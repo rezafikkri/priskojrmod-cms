@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
-import { MoreHorizontal, Check, Pin } from 'lucide-react';
+import { MoreHorizontal, Check } from 'lucide-react';
 import Dot from '../icon/Dot';
 import Link from 'next/link';
 import { formatDateTimeWIB } from '@/lib/format-date';
@@ -56,7 +56,7 @@ export default function DataTable({
               <span>{row.getValue('name')}</span>
               <Badge
                 variant="secondary"
-                className="bg-green-100/80 dark:bg-green-600 ms-3 text-xs text-green-900"
+                className="bg-green-100 dark:bg-green-900 ms-3 text-xs text-green-800 dark:text-green-300"
               >
                 Pinned
               </Badge>

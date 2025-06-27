@@ -4,6 +4,7 @@ import {
   createProduct,
   updateProductPinnedStatus,
   updateProductPublishedStatus,
+  deleteProduct,
 } from '@/lib/services/product-service';
 
 export async function addProduct(data) {
@@ -28,6 +29,15 @@ export async function editProductPublishedStatus({ id, is_published }) {
   try {
     const updatedData = await updateProductPublishedStatus({ id, is_published });
     return { status: 'success', data: updatedData };
+  } catch (err) {
+    return { status: 'error', message: err.message };
+  }
+}
+
+export async function removeProduct(id) {
+  try {
+    await deleteProduct(id);
+    return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };
   }
