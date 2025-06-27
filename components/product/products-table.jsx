@@ -20,7 +20,7 @@ import {
   AlertTitle,
 } from '@/components/ui/alert';
 import { PriceType } from '@/constants/enums';
-import { editProductPinnedStatus, editProductPublishedStatus } from '@/actions/product-actions';
+import { editProductPinnedStatus, editProductPublishedStatus, removeProduct } from '@/actions/product-actions';
 import { toast } from 'sonner';
 
 export default function ProductsTable() {
@@ -150,6 +150,29 @@ export default function ProductsTable() {
     }
   }
 
+  async function handleDelete({ deleteData, toastId }) {
+    const targetRow = document.querySelector(`#row${deleteData.id}`);
+    const targetActionBtn = targetRow.querySelector('td > button');
+    targetRow.classList.add('opacity-50');
+    targetActionBtn.setAttribute('disabled', true);
+
+    const removeRes = await removeProduct(deleteData.id);
+
+    targetRow.classList.remove('opacity-50');
+    targetActionBtn.removeAttribute('disabled');
+    
+    if (removeRes.status === 'success') {
+      queryClient.setQueryData(['products'], (oldData) => {
+        return [ ...oldData.filter(data => data.id !== deleteData.id) ];
+      });
+      toast.success(<>Product <i>{deleteData.name}</i> was successfully deleted.</>, {
+        id: toastId,
+      });
+    } else {
+      toast.error(removeRes.message, { id: toastId });
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-3 mb-4">
@@ -202,6 +225,7 @@ export default function ProductsTable() {
             onColumnVisibilityChange: setColumnVisibility,
             onEditPinnedStatus: handleEditPinnedStatus,
             onEditPublishedStatus: handleEditPublishedStatus,
+            onDelete: handleDelete,
           }}
         />
       )}

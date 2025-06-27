@@ -30,6 +30,7 @@ import { formatDateTimeWIB } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { CurrencyCode, PriceType } from '@/constants/enums';
 import { Badge } from '../ui/badge';
+import DeleteDialog from './delete-dialog';
 
 export default function DataTable({
   products,
@@ -40,6 +41,7 @@ export default function DataTable({
     onColumnVisibilityChange,
     onEditPinnedStatus,
     onEditPublishedStatus,
+    onDelete,
   } = tableHandler;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
@@ -183,7 +185,12 @@ export default function DataTable({
                 className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
                 asChild
               >
-                <button onClick={() => handleDelete(row.original.id)}>
+                <button
+                  onClick={() => {
+                    setDeleteData({ id: row.original.id, name: row.getValue('name') });
+                    setIsOpenDeleteDialog(true);
+                  }}
+                >
                   Delete
                 </button>
               </DropdownMenuItem>
@@ -256,6 +263,14 @@ export default function DataTable({
           {products.length} {products.length === 1 ? 'result' : 'results'}
         </p>
       )}
+
+      <DeleteDialog
+        onDelete={onDelete}
+        isOpenDeleteDialog={isOpenDeleteDialog}
+        setIsOpenDeleteDialog={setIsOpenDeleteDialog}
+        deleteData={deleteData}
+        setDeleteData={setDeleteData}
+      />
     </>
   );
 }
