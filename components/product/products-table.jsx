@@ -13,15 +13,18 @@ import {
   DropdownMenuCheckboxItem,
 } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TableSekeleton from '../loadings/table-skeleton';
 import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
 import { PriceType } from '@/constants/enums';
+import { editProductPinnedStatus, editProductPublishedStatus } from '@/actions/product-actions';
+import { toast } from 'sonner';
 
 export default function ProductsTable() {
+  const queryClient = useQueryClient();
   const [columnVisibility, setColumnVisibility] = useState({
     is_published: true,
     released_at: true,
@@ -66,6 +69,86 @@ export default function ProductsTable() {
       });
     },
   });
+
+  async function handleEditPinnedStatus({ id, name, isPinned }) {
+    const targetRow = document.querySelector(`#row${id}`);
+    const targetActionBtn = targetRow.querySelector('td > button');
+    targetRow.classList.add('opacity-50');
+    targetActionBtn.setAttribute('disabled', true);
+    // show loading
+    const toastId = toast.loading(!isPinned ? 'Pinning product...' : 'Unpinning product...');
+
+    const editRes = await editProductPinnedStatus({ id, is_pinned: !isPinned });
+
+    targetRow.classList.remove('opacity-50');
+    targetActionBtn.removeAttribute('disabled');
+    
+    if (editRes.status === 'success') {
+      queryClient.setQueryData(['products'], (oldData) => {
+        let updatedProduct = { ...oldData.find(data => data.id === editRes.data.id) };
+        updatedProduct.updated_at = editRes.data.updated_at;
+        updatedProduct.is_pinned = !isPinned;
+
+        const targetIndex = oldData.findLastIndex(data => data.is_pinned);
+        const filteredProducts = oldData.filter(data => data.id !== editRes.data.id);
+
+        if (!isPinned) {
+          return [ updatedProduct, ...filteredProducts ];
+        } else {
+          filteredProducts.splice(targetIndex, 0, updatedProduct);
+          return filteredProducts;
+        }
+      });
+      toast.success(
+        !isPinned
+          ? <>Product <i>{name}</i> was pinned.</>
+          : <>Product <i>{name}</i> was unpinned.</>,
+        { id: toastId },
+      );
+    } else {
+      toast.error(editRes.message, { id: toastId });
+    }
+  }
+
+  async function handleEditPublishedStatus({ id, name, isPublished }) {
+    const targetRow = document.querySelector(`#row${id}`);
+    const targetActionBtn = targetRow.querySelector('td > button');
+    targetRow.classList.add('opacity-50');
+    targetActionBtn.setAttribute('disabled', true);
+    // show loading
+    const toastId = toast.loading(!isPublished ? 'Publishing product...' : 'Unpublishing product...');
+
+    const editRes = await editProductPublishedStatus({ id, is_published: !isPublished });
+
+    targetRow.classList.remove('opacity-50');
+    targetActionBtn.removeAttribute('disabled');
+    
+    if (editRes.status === 'success') {
+      queryClient.setQueryData(['products'], (oldData) => {
+        let updatedProduct = { ...oldData.find(data => data.id === editRes.data.id) };
+        updatedProduct.updated_at = editRes.data.updated_at;
+        updatedProduct.is_published = !isPublished;
+
+        let targetIndex = oldData.findIndex(data => !data.is_pinned);
+        const filteredProducts = oldData.filter(data => data.id !== editRes.data.id);
+
+        if (updatedProduct.is_pinned) {
+          return [ updatedProduct, ...filteredProducts ];
+        } else {
+          filteredProducts.splice(targetIndex, 0, updatedProduct);
+          return filteredProducts;
+        }
+      });
+      toast.success(
+        !isPublished
+          ? <>Product <i>{name}</i> was published.</>
+          : <>Product <i>{name}</i> was unpublished.</>,
+        { id: toastId },
+      );
+    } else {
+      toast.error(editRes.message, { id: toastId });
+    }
+  }
 
   return (
     <>
@@ -115,9 +198,15 @@ export default function ProductsTable() {
         <DataTable
           products={dataP}
           columnVisibility={columnVisibility}
-          onColumnVisibilityChange={setColumnVisibility}
+          tableHandler={{
+            onColumnVisibilityChange: setColumnVisibility,
+            onEditPinnedStatus: handleEditPinnedStatus,
+            onEditPublishedStatus: handleEditPublishedStatus,
+          }}
         />
       )}
+
+      <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: Pinned products will have higher display priority on the Products page and the homepage. A maximum of 4 products can be pinned.</p>
     </>
   );
 }

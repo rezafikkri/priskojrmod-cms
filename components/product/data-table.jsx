@@ -23,18 +23,24 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
-import { MoreHorizontal, Check } from 'lucide-react';
+import { MoreHorizontal, Check, Pin } from 'lucide-react';
 import Dot from '../icon/Dot';
 import Link from 'next/link';
 import { formatDateTimeWIB } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { CurrencyCode, PriceType } from '@/constants/enums';
+import { Badge } from '../ui/badge';
 
 export default function DataTable({
   products,
-  onColumnVisibilityChange,
   columnVisibility,
+  tableHandler,
 }) {
+  const { 
+    onColumnVisibilityChange,
+    onEditPinnedStatus,
+    onEditPublishedStatus,
+  } = tableHandler;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [priceCurrency, setPriceCurrency] = useState(CurrencyCode.IDR);
@@ -43,6 +49,22 @@ export default function DataTable({
     {
       accessorKey: 'name',
       header: 'Name',
+      cell: ({ row }) => {
+        if (row.original.is_pinned) {
+          return (
+            <>
+              <span>{row.getValue('name')}</span>
+              <Badge
+                variant="secondary"
+                className="bg-green-100/80 dark:bg-green-600 ms-3 text-xs text-green-900"
+              >
+                Pinned
+              </Badge>
+            </>
+          );
+        }
+        return row.getValue('name');
+      },
     },
     {
       accessorKey: 'prices',
@@ -130,15 +152,29 @@ export default function DataTable({
                 className="w-full text-base"
                 asChild
               >
-                <button>
-                  Pin
+                <button
+                  onClick={() =>
+                    onEditPinnedStatus({
+                      id: row.original.id,
+                      name: row.getValue('name'),
+                      isPinned: row.original.is_pinned,
+                    })
+                  }
+                >
+                  {row.original.is_pinned ? 'Unpin' : 'Pin'}
                 </button>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="w-full text-base"
                 asChild
               >
-                <button>
+                <button
+                  onClick={() => onEditPublishedStatus({
+                    id: row.original.id,
+                    name: row.getValue('name'),
+                    isPublished: row.original.is_published,
+                  })}
+                >
                   {row.getValue('is_published') ? 'Unpublish' : 'Publish'}
                 </button>
               </DropdownMenuItem>
