@@ -33,7 +33,7 @@ import { getTableHeaderWidth } from '@/lib/utils';
 
 export default function DataTable({ faqs: data }) {
   const [faqs, setFaqs] = useState(data);
-  const [titleLang, setTitleLang] = useState(Language.ID);
+  const [titleLang, setTitleLang] = useState(Language.EN);
 
   async function handleDelete(id) {
     const targetRow = document.querySelector(`#row${id}`);
@@ -69,17 +69,17 @@ export default function DataTable({ faqs: data }) {
           <div className="ms-4 inline-block space-x-1">
             <Button
               variant="outline"
-              className={`px-2 py-0.5 text-xs h-auto shadow-none ${titleLang === Language.ID ? 'text-accent-foreground bg-accent' : ''}`}
-              onClick={() => setTitleLang(Language.ID)}
-            >
-              ID
-            </Button>
-            <Button
-              variant="outline"
               className={`px-2 py-0.5 text-xs h-auto shadow-none ${titleLang === Language.EN ? 'text-accent-foreground bg-accent' : ''}`}
               onClick={() => setTitleLang(Language.EN)}
             >
               EN
+            </Button>
+            <Button
+              variant="outline"
+              className={`px-2 py-0.5 text-xs h-auto shadow-none ${titleLang === Language.ID ? 'text-accent-foreground bg-accent' : ''}`}
+              onClick={() => setTitleLang(Language.ID)}
+            >
+              ID
             </Button>
           </div>
         </>
@@ -170,12 +170,12 @@ export default function DataTable({ faqs: data }) {
                 </TableRow>
               ))
             ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
-                    No results
-                  </TableCell>
-                </TableRow>
-              )}
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
