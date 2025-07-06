@@ -22,11 +22,10 @@ import {
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
-import { useCreateProductStore } from '@/lib/providers/create-product-store-provider';
 import { createProductPricingSchema, editProductPricingSchema } from '@/lib/validators/product-validator';
 import { toast } from 'sonner';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
-import { useRef } from 'react';
+import { useMemo } from 'react';
 import { addProduct, editProduct } from '@/actions/product-actions';
 import PriceFields from './price-fields';
 import DiscountFields from './discount-fields';
@@ -39,37 +38,23 @@ export default function PricingForm({
   onResetStep,
   mode = 'create',
 }) {
-  let pricing;
-  let setPricing;
-  let clearDraft;
-  let basic;
-  let content;
-  let extras;
+  const pricing = useProductFormStore(state => state.pricing);
+  const setPricing = useProductFormStore(state => state.setPricing);
+  const clearDraft = useProductFormStore(state => state.clearDraft);
+  const basic = useProductFormStore(state => state.basic);
+  const content = useProductFormStore(state => state.content);
+  const extras = useProductFormStore(state => state.extras);
   let pricingSchema;
 
   // edit mode only
   let setExtras;
 
   if (mode === 'create') {
-    pricing = useCreateProductStore(state => state.pricing);
-    setPricing = useCreateProductStore(state => state.setPricing);
-    clearDraft = useCreateProductStore(state => state.clearDraft);
-    basic = useCreateProductStore(state => state.basic);
-    content = useCreateProductStore(state => state.content);
-    extras = useCreateProductStore(state => state.extras);
     pricingSchema = createProductPricingSchema;
   } else {
-    pricing = useProductFormStore(state => state.pricing);
-    setPricing = useProductFormStore(state => state.setPricing);
-    clearDraft = useProductFormStore(state => state.clearDraft);
-    basic = useProductFormStore(state => state.basic);
-    content = useProductFormStore(state => state.content);
-    extras = useProductFormStore(state => state.extras);
     setExtras = useProductFormStore(state => state.setExtras);
     pricingSchema = editProductPricingSchema;
   }
-
-  const hasRendered = useRef(false);
 
   function getDefaultPrices(priceType) {
     if (priceType === PriceType.FREE) return [];
@@ -95,8 +80,7 @@ export default function PricingForm({
   function syncPrices(pricing) {
     let newPrices = [];
 
-    // if in first render
-    if (!hasRendered.current && pricing.price_type === PriceType.PAID) {
+    if (pricing.price_type === PriceType.PAID) {
       for (const variant of extras.variants) {
         // This is for updating prices. It ensures that when the admin goes back to the previous step 
         // and edits a variant name, the new variant name will be reflected here.
@@ -141,9 +125,10 @@ export default function PricingForm({
     return pricing;
   }
 
+  const initialDefaultValues = useMemo(() => syncPrices(pricing), []);
   const form = useForm({
     resolver: zodResolver(pricingSchema),
-    defaultValues: syncPrices(pricing),
+    defaultValues: initialDefaultValues,
   });
   const isSubmitting = form.formState.isSubmitting;
   const {
@@ -257,8 +242,8 @@ export default function PricingForm({
           price_type: data.price_type,
           prices: saveRes.data.pricing.prices,
           should_update_released_at: false,
-          discount: { value: '', expired_at: '' },
-          coupon: { code: '', discount: '', expired_at: '' },
+          discount: data.discount,
+          coupon: data.coupon,
         };
 
         if (!data.discount.id && data.discount.value) {
@@ -282,6 +267,7 @@ export default function PricingForm({
           newPricing.coupon = { code: '', discount: '', expired_at: '' };
         }
 
+        setPricing(newPricing);
         form.reset(newPricing);
         toast.success('Product updated successfully.');
       }
@@ -294,10 +280,6 @@ export default function PricingForm({
     const data = form.getValues();
     setPricing(data);
     onPrevStep();
-  }
-
-  if (!hasRendered.current) {
-    hasRendered.current = true;
   }
 
   return (

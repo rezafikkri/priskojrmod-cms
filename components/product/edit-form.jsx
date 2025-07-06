@@ -1,9 +1,6 @@
 'use client';
 
-import { Separator } from '../ui/separator';
-import { ChevronRightIcon } from 'lucide-react';
-import FormStepItem from './form-step-item';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import BasicForm from './basic-form';
 import ContentForm from './content-form';
 import ExtrasForm from './extras-form';
@@ -18,7 +15,7 @@ export default function EditForm({
   const [formSteps, setFormSteps] = useState([
     {
       label: 'Basic',
-      status: 'nonactive',
+      status: 'active',
       render: ({ key, onNextStep }) =>
         <BasicForm
           key={key}
@@ -53,7 +50,7 @@ export default function EditForm({
     },
     {
       label: 'Pricing',
-      status: 'active',
+      status: 'nonactive',
       render: ({ key, onPrevStep, onResetStep }) =>
         <PricingForm
           key={key}

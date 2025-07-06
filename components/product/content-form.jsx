@@ -11,7 +11,6 @@ import FormLanguageToggle from '../ui/form-language-toggle';
 import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { createProductContentSchema, editProductContentSchema } from '@/lib/validators/product-validator';
-import { useCreateProductStore } from '@/lib/providers/create-product-store-provider';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
 
 export default function ContentForm({
@@ -20,17 +19,13 @@ export default function ContentForm({
   mode = 'create'
 }) {
   const [activeLang, setActiveLang] = useState(Language.ID);
-  let content;
-  let setContent;
+  const content = useProductFormStore(state => state.content);
+  const setContent = useProductFormStore(state => state.setContent);
   let contentSchema;
 
   if (mode === 'create') {
-    content = useCreateProductStore(state => state.content);
-    setContent = useCreateProductStore(state => state.setContent);
     contentSchema = createProductContentSchema;
   } else {
-    content = useProductFormStore(state => state.content);
-    setContent = useProductFormStore(state => state.setContent);
     contentSchema = editProductContentSchema;
   }
   const form = useForm({

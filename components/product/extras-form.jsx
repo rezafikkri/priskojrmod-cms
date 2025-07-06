@@ -13,7 +13,6 @@ import {
 import { Separator } from '../ui/separator';
 import ImageFields from './image-fields';
 import { createProductExtrasSchema, editProductExtrasSchema } from '@/lib/validators/product-validator';
-import { useCreateProductStore } from '@/lib/providers/create-product-store-provider';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
 import VariantFields from './variant-fields';
 import ImageGrid from './image-grid';
@@ -24,20 +23,16 @@ export default function ExtrasForm({
   onPrevStep,
   mode = 'create',
 }) {
-  let extras;
-  let setExtras;
+  const extras = useProductFormStore(state => state.extras);
+  const setExtras = useProductFormStore(state => state.setExtras);
   let extrasSchema;
 
   // for edit mode only
   let basic;
 
   if (mode === 'create') {
-    extras = useCreateProductStore(state => state.extras);
-    setExtras = useCreateProductStore(state => state.setExtras);
     extrasSchema = createProductExtrasSchema;
   } else {
-    extras = useProductFormStore(state => state.extras);
-    setExtras = useProductFormStore(state => state.setExtras);
     extrasSchema = editProductExtrasSchema;
     basic = useProductFormStore(state => state.basic);
   }

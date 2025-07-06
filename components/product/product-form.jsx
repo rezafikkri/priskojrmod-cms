@@ -23,7 +23,11 @@ export default async function ProductForm({ mode = 'create', id = null }) {
   const licenses = await getLicensesWithTranslation();
 
   if (mode === 'create') {
-    return <CreateForm categories={categories} owners={owners} licenses={licenses} />;
+    return (
+      <ProductFormStoreProvider>
+        <CreateForm categories={categories} owners={owners} licenses={licenses} />
+      </ProductFormStoreProvider>
+    );
   }
 
   const product = await getProduct(id);
