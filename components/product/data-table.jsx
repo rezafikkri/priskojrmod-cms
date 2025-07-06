@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
-import { MoreHorizontal, Check } from 'lucide-react';
+import { MoreHorizontal, Check, Minus } from 'lucide-react';
 import Dot from '../icon/Dot';
 import Link from 'next/link';
 import { formatDateTimeWIB } from '@/lib/format-date';
@@ -96,6 +96,7 @@ export default function DataTable({
           const prices = row.getValue('prices')[priceCurrency];
           let locale = priceCurrency === CurrencyCode.IDR ? 'id-ID' : 'en-US';
 
+          if (!prices) return <Minus className="size-4 text-zinc-300" />;
           if (prices.min === prices.max) {
             return `${priceCurrency} ${prices.min.toLocaleString(locale)}`;
           }

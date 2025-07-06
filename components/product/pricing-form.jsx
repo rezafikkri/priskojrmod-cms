@@ -19,25 +19,57 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import PriceInput from './price-input';
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useCreateProductStore } from '@/lib/providers/create-product-store-provider';
-import { createProductPricingSchema } from '@/lib/validators/product-validator';
-import { addProduct } from '@/actions/product-actions';
+import { createProductPricingSchema, editProductPricingSchema } from '@/lib/validators/product-validator';
 import { toast } from 'sonner';
+import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
+import { useRef } from 'react';
+import { addProduct, editProduct } from '@/actions/product-actions';
+import PriceFields from './price-fields';
+import DiscountFields from './discount-fields';
+import CouponFields from './coupon-fields';
+import useEditPendingTracker from '@/hooks/use-edit-pending-tracker';
+import { Separator } from '../ui/separator';
 
 export default function PricingForm({
   onPrevStep,
   onResetStep,
+  mode = 'create',
 }) {
-  const pricing = useCreateProductStore(state => state.pricing);
-  const setPricing = useCreateProductStore(state => state.setPricing);
-  const clearDraft = useCreateProductStore(state => state.clearDraft);
-  const basic = useCreateProductStore(state => state.basic);
-  const content = useCreateProductStore(state => state.content);
-  const extras = useCreateProductStore(state => state.extras);
+  let pricing;
+  let setPricing;
+  let clearDraft;
+  let basic;
+  let content;
+  let extras;
+  let pricingSchema;
+
+  // edit mode only
+  let setExtras;
+
+  if (mode === 'create') {
+    pricing = useCreateProductStore(state => state.pricing);
+    setPricing = useCreateProductStore(state => state.setPricing);
+    clearDraft = useCreateProductStore(state => state.clearDraft);
+    basic = useCreateProductStore(state => state.basic);
+    content = useCreateProductStore(state => state.content);
+    extras = useCreateProductStore(state => state.extras);
+    pricingSchema = createProductPricingSchema;
+  } else {
+    pricing = useProductFormStore(state => state.pricing);
+    setPricing = useProductFormStore(state => state.setPricing);
+    clearDraft = useProductFormStore(state => state.clearDraft);
+    basic = useProductFormStore(state => state.basic);
+    content = useProductFormStore(state => state.content);
+    extras = useProductFormStore(state => state.extras);
+    setExtras = useProductFormStore(state => state.setExtras);
+    pricingSchema = editProductPricingSchema;
+  }
+
+  const hasRendered = useRef(false);
 
   function getDefaultPrices(priceType) {
     if (priceType === PriceType.FREE) return [];
@@ -45,13 +77,13 @@ export default function PricingForm({
     let prices = [];
     for (const variant of extras.variants) {
       prices.push({
-        variantId: variant.id,
+        variantId: variant.id ?? variant.dbId,
         variantName: variant.name,
         price: '',
         currency_code: CurrencyCode.IDR,
       });
       prices.push({
-        variantId: variant.id,
+        variantId: variant.id ?? variant.dbId,
         variantName: variant.name,
         price: '',
         currency_code: CurrencyCode.USD,
@@ -60,9 +92,58 @@ export default function PricingForm({
     return prices;
   }
 
+  function syncPrices(pricing) {
+    let newPrices = [];
+
+    // if in first render
+    if (!hasRendered.current && pricing.price_type === PriceType.PAID) {
+      for (const variant of extras.variants) {
+        // This is for updating prices. It ensures that when the admin goes back to the previous step 
+        // and edits a variant name, the new variant name will be reflected here.
+        // It also handles the case when the admin deletes some variants in the previous step — 
+        // this function will ignore prices from deleted variants, 
+        // so their associated prices will appear as removed.
+        for (const [index, price] of pricing.prices.entries()) {
+          if (price.variantId === (variant.id ?? variant.dbId)) {
+            newPrices.push({
+              ...price,
+              variantName: variant.name,
+            });
+            newPrices.push({
+              ...pricing.prices[index + 1],
+              variantName: variant.name,
+            });
+            break;
+          }
+        }
+        
+        // if new variant exist, then add to newPrices array.
+        if (variant.id && !pricing.prices.some(price => variant.id === price.variantId)) {
+          newPrices.push({
+            variantId: variant.id,
+            variantName: variant.name,
+            price: '',
+            currency_code: CurrencyCode.IDR,
+          });
+          newPrices.push({
+            variantId: variant.id,
+            variantName: variant.name,
+            price: '',
+            currency_code: CurrencyCode.USD,
+          });
+        }
+      }
+    }
+
+    if (newPrices.length > 0) {
+      return { ...pricing, prices: newPrices };
+    }
+    return pricing;
+  }
+
   const form = useForm({
-    resolver: zodResolver(createProductPricingSchema),
-    defaultValues: pricing,
+    resolver: zodResolver(pricingSchema),
+    defaultValues: syncPrices(pricing),
   });
   const isSubmitting = form.formState.isSubmitting;
   const {
@@ -73,9 +154,22 @@ export default function PricingForm({
     name: 'prices',
   });
 
+  const {
+    incrementPending,
+    decrementPending,
+    isBlocking,
+  } = useEditPendingTracker();
+
   function handlePriceTypeChange({ selectedValue, field }) {
     field.onChange(selectedValue);
     replacePrices(getDefaultPrices(selectedValue));
+  }
+
+  function getExpiredAtEpoch(date) {
+    if (date instanceof Date) {
+      return Math.floor(date.getTime() / 1000);
+    }
+    return date;
   }
 
   async function handleSubmit(data) {
@@ -83,59 +177,116 @@ export default function PricingForm({
       ...basic,
       ...content,
       ...extras,
-      variants: extras.variants.map(variant => ({ ...variant })),
-      discount: {
-        ...extras.discount,
-        expired_at: extras.discount.expired_at !== ''
-          ? Math.floor(extras.discount.expired_at.getTime() / 1000)
-          : '',
-      },
-      coupon: {
-        ...extras.coupon,
-        expired_at: extras.coupon.expired_at !== ''
-          ? Math.floor(extras.coupon.expired_at.getTime() / 1000)
-          : '',
-      },
       price_type: data.price_type,
-      is_published: data.is_published,
     };
+
+    if (mode === 'create') {
+      product.is_published = data.is_published;
+    } else {
+      product.should_update_released_at = data.should_update_released_at;
+    }
 
     // if price type == paid
     if (data.price_type === PriceType.PAID) {
       product.variants = product.variants.map(variant => {
         let newVariant = { ...variant, prices: [] };
+
         for (const [i, price] of data.prices.entries()) {
-          if (variant.id === price.variantId) {
-            newVariant.prices.push({
+          if ((variant.id ?? variant.dbId) === price.variantId) {
+            let priceIDR = {
               price: price.price,
               currency_code: price.currency_code,
-            });
-            newVariant.prices.push({
+            };
+            if (price.id) priceIDR.id = price.id;
+
+            let priceUSD = {
               price: data.prices[i + 1].price,
               currency_code: data.prices[i + 1].currency_code,
-            });
+            };
+            if (data.prices[i + 1].id) priceUSD.id = data.prices[i + 1].id;
+
+            newVariant.prices.push(priceIDR);
+            newVariant.prices.push(priceUSD);
+
             break;
           }
         }
+
         delete newVariant.id;
         return newVariant;
       });
+
+      product.discount = {
+        ...data.discount,
+        expired_at: data.discount.expired_at !== ''
+          ? getExpiredAtEpoch(data.discount.expired_at)
+          : '',
+      };
+      product.coupon = {
+        ...data.coupon,
+        expired_at: data.coupon.expired_at !== ''
+          ? getExpiredAtEpoch(data.coupon.expired_at)
+          : '',
+      };
     } else {
       product.variants = product.variants.map(variant => {
-        delete variant.id;
-        return variant;
+        let newVariant = { ...variant };
+        delete newVariant.id;
+        return newVariant;
       });
     }
 
-    const addRes = await addProduct(product);
-    if (addRes.status === 'success') {
-      toast.success('Product created successfully.');
-
-      // reset step and form
-      clearDraft();
-      onResetStep();
+    let saveRes;
+    if (mode === 'create') {
+      saveRes = await addProduct(product);
     } else {
-      toast.error(addRes.message);
+      saveRes = await editProduct(product);
+    }
+
+    if (saveRes.status === 'success') {
+      if (mode === 'create') {
+        // reset step and form
+        clearDraft();
+        onResetStep();
+        toast.success('Product created successfully.');
+      } else {
+        // if success, set extras and pricing data, like id, etc.
+        setExtras(saveRes.data.extras);
+
+        let newPricing = {
+          price_type: data.price_type,
+          prices: saveRes.data.pricing.prices,
+          should_update_released_at: false,
+          discount: { value: '', expired_at: '' },
+          coupon: { code: '', discount: '', expired_at: '' },
+        };
+
+        if (!data.discount.id && data.discount.value) {
+          // add id from db to store
+          newPricing.discount = {
+            id: saveRes.data.pricing.discount.id,
+            ...data.discount,
+          };
+
+        } else if (data.discount.id && !data.discount.value) {
+          // reset discount
+          newPricing.discount = { value: '', expired_at: '' };
+        }
+
+        if (!data.coupon.id && data.coupon.code) {
+          newPricing.coupon = {
+            id: saveRes.data.pricing.coupon.id,
+            ...data.coupon,
+          };
+        } else if (data.coupon.id && !data.coupon.code) {
+          newPricing.coupon = { code: '', discount: '', expired_at: '' };
+        }
+
+        form.reset(newPricing);
+        toast.success('Product updated successfully.');
+      }
+    } else {
+      toast.error(saveRes.message);
     }
   }
 
@@ -145,81 +296,163 @@ export default function PricingForm({
     onPrevStep();
   }
 
+  if (!hasRendered.current) {
+    hasRendered.current = true;
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 lg:max-w-2/3 mb-10">
-        <FormField
-          control={form.control}
-          name="price_type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base">Price Type</FormLabel>
-              <Select
-                onValueChange={(priceType) => handlePriceTypeChange({ selectedValue: priceType, field: field })}
-                defaultValue={field.value}
-                disabled={isSubmitting}
-              >
-                <FormControl>
-                  <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-full">
-                    <SelectValue placeholder="Select price type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem className="text-base" value={PriceType.FREE}>
-                    {PriceType.FREE[0].toUpperCase() + PriceType.FREE.substring(1)}
-                  </SelectItem>
-                  <SelectItem className="text-base" value={PriceType.PAID}>
-                    {PriceType.PAID[0].toUpperCase() + PriceType.PAID.substring(1)}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>Select whether this product is free or paid.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {form.getValues('price_type') === 'paid' && (
-          <PriceInput prices={prices} form={form} />
+        {(mode === 'edit' && pricing.price_type === PriceType.PAID) ? (
+          <FormItem>
+            <FormLabel className="text-base">Price Type</FormLabel>
+            <p className="capitalize">{pricing.price_type}</p>
+            <FormDescription>This is a paid product. Price type cannot be changed.</FormDescription>
+          </FormItem>
+        ) : (
+          <FormField
+            control={form.control}
+            name="price_type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Price Type</FormLabel>
+                <Select
+                  onValueChange={(priceType) => handlePriceTypeChange({ selectedValue: priceType, field: field })}
+                  defaultValue={field.value}
+                  disabled={isSubmitting}
+                >
+                  <FormControl>
+                    <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-full capitalize">
+                      <SelectValue placeholder="Select price type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem className="text-base capitalize" value={PriceType.FREE}>
+                      {PriceType.FREE}
+                    </SelectItem>
+                    <SelectItem className="text-base capitalize" value={PriceType.PAID}>
+                      {PriceType.PAID}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select whether this product is free or paid.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         )}
 
-        <FormField
-          control={form.control}
-          name="is_published"
-          render={({ field }) => (
-            <FormItem className="flex space-x-2 items-start">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  disabled={isSubmitting}
-                />
-              </FormControl>
-              <div className="space-y-2">
-                <FormLabel className="text-base leading-none">Publish</FormLabel>
-                <FormDescription>
-                  Make this product visible on the website.
-                </FormDescription>
-              </div>
-            </FormItem>
-          )}
-        />
+        {form.getValues('price_type') === PriceType.PAID && (
+          <>
+            <Separator />
+            <section className="space-y-6 mb-9">
+              <h3 className="text-lg font-bold mb-0">Prices</h3>
+              <h4 className="text-zinc-700 dark:text-zinc-300/80">
+                Each variant has its own price in two currencies, USD and IDR.
+              </h4>
+
+              <PriceFields prices={prices} form={form} />
+            </section>
+            <Separator />
+            <section className="space-y-6 mb-9">
+              <h3 className="text-lg font-bold mb-0">Discount</h3>
+              <h4 className="text-zinc-700 dark:text-zinc-300/80">
+                Optional. The discount percentage to apply to the product price.
+              </h4>
+
+              <DiscountFields
+                form={form}
+                basic={basic}
+                handlers={{
+                  onIncrementPending: incrementPending,
+                  onDecrementPending: decrementPending,
+                }}
+                disabled={isSubmitting}
+              />
+            </section>
+            <Separator />
+            <section className="space-y-6 mb-9">
+              <h3 className="text-lg font-bold mb-0">Coupon</h3>
+              <h4 className="text-zinc-700 dark:text-zinc-300/80">
+                Optional. Provides a discount for previous buyers when purchasing product upgrades.
+              </h4>
+
+              <CouponFields
+                form={form}
+                basic={basic}
+                handlers={{
+                  onIncrementPending: incrementPending,
+                  onDecrementPending: decrementPending,
+                }}
+                disabled={isSubmitting}
+              />
+            </section>
+            <Separator />
+          </>
+        )}
+
+        {mode === 'create' ? (
+          <FormField
+            control={form.control}
+            name="is_published"
+            render={({ field }) => (
+              <FormItem className="flex space-x-2 items-start">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={isSubmitting}
+                  />
+                </FormControl>
+                <div className="space-y-2">
+                  <FormLabel className="text-base leading-none">Publish</FormLabel>
+                  <FormDescription>
+                    Make this product visible on the website.
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        ) : (
+          <FormField
+            control={form.control}
+            name="should_update_released_at"
+            render={({ field }) => (
+              <FormItem className="flex space-x-2 items-start">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={isSubmitting}
+                  />
+                </FormControl>
+                <div className="space-y-2">
+                  <FormLabel className="text-base leading-none">Update "Released At"</FormLabel>
+                  <FormDescription>
+                    Check this if you want to change the product’s "Released At" value.
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        )}
 
         <Button
           variant="outline"
           className="me-3 mb-0 h-auto inline-block text-base px-3 py-1.5"
           onClick={handlePrev}
+          disabled={isBlocking}
         >
           <ArrowLeft className="icon" /> Previous
         </Button>
         <div className="relative inline-block">
           <Button
             type="submit"
-            className={`h-auto text-base px-3 py-1.5 disabled:opacity-100 ${isSubmitting ? 'transition-none' : ''} border border-primary inline-block`}
-            disabled={isSubmitting}
+            className={`h-auto text-base px-3 py-1.5 ${isSubmitting ? 'transition-none disabled:opacity-100' : ''} border border-primary inline-block`}
+            disabled={isSubmitting || isBlocking}
           >
             <span className={isSubmitting ? 'opacity-0' : ''}>
-              Create
+              {mode === 'create' ? 'Create' : 'Update'}
             </span>
           </Button>
           {isSubmitting && (

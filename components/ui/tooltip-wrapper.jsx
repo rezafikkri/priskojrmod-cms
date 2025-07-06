@@ -12,7 +12,7 @@ export default function TooltipWrapper({
 }) {
   return (
     <TooltipProvider>
-      <Tooltip>
+      <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent className="font-semibold py-2 px-2" background={background}>
           <p>{text}</p>

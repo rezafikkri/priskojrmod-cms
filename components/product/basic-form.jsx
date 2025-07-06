@@ -22,27 +22,50 @@ import {
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { createProductBasicSchema } from '@/lib/validators/product-validator';
+import { createProductBasicSchema, editProductBasicSchema } from '@/lib/validators/product-validator';
 import { useCreateProductStore } from '@/lib/providers/create-product-store-provider';
+import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
 
 export default function BasicForm({
   onNextStep,
   categories,
   owners,
   licenses,
+  mode = 'create',
 }) {
-  const basic = useCreateProductStore(state => state.basic);
-  const setBasic = useCreateProductStore(state => state.setBasic);
-  const clearDraft = useCreateProductStore(state => state.clearDraft);
-  const form = useForm({
-    resolver: zodResolver(createProductBasicSchema),
-    defaultValues: {
-      name: basic.name,
+  let basic;
+  let setBasic;
+  let clearDraft;
+  let defaultValues;
+  let basicSchema;
+
+  if (mode === 'create') {
+    basic = useCreateProductStore(state => state.basic);
+    setBasic = useCreateProductStore(state => state.setBasic);
+    clearDraft = useCreateProductStore(state => state.clearDraft);
+    defaultValues = {
+      ...basic,
       category_id: basic.category_id.toString(),
       owner_id: basic.owner_id.toString(),
       license_id: basic.license_id.toString(),
-      download_link: basic.download_link,
-    },
+    };
+    basicSchema = createProductBasicSchema;
+  } else {
+    basic = useProductFormStore(state => state.basic);
+    setBasic = useProductFormStore(state => state.setBasic);
+    clearDraft = useProductFormStore(state => state.clearDraft);
+    defaultValues = {
+      ...basic,
+      category_id: basic.category_id.toString(),
+      owner_id: basic.owner_id.toString(),
+      license_id: basic.license_id.toString(),
+    };
+    basicSchema = editProductBasicSchema;
+  }
+
+  const form = useForm({
+    resolver: zodResolver(basicSchema),
+    defaultValues,
   });
 
   function handleNext(data) {

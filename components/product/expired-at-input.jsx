@@ -31,30 +31,68 @@ import { useState } from 'react';
 export default function ExpiredAtInput({
   field,
   description,
+  disabled = false,
 }) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
-  function handleDateChange({ date, expiredAtField }) {
-    if (!date) {
-      expiredAtField.onChange('');
+  function handleDateChange(date, fieldValue) {
+    if (date) {
+      let newDate = new Date(date);
+      let oldDate;
+      if (!(fieldValue instanceof Date)) {
+        oldDate = new Date(parseInt(fieldValue) * 1000);
+      } else {
+        oldDate = new Date(fieldValue);
+      }
+
+      if (!isNaN(oldDate)) {
+        newDate.setHours(oldDate.getHours(), oldDate.getMinutes());
+      }
+      field.onChange(newDate);
     } else {
-      const newDate = new Date(expiredAtField.value);
-      newDate.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
-      expiredAtField.onChange(newDate);
+      field.onChange('');
     }
     setIsCalendarOpen(false);
   }
 
-  function handleHourChange({ hour, expiredAtField }) {
-    const newDate = new Date(expiredAtField.value);
-    newDate.setHours(hour);
-    expiredAtField.onChange(newDate);
+  function handleHourChange(hour, fieldValue) {
+    const newDate = new Date(fieldValue);
+    if (!isNaN(newDate.getTime())) {
+      newDate.setHours(hour);
+      field.onChange(newDate);
+    }
   }
 
-  function handleMinuteChange({ minute, expiredAtField }) {
-    const newDate = new Date(expiredAtField.value);
-    newDate.setMinutes(minute);
-    expiredAtField.onChange(newDate);
+  function handleMinuteChange(minute, fieldValue) {
+    const newDate = new Date(fieldValue);
+    if (!isNaN(newDate.getTime())) {
+      newDate.setMinutes(minute);
+      field.onChange(newDate);
+    }
+  }
+
+  // This function is for get Date object from epoch time
+  function getDate(fieldValue) {
+    if (fieldValue && !(fieldValue instanceof Date)) {
+      return new Date(parseInt(fieldValue) * 1000);
+    }
+    return fieldValue;
+  }
+
+  function getHours(fieldValue) {
+    if (fieldValue) {
+      if (fieldValue instanceof Date) return fieldValue.getHours();
+      return new Date(parseInt(fieldValue) * 1000).getHours();
+    }
+    return fieldValue;
+  }
+
+  function getMinutes(fieldValue) {
+    if (fieldValue) {
+      if (fieldValue instanceof Date) return fieldValue.getMinutes();
+      return new Date(parseInt(fieldValue) * 1000).getMinutes();
+    }
+    return fieldValue;
   }
 
   return (
@@ -65,14 +103,19 @@ export default function ExpiredAtInput({
           <PopoverTrigger asChild className="shadow-none text-base h-auto! px-3 py-1.5 flex-1">
             <FormControl>
               <Button
-                variant={"outline"}
+                disabled={disabled}
+                variant="outline"
                 className={cn(
                   "pl-3 text-left font-normal w-full text-base",
                   !field.value && "text-muted-foreground"
                 )}
               >
                 {field.value ? (
-                  formatDate(Math.floor(field.value.getTime() / 1000))
+                  formatDate(
+                    (field.value instanceof Date)
+                      ? Math.floor(field.value.getTime() / 1000)
+                      : field.value,
+                  )
                 ) : (
                     <span>Pick a date</span>
                   )}
@@ -83,8 +126,8 @@ export default function ExpiredAtInput({
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar
               mode="single"
-              selected={field.value}
-              onSelect={(date) => handleDateChange({ date, expiredAtField: field })}
+              selected={getDate(field.value)}
+              onSelect={(date) => handleDateChange(date, field.value)}
               disabled={{ before: new Date() }}
               captionLayout="dropdown"
             />
@@ -92,12 +135,12 @@ export default function ExpiredAtInput({
         </Popover>
 
         <Select
-          onValueChange={(hour) => handleHourChange({ hour, expiredAtField: field })}
-          value={field.value ? field.value.getHours() : 0}
-          disabled={!field.value}
+          onValueChange={(hour) => handleHourChange(hour, field.value)}
+          value={getHours(field.value)}
+          disabled={!field.value || disabled}
         >
-          <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 ms-3">
-            <SelectValue />
+          <SelectTrigger className="shadow-none text-base min-h-9.5 h-auto! px-3 py-1.5 ms-3">
+            <SelectValue placeholder="Hour" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -110,12 +153,12 @@ export default function ExpiredAtInput({
         </Select>
         <span className="mx-1.5">:</span>
         <Select
-          onValueChange={(minute) => handleMinuteChange({ minute, expiredAtField: field })}
-          value={field.value ? field.value.getMinutes() : 0}
-          disabled={!field.value}
+          onValueChange={(minute) => handleMinuteChange(minute, field.value)}
+          value={getMinutes(field.value)}
+          disabled={!field.value || disabled}
         >
-          <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5">
-            <SelectValue />
+          <SelectTrigger className="shadow-none text-base min-h-9.5 h-auto! px-3 py-1.5">
+            <SelectValue placeholder="Minute" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>

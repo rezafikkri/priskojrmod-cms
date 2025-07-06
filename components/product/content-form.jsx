@@ -10,18 +10,31 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import FormLanguageToggle from '../ui/form-language-toggle';
 import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { createProductContentSchema } from '@/lib/validators/product-validator';
+import { createProductContentSchema, editProductContentSchema } from '@/lib/validators/product-validator';
 import { useCreateProductStore } from '@/lib/providers/create-product-store-provider';
+import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
 
 export default function ContentForm({
   onNextStep,
   onPrevStep,
+  mode = 'create'
 }) {
   const [activeLang, setActiveLang] = useState(Language.ID);
-  const content = useCreateProductStore(state => state.content);
-  const setContent = useCreateProductStore(state => state.setContent);
+  let content;
+  let setContent;
+  let contentSchema;
+
+  if (mode === 'create') {
+    content = useCreateProductStore(state => state.content);
+    setContent = useCreateProductStore(state => state.setContent);
+    contentSchema = createProductContentSchema;
+  } else {
+    content = useProductFormStore(state => state.content);
+    setContent = useProductFormStore(state => state.setContent);
+    contentSchema = editProductContentSchema;
+  }
   const form = useForm({
-    resolver: zodResolver(createProductContentSchema),
+    resolver: zodResolver(contentSchema),
     defaultValues: content,
   });
   const errors = form.formState.errors;
@@ -51,34 +64,68 @@ export default function ContentForm({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleNext)} className="space-y-6 lg:max-w-2/3 mb-10">
           {activeLang === Language.ID && (
-            <FormField
-              control={form.control}
-              name={`description.${Language.ID}`}
-              render={({ field, formState }) => (
-                <ContentInput
-                  field={field}
-                  formState={formState}
-                  activeLang={Language.ID}
-                  label="Description"
-                  description="Enter a clear and concise description of the product."
+            <>
+              <FormField
+                control={form.control}
+                name={`description.${Language.ID}`}
+                render={({ field, formState }) => (
+                  <ContentInput
+                    field={field}
+                    formState={formState}
+                    activeLang={Language.ID}
+                    label="Description"
+                    description="Enter a clear and concise description of the product."
+                  />
+                )}
+              />
+              {mode === 'edit' && (
+                <FormField
+                  control={form.control}
+                  name={`changelog.${Language.ID}`}
+                  render={({ field, formState }) => (
+                    <ContentInput
+                      field={field}
+                      formState={formState}
+                      activeLang={Language.ID}
+                      label="Changelog"
+                      description="Enter the changes or updates included in this release."
+                    />
+                  )}
                 />
               )}
-            />
+            </>
           )}
           {activeLang === Language.EN && (
-            <FormField
-              control={form.control}
-              name={`description.${Language.EN}`}
-              render={({ field, formState }) => (
-                <ContentInput
-                  field={field}
-                  formState={formState}
-                  activeLang={Language.EN}
-                  label="Description"
-                  description="Enter a clear and concise description of the product."
+            <>
+              <FormField
+                control={form.control}
+                name={`description.${Language.EN}`}
+                render={({ field, formState }) => (
+                  <ContentInput
+                    field={field}
+                    formState={formState}
+                    activeLang={Language.EN}
+                    label="Description"
+                    description="Enter a clear and concise description of the product."
+                  />
+                )}
+              />
+              {mode === 'edit' && (
+                <FormField
+                  control={form.control}
+                  name={`changelog.${Language.EN}`}
+                  render={({ field, formState }) => (
+                    <ContentInput
+                      field={field}
+                      formState={formState}
+                      activeLang={Language.EN}
+                      label="Changelog"
+                      description="Enter the changes or updates included in this release."
+                    />
+                  )}
                 />
               )}
-            />
+            </>
           )}
 
           <Button
