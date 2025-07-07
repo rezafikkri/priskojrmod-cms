@@ -99,7 +99,7 @@ describe('createAboutUs function', () => {
 });
 
 describe('updateAboutUs function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.AboutUs.$transaction and pjmeDBPrismaClient.AboutUs.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call pjmeDBPrismaClient.$transaction and pjmeDBPrismaClient.AboutUs.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
@@ -124,7 +124,7 @@ describe('updateAboutUs function', () => {
     expect(pjmeDBPrismaClient.AboutUsTranslation.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.AboutUs.$transaction function and call pjmeDBPrismaClient.AboutUs.update function twice correctly', async () => {
+  it('Should call pjmeDBPrismaClient.$transaction function and call pjmeDBPrismaClient.AboutUs.update function twice correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
