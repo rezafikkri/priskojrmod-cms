@@ -14,7 +14,7 @@ export default async function SecretKeyRegeneratePage({ params }) {
       <h2 className="text-zinc-700 dark:text-zinc-300/80 mb-7">Only regenerate the secret key when necessary, such as in case of a leak or other security issue.</h2>
 
       <Suspense fallback={<FormSkeleton />}>
-        <SecretKeyForm id={id} />
+        <SecretKeyForm id={id} mode='regenerate' />
       </Suspense>
     </>
   );

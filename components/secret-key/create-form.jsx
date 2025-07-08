@@ -14,23 +14,43 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import {
+  Loader2,
+  ArrowLeft,
+  ChevronsUpDown,
+  Check,
+} from 'lucide-react';
 import { createSecretKeySchema } from '@/lib/validators/secret-key-validator';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import random32Bytes from '@/actions/random-32-bytes-actions';
 import { addSecretKey } from '@/actions/secret-key-actions';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { cn } from '@/lib/utils';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
-export default function CreateForm() {
+export default function CreateForm({ products }) {
   const form = useForm({
     resolver: zodResolver(createSecretKeySchema),
     defaultValues: {
+      product_id: '',
       key: '',
-      app_name: '',
     },
   });
   const isSubmitting = form.formState.isSubmitting;
   const [loadingKey, setLoadingKey] = useState(false);
+  const [isComboboxOpen, setIsComboboxOpen] = useState(false)
 
   async function handleSubmit(data) {
     const addRes = await addSecretKey(data);
@@ -56,6 +76,76 @@ export default function CreateForm() {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 lg:max-w-2/3 mb-10">
+          <FormField
+            control={form.control}
+            name="product_id"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel className="text-base">Product</FormLabel>
+                <Popover open={isComboboxOpen} onOpenChange={setIsComboboxOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-[200px] justify-between w-full shadow-none font-normal text-base min-h-9.5 h-auto px-3 py-1.5",
+                          !field.value && "text-muted-foreground"
+                        )}
+                        disabled={isSubmitting}
+                      >
+                        {field.value
+                          ? products.find(
+                            (product) => product.id === field.value
+                          )?.name
+                          : "Select a product"}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search a product..."
+                        className="text-base"
+                      />
+                      <CommandList>
+                        <CommandEmpty>No product found.</CommandEmpty>
+                        <CommandGroup>
+                          {products.map(product => (
+                            <CommandItem
+                              className="text-base"
+                              value={product.name}
+                              key={product.id}
+                              onSelect={() => {
+                                form.setValue('product_id', product.id)
+                                setIsComboboxOpen(false);
+                              }}
+                            >
+                              {product.name}
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  product.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormDescription>
+                  Search or select a digital product.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="key"
@@ -92,20 +182,7 @@ export default function CreateForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="app_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Application Name</FormLabel>
-                <FormControl>
-                  <Input disabled={isSubmitting} {...field} className="md:text-base h-auto px-3 py-1.5 shadow-none" />
-                </FormControl>
-                <FormDescription>Enter the application name. Each application can have only one Secret Key.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
           <Button asChild variant="outline" className="me-3 mb-0 h-auto text-base px-3 py-1.5 inline-block">
             <Link href="/secret-key"><ArrowLeft className="icon" /> Back</Link>
           </Button>
