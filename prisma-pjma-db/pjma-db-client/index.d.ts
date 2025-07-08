@@ -3516,6 +3516,7 @@ export namespace Prisma {
 
   export type LicenseKeyWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    email_secret_key_id?: LicenseKeyEmailSecret_key_idCompoundUniqueInput
     AND?: LicenseKeyWhereInput | LicenseKeyWhereInput[]
     OR?: LicenseKeyWhereInput[]
     NOT?: LicenseKeyWhereInput | LicenseKeyWhereInput[]
@@ -3529,7 +3530,7 @@ export namespace Prisma {
     updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
     regenerated_at?: BigIntNullableFilter<"LicenseKey"> | bigint | number | null
     secret_key?: XOR<SecretKeyLicenseScalarRelationFilter, SecretKeyLicenseWhereInput>
-  }, "id">
+  }, "id" | "email_secret_key_id">
 
   export type LicenseKeyOrderByWithAggregationInput = {
     id?: SortOrder
@@ -3898,6 +3899,11 @@ export namespace Prisma {
   export type SecretKeyLicenseScalarRelationFilter = {
     is?: SecretKeyLicenseWhereInput
     isNot?: SecretKeyLicenseWhereInput
+  }
+
+  export type LicenseKeyEmailSecret_key_idCompoundUniqueInput = {
+    email: string
+    secret_key_id: bigint | number
   }
 
   export type LicenseKeyCountOrderByAggregateInput = {

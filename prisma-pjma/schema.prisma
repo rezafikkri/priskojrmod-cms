@@ -44,5 +44,6 @@ model LicenseKey {
   updated_at        BigInt
   regenerated_at    BigInt?
 
+  @@unique([email, secret_key_id])
   @@map("license_keys")
 }
