@@ -65,14 +65,15 @@ model Owner {
 }
 
 model Customer {
-  id           String  @id @db.VarChar(255)
+  id           String  @id @default(uuid(7)) @db.Uuid
+  oauth_id     String?  @db.VarChar(255) @unique 
+  is_banned    Boolean @default(false)
   first_name   String  @db.VarChar(100)
   last_name    String  @db.VarChar(100)
-  email        String  @unique @db.VarChar(100)
-  password     String? @db.VarChar(100)
+  email        String  @db.VarChar(100) @unique
   phone_number String? @db.VarChar(20)
   picture      String? @db.VarChar(255)
-  last_active  BigInt
+  last_active  BigInt?
 
   @@map("customers")
 }

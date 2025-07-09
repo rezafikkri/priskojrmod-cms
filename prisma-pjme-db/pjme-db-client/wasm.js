@@ -148,10 +148,11 @@ exports.Prisma.OwnerScalarFieldEnum = {
 
 exports.Prisma.CustomerScalarFieldEnum = {
   id: 'id',
+  oauth_id: 'oauth_id',
+  is_banned: 'is_banned',
   first_name: 'first_name',
   last_name: 'last_name',
   email: 'email',
-  password: 'password',
   phone_number: 'phone_number',
   picture: 'picture',
   last_active: 'last_active'
