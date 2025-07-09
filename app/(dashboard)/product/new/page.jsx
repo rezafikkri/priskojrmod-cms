@@ -2,6 +2,8 @@ import FormSkeleton from '@/components/loadings/form-skeleton';
 import ProductForm from '@/components/product/product-form';
 import { Suspense } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Create Product',
 };
