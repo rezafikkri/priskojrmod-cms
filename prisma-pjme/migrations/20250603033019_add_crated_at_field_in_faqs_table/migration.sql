@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "faqs" ADD COLUMN     "updated_at" BIGINT NOT NULL DEFAULT 1748920112;

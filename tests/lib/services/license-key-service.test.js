@@ -13,6 +13,7 @@ import {
   deleteLicenseKey,
   getLicenseKey,
   updateLicenseKey,
+  setCanRegenerateLicenseKeys,
 } from '@/lib/services/license-key-service';
 
 beforeAll(() => {
@@ -30,6 +31,7 @@ beforeAll(() => {
         findMany: vi.fn(),
         findUnique: vi.fn(),
         update: vi.fn(),
+        updateMany: vi.fn(),
       },
     },
   }));
@@ -95,6 +97,7 @@ describe('createLicenseKey function', () => {
         email: 'adel@gmail.com',
         key: 'jsonwebtoken',
         created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
       },
       select: { id: true },
     });
@@ -108,7 +111,7 @@ describe('getLicenseKeys function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(getLicenseKeys({ select: {}, pageIndex: 0, pageSize: 10 }))
+    await expect(getLicenseKeys({ select: {}, pageIndex: 0, pageSize: 10, filters: { secret_key_id: 2 } }))
       .rejects.toThrow('Unauthenticated');
 
     expect(verifySession).toHaveBeenCalled();
@@ -118,25 +121,32 @@ describe('getLicenseKeys function', () => {
   it('should call pjmaDBPrismaClient.LicenseKey.findMany function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const jwt = (await import('jsonwebtoken')).default;
 
+    const filters = { secret_key_id: 1 };
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
     const mockLicenseKeys = [
-      { id: '1', created_at: BigInt(123), key: 'key1' },
-      { id: '2', created_at: BigInt(456), key: 'key2' },
+      { id: '1', created_at: BigInt(123), updated_at: BigInt(3498), key: 'key1' },
+      { id: '2', created_at: BigInt(456), updated_at: BigInt(567), key: 'key2' },
     ];
     pjmaDBPrismaClient.LicenseKey.findMany.mockResolvedValue(mockLicenseKeys);
+    jwt.decode.mockReturnValue({ exp: 6789 });
 
     await getLicenseKeys({
       select: { id: true, key: true },
       pageIndex: 1,
       pageSize: 2,
+      filters,
     });
 
     expect(pjmaDBPrismaClient.LicenseKey.findMany).toHaveBeenCalledWith({
       select: { id: true, key: true },
-      orderBy: { created_at: 'desc' },
+      orderBy: { updated_at: 'desc' },
       take: 2,
       skip: 2,
+      where: {
+        secret_key_id: 1n,
+      },
     });
   });
 });
@@ -148,8 +158,12 @@ describe('searchLicenseKeys function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(searchLicenseKeys({ select: {}, searchKey: 'test', searchLimit: 5 }))
-      .rejects.toThrow('Unauthenticated');
+    await expect(searchLicenseKeys({
+      select: {},
+      searchKey: 'test',
+      searchLimit: 5,
+      filters: { secret_key_id: 3 },
+    })).rejects.toThrow('Unauthenticated');
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.LicenseKey.findMany).not.toHaveBeenCalled();
@@ -158,18 +172,21 @@ describe('searchLicenseKeys function', () => {
   it('should call pjmaDBPrismaClient.LicenseKey.findMany function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const jwt = (await import('jsonwebtoken')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
     const mockLicenseKeys = [
-      { id: '1', created_at: BigInt(123), key: 'key1' },
-      { id: '2', created_at: BigInt(456), key: 'key2' },
+      { id: '1', created_at: BigInt(123), updated_at: BigInt(3498), regenerated_at: BigInt(512), key: 'key1' },
+      { id: '2', created_at: BigInt(456), updated_at: BigInt(567), key: 'key2' },
     ];
     pjmaDBPrismaClient.LicenseKey.findMany.mockResolvedValue(mockLicenseKeys);
+    jwt.decode.mockReturnValue({ exp: 1234 });
 
     await searchLicenseKeys({
       select: { id: true, key: true },
-      searchKey: 'test',
-      searchLimit: 5,
+      key: 'test',
+      limit: 5,
+      filters: { secret_key_id: 4 },
     });
 
     expect(pjmaDBPrismaClient.LicenseKey.findMany).toHaveBeenCalledWith({
@@ -179,6 +196,7 @@ describe('searchLicenseKeys function', () => {
           startsWith: 'test',
           mode: 'insensitive',
         },
+        secret_key_id: 4n,
       },
       take: 6,
     });
@@ -204,10 +222,10 @@ describe('deleteLicenseKey function', () => {
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
 
-    await deleteLicenseKey('123');
+    await deleteLicenseKey('f28fe573-7fc9-4c0f-bd89-c698266fd4cf');
 
     expect(pjmaDBPrismaClient.LicenseKey.delete).toHaveBeenCalledWith({
-      where: { id: '123' },
+      where: { id: 'f28fe573-7fc9-4c0f-bd89-c698266fd4cf' },
       select: { id: true },
     });
   });
@@ -283,6 +301,9 @@ describe('updateLicenseKey function', () => {
   });
 
   it('Should call pjmaDBPrismaClient.LicenseKey.update function correctly', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(1744853503149); // deterministic timestamp
+
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
     const { getSpecificSecretKey } = await import('@/lib/services/secret-key-service');
@@ -323,9 +344,52 @@ describe('updateLicenseKey function', () => {
       },
       data: {
         secret_key_id: BigInt(2),
+        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
         used_for_activate: true,
         used_for_download: false,
         key: 'jsonwebtoken',
+      },
+    });
+  });
+});
+
+describe('setCanRegenerateLicenseKeys function', () => {
+  it('Should call verifySession function, not call pjmaDBPrismaClient.LicenseKey.updateMany function and throw Error with "Unauthenticated" message', async () => {
+    const verifySession = (await import('@/lib/verifySession')).default;
+    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+
+    verifySession.mockResolvedValue(false);
+
+    await expect(setCanRegenerateLicenseKeys([
+      'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
+    ])).rejects.toThrow('Unauthenticated');
+
+    expect(verifySession).toHaveBeenCalled();
+    expect(pjmaDBPrismaClient.LicenseKey.updateMany).not.toHaveBeenCalled();
+  });
+
+  it('Should call pjmaDBPrismaClient.LicenseKey.updateMany function correctly', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(1744853503149); // deterministic timestamp
+
+    const verifySession = (await import('@/lib/verifySession')).default;
+    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+
+    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    pjmaDBPrismaClient.LicenseKey.updateMany.mockResolvedValue({ count: 2 });
+
+    const uuid1 = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
+    const uuid2 = 'b1aebc99-8d0b-4ef8-aa6d-6bb9bd380b22';
+
+    await setCanRegenerateLicenseKeys([uuid1, uuid2]);
+
+    expect(pjmaDBPrismaClient.LicenseKey.updateMany).toHaveBeenCalledWith({
+      where: {
+        id: { in: [uuid1, uuid2] },
+      },
+      data: {
+        can_regenerate: true,
+        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
       },
     });
   });

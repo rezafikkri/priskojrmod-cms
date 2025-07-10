@@ -7,6 +7,7 @@ import {
   beforeAll,
 } from 'vitest';
 import { createAboutUs, updateAboutUs } from '@/lib/services/about-us-service';
+import { Language } from '@/constants/enums';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -66,8 +67,8 @@ describe('createAboutUs function', () => {
     const prismaResult = {
       id: 1,
       translations: [
-        { id: 1, language: 'ID' },
-        { id: 2, language: 'EN' },
+        { id: 1, language: Language.ID },
+        { id: 2, language: Language.EN },
       ],
     };
 
@@ -79,8 +80,8 @@ describe('createAboutUs function', () => {
       data: {
         translations: {
           create: [
-            { language: 'ID', content: inputContent.id },
-            { language: 'EN', content: inputContent.en },
+            { language: Language.ID, content: inputContent.id },
+            { language: Language.EN, content: inputContent.en },
           ],
         },
       },
@@ -98,7 +99,7 @@ describe('createAboutUs function', () => {
 });
 
 describe('updateAboutUs function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.AboutUs.$transaction and pjmeDBPrismaClient.AboutUs.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call pjmeDBPrismaClient.$transaction and pjmeDBPrismaClient.AboutUs.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
@@ -123,7 +124,7 @@ describe('updateAboutUs function', () => {
     expect(pjmeDBPrismaClient.AboutUsTranslation.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.AboutUs.$transaction function and call pjmeDBPrismaClient.AboutUs.update function twice correctly', async () => {
+  it('Should call pjmeDBPrismaClient.$transaction function and call pjmeDBPrismaClient.AboutUs.update function twice correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 

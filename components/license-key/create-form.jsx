@@ -26,13 +26,13 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { addLicenseKey } from '@/actions/license-key-actions';
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function CreateForm({
   secretKeys
 }) {
   // Get QueryClient from the context
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const form = useForm({
     resolver: zodResolver(createLicenseKeySchema),
@@ -49,7 +49,7 @@ export default function CreateForm({
   async function handleSubmit(data) {
     const addRes = await addLicenseKey(data);
     if (addRes.status === 'success') {
-      await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
+      queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
       form.reset();
       toast.success('License Key created successfully.');
     } else {
@@ -98,11 +98,11 @@ export default function CreateForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Name</FormLabel>
+                <FormLabel className="text-base">Customer Name</FormLabel>
                 <FormControl>
                   <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
-                <FormDescription>Enter customer name.</FormDescription>
+                <FormDescription>Enter the customer name.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -116,7 +116,7 @@ export default function CreateForm({
                 <FormControl>
                   <Input type="email" disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
-                <FormDescription>Enter customer email.</FormDescription>
+                <FormDescription>Enter the customer email.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

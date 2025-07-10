@@ -42,17 +42,17 @@ const items = {
     title: 'Document',
     icon: <Script />,
     subItems: [
-      { title: 'Terms of Service', url: '/toc', },
+      { title: 'Terms of Service', url: '/terms-of-service', },
       { title: 'Privacy Policy', url: '/privacy-policy' },
       { title: 'About Us', url: '/about-us' },
       { title: 'FAQs', url: '/faq' },
     ],
   },
   product: [
-    { title: 'Categories', url: '/categories', icon: Category },
-    { title: 'Licenses', url: '/licenses', icon: Copyright },
-    { title: 'Owners', url: '/owners', icon: Users },
-    { title: 'Products', url: '/products', icon: Package },
+    { title: 'Categories', url: '/category', icon: Category },
+    { title: 'Licenses', url: '/license', icon: Copyright },
+    { title: 'Owners', url: '/owner', icon: Users },
+    { title: 'Products', url: '/product', icon: Package },
   ],
   application: [
     { title: 'License Key', url: '/license-key', icon: Key },

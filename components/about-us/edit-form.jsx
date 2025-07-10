@@ -91,6 +91,7 @@ export default function EditForm({ aboutUs }) {
                   field={field}
                   formState={formState}
                   activeLang={Language.ID}
+                  description="Enter about us content."
                 />
               )}
             />
@@ -104,6 +105,7 @@ export default function EditForm({ aboutUs }) {
                   field={field}
                   formState={formState}
                   activeLang={Language.EN}
+                  description="Enter about us content."
                 />
               )}
             />

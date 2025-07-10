@@ -4,6 +4,17 @@ export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
   const pageIndex = parseInt(searchParams.get('pi'));
   const searchKey = searchParams.get('sk');
+  // params for filters
+  const secretKeyId = searchParams.get('ski');
+  const canRegenerate = searchParams.get('cr');
+
+  let filters;
+  if (secretKeyId) {
+    filters = { secret_key_id: secretKeyId };
+  }
+  if (canRegenerate) {
+    filters = { ...filters, can_regenerate: canRegenerate === 'yes' ? true : false };
+  }
 
   const select = {
     id: true,
@@ -12,6 +23,8 @@ export async function GET(req) {
     used_for_activate: true,
     used_for_download: true,
     created_at: true,
+    updated_at: true,
+    regenerated_at: true,
   };
 
   let dataResponse;
@@ -19,8 +32,9 @@ export async function GET(req) {
   if (searchKey) {
     const licenseKeys = await searchLicenseKeys({
       select,
-      searchKey,
-      searchLimit: parseInt(process.env.SEARCH_LIMIT),
+      key: searchKey,
+      limit: parseInt(process.env.SEARCH_LIMIT),
+      filters,
     });
     dataResponse = {
       licenseKeys,
@@ -37,8 +51,9 @@ export async function GET(req) {
       select,
       pageIndex,
       pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
+      filters,
     });
-    const numberLicenseKeys = await countLicenseKeys();
+    const numberLicenseKeys = await countLicenseKeys(filters);
     dataResponse = {
       licenseKeys,
       rowCount: numberLicenseKeys,

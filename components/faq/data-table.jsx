@@ -29,10 +29,11 @@ import { removeFaq } from '@/actions/faq-actions';
 import Link from 'next/link';
 import { Language } from '@/constants/enums';
 import { formatDateTimeWIB } from '@/lib/format-date';
+import { getTableHeaderWidth } from '@/lib/utils';
 
 export default function DataTable({ faqs: data }) {
   const [faqs, setFaqs] = useState(data);
-  const [titleLang, setTitleLang] = useState(Language.ID);
+  const [titleLang, setTitleLang] = useState(Language.EN);
 
   async function handleDelete(id) {
     const targetRow = document.querySelector(`#row${id}`);
@@ -68,17 +69,17 @@ export default function DataTable({ faqs: data }) {
           <div className="ms-4 inline-block space-x-1">
             <Button
               variant="outline"
-              className={`px-2 py-0.5 text-xs h-auto shadow-none ${titleLang === Language.ID ? 'text-accent-foreground bg-accent' : ''}`}
-              onClick={() => setTitleLang(Language.ID)}
-            >
-              ID
-            </Button>
-            <Button
-              variant="outline"
               className={`px-2 py-0.5 text-xs h-auto shadow-none ${titleLang === Language.EN ? 'text-accent-foreground bg-accent' : ''}`}
               onClick={() => setTitleLang(Language.EN)}
             >
               EN
+            </Button>
+            <Button
+              variant="outline"
+              className={`px-2 py-0.5 text-xs h-auto shadow-none ${titleLang === Language.ID ? 'text-accent-foreground bg-accent' : ''}`}
+              onClick={() => setTitleLang(Language.ID)}
+            >
+              ID
             </Button>
           </div>
         </>
@@ -88,6 +89,11 @@ export default function DataTable({ faqs: data }) {
       accessorKey: 'created_at',
       header: 'Created At',
       cell: ({ row }) => formatDateTimeWIB(row.getValue('created_at')),
+    },
+    {
+      accessorKey: 'updated_at',
+      header: 'Updated At',
+      cell: ({ row }) => formatDateTimeWIB(row.getValue('updated_at')),
     },
     {
       id: 'actions',
@@ -133,20 +139,19 @@ export default function DataTable({ faqs: data }) {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="bg-muted/50">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className="px-3 py-2.5 h-auto text-zinc-600 dark:text-zinc-400"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </TableHead>
-                  )})}
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className={`px-3 py-2.5 h-auto text-zinc-600 dark:text-zinc-400 ${getTableHeaderWidth(header.id)}`}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -157,7 +162,7 @@ export default function DataTable({ faqs: data }) {
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`p-3 ${cell.column.id === 'actions' ? 'text-right' : '' } ${cell.column.id === `translations_${titleLang}_title` ? 'max-w-150 whitespace-normal' : ''}`}
+                      className={`p-3 ${cell.column.id === 'actions' ? 'text-right' : '' } ${cell.column.id === `translations_title_${titleLang}` ? 'whitespace-normal' : ''}`}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
@@ -165,12 +170,12 @@ export default function DataTable({ faqs: data }) {
                 </TableRow>
               ))
             ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>

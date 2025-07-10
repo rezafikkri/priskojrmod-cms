@@ -3,7 +3,7 @@ import FormSkeleton from '@/components/loadings/form-skeleton';
 import { Suspense } from 'react';
 
 export const metadata = {
-  title: 'Account Settings - Prisko Jr Mod',
+  title: 'Account Settings',
 };
 
 export default function AccountSettingsPage() {

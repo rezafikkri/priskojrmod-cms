@@ -1,23 +1,36 @@
 import { Language } from '@/constants/enums';
 import { Button } from './button';
 
-function hasOtherSectionError(errors, activeLang) {
-  if (errors.title && errors.content) {
-    if (!errors.title[activeLang] && !errors.content[activeLang]) {
-      return true;
+/*
+ * This is for check in other section has error or not
+ */
+function hasOtherSectionError(
+  errors,
+  activeLang,
+  fieldNames = ['title', 'content'],
+) {
+  let isCurrentSectionError = false;
+  let isOtherSectionError = false;
+  for (const fn of fieldNames) {
+    if (errors[fn] && errors[fn][activeLang]) {
+      isCurrentSectionError = true;
     }
-  } else if (errors.title && !errors.content && !errors.title[activeLang]) {
-    return true;
-  } else if (errors.content && !errors.title && !errors.content[activeLang]) {
-    return true;
+    if (errors[fn]) {
+      isOtherSectionError = true;
+    }
   }
-  return false;
+
+  // if current section exist error, then return false
+  if (isCurrentSectionError) return false;
+  // for now, current section is no error. If other section exist error
+  if (isOtherSectionError) return true;
 }
 
 export default function FormLanguageToggle({
   activeLang,
   onToggle,
   errors,
+  fieldNames,
 }) {
   return (
     <div className="space-y-2 mb-6">
@@ -37,8 +50,8 @@ export default function FormLanguageToggle({
           English
         </Button>
       </div>
-      <p className="text-sm text-muted-foreground">Select a language to enter the content.</p>
-      {hasOtherSectionError(errors, activeLang) && (
+      <p className="text-sm text-muted-foreground">Select a language to enter content.</p>
+      {hasOtherSectionError(errors, activeLang, fieldNames) && (
         <p className="text-destructive text-sm">
           There are errors in the {activeLang === Language.ID ? 'English' : 'Indonesian'} section.
         </p>

@@ -14,22 +14,22 @@ import {
 import { toast } from 'sonner';
 
 export default function DeleteDialog({
-  deleteMutation,
-  isOpenDeleteDialog,
-  setIsOpenDeleteDialog,
+  onDelete,
+  isOpen,
+  onIsOpenChange,
+  onDeleteDataChange,
   deleteData,
-  setDeleteData,
 }) {
   const [email, setEmail] = useState('');
 
   function handleDelete() {
     if (email !== deleteData.email) return false;
 
-    setIsOpenDeleteDialog(false);
-    setDeleteData(null);
+    onIsOpenChange(false);
+    onDeleteDataChange(null);
     setEmail('');
     const toastId = toast.loading(`Deleting License Key for ${deleteData.email}...`);
-    deleteMutation.mutate({ deleteData, toastId });
+    onDelete({ deleteData, toastId });
   }
 
   let checkEmail = false;
@@ -37,8 +37,8 @@ export default function DeleteDialog({
   const emailToDelete = deleteData?.email ? deleteData?.email : email;
 
   function handleOpenChange() {
-    setIsOpenDeleteDialog(false);
-    setDeleteData(null);
+    onIsOpenChange(false);
+    onDeleteDataChange(null);
     setEmail('');
   }
 
@@ -49,7 +49,7 @@ export default function DeleteDialog({
   }
 
   return (
-    <Dialog open={isOpenDeleteDialog} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
         className="sm:max-w-md"
         onInteractOutside={handleClickOutside}

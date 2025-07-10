@@ -29,16 +29,16 @@ import { editLicenseKey } from '@/actions/license-key-actions';
 import { useQueryClient } from '@tanstack/react-query'
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
-import { formatDate } from '@/lib/format-date';
+import { formatDateTimeWIB } from '@/lib/format-date';
 
 export default function EditForm({
   secretKeys,
   licenseKey,
 }) {
   // Get QueryClient from the context
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const [licenseKeyExpire, setLicenseKeyExpire] = useState(() => {
-    return formatDate(licenseKey.parsedKey.exp);
+    return formatDateTimeWIB(licenseKey.parsedKey.exp);
   });
 
   const form = useForm({
@@ -62,13 +62,13 @@ export default function EditForm({
     const editRes = await editLicenseKey(data);
 
     if (editRes.status === 'success') {
-      await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
-      await queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+      queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
+      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       form.setValue('old_key', editRes.data.key);
       form.setValue('old_secret_key_id', editRes.data.secret_key_id);
       form.setValue('change_expiration_date', false);
       if (editRes.data.exp) {
-        setLicenseKeyExpire(formatDate(editRes.data.exp));
+        setLicenseKeyExpire(formatDateTimeWIB(editRes.data.exp));
       }
       toast.success('License Key updated successfully.');
     } else {
@@ -114,7 +114,7 @@ export default function EditForm({
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Select secret key based on application name!</FormDescription>
+                <FormDescription>Select secret key based on application name.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -124,11 +124,11 @@ export default function EditForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Name</FormLabel>
+                <FormLabel className="text-base">Customer Name</FormLabel>
                 <FormControl>
                   <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
-                <FormDescription>Enter customer name!</FormDescription>
+                <FormDescription>Enter the customer name.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -160,7 +160,7 @@ export default function EditForm({
                     </FormItem>
                   </RadioGroup>
                 </FormControl>
-                <FormDescription>Select activation type: online or offline!</FormDescription>
+                <FormDescription>Select activation type: online or offline.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -227,7 +227,7 @@ export default function EditForm({
             )}
           />
 
-          <Button asChild variant="outline" className="me-3 mb-0 h-auto inline-block text-base px-3 py-1.5">
+          <Button asChild variant="outline" className="me-3 mb-0 h-auto text-base px-3 py-1.5 inline-block">
             <Link href="/license-key"><ArrowLeft className="icon" /> Back</Link>
           </Button>
           <div className="relative inline-block">

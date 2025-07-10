@@ -5,7 +5,7 @@ import AboutUsForm from '@/components/about-us/about-us-form';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'About Us - Prisko Jr Mod',
+  title: 'About Us',
 };
 
 export default function AboutUsPage() {

@@ -3,7 +3,7 @@ import FormSkeleton from '@/components/loadings/form-skeleton';
 import { Suspense } from 'react';
 
 export const metadata = {
-  title: 'Edit FAQ - Prisko Jr Mod',
+  title: 'Edit FAQ',
 };
 
 export default async function FaqEditPage({ params }) {

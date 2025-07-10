@@ -124,8 +124,9 @@ exports.Prisma.SecretKeyLicenseScalarFieldEnum = {
   id: 'id',
   product_id: 'product_id',
   key: 'key',
+  app_name: 'app_name',
   created_at: 'created_at',
-  app_name: 'app_name'
+  regenerated_at: 'regenerated_at'
 };
 
 exports.Prisma.LicenseKeyScalarFieldEnum = {
@@ -135,7 +136,10 @@ exports.Prisma.LicenseKeyScalarFieldEnum = {
   key: 'key',
   used_for_activate: 'used_for_activate',
   used_for_download: 'used_for_download',
-  created_at: 'created_at'
+  can_regenerate: 'can_regenerate',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  regenerated_at: 'regenerated_at'
 };
 
 exports.Prisma.SortOrder = {
@@ -146,6 +150,11 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 
 

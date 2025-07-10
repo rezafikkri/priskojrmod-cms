@@ -8,9 +8,12 @@ import {
 } from 'vitest';
 import {
   createSecretKey,
+  updateAppName,
   deleteSecretKey,
   getSecretKeys,
   getSpecificSecretKey,
+  getSecretKey,
+  saveRegeneratedSecretKey,
 } from '@/lib/services/secret-key-service';
 
 beforeAll(() => {
@@ -27,18 +30,25 @@ beforeAll(() => {
         delete: vi.fn(),
         findMany: vi.fn(),
         findUnique: vi.fn(),
+        update: vi.fn(),
+        updateMany: vi.fn(),
       },
     },
   }));
 
-  vi.mock('uuid', () => ({
-    v7: () => 'uuidv7',
+  vi.mock('@/lib/pjme-prisma-client', () => ({
+    default: {
+      Product: {
+        findUnique: vi.fn(),
+      },
+    },
   }));
 });
 
 afterEach(() => {
   // Clear mocks before each test to ensure test isolation
   vi.clearAllMocks();
+  vi.useRealTimers();
 });
 
 describe('createSecretKey function', () => {
@@ -57,28 +67,65 @@ describe('createSecretKey function', () => {
   it('Should call pjmaDBPrismaClient.SecretKeyLicense.create function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
+
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
     pjmaDBPrismaClient.SecretKeyLicense.create.mockResolvedValue({ id: 1n });
+    pjmeDBPrismaClient.Product.findUnique.mockResolvedValue({ name: 'Product Name' });
 
     await createSecretKey({
+      product_id: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
       key: '8f23fcc4c918eb26c991b3950c79a243a6b0d683c2e58e0d31fc367b652e2b05',
-      app_name: 'test-app',
     });
 
     expect(pjmaDBPrismaClient.SecretKeyLicense.create).toHaveBeenCalledWith({
       data: {
         key: '8f23fcc4c918eb26c991b3950c79a243a6b0d683c2e58e0d31fc367b652e2b05',
-        app_name: 'test-app',
-        product_id: 'uuidv7',
+        app_name: 'Product Name',
+        product_id: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
         created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
       },
       select: { id: true },
     });
+  });
+});
 
-    vi.useRealTimers();
+describe('updateAppName function', () => {
+  it('Should call verifySession function, not call pjmaDBPrismaClient.SecretKeyLicense.update function and throw Error with "Unauthenticated" message', async () => {
+    const verifySession = (await import('@/lib/verifySession')).default;
+    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+
+    verifySession.mockResolvedValue(false);
+
+    await expect(
+      updateAppName({
+        product_id: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
+        name: 'New Product Name',
+      }),
+    ).rejects.toThrow('Unauthenticated');
+
+    expect(verifySession).toHaveBeenCalled();
+    expect(pjmaDBPrismaClient.SecretKeyLicense.updateMany).not.toHaveBeenCalled();
+  });
+
+  it('Should call pjmaDBPrismaClient.SecretKeyLicense.update function correctly', async () => {
+    const verifySession = (await import('@/lib/verifySession')).default;
+    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+
+    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+
+    await updateAppName({
+      product_id: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
+      name: 'Updated Name',
+    });
+
+    expect(pjmaDBPrismaClient.SecretKeyLicense.updateMany).toHaveBeenCalledWith({
+      where: { product_id: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2' },
+      data: { app_name: 'Updated Name' },
+    });
   });
 });
 
@@ -151,6 +198,7 @@ describe('getSecretKeys function', () => {
         id: true,
         app_name: true,
       },
+      orderBy: { created_at: 'desc' },
     });
   });
 });
@@ -187,6 +235,93 @@ describe('getSpecificSecretKey function', () => {
 
     expect(pjmaDBPrismaClient.SecretKeyLicense.findUnique).toHaveBeenCalledWith({
       where: { id: 2n },
+      select: { key: true },
+    });
+  });
+});
+
+describe('getSecretKey function', () => {
+  it('should call verifySession function, not call pjmaDBPrismaClient.SecretKeyLicense.findUnique function and throw Error with "Unauthenticated" message', async () => {
+    const verifySession = (await import('@/lib/verifySession')).default;
+    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+
+    verifySession.mockResolvedValue(false);
+
+    await expect(getSecretKey('123')).rejects.toThrow('Unauthenticated');
+
+    expect(verifySession).toHaveBeenCalled();
+    expect(pjmaDBPrismaClient.SecretKeyLicense.findUnique).not.toHaveBeenCalled();
+  });
+
+  it('should call pjmaDBPrismaClient.SecretKeyLicense.findUnique function correctly', async () => {
+    const verifySession = (await import('@/lib/verifySession')).default;
+    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+
+    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+
+    pjmaDBPrismaClient.SecretKeyLicense.findUnique.mockResolvedValue({
+      id: BigInt(123),
+      app_name: 'Test App',
+      key: 'secret-key-value',
+    });
+
+    await getSecretKey('123');
+
+    expect(verifySession).toHaveBeenCalled();
+    expect(pjmaDBPrismaClient.SecretKeyLicense.findUnique).toHaveBeenCalledWith({
+      where: { id: BigInt(123) },
+      select: {
+        id: true,
+        app_name: true,
+        key: true,
+      },
+    });
+  });
+});
+
+describe('saveRegeneratedSecretKey function', () => {
+  it('Should call verifySession function, not call pjmaDBPrismaClient.SecretKeyLicense.update function and throw Error with "Unauthenticated" message', async () => {
+    const verifySession = (await import('@/lib/verifySession')).default;
+    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+
+    verifySession.mockResolvedValue(false);
+
+    await expect(saveRegeneratedSecretKey({
+      id: '123',
+      key: 'a'.repeat(64),
+    })).rejects.toThrow('Unauthenticated');
+
+    expect(verifySession).toHaveBeenCalled();
+    expect(pjmaDBPrismaClient.SecretKeyLicense.update).not.toHaveBeenCalled();
+  });
+
+  it('Should call pjmaDBPrismaClient.SecretKeyLicense.update function correctly', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(1744853503149);
+
+    const verifySession = (await import('@/lib/verifySession')).default;
+    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+
+    const regeneratedKey = '6f927ec4f37c8a99880ad233b9d9cf7ea539b58b99bd7e21d7bcd2f4a7d9123e';
+
+    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+
+    pjmaDBPrismaClient.SecretKeyLicense.update.mockResolvedValue({
+      key: regeneratedKey,
+    });
+
+    await saveRegeneratedSecretKey({
+      id: '123',
+      key: regeneratedKey,
+    });
+
+    expect(verifySession).toHaveBeenCalled();
+    expect(pjmaDBPrismaClient.SecretKeyLicense.update).toHaveBeenCalledWith({
+      where: { id: BigInt(123) },
+      data: {
+        key: regeneratedKey,
+        regenerated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+      },
       select: { key: true },
     });
   });

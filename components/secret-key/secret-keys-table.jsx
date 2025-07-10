@@ -7,6 +7,7 @@ export default async function SecretKeysTable() {
     key: true,
     app_name: true,
     created_at: true,
+    regenerated_at: true,
   });
   return  <DataTable secretKeys={secretKeys} />;
 }

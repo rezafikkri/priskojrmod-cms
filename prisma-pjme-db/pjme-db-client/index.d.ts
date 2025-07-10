@@ -39,6 +39,11 @@ export type Customer = $Result.DefaultSelection<Prisma.$CustomerPayload>
  */
 export type License = $Result.DefaultSelection<Prisma.$LicensePayload>
 /**
+ * Model LicenseTranslation
+ * 
+ */
+export type LicenseTranslation = $Result.DefaultSelection<Prisma.$LicenseTranslationPayload>
+/**
  * Model Category
  * 
  */
@@ -48,6 +53,11 @@ export type Category = $Result.DefaultSelection<Prisma.$CategoryPayload>
  * 
  */
 export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
+/**
+ * Model ProductTranslation
+ * 
+ */
+export type ProductTranslation = $Result.DefaultSelection<Prisma.$ProductTranslationPayload>
 /**
  * Model ProductDiscount
  * 
@@ -74,10 +84,15 @@ export type ProductVariant = $Result.DefaultSelection<Prisma.$ProductVariantPayl
  */
 export type ProductPrice = $Result.DefaultSelection<Prisma.$ProductPricePayload>
 /**
- * Model TermAndCondition
+ * Model TermsOfService
  * 
  */
-export type TermAndCondition = $Result.DefaultSelection<Prisma.$TermAndConditionPayload>
+export type TermsOfService = $Result.DefaultSelection<Prisma.$TermsOfServicePayload>
+/**
+ * Model TermsOfServiceTranslation
+ * 
+ */
+export type TermsOfServiceTranslation = $Result.DefaultSelection<Prisma.$TermsOfServiceTranslationPayload>
 /**
  * Model PrivacyPolicy
  * 
@@ -326,6 +341,16 @@ export class PrismaClient<
   get license(): Prisma.LicenseDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.licenseTranslation`: Exposes CRUD operations for the **LicenseTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LicenseTranslations
+    * const licenseTranslations = await prisma.licenseTranslation.findMany()
+    * ```
+    */
+  get licenseTranslation(): Prisma.LicenseTranslationDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.category`: Exposes CRUD operations for the **Category** model.
     * Example usage:
     * ```ts
@@ -344,6 +369,16 @@ export class PrismaClient<
     * ```
     */
   get product(): Prisma.ProductDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.productTranslation`: Exposes CRUD operations for the **ProductTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductTranslations
+    * const productTranslations = await prisma.productTranslation.findMany()
+    * ```
+    */
+  get productTranslation(): Prisma.ProductTranslationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.productDiscount`: Exposes CRUD operations for the **ProductDiscount** model.
@@ -396,14 +431,24 @@ export class PrismaClient<
   get productPrice(): Prisma.ProductPriceDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.termAndCondition`: Exposes CRUD operations for the **TermAndCondition** model.
+   * `prisma.termsOfService`: Exposes CRUD operations for the **TermsOfService** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more TermAndConditions
-    * const termAndConditions = await prisma.termAndCondition.findMany()
+    * // Fetch zero or more TermsOfServices
+    * const termsOfServices = await prisma.termsOfService.findMany()
     * ```
     */
-  get termAndCondition(): Prisma.TermAndConditionDelegate<ExtArgs, ClientOptions>;
+  get termsOfService(): Prisma.TermsOfServiceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.termsOfServiceTranslation`: Exposes CRUD operations for the **TermsOfServiceTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TermsOfServiceTranslations
+    * const termsOfServiceTranslations = await prisma.termsOfServiceTranslation.findMany()
+    * ```
+    */
+  get termsOfServiceTranslation(): Prisma.TermsOfServiceTranslationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.privacyPolicy`: Exposes CRUD operations for the **PrivacyPolicy** model.
@@ -909,14 +954,17 @@ export namespace Prisma {
     Owner: 'Owner',
     Customer: 'Customer',
     License: 'License',
+    LicenseTranslation: 'LicenseTranslation',
     Category: 'Category',
     Product: 'Product',
+    ProductTranslation: 'ProductTranslation',
     ProductDiscount: 'ProductDiscount',
     ProductCoupon: 'ProductCoupon',
     ProductImage: 'ProductImage',
     ProductVariant: 'ProductVariant',
     ProductPrice: 'ProductPrice',
-    TermAndCondition: 'TermAndCondition',
+    TermsOfService: 'TermsOfService',
+    TermsOfServiceTranslation: 'TermsOfServiceTranslation',
     PrivacyPolicy: 'PrivacyPolicy',
     PrivacyPolicyTranslation: 'PrivacyPolicyTranslation',
     AboutUs: 'AboutUs',
@@ -941,7 +989,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "donationLink" | "owner" | "customer" | "license" | "category" | "product" | "productDiscount" | "productCoupon" | "productImage" | "productVariant" | "productPrice" | "termAndCondition" | "privacyPolicy" | "privacyPolicyTranslation" | "aboutUs" | "aboutUsTranslation" | "faq" | "faqTranslation"
+      modelProps: "admin" | "donationLink" | "owner" | "customer" | "license" | "licenseTranslation" | "category" | "product" | "productTranslation" | "productDiscount" | "productCoupon" | "productImage" | "productVariant" | "productPrice" | "termsOfService" | "termsOfServiceTranslation" | "privacyPolicy" | "privacyPolicyTranslation" | "aboutUs" | "aboutUsTranslation" | "faq" | "faqTranslation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1315,6 +1363,80 @@ export namespace Prisma {
           }
         }
       }
+      LicenseTranslation: {
+        payload: Prisma.$LicenseTranslationPayload<ExtArgs>
+        fields: Prisma.LicenseTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LicenseTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LicenseTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.LicenseTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LicenseTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.LicenseTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.LicenseTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.LicenseTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LicenseTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.LicenseTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload>
+          }
+          update: {
+            args: Prisma.LicenseTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.LicenseTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LicenseTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LicenseTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.LicenseTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LicenseTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.LicenseTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLicenseTranslation>
+          }
+          groupBy: {
+            args: Prisma.LicenseTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LicenseTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LicenseTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<LicenseTranslationCountAggregateOutputType> | number
+          }
+        }
+      }
       Category: {
         payload: Prisma.$CategoryPayload<ExtArgs>
         fields: Prisma.CategoryFieldRefs
@@ -1460,6 +1582,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ProductCountArgs<ExtArgs>
             result: $Utils.Optional<ProductCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductTranslation: {
+        payload: Prisma.$ProductTranslationPayload<ExtArgs>
+        fields: Prisma.ProductTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.ProductTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.ProductTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.ProductTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload>
+          }
+          update: {
+            args: Prisma.ProductTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductTranslation>
+          }
+          groupBy: {
+            args: Prisma.ProductTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductTranslationCountAggregateOutputType> | number
           }
         }
       }
@@ -1833,77 +2029,151 @@ export namespace Prisma {
           }
         }
       }
-      TermAndCondition: {
-        payload: Prisma.$TermAndConditionPayload<ExtArgs>
-        fields: Prisma.TermAndConditionFieldRefs
+      TermsOfService: {
+        payload: Prisma.$TermsOfServicePayload<ExtArgs>
+        fields: Prisma.TermsOfServiceFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.TermAndConditionFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload> | null
+            args: Prisma.TermsOfServiceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.TermAndConditionFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload>
+            args: Prisma.TermsOfServiceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload>
           }
           findFirst: {
-            args: Prisma.TermAndConditionFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload> | null
+            args: Prisma.TermsOfServiceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.TermAndConditionFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload>
+            args: Prisma.TermsOfServiceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload>
           }
           findMany: {
-            args: Prisma.TermAndConditionFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload>[]
+            args: Prisma.TermsOfServiceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload>[]
           }
           create: {
-            args: Prisma.TermAndConditionCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload>
+            args: Prisma.TermsOfServiceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload>
           }
           createMany: {
-            args: Prisma.TermAndConditionCreateManyArgs<ExtArgs>
+            args: Prisma.TermsOfServiceCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.TermAndConditionCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload>[]
+            args: Prisma.TermsOfServiceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload>[]
           }
           delete: {
-            args: Prisma.TermAndConditionDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload>
+            args: Prisma.TermsOfServiceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload>
           }
           update: {
-            args: Prisma.TermAndConditionUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload>
+            args: Prisma.TermsOfServiceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload>
           }
           deleteMany: {
-            args: Prisma.TermAndConditionDeleteManyArgs<ExtArgs>
+            args: Prisma.TermsOfServiceDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.TermAndConditionUpdateManyArgs<ExtArgs>
+            args: Prisma.TermsOfServiceUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.TermAndConditionUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload>[]
+            args: Prisma.TermsOfServiceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload>[]
           }
           upsert: {
-            args: Prisma.TermAndConditionUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TermAndConditionPayload>
+            args: Prisma.TermsOfServiceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServicePayload>
           }
           aggregate: {
-            args: Prisma.TermAndConditionAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateTermAndCondition>
+            args: Prisma.TermsOfServiceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTermsOfService>
           }
           groupBy: {
-            args: Prisma.TermAndConditionGroupByArgs<ExtArgs>
-            result: $Utils.Optional<TermAndConditionGroupByOutputType>[]
+            args: Prisma.TermsOfServiceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TermsOfServiceGroupByOutputType>[]
           }
           count: {
-            args: Prisma.TermAndConditionCountArgs<ExtArgs>
-            result: $Utils.Optional<TermAndConditionCountAggregateOutputType> | number
+            args: Prisma.TermsOfServiceCountArgs<ExtArgs>
+            result: $Utils.Optional<TermsOfServiceCountAggregateOutputType> | number
+          }
+        }
+      }
+      TermsOfServiceTranslation: {
+        payload: Prisma.$TermsOfServiceTranslationPayload<ExtArgs>
+        fields: Prisma.TermsOfServiceTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TermsOfServiceTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TermsOfServiceTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.TermsOfServiceTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TermsOfServiceTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.TermsOfServiceTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.TermsOfServiceTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.TermsOfServiceTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TermsOfServiceTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.TermsOfServiceTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload>
+          }
+          update: {
+            args: Prisma.TermsOfServiceTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.TermsOfServiceTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TermsOfServiceTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TermsOfServiceTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.TermsOfServiceTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TermsOfServiceTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.TermsOfServiceTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTermsOfServiceTranslation>
+          }
+          groupBy: {
+            args: Prisma.TermsOfServiceTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TermsOfServiceTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TermsOfServiceTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<TermsOfServiceTranslationCountAggregateOutputType> | number
           }
         }
       }
@@ -2440,14 +2710,17 @@ export namespace Prisma {
     owner?: OwnerOmit
     customer?: CustomerOmit
     license?: LicenseOmit
+    licenseTranslation?: LicenseTranslationOmit
     category?: CategoryOmit
     product?: ProductOmit
+    productTranslation?: ProductTranslationOmit
     productDiscount?: ProductDiscountOmit
     productCoupon?: ProductCouponOmit
     productImage?: ProductImageOmit
     productVariant?: ProductVariantOmit
     productPrice?: ProductPriceOmit
-    termAndCondition?: TermAndConditionOmit
+    termsOfService?: TermsOfServiceOmit
+    termsOfServiceTranslation?: TermsOfServiceTranslationOmit
     privacyPolicy?: PrivacyPolicyOmit
     privacyPolicyTranslation?: PrivacyPolicyTranslationOmit
     aboutUs?: AboutUsOmit
@@ -2620,10 +2893,12 @@ export namespace Prisma {
 
   export type LicenseCountOutputType = {
     products: number
+    translations: number
   }
 
   export type LicenseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | LicenseCountOutputTypeCountProductsArgs
+    translations?: boolean | LicenseCountOutputTypeCountTranslationsArgs
   }
 
   // Custom InputTypes
@@ -2642,6 +2917,13 @@ export namespace Prisma {
    */
   export type LicenseCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductWhereInput
+  }
+
+  /**
+   * LicenseCountOutputType without action
+   */
+  export type LicenseCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LicenseTranslationWhereInput
   }
 
 
@@ -2681,13 +2963,15 @@ export namespace Prisma {
    */
 
   export type ProductCountOutputType = {
-    product_images: number
-    product_variants: number
+    translations: number
+    images: number
+    variants: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product_images?: boolean | ProductCountOutputTypeCountProduct_imagesArgs
-    product_variants?: boolean | ProductCountOutputTypeCountProduct_variantsArgs
+    translations?: boolean | ProductCountOutputTypeCountTranslationsArgs
+    images?: boolean | ProductCountOutputTypeCountImagesArgs
+    variants?: boolean | ProductCountOutputTypeCountVariantsArgs
   }
 
   // Custom InputTypes
@@ -2704,14 +2988,21 @@ export namespace Prisma {
   /**
    * ProductCountOutputType without action
    */
-  export type ProductCountOutputTypeCountProduct_imagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductTranslationWhereInput
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountImagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductImageWhereInput
   }
 
   /**
    * ProductCountOutputType without action
    */
-  export type ProductCountOutputTypeCountProduct_variantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductCountOutputTypeCountVariantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductVariantWhereInput
   }
 
@@ -2721,11 +3012,11 @@ export namespace Prisma {
    */
 
   export type ProductVariantCountOutputType = {
-    product_prices: number
+    prices: number
   }
 
   export type ProductVariantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product_prices?: boolean | ProductVariantCountOutputTypeCountProduct_pricesArgs
+    prices?: boolean | ProductVariantCountOutputTypeCountPricesArgs
   }
 
   // Custom InputTypes
@@ -2742,8 +3033,39 @@ export namespace Prisma {
   /**
    * ProductVariantCountOutputType without action
    */
-  export type ProductVariantCountOutputTypeCountProduct_pricesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductVariantCountOutputTypeCountPricesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductPriceWhereInput
+  }
+
+
+  /**
+   * Count Type TermsOfServiceCountOutputType
+   */
+
+  export type TermsOfServiceCountOutputType = {
+    translations: number
+  }
+
+  export type TermsOfServiceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | TermsOfServiceCountOutputTypeCountTranslationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TermsOfServiceCountOutputType without action
+   */
+  export type TermsOfServiceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceCountOutputType
+     */
+    select?: TermsOfServiceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TermsOfServiceCountOutputType without action
+   */
+  export type TermsOfServiceCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TermsOfServiceTranslationWhereInput
   }
 
 
@@ -5048,10 +5370,14 @@ export namespace Prisma {
 
   export type OwnerAvgAggregateOutputType = {
     id: number | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type OwnerSumAggregateOutputType = {
     id: number | null
+    created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type OwnerMinAggregateOutputType = {
@@ -5060,6 +5386,8 @@ export namespace Prisma {
     last_name: string | null
     sm_username: string | null
     picture: string | null
+    created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type OwnerMaxAggregateOutputType = {
@@ -5068,6 +5396,8 @@ export namespace Prisma {
     last_name: string | null
     sm_username: string | null
     picture: string | null
+    created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type OwnerCountAggregateOutputType = {
@@ -5076,16 +5406,22 @@ export namespace Prisma {
     last_name: number
     sm_username: number
     picture: number
+    created_at: number
+    updated_at: number
     _all: number
   }
 
 
   export type OwnerAvgAggregateInputType = {
     id?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type OwnerSumAggregateInputType = {
     id?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type OwnerMinAggregateInputType = {
@@ -5094,6 +5430,8 @@ export namespace Prisma {
     last_name?: true
     sm_username?: true
     picture?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type OwnerMaxAggregateInputType = {
@@ -5102,6 +5440,8 @@ export namespace Prisma {
     last_name?: true
     sm_username?: true
     picture?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type OwnerCountAggregateInputType = {
@@ -5110,6 +5450,8 @@ export namespace Prisma {
     last_name?: true
     sm_username?: true
     picture?: true
+    created_at?: true
+    updated_at?: true
     _all?: true
   }
 
@@ -5205,6 +5547,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
+    created_at: bigint
+    updated_at: bigint
     _count: OwnerCountAggregateOutputType | null
     _avg: OwnerAvgAggregateOutputType | null
     _sum: OwnerSumAggregateOutputType | null
@@ -5232,6 +5576,8 @@ export namespace Prisma {
     last_name?: boolean
     sm_username?: boolean
     picture?: boolean
+    created_at?: boolean
+    updated_at?: boolean
     products?: boolean | Owner$productsArgs<ExtArgs>
     _count?: boolean | OwnerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["owner"]>
@@ -5242,6 +5588,8 @@ export namespace Prisma {
     last_name?: boolean
     sm_username?: boolean
     picture?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["owner"]>
 
   export type OwnerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5250,6 +5598,8 @@ export namespace Prisma {
     last_name?: boolean
     sm_username?: boolean
     picture?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["owner"]>
 
   export type OwnerSelectScalar = {
@@ -5258,9 +5608,11 @@ export namespace Prisma {
     last_name?: boolean
     sm_username?: boolean
     picture?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }
 
-  export type OwnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "sm_username" | "picture", ExtArgs["result"]["owner"]>
+  export type OwnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "sm_username" | "picture" | "created_at" | "updated_at", ExtArgs["result"]["owner"]>
   export type OwnerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | Owner$productsArgs<ExtArgs>
     _count?: boolean | OwnerCountOutputTypeDefaultArgs<ExtArgs>
@@ -5279,6 +5631,8 @@ export namespace Prisma {
       last_name: string
       sm_username: string
       picture: string
+      created_at: bigint
+      updated_at: bigint
     }, ExtArgs["result"]["owner"]>
     composites: {}
   }
@@ -5708,6 +6062,8 @@ export namespace Prisma {
     readonly last_name: FieldRef<"Owner", 'String'>
     readonly sm_username: FieldRef<"Owner", 'String'>
     readonly picture: FieldRef<"Owner", 'String'>
+    readonly created_at: FieldRef<"Owner", 'BigInt'>
+    readonly updated_at: FieldRef<"Owner", 'BigInt'>
   }
     
 
@@ -6160,10 +6516,11 @@ export namespace Prisma {
 
   export type CustomerMinAggregateOutputType = {
     id: string | null
+    oauth_id: string | null
+    is_banned: boolean | null
     first_name: string | null
     last_name: string | null
     email: string | null
-    password: string | null
     phone_number: string | null
     picture: string | null
     last_active: bigint | null
@@ -6171,10 +6528,11 @@ export namespace Prisma {
 
   export type CustomerMaxAggregateOutputType = {
     id: string | null
+    oauth_id: string | null
+    is_banned: boolean | null
     first_name: string | null
     last_name: string | null
     email: string | null
-    password: string | null
     phone_number: string | null
     picture: string | null
     last_active: bigint | null
@@ -6182,10 +6540,11 @@ export namespace Prisma {
 
   export type CustomerCountAggregateOutputType = {
     id: number
+    oauth_id: number
+    is_banned: number
     first_name: number
     last_name: number
     email: number
-    password: number
     phone_number: number
     picture: number
     last_active: number
@@ -6203,10 +6562,11 @@ export namespace Prisma {
 
   export type CustomerMinAggregateInputType = {
     id?: true
+    oauth_id?: true
+    is_banned?: true
     first_name?: true
     last_name?: true
     email?: true
-    password?: true
     phone_number?: true
     picture?: true
     last_active?: true
@@ -6214,10 +6574,11 @@ export namespace Prisma {
 
   export type CustomerMaxAggregateInputType = {
     id?: true
+    oauth_id?: true
+    is_banned?: true
     first_name?: true
     last_name?: true
     email?: true
-    password?: true
     phone_number?: true
     picture?: true
     last_active?: true
@@ -6225,10 +6586,11 @@ export namespace Prisma {
 
   export type CustomerCountAggregateInputType = {
     id?: true
+    oauth_id?: true
+    is_banned?: true
     first_name?: true
     last_name?: true
     email?: true
-    password?: true
     phone_number?: true
     picture?: true
     last_active?: true
@@ -6323,13 +6685,14 @@ export namespace Prisma {
 
   export type CustomerGroupByOutputType = {
     id: string
+    oauth_id: string | null
+    is_banned: boolean
     first_name: string
     last_name: string
     email: string
-    password: string | null
     phone_number: string | null
     picture: string | null
-    last_active: bigint
+    last_active: bigint | null
     _count: CustomerCountAggregateOutputType | null
     _avg: CustomerAvgAggregateOutputType | null
     _sum: CustomerSumAggregateOutputType | null
@@ -6353,10 +6716,11 @@ export namespace Prisma {
 
   export type CustomerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    oauth_id?: boolean
+    is_banned?: boolean
     first_name?: boolean
     last_name?: boolean
     email?: boolean
-    password?: boolean
     phone_number?: boolean
     picture?: boolean
     last_active?: boolean
@@ -6364,10 +6728,11 @@ export namespace Prisma {
 
   export type CustomerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    oauth_id?: boolean
+    is_banned?: boolean
     first_name?: boolean
     last_name?: boolean
     email?: boolean
-    password?: boolean
     phone_number?: boolean
     picture?: boolean
     last_active?: boolean
@@ -6375,10 +6740,11 @@ export namespace Prisma {
 
   export type CustomerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    oauth_id?: boolean
+    is_banned?: boolean
     first_name?: boolean
     last_name?: boolean
     email?: boolean
-    password?: boolean
     phone_number?: boolean
     picture?: boolean
     last_active?: boolean
@@ -6386,29 +6752,31 @@ export namespace Prisma {
 
   export type CustomerSelectScalar = {
     id?: boolean
+    oauth_id?: boolean
+    is_banned?: boolean
     first_name?: boolean
     last_name?: boolean
     email?: boolean
-    password?: boolean
     phone_number?: boolean
     picture?: boolean
     last_active?: boolean
   }
 
-  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "email" | "password" | "phone_number" | "picture" | "last_active", ExtArgs["result"]["customer"]>
+  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "oauth_id" | "is_banned" | "first_name" | "last_name" | "email" | "phone_number" | "picture" | "last_active", ExtArgs["result"]["customer"]>
 
   export type $CustomerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Customer"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      oauth_id: string | null
+      is_banned: boolean
       first_name: string
       last_name: string
       email: string
-      password: string | null
       phone_number: string | null
       picture: string | null
-      last_active: bigint
+      last_active: bigint | null
     }, ExtArgs["result"]["customer"]>
     composites: {}
   }
@@ -6833,10 +7201,11 @@ export namespace Prisma {
    */
   interface CustomerFieldRefs {
     readonly id: FieldRef<"Customer", 'String'>
+    readonly oauth_id: FieldRef<"Customer", 'String'>
+    readonly is_banned: FieldRef<"Customer", 'Boolean'>
     readonly first_name: FieldRef<"Customer", 'String'>
     readonly last_name: FieldRef<"Customer", 'String'>
     readonly email: FieldRef<"Customer", 'String'>
-    readonly password: FieldRef<"Customer", 'String'>
     readonly phone_number: FieldRef<"Customer", 'String'>
     readonly picture: FieldRef<"Customer", 'String'>
     readonly last_active: FieldRef<"Customer", 'BigInt'>
@@ -7220,29 +7589,31 @@ export namespace Prisma {
 
   export type LicenseAvgAggregateOutputType = {
     id: number | null
+    created_at: number | null
     updated_at: number | null
   }
 
   export type LicenseSumAggregateOutputType = {
     id: number | null
+    created_at: bigint | null
     updated_at: bigint | null
   }
 
   export type LicenseMinAggregateOutputType = {
     id: number | null
-    content: string | null
+    created_at: bigint | null
     updated_at: bigint | null
   }
 
   export type LicenseMaxAggregateOutputType = {
     id: number | null
-    content: string | null
+    created_at: bigint | null
     updated_at: bigint | null
   }
 
   export type LicenseCountAggregateOutputType = {
     id: number
-    content: number
+    created_at: number
     updated_at: number
     _all: number
   }
@@ -7250,29 +7621,31 @@ export namespace Prisma {
 
   export type LicenseAvgAggregateInputType = {
     id?: true
+    created_at?: true
     updated_at?: true
   }
 
   export type LicenseSumAggregateInputType = {
     id?: true
+    created_at?: true
     updated_at?: true
   }
 
   export type LicenseMinAggregateInputType = {
     id?: true
-    content?: true
+    created_at?: true
     updated_at?: true
   }
 
   export type LicenseMaxAggregateInputType = {
     id?: true
-    content?: true
+    created_at?: true
     updated_at?: true
   }
 
   export type LicenseCountAggregateInputType = {
     id?: true
-    content?: true
+    created_at?: true
     updated_at?: true
     _all?: true
   }
@@ -7365,7 +7738,7 @@ export namespace Prisma {
 
   export type LicenseGroupByOutputType = {
     id: number
-    content: string
+    created_at: bigint
     updated_at: bigint
     _count: LicenseCountAggregateOutputType | null
     _avg: LicenseAvgAggregateOutputType | null
@@ -7390,33 +7763,35 @@ export namespace Prisma {
 
   export type LicenseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    content?: boolean
+    created_at?: boolean
     updated_at?: boolean
     products?: boolean | License$productsArgs<ExtArgs>
+    translations?: boolean | License$translationsArgs<ExtArgs>
     _count?: boolean | LicenseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["license"]>
 
   export type LicenseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    content?: boolean
+    created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["license"]>
 
   export type LicenseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    content?: boolean
+    created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["license"]>
 
   export type LicenseSelectScalar = {
     id?: boolean
-    content?: boolean
+    created_at?: boolean
     updated_at?: boolean
   }
 
-  export type LicenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "updated_at", ExtArgs["result"]["license"]>
+  export type LicenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "created_at" | "updated_at", ExtArgs["result"]["license"]>
   export type LicenseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | License$productsArgs<ExtArgs>
+    translations?: boolean | License$translationsArgs<ExtArgs>
     _count?: boolean | LicenseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LicenseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7426,10 +7801,11 @@ export namespace Prisma {
     name: "License"
     objects: {
       products: Prisma.$ProductPayload<ExtArgs>[]
+      translations: Prisma.$LicenseTranslationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      content: string
+      created_at: bigint
       updated_at: bigint
     }, ExtArgs["result"]["license"]>
     composites: {}
@@ -7826,6 +8202,7 @@ export namespace Prisma {
   export interface Prisma__LicenseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     products<T extends License$productsArgs<ExtArgs> = {}>(args?: Subset<T, License$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    translations<T extends License$translationsArgs<ExtArgs> = {}>(args?: Subset<T, License$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7856,7 +8233,7 @@ export namespace Prisma {
    */
   interface LicenseFieldRefs {
     readonly id: FieldRef<"License", 'Int'>
-    readonly content: FieldRef<"License", 'String'>
+    readonly created_at: FieldRef<"License", 'BigInt'>
     readonly updated_at: FieldRef<"License", 'BigInt'>
   }
     
@@ -8270,6 +8647,30 @@ export namespace Prisma {
   }
 
   /**
+   * License.translations
+   */
+  export type License$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    where?: LicenseTranslationWhereInput
+    orderBy?: LicenseTranslationOrderByWithRelationInput | LicenseTranslationOrderByWithRelationInput[]
+    cursor?: LicenseTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LicenseTranslationScalarFieldEnum | LicenseTranslationScalarFieldEnum[]
+  }
+
+  /**
    * License without action
    */
   export type LicenseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8289,6 +8690,1102 @@ export namespace Prisma {
 
 
   /**
+   * Model LicenseTranslation
+   */
+
+  export type AggregateLicenseTranslation = {
+    _count: LicenseTranslationCountAggregateOutputType | null
+    _avg: LicenseTranslationAvgAggregateOutputType | null
+    _sum: LicenseTranslationSumAggregateOutputType | null
+    _min: LicenseTranslationMinAggregateOutputType | null
+    _max: LicenseTranslationMaxAggregateOutputType | null
+  }
+
+  export type LicenseTranslationAvgAggregateOutputType = {
+    id: number | null
+    license_id: number | null
+  }
+
+  export type LicenseTranslationSumAggregateOutputType = {
+    id: number | null
+    license_id: number | null
+  }
+
+  export type LicenseTranslationMinAggregateOutputType = {
+    id: number | null
+    license_id: number | null
+    language: $Enums.Language | null
+    name: string | null
+    content: string | null
+  }
+
+  export type LicenseTranslationMaxAggregateOutputType = {
+    id: number | null
+    license_id: number | null
+    language: $Enums.Language | null
+    name: string | null
+    content: string | null
+  }
+
+  export type LicenseTranslationCountAggregateOutputType = {
+    id: number
+    license_id: number
+    language: number
+    name: number
+    content: number
+    _all: number
+  }
+
+
+  export type LicenseTranslationAvgAggregateInputType = {
+    id?: true
+    license_id?: true
+  }
+
+  export type LicenseTranslationSumAggregateInputType = {
+    id?: true
+    license_id?: true
+  }
+
+  export type LicenseTranslationMinAggregateInputType = {
+    id?: true
+    license_id?: true
+    language?: true
+    name?: true
+    content?: true
+  }
+
+  export type LicenseTranslationMaxAggregateInputType = {
+    id?: true
+    license_id?: true
+    language?: true
+    name?: true
+    content?: true
+  }
+
+  export type LicenseTranslationCountAggregateInputType = {
+    id?: true
+    license_id?: true
+    language?: true
+    name?: true
+    content?: true
+    _all?: true
+  }
+
+  export type LicenseTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LicenseTranslation to aggregate.
+     */
+    where?: LicenseTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LicenseTranslations to fetch.
+     */
+    orderBy?: LicenseTranslationOrderByWithRelationInput | LicenseTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LicenseTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LicenseTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LicenseTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LicenseTranslations
+    **/
+    _count?: true | LicenseTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LicenseTranslationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LicenseTranslationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LicenseTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LicenseTranslationMaxAggregateInputType
+  }
+
+  export type GetLicenseTranslationAggregateType<T extends LicenseTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateLicenseTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLicenseTranslation[P]>
+      : GetScalarType<T[P], AggregateLicenseTranslation[P]>
+  }
+
+
+
+
+  export type LicenseTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LicenseTranslationWhereInput
+    orderBy?: LicenseTranslationOrderByWithAggregationInput | LicenseTranslationOrderByWithAggregationInput[]
+    by: LicenseTranslationScalarFieldEnum[] | LicenseTranslationScalarFieldEnum
+    having?: LicenseTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LicenseTranslationCountAggregateInputType | true
+    _avg?: LicenseTranslationAvgAggregateInputType
+    _sum?: LicenseTranslationSumAggregateInputType
+    _min?: LicenseTranslationMinAggregateInputType
+    _max?: LicenseTranslationMaxAggregateInputType
+  }
+
+  export type LicenseTranslationGroupByOutputType = {
+    id: number
+    license_id: number
+    language: $Enums.Language
+    name: string
+    content: string
+    _count: LicenseTranslationCountAggregateOutputType | null
+    _avg: LicenseTranslationAvgAggregateOutputType | null
+    _sum: LicenseTranslationSumAggregateOutputType | null
+    _min: LicenseTranslationMinAggregateOutputType | null
+    _max: LicenseTranslationMaxAggregateOutputType | null
+  }
+
+  type GetLicenseTranslationGroupByPayload<T extends LicenseTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LicenseTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LicenseTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LicenseTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], LicenseTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LicenseTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    license_id?: boolean
+    language?: boolean
+    name?: boolean
+    content?: boolean
+    license?: boolean | LicenseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["licenseTranslation"]>
+
+  export type LicenseTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    license_id?: boolean
+    language?: boolean
+    name?: boolean
+    content?: boolean
+    license?: boolean | LicenseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["licenseTranslation"]>
+
+  export type LicenseTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    license_id?: boolean
+    language?: boolean
+    name?: boolean
+    content?: boolean
+    license?: boolean | LicenseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["licenseTranslation"]>
+
+  export type LicenseTranslationSelectScalar = {
+    id?: boolean
+    license_id?: boolean
+    language?: boolean
+    name?: boolean
+    content?: boolean
+  }
+
+  export type LicenseTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "license_id" | "language" | "name" | "content", ExtArgs["result"]["licenseTranslation"]>
+  export type LicenseTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    license?: boolean | LicenseDefaultArgs<ExtArgs>
+  }
+  export type LicenseTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    license?: boolean | LicenseDefaultArgs<ExtArgs>
+  }
+  export type LicenseTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    license?: boolean | LicenseDefaultArgs<ExtArgs>
+  }
+
+  export type $LicenseTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LicenseTranslation"
+    objects: {
+      license: Prisma.$LicensePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      license_id: number
+      language: $Enums.Language
+      name: string
+      content: string
+    }, ExtArgs["result"]["licenseTranslation"]>
+    composites: {}
+  }
+
+  type LicenseTranslationGetPayload<S extends boolean | null | undefined | LicenseTranslationDefaultArgs> = $Result.GetResult<Prisma.$LicenseTranslationPayload, S>
+
+  type LicenseTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LicenseTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LicenseTranslationCountAggregateInputType | true
+    }
+
+  export interface LicenseTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LicenseTranslation'], meta: { name: 'LicenseTranslation' } }
+    /**
+     * Find zero or one LicenseTranslation that matches the filter.
+     * @param {LicenseTranslationFindUniqueArgs} args - Arguments to find a LicenseTranslation
+     * @example
+     * // Get one LicenseTranslation
+     * const licenseTranslation = await prisma.licenseTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LicenseTranslationFindUniqueArgs>(args: SelectSubset<T, LicenseTranslationFindUniqueArgs<ExtArgs>>): Prisma__LicenseTranslationClient<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LicenseTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LicenseTranslationFindUniqueOrThrowArgs} args - Arguments to find a LicenseTranslation
+     * @example
+     * // Get one LicenseTranslation
+     * const licenseTranslation = await prisma.licenseTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LicenseTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, LicenseTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LicenseTranslationClient<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LicenseTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LicenseTranslationFindFirstArgs} args - Arguments to find a LicenseTranslation
+     * @example
+     * // Get one LicenseTranslation
+     * const licenseTranslation = await prisma.licenseTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LicenseTranslationFindFirstArgs>(args?: SelectSubset<T, LicenseTranslationFindFirstArgs<ExtArgs>>): Prisma__LicenseTranslationClient<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LicenseTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LicenseTranslationFindFirstOrThrowArgs} args - Arguments to find a LicenseTranslation
+     * @example
+     * // Get one LicenseTranslation
+     * const licenseTranslation = await prisma.licenseTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LicenseTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, LicenseTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__LicenseTranslationClient<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LicenseTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LicenseTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LicenseTranslations
+     * const licenseTranslations = await prisma.licenseTranslation.findMany()
+     * 
+     * // Get first 10 LicenseTranslations
+     * const licenseTranslations = await prisma.licenseTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const licenseTranslationWithIdOnly = await prisma.licenseTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LicenseTranslationFindManyArgs>(args?: SelectSubset<T, LicenseTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LicenseTranslation.
+     * @param {LicenseTranslationCreateArgs} args - Arguments to create a LicenseTranslation.
+     * @example
+     * // Create one LicenseTranslation
+     * const LicenseTranslation = await prisma.licenseTranslation.create({
+     *   data: {
+     *     // ... data to create a LicenseTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends LicenseTranslationCreateArgs>(args: SelectSubset<T, LicenseTranslationCreateArgs<ExtArgs>>): Prisma__LicenseTranslationClient<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LicenseTranslations.
+     * @param {LicenseTranslationCreateManyArgs} args - Arguments to create many LicenseTranslations.
+     * @example
+     * // Create many LicenseTranslations
+     * const licenseTranslation = await prisma.licenseTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LicenseTranslationCreateManyArgs>(args?: SelectSubset<T, LicenseTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LicenseTranslations and returns the data saved in the database.
+     * @param {LicenseTranslationCreateManyAndReturnArgs} args - Arguments to create many LicenseTranslations.
+     * @example
+     * // Create many LicenseTranslations
+     * const licenseTranslation = await prisma.licenseTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LicenseTranslations and only return the `id`
+     * const licenseTranslationWithIdOnly = await prisma.licenseTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LicenseTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, LicenseTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LicenseTranslation.
+     * @param {LicenseTranslationDeleteArgs} args - Arguments to delete one LicenseTranslation.
+     * @example
+     * // Delete one LicenseTranslation
+     * const LicenseTranslation = await prisma.licenseTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one LicenseTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LicenseTranslationDeleteArgs>(args: SelectSubset<T, LicenseTranslationDeleteArgs<ExtArgs>>): Prisma__LicenseTranslationClient<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LicenseTranslation.
+     * @param {LicenseTranslationUpdateArgs} args - Arguments to update one LicenseTranslation.
+     * @example
+     * // Update one LicenseTranslation
+     * const licenseTranslation = await prisma.licenseTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LicenseTranslationUpdateArgs>(args: SelectSubset<T, LicenseTranslationUpdateArgs<ExtArgs>>): Prisma__LicenseTranslationClient<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LicenseTranslations.
+     * @param {LicenseTranslationDeleteManyArgs} args - Arguments to filter LicenseTranslations to delete.
+     * @example
+     * // Delete a few LicenseTranslations
+     * const { count } = await prisma.licenseTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LicenseTranslationDeleteManyArgs>(args?: SelectSubset<T, LicenseTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LicenseTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LicenseTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LicenseTranslations
+     * const licenseTranslation = await prisma.licenseTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LicenseTranslationUpdateManyArgs>(args: SelectSubset<T, LicenseTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LicenseTranslations and returns the data updated in the database.
+     * @param {LicenseTranslationUpdateManyAndReturnArgs} args - Arguments to update many LicenseTranslations.
+     * @example
+     * // Update many LicenseTranslations
+     * const licenseTranslation = await prisma.licenseTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LicenseTranslations and only return the `id`
+     * const licenseTranslationWithIdOnly = await prisma.licenseTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LicenseTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, LicenseTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LicenseTranslation.
+     * @param {LicenseTranslationUpsertArgs} args - Arguments to update or create a LicenseTranslation.
+     * @example
+     * // Update or create a LicenseTranslation
+     * const licenseTranslation = await prisma.licenseTranslation.upsert({
+     *   create: {
+     *     // ... data to create a LicenseTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LicenseTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LicenseTranslationUpsertArgs>(args: SelectSubset<T, LicenseTranslationUpsertArgs<ExtArgs>>): Prisma__LicenseTranslationClient<$Result.GetResult<Prisma.$LicenseTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LicenseTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LicenseTranslationCountArgs} args - Arguments to filter LicenseTranslations to count.
+     * @example
+     * // Count the number of LicenseTranslations
+     * const count = await prisma.licenseTranslation.count({
+     *   where: {
+     *     // ... the filter for the LicenseTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends LicenseTranslationCountArgs>(
+      args?: Subset<T, LicenseTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LicenseTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LicenseTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LicenseTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LicenseTranslationAggregateArgs>(args: Subset<T, LicenseTranslationAggregateArgs>): Prisma.PrismaPromise<GetLicenseTranslationAggregateType<T>>
+
+    /**
+     * Group by LicenseTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LicenseTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LicenseTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LicenseTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: LicenseTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LicenseTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLicenseTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LicenseTranslation model
+   */
+  readonly fields: LicenseTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LicenseTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LicenseTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    license<T extends LicenseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LicenseDefaultArgs<ExtArgs>>): Prisma__LicenseClient<$Result.GetResult<Prisma.$LicensePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LicenseTranslation model
+   */
+  interface LicenseTranslationFieldRefs {
+    readonly id: FieldRef<"LicenseTranslation", 'Int'>
+    readonly license_id: FieldRef<"LicenseTranslation", 'Int'>
+    readonly language: FieldRef<"LicenseTranslation", 'Language'>
+    readonly name: FieldRef<"LicenseTranslation", 'String'>
+    readonly content: FieldRef<"LicenseTranslation", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LicenseTranslation findUnique
+   */
+  export type LicenseTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which LicenseTranslation to fetch.
+     */
+    where: LicenseTranslationWhereUniqueInput
+  }
+
+  /**
+   * LicenseTranslation findUniqueOrThrow
+   */
+  export type LicenseTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which LicenseTranslation to fetch.
+     */
+    where: LicenseTranslationWhereUniqueInput
+  }
+
+  /**
+   * LicenseTranslation findFirst
+   */
+  export type LicenseTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which LicenseTranslation to fetch.
+     */
+    where?: LicenseTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LicenseTranslations to fetch.
+     */
+    orderBy?: LicenseTranslationOrderByWithRelationInput | LicenseTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LicenseTranslations.
+     */
+    cursor?: LicenseTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LicenseTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LicenseTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LicenseTranslations.
+     */
+    distinct?: LicenseTranslationScalarFieldEnum | LicenseTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * LicenseTranslation findFirstOrThrow
+   */
+  export type LicenseTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which LicenseTranslation to fetch.
+     */
+    where?: LicenseTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LicenseTranslations to fetch.
+     */
+    orderBy?: LicenseTranslationOrderByWithRelationInput | LicenseTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LicenseTranslations.
+     */
+    cursor?: LicenseTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LicenseTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LicenseTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LicenseTranslations.
+     */
+    distinct?: LicenseTranslationScalarFieldEnum | LicenseTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * LicenseTranslation findMany
+   */
+  export type LicenseTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which LicenseTranslations to fetch.
+     */
+    where?: LicenseTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LicenseTranslations to fetch.
+     */
+    orderBy?: LicenseTranslationOrderByWithRelationInput | LicenseTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LicenseTranslations.
+     */
+    cursor?: LicenseTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LicenseTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LicenseTranslations.
+     */
+    skip?: number
+    distinct?: LicenseTranslationScalarFieldEnum | LicenseTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * LicenseTranslation create
+   */
+  export type LicenseTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LicenseTranslation.
+     */
+    data: XOR<LicenseTranslationCreateInput, LicenseTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * LicenseTranslation createMany
+   */
+  export type LicenseTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LicenseTranslations.
+     */
+    data: LicenseTranslationCreateManyInput | LicenseTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LicenseTranslation createManyAndReturn
+   */
+  export type LicenseTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many LicenseTranslations.
+     */
+    data: LicenseTranslationCreateManyInput | LicenseTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LicenseTranslation update
+   */
+  export type LicenseTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LicenseTranslation.
+     */
+    data: XOR<LicenseTranslationUpdateInput, LicenseTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which LicenseTranslation to update.
+     */
+    where: LicenseTranslationWhereUniqueInput
+  }
+
+  /**
+   * LicenseTranslation updateMany
+   */
+  export type LicenseTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LicenseTranslations.
+     */
+    data: XOR<LicenseTranslationUpdateManyMutationInput, LicenseTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which LicenseTranslations to update
+     */
+    where?: LicenseTranslationWhereInput
+    /**
+     * Limit how many LicenseTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LicenseTranslation updateManyAndReturn
+   */
+  export type LicenseTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update LicenseTranslations.
+     */
+    data: XOR<LicenseTranslationUpdateManyMutationInput, LicenseTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which LicenseTranslations to update
+     */
+    where?: LicenseTranslationWhereInput
+    /**
+     * Limit how many LicenseTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LicenseTranslation upsert
+   */
+  export type LicenseTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LicenseTranslation to update in case it exists.
+     */
+    where: LicenseTranslationWhereUniqueInput
+    /**
+     * In case the LicenseTranslation found by the `where` argument doesn't exist, create a new LicenseTranslation with this data.
+     */
+    create: XOR<LicenseTranslationCreateInput, LicenseTranslationUncheckedCreateInput>
+    /**
+     * In case the LicenseTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LicenseTranslationUpdateInput, LicenseTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * LicenseTranslation delete
+   */
+  export type LicenseTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which LicenseTranslation to delete.
+     */
+    where: LicenseTranslationWhereUniqueInput
+  }
+
+  /**
+   * LicenseTranslation deleteMany
+   */
+  export type LicenseTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LicenseTranslations to delete
+     */
+    where?: LicenseTranslationWhereInput
+    /**
+     * Limit how many LicenseTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LicenseTranslation without action
+   */
+  export type LicenseTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LicenseTranslation
+     */
+    select?: LicenseTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LicenseTranslation
+     */
+    omit?: LicenseTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LicenseTranslationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Category
    */
 
@@ -8302,56 +9799,76 @@ export namespace Prisma {
 
   export type CategoryAvgAggregateOutputType = {
     id: number | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type CategorySumAggregateOutputType = {
     id: number | null
+    created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type CategoryMinAggregateOutputType = {
     id: number | null
     name: string | null
     slug: string | null
+    created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type CategoryMaxAggregateOutputType = {
     id: number | null
     name: string | null
     slug: string | null
+    created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type CategoryCountAggregateOutputType = {
     id: number
     name: number
     slug: number
+    created_at: number
+    updated_at: number
     _all: number
   }
 
 
   export type CategoryAvgAggregateInputType = {
     id?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type CategorySumAggregateInputType = {
     id?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type CategoryMinAggregateInputType = {
     id?: true
     name?: true
     slug?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type CategoryMaxAggregateInputType = {
     id?: true
     name?: true
     slug?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type CategoryCountAggregateInputType = {
     id?: true
     name?: true
     slug?: true
+    created_at?: true
+    updated_at?: true
     _all?: true
   }
 
@@ -8445,6 +9962,8 @@ export namespace Prisma {
     id: number
     name: string
     slug: string
+    created_at: bigint
+    updated_at: bigint
     _count: CategoryCountAggregateOutputType | null
     _avg: CategoryAvgAggregateOutputType | null
     _sum: CategorySumAggregateOutputType | null
@@ -8470,6 +9989,8 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     slug?: boolean
+    created_at?: boolean
+    updated_at?: boolean
     products?: boolean | Category$productsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["category"]>
@@ -8478,21 +9999,27 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     slug?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["category"]>
 
   export type CategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     slug?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["category"]>
 
   export type CategorySelectScalar = {
     id?: boolean
     name?: boolean
     slug?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }
 
-  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug", ExtArgs["result"]["category"]>
+  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "created_at" | "updated_at", ExtArgs["result"]["category"]>
   export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | Category$productsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -8509,6 +10036,8 @@ export namespace Prisma {
       id: number
       name: string
       slug: string
+      created_at: bigint
+      updated_at: bigint
     }, ExtArgs["result"]["category"]>
     composites: {}
   }
@@ -8936,6 +10465,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Category", 'Int'>
     readonly name: FieldRef<"Category", 'String'>
     readonly slug: FieldRef<"Category", 'String'>
+    readonly created_at: FieldRef<"Category", 'BigInt'>
+    readonly updated_at: FieldRef<"Category", 'BigInt'>
   }
     
 
@@ -9382,6 +10913,7 @@ export namespace Prisma {
     category_id: number | null
     owner_id: number | null
     license_id: number | null
+    created_at: number | null
     released_at: number | null
     updated_at: number | null
   }
@@ -9390,6 +10922,7 @@ export namespace Prisma {
     category_id: number | null
     owner_id: number | null
     license_id: number | null
+    created_at: bigint | null
     released_at: bigint | null
     updated_at: bigint | null
   }
@@ -9402,10 +10935,11 @@ export namespace Prisma {
     license_id: number | null
     name: string | null
     slug: string | null
-    description: string | null
-    changelog: string | null
     price_type: $Enums.PriceType | null
     download_link: string | null
+    is_published: boolean | null
+    is_pinned: boolean | null
+    created_at: bigint | null
     released_at: bigint | null
     updated_at: bigint | null
   }
@@ -9418,10 +10952,11 @@ export namespace Prisma {
     license_id: number | null
     name: string | null
     slug: string | null
-    description: string | null
-    changelog: string | null
     price_type: $Enums.PriceType | null
     download_link: string | null
+    is_published: boolean | null
+    is_pinned: boolean | null
+    created_at: bigint | null
     released_at: bigint | null
     updated_at: bigint | null
   }
@@ -9434,10 +10969,11 @@ export namespace Prisma {
     license_id: number
     name: number
     slug: number
-    description: number
-    changelog: number
     price_type: number
     download_link: number
+    is_published: number
+    is_pinned: number
+    created_at: number
     released_at: number
     updated_at: number
     _all: number
@@ -9448,6 +10984,7 @@ export namespace Prisma {
     category_id?: true
     owner_id?: true
     license_id?: true
+    created_at?: true
     released_at?: true
     updated_at?: true
   }
@@ -9456,6 +10993,7 @@ export namespace Prisma {
     category_id?: true
     owner_id?: true
     license_id?: true
+    created_at?: true
     released_at?: true
     updated_at?: true
   }
@@ -9468,10 +11006,11 @@ export namespace Prisma {
     license_id?: true
     name?: true
     slug?: true
-    description?: true
-    changelog?: true
     price_type?: true
     download_link?: true
+    is_published?: true
+    is_pinned?: true
+    created_at?: true
     released_at?: true
     updated_at?: true
   }
@@ -9484,10 +11023,11 @@ export namespace Prisma {
     license_id?: true
     name?: true
     slug?: true
-    description?: true
-    changelog?: true
     price_type?: true
     download_link?: true
+    is_published?: true
+    is_pinned?: true
+    created_at?: true
     released_at?: true
     updated_at?: true
   }
@@ -9500,10 +11040,11 @@ export namespace Prisma {
     license_id?: true
     name?: true
     slug?: true
-    description?: true
-    changelog?: true
     price_type?: true
     download_link?: true
+    is_published?: true
+    is_pinned?: true
+    created_at?: true
     released_at?: true
     updated_at?: true
     _all?: true
@@ -9603,10 +11144,11 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog: string | null
     price_type: $Enums.PriceType
     download_link: string | null
+    is_published: boolean
+    is_pinned: boolean
+    created_at: bigint
     released_at: bigint
     updated_at: bigint
     _count: ProductCountAggregateOutputType | null
@@ -9638,20 +11180,22 @@ export namespace Prisma {
     license_id?: boolean
     name?: boolean
     slug?: boolean
-    description?: boolean
-    changelog?: boolean
     price_type?: boolean
     download_link?: boolean
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at?: boolean
     released_at?: boolean
     updated_at?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     owner?: boolean | OwnerDefaultArgs<ExtArgs>
     license?: boolean | LicenseDefaultArgs<ExtArgs>
-    product_discounts?: boolean | Product$product_discountsArgs<ExtArgs>
-    product_coupons?: boolean | Product$product_couponsArgs<ExtArgs>
-    product_images?: boolean | Product$product_imagesArgs<ExtArgs>
-    product_variants?: boolean | Product$product_variantsArgs<ExtArgs>
+    translations?: boolean | Product$translationsArgs<ExtArgs>
+    discount?: boolean | Product$discountArgs<ExtArgs>
+    coupon?: boolean | Product$couponArgs<ExtArgs>
+    images?: boolean | Product$imagesArgs<ExtArgs>
+    variants?: boolean | Product$variantsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -9663,10 +11207,11 @@ export namespace Prisma {
     license_id?: boolean
     name?: boolean
     slug?: boolean
-    description?: boolean
-    changelog?: boolean
     price_type?: boolean
     download_link?: boolean
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at?: boolean
     released_at?: boolean
     updated_at?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
@@ -9683,10 +11228,11 @@ export namespace Prisma {
     license_id?: boolean
     name?: boolean
     slug?: boolean
-    description?: boolean
-    changelog?: boolean
     price_type?: boolean
     download_link?: boolean
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at?: boolean
     released_at?: boolean
     updated_at?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
@@ -9703,24 +11249,26 @@ export namespace Prisma {
     license_id?: boolean
     name?: boolean
     slug?: boolean
-    description?: boolean
-    changelog?: boolean
     price_type?: boolean
     download_link?: boolean
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at?: boolean
     released_at?: boolean
     updated_at?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category_id" | "admin_id" | "owner_id" | "license_id" | "name" | "slug" | "description" | "changelog" | "price_type" | "download_link" | "released_at" | "updated_at", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category_id" | "admin_id" | "owner_id" | "license_id" | "name" | "slug" | "price_type" | "download_link" | "is_published" | "is_pinned" | "created_at" | "released_at" | "updated_at", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     owner?: boolean | OwnerDefaultArgs<ExtArgs>
     license?: boolean | LicenseDefaultArgs<ExtArgs>
-    product_discounts?: boolean | Product$product_discountsArgs<ExtArgs>
-    product_coupons?: boolean | Product$product_couponsArgs<ExtArgs>
-    product_images?: boolean | Product$product_imagesArgs<ExtArgs>
-    product_variants?: boolean | Product$product_variantsArgs<ExtArgs>
+    translations?: boolean | Product$translationsArgs<ExtArgs>
+    discount?: boolean | Product$discountArgs<ExtArgs>
+    coupon?: boolean | Product$couponArgs<ExtArgs>
+    images?: boolean | Product$imagesArgs<ExtArgs>
+    variants?: boolean | Product$variantsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9743,10 +11291,11 @@ export namespace Prisma {
       category: Prisma.$CategoryPayload<ExtArgs>
       owner: Prisma.$OwnerPayload<ExtArgs>
       license: Prisma.$LicensePayload<ExtArgs>
-      product_discounts: Prisma.$ProductDiscountPayload<ExtArgs> | null
-      product_coupons: Prisma.$ProductCouponPayload<ExtArgs> | null
-      product_images: Prisma.$ProductImagePayload<ExtArgs>[]
-      product_variants: Prisma.$ProductVariantPayload<ExtArgs>[]
+      translations: Prisma.$ProductTranslationPayload<ExtArgs>[]
+      discount: Prisma.$ProductDiscountPayload<ExtArgs> | null
+      coupon: Prisma.$ProductCouponPayload<ExtArgs> | null
+      images: Prisma.$ProductImagePayload<ExtArgs>[]
+      variants: Prisma.$ProductVariantPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9756,10 +11305,11 @@ export namespace Prisma {
       license_id: number
       name: string
       slug: string
-      description: string
-      changelog: string | null
       price_type: $Enums.PriceType
       download_link: string | null
+      is_published: boolean
+      is_pinned: boolean
+      created_at: bigint
       released_at: bigint
       updated_at: bigint
     }, ExtArgs["result"]["product"]>
@@ -10160,10 +11710,11 @@ export namespace Prisma {
     category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     owner<T extends OwnerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OwnerDefaultArgs<ExtArgs>>): Prisma__OwnerClient<$Result.GetResult<Prisma.$OwnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     license<T extends LicenseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LicenseDefaultArgs<ExtArgs>>): Prisma__LicenseClient<$Result.GetResult<Prisma.$LicensePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    product_discounts<T extends Product$product_discountsArgs<ExtArgs> = {}>(args?: Subset<T, Product$product_discountsArgs<ExtArgs>>): Prisma__ProductDiscountClient<$Result.GetResult<Prisma.$ProductDiscountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    product_coupons<T extends Product$product_couponsArgs<ExtArgs> = {}>(args?: Subset<T, Product$product_couponsArgs<ExtArgs>>): Prisma__ProductCouponClient<$Result.GetResult<Prisma.$ProductCouponPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    product_images<T extends Product$product_imagesArgs<ExtArgs> = {}>(args?: Subset<T, Product$product_imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    product_variants<T extends Product$product_variantsArgs<ExtArgs> = {}>(args?: Subset<T, Product$product_variantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVariantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    translations<T extends Product$translationsArgs<ExtArgs> = {}>(args?: Subset<T, Product$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    discount<T extends Product$discountArgs<ExtArgs> = {}>(args?: Subset<T, Product$discountArgs<ExtArgs>>): Prisma__ProductDiscountClient<$Result.GetResult<Prisma.$ProductDiscountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    coupon<T extends Product$couponArgs<ExtArgs> = {}>(args?: Subset<T, Product$couponArgs<ExtArgs>>): Prisma__ProductCouponClient<$Result.GetResult<Prisma.$ProductCouponPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    images<T extends Product$imagesArgs<ExtArgs> = {}>(args?: Subset<T, Product$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    variants<T extends Product$variantsArgs<ExtArgs> = {}>(args?: Subset<T, Product$variantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVariantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10200,10 +11751,11 @@ export namespace Prisma {
     readonly license_id: FieldRef<"Product", 'Int'>
     readonly name: FieldRef<"Product", 'String'>
     readonly slug: FieldRef<"Product", 'String'>
-    readonly description: FieldRef<"Product", 'String'>
-    readonly changelog: FieldRef<"Product", 'String'>
     readonly price_type: FieldRef<"Product", 'PriceType'>
     readonly download_link: FieldRef<"Product", 'String'>
+    readonly is_published: FieldRef<"Product", 'Boolean'>
+    readonly is_pinned: FieldRef<"Product", 'Boolean'>
+    readonly created_at: FieldRef<"Product", 'BigInt'>
     readonly released_at: FieldRef<"Product", 'BigInt'>
     readonly updated_at: FieldRef<"Product", 'BigInt'>
   }
@@ -10602,9 +12154,33 @@ export namespace Prisma {
   }
 
   /**
-   * Product.product_discounts
+   * Product.translations
    */
-  export type Product$product_discountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Product$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    where?: ProductTranslationWhereInput
+    orderBy?: ProductTranslationOrderByWithRelationInput | ProductTranslationOrderByWithRelationInput[]
+    cursor?: ProductTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductTranslationScalarFieldEnum | ProductTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * Product.discount
+   */
+  export type Product$discountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ProductDiscount
      */
@@ -10621,9 +12197,9 @@ export namespace Prisma {
   }
 
   /**
-   * Product.product_coupons
+   * Product.coupon
    */
-  export type Product$product_couponsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Product$couponArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ProductCoupon
      */
@@ -10640,9 +12216,9 @@ export namespace Prisma {
   }
 
   /**
-   * Product.product_images
+   * Product.images
    */
-  export type Product$product_imagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Product$imagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ProductImage
      */
@@ -10664,9 +12240,9 @@ export namespace Prisma {
   }
 
   /**
-   * Product.product_variants
+   * Product.variants
    */
-  export type Product$product_variantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Product$variantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ProductVariant
      */
@@ -10707,6 +12283,1064 @@ export namespace Prisma {
 
 
   /**
+   * Model ProductTranslation
+   */
+
+  export type AggregateProductTranslation = {
+    _count: ProductTranslationCountAggregateOutputType | null
+    _min: ProductTranslationMinAggregateOutputType | null
+    _max: ProductTranslationMaxAggregateOutputType | null
+  }
+
+  export type ProductTranslationMinAggregateOutputType = {
+    id: string | null
+    product_id: string | null
+    language: $Enums.Language | null
+    description: string | null
+    changelog: string | null
+  }
+
+  export type ProductTranslationMaxAggregateOutputType = {
+    id: string | null
+    product_id: string | null
+    language: $Enums.Language | null
+    description: string | null
+    changelog: string | null
+  }
+
+  export type ProductTranslationCountAggregateOutputType = {
+    id: number
+    product_id: number
+    language: number
+    description: number
+    changelog: number
+    _all: number
+  }
+
+
+  export type ProductTranslationMinAggregateInputType = {
+    id?: true
+    product_id?: true
+    language?: true
+    description?: true
+    changelog?: true
+  }
+
+  export type ProductTranslationMaxAggregateInputType = {
+    id?: true
+    product_id?: true
+    language?: true
+    description?: true
+    changelog?: true
+  }
+
+  export type ProductTranslationCountAggregateInputType = {
+    id?: true
+    product_id?: true
+    language?: true
+    description?: true
+    changelog?: true
+    _all?: true
+  }
+
+  export type ProductTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductTranslation to aggregate.
+     */
+    where?: ProductTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductTranslations to fetch.
+     */
+    orderBy?: ProductTranslationOrderByWithRelationInput | ProductTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductTranslations
+    **/
+    _count?: true | ProductTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductTranslationMaxAggregateInputType
+  }
+
+  export type GetProductTranslationAggregateType<T extends ProductTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductTranslation[P]>
+      : GetScalarType<T[P], AggregateProductTranslation[P]>
+  }
+
+
+
+
+  export type ProductTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductTranslationWhereInput
+    orderBy?: ProductTranslationOrderByWithAggregationInput | ProductTranslationOrderByWithAggregationInput[]
+    by: ProductTranslationScalarFieldEnum[] | ProductTranslationScalarFieldEnum
+    having?: ProductTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductTranslationCountAggregateInputType | true
+    _min?: ProductTranslationMinAggregateInputType
+    _max?: ProductTranslationMaxAggregateInputType
+  }
+
+  export type ProductTranslationGroupByOutputType = {
+    id: string
+    product_id: string
+    language: $Enums.Language
+    description: string
+    changelog: string | null
+    _count: ProductTranslationCountAggregateOutputType | null
+    _min: ProductTranslationMinAggregateOutputType | null
+    _max: ProductTranslationMaxAggregateOutputType | null
+  }
+
+  type GetProductTranslationGroupByPayload<T extends ProductTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_id?: boolean
+    language?: boolean
+    description?: boolean
+    changelog?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productTranslation"]>
+
+  export type ProductTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_id?: boolean
+    language?: boolean
+    description?: boolean
+    changelog?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productTranslation"]>
+
+  export type ProductTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_id?: boolean
+    language?: boolean
+    description?: boolean
+    changelog?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productTranslation"]>
+
+  export type ProductTranslationSelectScalar = {
+    id?: boolean
+    product_id?: boolean
+    language?: boolean
+    description?: boolean
+    changelog?: boolean
+  }
+
+  export type ProductTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_id" | "language" | "description" | "changelog", ExtArgs["result"]["productTranslation"]>
+  export type ProductTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }
+  export type ProductTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }
+  export type ProductTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductTranslation"
+    objects: {
+      product: Prisma.$ProductPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      product_id: string
+      language: $Enums.Language
+      description: string
+      changelog: string | null
+    }, ExtArgs["result"]["productTranslation"]>
+    composites: {}
+  }
+
+  type ProductTranslationGetPayload<S extends boolean | null | undefined | ProductTranslationDefaultArgs> = $Result.GetResult<Prisma.$ProductTranslationPayload, S>
+
+  type ProductTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductTranslationCountAggregateInputType | true
+    }
+
+  export interface ProductTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductTranslation'], meta: { name: 'ProductTranslation' } }
+    /**
+     * Find zero or one ProductTranslation that matches the filter.
+     * @param {ProductTranslationFindUniqueArgs} args - Arguments to find a ProductTranslation
+     * @example
+     * // Get one ProductTranslation
+     * const productTranslation = await prisma.productTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductTranslationFindUniqueArgs>(args: SelectSubset<T, ProductTranslationFindUniqueArgs<ExtArgs>>): Prisma__ProductTranslationClient<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProductTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductTranslationFindUniqueOrThrowArgs} args - Arguments to find a ProductTranslation
+     * @example
+     * // Get one ProductTranslation
+     * const productTranslation = await prisma.productTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductTranslationClient<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductTranslationFindFirstArgs} args - Arguments to find a ProductTranslation
+     * @example
+     * // Get one ProductTranslation
+     * const productTranslation = await prisma.productTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductTranslationFindFirstArgs>(args?: SelectSubset<T, ProductTranslationFindFirstArgs<ExtArgs>>): Prisma__ProductTranslationClient<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductTranslationFindFirstOrThrowArgs} args - Arguments to find a ProductTranslation
+     * @example
+     * // Get one ProductTranslation
+     * const productTranslation = await prisma.productTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductTranslationClient<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProductTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductTranslations
+     * const productTranslations = await prisma.productTranslation.findMany()
+     * 
+     * // Get first 10 ProductTranslations
+     * const productTranslations = await prisma.productTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productTranslationWithIdOnly = await prisma.productTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductTranslationFindManyArgs>(args?: SelectSubset<T, ProductTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProductTranslation.
+     * @param {ProductTranslationCreateArgs} args - Arguments to create a ProductTranslation.
+     * @example
+     * // Create one ProductTranslation
+     * const ProductTranslation = await prisma.productTranslation.create({
+     *   data: {
+     *     // ... data to create a ProductTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductTranslationCreateArgs>(args: SelectSubset<T, ProductTranslationCreateArgs<ExtArgs>>): Prisma__ProductTranslationClient<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProductTranslations.
+     * @param {ProductTranslationCreateManyArgs} args - Arguments to create many ProductTranslations.
+     * @example
+     * // Create many ProductTranslations
+     * const productTranslation = await prisma.productTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductTranslationCreateManyArgs>(args?: SelectSubset<T, ProductTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductTranslations and returns the data saved in the database.
+     * @param {ProductTranslationCreateManyAndReturnArgs} args - Arguments to create many ProductTranslations.
+     * @example
+     * // Create many ProductTranslations
+     * const productTranslation = await prisma.productTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductTranslations and only return the `id`
+     * const productTranslationWithIdOnly = await prisma.productTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProductTranslation.
+     * @param {ProductTranslationDeleteArgs} args - Arguments to delete one ProductTranslation.
+     * @example
+     * // Delete one ProductTranslation
+     * const ProductTranslation = await prisma.productTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one ProductTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductTranslationDeleteArgs>(args: SelectSubset<T, ProductTranslationDeleteArgs<ExtArgs>>): Prisma__ProductTranslationClient<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProductTranslation.
+     * @param {ProductTranslationUpdateArgs} args - Arguments to update one ProductTranslation.
+     * @example
+     * // Update one ProductTranslation
+     * const productTranslation = await prisma.productTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductTranslationUpdateArgs>(args: SelectSubset<T, ProductTranslationUpdateArgs<ExtArgs>>): Prisma__ProductTranslationClient<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProductTranslations.
+     * @param {ProductTranslationDeleteManyArgs} args - Arguments to filter ProductTranslations to delete.
+     * @example
+     * // Delete a few ProductTranslations
+     * const { count } = await prisma.productTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductTranslationDeleteManyArgs>(args?: SelectSubset<T, ProductTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductTranslations
+     * const productTranslation = await prisma.productTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductTranslationUpdateManyArgs>(args: SelectSubset<T, ProductTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductTranslations and returns the data updated in the database.
+     * @param {ProductTranslationUpdateManyAndReturnArgs} args - Arguments to update many ProductTranslations.
+     * @example
+     * // Update many ProductTranslations
+     * const productTranslation = await prisma.productTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProductTranslations and only return the `id`
+     * const productTranslationWithIdOnly = await prisma.productTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProductTranslation.
+     * @param {ProductTranslationUpsertArgs} args - Arguments to update or create a ProductTranslation.
+     * @example
+     * // Update or create a ProductTranslation
+     * const productTranslation = await prisma.productTranslation.upsert({
+     *   create: {
+     *     // ... data to create a ProductTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductTranslationUpsertArgs>(args: SelectSubset<T, ProductTranslationUpsertArgs<ExtArgs>>): Prisma__ProductTranslationClient<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProductTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductTranslationCountArgs} args - Arguments to filter ProductTranslations to count.
+     * @example
+     * // Count the number of ProductTranslations
+     * const count = await prisma.productTranslation.count({
+     *   where: {
+     *     // ... the filter for the ProductTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductTranslationCountArgs>(
+      args?: Subset<T, ProductTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductTranslationAggregateArgs>(args: Subset<T, ProductTranslationAggregateArgs>): Prisma.PrismaPromise<GetProductTranslationAggregateType<T>>
+
+    /**
+     * Group by ProductTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: ProductTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductTranslation model
+   */
+  readonly fields: ProductTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductTranslation model
+   */
+  interface ProductTranslationFieldRefs {
+    readonly id: FieldRef<"ProductTranslation", 'String'>
+    readonly product_id: FieldRef<"ProductTranslation", 'String'>
+    readonly language: FieldRef<"ProductTranslation", 'Language'>
+    readonly description: FieldRef<"ProductTranslation", 'String'>
+    readonly changelog: FieldRef<"ProductTranslation", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductTranslation findUnique
+   */
+  export type ProductTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductTranslation to fetch.
+     */
+    where: ProductTranslationWhereUniqueInput
+  }
+
+  /**
+   * ProductTranslation findUniqueOrThrow
+   */
+  export type ProductTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductTranslation to fetch.
+     */
+    where: ProductTranslationWhereUniqueInput
+  }
+
+  /**
+   * ProductTranslation findFirst
+   */
+  export type ProductTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductTranslation to fetch.
+     */
+    where?: ProductTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductTranslations to fetch.
+     */
+    orderBy?: ProductTranslationOrderByWithRelationInput | ProductTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductTranslations.
+     */
+    cursor?: ProductTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductTranslations.
+     */
+    distinct?: ProductTranslationScalarFieldEnum | ProductTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductTranslation findFirstOrThrow
+   */
+  export type ProductTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductTranslation to fetch.
+     */
+    where?: ProductTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductTranslations to fetch.
+     */
+    orderBy?: ProductTranslationOrderByWithRelationInput | ProductTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductTranslations.
+     */
+    cursor?: ProductTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductTranslations.
+     */
+    distinct?: ProductTranslationScalarFieldEnum | ProductTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductTranslation findMany
+   */
+  export type ProductTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductTranslations to fetch.
+     */
+    where?: ProductTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductTranslations to fetch.
+     */
+    orderBy?: ProductTranslationOrderByWithRelationInput | ProductTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductTranslations.
+     */
+    cursor?: ProductTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductTranslations.
+     */
+    skip?: number
+    distinct?: ProductTranslationScalarFieldEnum | ProductTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductTranslation create
+   */
+  export type ProductTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductTranslation.
+     */
+    data: XOR<ProductTranslationCreateInput, ProductTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * ProductTranslation createMany
+   */
+  export type ProductTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductTranslations.
+     */
+    data: ProductTranslationCreateManyInput | ProductTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductTranslation createManyAndReturn
+   */
+  export type ProductTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductTranslations.
+     */
+    data: ProductTranslationCreateManyInput | ProductTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductTranslation update
+   */
+  export type ProductTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductTranslation.
+     */
+    data: XOR<ProductTranslationUpdateInput, ProductTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which ProductTranslation to update.
+     */
+    where: ProductTranslationWhereUniqueInput
+  }
+
+  /**
+   * ProductTranslation updateMany
+   */
+  export type ProductTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductTranslations.
+     */
+    data: XOR<ProductTranslationUpdateManyMutationInput, ProductTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductTranslations to update
+     */
+    where?: ProductTranslationWhereInput
+    /**
+     * Limit how many ProductTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductTranslation updateManyAndReturn
+   */
+  export type ProductTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductTranslations.
+     */
+    data: XOR<ProductTranslationUpdateManyMutationInput, ProductTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductTranslations to update
+     */
+    where?: ProductTranslationWhereInput
+    /**
+     * Limit how many ProductTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductTranslation upsert
+   */
+  export type ProductTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductTranslation to update in case it exists.
+     */
+    where: ProductTranslationWhereUniqueInput
+    /**
+     * In case the ProductTranslation found by the `where` argument doesn't exist, create a new ProductTranslation with this data.
+     */
+    create: XOR<ProductTranslationCreateInput, ProductTranslationUncheckedCreateInput>
+    /**
+     * In case the ProductTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductTranslationUpdateInput, ProductTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductTranslation delete
+   */
+  export type ProductTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which ProductTranslation to delete.
+     */
+    where: ProductTranslationWhereUniqueInput
+  }
+
+  /**
+   * ProductTranslation deleteMany
+   */
+  export type ProductTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductTranslations to delete
+     */
+    where?: ProductTranslationWhereInput
+    /**
+     * Limit how many ProductTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductTranslation without action
+   */
+  export type ProductTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductTranslation
+     */
+    select?: ProductTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductTranslation
+     */
+    omit?: ProductTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductTranslationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model ProductDiscount
    */
 
@@ -10719,24 +13353,28 @@ export namespace Prisma {
   }
 
   export type ProductDiscountAvgAggregateOutputType = {
+    id: number | null
+    discount: number | null
     expired_at: number | null
   }
 
   export type ProductDiscountSumAggregateOutputType = {
+    id: number | null
+    discount: number | null
     expired_at: bigint | null
   }
 
   export type ProductDiscountMinAggregateOutputType = {
-    id: string | null
+    id: number | null
     product_id: string | null
-    discount: string | null
+    discount: number | null
     expired_at: bigint | null
   }
 
   export type ProductDiscountMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
     product_id: string | null
-    discount: string | null
+    discount: number | null
     expired_at: bigint | null
   }
 
@@ -10750,10 +13388,14 @@ export namespace Prisma {
 
 
   export type ProductDiscountAvgAggregateInputType = {
+    id?: true
+    discount?: true
     expired_at?: true
   }
 
   export type ProductDiscountSumAggregateInputType = {
+    id?: true
+    discount?: true
     expired_at?: true
   }
 
@@ -10866,9 +13508,9 @@ export namespace Prisma {
   }
 
   export type ProductDiscountGroupByOutputType = {
-    id: string
+    id: number
     product_id: string
-    discount: string
+    discount: number
     expired_at: bigint
     _count: ProductDiscountCountAggregateOutputType | null
     _avg: ProductDiscountAvgAggregateOutputType | null
@@ -10939,9 +13581,9 @@ export namespace Prisma {
       product: Prisma.$ProductPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
       product_id: string
-      discount: string
+      discount: number
       expired_at: bigint
     }, ExtArgs["result"]["productDiscount"]>
     composites: {}
@@ -11367,9 +14009,9 @@ export namespace Prisma {
    * Fields of the ProductDiscount model
    */
   interface ProductDiscountFieldRefs {
-    readonly id: FieldRef<"ProductDiscount", 'String'>
+    readonly id: FieldRef<"ProductDiscount", 'Int'>
     readonly product_id: FieldRef<"ProductDiscount", 'String'>
-    readonly discount: FieldRef<"ProductDiscount", 'String'>
+    readonly discount: FieldRef<"ProductDiscount", 'Int'>
     readonly expired_at: FieldRef<"ProductDiscount", 'BigInt'>
   }
     
@@ -11798,26 +14440,30 @@ export namespace Prisma {
   }
 
   export type ProductCouponAvgAggregateOutputType = {
+    id: number | null
+    discount: number | null
     expired_at: number | null
   }
 
   export type ProductCouponSumAggregateOutputType = {
+    id: number | null
+    discount: number | null
     expired_at: bigint | null
   }
 
   export type ProductCouponMinAggregateOutputType = {
-    id: string | null
+    id: number | null
     product_id: string | null
     code: string | null
-    discount: string | null
+    discount: number | null
     expired_at: bigint | null
   }
 
   export type ProductCouponMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
     product_id: string | null
     code: string | null
-    discount: string | null
+    discount: number | null
     expired_at: bigint | null
   }
 
@@ -11832,10 +14478,14 @@ export namespace Prisma {
 
 
   export type ProductCouponAvgAggregateInputType = {
+    id?: true
+    discount?: true
     expired_at?: true
   }
 
   export type ProductCouponSumAggregateInputType = {
+    id?: true
+    discount?: true
     expired_at?: true
   }
 
@@ -11951,10 +14601,10 @@ export namespace Prisma {
   }
 
   export type ProductCouponGroupByOutputType = {
-    id: string
+    id: number
     product_id: string
     code: string
-    discount: string
+    discount: number
     expired_at: bigint
     _count: ProductCouponCountAggregateOutputType | null
     _avg: ProductCouponAvgAggregateOutputType | null
@@ -12029,10 +14679,10 @@ export namespace Prisma {
       product: Prisma.$ProductPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
       product_id: string
       code: string
-      discount: string
+      discount: number
       expired_at: bigint
     }, ExtArgs["result"]["productCoupon"]>
     composites: {}
@@ -12458,10 +15108,10 @@ export namespace Prisma {
    * Fields of the ProductCoupon model
    */
   interface ProductCouponFieldRefs {
-    readonly id: FieldRef<"ProductCoupon", 'String'>
+    readonly id: FieldRef<"ProductCoupon", 'Int'>
     readonly product_id: FieldRef<"ProductCoupon", 'String'>
     readonly code: FieldRef<"ProductCoupon", 'String'>
-    readonly discount: FieldRef<"ProductCoupon", 'String'>
+    readonly discount: FieldRef<"ProductCoupon", 'Int'>
     readonly expired_at: FieldRef<"ProductCoupon", 'BigInt'>
   }
     
@@ -14143,7 +16793,7 @@ export namespace Prisma {
     name?: boolean
     download_link?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
-    product_prices?: boolean | ProductVariant$product_pricesArgs<ExtArgs>
+    prices?: boolean | ProductVariant$pricesArgs<ExtArgs>
     _count?: boolean | ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productVariant"]>
 
@@ -14173,7 +16823,7 @@ export namespace Prisma {
   export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_id" | "name" | "download_link", ExtArgs["result"]["productVariant"]>
   export type ProductVariantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
-    product_prices?: boolean | ProductVariant$product_pricesArgs<ExtArgs>
+    prices?: boolean | ProductVariant$pricesArgs<ExtArgs>
     _count?: boolean | ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductVariantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14187,7 +16837,7 @@ export namespace Prisma {
     name: "ProductVariant"
     objects: {
       product: Prisma.$ProductPayload<ExtArgs>
-      product_prices: Prisma.$ProductPricePayload<ExtArgs>[]
+      prices: Prisma.$ProductPricePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14589,7 +17239,7 @@ export namespace Prisma {
   export interface Prisma__ProductVariantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    product_prices<T extends ProductVariant$product_pricesArgs<ExtArgs> = {}>(args?: Subset<T, ProductVariant$product_pricesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    prices<T extends ProductVariant$pricesArgs<ExtArgs> = {}>(args?: Subset<T, ProductVariant$pricesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15019,9 +17669,9 @@ export namespace Prisma {
   }
 
   /**
-   * ProductVariant.product_prices
+   * ProductVariant.prices
    */
-  export type ProductVariant$product_pricesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProductVariant$pricesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ProductPrice
      */
@@ -16141,350 +18791,364 @@ export namespace Prisma {
 
 
   /**
-   * Model TermAndCondition
+   * Model TermsOfService
    */
 
-  export type AggregateTermAndCondition = {
-    _count: TermAndConditionCountAggregateOutputType | null
-    _avg: TermAndConditionAvgAggregateOutputType | null
-    _sum: TermAndConditionSumAggregateOutputType | null
-    _min: TermAndConditionMinAggregateOutputType | null
-    _max: TermAndConditionMaxAggregateOutputType | null
+  export type AggregateTermsOfService = {
+    _count: TermsOfServiceCountAggregateOutputType | null
+    _avg: TermsOfServiceAvgAggregateOutputType | null
+    _sum: TermsOfServiceSumAggregateOutputType | null
+    _min: TermsOfServiceMinAggregateOutputType | null
+    _max: TermsOfServiceMaxAggregateOutputType | null
   }
 
-  export type TermAndConditionAvgAggregateOutputType = {
+  export type TermsOfServiceAvgAggregateOutputType = {
     id: number | null
+    created_at: number | null
     updated_at: number | null
   }
 
-  export type TermAndConditionSumAggregateOutputType = {
+  export type TermsOfServiceSumAggregateOutputType = {
     id: number | null
+    created_at: bigint | null
     updated_at: bigint | null
   }
 
-  export type TermAndConditionMinAggregateOutputType = {
+  export type TermsOfServiceMinAggregateOutputType = {
     id: number | null
-    content: string | null
+    created_at: bigint | null
     updated_at: bigint | null
   }
 
-  export type TermAndConditionMaxAggregateOutputType = {
+  export type TermsOfServiceMaxAggregateOutputType = {
     id: number | null
-    content: string | null
+    created_at: bigint | null
     updated_at: bigint | null
   }
 
-  export type TermAndConditionCountAggregateOutputType = {
+  export type TermsOfServiceCountAggregateOutputType = {
     id: number
-    content: number
+    created_at: number
     updated_at: number
     _all: number
   }
 
 
-  export type TermAndConditionAvgAggregateInputType = {
+  export type TermsOfServiceAvgAggregateInputType = {
     id?: true
+    created_at?: true
     updated_at?: true
   }
 
-  export type TermAndConditionSumAggregateInputType = {
+  export type TermsOfServiceSumAggregateInputType = {
     id?: true
+    created_at?: true
     updated_at?: true
   }
 
-  export type TermAndConditionMinAggregateInputType = {
+  export type TermsOfServiceMinAggregateInputType = {
     id?: true
-    content?: true
+    created_at?: true
     updated_at?: true
   }
 
-  export type TermAndConditionMaxAggregateInputType = {
+  export type TermsOfServiceMaxAggregateInputType = {
     id?: true
-    content?: true
+    created_at?: true
     updated_at?: true
   }
 
-  export type TermAndConditionCountAggregateInputType = {
+  export type TermsOfServiceCountAggregateInputType = {
     id?: true
-    content?: true
+    created_at?: true
     updated_at?: true
     _all?: true
   }
 
-  export type TermAndConditionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which TermAndCondition to aggregate.
+     * Filter which TermsOfService to aggregate.
      */
-    where?: TermAndConditionWhereInput
+    where?: TermsOfServiceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of TermAndConditions to fetch.
+     * Determine the order of TermsOfServices to fetch.
      */
-    orderBy?: TermAndConditionOrderByWithRelationInput | TermAndConditionOrderByWithRelationInput[]
+    orderBy?: TermsOfServiceOrderByWithRelationInput | TermsOfServiceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: TermAndConditionWhereUniqueInput
+    cursor?: TermsOfServiceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` TermAndConditions from the position of the cursor.
+     * Take `±n` TermsOfServices from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` TermAndConditions.
+     * Skip the first `n` TermsOfServices.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned TermAndConditions
+     * Count returned TermsOfServices
     **/
-    _count?: true | TermAndConditionCountAggregateInputType
+    _count?: true | TermsOfServiceCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: TermAndConditionAvgAggregateInputType
+    _avg?: TermsOfServiceAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: TermAndConditionSumAggregateInputType
+    _sum?: TermsOfServiceSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: TermAndConditionMinAggregateInputType
+    _min?: TermsOfServiceMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: TermAndConditionMaxAggregateInputType
+    _max?: TermsOfServiceMaxAggregateInputType
   }
 
-  export type GetTermAndConditionAggregateType<T extends TermAndConditionAggregateArgs> = {
-        [P in keyof T & keyof AggregateTermAndCondition]: P extends '_count' | 'count'
+  export type GetTermsOfServiceAggregateType<T extends TermsOfServiceAggregateArgs> = {
+        [P in keyof T & keyof AggregateTermsOfService]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateTermAndCondition[P]>
-      : GetScalarType<T[P], AggregateTermAndCondition[P]>
+        : GetScalarType<T[P], AggregateTermsOfService[P]>
+      : GetScalarType<T[P], AggregateTermsOfService[P]>
   }
 
 
 
 
-  export type TermAndConditionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TermAndConditionWhereInput
-    orderBy?: TermAndConditionOrderByWithAggregationInput | TermAndConditionOrderByWithAggregationInput[]
-    by: TermAndConditionScalarFieldEnum[] | TermAndConditionScalarFieldEnum
-    having?: TermAndConditionScalarWhereWithAggregatesInput
+  export type TermsOfServiceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TermsOfServiceWhereInput
+    orderBy?: TermsOfServiceOrderByWithAggregationInput | TermsOfServiceOrderByWithAggregationInput[]
+    by: TermsOfServiceScalarFieldEnum[] | TermsOfServiceScalarFieldEnum
+    having?: TermsOfServiceScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: TermAndConditionCountAggregateInputType | true
-    _avg?: TermAndConditionAvgAggregateInputType
-    _sum?: TermAndConditionSumAggregateInputType
-    _min?: TermAndConditionMinAggregateInputType
-    _max?: TermAndConditionMaxAggregateInputType
+    _count?: TermsOfServiceCountAggregateInputType | true
+    _avg?: TermsOfServiceAvgAggregateInputType
+    _sum?: TermsOfServiceSumAggregateInputType
+    _min?: TermsOfServiceMinAggregateInputType
+    _max?: TermsOfServiceMaxAggregateInputType
   }
 
-  export type TermAndConditionGroupByOutputType = {
+  export type TermsOfServiceGroupByOutputType = {
     id: number
-    content: string
+    created_at: bigint
     updated_at: bigint
-    _count: TermAndConditionCountAggregateOutputType | null
-    _avg: TermAndConditionAvgAggregateOutputType | null
-    _sum: TermAndConditionSumAggregateOutputType | null
-    _min: TermAndConditionMinAggregateOutputType | null
-    _max: TermAndConditionMaxAggregateOutputType | null
+    _count: TermsOfServiceCountAggregateOutputType | null
+    _avg: TermsOfServiceAvgAggregateOutputType | null
+    _sum: TermsOfServiceSumAggregateOutputType | null
+    _min: TermsOfServiceMinAggregateOutputType | null
+    _max: TermsOfServiceMaxAggregateOutputType | null
   }
 
-  type GetTermAndConditionGroupByPayload<T extends TermAndConditionGroupByArgs> = Prisma.PrismaPromise<
+  type GetTermsOfServiceGroupByPayload<T extends TermsOfServiceGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<TermAndConditionGroupByOutputType, T['by']> &
+      PickEnumerable<TermsOfServiceGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof TermAndConditionGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof TermsOfServiceGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], TermAndConditionGroupByOutputType[P]>
-            : GetScalarType<T[P], TermAndConditionGroupByOutputType[P]>
+              : GetScalarType<T[P], TermsOfServiceGroupByOutputType[P]>
+            : GetScalarType<T[P], TermsOfServiceGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type TermAndConditionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type TermsOfServiceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    content?: boolean
+    created_at?: boolean
     updated_at?: boolean
-  }, ExtArgs["result"]["termAndCondition"]>
+    translations?: boolean | TermsOfService$translationsArgs<ExtArgs>
+    _count?: boolean | TermsOfServiceCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["termsOfService"]>
 
-  export type TermAndConditionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type TermsOfServiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    content?: boolean
+    created_at?: boolean
     updated_at?: boolean
-  }, ExtArgs["result"]["termAndCondition"]>
+  }, ExtArgs["result"]["termsOfService"]>
 
-  export type TermAndConditionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type TermsOfServiceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    content?: boolean
+    created_at?: boolean
     updated_at?: boolean
-  }, ExtArgs["result"]["termAndCondition"]>
+  }, ExtArgs["result"]["termsOfService"]>
 
-  export type TermAndConditionSelectScalar = {
+  export type TermsOfServiceSelectScalar = {
     id?: boolean
-    content?: boolean
+    created_at?: boolean
     updated_at?: boolean
   }
 
-  export type TermAndConditionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "updated_at", ExtArgs["result"]["termAndCondition"]>
+  export type TermsOfServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "created_at" | "updated_at", ExtArgs["result"]["termsOfService"]>
+  export type TermsOfServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | TermsOfService$translationsArgs<ExtArgs>
+    _count?: boolean | TermsOfServiceCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TermsOfServiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TermsOfServiceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $TermAndConditionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "TermAndCondition"
-    objects: {}
+  export type $TermsOfServicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TermsOfService"
+    objects: {
+      translations: Prisma.$TermsOfServiceTranslationPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      content: string
+      created_at: bigint
       updated_at: bigint
-    }, ExtArgs["result"]["termAndCondition"]>
+    }, ExtArgs["result"]["termsOfService"]>
     composites: {}
   }
 
-  type TermAndConditionGetPayload<S extends boolean | null | undefined | TermAndConditionDefaultArgs> = $Result.GetResult<Prisma.$TermAndConditionPayload, S>
+  type TermsOfServiceGetPayload<S extends boolean | null | undefined | TermsOfServiceDefaultArgs> = $Result.GetResult<Prisma.$TermsOfServicePayload, S>
 
-  type TermAndConditionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<TermAndConditionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: TermAndConditionCountAggregateInputType | true
+  type TermsOfServiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TermsOfServiceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TermsOfServiceCountAggregateInputType | true
     }
 
-  export interface TermAndConditionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TermAndCondition'], meta: { name: 'TermAndCondition' } }
+  export interface TermsOfServiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TermsOfService'], meta: { name: 'TermsOfService' } }
     /**
-     * Find zero or one TermAndCondition that matches the filter.
-     * @param {TermAndConditionFindUniqueArgs} args - Arguments to find a TermAndCondition
+     * Find zero or one TermsOfService that matches the filter.
+     * @param {TermsOfServiceFindUniqueArgs} args - Arguments to find a TermsOfService
      * @example
-     * // Get one TermAndCondition
-     * const termAndCondition = await prisma.termAndCondition.findUnique({
+     * // Get one TermsOfService
+     * const termsOfService = await prisma.termsOfService.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends TermAndConditionFindUniqueArgs>(args: SelectSubset<T, TermAndConditionFindUniqueArgs<ExtArgs>>): Prisma__TermAndConditionClient<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends TermsOfServiceFindUniqueArgs>(args: SelectSubset<T, TermsOfServiceFindUniqueArgs<ExtArgs>>): Prisma__TermsOfServiceClient<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one TermAndCondition that matches the filter or throw an error with `error.code='P2025'`
+     * Find one TermsOfService that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {TermAndConditionFindUniqueOrThrowArgs} args - Arguments to find a TermAndCondition
+     * @param {TermsOfServiceFindUniqueOrThrowArgs} args - Arguments to find a TermsOfService
      * @example
-     * // Get one TermAndCondition
-     * const termAndCondition = await prisma.termAndCondition.findUniqueOrThrow({
+     * // Get one TermsOfService
+     * const termsOfService = await prisma.termsOfService.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends TermAndConditionFindUniqueOrThrowArgs>(args: SelectSubset<T, TermAndConditionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TermAndConditionClient<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends TermsOfServiceFindUniqueOrThrowArgs>(args: SelectSubset<T, TermsOfServiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TermsOfServiceClient<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first TermAndCondition that matches the filter.
+     * Find the first TermsOfService that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TermAndConditionFindFirstArgs} args - Arguments to find a TermAndCondition
+     * @param {TermsOfServiceFindFirstArgs} args - Arguments to find a TermsOfService
      * @example
-     * // Get one TermAndCondition
-     * const termAndCondition = await prisma.termAndCondition.findFirst({
+     * // Get one TermsOfService
+     * const termsOfService = await prisma.termsOfService.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends TermAndConditionFindFirstArgs>(args?: SelectSubset<T, TermAndConditionFindFirstArgs<ExtArgs>>): Prisma__TermAndConditionClient<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends TermsOfServiceFindFirstArgs>(args?: SelectSubset<T, TermsOfServiceFindFirstArgs<ExtArgs>>): Prisma__TermsOfServiceClient<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first TermAndCondition that matches the filter or
+     * Find the first TermsOfService that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TermAndConditionFindFirstOrThrowArgs} args - Arguments to find a TermAndCondition
+     * @param {TermsOfServiceFindFirstOrThrowArgs} args - Arguments to find a TermsOfService
      * @example
-     * // Get one TermAndCondition
-     * const termAndCondition = await prisma.termAndCondition.findFirstOrThrow({
+     * // Get one TermsOfService
+     * const termsOfService = await prisma.termsOfService.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends TermAndConditionFindFirstOrThrowArgs>(args?: SelectSubset<T, TermAndConditionFindFirstOrThrowArgs<ExtArgs>>): Prisma__TermAndConditionClient<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends TermsOfServiceFindFirstOrThrowArgs>(args?: SelectSubset<T, TermsOfServiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__TermsOfServiceClient<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more TermAndConditions that matches the filter.
+     * Find zero or more TermsOfServices that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TermAndConditionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {TermsOfServiceFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all TermAndConditions
-     * const termAndConditions = await prisma.termAndCondition.findMany()
+     * // Get all TermsOfServices
+     * const termsOfServices = await prisma.termsOfService.findMany()
      * 
-     * // Get first 10 TermAndConditions
-     * const termAndConditions = await prisma.termAndCondition.findMany({ take: 10 })
+     * // Get first 10 TermsOfServices
+     * const termsOfServices = await prisma.termsOfService.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const termAndConditionWithIdOnly = await prisma.termAndCondition.findMany({ select: { id: true } })
+     * const termsOfServiceWithIdOnly = await prisma.termsOfService.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends TermAndConditionFindManyArgs>(args?: SelectSubset<T, TermAndConditionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends TermsOfServiceFindManyArgs>(args?: SelectSubset<T, TermsOfServiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a TermAndCondition.
-     * @param {TermAndConditionCreateArgs} args - Arguments to create a TermAndCondition.
+     * Create a TermsOfService.
+     * @param {TermsOfServiceCreateArgs} args - Arguments to create a TermsOfService.
      * @example
-     * // Create one TermAndCondition
-     * const TermAndCondition = await prisma.termAndCondition.create({
+     * // Create one TermsOfService
+     * const TermsOfService = await prisma.termsOfService.create({
      *   data: {
-     *     // ... data to create a TermAndCondition
+     *     // ... data to create a TermsOfService
      *   }
      * })
      * 
      */
-    create<T extends TermAndConditionCreateArgs>(args: SelectSubset<T, TermAndConditionCreateArgs<ExtArgs>>): Prisma__TermAndConditionClient<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends TermsOfServiceCreateArgs>(args: SelectSubset<T, TermsOfServiceCreateArgs<ExtArgs>>): Prisma__TermsOfServiceClient<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many TermAndConditions.
-     * @param {TermAndConditionCreateManyArgs} args - Arguments to create many TermAndConditions.
+     * Create many TermsOfServices.
+     * @param {TermsOfServiceCreateManyArgs} args - Arguments to create many TermsOfServices.
      * @example
-     * // Create many TermAndConditions
-     * const termAndCondition = await prisma.termAndCondition.createMany({
+     * // Create many TermsOfServices
+     * const termsOfService = await prisma.termsOfService.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends TermAndConditionCreateManyArgs>(args?: SelectSubset<T, TermAndConditionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends TermsOfServiceCreateManyArgs>(args?: SelectSubset<T, TermsOfServiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many TermAndConditions and returns the data saved in the database.
-     * @param {TermAndConditionCreateManyAndReturnArgs} args - Arguments to create many TermAndConditions.
+     * Create many TermsOfServices and returns the data saved in the database.
+     * @param {TermsOfServiceCreateManyAndReturnArgs} args - Arguments to create many TermsOfServices.
      * @example
-     * // Create many TermAndConditions
-     * const termAndCondition = await prisma.termAndCondition.createManyAndReturn({
+     * // Create many TermsOfServices
+     * const termsOfService = await prisma.termsOfService.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many TermAndConditions and only return the `id`
-     * const termAndConditionWithIdOnly = await prisma.termAndCondition.createManyAndReturn({
+     * // Create many TermsOfServices and only return the `id`
+     * const termsOfServiceWithIdOnly = await prisma.termsOfService.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -16494,28 +19158,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends TermAndConditionCreateManyAndReturnArgs>(args?: SelectSubset<T, TermAndConditionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends TermsOfServiceCreateManyAndReturnArgs>(args?: SelectSubset<T, TermsOfServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a TermAndCondition.
-     * @param {TermAndConditionDeleteArgs} args - Arguments to delete one TermAndCondition.
+     * Delete a TermsOfService.
+     * @param {TermsOfServiceDeleteArgs} args - Arguments to delete one TermsOfService.
      * @example
-     * // Delete one TermAndCondition
-     * const TermAndCondition = await prisma.termAndCondition.delete({
+     * // Delete one TermsOfService
+     * const TermsOfService = await prisma.termsOfService.delete({
      *   where: {
-     *     // ... filter to delete one TermAndCondition
+     *     // ... filter to delete one TermsOfService
      *   }
      * })
      * 
      */
-    delete<T extends TermAndConditionDeleteArgs>(args: SelectSubset<T, TermAndConditionDeleteArgs<ExtArgs>>): Prisma__TermAndConditionClient<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends TermsOfServiceDeleteArgs>(args: SelectSubset<T, TermsOfServiceDeleteArgs<ExtArgs>>): Prisma__TermsOfServiceClient<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one TermAndCondition.
-     * @param {TermAndConditionUpdateArgs} args - Arguments to update one TermAndCondition.
+     * Update one TermsOfService.
+     * @param {TermsOfServiceUpdateArgs} args - Arguments to update one TermsOfService.
      * @example
-     * // Update one TermAndCondition
-     * const termAndCondition = await prisma.termAndCondition.update({
+     * // Update one TermsOfService
+     * const termsOfService = await prisma.termsOfService.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -16525,30 +19189,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends TermAndConditionUpdateArgs>(args: SelectSubset<T, TermAndConditionUpdateArgs<ExtArgs>>): Prisma__TermAndConditionClient<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends TermsOfServiceUpdateArgs>(args: SelectSubset<T, TermsOfServiceUpdateArgs<ExtArgs>>): Prisma__TermsOfServiceClient<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more TermAndConditions.
-     * @param {TermAndConditionDeleteManyArgs} args - Arguments to filter TermAndConditions to delete.
+     * Delete zero or more TermsOfServices.
+     * @param {TermsOfServiceDeleteManyArgs} args - Arguments to filter TermsOfServices to delete.
      * @example
-     * // Delete a few TermAndConditions
-     * const { count } = await prisma.termAndCondition.deleteMany({
+     * // Delete a few TermsOfServices
+     * const { count } = await prisma.termsOfService.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends TermAndConditionDeleteManyArgs>(args?: SelectSubset<T, TermAndConditionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends TermsOfServiceDeleteManyArgs>(args?: SelectSubset<T, TermsOfServiceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more TermAndConditions.
+     * Update zero or more TermsOfServices.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TermAndConditionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {TermsOfServiceUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many TermAndConditions
-     * const termAndCondition = await prisma.termAndCondition.updateMany({
+     * // Update many TermsOfServices
+     * const termsOfService = await prisma.termsOfService.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -16558,14 +19222,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends TermAndConditionUpdateManyArgs>(args: SelectSubset<T, TermAndConditionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends TermsOfServiceUpdateManyArgs>(args: SelectSubset<T, TermsOfServiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more TermAndConditions and returns the data updated in the database.
-     * @param {TermAndConditionUpdateManyAndReturnArgs} args - Arguments to update many TermAndConditions.
+     * Update zero or more TermsOfServices and returns the data updated in the database.
+     * @param {TermsOfServiceUpdateManyAndReturnArgs} args - Arguments to update many TermsOfServices.
      * @example
-     * // Update many TermAndConditions
-     * const termAndCondition = await prisma.termAndCondition.updateManyAndReturn({
+     * // Update many TermsOfServices
+     * const termsOfService = await prisma.termsOfService.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -16574,8 +19238,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more TermAndConditions and only return the `id`
-     * const termAndConditionWithIdOnly = await prisma.termAndCondition.updateManyAndReturn({
+     * // Update zero or more TermsOfServices and only return the `id`
+     * const termsOfServiceWithIdOnly = await prisma.termsOfService.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -16588,56 +19252,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends TermAndConditionUpdateManyAndReturnArgs>(args: SelectSubset<T, TermAndConditionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends TermsOfServiceUpdateManyAndReturnArgs>(args: SelectSubset<T, TermsOfServiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one TermAndCondition.
-     * @param {TermAndConditionUpsertArgs} args - Arguments to update or create a TermAndCondition.
+     * Create or update one TermsOfService.
+     * @param {TermsOfServiceUpsertArgs} args - Arguments to update or create a TermsOfService.
      * @example
-     * // Update or create a TermAndCondition
-     * const termAndCondition = await prisma.termAndCondition.upsert({
+     * // Update or create a TermsOfService
+     * const termsOfService = await prisma.termsOfService.upsert({
      *   create: {
-     *     // ... data to create a TermAndCondition
+     *     // ... data to create a TermsOfService
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the TermAndCondition we want to update
+     *     // ... the filter for the TermsOfService we want to update
      *   }
      * })
      */
-    upsert<T extends TermAndConditionUpsertArgs>(args: SelectSubset<T, TermAndConditionUpsertArgs<ExtArgs>>): Prisma__TermAndConditionClient<$Result.GetResult<Prisma.$TermAndConditionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends TermsOfServiceUpsertArgs>(args: SelectSubset<T, TermsOfServiceUpsertArgs<ExtArgs>>): Prisma__TermsOfServiceClient<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of TermAndConditions.
+     * Count the number of TermsOfServices.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TermAndConditionCountArgs} args - Arguments to filter TermAndConditions to count.
+     * @param {TermsOfServiceCountArgs} args - Arguments to filter TermsOfServices to count.
      * @example
-     * // Count the number of TermAndConditions
-     * const count = await prisma.termAndCondition.count({
+     * // Count the number of TermsOfServices
+     * const count = await prisma.termsOfService.count({
      *   where: {
-     *     // ... the filter for the TermAndConditions we want to count
+     *     // ... the filter for the TermsOfServices we want to count
      *   }
      * })
     **/
-    count<T extends TermAndConditionCountArgs>(
-      args?: Subset<T, TermAndConditionCountArgs>,
+    count<T extends TermsOfServiceCountArgs>(
+      args?: Subset<T, TermsOfServiceCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], TermAndConditionCountAggregateOutputType>
+          : GetScalarType<T['select'], TermsOfServiceCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a TermAndCondition.
+     * Allows you to perform aggregations operations on a TermsOfService.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TermAndConditionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {TermsOfServiceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -16657,13 +19321,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends TermAndConditionAggregateArgs>(args: Subset<T, TermAndConditionAggregateArgs>): Prisma.PrismaPromise<GetTermAndConditionAggregateType<T>>
+    aggregate<T extends TermsOfServiceAggregateArgs>(args: Subset<T, TermsOfServiceAggregateArgs>): Prisma.PrismaPromise<GetTermsOfServiceAggregateType<T>>
 
     /**
-     * Group by TermAndCondition.
+     * Group by TermsOfService.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TermAndConditionGroupByArgs} args - Group by arguments.
+     * @param {TermsOfServiceGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -16678,14 +19342,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends TermAndConditionGroupByArgs,
+      T extends TermsOfServiceGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TermAndConditionGroupByArgs['orderBy'] }
-        : { orderBy?: TermAndConditionGroupByArgs['orderBy'] },
+        ? { orderBy: TermsOfServiceGroupByArgs['orderBy'] }
+        : { orderBy?: TermsOfServiceGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -16734,21 +19398,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, TermAndConditionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTermAndConditionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, TermsOfServiceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTermsOfServiceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the TermAndCondition model
+   * Fields of the TermsOfService model
    */
-  readonly fields: TermAndConditionFieldRefs;
+  readonly fields: TermsOfServiceFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for TermAndCondition.
+   * The delegate class that acts as a "Promise-like" for TermsOfService.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__TermAndConditionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__TermsOfServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    translations<T extends TermsOfService$translationsArgs<ExtArgs> = {}>(args?: Subset<T, TermsOfService$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16775,375 +19440,1522 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the TermAndCondition model
+   * Fields of the TermsOfService model
    */
-  interface TermAndConditionFieldRefs {
-    readonly id: FieldRef<"TermAndCondition", 'Int'>
-    readonly content: FieldRef<"TermAndCondition", 'String'>
-    readonly updated_at: FieldRef<"TermAndCondition", 'BigInt'>
+  interface TermsOfServiceFieldRefs {
+    readonly id: FieldRef<"TermsOfService", 'Int'>
+    readonly created_at: FieldRef<"TermsOfService", 'BigInt'>
+    readonly updated_at: FieldRef<"TermsOfService", 'BigInt'>
   }
     
 
   // Custom InputTypes
   /**
-   * TermAndCondition findUnique
+   * TermsOfService findUnique
    */
-  export type TermAndConditionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * Filter, which TermAndCondition to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where: TermAndConditionWhereUniqueInput
+    include?: TermsOfServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfService to fetch.
+     */
+    where: TermsOfServiceWhereUniqueInput
   }
 
   /**
-   * TermAndCondition findUniqueOrThrow
+   * TermsOfService findUniqueOrThrow
    */
-  export type TermAndConditionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * Filter, which TermAndCondition to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where: TermAndConditionWhereUniqueInput
+    include?: TermsOfServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfService to fetch.
+     */
+    where: TermsOfServiceWhereUniqueInput
   }
 
   /**
-   * TermAndCondition findFirst
+   * TermsOfService findFirst
    */
-  export type TermAndConditionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * Filter, which TermAndCondition to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where?: TermAndConditionWhereInput
+    include?: TermsOfServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfService to fetch.
+     */
+    where?: TermsOfServiceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of TermAndConditions to fetch.
+     * Determine the order of TermsOfServices to fetch.
      */
-    orderBy?: TermAndConditionOrderByWithRelationInput | TermAndConditionOrderByWithRelationInput[]
+    orderBy?: TermsOfServiceOrderByWithRelationInput | TermsOfServiceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for TermAndConditions.
+     * Sets the position for searching for TermsOfServices.
      */
-    cursor?: TermAndConditionWhereUniqueInput
+    cursor?: TermsOfServiceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` TermAndConditions from the position of the cursor.
+     * Take `±n` TermsOfServices from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` TermAndConditions.
+     * Skip the first `n` TermsOfServices.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of TermAndConditions.
+     * Filter by unique combinations of TermsOfServices.
      */
-    distinct?: TermAndConditionScalarFieldEnum | TermAndConditionScalarFieldEnum[]
+    distinct?: TermsOfServiceScalarFieldEnum | TermsOfServiceScalarFieldEnum[]
   }
 
   /**
-   * TermAndCondition findFirstOrThrow
+   * TermsOfService findFirstOrThrow
    */
-  export type TermAndConditionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * Filter, which TermAndCondition to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where?: TermAndConditionWhereInput
+    include?: TermsOfServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfService to fetch.
+     */
+    where?: TermsOfServiceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of TermAndConditions to fetch.
+     * Determine the order of TermsOfServices to fetch.
      */
-    orderBy?: TermAndConditionOrderByWithRelationInput | TermAndConditionOrderByWithRelationInput[]
+    orderBy?: TermsOfServiceOrderByWithRelationInput | TermsOfServiceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for TermAndConditions.
+     * Sets the position for searching for TermsOfServices.
      */
-    cursor?: TermAndConditionWhereUniqueInput
+    cursor?: TermsOfServiceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` TermAndConditions from the position of the cursor.
+     * Take `±n` TermsOfServices from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` TermAndConditions.
+     * Skip the first `n` TermsOfServices.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of TermAndConditions.
+     * Filter by unique combinations of TermsOfServices.
      */
-    distinct?: TermAndConditionScalarFieldEnum | TermAndConditionScalarFieldEnum[]
+    distinct?: TermsOfServiceScalarFieldEnum | TermsOfServiceScalarFieldEnum[]
   }
 
   /**
-   * TermAndCondition findMany
+   * TermsOfService findMany
    */
-  export type TermAndConditionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * Filter, which TermAndConditions to fetch.
+     * Choose, which related nodes to fetch as well
      */
-    where?: TermAndConditionWhereInput
+    include?: TermsOfServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfServices to fetch.
+     */
+    where?: TermsOfServiceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of TermAndConditions to fetch.
+     * Determine the order of TermsOfServices to fetch.
      */
-    orderBy?: TermAndConditionOrderByWithRelationInput | TermAndConditionOrderByWithRelationInput[]
+    orderBy?: TermsOfServiceOrderByWithRelationInput | TermsOfServiceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing TermAndConditions.
+     * Sets the position for listing TermsOfServices.
      */
-    cursor?: TermAndConditionWhereUniqueInput
+    cursor?: TermsOfServiceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` TermAndConditions from the position of the cursor.
+     * Take `±n` TermsOfServices from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` TermAndConditions.
+     * Skip the first `n` TermsOfServices.
      */
     skip?: number
-    distinct?: TermAndConditionScalarFieldEnum | TermAndConditionScalarFieldEnum[]
+    distinct?: TermsOfServiceScalarFieldEnum | TermsOfServiceScalarFieldEnum[]
   }
 
   /**
-   * TermAndCondition create
+   * TermsOfService create
    */
-  export type TermAndConditionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * The data needed to create a TermAndCondition.
+     * Choose, which related nodes to fetch as well
      */
-    data: XOR<TermAndConditionCreateInput, TermAndConditionUncheckedCreateInput>
+    include?: TermsOfServiceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TermsOfService.
+     */
+    data: XOR<TermsOfServiceCreateInput, TermsOfServiceUncheckedCreateInput>
   }
 
   /**
-   * TermAndCondition createMany
+   * TermsOfService createMany
    */
-  export type TermAndConditionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many TermAndConditions.
+     * The data used to create many TermsOfServices.
      */
-    data: TermAndConditionCreateManyInput | TermAndConditionCreateManyInput[]
+    data: TermsOfServiceCreateManyInput | TermsOfServiceCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * TermAndCondition createManyAndReturn
+   * TermsOfService createManyAndReturn
    */
-  export type TermAndConditionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelectCreateManyAndReturn<ExtArgs> | null
+    select?: TermsOfServiceSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * The data used to create many TermAndConditions.
+     * The data used to create many TermsOfServices.
      */
-    data: TermAndConditionCreateManyInput | TermAndConditionCreateManyInput[]
+    data: TermsOfServiceCreateManyInput | TermsOfServiceCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * TermAndCondition update
+   * TermsOfService update
    */
-  export type TermAndConditionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * The data needed to update a TermAndCondition.
+     * Choose, which related nodes to fetch as well
      */
-    data: XOR<TermAndConditionUpdateInput, TermAndConditionUncheckedUpdateInput>
+    include?: TermsOfServiceInclude<ExtArgs> | null
     /**
-     * Choose, which TermAndCondition to update.
+     * The data needed to update a TermsOfService.
      */
-    where: TermAndConditionWhereUniqueInput
+    data: XOR<TermsOfServiceUpdateInput, TermsOfServiceUncheckedUpdateInput>
+    /**
+     * Choose, which TermsOfService to update.
+     */
+    where: TermsOfServiceWhereUniqueInput
   }
 
   /**
-   * TermAndCondition updateMany
+   * TermsOfService updateMany
    */
-  export type TermAndConditionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update TermAndConditions.
+     * The data used to update TermsOfServices.
      */
-    data: XOR<TermAndConditionUpdateManyMutationInput, TermAndConditionUncheckedUpdateManyInput>
+    data: XOR<TermsOfServiceUpdateManyMutationInput, TermsOfServiceUncheckedUpdateManyInput>
     /**
-     * Filter which TermAndConditions to update
+     * Filter which TermsOfServices to update
      */
-    where?: TermAndConditionWhereInput
+    where?: TermsOfServiceWhereInput
     /**
-     * Limit how many TermAndConditions to update.
+     * Limit how many TermsOfServices to update.
      */
     limit?: number
   }
 
   /**
-   * TermAndCondition updateManyAndReturn
+   * TermsOfService updateManyAndReturn
    */
-  export type TermAndConditionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: TermsOfServiceSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * The data used to update TermAndConditions.
+     * The data used to update TermsOfServices.
      */
-    data: XOR<TermAndConditionUpdateManyMutationInput, TermAndConditionUncheckedUpdateManyInput>
+    data: XOR<TermsOfServiceUpdateManyMutationInput, TermsOfServiceUncheckedUpdateManyInput>
     /**
-     * Filter which TermAndConditions to update
+     * Filter which TermsOfServices to update
      */
-    where?: TermAndConditionWhereInput
+    where?: TermsOfServiceWhereInput
     /**
-     * Limit how many TermAndConditions to update.
+     * Limit how many TermsOfServices to update.
      */
     limit?: number
   }
 
   /**
-   * TermAndCondition upsert
+   * TermsOfService upsert
    */
-  export type TermAndConditionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * The filter to search for the TermAndCondition to update in case it exists.
+     * Choose, which related nodes to fetch as well
      */
-    where: TermAndConditionWhereUniqueInput
+    include?: TermsOfServiceInclude<ExtArgs> | null
     /**
-     * In case the TermAndCondition found by the `where` argument doesn't exist, create a new TermAndCondition with this data.
+     * The filter to search for the TermsOfService to update in case it exists.
      */
-    create: XOR<TermAndConditionCreateInput, TermAndConditionUncheckedCreateInput>
+    where: TermsOfServiceWhereUniqueInput
     /**
-     * In case the TermAndCondition was found with the provided `where` argument, update it with this data.
+     * In case the TermsOfService found by the `where` argument doesn't exist, create a new TermsOfService with this data.
      */
-    update: XOR<TermAndConditionUpdateInput, TermAndConditionUncheckedUpdateInput>
+    create: XOR<TermsOfServiceCreateInput, TermsOfServiceUncheckedCreateInput>
+    /**
+     * In case the TermsOfService was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TermsOfServiceUpdateInput, TermsOfServiceUncheckedUpdateInput>
   }
 
   /**
-   * TermAndCondition delete
+   * TermsOfService delete
    */
-  export type TermAndConditionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfService
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfService
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceOmit<ExtArgs> | null
     /**
-     * Filter which TermAndCondition to delete.
+     * Choose, which related nodes to fetch as well
      */
-    where: TermAndConditionWhereUniqueInput
+    include?: TermsOfServiceInclude<ExtArgs> | null
+    /**
+     * Filter which TermsOfService to delete.
+     */
+    where: TermsOfServiceWhereUniqueInput
   }
 
   /**
-   * TermAndCondition deleteMany
+   * TermsOfService deleteMany
    */
-  export type TermAndConditionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfServiceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which TermAndConditions to delete
+     * Filter which TermsOfServices to delete
      */
-    where?: TermAndConditionWhereInput
+    where?: TermsOfServiceWhereInput
     /**
-     * Limit how many TermAndConditions to delete.
+     * Limit how many TermsOfServices to delete.
      */
     limit?: number
   }
 
   /**
-   * TermAndCondition without action
+   * TermsOfService.translations
    */
-  export type TermAndConditionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TermsOfService$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TermAndCondition
+     * Select specific fields to fetch from the TermsOfServiceTranslation
      */
-    select?: TermAndConditionSelect<ExtArgs> | null
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TermAndCondition
+     * Omit specific fields from the TermsOfServiceTranslation
      */
-    omit?: TermAndConditionOmit<ExtArgs> | null
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    where?: TermsOfServiceTranslationWhereInput
+    orderBy?: TermsOfServiceTranslationOrderByWithRelationInput | TermsOfServiceTranslationOrderByWithRelationInput[]
+    cursor?: TermsOfServiceTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TermsOfServiceTranslationScalarFieldEnum | TermsOfServiceTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * TermsOfService without action
+   */
+  export type TermsOfServiceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfService
+     */
+    select?: TermsOfServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfService
+     */
+    omit?: TermsOfServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TermsOfServiceTranslation
+   */
+
+  export type AggregateTermsOfServiceTranslation = {
+    _count: TermsOfServiceTranslationCountAggregateOutputType | null
+    _avg: TermsOfServiceTranslationAvgAggregateOutputType | null
+    _sum: TermsOfServiceTranslationSumAggregateOutputType | null
+    _min: TermsOfServiceTranslationMinAggregateOutputType | null
+    _max: TermsOfServiceTranslationMaxAggregateOutputType | null
+  }
+
+  export type TermsOfServiceTranslationAvgAggregateOutputType = {
+    id: number | null
+    terms_of_service_id: number | null
+  }
+
+  export type TermsOfServiceTranslationSumAggregateOutputType = {
+    id: number | null
+    terms_of_service_id: number | null
+  }
+
+  export type TermsOfServiceTranslationMinAggregateOutputType = {
+    id: number | null
+    terms_of_service_id: number | null
+    language: $Enums.Language | null
+    content: string | null
+  }
+
+  export type TermsOfServiceTranslationMaxAggregateOutputType = {
+    id: number | null
+    terms_of_service_id: number | null
+    language: $Enums.Language | null
+    content: string | null
+  }
+
+  export type TermsOfServiceTranslationCountAggregateOutputType = {
+    id: number
+    terms_of_service_id: number
+    language: number
+    content: number
+    _all: number
+  }
+
+
+  export type TermsOfServiceTranslationAvgAggregateInputType = {
+    id?: true
+    terms_of_service_id?: true
+  }
+
+  export type TermsOfServiceTranslationSumAggregateInputType = {
+    id?: true
+    terms_of_service_id?: true
+  }
+
+  export type TermsOfServiceTranslationMinAggregateInputType = {
+    id?: true
+    terms_of_service_id?: true
+    language?: true
+    content?: true
+  }
+
+  export type TermsOfServiceTranslationMaxAggregateInputType = {
+    id?: true
+    terms_of_service_id?: true
+    language?: true
+    content?: true
+  }
+
+  export type TermsOfServiceTranslationCountAggregateInputType = {
+    id?: true
+    terms_of_service_id?: true
+    language?: true
+    content?: true
+    _all?: true
+  }
+
+  export type TermsOfServiceTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TermsOfServiceTranslation to aggregate.
+     */
+    where?: TermsOfServiceTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsOfServiceTranslations to fetch.
+     */
+    orderBy?: TermsOfServiceTranslationOrderByWithRelationInput | TermsOfServiceTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TermsOfServiceTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsOfServiceTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsOfServiceTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TermsOfServiceTranslations
+    **/
+    _count?: true | TermsOfServiceTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TermsOfServiceTranslationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TermsOfServiceTranslationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TermsOfServiceTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TermsOfServiceTranslationMaxAggregateInputType
+  }
+
+  export type GetTermsOfServiceTranslationAggregateType<T extends TermsOfServiceTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateTermsOfServiceTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTermsOfServiceTranslation[P]>
+      : GetScalarType<T[P], AggregateTermsOfServiceTranslation[P]>
+  }
+
+
+
+
+  export type TermsOfServiceTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TermsOfServiceTranslationWhereInput
+    orderBy?: TermsOfServiceTranslationOrderByWithAggregationInput | TermsOfServiceTranslationOrderByWithAggregationInput[]
+    by: TermsOfServiceTranslationScalarFieldEnum[] | TermsOfServiceTranslationScalarFieldEnum
+    having?: TermsOfServiceTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TermsOfServiceTranslationCountAggregateInputType | true
+    _avg?: TermsOfServiceTranslationAvgAggregateInputType
+    _sum?: TermsOfServiceTranslationSumAggregateInputType
+    _min?: TermsOfServiceTranslationMinAggregateInputType
+    _max?: TermsOfServiceTranslationMaxAggregateInputType
+  }
+
+  export type TermsOfServiceTranslationGroupByOutputType = {
+    id: number
+    terms_of_service_id: number
+    language: $Enums.Language
+    content: string
+    _count: TermsOfServiceTranslationCountAggregateOutputType | null
+    _avg: TermsOfServiceTranslationAvgAggregateOutputType | null
+    _sum: TermsOfServiceTranslationSumAggregateOutputType | null
+    _min: TermsOfServiceTranslationMinAggregateOutputType | null
+    _max: TermsOfServiceTranslationMaxAggregateOutputType | null
+  }
+
+  type GetTermsOfServiceTranslationGroupByPayload<T extends TermsOfServiceTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TermsOfServiceTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TermsOfServiceTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TermsOfServiceTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], TermsOfServiceTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TermsOfServiceTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    terms_of_service_id?: boolean
+    language?: boolean
+    content?: boolean
+    terms_of_service?: boolean | TermsOfServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["termsOfServiceTranslation"]>
+
+  export type TermsOfServiceTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    terms_of_service_id?: boolean
+    language?: boolean
+    content?: boolean
+    terms_of_service?: boolean | TermsOfServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["termsOfServiceTranslation"]>
+
+  export type TermsOfServiceTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    terms_of_service_id?: boolean
+    language?: boolean
+    content?: boolean
+    terms_of_service?: boolean | TermsOfServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["termsOfServiceTranslation"]>
+
+  export type TermsOfServiceTranslationSelectScalar = {
+    id?: boolean
+    terms_of_service_id?: boolean
+    language?: boolean
+    content?: boolean
+  }
+
+  export type TermsOfServiceTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "terms_of_service_id" | "language" | "content", ExtArgs["result"]["termsOfServiceTranslation"]>
+  export type TermsOfServiceTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    terms_of_service?: boolean | TermsOfServiceDefaultArgs<ExtArgs>
+  }
+  export type TermsOfServiceTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    terms_of_service?: boolean | TermsOfServiceDefaultArgs<ExtArgs>
+  }
+  export type TermsOfServiceTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    terms_of_service?: boolean | TermsOfServiceDefaultArgs<ExtArgs>
+  }
+
+  export type $TermsOfServiceTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TermsOfServiceTranslation"
+    objects: {
+      terms_of_service: Prisma.$TermsOfServicePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      terms_of_service_id: number
+      language: $Enums.Language
+      content: string
+    }, ExtArgs["result"]["termsOfServiceTranslation"]>
+    composites: {}
+  }
+
+  type TermsOfServiceTranslationGetPayload<S extends boolean | null | undefined | TermsOfServiceTranslationDefaultArgs> = $Result.GetResult<Prisma.$TermsOfServiceTranslationPayload, S>
+
+  type TermsOfServiceTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TermsOfServiceTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TermsOfServiceTranslationCountAggregateInputType | true
+    }
+
+  export interface TermsOfServiceTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TermsOfServiceTranslation'], meta: { name: 'TermsOfServiceTranslation' } }
+    /**
+     * Find zero or one TermsOfServiceTranslation that matches the filter.
+     * @param {TermsOfServiceTranslationFindUniqueArgs} args - Arguments to find a TermsOfServiceTranslation
+     * @example
+     * // Get one TermsOfServiceTranslation
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TermsOfServiceTranslationFindUniqueArgs>(args: SelectSubset<T, TermsOfServiceTranslationFindUniqueArgs<ExtArgs>>): Prisma__TermsOfServiceTranslationClient<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TermsOfServiceTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TermsOfServiceTranslationFindUniqueOrThrowArgs} args - Arguments to find a TermsOfServiceTranslation
+     * @example
+     * // Get one TermsOfServiceTranslation
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TermsOfServiceTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, TermsOfServiceTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TermsOfServiceTranslationClient<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TermsOfServiceTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsOfServiceTranslationFindFirstArgs} args - Arguments to find a TermsOfServiceTranslation
+     * @example
+     * // Get one TermsOfServiceTranslation
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TermsOfServiceTranslationFindFirstArgs>(args?: SelectSubset<T, TermsOfServiceTranslationFindFirstArgs<ExtArgs>>): Prisma__TermsOfServiceTranslationClient<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TermsOfServiceTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsOfServiceTranslationFindFirstOrThrowArgs} args - Arguments to find a TermsOfServiceTranslation
+     * @example
+     * // Get one TermsOfServiceTranslation
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TermsOfServiceTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, TermsOfServiceTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__TermsOfServiceTranslationClient<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TermsOfServiceTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsOfServiceTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TermsOfServiceTranslations
+     * const termsOfServiceTranslations = await prisma.termsOfServiceTranslation.findMany()
+     * 
+     * // Get first 10 TermsOfServiceTranslations
+     * const termsOfServiceTranslations = await prisma.termsOfServiceTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const termsOfServiceTranslationWithIdOnly = await prisma.termsOfServiceTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TermsOfServiceTranslationFindManyArgs>(args?: SelectSubset<T, TermsOfServiceTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TermsOfServiceTranslation.
+     * @param {TermsOfServiceTranslationCreateArgs} args - Arguments to create a TermsOfServiceTranslation.
+     * @example
+     * // Create one TermsOfServiceTranslation
+     * const TermsOfServiceTranslation = await prisma.termsOfServiceTranslation.create({
+     *   data: {
+     *     // ... data to create a TermsOfServiceTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends TermsOfServiceTranslationCreateArgs>(args: SelectSubset<T, TermsOfServiceTranslationCreateArgs<ExtArgs>>): Prisma__TermsOfServiceTranslationClient<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TermsOfServiceTranslations.
+     * @param {TermsOfServiceTranslationCreateManyArgs} args - Arguments to create many TermsOfServiceTranslations.
+     * @example
+     * // Create many TermsOfServiceTranslations
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TermsOfServiceTranslationCreateManyArgs>(args?: SelectSubset<T, TermsOfServiceTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TermsOfServiceTranslations and returns the data saved in the database.
+     * @param {TermsOfServiceTranslationCreateManyAndReturnArgs} args - Arguments to create many TermsOfServiceTranslations.
+     * @example
+     * // Create many TermsOfServiceTranslations
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TermsOfServiceTranslations and only return the `id`
+     * const termsOfServiceTranslationWithIdOnly = await prisma.termsOfServiceTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TermsOfServiceTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, TermsOfServiceTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TermsOfServiceTranslation.
+     * @param {TermsOfServiceTranslationDeleteArgs} args - Arguments to delete one TermsOfServiceTranslation.
+     * @example
+     * // Delete one TermsOfServiceTranslation
+     * const TermsOfServiceTranslation = await prisma.termsOfServiceTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one TermsOfServiceTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TermsOfServiceTranslationDeleteArgs>(args: SelectSubset<T, TermsOfServiceTranslationDeleteArgs<ExtArgs>>): Prisma__TermsOfServiceTranslationClient<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TermsOfServiceTranslation.
+     * @param {TermsOfServiceTranslationUpdateArgs} args - Arguments to update one TermsOfServiceTranslation.
+     * @example
+     * // Update one TermsOfServiceTranslation
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TermsOfServiceTranslationUpdateArgs>(args: SelectSubset<T, TermsOfServiceTranslationUpdateArgs<ExtArgs>>): Prisma__TermsOfServiceTranslationClient<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TermsOfServiceTranslations.
+     * @param {TermsOfServiceTranslationDeleteManyArgs} args - Arguments to filter TermsOfServiceTranslations to delete.
+     * @example
+     * // Delete a few TermsOfServiceTranslations
+     * const { count } = await prisma.termsOfServiceTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TermsOfServiceTranslationDeleteManyArgs>(args?: SelectSubset<T, TermsOfServiceTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TermsOfServiceTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsOfServiceTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TermsOfServiceTranslations
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TermsOfServiceTranslationUpdateManyArgs>(args: SelectSubset<T, TermsOfServiceTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TermsOfServiceTranslations and returns the data updated in the database.
+     * @param {TermsOfServiceTranslationUpdateManyAndReturnArgs} args - Arguments to update many TermsOfServiceTranslations.
+     * @example
+     * // Update many TermsOfServiceTranslations
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TermsOfServiceTranslations and only return the `id`
+     * const termsOfServiceTranslationWithIdOnly = await prisma.termsOfServiceTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TermsOfServiceTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, TermsOfServiceTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TermsOfServiceTranslation.
+     * @param {TermsOfServiceTranslationUpsertArgs} args - Arguments to update or create a TermsOfServiceTranslation.
+     * @example
+     * // Update or create a TermsOfServiceTranslation
+     * const termsOfServiceTranslation = await prisma.termsOfServiceTranslation.upsert({
+     *   create: {
+     *     // ... data to create a TermsOfServiceTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TermsOfServiceTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TermsOfServiceTranslationUpsertArgs>(args: SelectSubset<T, TermsOfServiceTranslationUpsertArgs<ExtArgs>>): Prisma__TermsOfServiceTranslationClient<$Result.GetResult<Prisma.$TermsOfServiceTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TermsOfServiceTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsOfServiceTranslationCountArgs} args - Arguments to filter TermsOfServiceTranslations to count.
+     * @example
+     * // Count the number of TermsOfServiceTranslations
+     * const count = await prisma.termsOfServiceTranslation.count({
+     *   where: {
+     *     // ... the filter for the TermsOfServiceTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends TermsOfServiceTranslationCountArgs>(
+      args?: Subset<T, TermsOfServiceTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TermsOfServiceTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TermsOfServiceTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsOfServiceTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TermsOfServiceTranslationAggregateArgs>(args: Subset<T, TermsOfServiceTranslationAggregateArgs>): Prisma.PrismaPromise<GetTermsOfServiceTranslationAggregateType<T>>
+
+    /**
+     * Group by TermsOfServiceTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsOfServiceTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TermsOfServiceTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TermsOfServiceTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: TermsOfServiceTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TermsOfServiceTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTermsOfServiceTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TermsOfServiceTranslation model
+   */
+  readonly fields: TermsOfServiceTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TermsOfServiceTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TermsOfServiceTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    terms_of_service<T extends TermsOfServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TermsOfServiceDefaultArgs<ExtArgs>>): Prisma__TermsOfServiceClient<$Result.GetResult<Prisma.$TermsOfServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TermsOfServiceTranslation model
+   */
+  interface TermsOfServiceTranslationFieldRefs {
+    readonly id: FieldRef<"TermsOfServiceTranslation", 'Int'>
+    readonly terms_of_service_id: FieldRef<"TermsOfServiceTranslation", 'Int'>
+    readonly language: FieldRef<"TermsOfServiceTranslation", 'Language'>
+    readonly content: FieldRef<"TermsOfServiceTranslation", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TermsOfServiceTranslation findUnique
+   */
+  export type TermsOfServiceTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfServiceTranslation to fetch.
+     */
+    where: TermsOfServiceTranslationWhereUniqueInput
+  }
+
+  /**
+   * TermsOfServiceTranslation findUniqueOrThrow
+   */
+  export type TermsOfServiceTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfServiceTranslation to fetch.
+     */
+    where: TermsOfServiceTranslationWhereUniqueInput
+  }
+
+  /**
+   * TermsOfServiceTranslation findFirst
+   */
+  export type TermsOfServiceTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfServiceTranslation to fetch.
+     */
+    where?: TermsOfServiceTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsOfServiceTranslations to fetch.
+     */
+    orderBy?: TermsOfServiceTranslationOrderByWithRelationInput | TermsOfServiceTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TermsOfServiceTranslations.
+     */
+    cursor?: TermsOfServiceTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsOfServiceTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsOfServiceTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TermsOfServiceTranslations.
+     */
+    distinct?: TermsOfServiceTranslationScalarFieldEnum | TermsOfServiceTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * TermsOfServiceTranslation findFirstOrThrow
+   */
+  export type TermsOfServiceTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfServiceTranslation to fetch.
+     */
+    where?: TermsOfServiceTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsOfServiceTranslations to fetch.
+     */
+    orderBy?: TermsOfServiceTranslationOrderByWithRelationInput | TermsOfServiceTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TermsOfServiceTranslations.
+     */
+    cursor?: TermsOfServiceTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsOfServiceTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsOfServiceTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TermsOfServiceTranslations.
+     */
+    distinct?: TermsOfServiceTranslationScalarFieldEnum | TermsOfServiceTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * TermsOfServiceTranslation findMany
+   */
+  export type TermsOfServiceTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsOfServiceTranslations to fetch.
+     */
+    where?: TermsOfServiceTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsOfServiceTranslations to fetch.
+     */
+    orderBy?: TermsOfServiceTranslationOrderByWithRelationInput | TermsOfServiceTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TermsOfServiceTranslations.
+     */
+    cursor?: TermsOfServiceTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsOfServiceTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsOfServiceTranslations.
+     */
+    skip?: number
+    distinct?: TermsOfServiceTranslationScalarFieldEnum | TermsOfServiceTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * TermsOfServiceTranslation create
+   */
+  export type TermsOfServiceTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TermsOfServiceTranslation.
+     */
+    data: XOR<TermsOfServiceTranslationCreateInput, TermsOfServiceTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * TermsOfServiceTranslation createMany
+   */
+  export type TermsOfServiceTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TermsOfServiceTranslations.
+     */
+    data: TermsOfServiceTranslationCreateManyInput | TermsOfServiceTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TermsOfServiceTranslation createManyAndReturn
+   */
+  export type TermsOfServiceTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many TermsOfServiceTranslations.
+     */
+    data: TermsOfServiceTranslationCreateManyInput | TermsOfServiceTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TermsOfServiceTranslation update
+   */
+  export type TermsOfServiceTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TermsOfServiceTranslation.
+     */
+    data: XOR<TermsOfServiceTranslationUpdateInput, TermsOfServiceTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which TermsOfServiceTranslation to update.
+     */
+    where: TermsOfServiceTranslationWhereUniqueInput
+  }
+
+  /**
+   * TermsOfServiceTranslation updateMany
+   */
+  export type TermsOfServiceTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TermsOfServiceTranslations.
+     */
+    data: XOR<TermsOfServiceTranslationUpdateManyMutationInput, TermsOfServiceTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which TermsOfServiceTranslations to update
+     */
+    where?: TermsOfServiceTranslationWhereInput
+    /**
+     * Limit how many TermsOfServiceTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TermsOfServiceTranslation updateManyAndReturn
+   */
+  export type TermsOfServiceTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update TermsOfServiceTranslations.
+     */
+    data: XOR<TermsOfServiceTranslationUpdateManyMutationInput, TermsOfServiceTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which TermsOfServiceTranslations to update
+     */
+    where?: TermsOfServiceTranslationWhereInput
+    /**
+     * Limit how many TermsOfServiceTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TermsOfServiceTranslation upsert
+   */
+  export type TermsOfServiceTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TermsOfServiceTranslation to update in case it exists.
+     */
+    where: TermsOfServiceTranslationWhereUniqueInput
+    /**
+     * In case the TermsOfServiceTranslation found by the `where` argument doesn't exist, create a new TermsOfServiceTranslation with this data.
+     */
+    create: XOR<TermsOfServiceTranslationCreateInput, TermsOfServiceTranslationUncheckedCreateInput>
+    /**
+     * In case the TermsOfServiceTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TermsOfServiceTranslationUpdateInput, TermsOfServiceTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * TermsOfServiceTranslation delete
+   */
+  export type TermsOfServiceTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which TermsOfServiceTranslation to delete.
+     */
+    where: TermsOfServiceTranslationWhereUniqueInput
+  }
+
+  /**
+   * TermsOfServiceTranslation deleteMany
+   */
+  export type TermsOfServiceTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TermsOfServiceTranslations to delete
+     */
+    where?: TermsOfServiceTranslationWhereInput
+    /**
+     * Limit how many TermsOfServiceTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TermsOfServiceTranslation without action
+   */
+  export type TermsOfServiceTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsOfServiceTranslation
+     */
+    select?: TermsOfServiceTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TermsOfServiceTranslation
+     */
+    omit?: TermsOfServiceTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TermsOfServiceTranslationInclude<ExtArgs> | null
   }
 
 
@@ -17161,26 +20973,31 @@ export namespace Prisma {
 
   export type PrivacyPolicyAvgAggregateOutputType = {
     id: number | null
+    created_at: number | null
     updated_at: number | null
   }
 
   export type PrivacyPolicySumAggregateOutputType = {
     id: number | null
+    created_at: bigint | null
     updated_at: bigint | null
   }
 
   export type PrivacyPolicyMinAggregateOutputType = {
     id: number | null
+    created_at: bigint | null
     updated_at: bigint | null
   }
 
   export type PrivacyPolicyMaxAggregateOutputType = {
     id: number | null
+    created_at: bigint | null
     updated_at: bigint | null
   }
 
   export type PrivacyPolicyCountAggregateOutputType = {
     id: number
+    created_at: number
     updated_at: number
     _all: number
   }
@@ -17188,26 +21005,31 @@ export namespace Prisma {
 
   export type PrivacyPolicyAvgAggregateInputType = {
     id?: true
+    created_at?: true
     updated_at?: true
   }
 
   export type PrivacyPolicySumAggregateInputType = {
     id?: true
+    created_at?: true
     updated_at?: true
   }
 
   export type PrivacyPolicyMinAggregateInputType = {
     id?: true
+    created_at?: true
     updated_at?: true
   }
 
   export type PrivacyPolicyMaxAggregateInputType = {
     id?: true
+    created_at?: true
     updated_at?: true
   }
 
   export type PrivacyPolicyCountAggregateInputType = {
     id?: true
+    created_at?: true
     updated_at?: true
     _all?: true
   }
@@ -17300,6 +21122,7 @@ export namespace Prisma {
 
   export type PrivacyPolicyGroupByOutputType = {
     id: number
+    created_at: bigint
     updated_at: bigint
     _count: PrivacyPolicyCountAggregateOutputType | null
     _avg: PrivacyPolicyAvgAggregateOutputType | null
@@ -17324,6 +21147,7 @@ export namespace Prisma {
 
   export type PrivacyPolicySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    created_at?: boolean
     updated_at?: boolean
     translations?: boolean | PrivacyPolicy$translationsArgs<ExtArgs>
     _count?: boolean | PrivacyPolicyCountOutputTypeDefaultArgs<ExtArgs>
@@ -17331,20 +21155,23 @@ export namespace Prisma {
 
   export type PrivacyPolicySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["privacyPolicy"]>
 
   export type PrivacyPolicySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["privacyPolicy"]>
 
   export type PrivacyPolicySelectScalar = {
     id?: boolean
+    created_at?: boolean
     updated_at?: boolean
   }
 
-  export type PrivacyPolicyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "updated_at", ExtArgs["result"]["privacyPolicy"]>
+  export type PrivacyPolicyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "created_at" | "updated_at", ExtArgs["result"]["privacyPolicy"]>
   export type PrivacyPolicyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     translations?: boolean | PrivacyPolicy$translationsArgs<ExtArgs>
     _count?: boolean | PrivacyPolicyCountOutputTypeDefaultArgs<ExtArgs>
@@ -17359,6 +21186,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
+      created_at: bigint
       updated_at: bigint
     }, ExtArgs["result"]["privacyPolicy"]>
     composites: {}
@@ -17785,6 +21613,7 @@ export namespace Prisma {
    */
   interface PrivacyPolicyFieldRefs {
     readonly id: FieldRef<"PrivacyPolicy", 'Int'>
+    readonly created_at: FieldRef<"PrivacyPolicy", 'BigInt'>
     readonly updated_at: FieldRef<"PrivacyPolicy", 'BigInt'>
   }
     
@@ -21449,26 +25278,31 @@ export namespace Prisma {
   export type FaqAvgAggregateOutputType = {
     id: number | null
     created_at: number | null
+    updated_at: number | null
   }
 
   export type FaqSumAggregateOutputType = {
     id: number | null
     created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type FaqMinAggregateOutputType = {
     id: number | null
     created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type FaqMaxAggregateOutputType = {
     id: number | null
     created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type FaqCountAggregateOutputType = {
     id: number
     created_at: number
+    updated_at: number
     _all: number
   }
 
@@ -21476,26 +25310,31 @@ export namespace Prisma {
   export type FaqAvgAggregateInputType = {
     id?: true
     created_at?: true
+    updated_at?: true
   }
 
   export type FaqSumAggregateInputType = {
     id?: true
     created_at?: true
+    updated_at?: true
   }
 
   export type FaqMinAggregateInputType = {
     id?: true
     created_at?: true
+    updated_at?: true
   }
 
   export type FaqMaxAggregateInputType = {
     id?: true
     created_at?: true
+    updated_at?: true
   }
 
   export type FaqCountAggregateInputType = {
     id?: true
     created_at?: true
+    updated_at?: true
     _all?: true
   }
 
@@ -21588,6 +25427,7 @@ export namespace Prisma {
   export type FaqGroupByOutputType = {
     id: number
     created_at: bigint
+    updated_at: bigint
     _count: FaqCountAggregateOutputType | null
     _avg: FaqAvgAggregateOutputType | null
     _sum: FaqSumAggregateOutputType | null
@@ -21612,6 +25452,7 @@ export namespace Prisma {
   export type FaqSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     created_at?: boolean
+    updated_at?: boolean
     translations?: boolean | Faq$translationsArgs<ExtArgs>
     _count?: boolean | FaqCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["faq"]>
@@ -21619,19 +25460,22 @@ export namespace Prisma {
   export type FaqSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["faq"]>
 
   export type FaqSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["faq"]>
 
   export type FaqSelectScalar = {
     id?: boolean
     created_at?: boolean
+    updated_at?: boolean
   }
 
-  export type FaqOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "created_at", ExtArgs["result"]["faq"]>
+  export type FaqOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "created_at" | "updated_at", ExtArgs["result"]["faq"]>
   export type FaqInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     translations?: boolean | Faq$translationsArgs<ExtArgs>
     _count?: boolean | FaqCountOutputTypeDefaultArgs<ExtArgs>
@@ -21647,6 +25491,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       created_at: bigint
+      updated_at: bigint
     }, ExtArgs["result"]["faq"]>
     composites: {}
   }
@@ -22073,6 +25918,7 @@ export namespace Prisma {
   interface FaqFieldRefs {
     readonly id: FieldRef<"Faq", 'Int'>
     readonly created_at: FieldRef<"Faq", 'BigInt'>
+    readonly updated_at: FieldRef<"Faq", 'BigInt'>
   }
     
 
@@ -23640,7 +27486,9 @@ export namespace Prisma {
     first_name: 'first_name',
     last_name: 'last_name',
     sm_username: 'sm_username',
-    picture: 'picture'
+    picture: 'picture',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
   };
 
   export type OwnerScalarFieldEnum = (typeof OwnerScalarFieldEnum)[keyof typeof OwnerScalarFieldEnum]
@@ -23648,10 +27496,11 @@ export namespace Prisma {
 
   export const CustomerScalarFieldEnum: {
     id: 'id',
+    oauth_id: 'oauth_id',
+    is_banned: 'is_banned',
     first_name: 'first_name',
     last_name: 'last_name',
     email: 'email',
-    password: 'password',
     phone_number: 'phone_number',
     picture: 'picture',
     last_active: 'last_active'
@@ -23662,17 +27511,30 @@ export namespace Prisma {
 
   export const LicenseScalarFieldEnum: {
     id: 'id',
-    content: 'content',
+    created_at: 'created_at',
     updated_at: 'updated_at'
   };
 
   export type LicenseScalarFieldEnum = (typeof LicenseScalarFieldEnum)[keyof typeof LicenseScalarFieldEnum]
 
 
+  export const LicenseTranslationScalarFieldEnum: {
+    id: 'id',
+    license_id: 'license_id',
+    language: 'language',
+    name: 'name',
+    content: 'content'
+  };
+
+  export type LicenseTranslationScalarFieldEnum = (typeof LicenseTranslationScalarFieldEnum)[keyof typeof LicenseTranslationScalarFieldEnum]
+
+
   export const CategoryScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    slug: 'slug'
+    slug: 'slug',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
   };
 
   export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -23686,15 +27548,27 @@ export namespace Prisma {
     license_id: 'license_id',
     name: 'name',
     slug: 'slug',
-    description: 'description',
-    changelog: 'changelog',
     price_type: 'price_type',
     download_link: 'download_link',
+    is_published: 'is_published',
+    is_pinned: 'is_pinned',
+    created_at: 'created_at',
     released_at: 'released_at',
     updated_at: 'updated_at'
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+  export const ProductTranslationScalarFieldEnum: {
+    id: 'id',
+    product_id: 'product_id',
+    language: 'language',
+    description: 'description',
+    changelog: 'changelog'
+  };
+
+  export type ProductTranslationScalarFieldEnum = (typeof ProductTranslationScalarFieldEnum)[keyof typeof ProductTranslationScalarFieldEnum]
 
 
   export const ProductDiscountScalarFieldEnum: {
@@ -23750,17 +27624,28 @@ export namespace Prisma {
   export type ProductPriceScalarFieldEnum = (typeof ProductPriceScalarFieldEnum)[keyof typeof ProductPriceScalarFieldEnum]
 
 
-  export const TermAndConditionScalarFieldEnum: {
+  export const TermsOfServiceScalarFieldEnum: {
     id: 'id',
-    content: 'content',
+    created_at: 'created_at',
     updated_at: 'updated_at'
   };
 
-  export type TermAndConditionScalarFieldEnum = (typeof TermAndConditionScalarFieldEnum)[keyof typeof TermAndConditionScalarFieldEnum]
+  export type TermsOfServiceScalarFieldEnum = (typeof TermsOfServiceScalarFieldEnum)[keyof typeof TermsOfServiceScalarFieldEnum]
+
+
+  export const TermsOfServiceTranslationScalarFieldEnum: {
+    id: 'id',
+    terms_of_service_id: 'terms_of_service_id',
+    language: 'language',
+    content: 'content'
+  };
+
+  export type TermsOfServiceTranslationScalarFieldEnum = (typeof TermsOfServiceTranslationScalarFieldEnum)[keyof typeof TermsOfServiceTranslationScalarFieldEnum]
 
 
   export const PrivacyPolicyScalarFieldEnum: {
     id: 'id',
+    created_at: 'created_at',
     updated_at: 'updated_at'
   };
 
@@ -23796,7 +27681,8 @@ export namespace Prisma {
 
   export const FaqScalarFieldEnum: {
     id: 'id',
-    created_at: 'created_at'
+    created_at: 'created_at',
+    updated_at: 'updated_at'
   };
 
   export type FaqScalarFieldEnum = (typeof FaqScalarFieldEnum)[keyof typeof FaqScalarFieldEnum]
@@ -23899,20 +27785,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'PriceType'
-   */
-  export type EnumPriceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceType'>
-    
-
-
-  /**
-   * Reference to a field of type 'PriceType[]'
-   */
-  export type ListEnumPriceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceType[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -23930,6 +27802,20 @@ export namespace Prisma {
    * Reference to a field of type 'Language[]'
    */
   export type ListEnumLanguageFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Language[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PriceType'
+   */
+  export type EnumPriceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceType'>
+    
+
+
+  /**
+   * Reference to a field of type 'PriceType[]'
+   */
+  export type ListEnumPriceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceType[]'>
     
 
 
@@ -24074,6 +27960,8 @@ export namespace Prisma {
     last_name?: StringFilter<"Owner"> | string
     sm_username?: StringFilter<"Owner"> | string
     picture?: StringFilter<"Owner"> | string
+    created_at?: BigIntFilter<"Owner"> | bigint | number
+    updated_at?: BigIntFilter<"Owner"> | bigint | number
     products?: ProductListRelationFilter
   }
 
@@ -24083,6 +27971,8 @@ export namespace Prisma {
     last_name?: SortOrder
     sm_username?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     products?: ProductOrderByRelationAggregateInput
   }
 
@@ -24095,6 +27985,8 @@ export namespace Prisma {
     last_name?: StringFilter<"Owner"> | string
     sm_username?: StringFilter<"Owner"> | string
     picture?: StringFilter<"Owner"> | string
+    created_at?: BigIntFilter<"Owner"> | bigint | number
+    updated_at?: BigIntFilter<"Owner"> | bigint | number
     products?: ProductListRelationFilter
   }, "id">
 
@@ -24104,6 +27996,8 @@ export namespace Prisma {
     last_name?: SortOrder
     sm_username?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     _count?: OwnerCountOrderByAggregateInput
     _avg?: OwnerAvgOrderByAggregateInput
     _max?: OwnerMaxOrderByAggregateInput
@@ -24120,56 +28014,62 @@ export namespace Prisma {
     last_name?: StringWithAggregatesFilter<"Owner"> | string
     sm_username?: StringWithAggregatesFilter<"Owner"> | string
     picture?: StringWithAggregatesFilter<"Owner"> | string
+    created_at?: BigIntWithAggregatesFilter<"Owner"> | bigint | number
+    updated_at?: BigIntWithAggregatesFilter<"Owner"> | bigint | number
   }
 
   export type CustomerWhereInput = {
     AND?: CustomerWhereInput | CustomerWhereInput[]
     OR?: CustomerWhereInput[]
     NOT?: CustomerWhereInput | CustomerWhereInput[]
-    id?: StringFilter<"Customer"> | string
+    id?: UuidFilter<"Customer"> | string
+    oauth_id?: StringNullableFilter<"Customer"> | string | null
+    is_banned?: BoolFilter<"Customer"> | boolean
     first_name?: StringFilter<"Customer"> | string
     last_name?: StringFilter<"Customer"> | string
     email?: StringFilter<"Customer"> | string
-    password?: StringNullableFilter<"Customer"> | string | null
     phone_number?: StringNullableFilter<"Customer"> | string | null
     picture?: StringNullableFilter<"Customer"> | string | null
-    last_active?: BigIntFilter<"Customer"> | bigint | number
+    last_active?: BigIntNullableFilter<"Customer"> | bigint | number | null
   }
 
   export type CustomerOrderByWithRelationInput = {
     id?: SortOrder
+    oauth_id?: SortOrderInput | SortOrder
+    is_banned?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
-    password?: SortOrderInput | SortOrder
     phone_number?: SortOrderInput | SortOrder
     picture?: SortOrderInput | SortOrder
-    last_active?: SortOrder
+    last_active?: SortOrderInput | SortOrder
   }
 
   export type CustomerWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    oauth_id?: string
     email?: string
     AND?: CustomerWhereInput | CustomerWhereInput[]
     OR?: CustomerWhereInput[]
     NOT?: CustomerWhereInput | CustomerWhereInput[]
+    is_banned?: BoolFilter<"Customer"> | boolean
     first_name?: StringFilter<"Customer"> | string
     last_name?: StringFilter<"Customer"> | string
-    password?: StringNullableFilter<"Customer"> | string | null
     phone_number?: StringNullableFilter<"Customer"> | string | null
     picture?: StringNullableFilter<"Customer"> | string | null
-    last_active?: BigIntFilter<"Customer"> | bigint | number
-  }, "id" | "email">
+    last_active?: BigIntNullableFilter<"Customer"> | bigint | number | null
+  }, "id" | "oauth_id" | "email">
 
   export type CustomerOrderByWithAggregationInput = {
     id?: SortOrder
+    oauth_id?: SortOrderInput | SortOrder
+    is_banned?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
-    password?: SortOrderInput | SortOrder
     phone_number?: SortOrderInput | SortOrder
     picture?: SortOrderInput | SortOrder
-    last_active?: SortOrder
+    last_active?: SortOrderInput | SortOrder
     _count?: CustomerCountOrderByAggregateInput
     _avg?: CustomerAvgOrderByAggregateInput
     _max?: CustomerMaxOrderByAggregateInput
@@ -24181,14 +28081,15 @@ export namespace Prisma {
     AND?: CustomerScalarWhereWithAggregatesInput | CustomerScalarWhereWithAggregatesInput[]
     OR?: CustomerScalarWhereWithAggregatesInput[]
     NOT?: CustomerScalarWhereWithAggregatesInput | CustomerScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Customer"> | string
+    id?: UuidWithAggregatesFilter<"Customer"> | string
+    oauth_id?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    is_banned?: BoolWithAggregatesFilter<"Customer"> | boolean
     first_name?: StringWithAggregatesFilter<"Customer"> | string
     last_name?: StringWithAggregatesFilter<"Customer"> | string
     email?: StringWithAggregatesFilter<"Customer"> | string
-    password?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     phone_number?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     picture?: StringNullableWithAggregatesFilter<"Customer"> | string | null
-    last_active?: BigIntWithAggregatesFilter<"Customer"> | bigint | number
+    last_active?: BigIntNullableWithAggregatesFilter<"Customer"> | bigint | number | null
   }
 
   export type LicenseWhereInput = {
@@ -24196,16 +28097,18 @@ export namespace Prisma {
     OR?: LicenseWhereInput[]
     NOT?: LicenseWhereInput | LicenseWhereInput[]
     id?: IntFilter<"License"> | number
-    content?: StringFilter<"License"> | string
+    created_at?: BigIntFilter<"License"> | bigint | number
     updated_at?: BigIntFilter<"License"> | bigint | number
     products?: ProductListRelationFilter
+    translations?: LicenseTranslationListRelationFilter
   }
 
   export type LicenseOrderByWithRelationInput = {
     id?: SortOrder
-    content?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
     products?: ProductOrderByRelationAggregateInput
+    translations?: LicenseTranslationOrderByRelationAggregateInput
   }
 
   export type LicenseWhereUniqueInput = Prisma.AtLeast<{
@@ -24213,14 +28116,15 @@ export namespace Prisma {
     AND?: LicenseWhereInput | LicenseWhereInput[]
     OR?: LicenseWhereInput[]
     NOT?: LicenseWhereInput | LicenseWhereInput[]
-    content?: StringFilter<"License"> | string
+    created_at?: BigIntFilter<"License"> | bigint | number
     updated_at?: BigIntFilter<"License"> | bigint | number
     products?: ProductListRelationFilter
+    translations?: LicenseTranslationListRelationFilter
   }, "id">
 
   export type LicenseOrderByWithAggregationInput = {
     id?: SortOrder
-    content?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
     _count?: LicenseCountOrderByAggregateInput
     _avg?: LicenseAvgOrderByAggregateInput
@@ -24234,8 +28138,65 @@ export namespace Prisma {
     OR?: LicenseScalarWhereWithAggregatesInput[]
     NOT?: LicenseScalarWhereWithAggregatesInput | LicenseScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"License"> | number
-    content?: StringWithAggregatesFilter<"License"> | string
+    created_at?: BigIntWithAggregatesFilter<"License"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"License"> | bigint | number
+  }
+
+  export type LicenseTranslationWhereInput = {
+    AND?: LicenseTranslationWhereInput | LicenseTranslationWhereInput[]
+    OR?: LicenseTranslationWhereInput[]
+    NOT?: LicenseTranslationWhereInput | LicenseTranslationWhereInput[]
+    id?: IntFilter<"LicenseTranslation"> | number
+    license_id?: IntFilter<"LicenseTranslation"> | number
+    language?: EnumLanguageFilter<"LicenseTranslation"> | $Enums.Language
+    name?: StringFilter<"LicenseTranslation"> | string
+    content?: StringFilter<"LicenseTranslation"> | string
+    license?: XOR<LicenseScalarRelationFilter, LicenseWhereInput>
+  }
+
+  export type LicenseTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    license_id?: SortOrder
+    language?: SortOrder
+    name?: SortOrder
+    content?: SortOrder
+    license?: LicenseOrderByWithRelationInput
+  }
+
+  export type LicenseTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: LicenseTranslationWhereInput | LicenseTranslationWhereInput[]
+    OR?: LicenseTranslationWhereInput[]
+    NOT?: LicenseTranslationWhereInput | LicenseTranslationWhereInput[]
+    license_id?: IntFilter<"LicenseTranslation"> | number
+    language?: EnumLanguageFilter<"LicenseTranslation"> | $Enums.Language
+    name?: StringFilter<"LicenseTranslation"> | string
+    content?: StringFilter<"LicenseTranslation"> | string
+    license?: XOR<LicenseScalarRelationFilter, LicenseWhereInput>
+  }, "id">
+
+  export type LicenseTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    license_id?: SortOrder
+    language?: SortOrder
+    name?: SortOrder
+    content?: SortOrder
+    _count?: LicenseTranslationCountOrderByAggregateInput
+    _avg?: LicenseTranslationAvgOrderByAggregateInput
+    _max?: LicenseTranslationMaxOrderByAggregateInput
+    _min?: LicenseTranslationMinOrderByAggregateInput
+    _sum?: LicenseTranslationSumOrderByAggregateInput
+  }
+
+  export type LicenseTranslationScalarWhereWithAggregatesInput = {
+    AND?: LicenseTranslationScalarWhereWithAggregatesInput | LicenseTranslationScalarWhereWithAggregatesInput[]
+    OR?: LicenseTranslationScalarWhereWithAggregatesInput[]
+    NOT?: LicenseTranslationScalarWhereWithAggregatesInput | LicenseTranslationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"LicenseTranslation"> | number
+    license_id?: IntWithAggregatesFilter<"LicenseTranslation"> | number
+    language?: EnumLanguageWithAggregatesFilter<"LicenseTranslation"> | $Enums.Language
+    name?: StringWithAggregatesFilter<"LicenseTranslation"> | string
+    content?: StringWithAggregatesFilter<"LicenseTranslation"> | string
   }
 
   export type CategoryWhereInput = {
@@ -24245,6 +28206,8 @@ export namespace Prisma {
     id?: IntFilter<"Category"> | number
     name?: StringFilter<"Category"> | string
     slug?: StringFilter<"Category"> | string
+    created_at?: BigIntFilter<"Category"> | bigint | number
+    updated_at?: BigIntFilter<"Category"> | bigint | number
     products?: ProductListRelationFilter
   }
 
@@ -24252,23 +28215,29 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     products?: ProductOrderByRelationAggregateInput
   }
 
   export type CategoryWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    slug?: string
     AND?: CategoryWhereInput | CategoryWhereInput[]
     OR?: CategoryWhereInput[]
     NOT?: CategoryWhereInput | CategoryWhereInput[]
     name?: StringFilter<"Category"> | string
-    slug?: StringFilter<"Category"> | string
+    created_at?: BigIntFilter<"Category"> | bigint | number
+    updated_at?: BigIntFilter<"Category"> | bigint | number
     products?: ProductListRelationFilter
-  }, "id">
+  }, "id" | "slug">
 
   export type CategoryOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     _count?: CategoryCountOrderByAggregateInput
     _avg?: CategoryAvgOrderByAggregateInput
     _max?: CategoryMaxOrderByAggregateInput
@@ -24283,6 +28252,8 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Category"> | number
     name?: StringWithAggregatesFilter<"Category"> | string
     slug?: StringWithAggregatesFilter<"Category"> | string
+    created_at?: BigIntWithAggregatesFilter<"Category"> | bigint | number
+    updated_at?: BigIntWithAggregatesFilter<"Category"> | bigint | number
   }
 
   export type ProductWhereInput = {
@@ -24296,20 +28267,22 @@ export namespace Prisma {
     license_id?: IntFilter<"Product"> | number
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
-    description?: StringFilter<"Product"> | string
-    changelog?: StringNullableFilter<"Product"> | string | null
     price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
     download_link?: StringNullableFilter<"Product"> | string | null
+    is_published?: BoolFilter<"Product"> | boolean
+    is_pinned?: BoolFilter<"Product"> | boolean
+    created_at?: BigIntFilter<"Product"> | bigint | number
     released_at?: BigIntFilter<"Product"> | bigint | number
     updated_at?: BigIntFilter<"Product"> | bigint | number
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     owner?: XOR<OwnerScalarRelationFilter, OwnerWhereInput>
     license?: XOR<LicenseScalarRelationFilter, LicenseWhereInput>
-    product_discounts?: XOR<ProductDiscountNullableScalarRelationFilter, ProductDiscountWhereInput> | null
-    product_coupons?: XOR<ProductCouponNullableScalarRelationFilter, ProductCouponWhereInput> | null
-    product_images?: ProductImageListRelationFilter
-    product_variants?: ProductVariantListRelationFilter
+    translations?: ProductTranslationListRelationFilter
+    discount?: XOR<ProductDiscountNullableScalarRelationFilter, ProductDiscountWhereInput> | null
+    coupon?: XOR<ProductCouponNullableScalarRelationFilter, ProductCouponWhereInput> | null
+    images?: ProductImageListRelationFilter
+    variants?: ProductVariantListRelationFilter
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -24320,24 +28293,27 @@ export namespace Prisma {
     license_id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    description?: SortOrder
-    changelog?: SortOrderInput | SortOrder
     price_type?: SortOrder
     download_link?: SortOrderInput | SortOrder
+    is_published?: SortOrder
+    is_pinned?: SortOrder
+    created_at?: SortOrder
     released_at?: SortOrder
     updated_at?: SortOrder
     admin?: AdminOrderByWithRelationInput
     category?: CategoryOrderByWithRelationInput
     owner?: OwnerOrderByWithRelationInput
     license?: LicenseOrderByWithRelationInput
-    product_discounts?: ProductDiscountOrderByWithRelationInput
-    product_coupons?: ProductCouponOrderByWithRelationInput
-    product_images?: ProductImageOrderByRelationAggregateInput
-    product_variants?: ProductVariantOrderByRelationAggregateInput
+    translations?: ProductTranslationOrderByRelationAggregateInput
+    discount?: ProductDiscountOrderByWithRelationInput
+    coupon?: ProductCouponOrderByWithRelationInput
+    images?: ProductImageOrderByRelationAggregateInput
+    variants?: ProductVariantOrderByRelationAggregateInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    slug?: string
     AND?: ProductWhereInput | ProductWhereInput[]
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
@@ -24346,22 +28322,23 @@ export namespace Prisma {
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
     name?: StringFilter<"Product"> | string
-    slug?: StringFilter<"Product"> | string
-    description?: StringFilter<"Product"> | string
-    changelog?: StringNullableFilter<"Product"> | string | null
     price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
     download_link?: StringNullableFilter<"Product"> | string | null
+    is_published?: BoolFilter<"Product"> | boolean
+    is_pinned?: BoolFilter<"Product"> | boolean
+    created_at?: BigIntFilter<"Product"> | bigint | number
     released_at?: BigIntFilter<"Product"> | bigint | number
     updated_at?: BigIntFilter<"Product"> | bigint | number
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     owner?: XOR<OwnerScalarRelationFilter, OwnerWhereInput>
     license?: XOR<LicenseScalarRelationFilter, LicenseWhereInput>
-    product_discounts?: XOR<ProductDiscountNullableScalarRelationFilter, ProductDiscountWhereInput> | null
-    product_coupons?: XOR<ProductCouponNullableScalarRelationFilter, ProductCouponWhereInput> | null
-    product_images?: ProductImageListRelationFilter
-    product_variants?: ProductVariantListRelationFilter
-  }, "id">
+    translations?: ProductTranslationListRelationFilter
+    discount?: XOR<ProductDiscountNullableScalarRelationFilter, ProductDiscountWhereInput> | null
+    coupon?: XOR<ProductCouponNullableScalarRelationFilter, ProductCouponWhereInput> | null
+    images?: ProductImageListRelationFilter
+    variants?: ProductVariantListRelationFilter
+  }, "id" | "slug">
 
   export type ProductOrderByWithAggregationInput = {
     id?: SortOrder
@@ -24371,10 +28348,11 @@ export namespace Prisma {
     license_id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    description?: SortOrder
-    changelog?: SortOrderInput | SortOrder
     price_type?: SortOrder
     download_link?: SortOrderInput | SortOrder
+    is_published?: SortOrder
+    is_pinned?: SortOrder
+    created_at?: SortOrder
     released_at?: SortOrder
     updated_at?: SortOrder
     _count?: ProductCountOrderByAggregateInput
@@ -24395,21 +28373,77 @@ export namespace Prisma {
     license_id?: IntWithAggregatesFilter<"Product"> | number
     name?: StringWithAggregatesFilter<"Product"> | string
     slug?: StringWithAggregatesFilter<"Product"> | string
-    description?: StringWithAggregatesFilter<"Product"> | string
-    changelog?: StringNullableWithAggregatesFilter<"Product"> | string | null
     price_type?: EnumPriceTypeWithAggregatesFilter<"Product"> | $Enums.PriceType
     download_link?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    is_published?: BoolWithAggregatesFilter<"Product"> | boolean
+    is_pinned?: BoolWithAggregatesFilter<"Product"> | boolean
+    created_at?: BigIntWithAggregatesFilter<"Product"> | bigint | number
     released_at?: BigIntWithAggregatesFilter<"Product"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"Product"> | bigint | number
+  }
+
+  export type ProductTranslationWhereInput = {
+    AND?: ProductTranslationWhereInput | ProductTranslationWhereInput[]
+    OR?: ProductTranslationWhereInput[]
+    NOT?: ProductTranslationWhereInput | ProductTranslationWhereInput[]
+    id?: UuidFilter<"ProductTranslation"> | string
+    product_id?: UuidFilter<"ProductTranslation"> | string
+    language?: EnumLanguageFilter<"ProductTranslation"> | $Enums.Language
+    description?: StringFilter<"ProductTranslation"> | string
+    changelog?: StringNullableFilter<"ProductTranslation"> | string | null
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+  }
+
+  export type ProductTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    language?: SortOrder
+    description?: SortOrder
+    changelog?: SortOrderInput | SortOrder
+    product?: ProductOrderByWithRelationInput
+  }
+
+  export type ProductTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductTranslationWhereInput | ProductTranslationWhereInput[]
+    OR?: ProductTranslationWhereInput[]
+    NOT?: ProductTranslationWhereInput | ProductTranslationWhereInput[]
+    product_id?: UuidFilter<"ProductTranslation"> | string
+    language?: EnumLanguageFilter<"ProductTranslation"> | $Enums.Language
+    description?: StringFilter<"ProductTranslation"> | string
+    changelog?: StringNullableFilter<"ProductTranslation"> | string | null
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+  }, "id">
+
+  export type ProductTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    language?: SortOrder
+    description?: SortOrder
+    changelog?: SortOrderInput | SortOrder
+    _count?: ProductTranslationCountOrderByAggregateInput
+    _max?: ProductTranslationMaxOrderByAggregateInput
+    _min?: ProductTranslationMinOrderByAggregateInput
+  }
+
+  export type ProductTranslationScalarWhereWithAggregatesInput = {
+    AND?: ProductTranslationScalarWhereWithAggregatesInput | ProductTranslationScalarWhereWithAggregatesInput[]
+    OR?: ProductTranslationScalarWhereWithAggregatesInput[]
+    NOT?: ProductTranslationScalarWhereWithAggregatesInput | ProductTranslationScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ProductTranslation"> | string
+    product_id?: UuidWithAggregatesFilter<"ProductTranslation"> | string
+    language?: EnumLanguageWithAggregatesFilter<"ProductTranslation"> | $Enums.Language
+    description?: StringWithAggregatesFilter<"ProductTranslation"> | string
+    changelog?: StringNullableWithAggregatesFilter<"ProductTranslation"> | string | null
   }
 
   export type ProductDiscountWhereInput = {
     AND?: ProductDiscountWhereInput | ProductDiscountWhereInput[]
     OR?: ProductDiscountWhereInput[]
     NOT?: ProductDiscountWhereInput | ProductDiscountWhereInput[]
-    id?: UuidFilter<"ProductDiscount"> | string
+    id?: IntFilter<"ProductDiscount"> | number
     product_id?: UuidFilter<"ProductDiscount"> | string
-    discount?: StringFilter<"ProductDiscount"> | string
+    discount?: IntFilter<"ProductDiscount"> | number
     expired_at?: BigIntFilter<"ProductDiscount"> | bigint | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
@@ -24423,12 +28457,12 @@ export namespace Prisma {
   }
 
   export type ProductDiscountWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     product_id?: string
     AND?: ProductDiscountWhereInput | ProductDiscountWhereInput[]
     OR?: ProductDiscountWhereInput[]
     NOT?: ProductDiscountWhereInput | ProductDiscountWhereInput[]
-    discount?: StringFilter<"ProductDiscount"> | string
+    discount?: IntFilter<"ProductDiscount"> | number
     expired_at?: BigIntFilter<"ProductDiscount"> | bigint | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "id" | "product_id">
@@ -24449,9 +28483,9 @@ export namespace Prisma {
     AND?: ProductDiscountScalarWhereWithAggregatesInput | ProductDiscountScalarWhereWithAggregatesInput[]
     OR?: ProductDiscountScalarWhereWithAggregatesInput[]
     NOT?: ProductDiscountScalarWhereWithAggregatesInput | ProductDiscountScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ProductDiscount"> | string
+    id?: IntWithAggregatesFilter<"ProductDiscount"> | number
     product_id?: UuidWithAggregatesFilter<"ProductDiscount"> | string
-    discount?: StringWithAggregatesFilter<"ProductDiscount"> | string
+    discount?: IntWithAggregatesFilter<"ProductDiscount"> | number
     expired_at?: BigIntWithAggregatesFilter<"ProductDiscount"> | bigint | number
   }
 
@@ -24459,10 +28493,10 @@ export namespace Prisma {
     AND?: ProductCouponWhereInput | ProductCouponWhereInput[]
     OR?: ProductCouponWhereInput[]
     NOT?: ProductCouponWhereInput | ProductCouponWhereInput[]
-    id?: UuidFilter<"ProductCoupon"> | string
+    id?: IntFilter<"ProductCoupon"> | number
     product_id?: UuidFilter<"ProductCoupon"> | string
     code?: StringFilter<"ProductCoupon"> | string
-    discount?: StringFilter<"ProductCoupon"> | string
+    discount?: IntFilter<"ProductCoupon"> | number
     expired_at?: BigIntFilter<"ProductCoupon"> | bigint | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
@@ -24477,13 +28511,13 @@ export namespace Prisma {
   }
 
   export type ProductCouponWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     product_id?: string
     AND?: ProductCouponWhereInput | ProductCouponWhereInput[]
     OR?: ProductCouponWhereInput[]
     NOT?: ProductCouponWhereInput | ProductCouponWhereInput[]
     code?: StringFilter<"ProductCoupon"> | string
-    discount?: StringFilter<"ProductCoupon"> | string
+    discount?: IntFilter<"ProductCoupon"> | number
     expired_at?: BigIntFilter<"ProductCoupon"> | bigint | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "id" | "product_id">
@@ -24505,10 +28539,10 @@ export namespace Prisma {
     AND?: ProductCouponScalarWhereWithAggregatesInput | ProductCouponScalarWhereWithAggregatesInput[]
     OR?: ProductCouponScalarWhereWithAggregatesInput[]
     NOT?: ProductCouponScalarWhereWithAggregatesInput | ProductCouponScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ProductCoupon"> | string
+    id?: IntWithAggregatesFilter<"ProductCoupon"> | number
     product_id?: UuidWithAggregatesFilter<"ProductCoupon"> | string
     code?: StringWithAggregatesFilter<"ProductCoupon"> | string
-    discount?: StringWithAggregatesFilter<"ProductCoupon"> | string
+    discount?: IntWithAggregatesFilter<"ProductCoupon"> | number
     expired_at?: BigIntWithAggregatesFilter<"ProductCoupon"> | bigint | number
   }
 
@@ -24583,7 +28617,7 @@ export namespace Prisma {
     name?: StringFilter<"ProductVariant"> | string
     download_link?: StringNullableFilter<"ProductVariant"> | string | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
-    product_prices?: ProductPriceListRelationFilter
+    prices?: ProductPriceListRelationFilter
   }
 
   export type ProductVariantOrderByWithRelationInput = {
@@ -24592,7 +28626,7 @@ export namespace Prisma {
     name?: SortOrder
     download_link?: SortOrderInput | SortOrder
     product?: ProductOrderByWithRelationInput
-    product_prices?: ProductPriceOrderByRelationAggregateInput
+    prices?: ProductPriceOrderByRelationAggregateInput
   }
 
   export type ProductVariantWhereUniqueInput = Prisma.AtLeast<{
@@ -24604,7 +28638,7 @@ export namespace Prisma {
     name?: StringFilter<"ProductVariant"> | string
     download_link?: StringNullableFilter<"ProductVariant"> | string | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
-    product_prices?: ProductPriceListRelationFilter
+    prices?: ProductPriceListRelationFilter
   }, "id">
 
   export type ProductVariantOrderByWithAggregationInput = {
@@ -24679,48 +28713,103 @@ export namespace Prisma {
     price?: IntWithAggregatesFilter<"ProductPrice"> | number
   }
 
-  export type TermAndConditionWhereInput = {
-    AND?: TermAndConditionWhereInput | TermAndConditionWhereInput[]
-    OR?: TermAndConditionWhereInput[]
-    NOT?: TermAndConditionWhereInput | TermAndConditionWhereInput[]
-    id?: IntFilter<"TermAndCondition"> | number
-    content?: StringFilter<"TermAndCondition"> | string
-    updated_at?: BigIntFilter<"TermAndCondition"> | bigint | number
+  export type TermsOfServiceWhereInput = {
+    AND?: TermsOfServiceWhereInput | TermsOfServiceWhereInput[]
+    OR?: TermsOfServiceWhereInput[]
+    NOT?: TermsOfServiceWhereInput | TermsOfServiceWhereInput[]
+    id?: IntFilter<"TermsOfService"> | number
+    created_at?: BigIntFilter<"TermsOfService"> | bigint | number
+    updated_at?: BigIntFilter<"TermsOfService"> | bigint | number
+    translations?: TermsOfServiceTranslationListRelationFilter
   }
 
-  export type TermAndConditionOrderByWithRelationInput = {
+  export type TermsOfServiceOrderByWithRelationInput = {
     id?: SortOrder
-    content?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
+    translations?: TermsOfServiceTranslationOrderByRelationAggregateInput
   }
 
-  export type TermAndConditionWhereUniqueInput = Prisma.AtLeast<{
+  export type TermsOfServiceWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    AND?: TermAndConditionWhereInput | TermAndConditionWhereInput[]
-    OR?: TermAndConditionWhereInput[]
-    NOT?: TermAndConditionWhereInput | TermAndConditionWhereInput[]
-    content?: StringFilter<"TermAndCondition"> | string
-    updated_at?: BigIntFilter<"TermAndCondition"> | bigint | number
+    AND?: TermsOfServiceWhereInput | TermsOfServiceWhereInput[]
+    OR?: TermsOfServiceWhereInput[]
+    NOT?: TermsOfServiceWhereInput | TermsOfServiceWhereInput[]
+    created_at?: BigIntFilter<"TermsOfService"> | bigint | number
+    updated_at?: BigIntFilter<"TermsOfService"> | bigint | number
+    translations?: TermsOfServiceTranslationListRelationFilter
   }, "id">
 
-  export type TermAndConditionOrderByWithAggregationInput = {
+  export type TermsOfServiceOrderByWithAggregationInput = {
     id?: SortOrder
-    content?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
-    _count?: TermAndConditionCountOrderByAggregateInput
-    _avg?: TermAndConditionAvgOrderByAggregateInput
-    _max?: TermAndConditionMaxOrderByAggregateInput
-    _min?: TermAndConditionMinOrderByAggregateInput
-    _sum?: TermAndConditionSumOrderByAggregateInput
+    _count?: TermsOfServiceCountOrderByAggregateInput
+    _avg?: TermsOfServiceAvgOrderByAggregateInput
+    _max?: TermsOfServiceMaxOrderByAggregateInput
+    _min?: TermsOfServiceMinOrderByAggregateInput
+    _sum?: TermsOfServiceSumOrderByAggregateInput
   }
 
-  export type TermAndConditionScalarWhereWithAggregatesInput = {
-    AND?: TermAndConditionScalarWhereWithAggregatesInput | TermAndConditionScalarWhereWithAggregatesInput[]
-    OR?: TermAndConditionScalarWhereWithAggregatesInput[]
-    NOT?: TermAndConditionScalarWhereWithAggregatesInput | TermAndConditionScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"TermAndCondition"> | number
-    content?: StringWithAggregatesFilter<"TermAndCondition"> | string
-    updated_at?: BigIntWithAggregatesFilter<"TermAndCondition"> | bigint | number
+  export type TermsOfServiceScalarWhereWithAggregatesInput = {
+    AND?: TermsOfServiceScalarWhereWithAggregatesInput | TermsOfServiceScalarWhereWithAggregatesInput[]
+    OR?: TermsOfServiceScalarWhereWithAggregatesInput[]
+    NOT?: TermsOfServiceScalarWhereWithAggregatesInput | TermsOfServiceScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"TermsOfService"> | number
+    created_at?: BigIntWithAggregatesFilter<"TermsOfService"> | bigint | number
+    updated_at?: BigIntWithAggregatesFilter<"TermsOfService"> | bigint | number
+  }
+
+  export type TermsOfServiceTranslationWhereInput = {
+    AND?: TermsOfServiceTranslationWhereInput | TermsOfServiceTranslationWhereInput[]
+    OR?: TermsOfServiceTranslationWhereInput[]
+    NOT?: TermsOfServiceTranslationWhereInput | TermsOfServiceTranslationWhereInput[]
+    id?: IntFilter<"TermsOfServiceTranslation"> | number
+    terms_of_service_id?: IntFilter<"TermsOfServiceTranslation"> | number
+    language?: EnumLanguageFilter<"TermsOfServiceTranslation"> | $Enums.Language
+    content?: StringFilter<"TermsOfServiceTranslation"> | string
+    terms_of_service?: XOR<TermsOfServiceScalarRelationFilter, TermsOfServiceWhereInput>
+  }
+
+  export type TermsOfServiceTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    terms_of_service_id?: SortOrder
+    language?: SortOrder
+    content?: SortOrder
+    terms_of_service?: TermsOfServiceOrderByWithRelationInput
+  }
+
+  export type TermsOfServiceTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: TermsOfServiceTranslationWhereInput | TermsOfServiceTranslationWhereInput[]
+    OR?: TermsOfServiceTranslationWhereInput[]
+    NOT?: TermsOfServiceTranslationWhereInput | TermsOfServiceTranslationWhereInput[]
+    terms_of_service_id?: IntFilter<"TermsOfServiceTranslation"> | number
+    language?: EnumLanguageFilter<"TermsOfServiceTranslation"> | $Enums.Language
+    content?: StringFilter<"TermsOfServiceTranslation"> | string
+    terms_of_service?: XOR<TermsOfServiceScalarRelationFilter, TermsOfServiceWhereInput>
+  }, "id">
+
+  export type TermsOfServiceTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    terms_of_service_id?: SortOrder
+    language?: SortOrder
+    content?: SortOrder
+    _count?: TermsOfServiceTranslationCountOrderByAggregateInput
+    _avg?: TermsOfServiceTranslationAvgOrderByAggregateInput
+    _max?: TermsOfServiceTranslationMaxOrderByAggregateInput
+    _min?: TermsOfServiceTranslationMinOrderByAggregateInput
+    _sum?: TermsOfServiceTranslationSumOrderByAggregateInput
+  }
+
+  export type TermsOfServiceTranslationScalarWhereWithAggregatesInput = {
+    AND?: TermsOfServiceTranslationScalarWhereWithAggregatesInput | TermsOfServiceTranslationScalarWhereWithAggregatesInput[]
+    OR?: TermsOfServiceTranslationScalarWhereWithAggregatesInput[]
+    NOT?: TermsOfServiceTranslationScalarWhereWithAggregatesInput | TermsOfServiceTranslationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"TermsOfServiceTranslation"> | number
+    terms_of_service_id?: IntWithAggregatesFilter<"TermsOfServiceTranslation"> | number
+    language?: EnumLanguageWithAggregatesFilter<"TermsOfServiceTranslation"> | $Enums.Language
+    content?: StringWithAggregatesFilter<"TermsOfServiceTranslation"> | string
   }
 
   export type PrivacyPolicyWhereInput = {
@@ -24728,12 +28817,14 @@ export namespace Prisma {
     OR?: PrivacyPolicyWhereInput[]
     NOT?: PrivacyPolicyWhereInput | PrivacyPolicyWhereInput[]
     id?: IntFilter<"PrivacyPolicy"> | number
+    created_at?: BigIntFilter<"PrivacyPolicy"> | bigint | number
     updated_at?: BigIntFilter<"PrivacyPolicy"> | bigint | number
     translations?: PrivacyPolicyTranslationListRelationFilter
   }
 
   export type PrivacyPolicyOrderByWithRelationInput = {
     id?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
     translations?: PrivacyPolicyTranslationOrderByRelationAggregateInput
   }
@@ -24743,12 +28834,14 @@ export namespace Prisma {
     AND?: PrivacyPolicyWhereInput | PrivacyPolicyWhereInput[]
     OR?: PrivacyPolicyWhereInput[]
     NOT?: PrivacyPolicyWhereInput | PrivacyPolicyWhereInput[]
+    created_at?: BigIntFilter<"PrivacyPolicy"> | bigint | number
     updated_at?: BigIntFilter<"PrivacyPolicy"> | bigint | number
     translations?: PrivacyPolicyTranslationListRelationFilter
   }, "id">
 
   export type PrivacyPolicyOrderByWithAggregationInput = {
     id?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
     _count?: PrivacyPolicyCountOrderByAggregateInput
     _avg?: PrivacyPolicyAvgOrderByAggregateInput
@@ -24762,6 +28855,7 @@ export namespace Prisma {
     OR?: PrivacyPolicyScalarWhereWithAggregatesInput[]
     NOT?: PrivacyPolicyScalarWhereWithAggregatesInput | PrivacyPolicyScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"PrivacyPolicy"> | number
+    created_at?: BigIntWithAggregatesFilter<"PrivacyPolicy"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"PrivacyPolicy"> | bigint | number
   }
 
@@ -24912,12 +29006,14 @@ export namespace Prisma {
     NOT?: FaqWhereInput | FaqWhereInput[]
     id?: IntFilter<"Faq"> | number
     created_at?: BigIntFilter<"Faq"> | bigint | number
+    updated_at?: BigIntFilter<"Faq"> | bigint | number
     translations?: FaqTranslationListRelationFilter
   }
 
   export type FaqOrderByWithRelationInput = {
     id?: SortOrder
     created_at?: SortOrder
+    updated_at?: SortOrder
     translations?: FaqTranslationOrderByRelationAggregateInput
   }
 
@@ -24927,12 +29023,14 @@ export namespace Prisma {
     OR?: FaqWhereInput[]
     NOT?: FaqWhereInput | FaqWhereInput[]
     created_at?: BigIntFilter<"Faq"> | bigint | number
+    updated_at?: BigIntFilter<"Faq"> | bigint | number
     translations?: FaqTranslationListRelationFilter
   }, "id">
 
   export type FaqOrderByWithAggregationInput = {
     id?: SortOrder
     created_at?: SortOrder
+    updated_at?: SortOrder
     _count?: FaqCountOrderByAggregateInput
     _avg?: FaqAvgOrderByAggregateInput
     _max?: FaqMaxOrderByAggregateInput
@@ -24946,6 +29044,7 @@ export namespace Prisma {
     NOT?: FaqScalarWhereWithAggregatesInput | FaqScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Faq"> | number
     created_at?: BigIntWithAggregatesFilter<"Faq"> | bigint | number
+    updated_at?: BigIntWithAggregatesFilter<"Faq"> | bigint | number
   }
 
   export type FaqTranslationWhereInput = {
@@ -25126,6 +29225,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
+    created_at: bigint | number
+    updated_at: bigint | number
     products?: ProductCreateNestedManyWithoutOwnerInput
   }
 
@@ -25135,6 +29236,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
+    created_at: bigint | number
+    updated_at: bigint | number
     products?: ProductUncheckedCreateNestedManyWithoutOwnerInput
   }
 
@@ -25143,6 +29246,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     products?: ProductUpdateManyWithoutOwnerNestedInput
   }
 
@@ -25152,6 +29257,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     products?: ProductUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
@@ -25161,6 +29268,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
+    created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type OwnerUpdateManyMutationInput = {
@@ -25168,6 +29277,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type OwnerUncheckedUpdateManyInput = {
@@ -25176,131 +29287,198 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type CustomerCreateInput = {
-    id: string
+    id?: string
+    oauth_id?: string | null
+    is_banned?: boolean
     first_name: string
     last_name: string
     email: string
-    password?: string | null
     phone_number?: string | null
     picture?: string | null
-    last_active: bigint | number
+    last_active?: bigint | number | null
   }
 
   export type CustomerUncheckedCreateInput = {
-    id: string
+    id?: string
+    oauth_id?: string | null
+    is_banned?: boolean
     first_name: string
     last_name: string
     email: string
-    password?: string | null
     phone_number?: string | null
     picture?: string | null
-    last_active: bigint | number
+    last_active?: bigint | number | null
   }
 
   export type CustomerUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    oauth_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_banned?: BoolFieldUpdateOperationsInput | boolean
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type CustomerUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    oauth_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_banned?: BoolFieldUpdateOperationsInput | boolean
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type CustomerCreateManyInput = {
-    id: string
+    id?: string
+    oauth_id?: string | null
+    is_banned?: boolean
     first_name: string
     last_name: string
     email: string
-    password?: string | null
     phone_number?: string | null
     picture?: string | null
-    last_active: bigint | number
+    last_active?: bigint | number | null
   }
 
   export type CustomerUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    oauth_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_banned?: BoolFieldUpdateOperationsInput | boolean
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type CustomerUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    oauth_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_banned?: BoolFieldUpdateOperationsInput | boolean
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type LicenseCreateInput = {
-    content: string
+    created_at: bigint | number
     updated_at: bigint | number
     products?: ProductCreateNestedManyWithoutLicenseInput
+    translations?: LicenseTranslationCreateNestedManyWithoutLicenseInput
   }
 
   export type LicenseUncheckedCreateInput = {
     id?: number
-    content: string
+    created_at: bigint | number
     updated_at: bigint | number
     products?: ProductUncheckedCreateNestedManyWithoutLicenseInput
+    translations?: LicenseTranslationUncheckedCreateNestedManyWithoutLicenseInput
   }
 
   export type LicenseUpdateInput = {
-    content?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     products?: ProductUpdateManyWithoutLicenseNestedInput
+    translations?: LicenseTranslationUpdateManyWithoutLicenseNestedInput
   }
 
   export type LicenseUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    content?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     products?: ProductUncheckedUpdateManyWithoutLicenseNestedInput
+    translations?: LicenseTranslationUncheckedUpdateManyWithoutLicenseNestedInput
   }
 
   export type LicenseCreateManyInput = {
     id?: number
-    content: string
+    created_at: bigint | number
     updated_at: bigint | number
   }
 
   export type LicenseUpdateManyMutationInput = {
-    content?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type LicenseUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    content?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type LicenseTranslationCreateInput = {
+    language: $Enums.Language
+    name: string
+    content: string
+    license: LicenseCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type LicenseTranslationUncheckedCreateInput = {
+    id?: number
+    license_id: number
+    language: $Enums.Language
+    name: string
+    content: string
+  }
+
+  export type LicenseTranslationUpdateInput = {
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    name?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    license?: LicenseUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type LicenseTranslationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    license_id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    name?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LicenseTranslationCreateManyInput = {
+    id?: number
+    license_id: number
+    language: $Enums.Language
+    name: string
+    content: string
+  }
+
+  export type LicenseTranslationUpdateManyMutationInput = {
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    name?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LicenseTranslationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    license_id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    name?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
   }
 
   export type CategoryCreateInput = {
     name: string
     slug: string
+    created_at: bigint | number
+    updated_at: bigint | number
     products?: ProductCreateNestedManyWithoutCategoryInput
   }
 
@@ -25308,12 +29486,16 @@ export namespace Prisma {
     id?: number
     name: string
     slug: string
+    created_at: bigint | number
+    updated_at: bigint | number
     products?: ProductUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     products?: ProductUpdateManyWithoutCategoryNestedInput
   }
 
@@ -25321,6 +29503,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
@@ -25328,37 +29512,45 @@ export namespace Prisma {
     id?: number
     name: string
     slug: string
+    created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type CategoryUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type CategoryUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductCreateInput = {
     id?: string
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
-    product_discounts?: ProductDiscountCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponCreateNestedOneWithoutProductInput
-    product_images?: ProductImageCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -25369,36 +29561,40 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
-    product_discounts?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
-    product_images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
-    product_discounts?: ProductDiscountUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -25409,16 +29605,18 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product_discounts?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateManyInput = {
@@ -25429,10 +29627,11 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
   }
@@ -25441,10 +29640,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
@@ -25457,114 +29657,164 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
-  export type ProductDiscountCreateInput = {
+  export type ProductTranslationCreateInput = {
     id?: string
-    discount: string
+    language: $Enums.Language
+    description: string
+    changelog?: string | null
+    product: ProductCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type ProductTranslationUncheckedCreateInput = {
+    id?: string
+    product_id: string
+    language: $Enums.Language
+    description: string
+    changelog?: string | null
+  }
+
+  export type ProductTranslationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    description?: StringFieldUpdateOperationsInput | string
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+    product?: ProductUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type ProductTranslationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    description?: StringFieldUpdateOperationsInput | string
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductTranslationCreateManyInput = {
+    id?: string
+    product_id: string
+    language: $Enums.Language
+    description: string
+    changelog?: string | null
+  }
+
+  export type ProductTranslationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    description?: StringFieldUpdateOperationsInput | string
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductTranslationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    description?: StringFieldUpdateOperationsInput | string
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductDiscountCreateInput = {
+    discount: number
     expired_at: bigint | number
-    product: ProductCreateNestedOneWithoutProduct_discountsInput
+    product: ProductCreateNestedOneWithoutDiscountInput
   }
 
   export type ProductDiscountUncheckedCreateInput = {
-    id?: string
+    id?: number
     product_id: string
-    discount: string
+    discount: number
     expired_at: bigint | number
   }
 
   export type ProductDiscountUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product?: ProductUpdateOneRequiredWithoutProduct_discountsNestedInput
+    product?: ProductUpdateOneRequiredWithoutDiscountNestedInput
   }
 
   export type ProductDiscountUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     product_id?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductDiscountCreateManyInput = {
-    id?: string
+    id?: number
     product_id: string
-    discount: string
+    discount: number
     expired_at: bigint | number
   }
 
   export type ProductDiscountUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductDiscountUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     product_id?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductCouponCreateInput = {
-    id?: string
     code: string
-    discount: string
+    discount: number
     expired_at: bigint | number
-    product: ProductCreateNestedOneWithoutProduct_couponsInput
+    product: ProductCreateNestedOneWithoutCouponInput
   }
 
   export type ProductCouponUncheckedCreateInput = {
-    id?: string
+    id?: number
     product_id: string
     code: string
-    discount: string
+    discount: number
     expired_at: bigint | number
   }
 
   export type ProductCouponUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product?: ProductUpdateOneRequiredWithoutProduct_couponsNestedInput
+    product?: ProductUpdateOneRequiredWithoutCouponNestedInput
   }
 
   export type ProductCouponUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     product_id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductCouponCreateManyInput = {
-    id?: string
+    id?: number
     product_id: string
     code: string
-    discount: string
+    discount: number
     expired_at: bigint | number
   }
 
   export type ProductCouponUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductCouponUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     product_id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -25574,7 +29824,7 @@ export namespace Prisma {
     is_thumbnail: boolean
     width: number
     height: number
-    product: ProductCreateNestedOneWithoutProduct_imagesInput
+    product: ProductCreateNestedOneWithoutImagesInput
   }
 
   export type ProductImageUncheckedCreateInput = {
@@ -25592,7 +29842,7 @@ export namespace Prisma {
     is_thumbnail?: BoolFieldUpdateOperationsInput | boolean
     width?: IntFieldUpdateOperationsInput | number
     height?: IntFieldUpdateOperationsInput | number
-    product?: ProductUpdateOneRequiredWithoutProduct_imagesNestedInput
+    product?: ProductUpdateOneRequiredWithoutImagesNestedInput
   }
 
   export type ProductImageUncheckedUpdateInput = {
@@ -25634,8 +29884,8 @@ export namespace Prisma {
     id?: string
     name: string
     download_link?: string | null
-    product: ProductCreateNestedOneWithoutProduct_variantsInput
-    product_prices?: ProductPriceCreateNestedManyWithoutVariantInput
+    product: ProductCreateNestedOneWithoutVariantsInput
+    prices?: ProductPriceCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantUncheckedCreateInput = {
@@ -25643,15 +29893,15 @@ export namespace Prisma {
     product_id: string
     name: string
     download_link?: string | null
-    product_prices?: ProductPriceUncheckedCreateNestedManyWithoutVariantInput
+    prices?: ProductPriceUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
-    product?: ProductUpdateOneRequiredWithoutProduct_variantsNestedInput
-    product_prices?: ProductPriceUpdateManyWithoutVariantNestedInput
+    product?: ProductUpdateOneRequiredWithoutVariantsNestedInput
+    prices?: ProductPriceUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantUncheckedUpdateInput = {
@@ -25659,7 +29909,7 @@ export namespace Prisma {
     product_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
-    product_prices?: ProductPriceUncheckedUpdateManyWithoutVariantNestedInput
+    prices?: ProductPriceUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantCreateManyInput = {
@@ -25686,7 +29936,7 @@ export namespace Prisma {
     id?: string
     currency_code: $Enums.CurrencyCode
     price: number
-    variant: ProductVariantCreateNestedOneWithoutProduct_pricesInput
+    variant: ProductVariantCreateNestedOneWithoutPricesInput
   }
 
   export type ProductPriceUncheckedCreateInput = {
@@ -25700,7 +29950,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     price?: IntFieldUpdateOperationsInput | number
-    variant?: ProductVariantUpdateOneRequiredWithoutProduct_pricesNestedInput
+    variant?: ProductVariantUpdateOneRequiredWithoutPricesNestedInput
   }
 
   export type ProductPriceUncheckedUpdateInput = {
@@ -25730,78 +29980,134 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
   }
 
-  export type TermAndConditionCreateInput = {
-    content: string
+  export type TermsOfServiceCreateInput = {
+    created_at: bigint | number
     updated_at: bigint | number
+    translations?: TermsOfServiceTranslationCreateNestedManyWithoutTerms_of_serviceInput
   }
 
-  export type TermAndConditionUncheckedCreateInput = {
+  export type TermsOfServiceUncheckedCreateInput = {
     id?: number
-    content: string
+    created_at: bigint | number
     updated_at: bigint | number
+    translations?: TermsOfServiceTranslationUncheckedCreateNestedManyWithoutTerms_of_serviceInput
   }
 
-  export type TermAndConditionUpdateInput = {
-    content?: StringFieldUpdateOperationsInput | string
+  export type TermsOfServiceUpdateInput = {
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: TermsOfServiceTranslationUpdateManyWithoutTerms_of_serviceNestedInput
   }
 
-  export type TermAndConditionUncheckedUpdateInput = {
+  export type TermsOfServiceUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    content?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: TermsOfServiceTranslationUncheckedUpdateManyWithoutTerms_of_serviceNestedInput
   }
 
-  export type TermAndConditionCreateManyInput = {
+  export type TermsOfServiceCreateManyInput = {
     id?: number
-    content: string
+    created_at: bigint | number
     updated_at: bigint | number
   }
 
-  export type TermAndConditionUpdateManyMutationInput = {
-    content?: StringFieldUpdateOperationsInput | string
+  export type TermsOfServiceUpdateManyMutationInput = {
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
-  export type TermAndConditionUncheckedUpdateManyInput = {
+  export type TermsOfServiceUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    content?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type TermsOfServiceTranslationCreateInput = {
+    language: $Enums.Language
+    content: string
+    terms_of_service: TermsOfServiceCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type TermsOfServiceTranslationUncheckedCreateInput = {
+    id?: number
+    terms_of_service_id: number
+    language: $Enums.Language
+    content: string
+  }
+
+  export type TermsOfServiceTranslationUpdateInput = {
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    content?: StringFieldUpdateOperationsInput | string
+    terms_of_service?: TermsOfServiceUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type TermsOfServiceTranslationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    terms_of_service_id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TermsOfServiceTranslationCreateManyInput = {
+    id?: number
+    terms_of_service_id: number
+    language: $Enums.Language
+    content: string
+  }
+
+  export type TermsOfServiceTranslationUpdateManyMutationInput = {
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TermsOfServiceTranslationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    terms_of_service_id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    content?: StringFieldUpdateOperationsInput | string
   }
 
   export type PrivacyPolicyCreateInput = {
+    created_at: bigint | number
     updated_at: bigint | number
     translations?: PrivacyPolicyTranslationCreateNestedManyWithoutPrivacy_policyInput
   }
 
   export type PrivacyPolicyUncheckedCreateInput = {
     id?: number
+    created_at: bigint | number
     updated_at: bigint | number
     translations?: PrivacyPolicyTranslationUncheckedCreateNestedManyWithoutPrivacy_policyInput
   }
 
   export type PrivacyPolicyUpdateInput = {
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: PrivacyPolicyTranslationUpdateManyWithoutPrivacy_policyNestedInput
   }
 
   export type PrivacyPolicyUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: PrivacyPolicyTranslationUncheckedUpdateManyWithoutPrivacy_policyNestedInput
   }
 
   export type PrivacyPolicyCreateManyInput = {
     id?: number
+    created_at: bigint | number
     updated_at: bigint | number
   }
 
   export type PrivacyPolicyUpdateManyMutationInput = {
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type PrivacyPolicyUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -25927,38 +30233,45 @@ export namespace Prisma {
 
   export type FaqCreateInput = {
     created_at: bigint | number
+    updated_at: bigint | number
     translations?: FaqTranslationCreateNestedManyWithoutFaqInput
   }
 
   export type FaqUncheckedCreateInput = {
     id?: number
     created_at: bigint | number
+    updated_at: bigint | number
     translations?: FaqTranslationUncheckedCreateNestedManyWithoutFaqInput
   }
 
   export type FaqUpdateInput = {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: FaqTranslationUpdateManyWithoutFaqNestedInput
   }
 
   export type FaqUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: FaqTranslationUncheckedUpdateManyWithoutFaqNestedInput
   }
 
   export type FaqCreateManyInput = {
     id?: number
     created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type FaqUpdateManyMutationInput = {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type FaqUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type FaqTranslationCreateInput = {
@@ -26171,16 +30484,31 @@ export namespace Prisma {
     _max?: NestedEnumCurrencyCodeFilter<$PrismaModel>
   }
 
+  export type BigIntFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  }
+
   export type OwnerCountOrderByAggregateInput = {
     id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     sm_username?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type OwnerAvgOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type OwnerMaxOrderByAggregateInput = {
@@ -26189,6 +30517,8 @@ export namespace Prisma {
     last_name?: SortOrder
     sm_username?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type OwnerMinOrderByAggregateInput = {
@@ -26197,10 +30527,42 @@ export namespace Prisma {
     last_name?: SortOrder
     sm_username?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type OwnerSumOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedBigIntFilter<$PrismaModel>
+    _max?: NestedBigIntFilter<$PrismaModel>
+  }
+
+  export type UuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidFilter<$PrismaModel> | string
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -26218,15 +30580,20 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type BigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type BigIntNullableFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
     lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
   }
 
   export type SortOrderInput = {
@@ -26236,10 +30603,11 @@ export namespace Prisma {
 
   export type CustomerCountOrderByAggregateInput = {
     id?: SortOrder
+    oauth_id?: SortOrder
+    is_banned?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
-    password?: SortOrder
     phone_number?: SortOrder
     picture?: SortOrder
     last_active?: SortOrder
@@ -26251,10 +30619,11 @@ export namespace Prisma {
 
   export type CustomerMaxOrderByAggregateInput = {
     id?: SortOrder
+    oauth_id?: SortOrder
+    is_banned?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
-    password?: SortOrder
     phone_number?: SortOrder
     picture?: SortOrder
     last_active?: SortOrder
@@ -26262,10 +30631,11 @@ export namespace Prisma {
 
   export type CustomerMinOrderByAggregateInput = {
     id?: SortOrder
+    oauth_id?: SortOrder
+    is_banned?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
-    password?: SortOrder
     phone_number?: SortOrder
     picture?: SortOrder
     last_active?: SortOrder
@@ -26273,6 +30643,21 @@ export namespace Prisma {
 
   export type CustomerSumOrderByAggregateInput = {
     last_active?: SortOrder
+  }
+
+  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -26293,86 +30678,160 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
     lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
+    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedBigIntNullableFilter<$PrismaModel>
+    _min?: NestedBigIntNullableFilter<$PrismaModel>
+    _max?: NestedBigIntNullableFilter<$PrismaModel>
+  }
+
+  export type LicenseTranslationListRelationFilter = {
+    every?: LicenseTranslationWhereInput
+    some?: LicenseTranslationWhereInput
+    none?: LicenseTranslationWhereInput
+  }
+
+  export type LicenseTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type LicenseCountOrderByAggregateInput = {
     id?: SortOrder
-    content?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type LicenseAvgOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type LicenseMaxOrderByAggregateInput = {
     id?: SortOrder
-    content?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type LicenseMinOrderByAggregateInput = {
     id?: SortOrder
-    content?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type LicenseSumOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type EnumLanguageFilter<$PrismaModel = never> = {
+    equals?: $Enums.Language | EnumLanguageFieldRefInput<$PrismaModel>
+    in?: $Enums.Language[] | ListEnumLanguageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Language[] | ListEnumLanguageFieldRefInput<$PrismaModel>
+    not?: NestedEnumLanguageFilter<$PrismaModel> | $Enums.Language
+  }
+
+  export type LicenseScalarRelationFilter = {
+    is?: LicenseWhereInput
+    isNot?: LicenseWhereInput
+  }
+
+  export type LicenseTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    license_id?: SortOrder
+    language?: SortOrder
+    name?: SortOrder
+    content?: SortOrder
+  }
+
+  export type LicenseTranslationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    license_id?: SortOrder
+  }
+
+  export type LicenseTranslationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    license_id?: SortOrder
+    language?: SortOrder
+    name?: SortOrder
+    content?: SortOrder
+  }
+
+  export type LicenseTranslationMinOrderByAggregateInput = {
+    id?: SortOrder
+    license_id?: SortOrder
+    language?: SortOrder
+    name?: SortOrder
+    content?: SortOrder
+  }
+
+  export type LicenseTranslationSumOrderByAggregateInput = {
+    id?: SortOrder
+    license_id?: SortOrder
+  }
+
+  export type EnumLanguageWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Language | EnumLanguageFieldRefInput<$PrismaModel>
+    in?: $Enums.Language[] | ListEnumLanguageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Language[] | ListEnumLanguageFieldRefInput<$PrismaModel>
+    not?: NestedEnumLanguageWithAggregatesFilter<$PrismaModel> | $Enums.Language
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLanguageFilter<$PrismaModel>
+    _max?: NestedEnumLanguageFilter<$PrismaModel>
   }
 
   export type CategoryCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type CategoryAvgOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type CategoryMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type CategoryMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type CategorySumOrderByAggregateInput = {
     id?: SortOrder
-  }
-
-  export type UuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidFilter<$PrismaModel> | string
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type EnumPriceTypeFilter<$PrismaModel = never> = {
@@ -26392,9 +30851,10 @@ export namespace Prisma {
     isNot?: OwnerWhereInput
   }
 
-  export type LicenseScalarRelationFilter = {
-    is?: LicenseWhereInput
-    isNot?: LicenseWhereInput
+  export type ProductTranslationListRelationFilter = {
+    every?: ProductTranslationWhereInput
+    some?: ProductTranslationWhereInput
+    none?: ProductTranslationWhereInput
   }
 
   export type ProductDiscountNullableScalarRelationFilter = {
@@ -26419,6 +30879,10 @@ export namespace Prisma {
     none?: ProductVariantWhereInput
   }
 
+  export type ProductTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProductImageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -26435,10 +30899,11 @@ export namespace Prisma {
     license_id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    description?: SortOrder
-    changelog?: SortOrder
     price_type?: SortOrder
     download_link?: SortOrder
+    is_published?: SortOrder
+    is_pinned?: SortOrder
+    created_at?: SortOrder
     released_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -26447,6 +30912,7 @@ export namespace Prisma {
     category_id?: SortOrder
     owner_id?: SortOrder
     license_id?: SortOrder
+    created_at?: SortOrder
     released_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -26459,10 +30925,11 @@ export namespace Prisma {
     license_id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    description?: SortOrder
-    changelog?: SortOrder
     price_type?: SortOrder
     download_link?: SortOrder
+    is_published?: SortOrder
+    is_pinned?: SortOrder
+    created_at?: SortOrder
     released_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -26475,10 +30942,11 @@ export namespace Prisma {
     license_id?: SortOrder
     name?: SortOrder
     slug?: SortOrder
-    description?: SortOrder
-    changelog?: SortOrder
     price_type?: SortOrder
     download_link?: SortOrder
+    is_published?: SortOrder
+    is_pinned?: SortOrder
+    created_at?: SortOrder
     released_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -26487,23 +30955,9 @@ export namespace Prisma {
     category_id?: SortOrder
     owner_id?: SortOrder
     license_id?: SortOrder
+    created_at?: SortOrder
     released_at?: SortOrder
     updated_at?: SortOrder
-  }
-
-  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type EnumPriceTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -26521,6 +30975,30 @@ export namespace Prisma {
     isNot?: ProductWhereInput
   }
 
+  export type ProductTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    language?: SortOrder
+    description?: SortOrder
+    changelog?: SortOrder
+  }
+
+  export type ProductTranslationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    language?: SortOrder
+    description?: SortOrder
+    changelog?: SortOrder
+  }
+
+  export type ProductTranslationMinOrderByAggregateInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    language?: SortOrder
+    description?: SortOrder
+    changelog?: SortOrder
+  }
+
   export type ProductDiscountCountOrderByAggregateInput = {
     id?: SortOrder
     product_id?: SortOrder
@@ -26529,6 +31007,8 @@ export namespace Prisma {
   }
 
   export type ProductDiscountAvgOrderByAggregateInput = {
+    id?: SortOrder
+    discount?: SortOrder
     expired_at?: SortOrder
   }
 
@@ -26547,6 +31027,8 @@ export namespace Prisma {
   }
 
   export type ProductDiscountSumOrderByAggregateInput = {
+    id?: SortOrder
+    discount?: SortOrder
     expired_at?: SortOrder
   }
 
@@ -26559,6 +31041,8 @@ export namespace Prisma {
   }
 
   export type ProductCouponAvgOrderByAggregateInput = {
+    id?: SortOrder
+    discount?: SortOrder
     expired_at?: SortOrder
   }
 
@@ -26579,12 +31063,9 @@ export namespace Prisma {
   }
 
   export type ProductCouponSumOrderByAggregateInput = {
+    id?: SortOrder
+    discount?: SortOrder
     expired_at?: SortOrder
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type ProductImageCountOrderByAggregateInput = {
@@ -26622,14 +31103,6 @@ export namespace Prisma {
   export type ProductImageSumOrderByAggregateInput = {
     width?: SortOrder
     height?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ProductPriceListRelationFilter = {
@@ -26697,32 +31170,80 @@ export namespace Prisma {
     price?: SortOrder
   }
 
-  export type TermAndConditionCountOrderByAggregateInput = {
+  export type TermsOfServiceTranslationListRelationFilter = {
+    every?: TermsOfServiceTranslationWhereInput
+    some?: TermsOfServiceTranslationWhereInput
+    none?: TermsOfServiceTranslationWhereInput
+  }
+
+  export type TermsOfServiceTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TermsOfServiceCountOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type TermsOfServiceAvgOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type TermsOfServiceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type TermsOfServiceMinOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type TermsOfServiceSumOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type TermsOfServiceScalarRelationFilter = {
+    is?: TermsOfServiceWhereInput
+    isNot?: TermsOfServiceWhereInput
+  }
+
+  export type TermsOfServiceTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    terms_of_service_id?: SortOrder
+    language?: SortOrder
     content?: SortOrder
-    updated_at?: SortOrder
   }
 
-  export type TermAndConditionAvgOrderByAggregateInput = {
+  export type TermsOfServiceTranslationAvgOrderByAggregateInput = {
     id?: SortOrder
-    updated_at?: SortOrder
+    terms_of_service_id?: SortOrder
   }
 
-  export type TermAndConditionMaxOrderByAggregateInput = {
+  export type TermsOfServiceTranslationMaxOrderByAggregateInput = {
     id?: SortOrder
+    terms_of_service_id?: SortOrder
+    language?: SortOrder
     content?: SortOrder
-    updated_at?: SortOrder
   }
 
-  export type TermAndConditionMinOrderByAggregateInput = {
+  export type TermsOfServiceTranslationMinOrderByAggregateInput = {
     id?: SortOrder
+    terms_of_service_id?: SortOrder
+    language?: SortOrder
     content?: SortOrder
-    updated_at?: SortOrder
   }
 
-  export type TermAndConditionSumOrderByAggregateInput = {
+  export type TermsOfServiceTranslationSumOrderByAggregateInput = {
     id?: SortOrder
-    updated_at?: SortOrder
+    terms_of_service_id?: SortOrder
   }
 
   export type PrivacyPolicyTranslationListRelationFilter = {
@@ -26737,34 +31258,32 @@ export namespace Prisma {
 
   export type PrivacyPolicyCountOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type PrivacyPolicyAvgOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type PrivacyPolicyMaxOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type PrivacyPolicyMinOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type PrivacyPolicySumOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
     updated_at?: SortOrder
-  }
-
-  export type EnumLanguageFilter<$PrismaModel = never> = {
-    equals?: $Enums.Language | EnumLanguageFieldRefInput<$PrismaModel>
-    in?: $Enums.Language[] | ListEnumLanguageFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Language[] | ListEnumLanguageFieldRefInput<$PrismaModel>
-    not?: NestedEnumLanguageFilter<$PrismaModel> | $Enums.Language
   }
 
   export type PrivacyPolicyScalarRelationFilter = {
@@ -26801,16 +31320,6 @@ export namespace Prisma {
   export type PrivacyPolicyTranslationSumOrderByAggregateInput = {
     id?: SortOrder
     privacy_policy_id?: SortOrder
-  }
-
-  export type EnumLanguageWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Language | EnumLanguageFieldRefInput<$PrismaModel>
-    in?: $Enums.Language[] | ListEnumLanguageFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Language[] | ListEnumLanguageFieldRefInput<$PrismaModel>
-    not?: NestedEnumLanguageWithAggregatesFilter<$PrismaModel> | $Enums.Language
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumLanguageFilter<$PrismaModel>
-    _max?: NestedEnumLanguageFilter<$PrismaModel>
   }
 
   export type AboutUsTranslationListRelationFilter = {
@@ -26892,26 +31401,31 @@ export namespace Prisma {
   export type FaqCountOrderByAggregateInput = {
     id?: SortOrder
     created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type FaqAvgOrderByAggregateInput = {
     id?: SortOrder
     created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type FaqMaxOrderByAggregateInput = {
     id?: SortOrder
     created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type FaqMinOrderByAggregateInput = {
     id?: SortOrder
     created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type FaqSumOrderByAggregateInput = {
     id?: SortOrder
     created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type FaqScalarRelationFilter = {
@@ -27081,6 +31595,14 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
+  export type BigIntFieldUpdateOperationsInput = {
+    set?: bigint | number
+    increment?: bigint | number
+    decrement?: bigint | number
+    multiply?: bigint | number
+    divide?: bigint | number
+  }
+
   export type ProductUpdateManyWithoutOwnerNestedInput = {
     create?: XOR<ProductCreateWithoutOwnerInput, ProductUncheckedCreateWithoutOwnerInput> | ProductCreateWithoutOwnerInput[] | ProductUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutOwnerInput | ProductCreateOrConnectWithoutOwnerInput[]
@@ -27113,8 +31635,12 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type BigIntFieldUpdateOperationsInput = {
-    set?: bigint | number
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type NullableBigIntFieldUpdateOperationsInput = {
+    set?: bigint | number | null
     increment?: bigint | number
     decrement?: bigint | number
     multiply?: bigint | number
@@ -27128,11 +31654,25 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
+  export type LicenseTranslationCreateNestedManyWithoutLicenseInput = {
+    create?: XOR<LicenseTranslationCreateWithoutLicenseInput, LicenseTranslationUncheckedCreateWithoutLicenseInput> | LicenseTranslationCreateWithoutLicenseInput[] | LicenseTranslationUncheckedCreateWithoutLicenseInput[]
+    connectOrCreate?: LicenseTranslationCreateOrConnectWithoutLicenseInput | LicenseTranslationCreateOrConnectWithoutLicenseInput[]
+    createMany?: LicenseTranslationCreateManyLicenseInputEnvelope
+    connect?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
+  }
+
   export type ProductUncheckedCreateNestedManyWithoutLicenseInput = {
     create?: XOR<ProductCreateWithoutLicenseInput, ProductUncheckedCreateWithoutLicenseInput> | ProductCreateWithoutLicenseInput[] | ProductUncheckedCreateWithoutLicenseInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutLicenseInput | ProductCreateOrConnectWithoutLicenseInput[]
     createMany?: ProductCreateManyLicenseInputEnvelope
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type LicenseTranslationUncheckedCreateNestedManyWithoutLicenseInput = {
+    create?: XOR<LicenseTranslationCreateWithoutLicenseInput, LicenseTranslationUncheckedCreateWithoutLicenseInput> | LicenseTranslationCreateWithoutLicenseInput[] | LicenseTranslationUncheckedCreateWithoutLicenseInput[]
+    connectOrCreate?: LicenseTranslationCreateOrConnectWithoutLicenseInput | LicenseTranslationCreateOrConnectWithoutLicenseInput[]
+    createMany?: LicenseTranslationCreateManyLicenseInputEnvelope
+    connect?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
   }
 
   export type ProductUpdateManyWithoutLicenseNestedInput = {
@@ -27149,6 +31689,20 @@ export namespace Prisma {
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
   }
 
+  export type LicenseTranslationUpdateManyWithoutLicenseNestedInput = {
+    create?: XOR<LicenseTranslationCreateWithoutLicenseInput, LicenseTranslationUncheckedCreateWithoutLicenseInput> | LicenseTranslationCreateWithoutLicenseInput[] | LicenseTranslationUncheckedCreateWithoutLicenseInput[]
+    connectOrCreate?: LicenseTranslationCreateOrConnectWithoutLicenseInput | LicenseTranslationCreateOrConnectWithoutLicenseInput[]
+    upsert?: LicenseTranslationUpsertWithWhereUniqueWithoutLicenseInput | LicenseTranslationUpsertWithWhereUniqueWithoutLicenseInput[]
+    createMany?: LicenseTranslationCreateManyLicenseInputEnvelope
+    set?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
+    disconnect?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
+    delete?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
+    connect?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
+    update?: LicenseTranslationUpdateWithWhereUniqueWithoutLicenseInput | LicenseTranslationUpdateWithWhereUniqueWithoutLicenseInput[]
+    updateMany?: LicenseTranslationUpdateManyWithWhereWithoutLicenseInput | LicenseTranslationUpdateManyWithWhereWithoutLicenseInput[]
+    deleteMany?: LicenseTranslationScalarWhereInput | LicenseTranslationScalarWhereInput[]
+  }
+
   export type ProductUncheckedUpdateManyWithoutLicenseNestedInput = {
     create?: XOR<ProductCreateWithoutLicenseInput, ProductUncheckedCreateWithoutLicenseInput> | ProductCreateWithoutLicenseInput[] | ProductUncheckedCreateWithoutLicenseInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutLicenseInput | ProductCreateOrConnectWithoutLicenseInput[]
@@ -27161,6 +31715,38 @@ export namespace Prisma {
     update?: ProductUpdateWithWhereUniqueWithoutLicenseInput | ProductUpdateWithWhereUniqueWithoutLicenseInput[]
     updateMany?: ProductUpdateManyWithWhereWithoutLicenseInput | ProductUpdateManyWithWhereWithoutLicenseInput[]
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
+  export type LicenseTranslationUncheckedUpdateManyWithoutLicenseNestedInput = {
+    create?: XOR<LicenseTranslationCreateWithoutLicenseInput, LicenseTranslationUncheckedCreateWithoutLicenseInput> | LicenseTranslationCreateWithoutLicenseInput[] | LicenseTranslationUncheckedCreateWithoutLicenseInput[]
+    connectOrCreate?: LicenseTranslationCreateOrConnectWithoutLicenseInput | LicenseTranslationCreateOrConnectWithoutLicenseInput[]
+    upsert?: LicenseTranslationUpsertWithWhereUniqueWithoutLicenseInput | LicenseTranslationUpsertWithWhereUniqueWithoutLicenseInput[]
+    createMany?: LicenseTranslationCreateManyLicenseInputEnvelope
+    set?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
+    disconnect?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
+    delete?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
+    connect?: LicenseTranslationWhereUniqueInput | LicenseTranslationWhereUniqueInput[]
+    update?: LicenseTranslationUpdateWithWhereUniqueWithoutLicenseInput | LicenseTranslationUpdateWithWhereUniqueWithoutLicenseInput[]
+    updateMany?: LicenseTranslationUpdateManyWithWhereWithoutLicenseInput | LicenseTranslationUpdateManyWithWhereWithoutLicenseInput[]
+    deleteMany?: LicenseTranslationScalarWhereInput | LicenseTranslationScalarWhereInput[]
+  }
+
+  export type LicenseCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<LicenseCreateWithoutTranslationsInput, LicenseUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: LicenseCreateOrConnectWithoutTranslationsInput
+    connect?: LicenseWhereUniqueInput
+  }
+
+  export type EnumLanguageFieldUpdateOperationsInput = {
+    set?: $Enums.Language
+  }
+
+  export type LicenseUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<LicenseCreateWithoutTranslationsInput, LicenseUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: LicenseCreateOrConnectWithoutTranslationsInput
+    upsert?: LicenseUpsertWithoutTranslationsInput
+    connect?: LicenseWhereUniqueInput
+    update?: XOR<XOR<LicenseUpdateToOneWithWhereWithoutTranslationsInput, LicenseUpdateWithoutTranslationsInput>, LicenseUncheckedUpdateWithoutTranslationsInput>
   }
 
   export type ProductCreateNestedManyWithoutCategoryInput = {
@@ -27229,6 +31815,13 @@ export namespace Prisma {
     connect?: LicenseWhereUniqueInput
   }
 
+  export type ProductTranslationCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductTranslationCreateWithoutProductInput, ProductTranslationUncheckedCreateWithoutProductInput> | ProductTranslationCreateWithoutProductInput[] | ProductTranslationUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductTranslationCreateOrConnectWithoutProductInput | ProductTranslationCreateOrConnectWithoutProductInput[]
+    createMany?: ProductTranslationCreateManyProductInputEnvelope
+    connect?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+  }
+
   export type ProductDiscountCreateNestedOneWithoutProductInput = {
     create?: XOR<ProductDiscountCreateWithoutProductInput, ProductDiscountUncheckedCreateWithoutProductInput>
     connectOrCreate?: ProductDiscountCreateOrConnectWithoutProductInput
@@ -27253,6 +31846,13 @@ export namespace Prisma {
     connectOrCreate?: ProductVariantCreateOrConnectWithoutProductInput | ProductVariantCreateOrConnectWithoutProductInput[]
     createMany?: ProductVariantCreateManyProductInputEnvelope
     connect?: ProductVariantWhereUniqueInput | ProductVariantWhereUniqueInput[]
+  }
+
+  export type ProductTranslationUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductTranslationCreateWithoutProductInput, ProductTranslationUncheckedCreateWithoutProductInput> | ProductTranslationCreateWithoutProductInput[] | ProductTranslationUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductTranslationCreateOrConnectWithoutProductInput | ProductTranslationCreateOrConnectWithoutProductInput[]
+    createMany?: ProductTranslationCreateManyProductInputEnvelope
+    connect?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
   }
 
   export type ProductDiscountUncheckedCreateNestedOneWithoutProductInput = {
@@ -27317,6 +31917,20 @@ export namespace Prisma {
     update?: XOR<XOR<LicenseUpdateToOneWithWhereWithoutProductsInput, LicenseUpdateWithoutProductsInput>, LicenseUncheckedUpdateWithoutProductsInput>
   }
 
+  export type ProductTranslationUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductTranslationCreateWithoutProductInput, ProductTranslationUncheckedCreateWithoutProductInput> | ProductTranslationCreateWithoutProductInput[] | ProductTranslationUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductTranslationCreateOrConnectWithoutProductInput | ProductTranslationCreateOrConnectWithoutProductInput[]
+    upsert?: ProductTranslationUpsertWithWhereUniqueWithoutProductInput | ProductTranslationUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductTranslationCreateManyProductInputEnvelope
+    set?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+    disconnect?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+    delete?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+    connect?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+    update?: ProductTranslationUpdateWithWhereUniqueWithoutProductInput | ProductTranslationUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductTranslationUpdateManyWithWhereWithoutProductInput | ProductTranslationUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductTranslationScalarWhereInput | ProductTranslationScalarWhereInput[]
+  }
+
   export type ProductDiscountUpdateOneWithoutProductNestedInput = {
     create?: XOR<ProductDiscountCreateWithoutProductInput, ProductDiscountUncheckedCreateWithoutProductInput>
     connectOrCreate?: ProductDiscountCreateOrConnectWithoutProductInput
@@ -27363,6 +31977,20 @@ export namespace Prisma {
     update?: ProductVariantUpdateWithWhereUniqueWithoutProductInput | ProductVariantUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: ProductVariantUpdateManyWithWhereWithoutProductInput | ProductVariantUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: ProductVariantScalarWhereInput | ProductVariantScalarWhereInput[]
+  }
+
+  export type ProductTranslationUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductTranslationCreateWithoutProductInput, ProductTranslationUncheckedCreateWithoutProductInput> | ProductTranslationCreateWithoutProductInput[] | ProductTranslationUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductTranslationCreateOrConnectWithoutProductInput | ProductTranslationCreateOrConnectWithoutProductInput[]
+    upsert?: ProductTranslationUpsertWithWhereUniqueWithoutProductInput | ProductTranslationUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductTranslationCreateManyProductInputEnvelope
+    set?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+    disconnect?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+    delete?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+    connect?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+    update?: ProductTranslationUpdateWithWhereUniqueWithoutProductInput | ProductTranslationUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductTranslationUpdateManyWithWhereWithoutProductInput | ProductTranslationUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductTranslationScalarWhereInput | ProductTranslationScalarWhereInput[]
   }
 
   export type ProductDiscountUncheckedUpdateOneWithoutProductNestedInput = {
@@ -27413,55 +32041,65 @@ export namespace Prisma {
     deleteMany?: ProductVariantScalarWhereInput | ProductVariantScalarWhereInput[]
   }
 
-  export type ProductCreateNestedOneWithoutProduct_discountsInput = {
-    create?: XOR<ProductCreateWithoutProduct_discountsInput, ProductUncheckedCreateWithoutProduct_discountsInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutProduct_discountsInput
+  export type ProductCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<ProductCreateWithoutTranslationsInput, ProductUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutTranslationsInput
     connect?: ProductWhereUniqueInput
   }
 
-  export type ProductUpdateOneRequiredWithoutProduct_discountsNestedInput = {
-    create?: XOR<ProductCreateWithoutProduct_discountsInput, ProductUncheckedCreateWithoutProduct_discountsInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutProduct_discountsInput
-    upsert?: ProductUpsertWithoutProduct_discountsInput
+  export type ProductUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<ProductCreateWithoutTranslationsInput, ProductUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutTranslationsInput
+    upsert?: ProductUpsertWithoutTranslationsInput
     connect?: ProductWhereUniqueInput
-    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutProduct_discountsInput, ProductUpdateWithoutProduct_discountsInput>, ProductUncheckedUpdateWithoutProduct_discountsInput>
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutTranslationsInput, ProductUpdateWithoutTranslationsInput>, ProductUncheckedUpdateWithoutTranslationsInput>
   }
 
-  export type ProductCreateNestedOneWithoutProduct_couponsInput = {
-    create?: XOR<ProductCreateWithoutProduct_couponsInput, ProductUncheckedCreateWithoutProduct_couponsInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutProduct_couponsInput
-    connect?: ProductWhereUniqueInput
-  }
-
-  export type ProductUpdateOneRequiredWithoutProduct_couponsNestedInput = {
-    create?: XOR<ProductCreateWithoutProduct_couponsInput, ProductUncheckedCreateWithoutProduct_couponsInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutProduct_couponsInput
-    upsert?: ProductUpsertWithoutProduct_couponsInput
-    connect?: ProductWhereUniqueInput
-    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutProduct_couponsInput, ProductUpdateWithoutProduct_couponsInput>, ProductUncheckedUpdateWithoutProduct_couponsInput>
-  }
-
-  export type ProductCreateNestedOneWithoutProduct_imagesInput = {
-    create?: XOR<ProductCreateWithoutProduct_imagesInput, ProductUncheckedCreateWithoutProduct_imagesInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutProduct_imagesInput
+  export type ProductCreateNestedOneWithoutDiscountInput = {
+    create?: XOR<ProductCreateWithoutDiscountInput, ProductUncheckedCreateWithoutDiscountInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutDiscountInput
     connect?: ProductWhereUniqueInput
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type ProductUpdateOneRequiredWithoutProduct_imagesNestedInput = {
-    create?: XOR<ProductCreateWithoutProduct_imagesInput, ProductUncheckedCreateWithoutProduct_imagesInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutProduct_imagesInput
-    upsert?: ProductUpsertWithoutProduct_imagesInput
+  export type ProductUpdateOneRequiredWithoutDiscountNestedInput = {
+    create?: XOR<ProductCreateWithoutDiscountInput, ProductUncheckedCreateWithoutDiscountInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutDiscountInput
+    upsert?: ProductUpsertWithoutDiscountInput
     connect?: ProductWhereUniqueInput
-    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutProduct_imagesInput, ProductUpdateWithoutProduct_imagesInput>, ProductUncheckedUpdateWithoutProduct_imagesInput>
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutDiscountInput, ProductUpdateWithoutDiscountInput>, ProductUncheckedUpdateWithoutDiscountInput>
   }
 
-  export type ProductCreateNestedOneWithoutProduct_variantsInput = {
-    create?: XOR<ProductCreateWithoutProduct_variantsInput, ProductUncheckedCreateWithoutProduct_variantsInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutProduct_variantsInput
+  export type ProductCreateNestedOneWithoutCouponInput = {
+    create?: XOR<ProductCreateWithoutCouponInput, ProductUncheckedCreateWithoutCouponInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutCouponInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type ProductUpdateOneRequiredWithoutCouponNestedInput = {
+    create?: XOR<ProductCreateWithoutCouponInput, ProductUncheckedCreateWithoutCouponInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutCouponInput
+    upsert?: ProductUpsertWithoutCouponInput
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutCouponInput, ProductUpdateWithoutCouponInput>, ProductUncheckedUpdateWithoutCouponInput>
+  }
+
+  export type ProductCreateNestedOneWithoutImagesInput = {
+    create?: XOR<ProductCreateWithoutImagesInput, ProductUncheckedCreateWithoutImagesInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutImagesInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type ProductUpdateOneRequiredWithoutImagesNestedInput = {
+    create?: XOR<ProductCreateWithoutImagesInput, ProductUncheckedCreateWithoutImagesInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutImagesInput
+    upsert?: ProductUpsertWithoutImagesInput
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutImagesInput, ProductUpdateWithoutImagesInput>, ProductUncheckedUpdateWithoutImagesInput>
+  }
+
+  export type ProductCreateNestedOneWithoutVariantsInput = {
+    create?: XOR<ProductCreateWithoutVariantsInput, ProductUncheckedCreateWithoutVariantsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutVariantsInput
     connect?: ProductWhereUniqueInput
   }
 
@@ -27479,12 +32117,12 @@ export namespace Prisma {
     connect?: ProductPriceWhereUniqueInput | ProductPriceWhereUniqueInput[]
   }
 
-  export type ProductUpdateOneRequiredWithoutProduct_variantsNestedInput = {
-    create?: XOR<ProductCreateWithoutProduct_variantsInput, ProductUncheckedCreateWithoutProduct_variantsInput>
-    connectOrCreate?: ProductCreateOrConnectWithoutProduct_variantsInput
-    upsert?: ProductUpsertWithoutProduct_variantsInput
+  export type ProductUpdateOneRequiredWithoutVariantsNestedInput = {
+    create?: XOR<ProductCreateWithoutVariantsInput, ProductUncheckedCreateWithoutVariantsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutVariantsInput
+    upsert?: ProductUpsertWithoutVariantsInput
     connect?: ProductWhereUniqueInput
-    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutProduct_variantsInput, ProductUpdateWithoutProduct_variantsInput>, ProductUncheckedUpdateWithoutProduct_variantsInput>
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutVariantsInput, ProductUpdateWithoutVariantsInput>, ProductUncheckedUpdateWithoutVariantsInput>
   }
 
   export type ProductPriceUpdateManyWithoutVariantNestedInput = {
@@ -27515,18 +32153,74 @@ export namespace Prisma {
     deleteMany?: ProductPriceScalarWhereInput | ProductPriceScalarWhereInput[]
   }
 
-  export type ProductVariantCreateNestedOneWithoutProduct_pricesInput = {
-    create?: XOR<ProductVariantCreateWithoutProduct_pricesInput, ProductVariantUncheckedCreateWithoutProduct_pricesInput>
-    connectOrCreate?: ProductVariantCreateOrConnectWithoutProduct_pricesInput
+  export type ProductVariantCreateNestedOneWithoutPricesInput = {
+    create?: XOR<ProductVariantCreateWithoutPricesInput, ProductVariantUncheckedCreateWithoutPricesInput>
+    connectOrCreate?: ProductVariantCreateOrConnectWithoutPricesInput
     connect?: ProductVariantWhereUniqueInput
   }
 
-  export type ProductVariantUpdateOneRequiredWithoutProduct_pricesNestedInput = {
-    create?: XOR<ProductVariantCreateWithoutProduct_pricesInput, ProductVariantUncheckedCreateWithoutProduct_pricesInput>
-    connectOrCreate?: ProductVariantCreateOrConnectWithoutProduct_pricesInput
-    upsert?: ProductVariantUpsertWithoutProduct_pricesInput
+  export type ProductVariantUpdateOneRequiredWithoutPricesNestedInput = {
+    create?: XOR<ProductVariantCreateWithoutPricesInput, ProductVariantUncheckedCreateWithoutPricesInput>
+    connectOrCreate?: ProductVariantCreateOrConnectWithoutPricesInput
+    upsert?: ProductVariantUpsertWithoutPricesInput
     connect?: ProductVariantWhereUniqueInput
-    update?: XOR<XOR<ProductVariantUpdateToOneWithWhereWithoutProduct_pricesInput, ProductVariantUpdateWithoutProduct_pricesInput>, ProductVariantUncheckedUpdateWithoutProduct_pricesInput>
+    update?: XOR<XOR<ProductVariantUpdateToOneWithWhereWithoutPricesInput, ProductVariantUpdateWithoutPricesInput>, ProductVariantUncheckedUpdateWithoutPricesInput>
+  }
+
+  export type TermsOfServiceTranslationCreateNestedManyWithoutTerms_of_serviceInput = {
+    create?: XOR<TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput, TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput> | TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput[] | TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput[]
+    connectOrCreate?: TermsOfServiceTranslationCreateOrConnectWithoutTerms_of_serviceInput | TermsOfServiceTranslationCreateOrConnectWithoutTerms_of_serviceInput[]
+    createMany?: TermsOfServiceTranslationCreateManyTerms_of_serviceInputEnvelope
+    connect?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+  }
+
+  export type TermsOfServiceTranslationUncheckedCreateNestedManyWithoutTerms_of_serviceInput = {
+    create?: XOR<TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput, TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput> | TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput[] | TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput[]
+    connectOrCreate?: TermsOfServiceTranslationCreateOrConnectWithoutTerms_of_serviceInput | TermsOfServiceTranslationCreateOrConnectWithoutTerms_of_serviceInput[]
+    createMany?: TermsOfServiceTranslationCreateManyTerms_of_serviceInputEnvelope
+    connect?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+  }
+
+  export type TermsOfServiceTranslationUpdateManyWithoutTerms_of_serviceNestedInput = {
+    create?: XOR<TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput, TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput> | TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput[] | TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput[]
+    connectOrCreate?: TermsOfServiceTranslationCreateOrConnectWithoutTerms_of_serviceInput | TermsOfServiceTranslationCreateOrConnectWithoutTerms_of_serviceInput[]
+    upsert?: TermsOfServiceTranslationUpsertWithWhereUniqueWithoutTerms_of_serviceInput | TermsOfServiceTranslationUpsertWithWhereUniqueWithoutTerms_of_serviceInput[]
+    createMany?: TermsOfServiceTranslationCreateManyTerms_of_serviceInputEnvelope
+    set?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+    disconnect?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+    delete?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+    connect?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+    update?: TermsOfServiceTranslationUpdateWithWhereUniqueWithoutTerms_of_serviceInput | TermsOfServiceTranslationUpdateWithWhereUniqueWithoutTerms_of_serviceInput[]
+    updateMany?: TermsOfServiceTranslationUpdateManyWithWhereWithoutTerms_of_serviceInput | TermsOfServiceTranslationUpdateManyWithWhereWithoutTerms_of_serviceInput[]
+    deleteMany?: TermsOfServiceTranslationScalarWhereInput | TermsOfServiceTranslationScalarWhereInput[]
+  }
+
+  export type TermsOfServiceTranslationUncheckedUpdateManyWithoutTerms_of_serviceNestedInput = {
+    create?: XOR<TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput, TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput> | TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput[] | TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput[]
+    connectOrCreate?: TermsOfServiceTranslationCreateOrConnectWithoutTerms_of_serviceInput | TermsOfServiceTranslationCreateOrConnectWithoutTerms_of_serviceInput[]
+    upsert?: TermsOfServiceTranslationUpsertWithWhereUniqueWithoutTerms_of_serviceInput | TermsOfServiceTranslationUpsertWithWhereUniqueWithoutTerms_of_serviceInput[]
+    createMany?: TermsOfServiceTranslationCreateManyTerms_of_serviceInputEnvelope
+    set?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+    disconnect?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+    delete?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+    connect?: TermsOfServiceTranslationWhereUniqueInput | TermsOfServiceTranslationWhereUniqueInput[]
+    update?: TermsOfServiceTranslationUpdateWithWhereUniqueWithoutTerms_of_serviceInput | TermsOfServiceTranslationUpdateWithWhereUniqueWithoutTerms_of_serviceInput[]
+    updateMany?: TermsOfServiceTranslationUpdateManyWithWhereWithoutTerms_of_serviceInput | TermsOfServiceTranslationUpdateManyWithWhereWithoutTerms_of_serviceInput[]
+    deleteMany?: TermsOfServiceTranslationScalarWhereInput | TermsOfServiceTranslationScalarWhereInput[]
+  }
+
+  export type TermsOfServiceCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<TermsOfServiceCreateWithoutTranslationsInput, TermsOfServiceUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: TermsOfServiceCreateOrConnectWithoutTranslationsInput
+    connect?: TermsOfServiceWhereUniqueInput
+  }
+
+  export type TermsOfServiceUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<TermsOfServiceCreateWithoutTranslationsInput, TermsOfServiceUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: TermsOfServiceCreateOrConnectWithoutTranslationsInput
+    upsert?: TermsOfServiceUpsertWithoutTranslationsInput
+    connect?: TermsOfServiceWhereUniqueInput
+    update?: XOR<XOR<TermsOfServiceUpdateToOneWithWhereWithoutTranslationsInput, TermsOfServiceUpdateWithoutTranslationsInput>, TermsOfServiceUncheckedUpdateWithoutTranslationsInput>
   }
 
   export type PrivacyPolicyTranslationCreateNestedManyWithoutPrivacy_policyInput = {
@@ -27575,10 +32269,6 @@ export namespace Prisma {
     create?: XOR<PrivacyPolicyCreateWithoutTranslationsInput, PrivacyPolicyUncheckedCreateWithoutTranslationsInput>
     connectOrCreate?: PrivacyPolicyCreateOrConnectWithoutTranslationsInput
     connect?: PrivacyPolicyWhereUniqueInput
-  }
-
-  export type EnumLanguageFieldUpdateOperationsInput = {
-    set?: $Enums.Language
   }
 
   export type PrivacyPolicyUpdateOneRequiredWithoutTranslationsNestedInput = {
@@ -27787,6 +32477,44 @@ export namespace Prisma {
     _max?: NestedEnumCurrencyCodeFilter<$PrismaModel>
   }
 
+  export type NestedBigIntFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  }
+
+  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedBigIntFilter<$PrismaModel>
+    _max?: NestedBigIntFilter<$PrismaModel>
+  }
+
+  export type NestedUuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidFilter<$PrismaModel> | string
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -27801,15 +32529,34 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedBigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBigIntNullableFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
     lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  }
+
+  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -27840,75 +32587,39 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
-  }
-
-  export type NestedUuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidFilter<$PrismaModel> | string
-  }
-
-  export type NestedEnumPriceTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.PriceType | EnumPriceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PriceType[] | ListEnumPriceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PriceType[] | ListEnumPriceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriceTypeFilter<$PrismaModel> | $Enums.PriceType
-  }
-
-  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedEnumPriceTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PriceType | EnumPriceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PriceType[] | ListEnumPriceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PriceType[] | ListEnumPriceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriceTypeWithAggregatesFilter<$PrismaModel> | $Enums.PriceType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPriceTypeFilter<$PrismaModel>
-    _max?: NestedEnumPriceTypeFilter<$PrismaModel>
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedBigIntNullableFilter<$PrismaModel>
+    _min?: NestedBigIntNullableFilter<$PrismaModel>
+    _max?: NestedBigIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumLanguageFilter<$PrismaModel = never> = {
@@ -27926,6 +32637,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLanguageFilter<$PrismaModel>
     _max?: NestedEnumLanguageFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPriceTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PriceType | EnumPriceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PriceType[] | ListEnumPriceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PriceType[] | ListEnumPriceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPriceTypeFilter<$PrismaModel> | $Enums.PriceType
+  }
+
+  export type NestedEnumPriceTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PriceType | EnumPriceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.PriceType[] | ListEnumPriceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PriceType[] | ListEnumPriceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumPriceTypeWithAggregatesFilter<$PrismaModel> | $Enums.PriceType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPriceTypeFilter<$PrismaModel>
+    _max?: NestedEnumPriceTypeFilter<$PrismaModel>
   }
 
   export type DonationLinkCreateWithoutAdminInput = {
@@ -27953,19 +32681,21 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
-    product_discounts?: ProductDiscountCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponCreateNestedOneWithoutProductInput
-    product_images?: ProductImageCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutAdminInput = {
@@ -27975,16 +32705,18 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
-    product_discounts?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
-    product_images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutAdminInput = {
@@ -28050,10 +32782,11 @@ export namespace Prisma {
     license_id?: IntFilter<"Product"> | number
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
-    description?: StringFilter<"Product"> | string
-    changelog?: StringNullableFilter<"Product"> | string | null
     price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
     download_link?: StringNullableFilter<"Product"> | string | null
+    is_published?: BoolFilter<"Product"> | boolean
+    is_pinned?: BoolFilter<"Product"> | boolean
+    created_at?: BigIntFilter<"Product"> | bigint | number
     released_at?: BigIntFilter<"Product"> | bigint | number
     updated_at?: BigIntFilter<"Product"> | bigint | number
   }
@@ -28118,19 +32851,21 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
-    product_discounts?: ProductDiscountCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponCreateNestedOneWithoutProductInput
-    product_images?: ProductImageCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutOwnerInput = {
@@ -28140,16 +32875,18 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
-    product_discounts?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
-    product_images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutOwnerInput = {
@@ -28182,19 +32919,21 @@ export namespace Prisma {
     id?: string
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
-    product_discounts?: ProductDiscountCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponCreateNestedOneWithoutProductInput
-    product_images?: ProductImageCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutLicenseInput = {
@@ -28204,16 +32943,18 @@ export namespace Prisma {
     owner_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
-    product_discounts?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
-    product_images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutLicenseInput = {
@@ -28223,6 +32964,29 @@ export namespace Prisma {
 
   export type ProductCreateManyLicenseInputEnvelope = {
     data: ProductCreateManyLicenseInput | ProductCreateManyLicenseInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LicenseTranslationCreateWithoutLicenseInput = {
+    language: $Enums.Language
+    name: string
+    content: string
+  }
+
+  export type LicenseTranslationUncheckedCreateWithoutLicenseInput = {
+    id?: number
+    language: $Enums.Language
+    name: string
+    content: string
+  }
+
+  export type LicenseTranslationCreateOrConnectWithoutLicenseInput = {
+    where: LicenseTranslationWhereUniqueInput
+    create: XOR<LicenseTranslationCreateWithoutLicenseInput, LicenseTranslationUncheckedCreateWithoutLicenseInput>
+  }
+
+  export type LicenseTranslationCreateManyLicenseInputEnvelope = {
+    data: LicenseTranslationCreateManyLicenseInput | LicenseTranslationCreateManyLicenseInput[]
     skipDuplicates?: boolean
   }
 
@@ -28242,23 +33006,94 @@ export namespace Prisma {
     data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutLicenseInput>
   }
 
+  export type LicenseTranslationUpsertWithWhereUniqueWithoutLicenseInput = {
+    where: LicenseTranslationWhereUniqueInput
+    update: XOR<LicenseTranslationUpdateWithoutLicenseInput, LicenseTranslationUncheckedUpdateWithoutLicenseInput>
+    create: XOR<LicenseTranslationCreateWithoutLicenseInput, LicenseTranslationUncheckedCreateWithoutLicenseInput>
+  }
+
+  export type LicenseTranslationUpdateWithWhereUniqueWithoutLicenseInput = {
+    where: LicenseTranslationWhereUniqueInput
+    data: XOR<LicenseTranslationUpdateWithoutLicenseInput, LicenseTranslationUncheckedUpdateWithoutLicenseInput>
+  }
+
+  export type LicenseTranslationUpdateManyWithWhereWithoutLicenseInput = {
+    where: LicenseTranslationScalarWhereInput
+    data: XOR<LicenseTranslationUpdateManyMutationInput, LicenseTranslationUncheckedUpdateManyWithoutLicenseInput>
+  }
+
+  export type LicenseTranslationScalarWhereInput = {
+    AND?: LicenseTranslationScalarWhereInput | LicenseTranslationScalarWhereInput[]
+    OR?: LicenseTranslationScalarWhereInput[]
+    NOT?: LicenseTranslationScalarWhereInput | LicenseTranslationScalarWhereInput[]
+    id?: IntFilter<"LicenseTranslation"> | number
+    license_id?: IntFilter<"LicenseTranslation"> | number
+    language?: EnumLanguageFilter<"LicenseTranslation"> | $Enums.Language
+    name?: StringFilter<"LicenseTranslation"> | string
+    content?: StringFilter<"LicenseTranslation"> | string
+  }
+
+  export type LicenseCreateWithoutTranslationsInput = {
+    created_at: bigint | number
+    updated_at: bigint | number
+    products?: ProductCreateNestedManyWithoutLicenseInput
+  }
+
+  export type LicenseUncheckedCreateWithoutTranslationsInput = {
+    id?: number
+    created_at: bigint | number
+    updated_at: bigint | number
+    products?: ProductUncheckedCreateNestedManyWithoutLicenseInput
+  }
+
+  export type LicenseCreateOrConnectWithoutTranslationsInput = {
+    where: LicenseWhereUniqueInput
+    create: XOR<LicenseCreateWithoutTranslationsInput, LicenseUncheckedCreateWithoutTranslationsInput>
+  }
+
+  export type LicenseUpsertWithoutTranslationsInput = {
+    update: XOR<LicenseUpdateWithoutTranslationsInput, LicenseUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<LicenseCreateWithoutTranslationsInput, LicenseUncheckedCreateWithoutTranslationsInput>
+    where?: LicenseWhereInput
+  }
+
+  export type LicenseUpdateToOneWithWhereWithoutTranslationsInput = {
+    where?: LicenseWhereInput
+    data: XOR<LicenseUpdateWithoutTranslationsInput, LicenseUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type LicenseUpdateWithoutTranslationsInput = {
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    products?: ProductUpdateManyWithoutLicenseNestedInput
+  }
+
+  export type LicenseUncheckedUpdateWithoutTranslationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    products?: ProductUncheckedUpdateManyWithoutLicenseNestedInput
+  }
+
   export type ProductCreateWithoutCategoryInput = {
     id?: string
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
-    product_discounts?: ProductDiscountCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponCreateNestedOneWithoutProductInput
-    product_images?: ProductImageCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutCategoryInput = {
@@ -28268,16 +33103,18 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
-    product_discounts?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
-    product_images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductCreateOrConnectWithoutCategoryInput = {
@@ -28334,12 +33171,16 @@ export namespace Prisma {
   export type CategoryCreateWithoutProductsInput = {
     name: string
     slug: string
+    created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type CategoryUncheckedCreateWithoutProductsInput = {
     id?: number
     name: string
     slug: string
+    created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type CategoryCreateOrConnectWithoutProductsInput = {
@@ -28352,6 +33193,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
+    created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type OwnerUncheckedCreateWithoutProductsInput = {
@@ -28360,6 +33203,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
+    created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type OwnerCreateOrConnectWithoutProductsInput = {
@@ -28368,14 +33213,16 @@ export namespace Prisma {
   }
 
   export type LicenseCreateWithoutProductsInput = {
-    content: string
+    created_at: bigint | number
     updated_at: bigint | number
+    translations?: LicenseTranslationCreateNestedManyWithoutLicenseInput
   }
 
   export type LicenseUncheckedCreateWithoutProductsInput = {
     id?: number
-    content: string
+    created_at: bigint | number
     updated_at: bigint | number
+    translations?: LicenseTranslationUncheckedCreateNestedManyWithoutLicenseInput
   }
 
   export type LicenseCreateOrConnectWithoutProductsInput = {
@@ -28383,15 +33230,38 @@ export namespace Prisma {
     create: XOR<LicenseCreateWithoutProductsInput, LicenseUncheckedCreateWithoutProductsInput>
   }
 
-  export type ProductDiscountCreateWithoutProductInput = {
+  export type ProductTranslationCreateWithoutProductInput = {
     id?: string
-    discount: string
+    language: $Enums.Language
+    description: string
+    changelog?: string | null
+  }
+
+  export type ProductTranslationUncheckedCreateWithoutProductInput = {
+    id?: string
+    language: $Enums.Language
+    description: string
+    changelog?: string | null
+  }
+
+  export type ProductTranslationCreateOrConnectWithoutProductInput = {
+    where: ProductTranslationWhereUniqueInput
+    create: XOR<ProductTranslationCreateWithoutProductInput, ProductTranslationUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductTranslationCreateManyProductInputEnvelope = {
+    data: ProductTranslationCreateManyProductInput | ProductTranslationCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductDiscountCreateWithoutProductInput = {
+    discount: number
     expired_at: bigint | number
   }
 
   export type ProductDiscountUncheckedCreateWithoutProductInput = {
-    id?: string
-    discount: string
+    id?: number
+    discount: number
     expired_at: bigint | number
   }
 
@@ -28401,16 +33271,15 @@ export namespace Prisma {
   }
 
   export type ProductCouponCreateWithoutProductInput = {
-    id?: string
     code: string
-    discount: string
+    discount: number
     expired_at: bigint | number
   }
 
   export type ProductCouponUncheckedCreateWithoutProductInput = {
-    id?: string
+    id?: number
     code: string
-    discount: string
+    discount: number
     expired_at: bigint | number
   }
 
@@ -28449,14 +33318,14 @@ export namespace Prisma {
     id?: string
     name: string
     download_link?: string | null
-    product_prices?: ProductPriceCreateNestedManyWithoutVariantInput
+    prices?: ProductPriceCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantUncheckedCreateWithoutProductInput = {
     id?: string
     name: string
     download_link?: string | null
-    product_prices?: ProductPriceUncheckedCreateNestedManyWithoutVariantInput
+    prices?: ProductPriceUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type ProductVariantCreateOrConnectWithoutProductInput = {
@@ -28514,12 +33383,16 @@ export namespace Prisma {
   export type CategoryUpdateWithoutProductsInput = {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type CategoryUncheckedUpdateWithoutProductsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type OwnerUpsertWithoutProductsInput = {
@@ -28538,6 +33411,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type OwnerUncheckedUpdateWithoutProductsInput = {
@@ -28546,6 +33421,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type LicenseUpsertWithoutProductsInput = {
@@ -28560,14 +33437,43 @@ export namespace Prisma {
   }
 
   export type LicenseUpdateWithoutProductsInput = {
-    content?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: LicenseTranslationUpdateManyWithoutLicenseNestedInput
   }
 
   export type LicenseUncheckedUpdateWithoutProductsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    content?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: LicenseTranslationUncheckedUpdateManyWithoutLicenseNestedInput
+  }
+
+  export type ProductTranslationUpsertWithWhereUniqueWithoutProductInput = {
+    where: ProductTranslationWhereUniqueInput
+    update: XOR<ProductTranslationUpdateWithoutProductInput, ProductTranslationUncheckedUpdateWithoutProductInput>
+    create: XOR<ProductTranslationCreateWithoutProductInput, ProductTranslationUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductTranslationUpdateWithWhereUniqueWithoutProductInput = {
+    where: ProductTranslationWhereUniqueInput
+    data: XOR<ProductTranslationUpdateWithoutProductInput, ProductTranslationUncheckedUpdateWithoutProductInput>
+  }
+
+  export type ProductTranslationUpdateManyWithWhereWithoutProductInput = {
+    where: ProductTranslationScalarWhereInput
+    data: XOR<ProductTranslationUpdateManyMutationInput, ProductTranslationUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type ProductTranslationScalarWhereInput = {
+    AND?: ProductTranslationScalarWhereInput | ProductTranslationScalarWhereInput[]
+    OR?: ProductTranslationScalarWhereInput[]
+    NOT?: ProductTranslationScalarWhereInput | ProductTranslationScalarWhereInput[]
+    id?: UuidFilter<"ProductTranslation"> | string
+    product_id?: UuidFilter<"ProductTranslation"> | string
+    language?: EnumLanguageFilter<"ProductTranslation"> | $Enums.Language
+    description?: StringFilter<"ProductTranslation"> | string
+    changelog?: StringNullableFilter<"ProductTranslation"> | string | null
   }
 
   export type ProductDiscountUpsertWithoutProductInput = {
@@ -28582,14 +33488,13 @@ export namespace Prisma {
   }
 
   export type ProductDiscountUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductDiscountUncheckedUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -28605,16 +33510,15 @@ export namespace Prisma {
   }
 
   export type ProductCouponUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductCouponUncheckedUpdateWithoutProductInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     code?: StringFieldUpdateOperationsInput | string
-    discount?: StringFieldUpdateOperationsInput | string
+    discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -28672,26 +33576,28 @@ export namespace Prisma {
     download_link?: StringNullableFilter<"ProductVariant"> | string | null
   }
 
-  export type ProductCreateWithoutProduct_discountsInput = {
+  export type ProductCreateWithoutTranslationsInput = {
     id?: string
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
-    product_coupons?: ProductCouponCreateNestedOneWithoutProductInput
-    product_images?: ProductImageCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
   }
 
-  export type ProductUncheckedCreateWithoutProduct_discountsInput = {
+  export type ProductUncheckedCreateWithoutTranslationsInput = {
     id?: string
     category_id: number
     admin_id: string
@@ -28699,53 +33605,57 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
-    product_coupons?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
-    product_images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
   }
 
-  export type ProductCreateOrConnectWithoutProduct_discountsInput = {
+  export type ProductCreateOrConnectWithoutTranslationsInput = {
     where: ProductWhereUniqueInput
-    create: XOR<ProductCreateWithoutProduct_discountsInput, ProductUncheckedCreateWithoutProduct_discountsInput>
+    create: XOR<ProductCreateWithoutTranslationsInput, ProductUncheckedCreateWithoutTranslationsInput>
   }
 
-  export type ProductUpsertWithoutProduct_discountsInput = {
-    update: XOR<ProductUpdateWithoutProduct_discountsInput, ProductUncheckedUpdateWithoutProduct_discountsInput>
-    create: XOR<ProductCreateWithoutProduct_discountsInput, ProductUncheckedCreateWithoutProduct_discountsInput>
+  export type ProductUpsertWithoutTranslationsInput = {
+    update: XOR<ProductUpdateWithoutTranslationsInput, ProductUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<ProductCreateWithoutTranslationsInput, ProductUncheckedCreateWithoutTranslationsInput>
     where?: ProductWhereInput
   }
 
-  export type ProductUpdateToOneWithWhereWithoutProduct_discountsInput = {
+  export type ProductUpdateToOneWithWhereWithoutTranslationsInput = {
     where?: ProductWhereInput
-    data: XOR<ProductUpdateWithoutProduct_discountsInput, ProductUncheckedUpdateWithoutProduct_discountsInput>
+    data: XOR<ProductUpdateWithoutTranslationsInput, ProductUncheckedUpdateWithoutTranslationsInput>
   }
 
-  export type ProductUpdateWithoutProduct_discountsInput = {
+  export type ProductUpdateWithoutTranslationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
-    product_coupons?: ProductCouponUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
   }
 
-  export type ProductUncheckedUpdateWithoutProduct_discountsInput = {
+  export type ProductUncheckedUpdateWithoutTranslationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -28753,37 +33663,41 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product_coupons?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   }
 
-  export type ProductCreateWithoutProduct_couponsInput = {
+  export type ProductCreateWithoutDiscountInput = {
     id?: string
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
-    product_discounts?: ProductDiscountCreateNestedOneWithoutProductInput
-    product_images?: ProductImageCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
   }
 
-  export type ProductUncheckedCreateWithoutProduct_couponsInput = {
+  export type ProductUncheckedCreateWithoutDiscountInput = {
     id?: string
     category_id: number
     admin_id: string
@@ -28791,53 +33705,57 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
-    product_discounts?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
-    product_images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
-    product_variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
   }
 
-  export type ProductCreateOrConnectWithoutProduct_couponsInput = {
+  export type ProductCreateOrConnectWithoutDiscountInput = {
     where: ProductWhereUniqueInput
-    create: XOR<ProductCreateWithoutProduct_couponsInput, ProductUncheckedCreateWithoutProduct_couponsInput>
+    create: XOR<ProductCreateWithoutDiscountInput, ProductUncheckedCreateWithoutDiscountInput>
   }
 
-  export type ProductUpsertWithoutProduct_couponsInput = {
-    update: XOR<ProductUpdateWithoutProduct_couponsInput, ProductUncheckedUpdateWithoutProduct_couponsInput>
-    create: XOR<ProductCreateWithoutProduct_couponsInput, ProductUncheckedCreateWithoutProduct_couponsInput>
+  export type ProductUpsertWithoutDiscountInput = {
+    update: XOR<ProductUpdateWithoutDiscountInput, ProductUncheckedUpdateWithoutDiscountInput>
+    create: XOR<ProductCreateWithoutDiscountInput, ProductUncheckedCreateWithoutDiscountInput>
     where?: ProductWhereInput
   }
 
-  export type ProductUpdateToOneWithWhereWithoutProduct_couponsInput = {
+  export type ProductUpdateToOneWithWhereWithoutDiscountInput = {
     where?: ProductWhereInput
-    data: XOR<ProductUpdateWithoutProduct_couponsInput, ProductUncheckedUpdateWithoutProduct_couponsInput>
+    data: XOR<ProductUpdateWithoutDiscountInput, ProductUncheckedUpdateWithoutDiscountInput>
   }
 
-  export type ProductUpdateWithoutProduct_couponsInput = {
+  export type ProductUpdateWithoutDiscountInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
-    product_discounts?: ProductDiscountUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
   }
 
-  export type ProductUncheckedUpdateWithoutProduct_couponsInput = {
+  export type ProductUncheckedUpdateWithoutDiscountInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -28845,37 +33763,41 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product_discounts?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   }
 
-  export type ProductCreateWithoutProduct_imagesInput = {
+  export type ProductCreateWithoutCouponInput = {
     id?: string
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
-    product_discounts?: ProductDiscountCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponCreateNestedOneWithoutProductInput
-    product_variants?: ProductVariantCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
   }
 
-  export type ProductUncheckedCreateWithoutProduct_imagesInput = {
+  export type ProductUncheckedCreateWithoutCouponInput = {
     id?: string
     category_id: number
     admin_id: string
@@ -28883,53 +33805,57 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
-    product_discounts?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
-    product_variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
   }
 
-  export type ProductCreateOrConnectWithoutProduct_imagesInput = {
+  export type ProductCreateOrConnectWithoutCouponInput = {
     where: ProductWhereUniqueInput
-    create: XOR<ProductCreateWithoutProduct_imagesInput, ProductUncheckedCreateWithoutProduct_imagesInput>
+    create: XOR<ProductCreateWithoutCouponInput, ProductUncheckedCreateWithoutCouponInput>
   }
 
-  export type ProductUpsertWithoutProduct_imagesInput = {
-    update: XOR<ProductUpdateWithoutProduct_imagesInput, ProductUncheckedUpdateWithoutProduct_imagesInput>
-    create: XOR<ProductCreateWithoutProduct_imagesInput, ProductUncheckedCreateWithoutProduct_imagesInput>
+  export type ProductUpsertWithoutCouponInput = {
+    update: XOR<ProductUpdateWithoutCouponInput, ProductUncheckedUpdateWithoutCouponInput>
+    create: XOR<ProductCreateWithoutCouponInput, ProductUncheckedCreateWithoutCouponInput>
     where?: ProductWhereInput
   }
 
-  export type ProductUpdateToOneWithWhereWithoutProduct_imagesInput = {
+  export type ProductUpdateToOneWithWhereWithoutCouponInput = {
     where?: ProductWhereInput
-    data: XOR<ProductUpdateWithoutProduct_imagesInput, ProductUncheckedUpdateWithoutProduct_imagesInput>
+    data: XOR<ProductUpdateWithoutCouponInput, ProductUncheckedUpdateWithoutCouponInput>
   }
 
-  export type ProductUpdateWithoutProduct_imagesInput = {
+  export type ProductUpdateWithoutCouponInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
-    product_discounts?: ProductDiscountUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUpdateOneWithoutProductNestedInput
-    product_variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
   }
 
-  export type ProductUncheckedUpdateWithoutProduct_imagesInput = {
+  export type ProductUncheckedUpdateWithoutCouponInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -28937,37 +33863,41 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product_discounts?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
-    product_variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   }
 
-  export type ProductCreateWithoutProduct_variantsInput = {
+  export type ProductCreateWithoutImagesInput = {
     id?: string
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
-    product_discounts?: ProductDiscountCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponCreateNestedOneWithoutProductInput
-    product_images?: ProductImageCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
   }
 
-  export type ProductUncheckedCreateWithoutProduct_variantsInput = {
+  export type ProductUncheckedCreateWithoutImagesInput = {
     id?: string
     category_id: number
     admin_id: string
@@ -28975,20 +33905,122 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
-    product_discounts?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
-    product_coupons?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
-    product_images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
   }
 
-  export type ProductCreateOrConnectWithoutProduct_variantsInput = {
+  export type ProductCreateOrConnectWithoutImagesInput = {
     where: ProductWhereUniqueInput
-    create: XOR<ProductCreateWithoutProduct_variantsInput, ProductUncheckedCreateWithoutProduct_variantsInput>
+    create: XOR<ProductCreateWithoutImagesInput, ProductUncheckedCreateWithoutImagesInput>
+  }
+
+  export type ProductUpsertWithoutImagesInput = {
+    update: XOR<ProductUpdateWithoutImagesInput, ProductUncheckedUpdateWithoutImagesInput>
+    create: XOR<ProductCreateWithoutImagesInput, ProductUncheckedCreateWithoutImagesInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutImagesInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutImagesInput, ProductUncheckedUpdateWithoutImagesInput>
+  }
+
+  export type ProductUpdateWithoutImagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
+    category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
+    owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
+    license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutImagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category_id?: IntFieldUpdateOperationsInput | number
+    admin_id?: StringFieldUpdateOperationsInput | string
+    owner_id?: IntFieldUpdateOperationsInput | number
+    license_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductCreateWithoutVariantsInput = {
+    id?: string
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
+    download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
+    released_at: bigint | number
+    updated_at: bigint | number
+    admin: AdminCreateNestedOneWithoutProductsInput
+    category: CategoryCreateNestedOneWithoutProductsInput
+    owner: OwnerCreateNestedOneWithoutProductsInput
+    license: LicenseCreateNestedOneWithoutProductsInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutVariantsInput = {
+    id?: string
+    category_id: number
+    admin_id: string
+    owner_id: number
+    license_id: number
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
+    download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
+    released_at: bigint | number
+    updated_at: bigint | number
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutVariantsInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutVariantsInput, ProductUncheckedCreateWithoutVariantsInput>
   }
 
   export type ProductPriceCreateWithoutVariantInput = {
@@ -29013,37 +34045,39 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ProductUpsertWithoutProduct_variantsInput = {
-    update: XOR<ProductUpdateWithoutProduct_variantsInput, ProductUncheckedUpdateWithoutProduct_variantsInput>
-    create: XOR<ProductCreateWithoutProduct_variantsInput, ProductUncheckedCreateWithoutProduct_variantsInput>
+  export type ProductUpsertWithoutVariantsInput = {
+    update: XOR<ProductUpdateWithoutVariantsInput, ProductUncheckedUpdateWithoutVariantsInput>
+    create: XOR<ProductCreateWithoutVariantsInput, ProductUncheckedCreateWithoutVariantsInput>
     where?: ProductWhereInput
   }
 
-  export type ProductUpdateToOneWithWhereWithoutProduct_variantsInput = {
+  export type ProductUpdateToOneWithWhereWithoutVariantsInput = {
     where?: ProductWhereInput
-    data: XOR<ProductUpdateWithoutProduct_variantsInput, ProductUncheckedUpdateWithoutProduct_variantsInput>
+    data: XOR<ProductUpdateWithoutVariantsInput, ProductUncheckedUpdateWithoutVariantsInput>
   }
 
-  export type ProductUpdateWithoutProduct_variantsInput = {
+  export type ProductUpdateWithoutVariantsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
-    product_discounts?: ProductDiscountUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
   }
 
-  export type ProductUncheckedUpdateWithoutProduct_variantsInput = {
+  export type ProductUncheckedUpdateWithoutVariantsInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
     admin_id?: StringFieldUpdateOperationsInput | string
@@ -29051,15 +34085,17 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product_discounts?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductPriceUpsertWithWhereUniqueWithoutVariantInput = {
@@ -29088,48 +34124,133 @@ export namespace Prisma {
     price?: IntFilter<"ProductPrice"> | number
   }
 
-  export type ProductVariantCreateWithoutProduct_pricesInput = {
+  export type ProductVariantCreateWithoutPricesInput = {
     id?: string
     name: string
     download_link?: string | null
-    product: ProductCreateNestedOneWithoutProduct_variantsInput
+    product: ProductCreateNestedOneWithoutVariantsInput
   }
 
-  export type ProductVariantUncheckedCreateWithoutProduct_pricesInput = {
+  export type ProductVariantUncheckedCreateWithoutPricesInput = {
     id?: string
     product_id: string
     name: string
     download_link?: string | null
   }
 
-  export type ProductVariantCreateOrConnectWithoutProduct_pricesInput = {
+  export type ProductVariantCreateOrConnectWithoutPricesInput = {
     where: ProductVariantWhereUniqueInput
-    create: XOR<ProductVariantCreateWithoutProduct_pricesInput, ProductVariantUncheckedCreateWithoutProduct_pricesInput>
+    create: XOR<ProductVariantCreateWithoutPricesInput, ProductVariantUncheckedCreateWithoutPricesInput>
   }
 
-  export type ProductVariantUpsertWithoutProduct_pricesInput = {
-    update: XOR<ProductVariantUpdateWithoutProduct_pricesInput, ProductVariantUncheckedUpdateWithoutProduct_pricesInput>
-    create: XOR<ProductVariantCreateWithoutProduct_pricesInput, ProductVariantUncheckedCreateWithoutProduct_pricesInput>
+  export type ProductVariantUpsertWithoutPricesInput = {
+    update: XOR<ProductVariantUpdateWithoutPricesInput, ProductVariantUncheckedUpdateWithoutPricesInput>
+    create: XOR<ProductVariantCreateWithoutPricesInput, ProductVariantUncheckedCreateWithoutPricesInput>
     where?: ProductVariantWhereInput
   }
 
-  export type ProductVariantUpdateToOneWithWhereWithoutProduct_pricesInput = {
+  export type ProductVariantUpdateToOneWithWhereWithoutPricesInput = {
     where?: ProductVariantWhereInput
-    data: XOR<ProductVariantUpdateWithoutProduct_pricesInput, ProductVariantUncheckedUpdateWithoutProduct_pricesInput>
+    data: XOR<ProductVariantUpdateWithoutPricesInput, ProductVariantUncheckedUpdateWithoutPricesInput>
   }
 
-  export type ProductVariantUpdateWithoutProduct_pricesInput = {
+  export type ProductVariantUpdateWithoutPricesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
-    product?: ProductUpdateOneRequiredWithoutProduct_variantsNestedInput
+    product?: ProductUpdateOneRequiredWithoutVariantsNestedInput
   }
 
-  export type ProductVariantUncheckedUpdateWithoutProduct_pricesInput = {
+  export type ProductVariantUncheckedUpdateWithoutPricesInput = {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput = {
+    language: $Enums.Language
+    content: string
+  }
+
+  export type TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput = {
+    id?: number
+    language: $Enums.Language
+    content: string
+  }
+
+  export type TermsOfServiceTranslationCreateOrConnectWithoutTerms_of_serviceInput = {
+    where: TermsOfServiceTranslationWhereUniqueInput
+    create: XOR<TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput, TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput>
+  }
+
+  export type TermsOfServiceTranslationCreateManyTerms_of_serviceInputEnvelope = {
+    data: TermsOfServiceTranslationCreateManyTerms_of_serviceInput | TermsOfServiceTranslationCreateManyTerms_of_serviceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TermsOfServiceTranslationUpsertWithWhereUniqueWithoutTerms_of_serviceInput = {
+    where: TermsOfServiceTranslationWhereUniqueInput
+    update: XOR<TermsOfServiceTranslationUpdateWithoutTerms_of_serviceInput, TermsOfServiceTranslationUncheckedUpdateWithoutTerms_of_serviceInput>
+    create: XOR<TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput, TermsOfServiceTranslationUncheckedCreateWithoutTerms_of_serviceInput>
+  }
+
+  export type TermsOfServiceTranslationUpdateWithWhereUniqueWithoutTerms_of_serviceInput = {
+    where: TermsOfServiceTranslationWhereUniqueInput
+    data: XOR<TermsOfServiceTranslationUpdateWithoutTerms_of_serviceInput, TermsOfServiceTranslationUncheckedUpdateWithoutTerms_of_serviceInput>
+  }
+
+  export type TermsOfServiceTranslationUpdateManyWithWhereWithoutTerms_of_serviceInput = {
+    where: TermsOfServiceTranslationScalarWhereInput
+    data: XOR<TermsOfServiceTranslationUpdateManyMutationInput, TermsOfServiceTranslationUncheckedUpdateManyWithoutTerms_of_serviceInput>
+  }
+
+  export type TermsOfServiceTranslationScalarWhereInput = {
+    AND?: TermsOfServiceTranslationScalarWhereInput | TermsOfServiceTranslationScalarWhereInput[]
+    OR?: TermsOfServiceTranslationScalarWhereInput[]
+    NOT?: TermsOfServiceTranslationScalarWhereInput | TermsOfServiceTranslationScalarWhereInput[]
+    id?: IntFilter<"TermsOfServiceTranslation"> | number
+    terms_of_service_id?: IntFilter<"TermsOfServiceTranslation"> | number
+    language?: EnumLanguageFilter<"TermsOfServiceTranslation"> | $Enums.Language
+    content?: StringFilter<"TermsOfServiceTranslation"> | string
+  }
+
+  export type TermsOfServiceCreateWithoutTranslationsInput = {
+    created_at: bigint | number
+    updated_at: bigint | number
+  }
+
+  export type TermsOfServiceUncheckedCreateWithoutTranslationsInput = {
+    id?: number
+    created_at: bigint | number
+    updated_at: bigint | number
+  }
+
+  export type TermsOfServiceCreateOrConnectWithoutTranslationsInput = {
+    where: TermsOfServiceWhereUniqueInput
+    create: XOR<TermsOfServiceCreateWithoutTranslationsInput, TermsOfServiceUncheckedCreateWithoutTranslationsInput>
+  }
+
+  export type TermsOfServiceUpsertWithoutTranslationsInput = {
+    update: XOR<TermsOfServiceUpdateWithoutTranslationsInput, TermsOfServiceUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<TermsOfServiceCreateWithoutTranslationsInput, TermsOfServiceUncheckedCreateWithoutTranslationsInput>
+    where?: TermsOfServiceWhereInput
+  }
+
+  export type TermsOfServiceUpdateToOneWithWhereWithoutTranslationsInput = {
+    where?: TermsOfServiceWhereInput
+    data: XOR<TermsOfServiceUpdateWithoutTranslationsInput, TermsOfServiceUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type TermsOfServiceUpdateWithoutTranslationsInput = {
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type TermsOfServiceUncheckedUpdateWithoutTranslationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type PrivacyPolicyTranslationCreateWithoutPrivacy_policyInput = {
@@ -29180,11 +34301,13 @@ export namespace Prisma {
   }
 
   export type PrivacyPolicyCreateWithoutTranslationsInput = {
+    created_at: bigint | number
     updated_at: bigint | number
   }
 
   export type PrivacyPolicyUncheckedCreateWithoutTranslationsInput = {
     id?: number
+    created_at: bigint | number
     updated_at: bigint | number
   }
 
@@ -29205,11 +34328,13 @@ export namespace Prisma {
   }
 
   export type PrivacyPolicyUpdateWithoutTranslationsInput = {
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type PrivacyPolicyUncheckedUpdateWithoutTranslationsInput = {
     id?: IntFieldUpdateOperationsInput | number
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -29344,11 +34469,13 @@ export namespace Prisma {
 
   export type FaqCreateWithoutTranslationsInput = {
     created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type FaqUncheckedCreateWithoutTranslationsInput = {
     id?: number
     created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type FaqCreateOrConnectWithoutTranslationsInput = {
@@ -29369,11 +34496,13 @@ export namespace Prisma {
 
   export type FaqUpdateWithoutTranslationsInput = {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type FaqUncheckedUpdateWithoutTranslationsInput = {
     id?: IntFieldUpdateOperationsInput | number
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type DonationLinkCreateManyAdminInput = {
@@ -29389,10 +34518,11 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
   }
@@ -29418,19 +34548,21 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
-    product_discounts?: ProductDiscountUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutAdminInput = {
@@ -29440,16 +34572,18 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product_discounts?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutAdminInput = {
@@ -29459,10 +34593,11 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
@@ -29474,10 +34609,11 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
   }
@@ -29486,19 +34622,21 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
-    product_discounts?: ProductDiscountUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutOwnerInput = {
@@ -29508,16 +34646,18 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product_discounts?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutOwnerInput = {
@@ -29527,10 +34667,11 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
@@ -29542,31 +34683,41 @@ export namespace Prisma {
     owner_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
+  }
+
+  export type LicenseTranslationCreateManyLicenseInput = {
+    id?: number
+    language: $Enums.Language
+    name: string
+    content: string
   }
 
   export type ProductUpdateWithoutLicenseInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
-    product_discounts?: ProductDiscountUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutLicenseInput = {
@@ -29576,16 +34727,18 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product_discounts?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutLicenseInput = {
@@ -29595,12 +34748,33 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type LicenseTranslationUpdateWithoutLicenseInput = {
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    name?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LicenseTranslationUncheckedUpdateWithoutLicenseInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    name?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LicenseTranslationUncheckedUpdateManyWithoutLicenseInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    name?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProductCreateManyCategoryInput = {
@@ -29610,10 +34784,11 @@ export namespace Prisma {
     license_id: number
     name: string
     slug: string
-    description: string
-    changelog?: string | null
     price_type: $Enums.PriceType
     download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    created_at: bigint | number
     released_at: bigint | number
     updated_at: bigint | number
   }
@@ -29622,19 +34797,21 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
-    product_discounts?: ProductDiscountUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutCategoryInput = {
@@ -29644,16 +34821,18 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    product_discounts?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
-    product_coupons?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
-    product_images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
-    product_variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutCategoryInput = {
@@ -29663,12 +34842,20 @@ export namespace Prisma {
     license_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type ProductTranslationCreateManyProductInput = {
+    id?: string
+    language: $Enums.Language
+    description: string
+    changelog?: string | null
   }
 
   export type ProductImageCreateManyProductInput = {
@@ -29683,6 +34870,27 @@ export namespace Prisma {
     id?: string
     name: string
     download_link?: string | null
+  }
+
+  export type ProductTranslationUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    description?: StringFieldUpdateOperationsInput | string
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductTranslationUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    description?: StringFieldUpdateOperationsInput | string
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductTranslationUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    description?: StringFieldUpdateOperationsInput | string
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductImageUpdateWithoutProductInput = {
@@ -29713,14 +34921,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
-    product_prices?: ProductPriceUpdateManyWithoutVariantNestedInput
+    prices?: ProductPriceUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
-    product_prices?: ProductPriceUncheckedUpdateManyWithoutVariantNestedInput
+    prices?: ProductPriceUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type ProductVariantUncheckedUpdateManyWithoutProductInput = {
@@ -29751,6 +34959,29 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     price?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type TermsOfServiceTranslationCreateManyTerms_of_serviceInput = {
+    id?: number
+    language: $Enums.Language
+    content: string
+  }
+
+  export type TermsOfServiceTranslationUpdateWithoutTerms_of_serviceInput = {
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TermsOfServiceTranslationUncheckedUpdateWithoutTerms_of_serviceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TermsOfServiceTranslationUncheckedUpdateManyWithoutTerms_of_serviceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    content?: StringFieldUpdateOperationsInput | string
   }
 
   export type PrivacyPolicyTranslationCreateManyPrivacy_policyInput = {

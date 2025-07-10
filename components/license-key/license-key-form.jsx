@@ -13,7 +13,7 @@ export default async function LicenseKeyForm({ mode = 'create', id = null }) {
   const secretKeys = await getSecretKeys({ id: true, app_name: true });
 
   if (mode === 'create') {
-    return <CreateForm secretKeys={secretKeys} />
+    return <CreateForm secretKeys={secretKeys} />;
   }
 
   const licenseKey = await getLicenseKey(id);
@@ -27,5 +27,5 @@ export default async function LicenseKeyForm({ mode = 'create', id = null }) {
   }
 
   licenseKey.parsedKey = jwt.decode(licenseKey.key);
-  return <EditForm secretKeys={secretKeys} licenseKey={licenseKey} />
+  return <EditForm secretKeys={secretKeys} licenseKey={licenseKey} />;
 }

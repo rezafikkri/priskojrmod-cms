@@ -82,6 +82,7 @@ describe('createPrivacyPolicy function', () => {
 
     expect(pjmeDBPrismaClient.PrivacyPolicy.create).toHaveBeenCalledWith({
       data: {
+        created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
         updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
         translations: {
           create: [
@@ -172,7 +173,6 @@ describe('updatePrivacyPolicy function', () => {
       },
       select: {
         id: true,
-        translations: false,
       },
     });
   });

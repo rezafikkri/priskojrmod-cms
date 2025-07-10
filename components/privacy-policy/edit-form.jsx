@@ -18,6 +18,7 @@ import { addPrivacyPolicy, editPrivacyPolicy } from '@/actions/privacy-policy-ac
 import { formatDateTimeWIB } from '@/lib/format-date';
 
 export default function EditForm({ privacyPolicy }) {
+  const [createdAt, setCreatedAt] = useState(privacyPolicy?.created_at);
   const [updatedAt, setUpdatedAt] = useState(privacyPolicy?.updated_at);
   const [hasPrivacyPolicy, setHasPrivacyPolicy] = useState(privacyPolicy !== null);
   // generate form default values
@@ -70,6 +71,7 @@ export default function EditForm({ privacyPolicy }) {
         form.setValue('translationId.id', saveRes.data.translations.id.id);
         form.setValue('translationId.en', saveRes.data.translations.id.en);
 
+        setCreatedAt(saveRes.data.created_at);
         setUpdatedAt(saveRes.data.updated_at);
         setHasPrivacyPolicy(true);
       }
@@ -95,6 +97,7 @@ export default function EditForm({ privacyPolicy }) {
                   field={field}
                   formState={formState}
                   activeLang={Language.ID}
+                  description="Enter privacy policy content."
                 />
               )}
             />
@@ -108,14 +111,16 @@ export default function EditForm({ privacyPolicy }) {
                   field={field}
                   formState={formState}
                   activeLang={Language.EN}
+                  description="Enter privacy policy content."
                 />
               )}
             />
           )}
 
           {hasPrivacyPolicy && (
-            <p className="text-sm text-muted-foreground">
-              Last updated: {formatDateTimeWIB(updatedAt)}
+            <p className="text-sm text-zinc-600 [&_span]:block space-y-2.5">
+              <span>Created on: {formatDateTimeWIB(createdAt)}</span>
+              <span>Last updated: {formatDateTimeWIB(updatedAt)}</span>
             </p>
           )}
 

@@ -7,10 +7,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { generatePageInfo, isLastPage } from '@/lib/utils';
-import Link from 'next/link';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Search, AlertCircle, X } from 'lucide-react';
+import { AlertCircle, Search, X } from 'lucide-react';
 import DataTable from './data-table';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
@@ -19,14 +16,23 @@ import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { removeLicenseKey } from '@/actions/license-key-actions';
+import { removeLicenseKey, setCanRegenerateKeys } from '@/actions/license-key-actions';
 import { toast } from 'sonner';
+import { searchKeySchema } from '@/lib/validators/base-validator';
+import { Input } from '../ui/input';
+import FiltersPopover from './filters-popover';
+import { Button } from '../ui/button';
+import { Columns } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+} from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
+import { Plus } from 'lucide-react';
+import TooltipWrapper from '../ui/tooltip-wrapper';
 
 export default function LicenseKeysTable() {
   const queryClient = useQueryClient();
@@ -34,50 +40,96 @@ export default function LicenseKeysTable() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchedLicenseKey, setSearchedLicenseKey] = useState(null);
   const searchRef = useRef(null);
+  // filters state
+  const [filters, setFilters] = useState(null);
+  const [isFilterActive, setIsFilterActive] = useState(false);
+  // table state
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: process.env.NEXT_PUBLIC_PAGE_SIZE,
   });
   const isPaginationChangeWhenDelete = useRef(false);
+  const [rowSelection, setRowSelection] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState({
+    regenerated_at: false,
+    created_at: false,
+    updated_at: false,
+  });
+  // set can regenerate state
+  const [isRegenerating, setIsRegenerating] = useState(false);
 
-  function handlePagination(paginationData) {
+  function handlePaginationChange(paginationData) {
     if (!isRerender.current) {
       isRerender.current = true;
     }
     setPagination(paginationData);
   }
 
-  async function handleSubmitSearch() {
-    if (!isRerender.current) {
-      isRerender.current = true;
+  // add secretKeyId and canRegenerate filters
+  function addFiltersToURL(url, appliedFilters) {
+    if (!appliedFilters) return url;
+
+    let newUrl = url;
+    if (appliedFilters.secretKeyId !== 'all') {
+      newUrl += `&ski=${appliedFilters.secretKeyId}`;
     }
+    if (appliedFilters.canRegenerate !== 'all') {
+      newUrl += `&cr=${appliedFilters.canRegenerate}`;
+    }
+    return newUrl;
+  }
 
-    const key = searchRef.current.value;
+  // set isFilterActive when apply and clear
+  function syncIsFilterActive(appliedFilters) {
+    if (appliedFilters && !isFilterActive) {
+      setIsFilterActive(true);
+    } else if (!appliedFilters && isFilterActive) {
+      setIsFilterActive(false);
+    }
+  }
 
-    if (key.trim() === '') return false;    
+  async function handleSearch(appliedFilters) {
+    const keyResult = searchKeySchema.safeParse(searchRef.current.value);
+    if (!keyResult.success) return false;
+    const parsedKey = keyResult.data;
     
-    setIsSearching(true);
     try {
       const result = await queryClient.fetchQuery({
-        queryKey: ['licenseKeysSearch', key],
+        queryKey: ['licenseKeysSearch', parsedKey, appliedFilters],
         queryFn: async () => {
-          const res = await fetch(`/api/license-keys?sk=${key}`);
+          setIsSearching(true);
+          // if previoesly searchedLicenseKey is null, then show skeleton loading
+          // for all table, besides that, then show toast loading only
+          let toastId;
+          if (searchedLicenseKey) {
+            toastId = toast.loading('Searching License Keys...');
+          }
+          const res = await fetch(addFiltersToURL(`/api/license-keys?sk=${parsedKey}`, appliedFilters));
           const resJson = await res.json();
+
+          if (toastId) {
+            toast.dismiss(toastId);
+          }
+
+          setIsSearching(false);
           return resJson;
         },
         staleTime: 10000,
         gcTime: 10000,
       });
+
+      if (!isRerender.current) {
+        isRerender.current = true;
+      }
       setSearchedLicenseKey(result.data);
     } catch (err) {
       console.error(err);
     }
-    setIsSearching(false);
   }
 
   function handleEnterSearch(e) {
     if (e.key === 'Enter') {
-      handleSubmitSearch();
+      handleSearch(filters);
     }
   }
 
@@ -99,14 +151,14 @@ export default function LicenseKeysTable() {
     isPlaceholderData: isPlaceholderDataLK,
     isStale: isStaleLK,
   } = useQuery({
-    queryKey: ['licenseKeys', pagination.pageIndex],
+    queryKey: ['licenseKeys', pagination.pageIndex, filters],
     queryFn: async () => {
       let toastId;
       if (isRerender.current) {
         toastId = toast.loading('Loading License Keys...');
       }
 
-      const res = await fetch(`/api/license-keys?pi=${pagination.pageIndex}`);
+      const res = await fetch(addFiltersToURL(`/api/license-keys?pi=${pagination.pageIndex}`, filters));
       const resJson = await res.json();
 
       if (toastId) {
@@ -145,10 +197,10 @@ export default function LicenseKeysTable() {
           ...searchedLicenseKey,
           licenseKeys: searchedLicenseKey.licenseKeys.filter(slk => slk.id !== deleteData.id),
         });
-        queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+        await queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+        await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       } else {
-        const licenseKey = queryClient.getQueryData(['licenseKeys', pagination.pageIndex]);
+        const licenseKey = queryClient.getQueryData(['licenseKeys', pagination.pageIndex, filters]);
         const newLicenseKeys = licenseKey.data.licenseKeys.filter(lk => lk.id !== deleteData.id);
         const newRowCount = licenseKey.data.rowCount - 1;
 
@@ -166,7 +218,7 @@ export default function LicenseKeysTable() {
               },
             };
           });
-          queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+          await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
         } else {
           if (newLicenseKeys.length <= 0 && newRowCount > 0) {
             isPaginationChangeWhenDelete.current = true;
@@ -187,7 +239,7 @@ export default function LicenseKeysTable() {
           }
         }
 
-        queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+        await queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       }
 
       toast.success(`License Key for ${deleteData.email} was successfully deleted.`, { id: toastId });
@@ -200,6 +252,84 @@ export default function LicenseKeysTable() {
       targetActionBtn.removeAttribute('disabled');
     },
   });
+
+  async function handleFilter({
+    action,
+    newFilters,
+  }) {
+    if (!isRerender.current) {
+      isRerender.current = true;
+    }
+
+    if (action === 'apply') {
+      if (!searchedLicenseKey) {
+        await queryClient.invalidateQueries({
+          queryKey: ['licenseKeys', pagination.pageIndex, newFilters],
+        });
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['licenseKeysSearch', searchRef.current.value, newFilters],
+        });
+        handleSearch(newFilters);
+      }
+
+      // set filters in the future
+      setFilters(newFilters);
+    } else {
+      if (!searchedLicenseKey) {
+        await queryClient.invalidateQueries({
+          queryKey: ['licenseKeys', pagination.pageIndex, null],
+        });
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['licenseKeysSearch', searchRef.current.value, null],
+        });
+        handleSearch(null);
+      }
+
+      // set filters untuk request kedepannya
+      setFilters(null);
+    }
+
+    syncIsFilterActive(newFilters);
+  }
+
+  async function handleSetCanRegenerate() {
+    const rowSelections = Object.keys(rowSelection);
+    if (rowSelections.length <= 0) return false;
+
+    if (!isRerender.current) {
+      isRerender.current = true;
+    }
+
+    setIsRegenerating(true);
+    // show loading
+    const toastId = toast.loading('Enabling Regeneration...');
+
+    // not use try/catch because in actions already using try/catch
+    const setCanRegenerateRes = await setCanRegenerateKeys(rowSelections);
+    if (setCanRegenerateRes.status === 'success') {
+      await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+      await queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+      setRowSelection({});
+
+      if (setCanRegenerateRes.data.count > 0) {
+        toast.success(`Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys.`, {
+          id: toastId,
+        });
+      } else {
+        toast.info('No license keys were updated. They may have already been deleted.', {
+          id: toastId,
+        });
+      }
+    } else {
+      toast.error(setCanRegenerateRes.message, {
+        id: toastId,
+      });
+    }
+
+    setIsRegenerating(false);
+  }
 
   // if after delete action, pagination changed
   useEffect(() => {
@@ -230,51 +360,97 @@ export default function LicenseKeysTable() {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:justify-between gap-3 items-start mb-5">
-        <Button asChild variant="outline" className="w-full md:w-auto h-auto text-base px-3 py-1.5">
-          <Link href="/license-key/new">Create License Key</Link>
-        </Button>
-        <div className="flex shadow-xs rounded-md w-full lg:w-1/3">
-          <div className="relative flex items-center w-full -me-[1px] z-1">
-            <Input
-              placeholder="Search with email..."
-              className="rounded-e-none shadow-none md:text-base h-auto px-3 py-1.5 pe-9"
+      <div className="flex flex-col lg:flex-row lg:justify-between gap-3 items-start mb-4">
+        <div className="flex space-x-6">
+          <TooltipWrapper text="Create license key">
+            <Button asChild variant="outline" className="md:w-auto h-auto text-base px-3 py-1.5 inline-block">
+              <Link href="/license-key/new"><Plus className="icon" /> Create</Link>
+            </Button>
+          </TooltipWrapper>
+
+          <div className="flex space-x-3">
+            <FiltersPopover
+              onFilter={handleFilter}
+              isFilterActive={isFilterActive}
               disabled={isFetchingLK || isSearching}
-              ref={searchRef}
-              onKeyUp={handleEnterSearch}
             />
-            {searchedLicenseKey ? (
-              <TooltipProvider>
-                <Tooltip delayDuration={1000}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      className="absolute right-2 w-4 h-5 p-0 z-1"
-                      variant="ghost"
-                      onClick={handleClearSearchInput}
-                      disabled={isSearching}
-                    >
-                      <X className="size-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent className="px-3 py-2 pb-2.5 text-sm">
-                    <p>Clear search input</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ) : null}
+            <Button
+              variant="outline"
+              className="text-base px-3 py-1.5 h-auto"
+              disabled={isFetchingLK
+                || isSearching
+                || Object.keys(rowSelection).length <= 0
+                || isRegenerating}
+              onClick={handleSetCanRegenerate}
+            >Set Can Regenerate</Button>
           </div>
-          <Button
-            variant="secondary"
-            className="border shadow-none rounded-s-none h-auto text-base px-3 py-1.5 focus:z-2"
-            disabled={isFetchingLK || isSearching}
-            onClick={handleSubmitSearch}
-          >
-            <Search />
-          </Button>
+        </div>
+        <div className="flex space-x-3 max-lg:w-full w-2/5">
+          <div className="flex shadow-xs rounded-md flex-1">
+            <div className="relative flex items-center -me-[1px] z-1 flex-1">
+              <Input
+                placeholder="Search with email..."
+                className="rounded-e-none shadow-none md:text-base h-auto px-3 py-1.5 pe-9"
+                disabled={isFetchingLK || isSearching}
+                ref={searchRef}
+                onKeyUp={handleEnterSearch}
+                autoComplete="off"
+              />
+              {searchedLicenseKey ? (
+                <TooltipWrapper text="Clear search input">
+                  <Button
+                    className="absolute right-2 w-4 h-5 p-0 z-1"
+                    variant="ghost"
+                    onClick={handleClearSearchInput}
+                    disabled={isSearching}
+                  >
+                    <X className="size-4" />
+                  </Button>
+                </TooltipWrapper>
+              ) : null}
+            </div>
+            <Button
+              variant="secondary"
+              className="border shadow-none rounded-s-none h-auto text-base px-3 py-1.5 focus:z-2"
+              disabled={isFetchingLK || isSearching}
+              onClick={() => handleSearch(filters)}
+            >
+              <Search />
+            </Button>
+          </div>
+
+          <DropdownMenu>
+            <TooltipWrapper text="Manage columns">
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="px-3 py-1.5 h-auto">
+                  <Columns />
+                </Button>
+              </DropdownMenuTrigger>
+            </TooltipWrapper>
+            <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
+              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
+              {Object.entries(columnVisibility).map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column[0]}
+                  className="capitalize text-base hover:cursor-pointer"
+                  checked={column[1]}
+                  onCheckedChange={(value) =>
+                    setColumnVisibility({
+                      ...columnVisibility,
+                      [column[0]]: value,
+                    })}
+                >
+                  {column[0].replace('_', ' ')}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      {(statusLK === 'pending') || (isFetchingLK && !isRerender.current) || isSearching ? (
+      {statusLK === 'pending'
+        || (isFetchingLK && !isRerender.current)
+        || (isSearching && !searchedLicenseKey) ? (
         <TablePaginationSekeleton pagination={!isSearching} />
       ) : isErrorLK ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
@@ -285,11 +461,15 @@ export default function LicenseKeysTable() {
         <DataTable
           licenseKey={licenseKey}
           pageInfo={pageInfo}
-          onPagination={handlePagination}
-          pagination={pagination}
+          tableState={{ pagination, rowSelection, columnVisibility }}
+          tableHandler={{ 
+            onPaginationChange: handlePaginationChange,
+            onRowSelectionChange: setRowSelection,
+            onColumnVisibilityChange: setColumnVisibility,
+            onDelete: deleteMutation.mutate,
+          }}
           isPlaceholderData={isPlaceholderDataLK}
-          searchKey={searchRef?.current?.value}
-          deleteMutation={deleteMutation}
+          hasSearched={!!searchedLicenseKey}
         />
       )}
 

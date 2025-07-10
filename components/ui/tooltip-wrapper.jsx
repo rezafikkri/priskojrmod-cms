@@ -5,12 +5,16 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export default function TooltipWrapper({ children, text }) {
+export default function TooltipWrapper({
+  children,
+  text,
+  background = 'bg-primary',
+}) {
   return (
     <TooltipProvider>
-      <Tooltip delayDuration={1000}>
+      <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent className="px-3 py-2 pb-2.5 text-sm">
+        <TooltipContent className="font-semibold py-2 px-2" background={background}>
           <p>{text}</p>
         </TooltipContent>
       </Tooltip>

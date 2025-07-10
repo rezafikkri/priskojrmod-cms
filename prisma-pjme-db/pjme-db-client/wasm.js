@@ -141,15 +141,18 @@ exports.Prisma.OwnerScalarFieldEnum = {
   first_name: 'first_name',
   last_name: 'last_name',
   sm_username: 'sm_username',
-  picture: 'picture'
+  picture: 'picture',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.CustomerScalarFieldEnum = {
   id: 'id',
+  oauth_id: 'oauth_id',
+  is_banned: 'is_banned',
   first_name: 'first_name',
   last_name: 'last_name',
   email: 'email',
-  password: 'password',
   phone_number: 'phone_number',
   picture: 'picture',
   last_active: 'last_active'
@@ -157,14 +160,24 @@ exports.Prisma.CustomerScalarFieldEnum = {
 
 exports.Prisma.LicenseScalarFieldEnum = {
   id: 'id',
-  content: 'content',
+  created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.LicenseTranslationScalarFieldEnum = {
+  id: 'id',
+  license_id: 'license_id',
+  language: 'language',
+  name: 'name',
+  content: 'content'
 };
 
 exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  slug: 'slug'
+  slug: 'slug',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
@@ -175,12 +188,21 @@ exports.Prisma.ProductScalarFieldEnum = {
   license_id: 'license_id',
   name: 'name',
   slug: 'slug',
-  description: 'description',
-  changelog: 'changelog',
   price_type: 'price_type',
   download_link: 'download_link',
+  is_published: 'is_published',
+  is_pinned: 'is_pinned',
+  created_at: 'created_at',
   released_at: 'released_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.ProductTranslationScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  language: 'language',
+  description: 'description',
+  changelog: 'changelog'
 };
 
 exports.Prisma.ProductDiscountScalarFieldEnum = {
@@ -221,14 +243,22 @@ exports.Prisma.ProductPriceScalarFieldEnum = {
   price: 'price'
 };
 
-exports.Prisma.TermAndConditionScalarFieldEnum = {
+exports.Prisma.TermsOfServiceScalarFieldEnum = {
   id: 'id',
-  content: 'content',
+  created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.TermsOfServiceTranslationScalarFieldEnum = {
+  id: 'id',
+  terms_of_service_id: 'terms_of_service_id',
+  language: 'language',
+  content: 'content'
 };
 
 exports.Prisma.PrivacyPolicyScalarFieldEnum = {
   id: 'id',
+  created_at: 'created_at',
   updated_at: 'updated_at'
 };
 
@@ -252,7 +282,8 @@ exports.Prisma.AboutUsTranslationScalarFieldEnum = {
 
 exports.Prisma.FaqScalarFieldEnum = {
   id: 'id',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.FaqTranslationScalarFieldEnum = {
@@ -282,14 +313,14 @@ exports.CurrencyCode = exports.$Enums.CurrencyCode = {
   USD: 'USD'
 };
 
-exports.PriceType = exports.$Enums.PriceType = {
-  paid: 'paid',
-  free: 'free'
-};
-
 exports.Language = exports.$Enums.Language = {
   id: 'id',
   en: 'en'
+};
+
+exports.PriceType = exports.$Enums.PriceType = {
+  paid: 'paid',
+  free: 'free'
 };
 
 exports.Prisma.ModelName = {
@@ -298,14 +329,17 @@ exports.Prisma.ModelName = {
   Owner: 'Owner',
   Customer: 'Customer',
   License: 'License',
+  LicenseTranslation: 'LicenseTranslation',
   Category: 'Category',
   Product: 'Product',
+  ProductTranslation: 'ProductTranslation',
   ProductDiscount: 'ProductDiscount',
   ProductCoupon: 'ProductCoupon',
   ProductImage: 'ProductImage',
   ProductVariant: 'ProductVariant',
   ProductPrice: 'ProductPrice',
-  TermAndCondition: 'TermAndCondition',
+  TermsOfService: 'TermsOfService',
+  TermsOfServiceTranslation: 'TermsOfServiceTranslation',
   PrivacyPolicy: 'PrivacyPolicy',
   PrivacyPolicyTranslation: 'PrivacyPolicyTranslation',
   AboutUs: 'AboutUs',

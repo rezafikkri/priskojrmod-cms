@@ -46,6 +46,7 @@ export default function FormFields({
                     formState={formState}
                     activeLang={Language.ID}
                     {...(isResetEditor && { isResetEditor })}
+                    description="Enter faq content."
                   />
                 )}
               />
@@ -69,6 +70,7 @@ export default function FormFields({
                     formState={formState}
                     activeLang={Language.EN}
                     {...(isResetEditor && { isResetEditor })}
+                    description="Enter faq content."
                   />
                 )}
               />

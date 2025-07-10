@@ -3,7 +3,7 @@ import FormSkeleton from '@/components/loadings/form-skeleton';
 import { Suspense } from 'react';
 
 export const metadata = {
-  title: 'Edit License Key - Prisko Jr Mod',
+  title: 'Edit License Key',
 };
 
 export default async function LicenseKeyEditPage({ params }) {

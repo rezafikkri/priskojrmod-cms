@@ -1,7 +1,7 @@
 import LicenseKeysTable from '@/components/license-key/license-keys-table';
 
 export const metadata = {
-  title: 'License Key - Prisko Jr Mod',
+  title: 'License Key',
 };
 
 export default async function LicenseKeyListPage() {
