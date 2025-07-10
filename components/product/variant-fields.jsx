@@ -21,6 +21,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import { Separator } from '../ui/separator';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function VariantFields({
   form,
@@ -35,6 +36,7 @@ export default function VariantFields({
     onDecrementPending,
   } = handlers;
   const [deletingIds, setDeletingIds] = useState([]);
+  const queryClient = useQueryClient();
 
   function handleAdd() {
     onAppend({
@@ -60,6 +62,8 @@ export default function VariantFields({
         if (currentVariants.length <= 1) {
           handleAdd();
         }
+
+        queryClient.invalidateQueries({ queryKey: ['products'] });
       } else {
         toast.error(removeRes.message);
         return;

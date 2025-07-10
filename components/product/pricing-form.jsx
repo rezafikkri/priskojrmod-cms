@@ -32,6 +32,7 @@ import DiscountFields from './discount-fields';
 import CouponFields from './coupon-fields';
 import useEditPendingTracker from '@/hooks/use-edit-pending-tracker';
 import { Separator } from '../ui/separator';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function PricingForm({
   onPrevStep,
@@ -55,6 +56,8 @@ export default function PricingForm({
     setExtras = useProductFormStore(state => state.setExtras);
     pricingSchema = editProductPricingSchema;
   }
+
+  const queryClient = useQueryClient();
 
   function getDefaultPrices(priceType) {
     if (priceType === PriceType.FREE) return [];
@@ -271,6 +274,8 @@ export default function PricingForm({
         form.reset(newPricing);
         toast.success('Product updated successfully.');
       }
+
+      queryClient.invalidateQueries({ queryKey: ['products'] });
     } else {
       toast.error(saveRes.message);
     }

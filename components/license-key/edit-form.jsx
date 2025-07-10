@@ -36,7 +36,7 @@ export default function EditForm({
   licenseKey,
 }) {
   // Get QueryClient from the context
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const [licenseKeyExpire, setLicenseKeyExpire] = useState(() => {
     return formatDateTimeWIB(licenseKey.parsedKey.exp);
   });
@@ -62,8 +62,8 @@ export default function EditForm({
     const editRes = await editLicenseKey(data);
 
     if (editRes.status === 'success') {
-      await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
-      await queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+      queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
+      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       form.setValue('old_key', editRes.data.key);
       form.setValue('old_secret_key_id', editRes.data.secret_key_id);
       form.setValue('change_expiration_date', false);

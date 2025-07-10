@@ -1,7 +1,5 @@
 import ProductsTable from '@/components/product/products-table';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
   title: 'Products',
 };

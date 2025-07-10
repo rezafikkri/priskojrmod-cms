@@ -49,7 +49,7 @@ export default function CreateForm({
   async function handleSubmit(data) {
     const addRes = await addLicenseKey(data);
     if (addRes.status === 'success') {
-      await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
+      queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
       form.reset();
       toast.success('License Key created successfully.');
     } else {

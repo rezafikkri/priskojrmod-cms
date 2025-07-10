@@ -68,6 +68,8 @@ export default function ProductsTable() {
         return newProduct;
       });
     },
+    staleTime: 1000 * 20,
+    gcTime: 1000 * 60,
   });
 
   async function handleEditPinnedStatus({ id, name, isPinned }) {
