@@ -89,7 +89,7 @@ export default function CreateForm({ products }) {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between w-full shadow-none font-normal text-base min-h-9.5 h-auto px-3 py-1.5",
+                          "justify-between w-full shadow-none font-normal text-base min-h-9.5 h-auto px-3 py-1.5",
                           !field.value && "text-muted-foreground"
                         )}
                         disabled={isSubmitting}
@@ -103,7 +103,7 @@ export default function CreateForm({ products }) {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="p-0" align="start">
                     <Command>
                       <CommandInput
                         placeholder="Search a product..."
