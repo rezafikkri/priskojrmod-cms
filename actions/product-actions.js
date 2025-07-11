@@ -87,7 +87,7 @@ export async function removeProductImage(id, productId) {
 export async function editProduct(data) {
   try {
     const updatedData = await updateProduct(data);
-    return { status: 'success', data: updatedData };
+    return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };
   }
