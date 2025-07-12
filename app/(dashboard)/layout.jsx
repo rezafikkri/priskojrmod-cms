@@ -4,7 +4,7 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { ThemeProvider } from '@/components/theme-provider';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-siderbar';
+import { AppSidebar } from '@/components/layout/app-sidebar';
 import SessionProvider from '@/components/session-provider';
 import ReactQueryProvider from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/sonner';
