@@ -155,7 +155,9 @@ exports.Prisma.CustomerScalarFieldEnum = {
   email: 'email',
   phone_number: 'phone_number',
   picture: 'picture',
-  last_active: 'last_active'
+  last_active: 'last_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.LicenseScalarFieldEnum = {

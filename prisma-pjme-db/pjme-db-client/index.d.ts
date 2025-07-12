@@ -6508,10 +6508,14 @@ export namespace Prisma {
 
   export type CustomerAvgAggregateOutputType = {
     last_active: number | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type CustomerSumAggregateOutputType = {
     last_active: bigint | null
+    created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type CustomerMinAggregateOutputType = {
@@ -6524,6 +6528,8 @@ export namespace Prisma {
     phone_number: string | null
     picture: string | null
     last_active: bigint | null
+    created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type CustomerMaxAggregateOutputType = {
@@ -6536,6 +6542,8 @@ export namespace Prisma {
     phone_number: string | null
     picture: string | null
     last_active: bigint | null
+    created_at: bigint | null
+    updated_at: bigint | null
   }
 
   export type CustomerCountAggregateOutputType = {
@@ -6548,16 +6556,22 @@ export namespace Prisma {
     phone_number: number
     picture: number
     last_active: number
+    created_at: number
+    updated_at: number
     _all: number
   }
 
 
   export type CustomerAvgAggregateInputType = {
     last_active?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type CustomerSumAggregateInputType = {
     last_active?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type CustomerMinAggregateInputType = {
@@ -6570,6 +6584,8 @@ export namespace Prisma {
     phone_number?: true
     picture?: true
     last_active?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type CustomerMaxAggregateInputType = {
@@ -6582,6 +6598,8 @@ export namespace Prisma {
     phone_number?: true
     picture?: true
     last_active?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type CustomerCountAggregateInputType = {
@@ -6594,6 +6612,8 @@ export namespace Prisma {
     phone_number?: true
     picture?: true
     last_active?: true
+    created_at?: true
+    updated_at?: true
     _all?: true
   }
 
@@ -6693,6 +6713,8 @@ export namespace Prisma {
     phone_number: string | null
     picture: string | null
     last_active: bigint | null
+    created_at: bigint
+    updated_at: bigint
     _count: CustomerCountAggregateOutputType | null
     _avg: CustomerAvgAggregateOutputType | null
     _sum: CustomerSumAggregateOutputType | null
@@ -6724,6 +6746,8 @@ export namespace Prisma {
     phone_number?: boolean
     picture?: boolean
     last_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["customer"]>
 
   export type CustomerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6736,6 +6760,8 @@ export namespace Prisma {
     phone_number?: boolean
     picture?: boolean
     last_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["customer"]>
 
   export type CustomerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6748,6 +6774,8 @@ export namespace Prisma {
     phone_number?: boolean
     picture?: boolean
     last_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["customer"]>
 
   export type CustomerSelectScalar = {
@@ -6760,9 +6788,11 @@ export namespace Prisma {
     phone_number?: boolean
     picture?: boolean
     last_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }
 
-  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "oauth_id" | "is_banned" | "first_name" | "last_name" | "email" | "phone_number" | "picture" | "last_active", ExtArgs["result"]["customer"]>
+  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "oauth_id" | "is_banned" | "first_name" | "last_name" | "email" | "phone_number" | "picture" | "last_active" | "created_at" | "updated_at", ExtArgs["result"]["customer"]>
 
   export type $CustomerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Customer"
@@ -6777,6 +6807,8 @@ export namespace Prisma {
       phone_number: string | null
       picture: string | null
       last_active: bigint | null
+      created_at: bigint
+      updated_at: bigint
     }, ExtArgs["result"]["customer"]>
     composites: {}
   }
@@ -7209,6 +7241,8 @@ export namespace Prisma {
     readonly phone_number: FieldRef<"Customer", 'String'>
     readonly picture: FieldRef<"Customer", 'String'>
     readonly last_active: FieldRef<"Customer", 'BigInt'>
+    readonly created_at: FieldRef<"Customer", 'BigInt'>
+    readonly updated_at: FieldRef<"Customer", 'BigInt'>
   }
     
 
@@ -27503,7 +27537,9 @@ export namespace Prisma {
     email: 'email',
     phone_number: 'phone_number',
     picture: 'picture',
-    last_active: 'last_active'
+    last_active: 'last_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
   };
 
   export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
@@ -28031,6 +28067,8 @@ export namespace Prisma {
     phone_number?: StringNullableFilter<"Customer"> | string | null
     picture?: StringNullableFilter<"Customer"> | string | null
     last_active?: BigIntNullableFilter<"Customer"> | bigint | number | null
+    created_at?: BigIntFilter<"Customer"> | bigint | number
+    updated_at?: BigIntFilter<"Customer"> | bigint | number
   }
 
   export type CustomerOrderByWithRelationInput = {
@@ -28043,6 +28081,8 @@ export namespace Prisma {
     phone_number?: SortOrderInput | SortOrder
     picture?: SortOrderInput | SortOrder
     last_active?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type CustomerWhereUniqueInput = Prisma.AtLeast<{
@@ -28058,6 +28098,8 @@ export namespace Prisma {
     phone_number?: StringNullableFilter<"Customer"> | string | null
     picture?: StringNullableFilter<"Customer"> | string | null
     last_active?: BigIntNullableFilter<"Customer"> | bigint | number | null
+    created_at?: BigIntFilter<"Customer"> | bigint | number
+    updated_at?: BigIntFilter<"Customer"> | bigint | number
   }, "id" | "oauth_id" | "email">
 
   export type CustomerOrderByWithAggregationInput = {
@@ -28070,6 +28112,8 @@ export namespace Prisma {
     phone_number?: SortOrderInput | SortOrder
     picture?: SortOrderInput | SortOrder
     last_active?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     _count?: CustomerCountOrderByAggregateInput
     _avg?: CustomerAvgOrderByAggregateInput
     _max?: CustomerMaxOrderByAggregateInput
@@ -28090,6 +28134,8 @@ export namespace Prisma {
     phone_number?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     picture?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     last_active?: BigIntNullableWithAggregatesFilter<"Customer"> | bigint | number | null
+    created_at?: BigIntWithAggregatesFilter<"Customer"> | bigint | number
+    updated_at?: BigIntWithAggregatesFilter<"Customer"> | bigint | number
   }
 
   export type LicenseWhereInput = {
@@ -29301,6 +29347,8 @@ export namespace Prisma {
     phone_number?: string | null
     picture?: string | null
     last_active?: bigint | number | null
+    created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type CustomerUncheckedCreateInput = {
@@ -29313,6 +29361,8 @@ export namespace Prisma {
     phone_number?: string | null
     picture?: string | null
     last_active?: bigint | number | null
+    created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type CustomerUpdateInput = {
@@ -29325,6 +29375,8 @@ export namespace Prisma {
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
     last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type CustomerUncheckedUpdateInput = {
@@ -29337,6 +29389,8 @@ export namespace Prisma {
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
     last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type CustomerCreateManyInput = {
@@ -29349,6 +29403,8 @@ export namespace Prisma {
     phone_number?: string | null
     picture?: string | null
     last_active?: bigint | number | null
+    created_at: bigint | number
+    updated_at: bigint | number
   }
 
   export type CustomerUpdateManyMutationInput = {
@@ -29361,6 +29417,8 @@ export namespace Prisma {
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
     last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type CustomerUncheckedUpdateManyInput = {
@@ -29373,6 +29431,8 @@ export namespace Prisma {
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
     last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type LicenseCreateInput = {
@@ -30611,10 +30671,14 @@ export namespace Prisma {
     phone_number?: SortOrder
     picture?: SortOrder
     last_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type CustomerAvgOrderByAggregateInput = {
     last_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type CustomerMaxOrderByAggregateInput = {
@@ -30627,6 +30691,8 @@ export namespace Prisma {
     phone_number?: SortOrder
     picture?: SortOrder
     last_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type CustomerMinOrderByAggregateInput = {
@@ -30639,10 +30705,14 @@ export namespace Prisma {
     phone_number?: SortOrder
     picture?: SortOrder
     last_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type CustomerSumOrderByAggregateInput = {
     last_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type UuidWithAggregatesFilter<$PrismaModel = never> = {
