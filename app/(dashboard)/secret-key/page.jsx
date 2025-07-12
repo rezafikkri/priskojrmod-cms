@@ -7,7 +7,7 @@ import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import { Plus } from 'lucide-react';
 
 export const metadata = {
-  title: 'Secret Key',
+  title: 'Secret Keys',
 };
 
 export default async function SecretKeyListPage() {

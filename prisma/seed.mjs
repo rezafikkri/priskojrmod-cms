@@ -5,7 +5,7 @@ import { PrismaClient as PjmeDBPrismaClient } from '../prisma-pjme-db/pjme-db-cl
 
 const pjmaDBPrismaClient = new PjmaDBPrismaClient();
 const pjmeDBPrismaClient = new PjmeDBPrismaClient();
-const SECRET = '36b5d3c2f8cf596ffc0bdb8d5ced264f9d6e1728ef61db686414f16aa3007a95'; 
+const SECRET = '5de3e16bd10629f8e26240c2e3fcc7d15f9c46a85a0285f5ca022d609e5071e3'; 
 
 function generateLicenseKeyPayload(email) {
   const expiresAt = new Date();
@@ -26,10 +26,10 @@ function generateJwtKey(payload) {
 
 async function main() {
   // seed license keys
-  const secretKeyId = 1n;
+  const secretKeyId = 13n;
   const licenseKeys = [];
 
-  for (let i = 0; i < 124; i++) {
+  for (let i = 0; i < 50; i++) {
     const email = faker.internet.email().toLowerCase();
     const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
     const payload = generateLicenseKeyPayload(email);
