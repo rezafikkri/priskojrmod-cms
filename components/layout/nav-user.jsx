@@ -66,7 +66,7 @@ export function NavUser() {
                     alt={session.user.name}
                     loading="lazy"
                     decoding="async"
-                    className="size-8 rounded-full"
+                    className="size-8 rounded-full object-cover"
                   />
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{session.user.name}</span>

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import FormFields from './form-fields';
 import { createCustomerSchema } from '@/lib/validators/customer-validator';
+import { addCustomer } from '@/actions/customer-actions';
 
 export default function CreateForm() {
   const form = useForm({
@@ -18,7 +19,7 @@ export default function CreateForm() {
   });
 
   async function handleSubmit(data) {
-    // const addRes = await addOwner(data);
+    const addRes = await addCustomer(data);
     if (addRes.status === 'success') {
       form.reset();
       toast.success('Customer created successfully.');
