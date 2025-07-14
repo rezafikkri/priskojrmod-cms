@@ -28,9 +28,9 @@ export default function FiltersPopover({
   const [showBanned, setShowBanned] = useState(false);
 
   function handleClear() {
-    set('all');
     setShowBanned(false);
-    onFilter({ action: 'clear' });
+    // set filters to default value
+    onFilter({ showBanned: false });
   }
 
   return (
@@ -38,10 +38,13 @@ export default function FiltersPopover({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="text-base px-3 py-1.5 h-auto"
+          className="text-base px-3 py-1.5 h-auto relative inline-block"
           disabled={disabled}
         >
-          <Filter />Filter
+          <Filter className="icon" /> Filter
+          {isFilterActive && (
+            <span className="absolute top-0 right-0 inline-block size-2.5 rounded-full bg-primary dark:bg-green-500 -mt-1 -me-1" />
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -85,10 +88,7 @@ export default function FiltersPopover({
           <PopoverClose asChild>
             <Button 
               className="text-base px-3 py-1.5 h-auto border border-primary" 
-              onClick={() => onFilter({
-                action: 'apply',
-                newFilters: { showBanned },
-              })} 
+              onClick={() => onFilter({ showBanned })} 
               disabled={!showBanned}
             > 
               Apply 

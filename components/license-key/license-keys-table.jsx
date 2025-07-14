@@ -402,7 +402,7 @@ export default function LicenseKeysTable() {
                     className="absolute right-2 w-4 h-5 p-0 z-1"
                     variant="ghost"
                     onClick={handleClearSearchInput}
-                    disabled={isSearching}
+                    disabled={isFetchingLK || isSearching}
                   >
                     <X className="size-4" />
                   </Button>

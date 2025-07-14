@@ -5,7 +5,6 @@ import { PrismaClient as PjmeDBPrismaClient } from '../prisma-pjme-db/pjme-db-cl
 
 const pjmaDBPrismaClient = new PjmaDBPrismaClient();
 const pjmeDBPrismaClient = new PjmeDBPrismaClient();
-const SECRET = '5de3e16bd10629f8e26240c2e3fcc7d15f9c46a85a0285f5ca022d609e5071e3'; 
 
 function generateLicenseKeyPayload(email) {
   const expiresAt = new Date();
@@ -20,25 +19,27 @@ function generateLicenseKeyPayload(email) {
   };
 }
 
-function generateJwtKey(payload) {
-  return jwt.sign(payload, SECRET);
+function generateJwtKey(payload, secret) {
+  return jwt.sign(payload, secret);
 }
 
 async function main() {
   // seed license keys
-  const secretKeyId = 13n;
   const licenseKeys = [];
 
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 120; i++) {
     const email = faker.internet.email().toLowerCase();
     const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
+    const secret = await pjmaDBPrismaClient.secretKeyLicense.findFirst({
+      select: { id: true, key: true },
+    });
     const payload = generateLicenseKeyPayload(email);
-    const key = generateJwtKey(payload);
+    const key = generateJwtKey(payload, secret.key);
 
     licenseKeys.push({
       email,
       key,
-      secret_key_id: secretKeyId,
+      secret_key_id: secret.id,
       used_for_activate: false,
       used_for_download: false,
       created_at: currentTime,
@@ -71,6 +72,37 @@ async function main() {
     });
     console.log(`✅ Seeded admin fikkri.reza@gmail.com`);
   }
+
+  // seed customers
+  const customers = [];
+  for (let i = 0; i < 160; i++) {
+    const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
+    const createData = {
+      first_name: faker.person.firstName(),
+      last_name: faker.person.lastName(),
+      email: faker.internet.email().toLowerCase(),
+      created_at: currentTime,
+      updated_at: currentTime,
+    };
+
+    if (i % 2 === 0) {
+      createData.is_banned = true;
+    }
+    if (i % 3 === 0) {
+      createData.phone_number = faker.phone.number({ style: 'international' });
+    }
+    if (i % 4 === 0) {
+      createData.picture = 'https://images.pexels.com/photos/29881401/pexels-photo-29881401.jpeg';
+    }
+
+    customers.push(createData);
+  }
+
+  await pjmeDBPrismaClient.customer.createMany({
+    data: customers,
+  });
+
+  console.log(`✅ Seeded ${customers.length} customers`);
 }
 
 main()

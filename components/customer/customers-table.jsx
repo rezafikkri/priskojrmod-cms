@@ -1,11 +1,9 @@
 'use client';
 
 import DataTable from './data-table';
-import { Search, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { Columns } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,16 +12,111 @@ import {
   DropdownMenuCheckboxItem,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
+import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { generatePageInfo } from '@/lib/utils';
+import {
+  Alert,
+  AlertTitle,
+} from '@/components/ui/alert';
+import { AlertCircle, Search, X, Plus, Columns } from 'lucide-react';
+import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
+import { RotateCw } from 'lucide-react';
 
 export default function CustomersTable() {
+  const queryClient = useQueryClient();
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchedLicenseKey, setSearchedLicenseKey] = useState(null);
+  const searchRef = useRef(null);
+
+  // filters state
+  const [filters, setFilters] = useState({ showBanned: false });
+  const [isFilterActive, setIsFilterActive] = useState(false);
+
+  // table state
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: process.env.NEXT_PUBLIC_PAGE_SIZE,
+  });
   const [columnVisibility, setColumnVisibility] = useState({
     last_active: true,
     created_at: false,
     updated_at: false,
   });
+
+  const {
+    data: dataC,
+    isFetching: isFetchingC,
+    status: statusC,
+    isError: isErrorC,
+    error: errorC,
+    isPlaceholderData: isPlaceholderDataC,
+  } = useQuery({
+    queryKey: ['customers', pagination.pageIndex, filters],
+    queryFn: async () => {
+      let toastId;
+      if (statusC !== 'pending') {
+        toastId = toast.loading('Loading License Keys...');
+      }
+
+      const res = await fetch(`/api/customers?pi=${pagination.pageIndex}&ib=${filters.showBanned}`);
+      const resJson = await res.json();
+
+      if (toastId) {
+        toast.dismiss(toastId);
+      }
+      if (!res.ok) {
+        throw new UnknownError('An unexpected error occurred. Please try reloading the page!');
+      }
+
+      return resJson;
+    },
+    placeholderData: keepPreviousData,
+    staleTime: 1000 * 20,
+    gcTime: 1000 * 60 * 3,
+  });
+
+  // set isFilterActive when apply and clear
+  function syncIsFilterActive(appliedFilters) {
+    if (appliedFilters.showBanned && !isFilterActive) {
+      setIsFilterActive(true);
+    } else if (!appliedFilters.showBanned && isFilterActive) {
+      setIsFilterActive(false);
+    }
+  }
+
+  async function handleFilter(newFilters) {
+    if (searchedLicenseKey) {
+      handleSearch(newFilters);
+    }
+
+    // set filters for trigger refetch in normal mode
+    setFilters(newFilters);
+    syncIsFilterActive(newFilters);
+  }
+
+  function handleRefresh() {
+    queryClient.invalidateQueries({ queryKey: ['customers'] });
+    queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
+  }
+
+  let customer;
+  if (dataC) {
+    customer = dataC.data;
+  }
+
+  // generate pageInfo like this: 1-10 of 20
+  const pageInfo = useMemo(() => {
+    return generatePageInfo({
+      pageIndex: pagination.pageIndex,
+      totalData: customer?.rowCount,
+      totalDataPerPage: customer?.customers?.length,
+      searchKey: searchRef?.current?.value,
+      isTooMany: customer?.isTooMany,
+    });
+  }, [customer]);
 
   return (
     <>
@@ -36,10 +129,20 @@ export default function CustomersTable() {
           </TooltipWrapper>
 
           <div className="flex space-x-3">
+            <TooltipWrapper text="Refresh">
+              <Button
+                variant="outline"
+                className="text-base px-3 py-1.5 h-auto inline-block"
+                disabled={isFetchingC || isSearching}
+                onClick={handleRefresh}
+              >
+                <RotateCw className="icon" />
+              </Button>
+            </TooltipWrapper>
             <FiltersPopover
-              onFilter = {() => {}}
-              isFilterActive = {false}
-              disabled = {false}
+              onFilter={handleFilter}
+              isFilterActive={isFilterActive}
+              disabled={isFetchingC || isSearching}
             />
            </div>
         </div>
@@ -51,18 +154,22 @@ export default function CustomersTable() {
                 className="rounded-e-none shadow-none md:text-base h-auto px-3 py-1.5 pe-9"
                 autoComplete="off"
               />
+              {searchedLicenseKey ? (
                 <TooltipWrapper text="Clear search input">
                   <Button
                     className="absolute right-2 w-4 h-5 p-0 z-1"
                     variant="ghost"
+                    disabled={isFetchingC || isSearching}
                   >
-                    <X className="size-4" />
+                    <X className="icon" />
                   </Button>
                 </TooltipWrapper>
+              ) : null}
             </div>
             <Button
               variant="secondary"
               className="border shadow-none rounded-s-none h-auto text-base px-3 py-1.5 focus:z-2"
+              disabled={isFetchingC || isSearching}
             >
               <Search />
             </Button>
@@ -97,21 +204,31 @@ export default function CustomersTable() {
         </div>
       </div>
 
-      <DataTable
-        customer={{
-          customers: [],
-          rowCount: 0,
-          isTooMany: false,
-        }}
-        tableState={{
-          columnVisibility,
-        }}
-        tableHandler={{
-          onColumnVisibilityChange: setColumnVisibility,
-        }}
-      />
+      {statusC === 'pending' || (isSearching && !searchedLicenseKey) ? (
+        <TablePaginationSekeleton pagination={!isSearching} />
+      ) : isErrorC ? (
+        <Alert variant="destructive" className="border-destructive/50 text-base">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>{errorC.message}</AlertTitle>
+        </Alert>
+      ) : (
+        <DataTable
+          customer={customer}
+          pageInfo={pageInfo}
+          tableState={{
+            columnVisibility,
+            pagination,
+          }}
+          tableHandler={{
+            onPaginationChange: (paginationData) => setPagination(paginationData),
+            onColumnVisibilityChange: setColumnVisibility,
+          }}
+          isPlaceholderData={isPlaceholderDataC}
+        />
+      )}
 
       <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: <i>Last Active</i> indicates the most recent recorded activity and is updated every 24 hours. This may not reflect real-time status.</small>
+      <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: Only customers who have never signed in, have been inactive for more than 30 days, do not have any license keys associated with their account, or have been banned can be deleted directly.</small>
     </>
   );
 }

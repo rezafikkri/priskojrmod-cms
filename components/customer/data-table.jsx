@@ -39,8 +39,19 @@ export default function DataTable({
 }) {
   const {customers, rowCount, isTooMany} = customer;
   const {
+    onPaginationChange,
     onColumnVisibilityChange,
   } = tableHandler;
+
+  function shouldShowDeleteButton({ oauthId, lastActive, isBanned }) {
+    const now = Math.floor(new Date().getTime() / 1000);
+    return (
+      !oauthId ||
+      !lastActive ||
+      (now - lastActive > (60 * 60 * 24 * 30)) ||
+      isBanned
+    );
+  }
 
   // table definition
   const columns = useMemo(() => [
@@ -92,18 +103,26 @@ export default function DataTable({
               asChild
             >
               <button>
-                Ban
+                {row.original.is_banned === false ? 'Ban' : 'Unban'}
               </button>
             </DropdownMenuItem>
-            <DropdownMenuSeparator className="-mx-1.5" />
-            <DropdownMenuItem
-              className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-              asChild
-            >
-              <button>
-                Delete
-              </button>
-            </DropdownMenuItem>
+            {shouldShowDeleteButton({
+              oauthId: row.original.oauth_id,
+              lastActive: row.getValue('last_active'),
+              isBanned: row.original.is_banned,
+            }) && (
+              <>
+                <DropdownMenuSeparator className="-mx-1.5" />
+                <DropdownMenuItem
+                  className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
+                  asChild
+                >
+                  <button>
+                    Delete
+                  </button>
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       ),
@@ -111,10 +130,13 @@ export default function DataTable({
   ], []);
   const table = useReactTable({
     data: customers,
+    rowCount,
     columns,
     state: tableState,
     getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
     onColumnVisibilityChange,
+    onPaginationChange,
   });
 
   return (
@@ -198,7 +220,7 @@ export default function DataTable({
       ) : null}
 
       {(hasSearched && isTooMany) ? (
-        <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Info</b>: If you haven't found the License Key you're looking for, please use a more specific email!</p>
+        <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Info</b>: If you haven't found the Customer you're looking for, please use a more specific email!</p>
       ) : null}
     </>
   );
