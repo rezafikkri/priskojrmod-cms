@@ -24,11 +24,13 @@ import {
 import { AlertCircle, Search, X, Plus, Columns } from 'lucide-react';
 import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
+import { searchKeySchema } from '@/lib/validators/base-validator';
+import { safeFetch } from '@/lib/safe-fetch';
 
 export default function CustomersTable() {
   const queryClient = useQueryClient();
   const [isSearching, setIsSearching] = useState(false);
-  const [searchedLicenseKey, setSearchedLicenseKey] = useState(null);
+  const [searchedCustomer, setSearchedCustomer] = useState(null);
   const searchRef = useRef(null);
 
   // filters state
@@ -58,25 +60,76 @@ export default function CustomersTable() {
     queryFn: async () => {
       let toastId;
       if (statusC !== 'pending') {
-        toastId = toast.loading('Loading License Keys...');
+        toastId = toast.loading('Loading customers...');
       }
 
-      const res = await fetch(`/api/customers?pi=${pagination.pageIndex}&ib=${filters.showBanned}`);
-      const resJson = await res.json();
-
-      if (toastId) {
-        toast.dismiss(toastId);
-      }
-      if (!res.ok) {
-        throw new UnknownError('An unexpected error occurred. Please try reloading the page!');
-      }
-
-      return resJson;
+      return await safeFetch({
+        url: `/api/customers?pi=${pagination.pageIndex}&ib=${filters.showBanned}`,
+        onFinally: () => {
+          if (toastId) {
+            toast.dismiss(toastId);
+          }
+        },
+      });
     },
     placeholderData: keepPreviousData,
     staleTime: 1000 * 20,
     gcTime: 1000 * 60 * 3,
+    enabled: !searchedCustomer,
   });
+
+  async function handleSearch(appliedFilters) {
+    const keyResult = searchKeySchema.safeParse(searchRef.current.value);
+    if (!keyResult.success) return false;
+    const parsedKey = keyResult.data;
+    
+    try {
+      const result = await queryClient.fetchQuery({
+        queryKey: ['customersSearch', parsedKey, appliedFilters],
+        queryFn: async () => {
+          setIsSearching(true);
+          // if previoesly searchedCustomer is null, then show skeleton loading
+          // for all table, besides that, then show toast loading only
+          let toastId;
+          if (searchedCustomer) {
+            toastId = toast.loading('Searching customers...');
+          }
+
+          return await safeFetch({
+            url: `/api/customers?sk=${parsedKey}&ib=${appliedFilters.showBanned}`,
+            onFinally: () => {
+              if (toastId) {
+                toast.dismiss(toastId);
+              }
+              setIsSearching(false);
+            },
+            errorMessage: 'Something went wrong while searching. Please try again.',
+          });
+        },
+        staleTime: 10000,
+        gcTime: 10000,
+      });
+
+      setSearchedCustomer(result.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function handleEnterSearch(e) {
+    if (e.key === 'Enter') {
+      handleSearch(filters);
+    }
+  }
+
+  function handleClearSearchInput() {
+    setPagination({
+      ...pagination,
+      pageIndex: 0,
+    });
+    setSearchedCustomer(null);
+    searchRef.current.value = '';
+  }
 
   // set isFilterActive when apply and clear
   function syncIsFilterActive(appliedFilters) {
@@ -88,8 +141,13 @@ export default function CustomersTable() {
   }
 
   async function handleFilter(newFilters) {
-    if (searchedLicenseKey) {
+    if (searchedCustomer) {
       handleSearch(newFilters);
+    } else {
+      setPagination({
+        ...pagination,
+        pageIndex: 0,
+      });
     }
 
     // set filters for trigger refetch in normal mode
@@ -100,10 +158,15 @@ export default function CustomersTable() {
   function handleRefresh() {
     queryClient.invalidateQueries({ queryKey: ['customers'] });
     queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
+    if (searchedCustomer) {
+      handleSearch(filters);
+    }
   }
 
   let customer;
-  if (dataC) {
+  if (searchedCustomer) {
+    customer = searchedCustomer;
+  } else if (dataC) {
     customer = dataC.data;
   }
 
@@ -153,12 +216,15 @@ export default function CustomersTable() {
                 placeholder="Search with email..."
                 className="rounded-e-none shadow-none md:text-base h-auto px-3 py-1.5 pe-9"
                 autoComplete="off"
+                ref={searchRef}
+                onKeyUp={handleEnterSearch}
               />
-              {searchedLicenseKey ? (
+              {searchedCustomer ? (
                 <TooltipWrapper text="Clear search input">
                   <Button
                     className="absolute right-2 w-4 h-5 p-0 z-1"
                     variant="ghost"
+                    onClick={handleClearSearchInput}
                     disabled={isFetchingC || isSearching}
                   >
                     <X className="icon" />
@@ -170,6 +236,7 @@ export default function CustomersTable() {
               variant="secondary"
               className="border shadow-none rounded-s-none h-auto text-base px-3 py-1.5 focus:z-2"
               disabled={isFetchingC || isSearching}
+              onClick={() => handleSearch(filters)}
             >
               <Search />
             </Button>
@@ -204,7 +271,7 @@ export default function CustomersTable() {
         </div>
       </div>
 
-      {statusC === 'pending' || (isSearching && !searchedLicenseKey) ? (
+      {statusC === 'pending' || (isSearching && !searchedCustomer) ? (
         <TablePaginationSekeleton pagination={!isSearching} />
       ) : isErrorC ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
@@ -224,6 +291,7 @@ export default function CustomersTable() {
             onColumnVisibilityChange: setColumnVisibility,
           }}
           isPlaceholderData={isPlaceholderDataC}
+          hasSearched={!!searchedCustomer}
         />
       )}
 
