@@ -296,6 +296,26 @@ exports.Prisma.FaqTranslationScalarFieldEnum = {
   content: 'content'
 };
 
+exports.Prisma.FeedbackScalarFieldEnum = {
+  id: 'id',
+  is_read: 'is_read',
+  name: 'name',
+  email: 'email',
+  message: 'message',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.TestimonialScalarFieldEnum = {
+  id: 'id',
+  picture: 'picture',
+  name: 'name',
+  message: 'message',
+  sm_username: 'sm_username',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -347,7 +367,9 @@ exports.Prisma.ModelName = {
   AboutUs: 'AboutUs',
   AboutUsTranslation: 'AboutUsTranslation',
   Faq: 'Faq',
-  FaqTranslation: 'FaqTranslation'
+  FaqTranslation: 'FaqTranslation',
+  Feedback: 'Feedback',
+  Testimonial: 'Testimonial'
 };
 
 /**

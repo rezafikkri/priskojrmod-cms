@@ -36,6 +36,7 @@ const items = {
     subItems: [
       { title: 'List', url: '/customer' },
       { title: 'Feedback', url: '/feedback' },
+      { title: 'Testimonials', url: '/testimonial' },
     ],
   },
   document: {
