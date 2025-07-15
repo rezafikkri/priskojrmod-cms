@@ -116,7 +116,7 @@ export default function DataTable({
         <div className="text-center">{
           row.getValue('is_published')
             ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300/50 dark:text-zinc-800 inline-block" />
+            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
         }</div>
       ),
     },

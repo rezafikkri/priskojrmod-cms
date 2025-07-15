@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Minus } from 'lucide-react';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -22,6 +23,29 @@ export default function FormFields({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-10">
+        {(mode === 'create' || form.getValues('is_banned')) ? (
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Email</FormLabel>
+                <FormControl>
+                  <Input type="email" disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
+                </FormControl>
+                <FormDescription>Enter a valid email address.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : (
+          <FormItem>
+            <FormLabel className="text-base">Email</FormLabel>
+            <p>{form.getValues('email')}</p>
+            <FormDescription>To prevent account misuse, email can only be updated once the user has been banned. This is typically used during account recovery.</FormDescription>
+          </FormItem>
+        )}
+        
         <div className="flex gap-3 items-start">
           <FormField
             control={form.control}
@@ -51,20 +75,15 @@ export default function FormFields({
           />
         </div>
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base">Email</FormLabel>
-              <FormControl>
-                <Input type="email" disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
-              </FormControl>
-              <FormDescription>Enter a valid email address.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {mode === 'edit' ? (
+          <FormItem>
+            <FormLabel className="text-base">Phone Number</FormLabel>
+            <p className="tabular-nums">{form.getValues('phone_number') ?? <Minus className="icon text-zinc-300 dark:text-zinc-700" />}</p>
+            {!form.getValues('phone_number') && (
+              <FormDescription>This information can only be provided by the customer.</FormDescription>
+            )}
+          </FormItem>
+        ) : null}
 
         <FormField
           control={form.control}

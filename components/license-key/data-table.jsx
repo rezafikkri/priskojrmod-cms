@@ -94,7 +94,7 @@ export default function DataTable({
         <div className="text-center">{
           row.getValue('used_for_activate')
             ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300/50 dark:text-zinc-800 inline-block" />
+            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
         }</div>
       ),
       enableHiding: false,
@@ -106,7 +106,7 @@ export default function DataTable({
         <div className="text-center">{
           row.getValue('used_for_download')
             ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300/50 dark:text-zinc-800 inline-block" />
+            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
         }</div>
       ),
       enableHiding: false,
