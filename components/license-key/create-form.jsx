@@ -11,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { Input } from '../ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Select,
@@ -27,6 +26,7 @@ import { Button } from '../ui/button';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { addLicenseKey } from '@/actions/license-key-actions';
 import { useQueryClient } from '@tanstack/react-query';
+import CustomerCombobox from './customer-combobox';
 
 export default function CreateForm({
   secretKeys
@@ -35,11 +35,10 @@ export default function CreateForm({
   const queryClient = useQueryClient();
 
   const form = useForm({
-    resolver: zodResolver(createLicenseKeySchema),
+    // resolver: zodResolver(createLicenseKeySchema),
     defaultValues: {
       secret_key_id: '',
-      email: '',
-      name: '',
+      customer_id: '',
       type: 'online',
     },
   });
@@ -47,6 +46,7 @@ export default function CreateForm({
   const isSubmitting = form.formState.isSubmitting;
 
   async function handleSubmit(data) {
+    console.dir(data);return;
     const addRes = await addLicenseKey(data);
     if (addRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
@@ -93,34 +93,9 @@ export default function CreateForm({
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Customer Name</FormLabel>
-                <FormControl>
-                  <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
-                </FormControl>
-                <FormDescription>Enter the customer name.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Email</FormLabel>
-                <FormControl>
-                  <Input type="email" disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
-                </FormControl>
-                <FormDescription>Enter the customer email.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
+          <CustomerCombobox form={form} disabled={isSubmitting} />
+          
           <FormField
             control={form.control}
             name="type"
