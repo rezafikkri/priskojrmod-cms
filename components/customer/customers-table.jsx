@@ -263,7 +263,6 @@ export default function CustomersTable() {
       totalData: customer?.rowCount,
       totalDataPerPage: customer?.customers?.length,
       searchKey: searchRef?.current?.value,
-      isTooMany: customer?.isTooMany,
     });
   }, [customer]);
 
