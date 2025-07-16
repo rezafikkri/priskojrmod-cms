@@ -1,7 +1,7 @@
 'use client';
 
 import DataTable from './data-table';
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import {
@@ -16,7 +16,7 @@ import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { generatePageInfo } from '@/lib/utils';
+import { generatePageInfo, isLastPage } from '@/lib/utils';
 import {
   Alert,
   AlertTitle,
@@ -26,6 +26,7 @@ import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
+import { editCustomerBanStatus } from '@/actions/customer-actions';
 
 export default function CustomersTable() {
   const queryClient = useQueryClient();
@@ -48,6 +49,17 @@ export default function CustomersTable() {
     updated_at: false,
   });
 
+  // This `useRef` is here to **always keep the newest `searchedCustomer` value**.
+  // We need it because our async function (sent to the child) might "remember"
+  // an old `searchedCustomer` value, which is called a "stale closure" problem.
+  const searchedCustomerRef = useRef(searchedCustomer);
+  const filtersRef = useRef(filters);
+  useEffect(() => {
+    searchedCustomerRef.current = searchedCustomer;
+    filtersRef.current = filters;
+  }, [searchedCustomer, filters]);
+
+
   const {
     data: dataC,
     isFetching: isFetchingC,
@@ -63,7 +75,7 @@ export default function CustomersTable() {
         toastId = toast.loading('Loading customers...');
       }
 
-      return await safeFetch({
+      const results = await safeFetch({
         url: `/api/customers?pi=${pagination.pageIndex}&ib=${filters.showBanned}`,
         onFinally: () => {
           if (toastId) {
@@ -71,6 +83,7 @@ export default function CustomersTable() {
           }
         },
       });
+      return results.data;
     },
     placeholderData: keepPreviousData,
     staleTime: 1000 * 20,
@@ -163,11 +176,84 @@ export default function CustomersTable() {
     }
   }
 
+  const handleEditBanStatus = useCallback(async ({ id, isBanned, pagination }) => {
+    const targetRow = document.querySelector(`#row${id}`);
+    const targetActionBtn = targetRow.querySelector('td > button');
+    targetRow.classList.add('opacity-50');
+    targetActionBtn.setAttribute('disabled', true);
+
+    const toastId = toast.loading(isBanned ? 'Banning customer...' : 'Unbanning customer...');
+
+    const editRes = await editCustomerBanStatus(id, isBanned);
+
+    targetRow.classList.remove('opacity-50');
+    targetActionBtn.removeAttribute('disabled');
+
+    if (editRes.status === 'success') {
+      if (searchedCustomerRef.current) {
+        setSearchedCustomer(prevCustomer => ({
+          ...prevCustomer,
+          customers: prevCustomer.customers.filter(customer => customer.id !== id),
+        }));
+        queryClient.invalidateQueries({ queryKey: ['customers'] });
+      } else {
+        const customer = queryClient.getQueryData(['customers', pagination.pageIndex, filtersRef.current]);
+        const newCustomers = customer.customers.filter(customer => customer.id !== id);
+        const newRowCount = customer.rowCount - 1;
+
+        if (!isLastPage({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          rowCount: customer.rowCount,
+        })) {
+          queryClient.setQueryData(['customers', pagination.pageIndex, filtersRef.current], ({
+            customers: newCustomers,
+            rowCount: newRowCount,
+          }));
+          queryClient.invalidateQueries({ queryKey: ['customers'] });
+        } else {
+          if (newCustomers.length === 0 && newRowCount > 0) {
+            queryClient.removeQueries({
+              queryKey: ['customers', pagination.pageIndex, filtersRef.current],
+              exact: true,
+            });
+            queryClient.setQueryData(
+              [ 'customers', pagination.pageIndex - 1, filtersRef.current ],
+              (oldData) => ({
+                ...oldData,
+                rowCount: newRowCount,
+              }),
+            );
+            setPagination({
+              ...pagination,
+              pageIndex: pagination.pageIndex - 1,
+            });
+          } else {
+            queryClient.setQueryData(['customers', pagination.pageIndex, filtersRef.current], () => ({
+              customers: newCustomers,
+              rowCount: newRowCount,
+            }));
+          }
+
+          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
+        }
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
+      toast.success(
+        isBanned ? 'Customer has been banned successfully.' : 'Customer has been unbanned successfully.',
+        { id: toastId },
+      );
+    } else {
+      toast.error(editRes.message, { id: toastId });
+    }
+  });
+
   let customer;
   if (searchedCustomer) {
     customer = searchedCustomer;
   } else if (dataC) {
-    customer = dataC.data;
+    customer = dataC;
   }
 
   // generate pageInfo like this: 1-10 of 20
@@ -287,8 +373,9 @@ export default function CustomersTable() {
             pagination,
           }}
           tableHandler={{
-            onPaginationChange: (paginationData) => setPagination(paginationData),
+            onPaginationChange: setPagination,
             onColumnVisibilityChange: setColumnVisibility,
+            onEditBanStatus: handleEditBanStatus,
           }}
           isPlaceholderData={isPlaceholderDataC}
           hasSearched={!!searchedCustomer}

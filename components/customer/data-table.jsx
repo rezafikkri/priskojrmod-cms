@@ -41,6 +41,7 @@ export default function DataTable({
   const {
     onPaginationChange,
     onColumnVisibilityChange,
+    onEditBanStatus,
   } = tableHandler;
 
   function shouldShowDeleteButton({ oauthId, lastActive, isBanned }) {
@@ -100,6 +101,11 @@ export default function DataTable({
             </DropdownMenuItem>
             <DropdownMenuItem
               className="w-full text-base"
+              onClick={() => onEditBanStatus({
+                id: row.original.id,
+                isBanned: !row.original.is_banned,
+                pagination: tableState.pagination,
+              })}
               asChild
             >
               <button>
@@ -127,7 +133,7 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], []);
+  ], [tableState.pagination]);
   const table = useReactTable({
     data: customers,
     rowCount,
