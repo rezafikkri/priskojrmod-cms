@@ -2144,6 +2144,7 @@ export namespace Prisma {
   export type LicenseKeyMinAggregateOutputType = {
     id: string | null
     secret_key_id: bigint | null
+    customer_id: string | null
     email: string | null
     key: string | null
     used_for_activate: boolean | null
@@ -2157,6 +2158,7 @@ export namespace Prisma {
   export type LicenseKeyMaxAggregateOutputType = {
     id: string | null
     secret_key_id: bigint | null
+    customer_id: string | null
     email: string | null
     key: string | null
     used_for_activate: boolean | null
@@ -2170,6 +2172,7 @@ export namespace Prisma {
   export type LicenseKeyCountAggregateOutputType = {
     id: number
     secret_key_id: number
+    customer_id: number
     email: number
     key: number
     used_for_activate: number
@@ -2199,6 +2202,7 @@ export namespace Prisma {
   export type LicenseKeyMinAggregateInputType = {
     id?: true
     secret_key_id?: true
+    customer_id?: true
     email?: true
     key?: true
     used_for_activate?: true
@@ -2212,6 +2216,7 @@ export namespace Prisma {
   export type LicenseKeyMaxAggregateInputType = {
     id?: true
     secret_key_id?: true
+    customer_id?: true
     email?: true
     key?: true
     used_for_activate?: true
@@ -2225,6 +2230,7 @@ export namespace Prisma {
   export type LicenseKeyCountAggregateInputType = {
     id?: true
     secret_key_id?: true
+    customer_id?: true
     email?: true
     key?: true
     used_for_activate?: true
@@ -2325,6 +2331,7 @@ export namespace Prisma {
   export type LicenseKeyGroupByOutputType = {
     id: string
     secret_key_id: bigint
+    customer_id: string
     email: string
     key: string
     used_for_activate: boolean
@@ -2357,6 +2364,7 @@ export namespace Prisma {
   export type LicenseKeySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     secret_key_id?: boolean
+    customer_id?: boolean
     email?: boolean
     key?: boolean
     used_for_activate?: boolean
@@ -2371,6 +2379,7 @@ export namespace Prisma {
   export type LicenseKeySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     secret_key_id?: boolean
+    customer_id?: boolean
     email?: boolean
     key?: boolean
     used_for_activate?: boolean
@@ -2385,6 +2394,7 @@ export namespace Prisma {
   export type LicenseKeySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     secret_key_id?: boolean
+    customer_id?: boolean
     email?: boolean
     key?: boolean
     used_for_activate?: boolean
@@ -2399,6 +2409,7 @@ export namespace Prisma {
   export type LicenseKeySelectScalar = {
     id?: boolean
     secret_key_id?: boolean
+    customer_id?: boolean
     email?: boolean
     key?: boolean
     used_for_activate?: boolean
@@ -2409,7 +2420,7 @@ export namespace Prisma {
     regenerated_at?: boolean
   }
 
-  export type LicenseKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "secret_key_id" | "email" | "key" | "used_for_activate" | "used_for_download" | "can_regenerate" | "created_at" | "updated_at" | "regenerated_at", ExtArgs["result"]["licenseKey"]>
+  export type LicenseKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "secret_key_id" | "customer_id" | "email" | "key" | "used_for_activate" | "used_for_download" | "can_regenerate" | "created_at" | "updated_at" | "regenerated_at", ExtArgs["result"]["licenseKey"]>
   export type LicenseKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     secret_key?: boolean | SecretKeyLicenseDefaultArgs<ExtArgs>
   }
@@ -2428,6 +2439,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       secret_key_id: bigint
+      customer_id: string
       email: string
       key: string
       used_for_activate: boolean
@@ -2862,6 +2874,7 @@ export namespace Prisma {
   interface LicenseKeyFieldRefs {
     readonly id: FieldRef<"LicenseKey", 'String'>
     readonly secret_key_id: FieldRef<"LicenseKey", 'BigInt'>
+    readonly customer_id: FieldRef<"LicenseKey", 'String'>
     readonly email: FieldRef<"LicenseKey", 'String'>
     readonly key: FieldRef<"LicenseKey", 'String'>
     readonly used_for_activate: FieldRef<"LicenseKey", 'Boolean'>
@@ -3313,6 +3326,7 @@ export namespace Prisma {
   export const LicenseKeyScalarFieldEnum: {
     id: 'id',
     secret_key_id: 'secret_key_id',
+    customer_id: 'customer_id',
     email: 'email',
     key: 'key',
     used_for_activate: 'used_for_activate',
@@ -3489,6 +3503,7 @@ export namespace Prisma {
     NOT?: LicenseKeyWhereInput | LicenseKeyWhereInput[]
     id?: UuidFilter<"LicenseKey"> | string
     secret_key_id?: BigIntFilter<"LicenseKey"> | bigint | number
+    customer_id?: UuidFilter<"LicenseKey"> | string
     email?: StringFilter<"LicenseKey"> | string
     key?: StringFilter<"LicenseKey"> | string
     used_for_activate?: BoolFilter<"LicenseKey"> | boolean
@@ -3503,6 +3518,7 @@ export namespace Prisma {
   export type LicenseKeyOrderByWithRelationInput = {
     id?: SortOrder
     secret_key_id?: SortOrder
+    customer_id?: SortOrder
     email?: SortOrder
     key?: SortOrder
     used_for_activate?: SortOrder
@@ -3516,11 +3532,12 @@ export namespace Prisma {
 
   export type LicenseKeyWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    email_secret_key_id?: LicenseKeyEmailSecret_key_idCompoundUniqueInput
+    customer_id_secret_key_id?: LicenseKeyCustomer_idSecret_key_idCompoundUniqueInput
     AND?: LicenseKeyWhereInput | LicenseKeyWhereInput[]
     OR?: LicenseKeyWhereInput[]
     NOT?: LicenseKeyWhereInput | LicenseKeyWhereInput[]
     secret_key_id?: BigIntFilter<"LicenseKey"> | bigint | number
+    customer_id?: UuidFilter<"LicenseKey"> | string
     email?: StringFilter<"LicenseKey"> | string
     key?: StringFilter<"LicenseKey"> | string
     used_for_activate?: BoolFilter<"LicenseKey"> | boolean
@@ -3530,11 +3547,12 @@ export namespace Prisma {
     updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
     regenerated_at?: BigIntNullableFilter<"LicenseKey"> | bigint | number | null
     secret_key?: XOR<SecretKeyLicenseScalarRelationFilter, SecretKeyLicenseWhereInput>
-  }, "id" | "email_secret_key_id">
+  }, "id" | "customer_id_secret_key_id">
 
   export type LicenseKeyOrderByWithAggregationInput = {
     id?: SortOrder
     secret_key_id?: SortOrder
+    customer_id?: SortOrder
     email?: SortOrder
     key?: SortOrder
     used_for_activate?: SortOrder
@@ -3556,6 +3574,7 @@ export namespace Prisma {
     NOT?: LicenseKeyScalarWhereWithAggregatesInput | LicenseKeyScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"LicenseKey"> | string
     secret_key_id?: BigIntWithAggregatesFilter<"LicenseKey"> | bigint | number
+    customer_id?: UuidWithAggregatesFilter<"LicenseKey"> | string
     email?: StringWithAggregatesFilter<"LicenseKey"> | string
     key?: StringWithAggregatesFilter<"LicenseKey"> | string
     used_for_activate?: BoolWithAggregatesFilter<"LicenseKey"> | boolean
@@ -3635,6 +3654,7 @@ export namespace Prisma {
 
   export type LicenseKeyCreateInput = {
     id?: string
+    customer_id: string
     email: string
     key: string
     used_for_activate?: boolean
@@ -3649,6 +3669,7 @@ export namespace Prisma {
   export type LicenseKeyUncheckedCreateInput = {
     id?: string
     secret_key_id: bigint | number
+    customer_id: string
     email: string
     key: string
     used_for_activate?: boolean
@@ -3661,6 +3682,7 @@ export namespace Prisma {
 
   export type LicenseKeyUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
@@ -3675,6 +3697,7 @@ export namespace Prisma {
   export type LicenseKeyUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     secret_key_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
@@ -3688,6 +3711,7 @@ export namespace Prisma {
   export type LicenseKeyCreateManyInput = {
     id?: string
     secret_key_id: bigint | number
+    customer_id: string
     email: string
     key: string
     used_for_activate?: boolean
@@ -3700,6 +3724,7 @@ export namespace Prisma {
 
   export type LicenseKeyUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
@@ -3713,6 +3738,7 @@ export namespace Prisma {
   export type LicenseKeyUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     secret_key_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
@@ -3901,14 +3927,15 @@ export namespace Prisma {
     isNot?: SecretKeyLicenseWhereInput
   }
 
-  export type LicenseKeyEmailSecret_key_idCompoundUniqueInput = {
-    email: string
+  export type LicenseKeyCustomer_idSecret_key_idCompoundUniqueInput = {
+    customer_id: string
     secret_key_id: bigint | number
   }
 
   export type LicenseKeyCountOrderByAggregateInput = {
     id?: SortOrder
     secret_key_id?: SortOrder
+    customer_id?: SortOrder
     email?: SortOrder
     key?: SortOrder
     used_for_activate?: SortOrder
@@ -3929,6 +3956,7 @@ export namespace Prisma {
   export type LicenseKeyMaxOrderByAggregateInput = {
     id?: SortOrder
     secret_key_id?: SortOrder
+    customer_id?: SortOrder
     email?: SortOrder
     key?: SortOrder
     used_for_activate?: SortOrder
@@ -3942,6 +3970,7 @@ export namespace Prisma {
   export type LicenseKeyMinOrderByAggregateInput = {
     id?: SortOrder
     secret_key_id?: SortOrder
+    customer_id?: SortOrder
     email?: SortOrder
     key?: SortOrder
     used_for_activate?: SortOrder
@@ -4216,6 +4245,7 @@ export namespace Prisma {
 
   export type LicenseKeyCreateWithoutSecret_keyInput = {
     id?: string
+    customer_id: string
     email: string
     key: string
     used_for_activate?: boolean
@@ -4228,6 +4258,7 @@ export namespace Prisma {
 
   export type LicenseKeyUncheckedCreateWithoutSecret_keyInput = {
     id?: string
+    customer_id: string
     email: string
     key: string
     used_for_activate?: boolean
@@ -4270,6 +4301,7 @@ export namespace Prisma {
     NOT?: LicenseKeyScalarWhereInput | LicenseKeyScalarWhereInput[]
     id?: UuidFilter<"LicenseKey"> | string
     secret_key_id?: BigIntFilter<"LicenseKey"> | bigint | number
+    customer_id?: UuidFilter<"LicenseKey"> | string
     email?: StringFilter<"LicenseKey"> | string
     key?: StringFilter<"LicenseKey"> | string
     used_for_activate?: BoolFilter<"LicenseKey"> | boolean
@@ -4334,6 +4366,7 @@ export namespace Prisma {
 
   export type LicenseKeyCreateManySecret_keyInput = {
     id?: string
+    customer_id: string
     email: string
     key: string
     used_for_activate?: boolean
@@ -4346,6 +4379,7 @@ export namespace Prisma {
 
   export type LicenseKeyUpdateWithoutSecret_keyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
@@ -4358,6 +4392,7 @@ export namespace Prisma {
 
   export type LicenseKeyUncheckedUpdateWithoutSecret_keyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
@@ -4370,6 +4405,7 @@ export namespace Prisma {
 
   export type LicenseKeyUncheckedUpdateManyWithoutSecret_keyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
