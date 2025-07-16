@@ -303,6 +303,7 @@ export default function CustomersTable() {
                 autoComplete="off"
                 ref={searchRef}
                 onKeyUp={handleEnterSearch}
+                disabled={isFetchingC || isSearching}
               />
               {searchedCustomer ? (
                 <TooltipWrapper text="Clear search input">
