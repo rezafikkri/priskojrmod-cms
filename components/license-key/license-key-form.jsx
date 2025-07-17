@@ -2,7 +2,6 @@ import { getSecretKeys } from '@/lib/services/secret-key-service';
 import CreateForm from './create-form';
 import { getLicenseKey } from '@/lib/services/license-key-service';
 import EditForm from './edit-form';
-import jwt from 'jsonwebtoken';
 import {
   Alert,
   AlertTitle,
@@ -26,6 +25,5 @@ export default async function LicenseKeyForm({ mode = 'create', id = null }) {
     );
   }
 
-  licenseKey.parsedKey = jwt.decode(licenseKey.key);
-  return <EditForm secretKeys={secretKeys} licenseKey={licenseKey} />;
+  return <EditForm licenseKey={licenseKey} />;
 }

@@ -47,7 +47,6 @@ export default function CustomerCombobox({
   });
   useEffect(() => {
     if (!customerId && selectedLabel) {
-      console.dir('kesini');
       setSelectedLabel('');
     }
   }, [customerId]);

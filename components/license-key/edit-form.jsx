@@ -11,15 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { Input } from '../ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../ui/select';
 import { editLicenseKeySchema } from '@/lib/validators/license-key-validator';
 import { toast } from 'sonner';
 import Link from 'next/link';
@@ -31,10 +23,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 import { formatDateTimeWIB } from '@/lib/format-date';
 
-export default function EditForm({
-  secretKeys,
-  licenseKey,
-}) {
+export default function EditForm({ licenseKey }) {
   // Get QueryClient from the context
   const queryClient = useQueryClient();
   const [licenseKeyExpire, setLicenseKeyExpire] = useState(() => {
@@ -45,10 +34,6 @@ export default function EditForm({
     resolver: zodResolver(editLicenseKeySchema),
     defaultValues: {
       id: licenseKey.id,
-      // old_key: licenseKey.key,
-      // old_secret_key_id: licenseKey.secret_key_id,
-      // secret_key_id: licenseKey.secret_key_id,
-      // name: licenseKey.parsedKey.name,
       type: licenseKey.parsedKey.type,
       used_for_activate: licenseKey.used_for_activate,
       used_for_download: licenseKey.used_for_download,
@@ -64,13 +49,11 @@ export default function EditForm({
     if (editRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
-      form.setValue('old_key', editRes.data.key);
-      form.setValue('old_secret_key_id', editRes.data.secret_key_id);
       form.setValue('change_expiration_date', false);
       if (editRes.data.exp) {
         setLicenseKeyExpire(formatDateTimeWIB(editRes.data.exp));
       }
-      toast.success('License Key updated successfully.');
+      toast.success('License key updated successfully.');
     } else {
       toast.error(editRes.message);
     }
@@ -81,58 +64,17 @@ export default function EditForm({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 lg:max-w-2/3 mb-10">
           <FormItem>
-            <FormLabel className="text-base">Email</FormLabel>
-            <p>{licenseKey.email}</p>
-            <FormDescription>Customer email.</FormDescription>
+            <FormLabel className="text-base">Secret Key</FormLabel>
+            <p>{licenseKey.appName}</p>
+            <FormDescription>What’s displayed here is the app name, which represents the Secret Key used by this license key. It cannot be changed after creation.</FormDescription>
           </FormItem>
 
-          <FormField
-            control={form.control}
-            name="secret_key_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Secret Key</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  disabled={isSubmitting}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full shadow-none text-base min-h-9.5 h-auto! px-3 py-1.5">
-                      <SelectValue placeholder="Select a secret key" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {secretKeys.map(secretKey => (
-                      <SelectItem
-                        key={secretKey.id}
-                        value={secretKey.id}
-                        className="text-base"
-                      >
-                        {secretKey.app_name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormDescription>Select secret key based on application name.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Customer Name</FormLabel>
-                <FormControl>
-                  <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
-                </FormControl>
-                <FormDescription>Enter the customer name.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <FormItem>
+            <FormLabel className="text-base">Customer</FormLabel>
+            <p>{licenseKey.customer}</p>
+            <FormDescription>This customer information is for reference only, indicating the owner of the license key. Changes to the customer data do not affect the contents of the license key payload.</FormDescription>
+          </FormItem>
+
           <FormField
             control={form.control}
             name="type"
@@ -165,6 +107,7 @@ export default function EditForm({
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="used_for_activate"
