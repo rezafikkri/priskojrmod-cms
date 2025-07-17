@@ -72,7 +72,7 @@ export default function EditForm({ licenseKey }) {
           <FormItem>
             <FormLabel className="text-base">Customer</FormLabel>
             <p>{licenseKey.customer}</p>
-            <FormDescription>This customer information is for reference only, indicating the owner of the license key. Changes to the customer data do not affect the contents of the license key payload.</FormDescription>
+            <FormDescription>What’s displayed here is the customer who owns this license key. It cannot be changed after creation, and updates to the customer data do not affect the license key payload.</FormDescription>
           </FormItem>
 
           <FormField
