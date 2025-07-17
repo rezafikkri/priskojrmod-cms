@@ -28,14 +28,12 @@ import { addLicenseKey } from '@/actions/license-key-actions';
 import { useQueryClient } from '@tanstack/react-query';
 import CustomerCombobox from './customer-combobox';
 
-export default function CreateForm({
-  secretKeys
-}) {
+export default function CreateForm({ secretKeys }) {
   // Get QueryClient from the context
   const queryClient = useQueryClient();
 
   const form = useForm({
-    // resolver: zodResolver(createLicenseKeySchema),
+    resolver: zodResolver(createLicenseKeySchema),
     defaultValues: {
       secret_key_id: '',
       customer_id: '',
@@ -46,12 +44,11 @@ export default function CreateForm({
   const isSubmitting = form.formState.isSubmitting;
 
   async function handleSubmit(data) {
-    console.dir(data);return;
     const addRes = await addLicenseKey(data);
     if (addRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] })
       form.reset();
-      toast.success('License Key created successfully.');
+      toast.success('License key created successfully.');
     } else {
       toast.error(addRes.message);
     }

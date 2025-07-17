@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   FormControl,
   FormDescription,
@@ -28,6 +28,7 @@ import { Button } from '../ui/button';
 import { ChevronsUpDown, Loader2, Check } from 'lucide-react';
 import { useDebounce } from '@/hooks/use-debounce';
 import { safeFetch } from '@/lib/safe-fetch';
+import { useWatch } from 'react-hook-form';
 
 export default function CustomerCombobox({
   form,
@@ -39,6 +40,17 @@ export default function CustomerCombobox({
 
   // This state for save selected value
   const [selectedLabel, setSelectedLabel] = useState('');
+
+  const customerId = useWatch({
+    control: form.control,
+    name: 'customer_id',
+  });
+  useEffect(() => {
+    if (!customerId && selectedLabel) {
+      console.dir('kesini');
+      setSelectedLabel('');
+    }
+  }, [customerId]);
 
   const { data, isFetching } = useQuery({
     queryKey: ['customers-autocomplete', debouncedKey],
@@ -70,7 +82,7 @@ export default function CustomerCombobox({
                   )}
                   disabled={disabled}
                 >
-                  {selectedLabel || 'Search an customer'}
+                  {selectedLabel || 'Search a customer'}
                   <ChevronsUpDown className="opacity-50" />
                 </Button>
               </FormControl>
@@ -103,7 +115,7 @@ export default function CustomerCombobox({
                         value={customer.displayLabel}
                         key={customer.id}
                         onSelect={() => {
-                          form.setValue('customer_id', customer.id)
+                          field.onChange(customer.id);
                           setSelectedLabel(customer.displayLabel);
                           setIsComboboxOpen(false);
                         }}
