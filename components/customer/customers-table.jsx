@@ -26,7 +26,7 @@ import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
-import { editCustomerBanStatus } from '@/actions/customer-actions';
+import { editCustomerBanStatus, removeCustomer } from '@/actions/customer-actions';
 
 export default function CustomersTable() {
   const queryClient = useQueryClient();
@@ -49,16 +49,22 @@ export default function CustomersTable() {
     updated_at: false,
   });
 
-  // This `useRef` is here to **always keep the newest `searchedCustomer` value**.
+  // deleting ids and ban/unban state
+  const [deletingIds, setDeletingIds] = useState([]);
+
+  // This `useRef` is here to **always keep the newest `searchedCustomer and more state` value**.
   // We need it because our async function (sent to the child) might "remember"
-  // an old `searchedCustomer` value, which is called a "stale closure" problem.
+  // an old `searchedCustomer and more state` value, which is called a "stale closure" problem.
   const searchedCustomerRef = useRef(searchedCustomer);
   const filtersRef = useRef(filters);
+  const paginationRef = useRef(pagination);
+  const deletingIdsRef = useRef(deletingIds);
+
   useEffect(() => {
     searchedCustomerRef.current = searchedCustomer;
     filtersRef.current = filters;
-  }, [searchedCustomer, filters]);
-
+    paginationRef.current = pagination;
+  }, [searchedCustomer, filters, pagination]);
 
   const {
     data: dataC,
@@ -86,8 +92,8 @@ export default function CustomersTable() {
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 60 * 3,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
     enabled: !searchedCustomer,
   });
 
@@ -119,8 +125,8 @@ export default function CustomersTable() {
             errorMessage: 'Something went wrong while searching. Please try again.',
           });
         },
-        staleTime: 10000,
-        gcTime: 10000,
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 5,
       });
 
       setSearchedCustomer(result.data);
@@ -247,7 +253,101 @@ export default function CustomersTable() {
     } else {
       toast.error(editRes.message, { id: toastId });
     }
-  });
+  }, []);
+
+  async function handleDelete({ deleteData, toastId }) {
+    // This is for add opacity-50 style to deleted row
+    setDeletingIds((prev) => {
+      const newIds = [...prev, deleteData.id];
+      deletingIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const removeRes = await removeCustomer(deleteData.id);
+
+    setDeletingIds((prev) => {
+      const newIds = prev.filter(id => id !== deleteData.id);
+      deletingIdsRef.current = newIds;
+      return newIds;
+    });
+
+    // TODO: Handle edge case where the when not in last page, last deleted item fails,
+    // but at least one deletion succeeded — to still trigger invalidateQueries.
+    // This is low priority and can be added after initial release.
+
+    // Test queryKey apakah akan up-to-date, ketika await masih pending, tetapi kita ubah paginationnya
+    // Hasil: queryKey tidak up-to-date, alias stale
+    if (removeRes.status === 'success') {
+      if (searchedCustomerRef.current) {
+        setSearchedCustomer((prevCustomer) => ({
+          ...prevCustomer,
+          customers: prevCustomer.customers.filter(customer => customer.id !== deleteData.id),
+        }));
+        queryClient.invalidateQueries({ queryKey: ['customers'] });
+      } else {
+        const customer = queryClient.getQueryData([
+          'customers',
+          paginationRef.current.pageIndex,
+          filtersRef.current,
+        ]);
+        const newCustomers = customer.customers.filter(customer => customer.id !== deleteData.id);
+        const newRowCount = customer.rowCount - 1;
+
+        if (!isLastPage({
+          pageIndex: paginationRef.current.pageIndex,
+          pageSize: paginationRef.current.pageSize,
+          rowCount: customer.rowCount,
+        })) {
+          queryClient.setQueryData(['customers', paginationRef.current.pageIndex, filtersRef.current], ({
+            customers: newCustomers,
+            rowCount: newRowCount,
+          }));
+
+          // check if all parallel delete finish
+          if (deletingIdsRef.current.length === 0) {
+            queryClient.invalidateQueries({ queryKey: ['customers'] });
+          }
+        } else {
+          if (newCustomers.length === 0 && newRowCount > 0) {
+            queryClient.removeQueries({
+              queryKey: ['customers', paginationRef.current.pageIndex, filtersRef.current],
+              exact: true,
+            });
+            queryClient.setQueryData(
+              ['customers', paginationRef.current.pageIndex - 1, filtersRef.current],
+              (oldData) => ({
+                ...oldData,
+                rowCount: newRowCount,
+              }),
+            );
+            setPagination((pagination) => ({
+              ...pagination,
+              pageIndex: pagination.pageIndex - 1,
+            }));
+          } else {
+            queryClient.setQueryData(
+              [
+                'customers',
+                paginationRef.current.pageIndex,
+                filtersRef.current,
+              ],
+              () => ({
+                customers: newCustomers,
+                rowCount: newRowCount,
+              }),
+            );
+          }
+
+          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
+        }
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
+      toast.success('Customer deleted successfully.', { id: toastId });
+    } else {
+      toast.error(removeRes.message, { id: toastId });
+    }
+  }
 
   let customer;
   if (searchedCustomer) {
@@ -371,11 +471,13 @@ export default function CustomersTable() {
           tableState={{
             columnVisibility,
             pagination,
+            deletingIds,
           }}
           tableHandler={{
             onPaginationChange: setPagination,
             onColumnVisibilityChange: setColumnVisibility,
             onEditBanStatus: handleEditBanStatus,
+            onDelete: handleDelete,
           }}
           isPlaceholderData={isPlaceholderDataC}
           hasSearched={!!searchedCustomer}

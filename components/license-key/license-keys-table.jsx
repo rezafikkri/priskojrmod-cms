@@ -204,6 +204,7 @@ export default function LicenseKeysTable() {
         const newLicenseKeys = licenseKey.data.licenseKeys.filter(lk => lk.id !== deleteData.id);
         const newRowCount = licenseKey.data.rowCount - 1;
 
+        console.dir(JSON.stringify(['licenseKeys', pagination.pageIndex, filters]));
         if (!isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,

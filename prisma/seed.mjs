@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { faker } from '@faker-js/faker';
 import { PrismaClient as PjmaDBPrismaClient } from '../prisma-pjma-db/pjma-db-client/index.js';
 import { PrismaClient as PjmeDBPrismaClient } from '../prisma-pjme-db/pjme-db-client/index.js';
+import { v7 } from 'uuid';
 
 const pjmaDBPrismaClient = new PjmaDBPrismaClient();
 const pjmeDBPrismaClient = new PjmeDBPrismaClient();
@@ -39,6 +40,7 @@ async function main() {
     licenseKeys.push({
       email,
       key,
+      customer_id: v7(),
       secret_key_id: secret.id,
       used_for_activate: false,
       used_for_download: false,

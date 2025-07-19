@@ -1,6 +1,11 @@
 'use server';
 
-import { createCustomer, updateCustomer, updateCustomerBanStatus } from '@/lib/services/customer-service';
+import {
+  createCustomer,
+  deleteCustomer,
+  updateCustomer,
+  updateCustomerBanStatus,
+} from '@/lib/services/customer-service';
 
 export async function addCustomer(data) {
   try {
@@ -23,6 +28,15 @@ export async function editCustomer(data) {
 export async function editCustomerBanStatus(id, is_banned) {
   try {
     await updateCustomerBanStatus(id, is_banned);
+    return { status: 'success' };
+  } catch (err) {
+    return { status: 'error', message: err.message };
+  }
+}
+
+export async function removeCustomer(id) {
+  try {
+    await deleteCustomer(id);
     return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };

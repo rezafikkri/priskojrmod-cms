@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { formatDateTimeWIB } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { Minus } from 'lucide-react';
+import DeleteDialog from './delete-dialog';
 
 export default function DataTable({
   customer,
@@ -42,7 +43,16 @@ export default function DataTable({
     onPaginationChange,
     onColumnVisibilityChange,
     onEditBanStatus,
+    onDelete,
   } = tableHandler;
+  const {
+    columnVisibility,
+    pagination,
+    deletingIds,
+  } = tableState;
+
+  const [deleteData, setDeleteData] = useState(null);
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
   function shouldShowDeleteButton({ oauthId, lastActive, isBanned }) {
     const now = Math.floor(new Date().getTime() / 1000);
@@ -90,7 +100,11 @@ export default function DataTable({
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0 focus-visible:ring-ring">
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={deletingIds.includes(row.original.id)}
+            >
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
@@ -123,7 +137,12 @@ export default function DataTable({
                   className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
                   asChild
                 >
-                  <button>
+                  <button
+                    onClick={() => {
+                      setDeleteData({ id: row.original.id, email: row.getValue('email') });
+                      setIsOpenDeleteDialog(true);
+                    }}
+                  >
                     Delete
                   </button>
                 </DropdownMenuItem>
@@ -133,12 +152,15 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], [tableState.pagination]);
+  ], [deletingIds]);
   const table = useReactTable({
     data: customers,
     rowCount,
     columns,
-    state: tableState,
+    state: {
+      columnVisibility,
+      pagination,
+    },
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     onColumnVisibilityChange,
@@ -173,8 +195,8 @@ export default function DataTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  id={`row${row.original.id}`}
                   data-state={row.getIsSelected() && 'selected'}
+                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -228,6 +250,14 @@ export default function DataTable({
       {(hasSearched && isTooMany) ? (
         <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Info</b>: If you haven't found the customer you're looking for, please use a more specific email!</p>
       ) : null}
+
+      <DeleteDialog
+        onDelete={onDelete}
+        isOpen={isOpenDeleteDialog}
+        onIsOpenChange={setIsOpenDeleteDialog}
+        onDeleteDataChange={setDeleteData}
+        deleteData={deleteData}
+      />
     </>
   );
 }
