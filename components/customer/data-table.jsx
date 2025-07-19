@@ -49,6 +49,7 @@ export default function DataTable({
     columnVisibility,
     pagination,
     deletingIds,
+    updatingBanStatusIds,
   } = tableState;
 
   const [deleteData, setDeleteData] = useState(null);
@@ -103,7 +104,10 @@ export default function DataTable({
             <Button
               variant="ghost"
               className="h-8 w-8 p-0 focus-visible:ring-ring"
-              disabled={deletingIds.includes(row.original.id)}
+              disabled={
+                deletingIds.includes(row.original.id) ||
+                updatingBanStatusIds.includes(row.original.id)
+              }
             >
               <MoreHorizontal />
             </Button>
@@ -118,7 +122,6 @@ export default function DataTable({
               onClick={() => onEditBanStatus({
                 id: row.original.id,
                 isBanned: !row.original.is_banned,
-                pagination: tableState.pagination,
               })}
               asChild
             >
@@ -152,7 +155,7 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], [deletingIds]);
+  ], [deletingIds, updatingBanStatusIds]);
   const table = useReactTable({
     data: customers,
     rowCount,
@@ -196,7 +199,14 @@ export default function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
+                  className={
+                    (
+                      deletingIds.includes(row.original.id) ||
+                      updatingBanStatusIds.includes(row.original.id)
+                    )
+                      ? 'opacity-50'
+                      : ''
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

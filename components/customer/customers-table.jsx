@@ -51,6 +51,11 @@ export default function CustomersTable() {
 
   // deleting ids and ban/unban state
   const [deletingIds, setDeletingIds] = useState([]);
+  const [updatingBanStatusIds, setUpdatingBanStatusIds] = useState([]);
+
+// Ensures that in normal mode and not on the last page,
+// invalidateQueries is still triggered even if not all deletions succeed.
+  const hasSuccessfulBanRef = useRef(false);
 
   // This `useRef` is here to **always keep the newest `searchedCustomer and more state` value**.
   // We need it because our async function (sent to the child) might "remember"
@@ -59,6 +64,7 @@ export default function CustomersTable() {
   const filtersRef = useRef(filters);
   const paginationRef = useRef(pagination);
   const deletingIdsRef = useRef(deletingIds);
+  const updatingBanStatusIdsRef = useRef(updatingBanStatusIds);
 
   useEffect(() => {
     searchedCustomerRef.current = searchedCustomer;
@@ -182,18 +188,22 @@ export default function CustomersTable() {
     }
   }
 
-  const handleEditBanStatus = useCallback(async ({ id, isBanned, pagination }) => {
-    const targetRow = document.querySelector(`#row${id}`);
-    const targetActionBtn = targetRow.querySelector('td > button');
-    targetRow.classList.add('opacity-50');
-    targetActionBtn.setAttribute('disabled', true);
-
+  const handleEditBanStatus = useCallback(async ({ id, isBanned }) => {
+    // This is for add opacity-50 style to updated row
+    setUpdatingBanStatusIds((prev) => {
+      const newIds = [...prev, id];
+      updatingBanStatusIdsRef.current = newIds;
+      return newIds;
+    });
     const toastId = toast.loading(isBanned ? 'Banning customer...' : 'Unbanning customer...');
 
     const editRes = await editCustomerBanStatus(id, isBanned);
 
-    targetRow.classList.remove('opacity-50');
-    targetActionBtn.removeAttribute('disabled');
+    setUpdatingBanStatusIds((prev) => {
+      const newIds = prev.filter(prevId => prevId !== id);
+      updatingBanStatusIdsRef.current = newIds;
+      return newIds;
+    });
 
     if (editRes.status === 'success') {
       if (searchedCustomerRef.current) {
@@ -201,44 +211,57 @@ export default function CustomersTable() {
           ...prevCustomer,
           customers: prevCustomer.customers.filter(customer => customer.id !== id),
         }));
+
         queryClient.invalidateQueries({ queryKey: ['customers'] });
       } else {
-        const customer = queryClient.getQueryData(['customers', pagination.pageIndex, filtersRef.current]);
+        const customer = queryClient.getQueryData([
+          'customers',
+          paginationRef.current.pageIndex,
+          filtersRef.current,
+        ]);
         const newCustomers = customer.customers.filter(customer => customer.id !== id);
         const newRowCount = customer.rowCount - 1;
 
         if (!isLastPage({
-          pageIndex: pagination.pageIndex,
-          pageSize: pagination.pageSize,
+          pageIndex: paginationRef.current.pageIndex,
+          pageSize: paginationRef.current.pageSize,
           rowCount: customer.rowCount,
         })) {
-          queryClient.setQueryData(['customers', pagination.pageIndex, filtersRef.current], ({
-            customers: newCustomers,
-            rowCount: newRowCount,
-          }));
-          queryClient.invalidateQueries({ queryKey: ['customers'] });
+          queryClient.setQueryData(
+            ['customers', paginationRef.current.pageIndex, filtersRef.current],
+            ({ customers: newCustomers, rowCount: newRowCount }),
+          );
+
+          if (!hasSuccessfulBanRef.current) {
+            hasSuccessfulBanRef.current = true;
+          }
         } else {
           if (newCustomers.length === 0 && newRowCount > 0) {
             queryClient.removeQueries({
-              queryKey: ['customers', pagination.pageIndex, filtersRef.current],
+              queryKey: ['customers', paginationRef.current.pageIndex, filtersRef.current],
               exact: true,
             });
+
             queryClient.setQueryData(
-              [ 'customers', pagination.pageIndex - 1, filtersRef.current ],
+              ['customers', paginationRef.current.pageIndex - 1, filtersRef.current],
               (oldData) => ({
                 ...oldData,
                 rowCount: newRowCount,
               }),
             );
-            setPagination({
+
+            setPagination((pagination) => ({
               ...pagination,
               pageIndex: pagination.pageIndex - 1,
-            });
-          } else {
-            queryClient.setQueryData(['customers', pagination.pageIndex, filtersRef.current], () => ({
-              customers: newCustomers,
-              rowCount: newRowCount,
             }));
+          } else {
+            queryClient.setQueryData(
+              ['customers', paginationRef.current.pageIndex, filtersRef.current ],
+              () => ({
+                customers: newCustomers,
+                rowCount: newRowCount,
+              })
+            );
           }
 
           queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
@@ -252,6 +275,29 @@ export default function CustomersTable() {
       );
     } else {
       toast.error(editRes.message, { id: toastId });
+    }
+
+    // For still invalidateQueries customers, when not in last page, last ban item fails, and 
+    // at least one ban succeeded.
+    if (
+      !searchedCustomerRef.current &&
+      updatingBanStatusIdsRef.current.length === 0 &&
+      hasSuccessfulBanRef.current
+    ) {
+      const customer = queryClient.getQueryData([
+        'customers',
+        paginationRef.current.pageIndex,
+        filtersRef.current,
+      ]);
+      if (!isLastPage({
+        pageIndex: paginationRef.current.pageIndex,
+        pageSize: paginationRef.current.pageSize,
+        rowCount: customer.rowCount,
+      })) {
+        queryClient.invalidateQueries({ queryKey: ['customers'] });
+      }
+
+      hasSuccessfulBanRef.current = false;
     }
   }, []);
 
@@ -283,6 +329,7 @@ export default function CustomersTable() {
           ...prevCustomer,
           customers: prevCustomer.customers.filter(customer => customer.id !== deleteData.id),
         }));
+
         queryClient.invalidateQueries({ queryKey: ['customers'] });
       } else {
         const customer = queryClient.getQueryData([
@@ -313,6 +360,7 @@ export default function CustomersTable() {
               queryKey: ['customers', paginationRef.current.pageIndex, filtersRef.current],
               exact: true,
             });
+            
             queryClient.setQueryData(
               ['customers', paginationRef.current.pageIndex - 1, filtersRef.current],
               (oldData) => ({
@@ -320,6 +368,7 @@ export default function CustomersTable() {
                 rowCount: newRowCount,
               }),
             );
+
             setPagination((pagination) => ({
               ...pagination,
               pageIndex: pagination.pageIndex - 1,
@@ -472,6 +521,7 @@ export default function CustomersTable() {
             columnVisibility,
             pagination,
             deletingIds,
+            updatingBanStatusIds,
           }}
           tableHandler={{
             onPaginationChange: setPagination,
