@@ -53,9 +53,10 @@ export default function CustomersTable() {
   const [deletingIds, setDeletingIds] = useState([]);
   const [updatingBanStatusIds, setUpdatingBanStatusIds] = useState([]);
 
-// Ensures that in normal mode and not on the last page,
-// invalidateQueries is still triggered even if not all deletions succeed.
+  // Ensures that in normal mode and not on the last page,
+  // invalidateQueries is still triggered even if not all deletions or banning succeed.
   const hasSuccessfulBanRef = useRef(false);
+  const hasSuccessfulDeleteRef = useRef(false);
 
   // This `useRef` is here to **always keep the newest `searchedCustomer and more state` value**.
   // We need it because our async function (sent to the child) might "remember"
@@ -317,10 +318,6 @@ export default function CustomersTable() {
       return newIds;
     });
 
-    // TODO: Handle edge case where the when not in last page, last deleted item fails,
-    // but at least one deletion succeeded — to still trigger invalidateQueries.
-    // This is low priority and can be added after initial release.
-
     // Test queryKey apakah akan up-to-date, ketika await masih pending, tetapi kita ubah paginationnya
     // Hasil: queryKey tidak up-to-date, alias stale
     if (removeRes.status === 'success') {
@@ -350,9 +347,8 @@ export default function CustomersTable() {
             rowCount: newRowCount,
           }));
 
-          // check if all parallel delete finish
-          if (deletingIdsRef.current.length === 0) {
-            queryClient.invalidateQueries({ queryKey: ['customers'] });
+          if (!hasSuccessfulDeleteRef.current) {
+            hasSuccessfulDeleteRef.current = true;
           }
         } else {
           if (newCustomers.length === 0 && newRowCount > 0) {
@@ -395,6 +391,29 @@ export default function CustomersTable() {
       toast.success('Customer deleted successfully.', { id: toastId });
     } else {
       toast.error(removeRes.message, { id: toastId });
+    }
+
+    // For still invalidateQueries customers, when not in last page, last delete item fails, and 
+    // at least one delete succeeded.
+    if (
+      !searchedCustomerRef.current &&
+      deletingIdsRef.current.length === 0 &&
+      hasSuccessfulDeleteRef.current
+    ) {
+      const customer = queryClient.getQueryData([
+        'customers',
+        paginationRef.current.pageIndex,
+        filtersRef.current,
+      ]);
+      if (!isLastPage({
+        pageIndex: paginationRef.current.pageIndex,
+        pageSize: paginationRef.current.pageSize,
+        rowCount: customer.rowCount,
+      })) {
+        queryClient.invalidateQueries({ queryKey: ['customers'] });
+      }
+
+      hasSuccessfulDeleteRef.current = false;
     }
   }
 
