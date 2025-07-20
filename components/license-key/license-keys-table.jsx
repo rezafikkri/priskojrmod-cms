@@ -37,13 +37,16 @@ import { safeFetch } from '@/lib/safe-fetch';
 
 export default function LicenseKeysTable() {
   const queryClient = useQueryClient();
-  const isRerender = useRef(false);
+
+  // seearc state
   const [isSearching, setIsSearching] = useState(false);
   const [searchedLicenseKey, setSearchedLicenseKey] = useState(null);
   const searchRef = useRef(null);
+
   // filters state
   const [filters, setFilters] = useState(null);
   const [isFilterActive, setIsFilterActive] = useState(false);
+
   // table state
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -56,15 +59,9 @@ export default function LicenseKeysTable() {
     created_at: false,
     updated_at: false,
   });
+
   // set can regenerate state
   const [isRegenerating, setIsRegenerating] = useState(false);
-
-  function handlePaginationChange(paginationData) {
-    if (!isRerender.current) {
-      isRerender.current = true;
-    }
-    setPagination(paginationData);
-  }
 
   // add secretKeyId and canRegenerate filters
   function addFiltersToURL(url, appliedFilters) {
@@ -92,21 +89,19 @@ export default function LicenseKeysTable() {
     queryKey: ['licenseKeys', pagination.pageIndex, filters],
     queryFn: async () => {
       let toastId;
-      if (isRerender.current) {
-        toastId = toast.loading('Loading License Keys...');
+      if (statusLK !== 'pending') {
+        toastId = toast.loading('Loading license keys...');
       }
 
-      const res = await fetch(addFiltersToURL(`/api/license-keys?pi=${pagination.pageIndex}`, filters));
-      const resJson = await res.json();
-
-      if (toastId) {
-        toast.dismiss(toastId);
-      }
-      if (!res.ok) {
-        throw new UnknownError('An unexpected error occurred. Please try reloading the page!');
-      }
-
-      return resJson;
+      const results = await safeFetch({
+        url: addFiltersToURL(`/api/license-keys?pi=${pagination.pageIndex}`, filters),
+        onFinally: () => {
+          if (toastId) {
+            toast.dismiss(toastId);
+          }
+        },
+      });
+      return results.data;
     },
     placeholderData: keepPreviousData,
     staleTime: 1000 * 20,
@@ -147,9 +142,6 @@ export default function LicenseKeysTable() {
         gcTime: 10_000,
       });
 
-      if (!isRerender.current) {
-        isRerender.current = true;
-      }
       setSearchedLicenseKey(result.data);
     } catch (err) {
       console.error(err);
@@ -181,10 +173,6 @@ export default function LicenseKeysTable() {
       return { targetRow, targetActionBtn };
     },
     onSuccess: async (deleteRes, { toastId, deleteData }) => {
-      if (!isRerender.current) {
-        isRerender.current = true;
-      }
-
       if (deleteRes.status !== 'success') throw new Error(deleteRes.message);
 
       if (searchedLicenseKey) {
@@ -262,10 +250,6 @@ export default function LicenseKeysTable() {
     action,
     newFilters,
   }) {
-    if (!isRerender.current) {
-      isRerender.current = true;
-    }
-
     if (action === 'apply') {
       if (!searchedLicenseKey) {
         await queryClient.invalidateQueries({
@@ -302,10 +286,6 @@ export default function LicenseKeysTable() {
   async function handleSetCanRegenerate() {
     const rowSelections = Object.keys(rowSelection);
     if (rowSelections.length <= 0) return false;
-
-    if (!isRerender.current) {
-      isRerender.current = true;
-    }
 
     setIsRegenerating(true);
     // show loading
@@ -349,7 +329,7 @@ export default function LicenseKeysTable() {
   if (searchedLicenseKey) {
     licenseKey = searchedLicenseKey;
   } else if (dataLK) {
-    licenseKey = dataLK.data;
+    licenseKey = dataLK;
   }
 
   // generate pageInfo like this: 1-10 of 20
@@ -453,9 +433,7 @@ export default function LicenseKeysTable() {
         </div>
       </div>
 
-      {statusLK === 'pending'
-        || (isFetchingLK && !isRerender.current)
-        || (isSearching && !searchedLicenseKey) ? (
+      {statusLK === 'pending' || (isSearching && !searchedLicenseKey) ? (
         <TablePaginationSekeleton pagination={!isSearching} />
       ) : isErrorLK ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
@@ -466,9 +444,13 @@ export default function LicenseKeysTable() {
         <DataTable
           licenseKey={licenseKey}
           pageInfo={pageInfo}
-          tableState={{ pagination, rowSelection, columnVisibility }}
+          tableState={{
+            pagination,
+            rowSelection,
+            columnVisibility,
+          }}
           tableHandler={{ 
-            onPaginationChange: handlePaginationChange,
+            onPaginationChange: setPagination,
             onRowSelectionChange: setRowSelection,
             onColumnVisibilityChange: setColumnVisibility,
             onDelete: deleteMutation.mutate,
