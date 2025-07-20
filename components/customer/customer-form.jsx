@@ -7,7 +7,7 @@ import {
 import Error404 from '../icon/error-404';
 
 export default async function CustomerForm({ id }) {
-  const customer = await getCustomer(id);
+  const customer = await getCustomer({ id });
   if (!customer) {
     return (
       <Alert>
