@@ -69,8 +69,8 @@ export default function FormStepManager({
   };
 
   return (
-    <>
-      <div className="flex gap-4 mb-5 lg:max-w-2/3 font-medium text-zinc-700/90 dark:text-zinc-200 items-center">
+    <div className="lg:max-w-2/3">
+      <div className="flex gap-4 mb-5 font-medium text-zinc-700/90 dark:text-zinc-200 items-center">
         {formSteps.map((step, index) => (
           <Fragment key={step.label}>
             <FormStepItem stepNumber={index + 1} status={step.status} label={step.label} />
@@ -82,7 +82,7 @@ export default function FormStepManager({
         ))}
       </div>
 
-      <Separator className="lg:max-w-2/3 mb-7" />
+      <Separator className="mb-7" />
 
       {formSteps.map(step => {
         if (step.status === 'active') {
@@ -95,6 +95,6 @@ export default function FormStepManager({
         }
         return null;
       })}
-    </>
+    </div>
   );
 }

@@ -78,7 +78,7 @@ export default function ExtrasForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleNext)} className="space-y-6 lg:max-w-2/3 mb-10">
+      <form onSubmit={form.handleSubmit(handleNext)} className="space-y-6 mb-10">
         <section className="space-y-6 mb-9">
           <h3 className="text-lg font-bold mb-0">Variants</h3>
           <h4 className="text-zinc-700 dark:text-zinc-300/80">List available variants that represent different options for this product.</h4>

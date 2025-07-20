@@ -9,11 +9,11 @@ export const metadata = {
 export default async function OwnerEditPage({ params }) {
   const { id } = await params;
   return (
-    <>
+    <section className="lg:max-w-2/3">
       <h1 className="text-2xl mb-7 font-bold">Edit Owner</h1>
       <Suspense fallback={<FormSkeleton />}>
         <OwnerForm id={id} />
       </Suspense>
-    </>
+    </section>
   );
 }

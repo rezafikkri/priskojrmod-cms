@@ -10,11 +10,11 @@ export default async function CategoryEditPage({ params }) {
   const { id } = await params;
 
   return (
-    <>
+    <section className="lg:max-w-2/3">
       <h1 className="text-2xl mb-7 font-bold">Edit Category</h1>
       <Suspense fallback={<FormSkeleton />}>
         <CategoryForm id={id} />
       </Suspense>
-    </>
+    </section>
   );
 }

@@ -57,7 +57,7 @@ export default function RegenerateForm({ secretKey }) {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 lg:max-w-2/3 mb-10">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
           <FormItem>
             <FormLabel className="text-base">Product</FormLabel>
             <p>{secretKey.app_name}</p>

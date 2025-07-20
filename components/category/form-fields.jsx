@@ -23,7 +23,7 @@ export default function FormFields({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 lg:max-w-2/3 mb-10">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-10">
         <FormField
           control={form.control}
           name="name"
