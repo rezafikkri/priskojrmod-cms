@@ -99,8 +99,8 @@ export default function CustomersTable() {
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 5,
+    staleTime: 1000 * 20,
+    gcTime: 1000 * 60 * 3,
     enabled: !searchedCustomer,
   });
 
@@ -132,8 +132,8 @@ export default function CustomersTable() {
             errorMessage: 'Something went wrong while searching. Please try again.',
           });
         },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 5,
+        staleTime: 10_000,
+        gcTime: 10_000,
       });
 
       setSearchedCustomer(result.data);
