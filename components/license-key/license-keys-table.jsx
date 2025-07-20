@@ -33,6 +33,7 @@ import {
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import TooltipWrapper from '../ui/tooltip-wrapper';
+import { safeFetch } from '@/lib/safe-fetch';
 
 export default function LicenseKeysTable() {
   const queryClient = useQueryClient();
@@ -79,69 +80,6 @@ export default function LicenseKeysTable() {
     return newUrl;
   }
 
-  // set isFilterActive when apply and clear
-  function syncIsFilterActive(appliedFilters) {
-    if (appliedFilters && !isFilterActive) {
-      setIsFilterActive(true);
-    } else if (!appliedFilters && isFilterActive) {
-      setIsFilterActive(false);
-    }
-  }
-
-  async function handleSearch(appliedFilters) {
-    const keyResult = searchKeySchema.safeParse(searchRef.current.value);
-    if (!keyResult.success) return false;
-    const parsedKey = keyResult.data;
-    
-    try {
-      const result = await queryClient.fetchQuery({
-        queryKey: ['licenseKeysSearch', parsedKey, appliedFilters],
-        queryFn: async () => {
-          setIsSearching(true);
-          // if previoesly searchedLicenseKey is null, then show skeleton loading
-          // for all table, besides that, then show toast loading only
-          let toastId;
-          if (searchedLicenseKey) {
-            toastId = toast.loading('Searching License Keys...');
-          }
-          const res = await fetch(addFiltersToURL(`/api/license-keys?sk=${parsedKey}`, appliedFilters));
-          const resJson = await res.json();
-
-          if (toastId) {
-            toast.dismiss(toastId);
-          }
-
-          setIsSearching(false);
-          return resJson;
-        },
-        staleTime: 10000,
-        gcTime: 10000,
-      });
-
-      if (!isRerender.current) {
-        isRerender.current = true;
-      }
-      setSearchedLicenseKey(result.data);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  function handleEnterSearch(e) {
-    if (e.key === 'Enter') {
-      handleSearch(filters);
-    }
-  }
-
-  function handleClearSearchInput() {
-    setPagination({
-      ...pagination,
-      pageIndex: 0,
-    });
-    setSearchedLicenseKey(null);
-    searchRef.current.value = '';
-  }
-
   const {
     data: dataLK,
     isFetching: isFetchingLK,
@@ -175,6 +113,63 @@ export default function LicenseKeysTable() {
     gcTime: 1000 * 60 * 3,
     enabled: !searchedLicenseKey,
   });
+
+  async function handleSearch(appliedFilters) {
+    const keyResult = searchKeySchema.safeParse(searchRef.current.value);
+    if (!keyResult.success) return false;
+    const parsedKey = keyResult.data;
+    
+    try {
+      const result = await queryClient.fetchQuery({
+        queryKey: ['licenseKeysSearch', parsedKey, appliedFilters],
+        queryFn: async () => {
+          setIsSearching(true);
+          // if previoesly searchedLicenseKey is null, then show skeleton loading
+          // for all table, besides that, then show toast loading only
+          let toastId;
+          if (searchedLicenseKey) {
+            toastId = toast.loading('Searching license keys...');
+          }
+
+          return await safeFetch({
+            url: addFiltersToURL(`/api/license-keys?sk=${parsedKey}`, appliedFilters),
+            onFinally: () => {
+              if (toastId) {
+                toast.dismiss(toastId);
+              }
+
+              setIsSearching(false);
+            },
+            errorMessage: 'Something went wrong while searching. Please try again.',
+          });
+        },
+        staleTime: 10_000,
+        gcTime: 10_000,
+      });
+
+      if (!isRerender.current) {
+        isRerender.current = true;
+      }
+      setSearchedLicenseKey(result.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function handleEnterSearch(e) {
+    if (e.key === 'Enter') {
+      handleSearch(filters);
+    }
+  }
+
+  function handleClearSearchInput() {
+    setPagination({
+      ...pagination,
+      pageIndex: 0,
+    });
+    setSearchedLicenseKey(null);
+    searchRef.current.value = '';
+  }
 
   const deleteMutation = useMutation({
     mutationFn: async ({ deleteData }) => await removeLicenseKey(deleteData.id),
@@ -253,6 +248,15 @@ export default function LicenseKeysTable() {
       targetActionBtn.removeAttribute('disabled');
     },
   });
+
+  // set isFilterActive when apply and clear
+  function syncIsFilterActive(appliedFilters) {
+    if (appliedFilters && !isFilterActive) {
+      setIsFilterActive(true);
+    } else if (!appliedFilters && isFilterActive) {
+      setIsFilterActive(false);
+    }
+  }
 
   async function handleFilter({
     action,
