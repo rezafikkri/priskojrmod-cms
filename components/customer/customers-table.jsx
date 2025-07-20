@@ -166,7 +166,7 @@ export default function CustomersTable() {
     }
   }
 
-  async function handleFilter(newFilters) {
+  function handleFilter(newFilters) {
     if (searchedCustomer) {
       handleSearch(newFilters);
     } else {
