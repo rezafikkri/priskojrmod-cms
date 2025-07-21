@@ -28,7 +28,7 @@ export default function DeleteDialog({
     onIsOpenChange(false);
     onDeleteDataChange(null);
     setEmail('');
-    const toastId = toast.loading(`Deleting License Key for ${deleteData.email}...`);
+    const toastId = toast.loading(`Deleting license key...`);
     onDelete({ deleteData, toastId });
   }
 

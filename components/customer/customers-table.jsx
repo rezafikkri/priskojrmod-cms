@@ -230,7 +230,7 @@ export default function CustomersTable() {
         })) {
           queryClient.setQueryData(
             ['customers', paginationRef.current.pageIndex, filtersRef.current],
-            ({ customers: newCustomers, rowCount: newRowCount }),
+            { customers: newCustomers, rowCount: newRowCount },
           );
 
           if (!hasSuccessfulBanRef.current) {
@@ -258,10 +258,7 @@ export default function CustomersTable() {
           } else {
             queryClient.setQueryData(
               ['customers', paginationRef.current.pageIndex, filtersRef.current ],
-              () => ({
-                customers: newCustomers,
-                rowCount: newRowCount,
-              })
+              { customers: newCustomers, rowCount: newRowCount },
             );
           }
 
@@ -342,10 +339,10 @@ export default function CustomersTable() {
           pageSize: paginationRef.current.pageSize,
           rowCount: customer.rowCount,
         })) {
-          queryClient.setQueryData(['customers', paginationRef.current.pageIndex, filtersRef.current], ({
-            customers: newCustomers,
-            rowCount: newRowCount,
-          }));
+          queryClient.setQueryData(
+            ['customers', paginationRef.current.pageIndex, filtersRef.current],
+            { customers: newCustomers, rowCount: newRowCount },
+          );
 
           if (!hasSuccessfulDeleteRef.current) {
             hasSuccessfulDeleteRef.current = true;
@@ -371,15 +368,8 @@ export default function CustomersTable() {
             }));
           } else {
             queryClient.setQueryData(
-              [
-                'customers',
-                paginationRef.current.pageIndex,
-                filtersRef.current,
-              ],
-              () => ({
-                customers: newCustomers,
-                rowCount: newRowCount,
-              }),
+              [ 'customers', paginationRef.current.pageIndex, filtersRef.current ],
+              { customers: newCustomers, rowCount: newRowCount },
             );
           }
 

@@ -2,7 +2,6 @@
 
 import {
   keepPreviousData,
-  useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
@@ -11,7 +10,6 @@ import { AlertCircle, Search, X } from 'lucide-react';
 import DataTable from './data-table';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
-import UnknownError from '@/lib/errors/UnknownError';
 import {
   Alert,
   AlertTitle,
@@ -52,13 +50,33 @@ export default function LicenseKeysTable() {
     pageIndex: 0,
     pageSize: process.env.NEXT_PUBLIC_PAGE_SIZE,
   });
-  const isPaginationChangeWhenDelete = useRef(false);
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState({
     regenerated_at: false,
     created_at: false,
     updated_at: false,
   });
+
+  // deleting ids and ban/unban state
+  const [deletingIds, setDeletingIds] = useState([]);
+
+  // Ensures that in normal mode and not on the last page,
+  // invalidateQueries is still triggered even if not all deletions or banning succeed.
+  const hasSuccessfulDeleteRef = useRef(false);
+
+  // This `useRef` is here to **always keep the newest `searchedLicenseKey and more state` value**.
+  // We need it because our async function (sent to the child) might "remember"
+  // an old `searchedLicenseKey and more state` value, which is called a "stale closure" problem.
+  const searchedLicenseKeyRef = useRef(searchedLicenseKey);
+  const filtersRef = useRef(filters);
+  const paginationRef = useRef(pagination);
+  const deletingIdsRef = useRef(deletingIds);
+
+  useEffect(() => {
+    searchedLicenseKeyRef.current = searchedLicenseKey;
+    filtersRef.current = filters;
+    paginationRef.current = pagination;
+  }, [searchedLicenseKey, filters, pagination]);
 
   // set can regenerate state
   const [isRegenerating, setIsRegenerating] = useState(false);
@@ -84,7 +102,6 @@ export default function LicenseKeysTable() {
     isError: isErrorLK,
     error: errorLK,
     isPlaceholderData: isPlaceholderDataLK,
-    isStale: isStaleLK,
   } = useQuery({
     queryKey: ['licenseKeys', pagination.pageIndex, filters],
     queryFn: async () => {
@@ -104,8 +121,8 @@ export default function LicenseKeysTable() {
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 60 * 3,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
     enabled: !searchedLicenseKey,
   });
 
@@ -138,8 +155,8 @@ export default function LicenseKeysTable() {
             errorMessage: 'Something went wrong while searching. Please try again.',
           });
         },
-        staleTime: 10_000,
-        gcTime: 10_000,
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 5,
       });
 
       setSearchedLicenseKey(result.data);
@@ -163,79 +180,104 @@ export default function LicenseKeysTable() {
     searchRef.current.value = '';
   }
 
-  const deleteMutation = useMutation({
-    mutationFn: async ({ deleteData }) => await removeLicenseKey(deleteData.id),
-    onMutate: ({ deleteData }) => {
-      const targetRow = document.querySelector(`#row${deleteData.id}`);
-      const targetActionBtn = targetRow.querySelector('td > button');
-      targetRow.classList.add('opacity-50');
-      targetActionBtn.setAttribute('disabled', true);
-      return { targetRow, targetActionBtn };
-    },
-    onSuccess: async (deleteRes, { toastId, deleteData }) => {
-      if (deleteRes.status !== 'success') throw new Error(deleteRes.message);
+  async function handleDelete({ deleteData, toastId }) {
+    // This is for add opacity-50 style to deleted row
+    setDeletingIds((prev) => {
+      const newIds = [...prev, deleteData.id];
+      deletingIdsRef.current = newIds;
+      return newIds;
+    });
 
-      if (searchedLicenseKey) {
-        setSearchedLicenseKey({
-          ...searchedLicenseKey,
-          licenseKeys: searchedLicenseKey.licenseKeys.filter(slk => slk.id !== deleteData.id),
-        });
-        await queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
-        await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+    const removeRes = await removeLicenseKey(deleteData.id);
+
+    setDeletingIds((prev) => {
+      const newIds = prev.filter(id => id !== deleteData.id);
+      deletingIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const licenseKey = queryClient.getQueryData([
+      'licenseKeys',
+      paginationRef.current.pageIndex,
+      filtersRef.current,
+    ]);
+
+    if (removeRes.status === 'success') {
+      if (searchedLicenseKeyRef.current) {
+        setSearchedLicenseKey((prevLicenseKey) => ({
+          ...prevLicenseKey,
+          licenseKeys: prevLicenseKey.licenseKeys.filter(slk => slk.id !== deleteData.id),
+        }));
+
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       } else {
-        const licenseKey = queryClient.getQueryData(['licenseKeys', pagination.pageIndex, filters]);
-        const newLicenseKeys = licenseKey.data.licenseKeys.filter(lk => lk.id !== deleteData.id);
-        const newRowCount = licenseKey.data.rowCount - 1;
+        const newLicenseKeys = licenseKey.licenseKeys.filter(lk => lk.id !== deleteData.id);
+        const newRowCount = licenseKey.rowCount - 1;
 
-        console.dir(JSON.stringify(['licenseKeys', pagination.pageIndex, filters]));
         if (!isLastPage({
-          pageIndex: pagination.pageIndex,
-          pageSize: pagination.pageSize,
-          rowCount: licenseKey.data.rowCount,
+          pageIndex: paginationRef.current.pageIndex,
+          pageSize: paginationRef.current.pageSize,
+          rowCount: licenseKey.rowCount,
         })) {
-          queryClient.setQueryData(['licenseKeys', pagination.pageIndex], (oldData) => {
-            return {
-              ...oldData,
-              data: {
-                licenseKeys: newLicenseKeys,
-                rowCount: newRowCount,
-              },
-            };
-          });
-          await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+          queryClient.setQueryData(
+            ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+            { licenseKeys: newLicenseKeys, rowCount: newRowCount },
+          );
+
+          if (!hasSuccessfulDeleteRef.current) {
+            hasSuccessfulDeleteRef.current = true;
+          }
         } else {
-          if (newLicenseKeys.length <= 0 && newRowCount > 0) {
-            isPaginationChangeWhenDelete.current = true;
-            setPagination({
+          if (newLicenseKeys.length === 0 && newRowCount > 0) {
+            queryClient.removeQueries({
+              queryKey: ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+              exact: true,
+            });
+
+            queryClient.setQueryData(
+              ['licenseKeys', paginationRef.current.pageIndex - 1, filtersRef.current],
+              (oldData) => ({ ...oldData, rowCount: newRowCount }),
+            );
+
+            setPagination((pagination) => ({
               ...pagination,
               pageIndex: pagination.pageIndex - 1,
-            });
+            }));
           } else {
-            queryClient.setQueryData(['licenseKeys', pagination.pageIndex], (oldData) => {
-              return {
-                ...oldData,
-                data: {
-                  licenseKeys: newLicenseKeys,
-                  rowCount: newRowCount,
-                },
-              };
-            });
+            queryClient.setQueryData(
+              ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+              { licenseKeys: newLicenseKeys, rowCount: newRowCount },
+            );
           }
-        }
 
-        await queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
+        }
+      }
+      
+      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+      toast.success(`License key deleted successfully.`, { id: toastId });
+    } else {
+      toast.error(removeRes.message, { id: toastId });
+    }
+
+    // For still invalidateQueries licenseKeys, when not in last page, last delete item fails, and 
+    // at least one delete succeeded.
+    if (
+      !searchedLicenseKeyRef.current &&
+      deletingIdsRef.current.length === 0 &&
+      hasSuccessfulDeleteRef.current
+    ) {
+      if (!isLastPage({
+        pageIndex: paginationRef.current.pageIndex,
+        pageSize: paginationRef.current.pageSize,
+        rowCount: licenseKey.rowCount,
+      })) {
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       }
 
-      toast.success(`License Key for ${deleteData.email} was successfully deleted.`, { id: toastId });
-    },
-    onError: (err, { toastId }) => {
-      toast.error(err.message, { id: toastId });
-    },
-    onSettled: (_d, _e, _v, { targetRow, targetActionBtn }) => {
-      targetRow.classList.remove('opacity-50');
-      targetActionBtn.removeAttribute('disabled');
-    },
-  });
+      hasSuccessfulDeleteRef.current = false;
+    }
+  }
 
   // set isFilterActive when apply and clear
   function syncIsFilterActive(appliedFilters) {
@@ -251,28 +293,14 @@ export default function LicenseKeysTable() {
     newFilters,
   }) {
     if (action === 'apply') {
-      if (!searchedLicenseKey) {
-        await queryClient.invalidateQueries({
-          queryKey: ['licenseKeys', pagination.pageIndex, newFilters],
-        });
-      } else {
-        await queryClient.invalidateQueries({
-          queryKey: ['licenseKeysSearch', searchRef.current.value, newFilters],
-        });
+      if (searchedLicenseKey) {
         handleSearch(newFilters);
       }
 
       // set filters in the future
       setFilters(newFilters);
     } else {
-      if (!searchedLicenseKey) {
-        await queryClient.invalidateQueries({
-          queryKey: ['licenseKeys', pagination.pageIndex, null],
-        });
-      } else {
-        await queryClient.invalidateQueries({
-          queryKey: ['licenseKeysSearch', searchRef.current.value, null],
-        });
+      if (searchedLicenseKey) {
         handleSearch(null);
       }
 
@@ -315,15 +343,6 @@ export default function LicenseKeysTable() {
 
     setIsRegenerating(false);
   }
-
-  // if after delete action, pagination changed
-  useEffect(() => {
-    if (isPaginationChangeWhenDelete.current && !isStaleLK) {
-      queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-    }
-
-    if (isPaginationChangeWhenDelete.current) isPaginationChangeWhenDelete.current = false;
-  }, [pagination, isPaginationChangeWhenDelete.current]);
 
   let licenseKey;
   if (searchedLicenseKey) {
@@ -448,19 +467,20 @@ export default function LicenseKeysTable() {
             pagination,
             rowSelection,
             columnVisibility,
+            deletingIds,
           }}
           tableHandler={{ 
             onPaginationChange: setPagination,
             onRowSelectionChange: setRowSelection,
             onColumnVisibilityChange: setColumnVisibility,
-            onDelete: deleteMutation.mutate,
+            onDelete: handleDelete,
           }}
           isPlaceholderData={isPlaceholderDataLK}
           hasSearched={!!searchedLicenseKey}
         />
       )}
 
-      <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: <i>Activate</i> indicates that the License Key has been used to activate the application, while <i>Download</i> indicates that the License Key has been used to download something associated with the application. For example, the Sider Manager app has a Default Addon; this means <i>Download</i> indicates the License Key has been used to download this Default Addon.</small>
+      <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: <i>Activate</i> indicates that the license key has been used to activate the application, while <i>Download</i> indicates that the license key has been used to download something associated with the application. For example, the Sider Manager app has a Default Addon; this means <i>Download</i> indicates the license key has been used to download this Default Addon.</small>
     </>
   );
 }

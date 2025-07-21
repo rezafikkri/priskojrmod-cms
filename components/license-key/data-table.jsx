@@ -49,6 +49,11 @@ export default function DataTable({
     onColumnVisibilityChange,
     onDelete,
   } = tableHandler;
+  const {
+    columnVisibility,
+    pagination,
+    deletingIds,
+  } = tableState;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
@@ -140,7 +145,11 @@ export default function DataTable({
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0 focus-visible:ring-ring">
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={deletingIds.includes(row.original.id)}
+            >
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
@@ -175,12 +184,15 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], []);
+  ], [deletingIds]);
   const table = useReactTable({
     data: licenseKeys,
     columns,
     rowCount,
-    state: tableState,
+    state: {
+      columnVisibility,
+      pagination,
+    },
     onPaginationChange,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
@@ -219,8 +231,8 @@ export default function DataTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  id={`row${row.original.id}`}
                   data-state={row.getIsSelected() && 'selected'}
+                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
