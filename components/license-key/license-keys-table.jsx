@@ -288,26 +288,18 @@ export default function LicenseKeysTable() {
     }
   }
 
-  async function handleFilter({
-    action,
-    newFilters,
-  }) {
-    if (action === 'apply') {
-      if (searchedLicenseKey) {
-        handleSearch(newFilters);
-      }
-
-      // set filters in the future
-      setFilters(newFilters);
+  async function handleFilter(newFilters) {
+    if (searchedLicenseKey) {
+      handleSearch(newFilters);
     } else {
-      if (searchedLicenseKey) {
-        handleSearch(null);
-      }
-
-      // set filters untuk request kedepannya
-      setFilters(null);
+      setPagination({
+        ...pagination,
+        pageIndex: 0,
+      });
     }
 
+    // set filters for trigger refetch in normal mode
+    setFilters(newFilters);
     syncIsFilterActive(newFilters);
   }
 
