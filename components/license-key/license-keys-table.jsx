@@ -358,7 +358,6 @@ export default function LicenseKeysTable() {
       totalData: licenseKey?.rowCount,
       totalDataPerPage: licenseKey?.licenseKeys?.length,
       searchKey: searchRef?.current?.value,
-      isTooMany: licenseKey?.isTooMany,
     });
   }, [licenseKey]);
 

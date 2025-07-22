@@ -284,7 +284,7 @@ export default function DataTable({
       ) : null}
 
       {(hasSearched && isTooMany) ? (
-        <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Info</b>: If you haven't found the License Key you're looking for, please use a more specific email!</p>
+        <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Info</b>: If you haven't found the license key you're looking for, please use a more specific email!</p>
       ) : null}
 
       <DeleteDialog
