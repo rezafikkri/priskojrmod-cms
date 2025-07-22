@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { generatePageInfo, isLastPage } from '@/lib/utils';
-import { AlertCircle, Search, X } from 'lucide-react';
+import { AlertCircle, Search, X, RotateCw } from 'lucide-react';
 import DataTable from './data-table';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
@@ -121,8 +121,8 @@ export default function LicenseKeysTable() {
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 5,
+    staleTime: 1000 * 20,
+    gcTime: 1000 * 60 * 3,
     enabled: !searchedLicenseKey,
   });
 
@@ -155,8 +155,8 @@ export default function LicenseKeysTable() {
             errorMessage: 'Something went wrong while searching. Please try again.',
           });
         },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 5,
+        staleTime: 10_000,
+        gcTime: 10_000,
       });
 
       setSearchedLicenseKey(result.data);
@@ -178,6 +178,14 @@ export default function LicenseKeysTable() {
     });
     setSearchedLicenseKey(null);
     searchRef.current.value = '';
+  }
+
+  function handleRefresh() {
+    queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+    queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+    if (searchedLicenseKey) {
+      handleSearch(filters);
+    }
   }
 
   async function handleDelete({ deleteData, toastId }) {
@@ -357,7 +365,7 @@ export default function LicenseKeysTable() {
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-3 items-start mb-4">
-        <div className="flex space-x-6">
+        <div className="flex space-x-3 max-lg:flex-wrap max-lg:w-full gap-3">
           <TooltipWrapper text="Create license key">
             <Button asChild variant="outline" className="md:w-auto h-auto text-base px-3 py-1.5 inline-block">
               <Link href="/license-key/new"><Plus className="icon" /> Create</Link>
@@ -365,11 +373,23 @@ export default function LicenseKeysTable() {
           </TooltipWrapper>
 
           <div className="flex space-x-3">
+            <TooltipWrapper text="Refresh">
+              <Button
+                variant="outline"
+                className="text-base px-3 py-1.5 h-auto inline-block"
+                disabled={isFetchingLK || isSearching}
+                onClick={handleRefresh}
+              >
+                <RotateCw className="icon" />
+              </Button>
+            </TooltipWrapper>
+            
             <FiltersPopover
               onFilter={handleFilter}
               isFilterActive={isFilterActive}
               disabled={isFetchingLK || isSearching}
             />
+
             <Button
               variant="outline"
               className="text-base px-3 py-1.5 h-auto"
