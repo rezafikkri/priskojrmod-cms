@@ -52,6 +52,7 @@ export default function LicenseKeysTable() {
   });
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState({
+    select: true,
     regenerated_at: false,
     created_at: false,
     updated_at: false,
@@ -301,7 +302,7 @@ export default function LicenseKeysTable() {
     }
   }
 
-  async function handleFilter(newFilters) {
+  function handleFilter(newFilters) {
     if (searchedLicenseKey) {
       handleSearch(newFilters);
     } else {
@@ -309,13 +310,27 @@ export default function LicenseKeysTable() {
         ...pagination,
         pageIndex: 0,
       });
-      // reset rowSelection
-      setRowSelection({});
     }
+
+    // reset rowSelection
+    setRowSelection({});
 
     // set filters for trigger refetch in normal mode
     setFilters(newFilters);
     syncIsFilterActive(newFilters);
+
+    // if canRegenerate = 'yes'
+    if (newFilters?.canRegenerate === 'yes' && columnVisibility.select) {
+      setColumnVisibility(prev => ({
+        ...prev,
+        select: false,
+      }));
+    } else if (!columnVisibility.select) {
+      setColumnVisibility(prev => ({
+        ...prev,
+        select: true,
+      }));
+    }
   }
 
   async function handleSetCanRegenerate() {
@@ -415,15 +430,17 @@ export default function LicenseKeysTable() {
               disabled={isFetchingLK || isSearching}
             />
 
-            <Button
-              variant="outline"
-              className="text-base px-3 py-1.5 h-auto"
-              disabled={isFetchingLK
-                || isSearching
-                || Object.keys(rowSelection).length <= 0
-                || isRegenerating}
-              onClick={handleSetCanRegenerate}
-            >Set Can Regenerate</Button>
+            {filters?.canRegenerate !== 'yes' && (
+              <Button
+                variant="outline"
+                className="text-base px-3 py-1.5 h-auto"
+                disabled={isFetchingLK
+                  || isSearching
+                  || Object.keys(rowSelection).length <= 0
+                  || isRegenerating}
+                onClick={handleSetCanRegenerate}
+              >Set Can Regenerate</Button>
+            )}
           </div>
         </div>
         <div className="flex space-x-3 max-lg:w-full w-2/5">
@@ -470,20 +487,23 @@ export default function LicenseKeysTable() {
             </TooltipWrapper>
             <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
               <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
-              {Object.entries(columnVisibility).map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column[0]}
-                  className="capitalize text-base hover:cursor-pointer"
-                  checked={column[1]}
-                  onCheckedChange={(value) =>
-                    setColumnVisibility({
-                      ...columnVisibility,
-                      [column[0]]: value,
-                    })}
-                >
-                  {column[0].replace('_', ' ')}
-                </DropdownMenuCheckboxItem>
-              ))}
+              {Object.entries(columnVisibility)
+                .filter(column => column[0] !== 'select')
+                .map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column[0]}
+                    className="capitalize text-base hover:cursor-pointer"
+                    checked={column[1]}
+                    onCheckedChange={(value) =>
+                      setColumnVisibility({
+                        ...columnVisibility,
+                        [column[0]]: value,
+                      })}
+                  >
+                    {column[0].replace('_', ' ')}
+                  </DropdownMenuCheckboxItem>
+                ))
+              }
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -62,7 +62,6 @@ export default function DataTable({
   const columns = useMemo(() => [
     {
       id: 'select',
-      enableHiding: false,
       enableSorting: false,
       header: ({ table }) => (
         <div className="flex items-center">
