@@ -160,6 +160,8 @@ export default function LicenseKeysTable() {
       });
 
       setSearchedLicenseKey(result.data);
+      // reset rowSelection
+      setRowSelection({});
     } catch (err) {
       console.error(err);
     }
@@ -180,11 +182,14 @@ export default function LicenseKeysTable() {
     searchRef.current.value = '';
   }
 
-  function handleRefresh() {
-    queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+  async function handleRefresh() {
+    await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
     queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
-    if (searchedLicenseKey) {
-      handleSearch(filters);
+    if (searchedLicenseKeyRef.current) {
+      handleSearch(filtersRef.current);
+    } else {
+      // reset rowSelection
+      setRowSelection({});
     }
   }
 
@@ -304,6 +309,8 @@ export default function LicenseKeysTable() {
         ...pagination,
         pageIndex: 0,
       });
+      // reset rowSelection
+      setRowSelection({});
     }
 
     // set filters for trigger refetch in normal mode
@@ -321,24 +328,43 @@ export default function LicenseKeysTable() {
 
     // not use try/catch because in actions already using try/catch
     const setCanRegenerateRes = await setCanRegenerateKeys(rowSelections);
+
+    toast.dismiss(toastId);
+
     if (setCanRegenerateRes.status === 'success') {
       await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-      await queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+
+      if (!searchedLicenseKey) {
+        if (filtersRef.current?.canRegenerate !== 'all') {
+          const licenseKey = queryClient.getQueryData([
+            'licenseKeys',
+            paginationRef.current.pageIndex,
+            filtersRef.current,
+          ]);
+          const newLastPageIndex = Math.ceil(licenseKey.rowCount / process.env.NEXT_PUBLIC_PAGE_SIZE) - 1;
+
+          if (paginationRef.current.pageIndex > newLastPageIndex) {
+            // change pagination to new last page index
+            setPagination(pagination => ({
+              ...pagination,
+              pageIndex: newLastPageIndex,
+            }));
+          }
+        }
+      } else {
+        await handleSearch(filtersRef.current);
+      }
+
       setRowSelection({});
 
       if (setCanRegenerateRes.data.count > 0) {
-        toast.success(`Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys.`, {
-          id: toastId,
-        });
+        toast.success(`Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys.`);
       } else {
-        toast.info('No license keys were updated. They may have already been deleted.', {
-          id: toastId,
-        });
+        toast.info('No license keys were updated. They may have already been deleted.');
       }
     } else {
-      toast.error(setCanRegenerateRes.message, {
-        id: toastId,
-      });
+      toast.error(setCanRegenerateRes.message);
     }
 
     setIsRegenerating(false);

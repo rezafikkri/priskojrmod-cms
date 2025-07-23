@@ -52,6 +52,7 @@ export default function DataTable({
   const {
     columnVisibility,
     pagination,
+    rowSelection,
     deletingIds,
   } = tableState;
   const [deleteData, setDeleteData] = useState(null);
@@ -192,6 +193,7 @@ export default function DataTable({
     state: {
       columnVisibility,
       pagination,
+      rowSelection,
     },
     onPaginationChange,
     getCoreRowModel: getCoreRowModel(),
