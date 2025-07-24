@@ -21,20 +21,23 @@ export default function DeleteDialog({
   deleteData,
 }) {
   const [email, setEmail] = useState('');
+  const [appName, setAppName] = useState('');
 
   function handleDelete() {
-    if (email !== deleteData.email) return false;
+    if (email !== deleteData.email || appName !== deleteData.appName) return false;
 
     onIsOpenChange(false);
     onDeleteDataChange(null);
     setEmail('');
+    setAppName('');
     const toastId = toast.loading(`Deleting license key...`);
     onDelete({ deleteData, toastId });
   }
 
-  let checkEmail = false;
-  if (email === deleteData?.email) checkEmail = true;
-  const emailToDelete = deleteData?.email ? deleteData?.email : email;
+  const isEmailConfirmed = email === deleteData?.email;
+  const isAppConfirmed = appName === deleteData?.appName;
+  const emailToDelete = deleteData?.email ? deleteData.email : email;
+  const appNameToDelete = deleteData?.appName ? deleteData.appName : appName;
 
   function handleOpenChange() {
     onIsOpenChange(false);
@@ -54,10 +57,16 @@ export default function DeleteDialog({
         className="sm:max-w-md"
         onInteractOutside={handleClickOutside}
       >
-        <DialogHeader>
+        <DialogHeader className="text-left">
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">The License Key for <b>{emailToDelete}</b> will be permanently deleted. To confirm, type "<b>{emailToDelete}</b>" in the box below.</DialogDescription>
+          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
+            The license key for <b>{emailToDelete}</b> under app <b>{appNameToDelete}</b> will be permanently deleted.
+          </DialogDescription>
+          <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
+            To confirm, type the email <b>{emailToDelete}</b> and app name <b>{appNameToDelete}</b> in the fields below.
+          </DialogDescription>
         </DialogHeader>
+
         <Input
           placeholder="Email..."
           className="mt-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
@@ -65,12 +74,20 @@ export default function DeleteDialog({
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />
+        <Input
+          placeholder="App name..."
+          className="mb-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
+          aria-invalid={true}
+          onChange={(e) => setAppName(e.target.value)}
+          value={appName}
+        />
+
         <DialogFooter className="relative">
           <Button
             variant="destructive"
             className={`w-full h-auto text-base px-3 py-1.5 dark:bg-destructive dark:hover:bg-destructive/90 text-primary-foreground`}
             onClick={handleDelete}
-            disabled={!checkEmail}
+            disabled={!isEmailConfirmed || !isAppConfirmed}
           > 
             Yes, delete
           </Button>

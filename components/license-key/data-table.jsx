@@ -177,7 +177,11 @@ export default function DataTable({
             >
               <button
                 onClick={() => {
-                  setDeleteData({ id: row.original.id, email: row.getValue('email') });
+                  setDeleteData({
+                    id: row.original.id,
+                    email: row.getValue('email'),
+                    appName: row.getValue('app_name'),
+                  });
                   setIsOpenDeleteDialog(true);
                 }}
               >
