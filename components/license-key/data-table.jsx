@@ -93,6 +93,10 @@ export default function DataTable({
       enableHiding: false,
     },
     {
+      accessorKey: 'app_name',
+      header: 'App Name',
+    },
+    {
       accessorKey: 'used_for_activate',
       header: <div className="text-center">Activate</div>,
       cell: ({ row }) => (

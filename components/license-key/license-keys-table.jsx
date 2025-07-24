@@ -53,6 +53,7 @@ export default function LicenseKeysTable() {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState({
     select: true,
+    app_name: true,
     regenerated_at: false,
     created_at: false,
     updated_at: false,
@@ -320,15 +321,32 @@ export default function LicenseKeysTable() {
     syncIsFilterActive(newFilters);
 
     // if canRegenerate = 'yes'
-    if (newFilters?.canRegenerate === 'yes' && columnVisibility.select) {
-      setColumnVisibility(prev => ({
-        ...prev,
-        select: false,
-      }));
+    if (newFilters?.canRegenerate === 'yes') {
+      if (columnVisibility.select) {
+        setColumnVisibility(prev => ({
+          ...prev,
+          select: false,
+        }));
+      }
     } else if (!columnVisibility.select) {
       setColumnVisibility(prev => ({
         ...prev,
         select: true,
+      }));
+    }
+
+    // if secretKeyId != 'all'
+    if (newFilters && newFilters.secretKeyId !== 'all') {
+      if (columnVisibility.app_name) {
+        setColumnVisibility(prev => ({
+          ...prev,
+          app_name: false,
+        }));
+      }
+    } else if (!columnVisibility.app_name) {
+      setColumnVisibility(prev => ({
+        ...prev,
+        app_name: true,
       }));
     }
   }
