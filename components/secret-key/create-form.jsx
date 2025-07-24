@@ -56,7 +56,7 @@ export default function CreateForm({ products }) {
     const addRes = await addSecretKey(data);
     if (addRes.status === 'success') {
       form.reset();
-      toast.success('Secret Key created successfully.');
+      toast.success('Secret key created successfully.');
     } else {
       toast.error(addRes.message);
     }

@@ -39,7 +39,7 @@ export default function DataTable({ owners: data }) {
     targetRow.classList.add('opacity-50');
     targetActionBtn.setAttribute('disabled', true);
     // show loading
-    const toastId = toast.loading('Deleting Owner...');
+    const toastId = toast.loading('Deleting owner...');
 
     const removeRes = await removeOwner(id);
 

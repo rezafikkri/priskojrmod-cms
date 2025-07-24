@@ -30,7 +30,7 @@ export default function DeleteDialog({
     onDeleteDataChange(null);
     setEmail('');
     setAppName('');
-    const toastId = toast.loading(`Deleting license key...`);
+    const toastId = toast.loading('Deleting license key...');
     onDelete({ deleteData, toastId });
   }
 
@@ -63,7 +63,7 @@ export default function DeleteDialog({
             The license key for <b>{emailToDelete}</b> under app <b>{appNameToDelete}</b> will be permanently deleted.
           </DialogDescription>
           <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            To confirm, type the email <b>{emailToDelete}</b> and app name <b>{appNameToDelete}</b> in the fields below.
+            To confirm, type the email "<b>{emailToDelete}</b>" and app name "<b>{appNameToDelete}</b>" in the fields below.
           </DialogDescription>
         </DialogHeader>
 

@@ -51,7 +51,7 @@ export default function DataTable({ secretKeys: data }) {
       setSecretKeys(secretKeys.filter(s => {
         return s.id !== deleteData.id;
       }));
-      toast.success(`Secret key for ${deleteData.appName} was successfully deleted.`, {
+      toast.success('Secret key deleted successfully.', {
         id: toastId,
       });
     } else {

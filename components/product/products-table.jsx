@@ -72,7 +72,7 @@ export default function ProductsTable() {
     gcTime: 1000 * 60,
   });
 
-  async function handleEditPinnedStatus({ id, name, isPinned }) {
+  async function handleEditPinnedStatus({ id, isPinned }) {
     const targetRow = document.querySelector(`#row${id}`);
     const targetActionBtn = targetRow.querySelector('td > button');
     targetRow.classList.add('opacity-50');
@@ -103,8 +103,8 @@ export default function ProductsTable() {
       });
       toast.success(
         !isPinned
-          ? <>Product <i>{name}</i> was pinned.</>
-          : <>Product <i>{name}</i> was unpinned.</>,
+          ? 'Product pinned successfully.'
+          : 'Product unpinned successfully.',
         { id: toastId },
       );
     } else {
@@ -112,7 +112,7 @@ export default function ProductsTable() {
     }
   }
 
-  async function handleEditPublishedStatus({ id, name, isPublished }) {
+  async function handleEditPublishedStatus({ id, isPublished }) {
     const targetRow = document.querySelector(`#row${id}`);
     const targetActionBtn = targetRow.querySelector('td > button');
     targetRow.classList.add('opacity-50');
@@ -143,8 +143,8 @@ export default function ProductsTable() {
       });
       toast.success(
         !isPublished
-          ? <>Product <i>{name}</i> was published.</>
-          : <>Product <i>{name}</i> was unpublished.</>,
+          ? 'Product published successfully.'
+          : 'Product unpublished successfully.',
         { id: toastId },
       );
     } else {
@@ -167,7 +167,7 @@ export default function ProductsTable() {
       queryClient.setQueryData(['products'], (oldData) => {
         return [ ...oldData.filter(data => data.id !== deleteData.id) ];
       });
-      toast.success(<>Product <i>{deleteData.name}</i> was successfully deleted.</>, {
+      toast.success('Product deleted successfully.', {
         id: toastId,
       });
     } else {

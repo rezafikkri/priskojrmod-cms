@@ -159,7 +159,6 @@ export default function DataTable({
                   onClick={() =>
                     onEditPinnedStatus({
                       id: row.original.id,
-                      name: row.getValue('name'),
                       isPinned: row.original.is_pinned,
                     })
                   }
@@ -174,7 +173,6 @@ export default function DataTable({
                 <button
                   onClick={() => onEditPublishedStatus({
                     id: row.original.id,
-                    name: row.getValue('name'),
                     isPublished: row.original.is_published,
                   })}
                 >

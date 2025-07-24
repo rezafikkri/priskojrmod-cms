@@ -57,7 +57,7 @@ export default function DeleteDialog({
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
             The customer with email <b>{emailToDelete}</b> will be permanently deleted.
-            To confirm, type "<b>{emailToDelete}</b>" in the box below.
+            To confirm, type the email "<b>{emailToDelete}</b>" in the box below.
           </DialogDescription>
         </DialogHeader>
         <Input
