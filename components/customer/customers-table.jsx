@@ -206,6 +206,12 @@ export default function CustomersTable() {
       return newIds;
     });
 
+    const customer = queryClient.getQueryData([
+      'customers',
+      paginationRef.current.pageIndex,
+      filtersRef.current,
+    ]);
+
     if (editRes.status === 'success') {
       if (searchedCustomerRef.current) {
         setSearchedCustomer(prevCustomer => ({
@@ -215,11 +221,6 @@ export default function CustomersTable() {
 
         queryClient.invalidateQueries({ queryKey: ['customers'] });
       } else {
-        const customer = queryClient.getQueryData([
-          'customers',
-          paginationRef.current.pageIndex,
-          filtersRef.current,
-        ]);
         const newCustomers = customer.customers.filter(customer => customer.id !== id);
         const newRowCount = customer.rowCount - 1;
 
@@ -282,11 +283,6 @@ export default function CustomersTable() {
       updatingBanStatusIdsRef.current.length === 0 &&
       hasSuccessfulBanRef.current
     ) {
-      const customer = queryClient.getQueryData([
-        'customers',
-        paginationRef.current.pageIndex,
-        filtersRef.current,
-      ]);
       if (!isLastPage({
         pageIndex: paginationRef.current.pageIndex,
         pageSize: paginationRef.current.pageSize,
@@ -315,6 +311,12 @@ export default function CustomersTable() {
       return newIds;
     });
 
+    const customer = queryClient.getQueryData([
+      'customers',
+      paginationRef.current.pageIndex,
+      filtersRef.current,
+    ]);
+
     // Test queryKey apakah akan up-to-date, ketika await masih pending, tetapi kita ubah paginationnya
     // Hasil: queryKey tidak up-to-date, alias stale
     if (removeRes.status === 'success') {
@@ -326,11 +328,6 @@ export default function CustomersTable() {
 
         queryClient.invalidateQueries({ queryKey: ['customers'] });
       } else {
-        const customer = queryClient.getQueryData([
-          'customers',
-          paginationRef.current.pageIndex,
-          filtersRef.current,
-        ]);
         const newCustomers = customer.customers.filter(customer => customer.id !== deleteData.id);
         const newRowCount = customer.rowCount - 1;
 
@@ -390,11 +387,6 @@ export default function CustomersTable() {
       deletingIdsRef.current.length === 0 &&
       hasSuccessfulDeleteRef.current
     ) {
-      const customer = queryClient.getQueryData([
-        'customers',
-        paginationRef.current.pageIndex,
-        filtersRef.current,
-      ]);
       if (!isLastPage({
         pageIndex: paginationRef.current.pageIndex,
         pageSize: paginationRef.current.pageSize,
