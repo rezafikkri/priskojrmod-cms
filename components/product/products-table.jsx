@@ -22,6 +22,7 @@ import {
 import { PriceType } from '@/constants/enums';
 import { editProductPinnedStatus, editProductPublishedStatus, removeProduct } from '@/actions/product-actions';
 import { toast } from 'sonner';
+import { safeFetch } from '@/lib/safe-fetch';
 
 export default function ProductsTable() {
   const queryClient = useQueryClient();
@@ -42,16 +43,7 @@ export default function ProductsTable() {
     error: errorP,
   } = useQuery({
     queryKey: ['products'],
-    queryFn: async () => {
-      const res = await fetch('/api/products');
-      const resJson = await res.json();
-
-      if (!res.ok) {
-        throw new UnknownError('An unexpected error occurred. Please try reloading the page!');
-      }
-
-      return resJson.data;
-    },
+    queryFn: async () => (await safeFetch({ url: '/api/products' })).data,
     select: (products) => {
       return products.map(product => {
         let newProduct = { ...product };
