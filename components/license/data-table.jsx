@@ -34,22 +34,24 @@ import { removeLicense } from '@/actions/license-actions';
 export default function DataTable({ licenses: data }) {
   const [licenses, setLicenses] = useState(data);
   const [nameLang, setNameLang] = useState(Language.EN);
+  const [deletingIds, setDeletingIds] = useState([]);
 
   async function handleDelete(id) {
-    const targetRow = document.querySelector(`#row${id}`);
-    const targetActionBtn = targetRow.querySelector('td > button');
-    targetRow.classList.add('opacity-50');
-    targetActionBtn.setAttribute('disabled', true);
+    // This is for add opacity-50 style to deleted row
+    setDeletingIds((prevDeletingIds) => [...prevDeletingIds, id]);
     // show loading
-    const toastId = toast.loading('Deleting License...');
-    
+    const toastId = toast.loading('Deleting license...');
+
     const removeRes = await removeLicense(id);
 
-    targetRow.classList.remove('opacity-50');
-    targetActionBtn.removeAttribute('disabled');
+    setDeletingIds((prevDeletingIds) =>
+      prevDeletingIds.filter((deletingId) => deletingId !== id)
+    );
 
     if (removeRes.status === 'success') {
-      setLicenses(licenses.filter(license => license.id !== id));
+      setLicenses((prevLicenses) =>
+        prevLicenses.filter((license) => license.id !== id)
+      );
       toast.success('License deleted successfully.', {
         id: toastId,
       });
@@ -102,7 +104,11 @@ export default function DataTable({ licenses: data }) {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 focus-visible:ring-ring">
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 focus-visible:ring-ring"
+                disabled={deletingIds.includes(row.original.id)}
+              >
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
@@ -125,7 +131,7 @@ export default function DataTable({ licenses: data }) {
         );
       },
     }
-  ], [licenses, nameLang]);
+  ], [nameLang, deletingIds]);
   const table = useReactTable({
     data: licenses,
     columns,
@@ -158,7 +164,10 @@ export default function DataTable({ licenses: data }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} id={'row' + row.original.id}>
+                <TableRow
+                  key={row.id}
+                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}

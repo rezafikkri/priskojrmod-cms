@@ -31,6 +31,9 @@ export default function ProductsTable() {
     created_at: false,
     updated_at: false,
   });
+  const [updatingPinnedStatusIds, setUpdatingPinnedStatusIds] = useState([]);
+  const [updatingPublishedIds, setUpdatingPublishedIds] = useState([]);
+  const [deletingIds, setDeletingIds] = useState([]);
 
   const {
     data: dataP,
@@ -73,18 +76,17 @@ export default function ProductsTable() {
   });
 
   async function handleEditPinnedStatus({ id, isPinned }) {
-    const targetRow = document.querySelector(`#row${id}`);
-    const targetActionBtn = targetRow.querySelector('td > button');
-    targetRow.classList.add('opacity-50');
-    targetActionBtn.setAttribute('disabled', true);
+    // This is for add opacity-50 style to deleted row
+    setUpdatingPinnedStatusIds((prevUpdatingPinnedStatusIds) => [...prevUpdatingPinnedStatusIds, id]);
     // show loading
     const toastId = toast.loading(!isPinned ? 'Pinning product...' : 'Unpinning product...');
 
     const editRes = await editProductPinnedStatus({ id, is_pinned: !isPinned });
 
-    targetRow.classList.remove('opacity-50');
-    targetActionBtn.removeAttribute('disabled');
-    
+    setUpdatingPinnedStatusIds((prevUpdatingPinnedStatusIds) =>
+      prevUpdatingPinnedStatusIds.filter((updatingId) => updatingId !== id)
+    );
+
     if (editRes.status === 'success') {
       queryClient.setQueryData(['products'], (oldData) => {
         let updatedProduct = { ...oldData.find(data => data.id === editRes.data.id) };
@@ -95,12 +97,13 @@ export default function ProductsTable() {
         const filteredProducts = oldData.filter(data => data.id !== editRes.data.id);
 
         if (!isPinned) {
-          return [ updatedProduct, ...filteredProducts ];
+          return [updatedProduct, ...filteredProducts];
         } else {
           filteredProducts.splice(targetIndex, 0, updatedProduct);
           return filteredProducts;
         }
       });
+
       toast.success(
         !isPinned
           ? 'Product pinned successfully.'
@@ -113,18 +116,18 @@ export default function ProductsTable() {
   }
 
   async function handleEditPublishedStatus({ id, isPublished }) {
-    const targetRow = document.querySelector(`#row${id}`);
-    const targetActionBtn = targetRow.querySelector('td > button');
-    targetRow.classList.add('opacity-50');
-    targetActionBtn.setAttribute('disabled', true);
+    // This is for add opacity-50 style to deleted row
+    setUpdatingPublishedIds((prevUpdatingPublishedIds) => [...prevUpdatingPublishedIds, id]);
+
     // show loading
     const toastId = toast.loading(!isPublished ? 'Publishing product...' : 'Unpublishing product...');
 
     const editRes = await editProductPublishedStatus({ id, is_published: !isPublished });
 
-    targetRow.classList.remove('opacity-50');
-    targetActionBtn.removeAttribute('disabled');
-    
+    setUpdatingPublishedIds((prevUpdatingPublishedIds) =>
+      prevUpdatingPublishedIds.filter((updatingId) => updatingId !== id)
+    );
+
     if (editRes.status === 'success') {
       queryClient.setQueryData(['products'], (oldData) => {
         let updatedProduct = { ...oldData.find(data => data.id === editRes.data.id) };
@@ -135,12 +138,13 @@ export default function ProductsTable() {
         const filteredProducts = oldData.filter(data => data.id !== editRes.data.id);
 
         if (updatedProduct.is_pinned) {
-          return [ updatedProduct, ...filteredProducts ];
+          return [updatedProduct, ...filteredProducts];
         } else {
           filteredProducts.splice(targetIndex, 0, updatedProduct);
           return filteredProducts;
         }
       });
+
       toast.success(
         !isPublished
           ? 'Product published successfully.'
@@ -153,20 +157,20 @@ export default function ProductsTable() {
   }
 
   async function handleDelete({ deleteData, toastId }) {
-    const targetRow = document.querySelector(`#row${deleteData.id}`);
-    const targetActionBtn = targetRow.querySelector('td > button');
-    targetRow.classList.add('opacity-50');
-    targetActionBtn.setAttribute('disabled', true);
+    // This is for add opacity-50 style to deleted row
+    setDeletingIds((prevDeletingIds) => [...prevDeletingIds, deleteData.id]);
 
     const removeRes = await removeProduct(deleteData.id);
 
-    targetRow.classList.remove('opacity-50');
-    targetActionBtn.removeAttribute('disabled');
-    
+    setDeletingIds((prevDeletingIds) =>
+      prevDeletingIds.filter((id) => id !== deleteData.id)
+    );
+
     if (removeRes.status === 'success') {
       queryClient.setQueryData(['products'], (oldData) => {
-        return [ ...oldData.filter(data => data.id !== deleteData.id) ];
+        return [...oldData.filter((data) => data.id !== deleteData.id)];
       });
+
       toast.success('Product deleted successfully.', {
         id: toastId,
       });
@@ -222,7 +226,12 @@ export default function ProductsTable() {
       ) : (
         <DataTable
           products={dataP}
-          columnVisibility={columnVisibility}
+          tableState={{
+            columnVisibility,
+            updatingPinnedStatusIds,
+            updatingPublishedIds,
+            deletingIds,
+          }}
           tableHandler={{
             onColumnVisibilityChange: setColumnVisibility,
             onEditPinnedStatus: handleEditPinnedStatus,

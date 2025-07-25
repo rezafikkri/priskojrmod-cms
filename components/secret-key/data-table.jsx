@@ -35,22 +35,23 @@ export default function DataTable({ secretKeys: data }) {
   const [secretKeys, setSecretKeys] = useState(data);
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const [deletingIds, setDeletingIds] = useState([]);
 
   async function handleDelete({ deleteData, toastId }) {
-    const targetRow = document.querySelector(`#row${deleteData.id}`);
-    const targetActionBtn = targetRow.querySelector('td > button');
-    targetRow.classList.add('opacity-50');
-    targetActionBtn.setAttribute('disabled', true);
+    // This is for add opacity-50 style to deleted row
+    setDeletingIds((prevDeletingIds) => [...prevDeletingIds, deleteData.id]);
 
     const removeRes = await removeSecretKey(deleteData.id);
 
-    targetRow.classList.remove('opacity-50');
-    targetActionBtn.removeAttribute('disabled');
-    
+    setDeletingIds((prevDeletingIds) =>
+      prevDeletingIds.filter((id) => id !== deleteData.id)
+    );
+
     if (removeRes.status === 'success') {
-      setSecretKeys(secretKeys.filter(s => {
-        return s.id !== deleteData.id;
-      }));
+      setSecretKeys((prevSecretKeys) =>
+        prevSecretKeys.filter((s) => s.id !== deleteData.id)
+      );
+
       toast.success('Secret key deleted successfully.', {
         id: toastId,
       });
@@ -84,7 +85,11 @@ export default function DataTable({ secretKeys: data }) {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 focus-visible:ring-ring">
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 focus-visible:ring-ring"
+                disabled={deletingIds.includes(row.original.id)}
+              >
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
@@ -120,7 +125,7 @@ export default function DataTable({ secretKeys: data }) {
         );
       },
     }
-  ], [secretKeys]);
+  ], [deletingIds]);
   const table = useReactTable({
     data: secretKeys,
     columns,
@@ -153,7 +158,10 @@ export default function DataTable({ secretKeys: data }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} id={'row' + row.original.id}>
+                <TableRow
+                  key={row.id}
+                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}

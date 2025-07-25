@@ -34,7 +34,7 @@ import DeleteDialog from './delete-dialog';
 
 export default function DataTable({
   products,
-  columnVisibility,
+  tableState,
   tableHandler,
 }) {
   const { 
@@ -43,6 +43,12 @@ export default function DataTable({
     onEditPublishedStatus,
     onDelete,
   } = tableHandler;
+  const {
+    columnVisibility,
+    updatingPinnedStatusIds,
+    updatingPublishedIds,
+    deletingIds,
+  } = tableState;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [priceCurrency, setPriceCurrency] = useState(CurrencyCode.IDR);
@@ -142,7 +148,15 @@ export default function DataTable({
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 focus-visible:ring-ring">
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 focus-visible:ring-ring"
+                disabled={
+                  updatingPinnedStatusIds.includes(row.original.id) ||
+                  updatingPublishedIds.includes(row.original.id) ||
+                  deletingIds.includes(row.original.id)
+                }
+              >
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
@@ -198,7 +212,7 @@ export default function DataTable({
         );
       },
     }
-  ], [products, priceCurrency]);
+  ], [priceCurrency, updatingPinnedStatusIds, updatingPublishedIds, deletingIds]);
   const table = useReactTable({
     data: products,
     columns,
@@ -235,7 +249,18 @@ export default function DataTable({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} id={'row' + row.original.id}>
+                <TableRow
+                  key={row.id}
+                  className={
+                    (
+                      updatingPinnedStatusIds.includes(row.original.id) ||
+                      updatingPublishedIds.includes(row.original.id) ||
+                      deletingIds.includes(row.original.id)
+                    )
+                      ? 'opacity-50'
+                      : ''
+                  }
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}

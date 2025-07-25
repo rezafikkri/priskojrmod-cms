@@ -32,22 +32,22 @@ import { getTableHeaderWidth } from '@/lib/utils';
 
 export default function DataTable({ categories: data }) {
   const [categories, setCategories] = useState(data);
+  const [deletingIds, setDeletingIds] = useState([]);
 
   async function handleDelete(id) {
-    const targetRow = document.querySelector(`#row${id}`);
-    const targetActionBtn = targetRow.querySelector('td > button');
-    targetRow.classList.add('opacity-50');
-    targetActionBtn.setAttribute('disabled', true);
+    // This is for add opacity-50 style to deleted row
+    setDeletingIds((prevDeletingIds) => [...prevDeletingIds, id]);
     // show loading
     const toastId = toast.loading('Deleting Category...');
     
     const removeRes = await removeCategory(id);
 
-    targetRow.classList.remove('opacity-50');
-    targetActionBtn.removeAttribute('disabled');
+    setDeletingIds((prevDeletingIds) =>
+      prevDeletingIds.filter((deletingId) => deletingId !== id)
+    );
 
     if (removeRes.status === 'success') {
-      setCategories(categories.filter(category => category.id !== id));
+      setCategories((prevCategories) => prevCategories.filter(category => category.id !== id));
       toast.success('Category deleted successfully.', {
         id: toastId,
       });
@@ -80,7 +80,11 @@ export default function DataTable({ categories: data }) {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 focus-visible:ring-ring">
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 focus-visible:ring-ring"
+                disabled={deletingIds.includes(row.original.id)}
+              >
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
@@ -103,7 +107,7 @@ export default function DataTable({ categories: data }) {
         );
       },
     }
-  ], [categories]);
+  ], [deletingIds]);
   const table = useReactTable({
     data: categories,
     columns,
@@ -136,7 +140,10 @@ export default function DataTable({ categories: data }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} id={'row' + row.original.id}>
+                <TableRow
+                  key={row.id}
+                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
