@@ -133,6 +133,11 @@ export type Feedback = $Result.DefaultSelection<Prisma.$FeedbackPayload>
  * 
  */
 export type Testimonial = $Result.DefaultSelection<Prisma.$TestimonialPayload>
+/**
+ * Model TestimonialTranslation
+ * 
+ */
+export type TestimonialTranslation = $Result.DefaultSelection<Prisma.$TestimonialTranslationPayload>
 
 /**
  * Enums
@@ -539,6 +544,16 @@ export class PrismaClient<
     * ```
     */
   get testimonial(): Prisma.TestimonialDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.testimonialTranslation`: Exposes CRUD operations for the **TestimonialTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TestimonialTranslations
+    * const testimonialTranslations = await prisma.testimonialTranslation.findMany()
+    * ```
+    */
+  get testimonialTranslation(): Prisma.TestimonialTranslationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1002,7 +1017,8 @@ export namespace Prisma {
     Faq: 'Faq',
     FaqTranslation: 'FaqTranslation',
     Feedback: 'Feedback',
-    Testimonial: 'Testimonial'
+    Testimonial: 'Testimonial',
+    TestimonialTranslation: 'TestimonialTranslation'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1021,7 +1037,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "donationLink" | "owner" | "customer" | "license" | "licenseTranslation" | "category" | "product" | "productTranslation" | "productDiscount" | "productCoupon" | "productImage" | "productVariant" | "productPrice" | "termsOfService" | "termsOfServiceTranslation" | "privacyPolicy" | "privacyPolicyTranslation" | "aboutUs" | "aboutUsTranslation" | "faq" | "faqTranslation" | "feedback" | "testimonial"
+      modelProps: "admin" | "donationLink" | "owner" | "customer" | "license" | "licenseTranslation" | "category" | "product" | "productTranslation" | "productDiscount" | "productCoupon" | "productImage" | "productVariant" | "productPrice" | "termsOfService" | "termsOfServiceTranslation" | "privacyPolicy" | "privacyPolicyTranslation" | "aboutUs" | "aboutUsTranslation" | "faq" | "faqTranslation" | "feedback" | "testimonial" | "testimonialTranslation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2801,6 +2817,80 @@ export namespace Prisma {
           }
         }
       }
+      TestimonialTranslation: {
+        payload: Prisma.$TestimonialTranslationPayload<ExtArgs>
+        fields: Prisma.TestimonialTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TestimonialTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TestimonialTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.TestimonialTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TestimonialTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.TestimonialTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.TestimonialTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.TestimonialTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TestimonialTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.TestimonialTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload>
+          }
+          update: {
+            args: Prisma.TestimonialTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.TestimonialTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TestimonialTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TestimonialTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.TestimonialTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TestimonialTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.TestimonialTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTestimonialTranslation>
+          }
+          groupBy: {
+            args: Prisma.TestimonialTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TestimonialTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TestimonialTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<TestimonialTranslationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2909,6 +2999,7 @@ export namespace Prisma {
     faqTranslation?: FaqTranslationOmit
     feedback?: FeedbackOmit
     testimonial?: TestimonialOmit
+    testimonialTranslation?: TestimonialTranslationOmit
   }
 
   /* Types for Logging */
@@ -3341,6 +3432,37 @@ export namespace Prisma {
    */
   export type FaqCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FaqTranslationWhereInput
+  }
+
+
+  /**
+   * Count Type TestimonialCountOutputType
+   */
+
+  export type TestimonialCountOutputType = {
+    translations: number
+  }
+
+  export type TestimonialCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | TestimonialCountOutputTypeCountTranslationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TestimonialCountOutputType without action
+   */
+  export type TestimonialCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialCountOutputType
+     */
+    select?: TestimonialCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TestimonialCountOutputType without action
+   */
+  export type TestimonialCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TestimonialTranslationWhereInput
   }
 
 
@@ -28748,7 +28870,6 @@ export namespace Prisma {
     id: number | null
     picture: string | null
     name: string | null
-    message: string | null
     sm_username: string | null
     created_at: bigint | null
     updated_at: bigint | null
@@ -28758,7 +28879,6 @@ export namespace Prisma {
     id: number | null
     picture: string | null
     name: string | null
-    message: string | null
     sm_username: string | null
     created_at: bigint | null
     updated_at: bigint | null
@@ -28768,7 +28888,6 @@ export namespace Prisma {
     id: number
     picture: number
     name: number
-    message: number
     sm_username: number
     created_at: number
     updated_at: number
@@ -28792,7 +28911,6 @@ export namespace Prisma {
     id?: true
     picture?: true
     name?: true
-    message?: true
     sm_username?: true
     created_at?: true
     updated_at?: true
@@ -28802,7 +28920,6 @@ export namespace Prisma {
     id?: true
     picture?: true
     name?: true
-    message?: true
     sm_username?: true
     created_at?: true
     updated_at?: true
@@ -28812,7 +28929,6 @@ export namespace Prisma {
     id?: true
     picture?: true
     name?: true
-    message?: true
     sm_username?: true
     created_at?: true
     updated_at?: true
@@ -28909,7 +29025,6 @@ export namespace Prisma {
     id: number
     picture: string
     name: string
-    message: string
     sm_username: string
     created_at: bigint
     updated_at: bigint
@@ -28938,17 +29053,17 @@ export namespace Prisma {
     id?: boolean
     picture?: boolean
     name?: boolean
-    message?: boolean
     sm_username?: boolean
     created_at?: boolean
     updated_at?: boolean
+    translations?: boolean | Testimonial$translationsArgs<ExtArgs>
+    _count?: boolean | TestimonialCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["testimonial"]>
 
   export type TestimonialSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     picture?: boolean
     name?: boolean
-    message?: boolean
     sm_username?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -28958,7 +29073,6 @@ export namespace Prisma {
     id?: boolean
     picture?: boolean
     name?: boolean
-    message?: boolean
     sm_username?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -28968,22 +29082,28 @@ export namespace Prisma {
     id?: boolean
     picture?: boolean
     name?: boolean
-    message?: boolean
     sm_username?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type TestimonialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "picture" | "name" | "message" | "sm_username" | "created_at" | "updated_at", ExtArgs["result"]["testimonial"]>
+  export type TestimonialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "picture" | "name" | "sm_username" | "created_at" | "updated_at", ExtArgs["result"]["testimonial"]>
+  export type TestimonialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | Testimonial$translationsArgs<ExtArgs>
+    _count?: boolean | TestimonialCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TestimonialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TestimonialIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $TestimonialPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Testimonial"
-    objects: {}
+    objects: {
+      translations: Prisma.$TestimonialTranslationPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       picture: string
       name: string
-      message: string
       sm_username: string
       created_at: bigint
       updated_at: bigint
@@ -29381,6 +29501,7 @@ export namespace Prisma {
    */
   export interface Prisma__TestimonialClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    translations<T extends Testimonial$translationsArgs<ExtArgs> = {}>(args?: Subset<T, Testimonial$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -29413,7 +29534,6 @@ export namespace Prisma {
     readonly id: FieldRef<"Testimonial", 'Int'>
     readonly picture: FieldRef<"Testimonial", 'String'>
     readonly name: FieldRef<"Testimonial", 'String'>
-    readonly message: FieldRef<"Testimonial", 'String'>
     readonly sm_username: FieldRef<"Testimonial", 'String'>
     readonly created_at: FieldRef<"Testimonial", 'BigInt'>
     readonly updated_at: FieldRef<"Testimonial", 'BigInt'>
@@ -29434,6 +29554,10 @@ export namespace Prisma {
      */
     omit?: TestimonialOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
+    /**
      * Filter, which Testimonial to fetch.
      */
     where: TestimonialWhereUniqueInput
@@ -29452,6 +29576,10 @@ export namespace Prisma {
      */
     omit?: TestimonialOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
+    /**
      * Filter, which Testimonial to fetch.
      */
     where: TestimonialWhereUniqueInput
@@ -29469,6 +29597,10 @@ export namespace Prisma {
      * Omit specific fields from the Testimonial
      */
     omit?: TestimonialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
     /**
      * Filter, which Testimonial to fetch.
      */
@@ -29518,6 +29650,10 @@ export namespace Prisma {
      */
     omit?: TestimonialOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
+    /**
      * Filter, which Testimonial to fetch.
      */
     where?: TestimonialWhereInput
@@ -29566,6 +29702,10 @@ export namespace Prisma {
      */
     omit?: TestimonialOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
+    /**
      * Filter, which Testimonials to fetch.
      */
     where?: TestimonialWhereInput
@@ -29608,6 +29748,10 @@ export namespace Prisma {
      * Omit specific fields from the Testimonial
      */
     omit?: TestimonialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
     /**
      * The data needed to create a Testimonial.
      */
@@ -29656,6 +29800,10 @@ export namespace Prisma {
      * Omit specific fields from the Testimonial
      */
     omit?: TestimonialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
     /**
      * The data needed to update a Testimonial.
      */
@@ -29723,6 +29871,10 @@ export namespace Prisma {
      */
     omit?: TestimonialOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
+    /**
      * The filter to search for the Testimonial to update in case it exists.
      */
     where: TestimonialWhereUniqueInput
@@ -29749,6 +29901,10 @@ export namespace Prisma {
      */
     omit?: TestimonialOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
+    /**
      * Filter which Testimonial to delete.
      */
     where: TestimonialWhereUniqueInput
@@ -29769,6 +29925,30 @@ export namespace Prisma {
   }
 
   /**
+   * Testimonial.translations
+   */
+  export type Testimonial$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    where?: TestimonialTranslationWhereInput
+    orderBy?: TestimonialTranslationOrderByWithRelationInput | TestimonialTranslationOrderByWithRelationInput[]
+    cursor?: TestimonialTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TestimonialTranslationScalarFieldEnum | TestimonialTranslationScalarFieldEnum[]
+  }
+
+  /**
    * Testimonial without action
    */
   export type TestimonialDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29780,6 +29960,1093 @@ export namespace Prisma {
      * Omit specific fields from the Testimonial
      */
     omit?: TestimonialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TestimonialTranslation
+   */
+
+  export type AggregateTestimonialTranslation = {
+    _count: TestimonialTranslationCountAggregateOutputType | null
+    _avg: TestimonialTranslationAvgAggregateOutputType | null
+    _sum: TestimonialTranslationSumAggregateOutputType | null
+    _min: TestimonialTranslationMinAggregateOutputType | null
+    _max: TestimonialTranslationMaxAggregateOutputType | null
+  }
+
+  export type TestimonialTranslationAvgAggregateOutputType = {
+    id: number | null
+    testimonial_id: number | null
+  }
+
+  export type TestimonialTranslationSumAggregateOutputType = {
+    id: number | null
+    testimonial_id: number | null
+  }
+
+  export type TestimonialTranslationMinAggregateOutputType = {
+    id: number | null
+    testimonial_id: number | null
+    language: $Enums.Language | null
+    message: string | null
+  }
+
+  export type TestimonialTranslationMaxAggregateOutputType = {
+    id: number | null
+    testimonial_id: number | null
+    language: $Enums.Language | null
+    message: string | null
+  }
+
+  export type TestimonialTranslationCountAggregateOutputType = {
+    id: number
+    testimonial_id: number
+    language: number
+    message: number
+    _all: number
+  }
+
+
+  export type TestimonialTranslationAvgAggregateInputType = {
+    id?: true
+    testimonial_id?: true
+  }
+
+  export type TestimonialTranslationSumAggregateInputType = {
+    id?: true
+    testimonial_id?: true
+  }
+
+  export type TestimonialTranslationMinAggregateInputType = {
+    id?: true
+    testimonial_id?: true
+    language?: true
+    message?: true
+  }
+
+  export type TestimonialTranslationMaxAggregateInputType = {
+    id?: true
+    testimonial_id?: true
+    language?: true
+    message?: true
+  }
+
+  export type TestimonialTranslationCountAggregateInputType = {
+    id?: true
+    testimonial_id?: true
+    language?: true
+    message?: true
+    _all?: true
+  }
+
+  export type TestimonialTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TestimonialTranslation to aggregate.
+     */
+    where?: TestimonialTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TestimonialTranslations to fetch.
+     */
+    orderBy?: TestimonialTranslationOrderByWithRelationInput | TestimonialTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TestimonialTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TestimonialTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TestimonialTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TestimonialTranslations
+    **/
+    _count?: true | TestimonialTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TestimonialTranslationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TestimonialTranslationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TestimonialTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TestimonialTranslationMaxAggregateInputType
+  }
+
+  export type GetTestimonialTranslationAggregateType<T extends TestimonialTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateTestimonialTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTestimonialTranslation[P]>
+      : GetScalarType<T[P], AggregateTestimonialTranslation[P]>
+  }
+
+
+
+
+  export type TestimonialTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TestimonialTranslationWhereInput
+    orderBy?: TestimonialTranslationOrderByWithAggregationInput | TestimonialTranslationOrderByWithAggregationInput[]
+    by: TestimonialTranslationScalarFieldEnum[] | TestimonialTranslationScalarFieldEnum
+    having?: TestimonialTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TestimonialTranslationCountAggregateInputType | true
+    _avg?: TestimonialTranslationAvgAggregateInputType
+    _sum?: TestimonialTranslationSumAggregateInputType
+    _min?: TestimonialTranslationMinAggregateInputType
+    _max?: TestimonialTranslationMaxAggregateInputType
+  }
+
+  export type TestimonialTranslationGroupByOutputType = {
+    id: number
+    testimonial_id: number
+    language: $Enums.Language
+    message: string
+    _count: TestimonialTranslationCountAggregateOutputType | null
+    _avg: TestimonialTranslationAvgAggregateOutputType | null
+    _sum: TestimonialTranslationSumAggregateOutputType | null
+    _min: TestimonialTranslationMinAggregateOutputType | null
+    _max: TestimonialTranslationMaxAggregateOutputType | null
+  }
+
+  type GetTestimonialTranslationGroupByPayload<T extends TestimonialTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TestimonialTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TestimonialTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TestimonialTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], TestimonialTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TestimonialTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    testimonial_id?: boolean
+    language?: boolean
+    message?: boolean
+    testimonial?: boolean | TestimonialDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["testimonialTranslation"]>
+
+  export type TestimonialTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    testimonial_id?: boolean
+    language?: boolean
+    message?: boolean
+    testimonial?: boolean | TestimonialDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["testimonialTranslation"]>
+
+  export type TestimonialTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    testimonial_id?: boolean
+    language?: boolean
+    message?: boolean
+    testimonial?: boolean | TestimonialDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["testimonialTranslation"]>
+
+  export type TestimonialTranslationSelectScalar = {
+    id?: boolean
+    testimonial_id?: boolean
+    language?: boolean
+    message?: boolean
+  }
+
+  export type TestimonialTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "testimonial_id" | "language" | "message", ExtArgs["result"]["testimonialTranslation"]>
+  export type TestimonialTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    testimonial?: boolean | TestimonialDefaultArgs<ExtArgs>
+  }
+  export type TestimonialTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    testimonial?: boolean | TestimonialDefaultArgs<ExtArgs>
+  }
+  export type TestimonialTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    testimonial?: boolean | TestimonialDefaultArgs<ExtArgs>
+  }
+
+  export type $TestimonialTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TestimonialTranslation"
+    objects: {
+      testimonial: Prisma.$TestimonialPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      testimonial_id: number
+      language: $Enums.Language
+      message: string
+    }, ExtArgs["result"]["testimonialTranslation"]>
+    composites: {}
+  }
+
+  type TestimonialTranslationGetPayload<S extends boolean | null | undefined | TestimonialTranslationDefaultArgs> = $Result.GetResult<Prisma.$TestimonialTranslationPayload, S>
+
+  type TestimonialTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TestimonialTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TestimonialTranslationCountAggregateInputType | true
+    }
+
+  export interface TestimonialTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TestimonialTranslation'], meta: { name: 'TestimonialTranslation' } }
+    /**
+     * Find zero or one TestimonialTranslation that matches the filter.
+     * @param {TestimonialTranslationFindUniqueArgs} args - Arguments to find a TestimonialTranslation
+     * @example
+     * // Get one TestimonialTranslation
+     * const testimonialTranslation = await prisma.testimonialTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TestimonialTranslationFindUniqueArgs>(args: SelectSubset<T, TestimonialTranslationFindUniqueArgs<ExtArgs>>): Prisma__TestimonialTranslationClient<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TestimonialTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TestimonialTranslationFindUniqueOrThrowArgs} args - Arguments to find a TestimonialTranslation
+     * @example
+     * // Get one TestimonialTranslation
+     * const testimonialTranslation = await prisma.testimonialTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TestimonialTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, TestimonialTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TestimonialTranslationClient<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TestimonialTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestimonialTranslationFindFirstArgs} args - Arguments to find a TestimonialTranslation
+     * @example
+     * // Get one TestimonialTranslation
+     * const testimonialTranslation = await prisma.testimonialTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TestimonialTranslationFindFirstArgs>(args?: SelectSubset<T, TestimonialTranslationFindFirstArgs<ExtArgs>>): Prisma__TestimonialTranslationClient<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TestimonialTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestimonialTranslationFindFirstOrThrowArgs} args - Arguments to find a TestimonialTranslation
+     * @example
+     * // Get one TestimonialTranslation
+     * const testimonialTranslation = await prisma.testimonialTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TestimonialTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, TestimonialTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__TestimonialTranslationClient<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TestimonialTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestimonialTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TestimonialTranslations
+     * const testimonialTranslations = await prisma.testimonialTranslation.findMany()
+     * 
+     * // Get first 10 TestimonialTranslations
+     * const testimonialTranslations = await prisma.testimonialTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const testimonialTranslationWithIdOnly = await prisma.testimonialTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TestimonialTranslationFindManyArgs>(args?: SelectSubset<T, TestimonialTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TestimonialTranslation.
+     * @param {TestimonialTranslationCreateArgs} args - Arguments to create a TestimonialTranslation.
+     * @example
+     * // Create one TestimonialTranslation
+     * const TestimonialTranslation = await prisma.testimonialTranslation.create({
+     *   data: {
+     *     // ... data to create a TestimonialTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends TestimonialTranslationCreateArgs>(args: SelectSubset<T, TestimonialTranslationCreateArgs<ExtArgs>>): Prisma__TestimonialTranslationClient<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TestimonialTranslations.
+     * @param {TestimonialTranslationCreateManyArgs} args - Arguments to create many TestimonialTranslations.
+     * @example
+     * // Create many TestimonialTranslations
+     * const testimonialTranslation = await prisma.testimonialTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TestimonialTranslationCreateManyArgs>(args?: SelectSubset<T, TestimonialTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TestimonialTranslations and returns the data saved in the database.
+     * @param {TestimonialTranslationCreateManyAndReturnArgs} args - Arguments to create many TestimonialTranslations.
+     * @example
+     * // Create many TestimonialTranslations
+     * const testimonialTranslation = await prisma.testimonialTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TestimonialTranslations and only return the `id`
+     * const testimonialTranslationWithIdOnly = await prisma.testimonialTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TestimonialTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, TestimonialTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TestimonialTranslation.
+     * @param {TestimonialTranslationDeleteArgs} args - Arguments to delete one TestimonialTranslation.
+     * @example
+     * // Delete one TestimonialTranslation
+     * const TestimonialTranslation = await prisma.testimonialTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one TestimonialTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TestimonialTranslationDeleteArgs>(args: SelectSubset<T, TestimonialTranslationDeleteArgs<ExtArgs>>): Prisma__TestimonialTranslationClient<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TestimonialTranslation.
+     * @param {TestimonialTranslationUpdateArgs} args - Arguments to update one TestimonialTranslation.
+     * @example
+     * // Update one TestimonialTranslation
+     * const testimonialTranslation = await prisma.testimonialTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TestimonialTranslationUpdateArgs>(args: SelectSubset<T, TestimonialTranslationUpdateArgs<ExtArgs>>): Prisma__TestimonialTranslationClient<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TestimonialTranslations.
+     * @param {TestimonialTranslationDeleteManyArgs} args - Arguments to filter TestimonialTranslations to delete.
+     * @example
+     * // Delete a few TestimonialTranslations
+     * const { count } = await prisma.testimonialTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TestimonialTranslationDeleteManyArgs>(args?: SelectSubset<T, TestimonialTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TestimonialTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestimonialTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TestimonialTranslations
+     * const testimonialTranslation = await prisma.testimonialTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TestimonialTranslationUpdateManyArgs>(args: SelectSubset<T, TestimonialTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TestimonialTranslations and returns the data updated in the database.
+     * @param {TestimonialTranslationUpdateManyAndReturnArgs} args - Arguments to update many TestimonialTranslations.
+     * @example
+     * // Update many TestimonialTranslations
+     * const testimonialTranslation = await prisma.testimonialTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TestimonialTranslations and only return the `id`
+     * const testimonialTranslationWithIdOnly = await prisma.testimonialTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TestimonialTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, TestimonialTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TestimonialTranslation.
+     * @param {TestimonialTranslationUpsertArgs} args - Arguments to update or create a TestimonialTranslation.
+     * @example
+     * // Update or create a TestimonialTranslation
+     * const testimonialTranslation = await prisma.testimonialTranslation.upsert({
+     *   create: {
+     *     // ... data to create a TestimonialTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TestimonialTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TestimonialTranslationUpsertArgs>(args: SelectSubset<T, TestimonialTranslationUpsertArgs<ExtArgs>>): Prisma__TestimonialTranslationClient<$Result.GetResult<Prisma.$TestimonialTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TestimonialTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestimonialTranslationCountArgs} args - Arguments to filter TestimonialTranslations to count.
+     * @example
+     * // Count the number of TestimonialTranslations
+     * const count = await prisma.testimonialTranslation.count({
+     *   where: {
+     *     // ... the filter for the TestimonialTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends TestimonialTranslationCountArgs>(
+      args?: Subset<T, TestimonialTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TestimonialTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TestimonialTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestimonialTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TestimonialTranslationAggregateArgs>(args: Subset<T, TestimonialTranslationAggregateArgs>): Prisma.PrismaPromise<GetTestimonialTranslationAggregateType<T>>
+
+    /**
+     * Group by TestimonialTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestimonialTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TestimonialTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TestimonialTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: TestimonialTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TestimonialTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTestimonialTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TestimonialTranslation model
+   */
+  readonly fields: TestimonialTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TestimonialTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TestimonialTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    testimonial<T extends TestimonialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TestimonialDefaultArgs<ExtArgs>>): Prisma__TestimonialClient<$Result.GetResult<Prisma.$TestimonialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TestimonialTranslation model
+   */
+  interface TestimonialTranslationFieldRefs {
+    readonly id: FieldRef<"TestimonialTranslation", 'Int'>
+    readonly testimonial_id: FieldRef<"TestimonialTranslation", 'Int'>
+    readonly language: FieldRef<"TestimonialTranslation", 'Language'>
+    readonly message: FieldRef<"TestimonialTranslation", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TestimonialTranslation findUnique
+   */
+  export type TestimonialTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TestimonialTranslation to fetch.
+     */
+    where: TestimonialTranslationWhereUniqueInput
+  }
+
+  /**
+   * TestimonialTranslation findUniqueOrThrow
+   */
+  export type TestimonialTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TestimonialTranslation to fetch.
+     */
+    where: TestimonialTranslationWhereUniqueInput
+  }
+
+  /**
+   * TestimonialTranslation findFirst
+   */
+  export type TestimonialTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TestimonialTranslation to fetch.
+     */
+    where?: TestimonialTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TestimonialTranslations to fetch.
+     */
+    orderBy?: TestimonialTranslationOrderByWithRelationInput | TestimonialTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TestimonialTranslations.
+     */
+    cursor?: TestimonialTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TestimonialTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TestimonialTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TestimonialTranslations.
+     */
+    distinct?: TestimonialTranslationScalarFieldEnum | TestimonialTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * TestimonialTranslation findFirstOrThrow
+   */
+  export type TestimonialTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TestimonialTranslation to fetch.
+     */
+    where?: TestimonialTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TestimonialTranslations to fetch.
+     */
+    orderBy?: TestimonialTranslationOrderByWithRelationInput | TestimonialTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TestimonialTranslations.
+     */
+    cursor?: TestimonialTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TestimonialTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TestimonialTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TestimonialTranslations.
+     */
+    distinct?: TestimonialTranslationScalarFieldEnum | TestimonialTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * TestimonialTranslation findMany
+   */
+  export type TestimonialTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which TestimonialTranslations to fetch.
+     */
+    where?: TestimonialTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TestimonialTranslations to fetch.
+     */
+    orderBy?: TestimonialTranslationOrderByWithRelationInput | TestimonialTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TestimonialTranslations.
+     */
+    cursor?: TestimonialTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TestimonialTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TestimonialTranslations.
+     */
+    skip?: number
+    distinct?: TestimonialTranslationScalarFieldEnum | TestimonialTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * TestimonialTranslation create
+   */
+  export type TestimonialTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TestimonialTranslation.
+     */
+    data: XOR<TestimonialTranslationCreateInput, TestimonialTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * TestimonialTranslation createMany
+   */
+  export type TestimonialTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TestimonialTranslations.
+     */
+    data: TestimonialTranslationCreateManyInput | TestimonialTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TestimonialTranslation createManyAndReturn
+   */
+  export type TestimonialTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many TestimonialTranslations.
+     */
+    data: TestimonialTranslationCreateManyInput | TestimonialTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TestimonialTranslation update
+   */
+  export type TestimonialTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TestimonialTranslation.
+     */
+    data: XOR<TestimonialTranslationUpdateInput, TestimonialTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which TestimonialTranslation to update.
+     */
+    where: TestimonialTranslationWhereUniqueInput
+  }
+
+  /**
+   * TestimonialTranslation updateMany
+   */
+  export type TestimonialTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TestimonialTranslations.
+     */
+    data: XOR<TestimonialTranslationUpdateManyMutationInput, TestimonialTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which TestimonialTranslations to update
+     */
+    where?: TestimonialTranslationWhereInput
+    /**
+     * Limit how many TestimonialTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TestimonialTranslation updateManyAndReturn
+   */
+  export type TestimonialTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update TestimonialTranslations.
+     */
+    data: XOR<TestimonialTranslationUpdateManyMutationInput, TestimonialTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which TestimonialTranslations to update
+     */
+    where?: TestimonialTranslationWhereInput
+    /**
+     * Limit how many TestimonialTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TestimonialTranslation upsert
+   */
+  export type TestimonialTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TestimonialTranslation to update in case it exists.
+     */
+    where: TestimonialTranslationWhereUniqueInput
+    /**
+     * In case the TestimonialTranslation found by the `where` argument doesn't exist, create a new TestimonialTranslation with this data.
+     */
+    create: XOR<TestimonialTranslationCreateInput, TestimonialTranslationUncheckedCreateInput>
+    /**
+     * In case the TestimonialTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TestimonialTranslationUpdateInput, TestimonialTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * TestimonialTranslation delete
+   */
+  export type TestimonialTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which TestimonialTranslation to delete.
+     */
+    where: TestimonialTranslationWhereUniqueInput
+  }
+
+  /**
+   * TestimonialTranslation deleteMany
+   */
+  export type TestimonialTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TestimonialTranslations to delete
+     */
+    where?: TestimonialTranslationWhereInput
+    /**
+     * Limit how many TestimonialTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TestimonialTranslation without action
+   */
+  export type TestimonialTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestimonialTranslation
+     */
+    select?: TestimonialTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestimonialTranslation
+     */
+    omit?: TestimonialTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestimonialTranslationInclude<ExtArgs> | null
   }
 
 
@@ -30056,13 +31323,22 @@ export namespace Prisma {
     id: 'id',
     picture: 'picture',
     name: 'name',
-    message: 'message',
     sm_username: 'sm_username',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
 
   export type TestimonialScalarFieldEnum = (typeof TestimonialScalarFieldEnum)[keyof typeof TestimonialScalarFieldEnum]
+
+
+  export const TestimonialTranslationScalarFieldEnum: {
+    id: 'id',
+    testimonial_id: 'testimonial_id',
+    language: 'language',
+    message: 'message'
+  };
+
+  export type TestimonialTranslationScalarFieldEnum = (typeof TestimonialTranslationScalarFieldEnum)[keyof typeof TestimonialTranslationScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -31551,20 +32827,20 @@ export namespace Prisma {
     id?: IntFilter<"Testimonial"> | number
     picture?: StringFilter<"Testimonial"> | string
     name?: StringFilter<"Testimonial"> | string
-    message?: StringFilter<"Testimonial"> | string
     sm_username?: StringFilter<"Testimonial"> | string
     created_at?: BigIntFilter<"Testimonial"> | bigint | number
     updated_at?: BigIntFilter<"Testimonial"> | bigint | number
+    translations?: TestimonialTranslationListRelationFilter
   }
 
   export type TestimonialOrderByWithRelationInput = {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    message?: SortOrder
     sm_username?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    translations?: TestimonialTranslationOrderByRelationAggregateInput
   }
 
   export type TestimonialWhereUniqueInput = Prisma.AtLeast<{
@@ -31574,17 +32850,16 @@ export namespace Prisma {
     NOT?: TestimonialWhereInput | TestimonialWhereInput[]
     picture?: StringFilter<"Testimonial"> | string
     name?: StringFilter<"Testimonial"> | string
-    message?: StringFilter<"Testimonial"> | string
     sm_username?: StringFilter<"Testimonial"> | string
     created_at?: BigIntFilter<"Testimonial"> | bigint | number
     updated_at?: BigIntFilter<"Testimonial"> | bigint | number
+    translations?: TestimonialTranslationListRelationFilter
   }, "id">
 
   export type TestimonialOrderByWithAggregationInput = {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    message?: SortOrder
     sm_username?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -31602,10 +32877,61 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Testimonial"> | number
     picture?: StringWithAggregatesFilter<"Testimonial"> | string
     name?: StringWithAggregatesFilter<"Testimonial"> | string
-    message?: StringWithAggregatesFilter<"Testimonial"> | string
     sm_username?: StringWithAggregatesFilter<"Testimonial"> | string
     created_at?: BigIntWithAggregatesFilter<"Testimonial"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"Testimonial"> | bigint | number
+  }
+
+  export type TestimonialTranslationWhereInput = {
+    AND?: TestimonialTranslationWhereInput | TestimonialTranslationWhereInput[]
+    OR?: TestimonialTranslationWhereInput[]
+    NOT?: TestimonialTranslationWhereInput | TestimonialTranslationWhereInput[]
+    id?: IntFilter<"TestimonialTranslation"> | number
+    testimonial_id?: IntFilter<"TestimonialTranslation"> | number
+    language?: EnumLanguageFilter<"TestimonialTranslation"> | $Enums.Language
+    message?: StringFilter<"TestimonialTranslation"> | string
+    testimonial?: XOR<TestimonialScalarRelationFilter, TestimonialWhereInput>
+  }
+
+  export type TestimonialTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    testimonial_id?: SortOrder
+    language?: SortOrder
+    message?: SortOrder
+    testimonial?: TestimonialOrderByWithRelationInput
+  }
+
+  export type TestimonialTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: TestimonialTranslationWhereInput | TestimonialTranslationWhereInput[]
+    OR?: TestimonialTranslationWhereInput[]
+    NOT?: TestimonialTranslationWhereInput | TestimonialTranslationWhereInput[]
+    testimonial_id?: IntFilter<"TestimonialTranslation"> | number
+    language?: EnumLanguageFilter<"TestimonialTranslation"> | $Enums.Language
+    message?: StringFilter<"TestimonialTranslation"> | string
+    testimonial?: XOR<TestimonialScalarRelationFilter, TestimonialWhereInput>
+  }, "id">
+
+  export type TestimonialTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    testimonial_id?: SortOrder
+    language?: SortOrder
+    message?: SortOrder
+    _count?: TestimonialTranslationCountOrderByAggregateInput
+    _avg?: TestimonialTranslationAvgOrderByAggregateInput
+    _max?: TestimonialTranslationMaxOrderByAggregateInput
+    _min?: TestimonialTranslationMinOrderByAggregateInput
+    _sum?: TestimonialTranslationSumOrderByAggregateInput
+  }
+
+  export type TestimonialTranslationScalarWhereWithAggregatesInput = {
+    AND?: TestimonialTranslationScalarWhereWithAggregatesInput | TestimonialTranslationScalarWhereWithAggregatesInput[]
+    OR?: TestimonialTranslationScalarWhereWithAggregatesInput[]
+    NOT?: TestimonialTranslationScalarWhereWithAggregatesInput | TestimonialTranslationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"TestimonialTranslation"> | number
+    testimonial_id?: IntWithAggregatesFilter<"TestimonialTranslation"> | number
+    language?: EnumLanguageWithAggregatesFilter<"TestimonialTranslation"> | $Enums.Language
+    message?: StringWithAggregatesFilter<"TestimonialTranslation"> | string
   }
 
   export type AdminCreateInput = {
@@ -32917,46 +34243,45 @@ export namespace Prisma {
   export type TestimonialCreateInput = {
     picture: string
     name: string
-    message: string
     sm_username: string
     created_at: bigint | number
     updated_at: bigint | number
+    translations?: TestimonialTranslationCreateNestedManyWithoutTestimonialInput
   }
 
   export type TestimonialUncheckedCreateInput = {
     id?: number
     picture: string
     name: string
-    message: string
     sm_username: string
     created_at: bigint | number
     updated_at: bigint | number
+    translations?: TestimonialTranslationUncheckedCreateNestedManyWithoutTestimonialInput
   }
 
   export type TestimonialUpdateInput = {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: TestimonialTranslationUpdateManyWithoutTestimonialNestedInput
   }
 
   export type TestimonialUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: TestimonialTranslationUncheckedUpdateManyWithoutTestimonialNestedInput
   }
 
   export type TestimonialCreateManyInput = {
     id?: number
     picture: string
     name: string
-    message: string
     sm_username: string
     created_at: bigint | number
     updated_at: bigint | number
@@ -32965,7 +34290,6 @@ export namespace Prisma {
   export type TestimonialUpdateManyMutationInput = {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -32975,10 +34299,54 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type TestimonialTranslationCreateInput = {
+    language: $Enums.Language
+    message: string
+    testimonial: TestimonialCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type TestimonialTranslationUncheckedCreateInput = {
+    id?: number
+    testimonial_id: number
+    language: $Enums.Language
+    message: string
+  }
+
+  export type TestimonialTranslationUpdateInput = {
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    message?: StringFieldUpdateOperationsInput | string
+    testimonial?: TestimonialUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type TestimonialTranslationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    testimonial_id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    message?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestimonialTranslationCreateManyInput = {
+    id?: number
+    testimonial_id: number
+    language: $Enums.Language
+    message: string
+  }
+
+  export type TestimonialTranslationUpdateManyMutationInput = {
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    message?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestimonialTranslationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    testimonial_id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    message?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -34172,11 +35540,20 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
+  export type TestimonialTranslationListRelationFilter = {
+    every?: TestimonialTranslationWhereInput
+    some?: TestimonialTranslationWhereInput
+    none?: TestimonialTranslationWhereInput
+  }
+
+  export type TestimonialTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type TestimonialCountOrderByAggregateInput = {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    message?: SortOrder
     sm_username?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -34192,7 +35569,6 @@ export namespace Prisma {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    message?: SortOrder
     sm_username?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -34202,7 +35578,6 @@ export namespace Prisma {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    message?: SortOrder
     sm_username?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -34212,6 +35587,42 @@ export namespace Prisma {
     id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type TestimonialScalarRelationFilter = {
+    is?: TestimonialWhereInput
+    isNot?: TestimonialWhereInput
+  }
+
+  export type TestimonialTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    testimonial_id?: SortOrder
+    language?: SortOrder
+    message?: SortOrder
+  }
+
+  export type TestimonialTranslationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    testimonial_id?: SortOrder
+  }
+
+  export type TestimonialTranslationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    testimonial_id?: SortOrder
+    language?: SortOrder
+    message?: SortOrder
+  }
+
+  export type TestimonialTranslationMinOrderByAggregateInput = {
+    id?: SortOrder
+    testimonial_id?: SortOrder
+    language?: SortOrder
+    message?: SortOrder
+  }
+
+  export type TestimonialTranslationSumOrderByAggregateInput = {
+    id?: SortOrder
+    testimonial_id?: SortOrder
   }
 
   export type DonationLinkCreateNestedManyWithoutAdminInput = {
@@ -35136,6 +36547,62 @@ export namespace Prisma {
     upsert?: FaqUpsertWithoutTranslationsInput
     connect?: FaqWhereUniqueInput
     update?: XOR<XOR<FaqUpdateToOneWithWhereWithoutTranslationsInput, FaqUpdateWithoutTranslationsInput>, FaqUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type TestimonialTranslationCreateNestedManyWithoutTestimonialInput = {
+    create?: XOR<TestimonialTranslationCreateWithoutTestimonialInput, TestimonialTranslationUncheckedCreateWithoutTestimonialInput> | TestimonialTranslationCreateWithoutTestimonialInput[] | TestimonialTranslationUncheckedCreateWithoutTestimonialInput[]
+    connectOrCreate?: TestimonialTranslationCreateOrConnectWithoutTestimonialInput | TestimonialTranslationCreateOrConnectWithoutTestimonialInput[]
+    createMany?: TestimonialTranslationCreateManyTestimonialInputEnvelope
+    connect?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+  }
+
+  export type TestimonialTranslationUncheckedCreateNestedManyWithoutTestimonialInput = {
+    create?: XOR<TestimonialTranslationCreateWithoutTestimonialInput, TestimonialTranslationUncheckedCreateWithoutTestimonialInput> | TestimonialTranslationCreateWithoutTestimonialInput[] | TestimonialTranslationUncheckedCreateWithoutTestimonialInput[]
+    connectOrCreate?: TestimonialTranslationCreateOrConnectWithoutTestimonialInput | TestimonialTranslationCreateOrConnectWithoutTestimonialInput[]
+    createMany?: TestimonialTranslationCreateManyTestimonialInputEnvelope
+    connect?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+  }
+
+  export type TestimonialTranslationUpdateManyWithoutTestimonialNestedInput = {
+    create?: XOR<TestimonialTranslationCreateWithoutTestimonialInput, TestimonialTranslationUncheckedCreateWithoutTestimonialInput> | TestimonialTranslationCreateWithoutTestimonialInput[] | TestimonialTranslationUncheckedCreateWithoutTestimonialInput[]
+    connectOrCreate?: TestimonialTranslationCreateOrConnectWithoutTestimonialInput | TestimonialTranslationCreateOrConnectWithoutTestimonialInput[]
+    upsert?: TestimonialTranslationUpsertWithWhereUniqueWithoutTestimonialInput | TestimonialTranslationUpsertWithWhereUniqueWithoutTestimonialInput[]
+    createMany?: TestimonialTranslationCreateManyTestimonialInputEnvelope
+    set?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+    disconnect?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+    delete?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+    connect?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+    update?: TestimonialTranslationUpdateWithWhereUniqueWithoutTestimonialInput | TestimonialTranslationUpdateWithWhereUniqueWithoutTestimonialInput[]
+    updateMany?: TestimonialTranslationUpdateManyWithWhereWithoutTestimonialInput | TestimonialTranslationUpdateManyWithWhereWithoutTestimonialInput[]
+    deleteMany?: TestimonialTranslationScalarWhereInput | TestimonialTranslationScalarWhereInput[]
+  }
+
+  export type TestimonialTranslationUncheckedUpdateManyWithoutTestimonialNestedInput = {
+    create?: XOR<TestimonialTranslationCreateWithoutTestimonialInput, TestimonialTranslationUncheckedCreateWithoutTestimonialInput> | TestimonialTranslationCreateWithoutTestimonialInput[] | TestimonialTranslationUncheckedCreateWithoutTestimonialInput[]
+    connectOrCreate?: TestimonialTranslationCreateOrConnectWithoutTestimonialInput | TestimonialTranslationCreateOrConnectWithoutTestimonialInput[]
+    upsert?: TestimonialTranslationUpsertWithWhereUniqueWithoutTestimonialInput | TestimonialTranslationUpsertWithWhereUniqueWithoutTestimonialInput[]
+    createMany?: TestimonialTranslationCreateManyTestimonialInputEnvelope
+    set?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+    disconnect?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+    delete?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+    connect?: TestimonialTranslationWhereUniqueInput | TestimonialTranslationWhereUniqueInput[]
+    update?: TestimonialTranslationUpdateWithWhereUniqueWithoutTestimonialInput | TestimonialTranslationUpdateWithWhereUniqueWithoutTestimonialInput[]
+    updateMany?: TestimonialTranslationUpdateManyWithWhereWithoutTestimonialInput | TestimonialTranslationUpdateManyWithWhereWithoutTestimonialInput[]
+    deleteMany?: TestimonialTranslationScalarWhereInput | TestimonialTranslationScalarWhereInput[]
+  }
+
+  export type TestimonialCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<TestimonialCreateWithoutTranslationsInput, TestimonialUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: TestimonialCreateOrConnectWithoutTranslationsInput
+    connect?: TestimonialWhereUniqueInput
+  }
+
+  export type TestimonialUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<TestimonialCreateWithoutTranslationsInput, TestimonialUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: TestimonialCreateOrConnectWithoutTranslationsInput
+    upsert?: TestimonialUpsertWithoutTranslationsInput
+    connect?: TestimonialWhereUniqueInput
+    update?: XOR<XOR<TestimonialUpdateToOneWithWhereWithoutTranslationsInput, TestimonialUpdateWithoutTranslationsInput>, TestimonialUncheckedUpdateWithoutTranslationsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -37252,6 +38719,103 @@ export namespace Prisma {
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
+  export type TestimonialTranslationCreateWithoutTestimonialInput = {
+    language: $Enums.Language
+    message: string
+  }
+
+  export type TestimonialTranslationUncheckedCreateWithoutTestimonialInput = {
+    id?: number
+    language: $Enums.Language
+    message: string
+  }
+
+  export type TestimonialTranslationCreateOrConnectWithoutTestimonialInput = {
+    where: TestimonialTranslationWhereUniqueInput
+    create: XOR<TestimonialTranslationCreateWithoutTestimonialInput, TestimonialTranslationUncheckedCreateWithoutTestimonialInput>
+  }
+
+  export type TestimonialTranslationCreateManyTestimonialInputEnvelope = {
+    data: TestimonialTranslationCreateManyTestimonialInput | TestimonialTranslationCreateManyTestimonialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TestimonialTranslationUpsertWithWhereUniqueWithoutTestimonialInput = {
+    where: TestimonialTranslationWhereUniqueInput
+    update: XOR<TestimonialTranslationUpdateWithoutTestimonialInput, TestimonialTranslationUncheckedUpdateWithoutTestimonialInput>
+    create: XOR<TestimonialTranslationCreateWithoutTestimonialInput, TestimonialTranslationUncheckedCreateWithoutTestimonialInput>
+  }
+
+  export type TestimonialTranslationUpdateWithWhereUniqueWithoutTestimonialInput = {
+    where: TestimonialTranslationWhereUniqueInput
+    data: XOR<TestimonialTranslationUpdateWithoutTestimonialInput, TestimonialTranslationUncheckedUpdateWithoutTestimonialInput>
+  }
+
+  export type TestimonialTranslationUpdateManyWithWhereWithoutTestimonialInput = {
+    where: TestimonialTranslationScalarWhereInput
+    data: XOR<TestimonialTranslationUpdateManyMutationInput, TestimonialTranslationUncheckedUpdateManyWithoutTestimonialInput>
+  }
+
+  export type TestimonialTranslationScalarWhereInput = {
+    AND?: TestimonialTranslationScalarWhereInput | TestimonialTranslationScalarWhereInput[]
+    OR?: TestimonialTranslationScalarWhereInput[]
+    NOT?: TestimonialTranslationScalarWhereInput | TestimonialTranslationScalarWhereInput[]
+    id?: IntFilter<"TestimonialTranslation"> | number
+    testimonial_id?: IntFilter<"TestimonialTranslation"> | number
+    language?: EnumLanguageFilter<"TestimonialTranslation"> | $Enums.Language
+    message?: StringFilter<"TestimonialTranslation"> | string
+  }
+
+  export type TestimonialCreateWithoutTranslationsInput = {
+    picture: string
+    name: string
+    sm_username: string
+    created_at: bigint | number
+    updated_at: bigint | number
+  }
+
+  export type TestimonialUncheckedCreateWithoutTranslationsInput = {
+    id?: number
+    picture: string
+    name: string
+    sm_username: string
+    created_at: bigint | number
+    updated_at: bigint | number
+  }
+
+  export type TestimonialCreateOrConnectWithoutTranslationsInput = {
+    where: TestimonialWhereUniqueInput
+    create: XOR<TestimonialCreateWithoutTranslationsInput, TestimonialUncheckedCreateWithoutTranslationsInput>
+  }
+
+  export type TestimonialUpsertWithoutTranslationsInput = {
+    update: XOR<TestimonialUpdateWithoutTranslationsInput, TestimonialUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<TestimonialCreateWithoutTranslationsInput, TestimonialUncheckedCreateWithoutTranslationsInput>
+    where?: TestimonialWhereInput
+  }
+
+  export type TestimonialUpdateToOneWithWhereWithoutTranslationsInput = {
+    where?: TestimonialWhereInput
+    data: XOR<TestimonialUpdateWithoutTranslationsInput, TestimonialUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type TestimonialUpdateWithoutTranslationsInput = {
+    picture?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sm_username?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type TestimonialUncheckedUpdateWithoutTranslationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    picture?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sm_username?: StringFieldUpdateOperationsInput | string
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
   export type DonationLinkCreateManyAdminInput = {
     id?: number
     currency_code: $Enums.CurrencyCode
@@ -37802,6 +39366,29 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestimonialTranslationCreateManyTestimonialInput = {
+    id?: number
+    language: $Enums.Language
+    message: string
+  }
+
+  export type TestimonialTranslationUpdateWithoutTestimonialInput = {
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    message?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestimonialTranslationUncheckedUpdateWithoutTestimonialInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    message?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestimonialTranslationUncheckedUpdateManyWithoutTestimonialInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    message?: StringFieldUpdateOperationsInput | string
   }
 
 
