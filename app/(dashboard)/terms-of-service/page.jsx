@@ -10,12 +10,12 @@ export const metadata = {
 
 export default function TermsOfServicePage() {
   return (
-    <>
+    <section className="lg:max-w-2/3">
       <h1 className="text-2xl mb-7 font-bold">Terms Of Service</h1>
 
       <Suspense fallback={<FormSkeleton />}>
         <TermsOfSeviceForm />
       </Suspense>
-    </>
+    </section>
   );
 }

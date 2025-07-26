@@ -10,12 +10,12 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <>
+    <section className="lg:max-w-2/3">
       <h1 className="text-2xl mb-7 font-bold">Privacy Policy</h1>
 
       <Suspense fallback={<FormSkeleton />}>
         <PrivacyPolicyForm />
       </Suspense>
-    </>
+    </section>
   );
 }

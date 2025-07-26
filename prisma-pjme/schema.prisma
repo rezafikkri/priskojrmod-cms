@@ -74,6 +74,8 @@ model Customer {
   phone_number String? @db.VarChar(20)
   picture      String? @db.VarChar(255)
   last_active  BigInt?
+  created_at   BigInt
+  updated_at   BigInt
 
   @@map("customers")
 }
@@ -309,4 +311,28 @@ model FaqTranslation {
   faq Faq @relation(fields: [faq_id], references: [id], onDelete: Cascade)
 
   @@map("faq_translations")
+}
+
+model Feedback {
+  id         String  @id @default(uuid(7)) @db.Uuid
+  is_read    Boolean @default(false)
+  name       String? @db.VarChar(100)
+  email      String? @db.VarChar(100)
+  message    String
+  created_at BigInt
+  updated_at BigInt
+
+  @@map("feedbacks")
+}
+
+model Testimonial {
+  id          Int     @id @default(autoincrement()) @db.SmallInt
+  picture     String  @db.VarChar(255)
+  name        String  @db.VarChar(100)
+  message     String
+  sm_username String  @db.VarChar(100)
+  created_at  BigInt
+  updated_at  BigInt
+
+  @@map("testimonials")
 }

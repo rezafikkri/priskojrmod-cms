@@ -14,8 +14,7 @@ function hasOtherSectionError(
   for (const fn of fieldNames) {
     if (errors[fn] && errors[fn][activeLang]) {
       isCurrentSectionError = true;
-    }
-    if (errors[fn]) {
+    } else if (errors[fn]) {
       isOtherSectionError = true;
     }
   }

@@ -28,7 +28,7 @@ export default function DeleteDialog({
     setIsOpenDeleteDialog(false);
     setDeleteData(null);
     setAppName('');
-    const toastId = toast.loading(`Deleting Secret Key for ${deleteData.appName}...`);
+    const toastId = toast.loading('Deleting secret key...');
     onDelete({ deleteData, toastId });
   }
 
@@ -56,7 +56,7 @@ export default function DeleteDialog({
       >
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">The Secret Key for the <b>{deleteTarget}</b> app will be permanently deleted. To confirm, type "<b>{deleteTarget}</b>" in the box below.</DialogDescription>
+          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">The secret key for the <b>{deleteTarget}</b> app will be permanently deleted. To confirm, type the app name "<b>{deleteTarget}</b>" in the box below.</DialogDescription>
         </DialogHeader>
         <Input
           placeholder="App name..."

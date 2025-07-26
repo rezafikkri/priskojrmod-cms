@@ -23,6 +23,14 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
+  vi.mock('@/lib/services/customer-service', () => ({
+    getCustomer: async () => ({
+      first_name: 'adelina',
+      last_name: 'damayanti',
+      email: 'adel@gmail.com',
+    }),
+  }));
+
   vi.mock('@/lib/pjma-prisma-client', () => ({
     default: {
       LicenseKey: {
@@ -32,6 +40,14 @@ beforeAll(() => {
         findUnique: vi.fn(),
         update: vi.fn(),
         updateMany: vi.fn(),
+      },
+    },
+  }));
+
+  vi.mock('@/lib/pjme-prisma-client', () => ({
+    default: {
+      Customer: {
+        findUnique: vi.fn(),
       },
     },
   }));
@@ -64,8 +80,7 @@ describe('createLicenseKey function', () => {
 
     await expect(createLicenseKey({
       secret_key_id: '123',
-      name: 'reza',
-      email: 're@co.co',
+      customer_id: 'customer-id',
       type: 'online',
     })).rejects.toThrow('Unauthenticated');
 
@@ -86,14 +101,14 @@ describe('createLicenseKey function', () => {
 
     await createLicenseKey({
       secret_key_id: '2',
-      name: 'adel',
-      email: 'adel@gmail.com',
+      customer_id: 'b86eb08d-02d8-44a2-a3fe-1c18cf35ce3c',
       type: 'online',
     });
 
     expect(pjmaDBPrismaClient.LicenseKey.create).toHaveBeenCalledWith({
       data: {
         secret_key_id: BigInt(2),
+        customer_id: 'b86eb08d-02d8-44a2-a3fe-1c18cf35ce3c',
         email: 'adel@gmail.com',
         key: 'jsonwebtoken',
         created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
@@ -141,7 +156,10 @@ describe('getLicenseKeys function', () => {
 
     expect(pjmaDBPrismaClient.LicenseKey.findMany).toHaveBeenCalledWith({
       select: { id: true, key: true },
-      orderBy: { updated_at: 'desc' },
+      orderBy: [
+        { updated_at: 'desc' },
+        { id: 'desc' },
+      ],
       take: 2,
       skip: 2,
       where: {
@@ -247,16 +265,23 @@ describe('getLicenseKey function', () => {
   it('Should call pjmaDBPrismaClient.LicenseKey.findUnique function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id' });
 
+    pjmeDBPrismaClient.Customer.findUnique.mockResolvedValue({
+      first_name: 'reza',
+      email: 'fikkri.reza@gmail.com',
+    });
     pjmaDBPrismaClient.LicenseKey.findUnique.mockResolvedValue({
       id: '33c993ad-097f-499d-9899-61186bb31b72',
-      secret_key_id: BigInt(123456),
-      email: 'test@example.com',
+      customer_id: '930ee77a-2b41-4099-87a7-28e1f309d73f',
       key: 'fake-key',
       used_for_activate: true,
       used_for_download: false,
+      secret_key: {
+        app_name: 'app-name',
+      },
     });
 
     await getLicenseKey('33c993ad-097f-499d-9899-61186bb31b72');
@@ -265,11 +290,15 @@ describe('getLicenseKey function', () => {
       where: { id: '33c993ad-097f-499d-9899-61186bb31b72' },
       select: {
         id: true,
-        secret_key_id: true,
-        email: true,
+        customer_id: true,
         key: true,
         used_for_activate: true,
         used_for_download: true,
+        secret_key: {
+          select: {
+            app_name: true,
+          },
+        },
       },
     });
   });
@@ -285,10 +314,6 @@ describe('updateLicenseKey function', () => {
     await expect(
       updateLicenseKey({
         id: '3f50e7ba-9c3e-4cf1-8a98-77be2c32c71a',
-        old_key: 'old-key',
-        old_secret_key_id: '1',
-        secret_key_id: '1',
-        name: 'Test Name',
         type: 'online',
         used_for_activate: true,
         used_for_download: false,
@@ -306,30 +331,13 @@ describe('updateLicenseKey function', () => {
 
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
-    const { getSpecificSecretKey } = await import('@/lib/services/secret-key-service');
-    const jwt = (await import('jsonwebtoken')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id' });
 
-    getSpecificSecretKey.mockResolvedValue({ key: 'secret-key' });
-    jwt.verify.mockReturnValue({
-      name: 'Old Name',
-      email: 'test@example.com',
-      type: 'online',
-      exp: 1234567890,
-    });
-
-    pjmaDBPrismaClient.LicenseKey.update.mockResolvedValue({
-      key: 'jsonwebtoken',
-      secret_key_id: BigInt(1),
-    });
+    pjmaDBPrismaClient.LicenseKey.findUnique.mockResolvedValue(null);
 
     await updateLicenseKey({
       id: '3f50e7ba-9c3e-4cf1-8a98-77be2c32c71a',
-      old_key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
-      old_secret_key_id: '1',
-      secret_key_id: '2',
-      name: 'New Name',
       type: 'online',
       used_for_activate: true,
       used_for_download: false,
@@ -340,14 +348,11 @@ describe('updateLicenseKey function', () => {
       where: { id: '3f50e7ba-9c3e-4cf1-8a98-77be2c32c71a' },
       select: {
         key: true,
-        secret_key_id: true,
       },
       data: {
-        secret_key_id: BigInt(2),
         updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
         used_for_activate: true,
         used_for_download: false,
-        key: 'jsonwebtoken',
       },
     });
   });

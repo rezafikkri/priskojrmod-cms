@@ -34,8 +34,9 @@ const items = {
     title: 'Customers',
     icon: <UserDollar />,
     subItems: [
-      { title: 'Lists', url: '/customers' },
+      { title: 'List', url: '/customer' },
       { title: 'Feedback', url: '/feedback' },
+      { title: 'Testimonials', url: '/testimonial' },
     ],
   },
   document: {

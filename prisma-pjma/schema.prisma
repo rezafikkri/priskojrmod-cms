@@ -35,6 +35,7 @@ model LicenseKey {
   id                String           @id @default(uuid(7)) @db.Uuid
   secret_key        SecretKeyLicense @relation(fields: [secret_key_id], references: [id])
   secret_key_id     BigInt
+  customer_id       String           @db.Uuid
   email             String           @db.VarChar(100)
   key               String
   used_for_activate Boolean          @default(false)
@@ -44,6 +45,6 @@ model LicenseKey {
   updated_at        BigInt
   regenerated_at    BigInt?
 
-  @@unique([email, secret_key_id])
+  @@unique([customer_id, secret_key_id])
   @@map("license_keys")
 }

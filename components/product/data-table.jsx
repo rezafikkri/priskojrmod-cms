@@ -34,7 +34,7 @@ import DeleteDialog from './delete-dialog';
 
 export default function DataTable({
   products,
-  columnVisibility,
+  tableState,
   tableHandler,
 }) {
   const { 
@@ -43,6 +43,12 @@ export default function DataTable({
     onEditPublishedStatus,
     onDelete,
   } = tableHandler;
+  const {
+    columnVisibility,
+    updatingPinnedStatusIds,
+    updatingPublishedIds,
+    deletingIds,
+  } = tableState;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [priceCurrency, setPriceCurrency] = useState(CurrencyCode.IDR);
@@ -116,7 +122,7 @@ export default function DataTable({
         <div className="text-center">{
           row.getValue('is_published')
             ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300/50 dark:text-zinc-800 inline-block" />
+            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
         }</div>
       ),
     },
@@ -142,7 +148,15 @@ export default function DataTable({
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 focus-visible:ring-ring">
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 focus-visible:ring-ring"
+                disabled={
+                  updatingPinnedStatusIds.includes(row.original.id) ||
+                  updatingPublishedIds.includes(row.original.id) ||
+                  deletingIds.includes(row.original.id)
+                }
+              >
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
@@ -159,7 +173,6 @@ export default function DataTable({
                   onClick={() =>
                     onEditPinnedStatus({
                       id: row.original.id,
-                      name: row.getValue('name'),
                       isPinned: row.original.is_pinned,
                     })
                   }
@@ -174,7 +187,6 @@ export default function DataTable({
                 <button
                   onClick={() => onEditPublishedStatus({
                     id: row.original.id,
-                    name: row.getValue('name'),
                     isPublished: row.original.is_published,
                   })}
                 >
@@ -200,7 +212,7 @@ export default function DataTable({
         );
       },
     }
-  ], [products, priceCurrency]);
+  ], [priceCurrency, updatingPinnedStatusIds, updatingPublishedIds, deletingIds]);
   const table = useReactTable({
     data: products,
     columns,
@@ -237,7 +249,18 @@ export default function DataTable({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} id={'row' + row.original.id}>
+                <TableRow
+                  key={row.id}
+                  className={
+                    (
+                      updatingPinnedStatusIds.includes(row.original.id) ||
+                      updatingPublishedIds.includes(row.original.id) ||
+                      deletingIds.includes(row.original.id)
+                    )
+                      ? 'opacity-50'
+                      : ''
+                  }
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}

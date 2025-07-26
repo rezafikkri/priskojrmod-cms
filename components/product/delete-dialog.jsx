@@ -28,7 +28,7 @@ export default function DeleteDialog({
     setIsOpenDeleteDialog(false);
     setDeleteData(null);
     setName('');
-    const toastId = toast.loading(<>Deleting product <i>{deleteData.name}</i>...</>);
+    const toastId = toast.loading('Deleting product...');
     onDelete({ deleteData, toastId });
   }
 
@@ -57,7 +57,7 @@ export default function DeleteDialog({
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            The product <b>{deleteTarget}</b> will be permanently deleted. To confirm, type "<b>{deleteTarget}</b>" in the box below.
+            The product <b>{deleteTarget}</b> will be permanently deleted. To confirm, type the product name "<b>{deleteTarget}</b>" in the box below.
           </DialogDescription>
         </DialogHeader>
         <Input

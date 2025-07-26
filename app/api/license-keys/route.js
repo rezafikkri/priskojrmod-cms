@@ -25,6 +25,11 @@ export async function GET(req) {
     created_at: true,
     updated_at: true,
     regenerated_at: true,
+    secret_key: {
+      select: {
+        app_name: true,
+      },
+    },
   };
 
   let dataResponse;
@@ -62,6 +67,12 @@ export async function GET(req) {
 
   return Response.json({
     message: 'success',
-    data: dataResponse,
+    data: {
+      ...dataResponse,
+      licenseKeys: dataResponse.licenseKeys.map(({ secret_key, ...rest }) => ({
+        ...rest,
+        app_name: secret_key.app_name,
+      })),
+    },
   });
 }

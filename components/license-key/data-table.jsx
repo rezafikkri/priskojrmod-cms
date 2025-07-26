@@ -49,6 +49,12 @@ export default function DataTable({
     onColumnVisibilityChange,
     onDelete,
   } = tableHandler;
+  const {
+    columnVisibility,
+    pagination,
+    rowSelection,
+    deletingIds,
+  } = tableState;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
@@ -56,7 +62,6 @@ export default function DataTable({
   const columns = useMemo(() => [
     {
       id: 'select',
-      enableHiding: false,
       enableSorting: false,
       header: ({ table }) => (
         <div className="flex items-center">
@@ -88,13 +93,17 @@ export default function DataTable({
       enableHiding: false,
     },
     {
+      accessorKey: 'app_name',
+      header: 'App Name',
+    },
+    {
       accessorKey: 'used_for_activate',
       header: <div className="text-center">Activate</div>,
       cell: ({ row }) => (
         <div className="text-center">{
           row.getValue('used_for_activate')
             ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300/50 dark:text-zinc-800 inline-block" />
+            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
         }</div>
       ),
       enableHiding: false,
@@ -106,7 +115,7 @@ export default function DataTable({
         <div className="text-center">{
           row.getValue('used_for_download')
             ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300/50 dark:text-zinc-800 inline-block" />
+            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
         }</div>
       ),
       enableHiding: false,
@@ -140,7 +149,11 @@ export default function DataTable({
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0 focus-visible:ring-ring">
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={deletingIds.includes(row.original.id)}
+            >
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
@@ -164,7 +177,11 @@ export default function DataTable({
             >
               <button
                 onClick={() => {
-                  setDeleteData({ id: row.original.id, email: row.getValue('email') });
+                  setDeleteData({
+                    id: row.original.id,
+                    email: row.getValue('email'),
+                    appName: row.getValue('app_name'),
+                  });
                   setIsOpenDeleteDialog(true);
                 }}
               >
@@ -175,12 +192,16 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], []);
+  ], [deletingIds]);
   const table = useReactTable({
     data: licenseKeys,
     columns,
     rowCount,
-    state: tableState,
+    state: {
+      columnVisibility,
+      pagination,
+      rowSelection,
+    },
     onPaginationChange,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
@@ -219,8 +240,8 @@ export default function DataTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  id={`row${row.original.id}`}
                   data-state={row.getIsSelected() && 'selected'}
+                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -272,7 +293,7 @@ export default function DataTable({
       ) : null}
 
       {(hasSearched && isTooMany) ? (
-        <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Info</b>: If you haven't found the License Key you're looking for, please use a more specific email!</p>
+        <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Info</b>: If you haven't found the license key you're looking for, please use a more specific email!</p>
       ) : null}
 
       <DeleteDialog

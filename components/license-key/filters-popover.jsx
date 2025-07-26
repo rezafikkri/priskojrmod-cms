@@ -36,7 +36,7 @@ export default function FiltersPopover({
   function handleClear() {
     setSecretKeyId('all');
     setCanRegenerate('all');
-    onFilter({ action: 'clear' });
+    onFilter(null);
   }
 
   // handler for select app_name onOpenChange event
@@ -67,10 +67,13 @@ export default function FiltersPopover({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="text-base px-3 py-1.5 h-auto"
+          className="text-base px-3 py-1.5 h-auto relative inline-block"
           disabled={disabled}
         >
-          <Filter />Filter
+          <Filter className="icon" /> Filter
+          {isFilterActive && (
+            <span className="absolute top-0 right-0 inline-block size-2.5 rounded-full bg-primary dark:bg-green-500 -mt-1 -me-1" />
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -141,10 +144,7 @@ export default function FiltersPopover({
           <PopoverClose asChild>
             <Button 
               className="text-base px-3 py-1.5 h-auto border border-primary" 
-              onClick={() => onFilter({
-                action: 'apply',
-                newFilters: { secretKeyId, canRegenerate },
-              })} 
+              onClick={() => onFilter({ secretKeyId, canRegenerate })} 
               disabled={secretKeyId === 'all' & canRegenerate === 'all'}
             > 
               Apply 

@@ -56,7 +56,7 @@ export default function CreateForm({ products }) {
     const addRes = await addSecretKey(data);
     if (addRes.status === 'success') {
       form.reset();
-      toast.success('Secret Key created successfully.');
+      toast.success('Secret key created successfully.');
     } else {
       toast.error(addRes.message);
     }
@@ -75,7 +75,7 @@ export default function CreateForm({ products }) {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 lg:max-w-2/3 mb-10">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
           <FormField
             control={form.control}
             name="product_id"

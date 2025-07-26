@@ -24,10 +24,15 @@ export default function FormFields({
   
   return (
     <>
-      <FormLanguageToggle activeLang={activeLang} onToggle={setActiveLang} errors={errors} />
+      <FormLanguageToggle
+        activeLang={activeLang}
+        onToggle={setActiveLang}
+        errors={errors}
+        fieldNames={['name', 'content']}
+      />
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 lg:max-w-2/3 mb-10">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-10">
           {activeLang === Language.ID && (
             <>
               <FormField
