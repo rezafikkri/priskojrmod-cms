@@ -2,7 +2,7 @@ import { Skeleton } from '../ui/skeleton';
 
 export default function FormSkeleton() {
   return (
-    <div className="lg:w-2/3 space-y-6">
+    <div className="space-y-6">
       <div className="space-y-2">
         <Skeleton className="w-1/4 flex-auto h-[14px] rounded-sm" />
         <Skeleton className="w-full flex-auto h-[36px] rounded-md" />
