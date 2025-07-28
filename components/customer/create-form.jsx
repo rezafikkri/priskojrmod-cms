@@ -6,8 +6,10 @@ import { toast } from 'sonner';
 import FormFields from './form-fields';
 import { createCustomerSchema } from '@/lib/validators/customer-validator';
 import { addCustomer } from '@/actions/customer-actions';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function CreateForm() {
+  const queryClient = useQueryClient();
   const form = useForm({
     resolver: zodResolver(createCustomerSchema),
     defaultValues: {
@@ -21,6 +23,8 @@ export default function CreateForm() {
   async function handleSubmit(data) {
     const addRes = await addCustomer(data);
     if (addRes.status === 'success') {
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
       form.reset();
       toast.success('Customer created successfully.');
     } else {

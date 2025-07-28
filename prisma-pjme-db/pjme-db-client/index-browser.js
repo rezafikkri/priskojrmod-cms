@@ -310,10 +310,16 @@ exports.Prisma.TestimonialScalarFieldEnum = {
   id: 'id',
   picture: 'picture',
   name: 'name',
-  message: 'message',
   sm_username: 'sm_username',
   created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.TestimonialTranslationScalarFieldEnum = {
+  id: 'id',
+  testimonial_id: 'testimonial_id',
+  language: 'language',
+  message: 'message'
 };
 
 exports.Prisma.SortOrder = {
@@ -369,7 +375,8 @@ exports.Prisma.ModelName = {
   Faq: 'Faq',
   FaqTranslation: 'FaqTranslation',
   Feedback: 'Feedback',
-  Testimonial: 'Testimonial'
+  Testimonial: 'Testimonial',
+  TestimonialTranslation: 'TestimonialTranslation'
 };
 
 /**

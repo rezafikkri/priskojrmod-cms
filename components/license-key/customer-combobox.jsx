@@ -58,7 +58,7 @@ export default function CustomerCombobox({
       return results.data;
     },
     placeholderData: [],
-    staleTime: 20_000,
+    staleTime: 10_000,
     enabled: debouncedKey.length > 0,
   });
 
