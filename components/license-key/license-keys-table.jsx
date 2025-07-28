@@ -45,11 +45,19 @@ export default function LicenseKeysTable() {
   const [filters, setFilters] = useState(null);
   const [isFilterActive, setIsFilterActive] = useState(false);
 
+  // determine show table skeleton or not in normal mode
+  const shouldShowSkeletonLoading = useRef(true);
+
   // table state
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: process.env.NEXT_PUBLIC_PAGE_SIZE,
   });
+  function handlePaginationChange(pagination) {
+    // not show table skeleton loading
+    shouldShowSkeletonLoading.current = false;
+    setPagination(pagination);
+  }
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState({
     select: true,
@@ -100,7 +108,6 @@ export default function LicenseKeysTable() {
   const {
     data: dataLK,
     isFetching: isFetchingLK,
-    status: statusLK,
     isError: isErrorLK,
     error: errorLK,
     isPlaceholderData: isPlaceholderDataLK,
@@ -108,7 +115,7 @@ export default function LicenseKeysTable() {
     queryKey: ['licenseKeys', pagination.pageIndex, filters],
     queryFn: async () => {
       let toastId;
-      if (statusLK !== 'pending') {
+      if (!shouldShowSkeletonLoading.current) {
         toastId = toast.loading('Loading license keys...');
       }
 
@@ -176,7 +183,7 @@ export default function LicenseKeysTable() {
   }
 
   function handleClearSearchInput() {
-    setPagination({
+    handlePaginationChange({
       ...pagination,
       pageIndex: 0,
     });
@@ -184,11 +191,17 @@ export default function LicenseKeysTable() {
     searchRef.current.value = '';
   }
 
-  async function handleRefresh() {
-    await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+  function handleRefresh() {
+    // not show table skeleton loading
+    if (!searchedLicenseKey && shouldShowSkeletonLoading.current) {
+      shouldShowSkeletonLoading.current = false;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
     queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
-    if (searchedLicenseKeyRef.current) {
-      handleSearch(filtersRef.current);
+
+    if (searchedLicenseKey) {
+      handleSearch(filters);
     } else {
       // reset rowSelection
       setRowSelection({});
@@ -196,6 +209,11 @@ export default function LicenseKeysTable() {
   }
 
   async function handleDelete({ deleteData, toastId }) {
+    // not show table skeleton loading
+    if (!searchedLicenseKey && shouldShowSkeletonLoading.current) {
+      shouldShowSkeletonLoading.current = false;
+    }
+
     // This is for add opacity-50 style to deleted row
     setDeletingIds((prev) => {
       const newIds = [...prev, deleteData.id];
@@ -307,7 +325,7 @@ export default function LicenseKeysTable() {
     if (searchedLicenseKey) {
       handleSearch(newFilters);
     } else {
-      setPagination({
+      handlePaginationChange({
         ...pagination,
         pageIndex: 0,
       });
@@ -354,6 +372,11 @@ export default function LicenseKeysTable() {
   async function handleSetCanRegenerate() {
     const rowSelections = Object.keys(rowSelection);
     if (rowSelections.length <= 0) return false;
+
+    // not show table skeleton loading
+    if (!searchedLicenseKey && shouldShowSkeletonLoading.current) {
+      shouldShowSkeletonLoading.current = false;
+    }
 
     setIsRegenerating(true);
     // show loading
@@ -527,7 +550,7 @@ export default function LicenseKeysTable() {
         </div>
       </div>
 
-      {statusLK === 'pending' || (isSearching && !searchedLicenseKey) ? (
+      {(shouldShowSkeletonLoading.current && isFetchingLK) || (isSearching && !searchedLicenseKey) ? (
         <TablePaginationSekeleton pagination={!isSearching} />
       ) : isErrorLK ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
@@ -545,7 +568,7 @@ export default function LicenseKeysTable() {
             deletingIds,
           }}
           tableHandler={{ 
-            onPaginationChange: setPagination,
+            onPaginationChange: handlePaginationChange,
             onRowSelectionChange: setRowSelection,
             onColumnVisibilityChange: setColumnVisibility,
             onDelete: handleDelete,

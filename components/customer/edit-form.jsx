@@ -34,6 +34,8 @@ export default function EditForm({ customer }) {
 
     const editRes = await editCustomer(newCustomer);
     if (editRes.status === 'success') {
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
       toast.success('Customer updated successfully.');
     } else {
       toast.error(editRes.message);

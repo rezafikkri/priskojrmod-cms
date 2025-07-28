@@ -38,11 +38,19 @@ export default function CustomersTable() {
   const [filters, setFilters] = useState({ showBanned: false });
   const [isFilterActive, setIsFilterActive] = useState(false);
 
+  // determine show table skeleton or not in normal mode
+  const shouldShowSkeletonLoading = useRef(true);
+
   // table state
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: process.env.NEXT_PUBLIC_PAGE_SIZE,
   });
+  function handlePaginationChange(pagination) {
+    // not show table skeleton loading
+    shouldShowSkeletonLoading.current = false;
+    setPagination(pagination);
+  }
   const [columnVisibility, setColumnVisibility] = useState({
     last_active: true,
     created_at: false,
@@ -76,7 +84,6 @@ export default function CustomersTable() {
   const {
     data: dataC,
     isFetching: isFetchingC,
-    status: statusC,
     isError: isErrorC,
     error: errorC,
     isPlaceholderData: isPlaceholderDataC,
@@ -84,7 +91,7 @@ export default function CustomersTable() {
     queryKey: ['customers', pagination.pageIndex, filters],
     queryFn: async () => {
       let toastId;
-      if (statusC !== 'pending') {
+      if (!shouldShowSkeletonLoading.current) {
         toastId = toast.loading('Loading customers...');
       }
 
@@ -149,7 +156,7 @@ export default function CustomersTable() {
   }
 
   function handleClearSearchInput() {
-    setPagination({
+    handlePaginationChange({
       ...pagination,
       pageIndex: 0,
     });
@@ -170,7 +177,7 @@ export default function CustomersTable() {
     if (searchedCustomer) {
       handleSearch(newFilters);
     } else {
-      setPagination({
+      handlePaginationChange({
         ...pagination,
         pageIndex: 0,
       });
@@ -182,14 +189,25 @@ export default function CustomersTable() {
   }
 
   function handleRefresh() {
+    // not show table skeleton loading
+    if (!searchedCustomer && shouldShowSkeletonLoading.current) {
+      shouldShowSkeletonLoading.current = false;
+    }
+    
     queryClient.invalidateQueries({ queryKey: ['customers'] });
     queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
+
     if (searchedCustomer) {
       handleSearch(filters);
     }
   }
 
   const handleEditBanStatus = useCallback(async ({ id, isBanned }) => {
+    // not show table skeleton loading
+    if (!searchedCustomerRef.current && shouldShowSkeletonLoading.current) {
+      shouldShowSkeletonLoading.current = false;
+    }
+
     // This is for add opacity-50 style to updated row
     setUpdatingBanStatusIds((prev) => {
       const newIds = [...prev, id];
@@ -296,6 +314,11 @@ export default function CustomersTable() {
   }, []);
 
   async function handleDelete({ deleteData, toastId }) {
+    // not show table skeleton loading
+    if (!searchedCustomer && shouldShowSkeletonLoading.current) {
+      shouldShowSkeletonLoading.current = false;
+    }
+
     // This is for add opacity-50 style to deleted row
     setDeletingIds((prev) => {
       const newIds = [...prev, deleteData.id];
@@ -507,7 +530,7 @@ export default function CustomersTable() {
         </div>
       </div>
 
-      {statusC === 'pending' || (isSearching && !searchedCustomer) ? (
+      {(shouldShowSkeletonLoading.current && isFetchingC) || (isSearching && !searchedCustomer) ? (
         <TablePaginationSekeleton pagination={!isSearching} />
       ) : isErrorC ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
@@ -525,7 +548,7 @@ export default function CustomersTable() {
             updatingBanStatusIds,
           }}
           tableHandler={{
-            onPaginationChange: setPagination,
+            onPaginationChange: handlePaginationChange,
             onColumnVisibilityChange: setColumnVisibility,
             onEditBanStatus: handleEditBanStatus,
             onDelete: handleDelete,
