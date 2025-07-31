@@ -34,8 +34,8 @@ export default function DataTable({
   tableState,
   tableHandler,
 }) {
-  const { onRowSelectionChange } = tableHandler;
-  const { rowSelection } = tableState;
+  const { onRowSelectionChange, onColumnVisibilityChange } = tableHandler;
+  const { rowSelection, columnVisibility } = tableState;
 
   // table definition
   const columns = useMemo(() => [
@@ -76,13 +76,10 @@ export default function DataTable({
       accessorKey: 'message',
       header: 'Message',
       enableHiding: false,
-      cell: ({ row }) => (
-        <div className="overflow-hidden text-ellipsis">{
-          row.getValue('message').length > 70
-            ? `${row.getValue('message').substring(0, 70)}...`
-            : row.getValue('message')
-        }</div>
-      ),
+      cell: ({ row }) => 
+        row.getValue('message').length > 50
+          ? `${row.getValue('message').substring(0, 50).trimEnd()}...`
+          : row.getValue('message')
     },
     {
       accessorKey: 'created_at',
@@ -127,10 +124,12 @@ export default function DataTable({
     columns,
     state: {
       rowSelection,
+      columnVisibility,
     },
     getCoreRowModel: getCoreRowModel(),
     getRowId: row => row.id,
     onRowSelectionChange,
+    onColumnVisibilityChange,
   });
 
   return (

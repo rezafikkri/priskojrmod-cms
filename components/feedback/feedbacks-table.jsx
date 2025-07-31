@@ -5,19 +5,28 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
 import { safeFetch } from '@/lib/safe-fetch';
 import TableSekeleton from '../loadings/table-skeleton';
-import { ArrowDownToLine } from 'lucide-react';
+import { ArrowDownToLine, AlertCircle, Columns } from 'lucide-react';
 import { Trash } from 'lucide-react';
+import { loadFeedbacks } from '@/actions/feedback-actions';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+} from '@/components/ui/dropdown-menu';
 
 export default function FeedbacksTable() {
+  const queryClient = useQueryClient();
+
   // filters state
   const [filters, setFilters] = useState(null);
   const [isFilterActive, setIsFilterActive] = useState(false);
@@ -25,17 +34,31 @@ export default function FeedbacksTable() {
   // determine show table skeleton or not in normal mode
   const shouldShowSkeletonLoading = useRef(true);
 
-  // read state
+  // read status state
   const [updatingReadStatusIds, setUpdatingReadStatusIds] = useState([]);
+
+  // pull new data state
+  const [isPulling, setIsPulling] = useState(false);
+  const [lastPullTime, setLastPullTime] = useState(null);
+  useEffect(() => {
+    const prevLastPullTime = localStorage.getItem('lastPullTime');
+    if (prevLastPullTime) {
+      setLastPullTime(prevLastPullTime);
+    }
+  }, []);
 
   // table state
   const [rowSelection, setRowSelection] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState({
+    created_at: true,
+    updated_at: false,
+  });
 
   // This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
   // We need it because our async function (sent to the child) might "remember"
   // an old `searchedCustomer` and more state value, which is called a "stale closure" problem.
   const filtersRef = useRef(filters);
-  const updatingBanStatusIdsRef = useRef(updatingReadStatusIds);
+  const updatingReadStatusIdsRef = useRef(updatingReadStatusIds);
 
   useEffect(() => {
     filtersRef.current = filters;
@@ -60,7 +83,6 @@ export default function FeedbacksTable() {
   } = useQuery({
     queryKey: ['feedbacks', filters],
     queryFn: async () => {
-      return [];
       let toastId;
       if (!shouldShowSkeletonLoading.current) {
         toastId = toast.loading('Loading feedbacks...');
@@ -94,33 +116,108 @@ export default function FeedbacksTable() {
     syncIsFilterActive(newFilters);
   }
 
+  async function handlePullFeedbacks() {
+    // check if now - lastPullTime > 1 hour, then pull, otherwise show alert
+    const lastPulledAt = new Date(lastPullTime);
+    if ((Date.now() - lastPulledAt.getTime()) < 60 * 60 * 1000) {
+      const nextPullTime = new Date(lastPulledAt);
+      nextPullTime.setHours(
+        lastPulledAt.getHours() + 1,
+        lastPulledAt.getMinutes() + 1,
+      );
+
+      const hour = nextPullTime.getHours().toString().padStart(2, '0');
+      const minute = nextPullTime.getMinutes().toString().padStart(2, '0');
+
+      toast.info(`Please wait until ${hour}:${minute} to pull new feedback.`);
+      return;
+    }
+
+    // not show table skeleton loading
+    if (shouldShowSkeletonLoading.current) {
+      shouldShowSkeletonLoading.current = false;
+    }
+
+    const toastId = toast.loading('Pulling new feedbacks...');
+    setIsPulling(true);
+
+    await loadFeedbacks();
+
+    setIsPulling(false);
+    toast.dismiss(toastId);
+    await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+    
+    // update last pull time
+    const currentLastPullTime = new Date().toISOString();
+    localStorage.setItem('lastPullTime', currentLastPullTime);
+    setLastPullTime(currentLastPullTime);
+
+    toast.success('Pulled new feedbacks successfully.');
+  }
+
   return (
     <>
-      <div className="flex gap-6 items-start mb-4">
+      <div className="flex gap-6 items-start mb-4 flex-wrap">
         <TooltipWrapper text="Pull new feedback from Google Form">
-          <Button variant="outline" className="md:w-auto h-auto text-base px-3 py-1.5 inline-block">
+          <Button
+            variant="outline"
+            className="h-auto text-base px-3 py-1.5 inline-block"
+            onClick={handlePullFeedbacks}
+            disabled={isFetchingF || isPulling}
+          >
             <ArrowDownToLine className="icon" /> Pull New Data
           </Button>
         </TooltipWrapper>
 
-        <FiltersPopover
-          onFilter={handleFilter}
-          isFilterActive={isFilterActive}
-          disabled={isFetchingF}
-        />
+        <div className="flex space-x-6 items-start justify-between flex-1">
+          <div className="flex space-x-6 items-start">
+            <FiltersPopover
+              onFilter={handleFilter}
+              isFilterActive={isFilterActive}
+              disabled={isFetchingF || isPulling}
+            />
 
-        <TooltipWrapper text="Delete feedbacks" background="bg-destructive">
-          <Button
-            variant="outline"
-            className="md:w-auto h-auto text-base px-3 py-1.5 inline-block hover:text-destructive dark:hover:text-red-500/90"
-            disabled={isFetchingF || Object.keys(rowSelection).length <= 0}
-          >
-            <Trash className="icon" />
-          </Button>
-        </TooltipWrapper>
+            <TooltipWrapper text="Delete feedbacks" background="bg-destructive">
+              <Button
+                variant="outline"
+                className="h-auto text-base px-3 py-1.5 inline-block hover:text-destructive dark:hover:text-red-500/90"
+                disabled={isFetchingF || Object.keys(rowSelection).length <= 0 || isPulling}
+              >
+                <Trash className="icon" />
+              </Button>
+            </TooltipWrapper>
+          </div>
+
+          <DropdownMenu>
+            <TooltipWrapper text="Manage columns">
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="text-base px-3 py-1.5 h-auto inline-block">
+                  <Columns className="icon" />
+                </Button>
+              </DropdownMenuTrigger>
+            </TooltipWrapper>
+            <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
+              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
+              {Object.entries(columnVisibility).map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column[0]}
+                  className="capitalize text-base hover:cursor-pointer"
+                  checked={column[1]}
+                  onCheckedChange={(value) =>
+                    setColumnVisibility({
+                      ...columnVisibility,
+                      [column[0]]: value,
+                    })}
+                >
+                  {column[0].replace('_', ' ')}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
-      {shouldShowSkeletonLoading.current && isFetchingF ? (
+      {(shouldShowSkeletonLoading.current && isFetchingF) ? (
         <TableSekeleton />
       ) : isErrorF ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
@@ -132,9 +229,11 @@ export default function FeedbacksTable() {
           feedbacks={dataF}
           tableState={{
             rowSelection,
+            columnVisibility,
           }}
           tableHandler={{
             onRowSelectionChange: setRowSelection,
+            onColumnVisibilityChange: setColumnVisibility,
           }}
         />
       )}
