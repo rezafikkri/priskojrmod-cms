@@ -31,7 +31,7 @@ export default function FeedbacksTable() {
   const [filters, setFilters] = useState(null);
   const [isFilterActive, setIsFilterActive] = useState(false);
 
-  // determine show table skeleton or not in normal mode
+  // determine show table skeleton or not in
   const shouldShowSkeletonLoading = useRef(true);
 
   // read status state
@@ -69,8 +69,8 @@ export default function FeedbacksTable() {
     if (!appliedFilters) return url;
 
     let newUrl = url;
-    if (appliedFilters.rs !== 'all') {
-      newUrl += `?rs=${appliedFilters.rs}`;
+    if (appliedFilters.readStatus !== 'all') {
+      newUrl += `?rs=${appliedFilters.readStatus}`;
     }
     return newUrl;
   }
@@ -105,13 +105,18 @@ export default function FeedbacksTable() {
 
   // set isFilterActive when apply and clear
   function syncIsFilterActive(appliedFilters) {
-    if (appliedFilters.readStatus && !isFilterActive) {
+    if (appliedFilters) {
       setIsFilterActive(true);
+    } else {
+      setIsFilterActive(false);
     }
   }
 
   function handleFilter(newFilters) {
-    // set filters for trigger refetch in normal mode
+    // not show table skeleton loading
+    shouldShowSkeletonLoading.current = false;
+    
+    // set filters for trigger refetch
     setFilters(newFilters);
     syncIsFilterActive(newFilters);
   }
@@ -134,9 +139,7 @@ export default function FeedbacksTable() {
     }
 
     // not show table skeleton loading
-    if (shouldShowSkeletonLoading.current) {
-      shouldShowSkeletonLoading.current = false;
-    }
+    shouldShowSkeletonLoading.current = false;
 
     const toastId = toast.loading('Pulling new feedbacks...');
     setIsPulling(true);

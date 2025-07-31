@@ -28,7 +28,7 @@ export default function FiltersPopover({
   const [readStatus, setReadStatus] = useState('all');
 
   function handleClear() {
-    setIsRead('all');
+    setReadStatus('all');
     onFilter(null);
   }
 
