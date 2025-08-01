@@ -67,8 +67,9 @@ export default function FeedbacksTable() {
   // isDeleting state
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Tracks the in-flight deletion toast so it can be updated.
+  // Tracks the in-flight deletion and pull toast so it can be updated.
   const deletionToastIdRef = useRef(null);
+  const pullFeedbacksToastIdRef = useRef(null);
 
   // add readStatus filters
   function addFiltersToURL(url, appliedFilters) {
@@ -91,9 +92,16 @@ export default function FeedbacksTable() {
     queryFn: async () => {
       let toastId;
       if (!shouldShowSkeletonLoading.current) {
-        if (deletionToastIdRef.current) {
-          toastId = toast.loading('Refreshing feedback...', { id: deletionToastIdRef.current });
-          deletionToastIdRef.current = null;
+        const activeToastId = deletionToastIdRef.current ?? pullFeedbacksToastIdRef.current;
+
+        if (activeToastId) {
+          toastId = toast.loading('Refreshing feedback...', { id: activeToastId });
+
+          if (deletionToastIdRef.current) {
+            deletionToastIdRef.current = null;
+          } else {
+            pullFeedbacksToastIdRef.current = null;
+          }
         } else {
           toastId = toast.loading('Loading feedback...');
         }
@@ -161,9 +169,6 @@ export default function FeedbacksTable() {
 
     const loadRes = await loadFeedbacks();
 
-    // hide loading
-    toast.dismiss(toastId);
-
     if (loadRes.status === 'success') {
       // set or update last pull time
       const currentLastPullTime = new Date().toISOString();
@@ -171,6 +176,9 @@ export default function FeedbacksTable() {
       setLastPullTime(currentLastPullTime);
 
       if (loadRes.data.count > 0) {
+        // note the toast id, for updated in queryFn useQuery
+        pullFeedbacksToastIdRef.current = toastId;
+
         await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
 
         // reset row selection
@@ -178,9 +186,12 @@ export default function FeedbacksTable() {
 
         toast.success(`New feedback pulled successfully for ${loadRes.data.count} entries.`);
       } else {
+        // hide loading, in success not need to hide, because already hide when refetch in queryFn useQuery
+        toast.dismiss(toastId);
         toast.info('No new feedback was pulled. They may have already been retrieved.');
       }
     } else {
+      toast.dismiss(toastId);
       toast.error(loadRes.message);
     }
 
