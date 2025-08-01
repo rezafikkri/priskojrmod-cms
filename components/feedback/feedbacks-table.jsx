@@ -115,6 +115,9 @@ export default function FeedbacksTable() {
   function handleFilter(newFilters) {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
+
+    // reset row selection
+    setRowSelection({});
     
     // set filters for trigger refetch
     setFilters(newFilters);
