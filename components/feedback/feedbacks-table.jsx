@@ -141,21 +141,31 @@ export default function FeedbacksTable() {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
 
+    // show loading and disabled button
     const toastId = toast.loading('Pulling new feedbacks...');
     setIsPulling(true);
 
-    await loadFeedbacks();
+    const loadRes = await loadFeedbacks();
 
+    // hide loading and enabled button
     setIsPulling(false);
     toast.dismiss(toastId);
-    await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
-    
-    // update last pull time
-    const currentLastPullTime = new Date().toISOString();
-    localStorage.setItem('lastPullTime', currentLastPullTime);
-    setLastPullTime(currentLastPullTime);
 
-    toast.success('Pulled new feedbacks successfully.');
+    if (loadRes.status === 'success') {
+      // set or update last pull time
+      const currentLastPullTime = new Date().toISOString();
+      localStorage.setItem('lastPullTime', currentLastPullTime);
+      setLastPullTime(currentLastPullTime);
+
+      if (loadRes.data.count > 0) {
+        await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+        toast.success(`New feedback pulled successfully for ${loadRes.data.count} entries.`);
+      } else {
+        toast.info('No new feedback was pulled. They may have already been retrieved.');
+      }
+    } else {
+      toast.error(loadRes.message);
+    }
   }
 
   return (
