@@ -32781,6 +32781,7 @@ export namespace Prisma {
 
   export type FeedbackWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    created_at?: bigint | number
     AND?: FeedbackWhereInput | FeedbackWhereInput[]
     OR?: FeedbackWhereInput[]
     NOT?: FeedbackWhereInput | FeedbackWhereInput[]
@@ -32788,9 +32789,8 @@ export namespace Prisma {
     name?: StringNullableFilter<"Feedback"> | string | null
     email?: StringNullableFilter<"Feedback"> | string | null
     message?: StringFilter<"Feedback"> | string
-    created_at?: BigIntFilter<"Feedback"> | bigint | number
     updated_at?: BigIntFilter<"Feedback"> | bigint | number
-  }, "id">
+  }, "id" | "created_at">
 
   export type FeedbackOrderByWithAggregationInput = {
     id?: SortOrder

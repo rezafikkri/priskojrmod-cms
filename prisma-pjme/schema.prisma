@@ -319,7 +319,7 @@ model Feedback {
   name       String? @db.VarChar(100)
   email      String? @db.VarChar(100)
   message    String
-  created_at BigInt
+  created_at BigInt @unique
   updated_at BigInt
 
   @@map("feedbacks")
