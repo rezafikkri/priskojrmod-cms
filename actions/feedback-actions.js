@@ -1,6 +1,6 @@
 'use server';
 
-import { pullFeedbacks } from '@/lib/services/feedback-service';
+import { pullFeedbacks, deleteFeedbacks } from '@/lib/services/feedback-service';
 
 export async function loadFeedbacks() {
   try {

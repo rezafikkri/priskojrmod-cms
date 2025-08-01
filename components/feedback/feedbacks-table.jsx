@@ -15,7 +15,7 @@ import { safeFetch } from '@/lib/safe-fetch';
 import TableSekeleton from '../loadings/table-skeleton';
 import { ArrowDownToLine, AlertCircle, Columns } from 'lucide-react';
 import { Trash } from 'lucide-react';
-import { loadFeedbacks } from '@/actions/feedback-actions';
+import { loadFeedbacks, removeFeedbacks } from '@/actions/feedback-actions';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,15 +27,8 @@ import {
 export default function FeedbacksTable() {
   const queryClient = useQueryClient();
 
-  // filters state
-  const [filters, setFilters] = useState(null);
-  const [isFilterActive, setIsFilterActive] = useState(false);
-
   // determine show table skeleton or not in
   const shouldShowSkeletonLoading = useRef(true);
-
-  // read status state
-  const [updatingReadStatusIds, setUpdatingReadStatusIds] = useState([]);
 
   // pull new data state
   const [isPulling, setIsPulling] = useState(false);
@@ -54,6 +47,13 @@ export default function FeedbacksTable() {
     updated_at: false,
   });
 
+  // filters state
+  const [filters, setFilters] = useState(null);
+  const [isFilterActive, setIsFilterActive] = useState(false);
+
+  // read status state
+  const [updatingReadStatusIds, setUpdatingReadStatusIds] = useState([]);
+
   // This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
   // We need it because our async function (sent to the child) might "remember"
   // an old `searchedCustomer` and more state value, which is called a "stale closure" problem.
@@ -63,6 +63,12 @@ export default function FeedbacksTable() {
   useEffect(() => {
     filtersRef.current = filters;
   }, [filters]);
+
+  // isDeleting state
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Tracks the in-flight deletion toast so it can be updated.
+  const deletionToastIdRef = useRef(null);
 
   // add readStatus filters
   function addFiltersToURL(url, appliedFilters) {
@@ -85,7 +91,12 @@ export default function FeedbacksTable() {
     queryFn: async () => {
       let toastId;
       if (!shouldShowSkeletonLoading.current) {
-        toastId = toast.loading('Loading feedbacks...');
+        if (deletionToastIdRef.current) {
+          toastId = toast.loading('Refreshing feedback...', { id: deletionToastIdRef.current });
+          deletionToastIdRef.current = null;
+        } else {
+          toastId = toast.loading('Loading feedback...');
+        }
       }
 
       const results = await safeFetch({
@@ -150,8 +161,7 @@ export default function FeedbacksTable() {
 
     const loadRes = await loadFeedbacks();
 
-    // hide loading and enabled button
-    setIsPulling(false);
+    // hide loading
     toast.dismiss(toastId);
 
     if (loadRes.status === 'success') {
@@ -173,6 +183,49 @@ export default function FeedbacksTable() {
     } else {
       toast.error(loadRes.message);
     }
+
+    // enabled button
+    setIsPulling(false);
+  }
+
+  async function handleDelete() {
+    // check selected row <= 0
+    const rowSelections = Object.keys(rowSelection);
+    if (rowSelections.length <= 0) return false;
+
+    // not show table skeleton loading
+    shouldShowSkeletonLoading.current = false;
+
+    // show loading and disabled button
+    const toastId = toast.loading('Deleting feedback...');
+    setIsDeleting(true);
+
+    const removeRes = await removeFeedbacks(rowSelections);
+
+    if (removeRes.status === 'success') {
+      // note the toast id, for updated in queryFn useQuery
+      deletionToastIdRef.current = toastId;
+
+      await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+      
+      // reset row selection
+      setRowSelection({});
+
+      if (removeRes.data.count > 0) {
+        toast.success(
+          `Successfully deleted ${removeRes.data.count} feedback entr${removeRes.data.count > 1 ? 'ies' : 'y'}.`
+        );
+      } else {
+        toast.info('No feedback entries were deleted. They may have already been removed.');
+      }
+    } else {
+      // hide loading, in success not need to hide, because already hide when refetch in queryFn useQuery
+      toast.dismiss(toastId);
+      toast.error(removeRes.message);
+    }
+
+    // enabled button
+    setIsDeleting(false);
   }
 
   return (
@@ -201,7 +254,11 @@ export default function FeedbacksTable() {
               <Button
                 variant="outline"
                 className="h-auto text-base px-3 py-1.5 inline-block hover:text-destructive dark:hover:text-red-500/90"
-                disabled={isFetchingF || Object.keys(rowSelection).length <= 0 || isPulling}
+                disabled={isFetchingF
+                  || Object.keys(rowSelection).length <= 0
+                  || isPulling
+                  || isDeleting}
+                onClick={handleDelete}
               >
                 <Trash className="icon" />
               </Button>
