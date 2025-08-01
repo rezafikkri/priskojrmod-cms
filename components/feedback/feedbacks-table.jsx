@@ -162,6 +162,10 @@ export default function FeedbacksTable() {
 
       if (loadRes.data.count > 0) {
         await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+
+        // reset row selection
+        setRowSelection({});
+
         toast.success(`New feedback pulled successfully for ${loadRes.data.count} entries.`);
       } else {
         toast.info('No new feedback was pulled. They may have already been retrieved.');
