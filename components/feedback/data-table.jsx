@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,14 +28,17 @@ import { getTableHeaderWidth } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
 import SelectionAlert from '../ui/selection-alert';
 import { Minus } from 'lucide-react';
+import DetailDialog from './detail-dialog';
 
 export default function DataTable({
   feedbacks,
   tableState,
   tableHandler,
 }) {
-  const { onRowSelectionChange, onColumnVisibilityChange } = tableHandler;
-  const { rowSelection, columnVisibility } = tableState;
+  const {onRowSelectionChange, onColumnVisibilityChange, onEditReadStatus} = tableHandler;
+  const {rowSelection, columnVisibility} = tableState;
+  const [detailData, setDetailData] = useState(null);
+  const [isOpenDetailDialog, setIsOpenDetailDialog] = useState(false);
 
   // table definition
   const columns = useMemo(() => [
@@ -100,6 +103,7 @@ export default function DataTable({
             <Button
               variant="ghost"
               className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={row.original.is_read}
             >
               <MoreHorizontal />
             </Button>
@@ -132,6 +136,36 @@ export default function DataTable({
     onColumnVisibilityChange,
   });
 
+  function getTableCellClassNames(columnId, isRead) {
+    switch (columnId) {
+      case 'actions':
+        return 'text-right';
+
+      case 'user_info':
+      case 'message':
+      case 'created_at':
+      case 'updated_at':
+        return `${!isRead ? 'font-semibold' : 'text-zinc-800 dark:text-zinc-300'} hover:cursor-pointer`;
+
+      default:
+        return '';
+    }
+  }
+
+  function handleOpenDetailDialog(columnId, row) {
+    if (columnId !== 'actions' && columnId !== 'select') {
+      setDetailData({
+        name: row.original.name,
+        email: row.original.email,
+        message: row.getValue('message'),
+        created_at: row.getValue('created_at'),
+      });
+      setIsOpenDetailDialog(true);
+
+      onEditReadStatus(row.original.id, row.original.is_read);
+    }
+  }
+
   return (
     <>
       <SelectionAlert table={table} />
@@ -163,11 +197,13 @@ export default function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className={row.original.is_read ? 'bg-muted/80' : ''}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={`p-3 ${cell.column.id === 'actions' ? 'text-right' : '' }`}
+                      className={`p-3 ${getTableCellClassNames(cell.column.id, row.original.is_read)}`}
+                      onClick={() => handleOpenDetailDialog(cell.column.id, row)}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
@@ -190,6 +226,13 @@ export default function DataTable({
           {feedbacks.length} {feedbacks.length === 1 ? 'result' : 'results'}
         </p>
       )}
+
+      <DetailDialog
+        isOpen={isOpenDetailDialog}
+        onIsOpenChange={setIsOpenDetailDialog}
+        detailData={detailData}
+        onDetailDataChange={setIsOpenDetailDialog}
+      />
     </>
   );
 }

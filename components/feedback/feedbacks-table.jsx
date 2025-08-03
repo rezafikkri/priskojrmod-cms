@@ -5,7 +5,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
-import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
+import { useQuery, keepPreviousData, useQueryClient, hashKey } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
   Alert,
@@ -15,7 +15,7 @@ import { safeFetch } from '@/lib/safe-fetch';
 import TableSekeleton from '../loadings/table-skeleton';
 import { ArrowDownToLine, AlertCircle, Columns } from 'lucide-react';
 import { Trash } from 'lucide-react';
-import { loadFeedbacks, removeFeedbacks } from '@/actions/feedback-actions';
+import { editFeedbackReadStatus, loadFeedbacks, removeFeedbacks } from '@/actions/feedback-actions';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,13 +52,19 @@ export default function FeedbacksTable() {
   const [isFilterActive, setIsFilterActive] = useState(false);
 
   // read status state
-  const [updatingReadStatusIds, setUpdatingReadStatusIds] = useState([]);
+  const [markingAsReadIds, setMarkingAsReadIds] = useState([]);
 
-  // This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
-  // We need it because our async function (sent to the child) might "remember"
-  // an old `searchedCustomer` and more state value, which is called a "stale closure" problem.
+  // This is for prevent double editFeedbackReadStatus process
+  const updatingReadStatusIdsRef = useRef([]);
+
+  /* This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
+   * We need it because our async function (sent to the child) might "remember"
+   * an old `searchedCustomer` and more state value, which is called a "stale closure" problem.
+  */
   const filtersRef = useRef(filters);
-  const updatingReadStatusIdsRef = useRef(updatingReadStatusIds);
+  // This is for handleMarkAsRead actions process, that used for ui,
+  // like add opacity-50 to targeted row, disable button `mark as read`, and more
+  const markingAsReadIdsRef = useRef(markingAsReadIds);
 
   useEffect(() => {
     filtersRef.current = filters;
@@ -239,6 +245,80 @@ export default function FeedbacksTable() {
     setIsDeleting(false);
   }
 
+  async function handleEditReadStatus(id, currentIsRead) {
+    if (
+      currentIsRead ||
+      updatingReadStatusIdsRef.current.includes(id)
+    ) return false;
+
+    // note the id to state to prevent double process
+    updatingReadStatusIdsRef.current = [ ...updatingReadStatusIdsRef.current, id ];
+
+    let removedSnaphost = { filters };
+
+    // optimistic update feedback
+    if (filters?.readStatus === 'unread') {
+      // remove item from ui
+      queryClient.setQueryData(
+        ['feedbacks', filters],
+        (oldData) => oldData.filter((feedback, index) => {
+          if (feedback.id == id) {
+            removedSnaphost = {
+              ...removedSnaphost,
+              item: feedback,
+              index,
+            };
+            return false;
+          }
+          return true;
+        }),
+      );
+    } else {
+      // just change the is_read status = true
+      queryClient.setQueryData(
+        ['feedbacks', filters],
+        (oldData) => oldData.map((feedback) => ({
+          ...feedback,
+          is_read: feedback.id === id ? true : feedback.is_read,
+        })),
+      );
+    }
+
+    const editRes = await editFeedbackReadStatus(id, true);
+
+    if (editRes.status === 'success') {
+      // invalidate all queryKey, except current queryKey
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryHash !== hashKey(['feedbacks', removedSnaphost.filters]),
+      });
+    } else {
+      if (removedSnaphost.filters?.readStatus === 'unread') {
+        // add back data to ui
+        queryClient.setQueryData(
+          ['feedbacks', removedSnaphost.filters],
+          (oldData) => [
+            ...oldData.slice(0, removedSnaphost.index),
+            removedSnaphost.item,
+            ...oldData.slice(removedSnaphost.index),
+          ],
+        );
+      } else {
+        // change back is_read = false
+        queryClient.setQueryData(
+          ['feedbacks', removedSnaphost.filters],
+          (oldData) => oldData.map((feedback) => ({
+            ...feedback,
+            is_read: feedback.id === id ? false : feedback.is_read,
+          })),
+        );
+      }
+    }
+
+    // remove id from updatingReadStatusIdsRef.current
+    updatingReadStatusIdsRef.current = updatingReadStatusIdsRef.current
+      .filter(updatingId => updatingId !== id);
+  }
+
   return (
     <>
       <div className="flex gap-6 items-start mb-4 flex-wrap">
@@ -318,10 +398,12 @@ export default function FeedbacksTable() {
           tableState={{
             rowSelection,
             columnVisibility,
+            filters,
           }}
           tableHandler={{
             onRowSelectionChange: setRowSelection,
             onColumnVisibilityChange: setColumnVisibility,
+            onEditReadStatus: handleEditReadStatus,
           }}
         />
       )}
