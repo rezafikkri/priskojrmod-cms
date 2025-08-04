@@ -261,26 +261,41 @@ export default function FeedbacksTable() {
       // remove item from ui
       queryClient.setQueryData(
         ['feedbacks', filters],
-        (oldData) => oldData.filter((feedback, index) => {
-          if (feedback.id == id) {
-            removedSnaphost = {
-              ...removedSnaphost,
-              item: feedback,
-              index,
-            };
-            return false;
-          }
-          return true;
-        }),
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          return oldData.filter((feedback, index) => {
+            if (feedback.id == id) {
+              removedSnaphost = {
+                ...removedSnaphost,
+                item: feedback,
+                index,
+              };
+              return false;
+            }
+            return true;
+          });
+        },
       );
+
+      // if id exist in rowSelection then remove
+      setRowSelection(prev => {
+        if (!id in prev) return prev;
+        const { [id]:_, ...next } = prev;
+        return next;
+      });
     } else {
       // just change the is_read status = true
       queryClient.setQueryData(
         ['feedbacks', filters],
-        (oldData) => oldData.map((feedback) => ({
-          ...feedback,
-          is_read: feedback.id === id ? true : feedback.is_read,
-        })),
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          return oldData.map((feedback) => ({
+            ...feedback,
+            is_read: feedback.id === id ? true : feedback.is_read,
+          }));
+        },
       );
     }
 
@@ -292,24 +307,33 @@ export default function FeedbacksTable() {
         predicate: (query) => query.queryHash !== hashKey(['feedbacks', removedSnaphost.filters]),
       });
     } else {
-      if (removedSnaphost.filters?.readStatus === 'unread') {
+      // if readStatus filters = unread and removedSnaphost item is exist
+      if (removedSnaphost.filters?.readStatus === 'unread' && removedSnaphost.item) {
         // add back data to ui
         queryClient.setQueryData(
           ['feedbacks', removedSnaphost.filters],
-          (oldData) => [
-            ...oldData.slice(0, removedSnaphost.index),
-            removedSnaphost.item,
-            ...oldData.slice(removedSnaphost.index),
-          ],
+          (oldData) => {
+            if (!oldData) return oldData;
+
+            return [
+              ...oldData.slice(0, removedSnaphost.index),
+              removedSnaphost.item,
+              ...oldData.slice(removedSnaphost.index),
+            ];
+          },
         );
       } else {
         // change back is_read = false
         queryClient.setQueryData(
           ['feedbacks', removedSnaphost.filters],
-          (oldData) => oldData.map((feedback) => ({
-            ...feedback,
-            is_read: feedback.id === id ? false : feedback.is_read,
-          })),
+          (oldData) => {
+            if (!oldData) return oldData;
+
+            return oldData.map((feedback) => ({
+              ...feedback,
+              is_read: feedback.id === id ? false : feedback.is_read,
+            }));
+          },
         );
       }
     }
