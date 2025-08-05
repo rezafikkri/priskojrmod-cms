@@ -51,11 +51,11 @@ export default function FeedbacksTable() {
   const [filters, setFilters] = useState(null);
   const [isFilterActive, setIsFilterActive] = useState(false);
 
-  // read status state
-  const [markingAsReadIds, setMarkingAsReadIds] = useState([]);
-
   // This is for prevent double editFeedbackReadStatus process
   const updatingReadStatusIdsRef = useRef([]);
+
+  // read status state
+  const [markingAsReadIds, setMarkingAsReadIds] = useState([]);
 
   /* This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
    * We need it because our async function (sent to the child) might "remember"
@@ -76,6 +76,7 @@ export default function FeedbacksTable() {
   // Tracks the in-flight deletion and pull toast so it can be updated.
   const deletionToastIdRef = useRef(null);
   const pullFeedbacksToastIdRef = useRef(null);
+  const markingAsReadToastIdRef = useRef(null);
 
   // add readStatus filters
   function addFiltersToURL(url, appliedFilters) {
@@ -98,15 +99,19 @@ export default function FeedbacksTable() {
     queryFn: async () => {
       let toastId;
       if (!shouldShowSkeletonLoading.current) {
-        const activeToastId = deletionToastIdRef.current ?? pullFeedbacksToastIdRef.current;
+        const activeToastId = deletionToastIdRef.current
+          ?? pullFeedbacksToastIdRef.current
+          ?? markingAsReadToastIdRef.current;
 
         if (activeToastId) {
           toastId = toast.loading('Refreshing feedback...', { id: activeToastId });
 
           if (deletionToastIdRef.current) {
             deletionToastIdRef.current = null;
-          } else {
+          } else if (pullFeedbacksToastIdRef.current) {
             pullFeedbacksToastIdRef.current = null;
+          } else {
+            markingAsReadToastIdRef.current = null;
           }
         } else {
           toastId = toast.loading('Loading feedback...');
@@ -124,8 +129,8 @@ export default function FeedbacksTable() {
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 60 * 3,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
   });
 
   // set isFilterActive when apply and clear
@@ -245,10 +250,11 @@ export default function FeedbacksTable() {
     setIsDeleting(false);
   }
 
-  async function handleEditReadStatus(id, currentIsRead) {
+  async function handleEditReadStatus(id, isRead) {
     if (
-      currentIsRead ||
-      updatingReadStatusIdsRef.current.includes(id)
+      isRead ||
+      updatingReadStatusIdsRef.current.includes(id) ||
+      markingAsReadIdsRef.current.includes(id)
     ) return false;
 
     // note the id to state to prevent double process
@@ -343,6 +349,76 @@ export default function FeedbacksTable() {
       .filter(updatingId => updatingId !== id);
   }
 
+  const handleMarkAsRead = useCallback(async (id) => {
+    // not show table skeleton loading
+    shouldShowSkeletonLoading.current = false;
+
+    // This is for add opacity-50 style to updated row
+    setMarkingAsReadIds((prev) => {
+      const newIds = [...prev, id];
+      markingAsReadIdsRef.current = newIds;
+      return newIds;
+    });
+    const toastId = toast.loading('Marking feedback as read...');
+
+    const editRes = await editFeedbackReadStatus(id, true);
+
+    setMarkingAsReadIds((prev) => {
+      const newIds = prev.filter(prevId => prevId !== id);
+      markingAsReadIdsRef.current = newIds;
+      return newIds;
+    });
+
+    if (editRes.status === 'success') {
+      if (filtersRef.current?.readStatus === 'unread') {
+        queryClient.setQueryData(
+          ['feedbacks', filtersRef.current],
+          (oldData) => {
+            if (!oldData) return oldData;
+
+            return oldData.filter((feedback) => feedback.id !== id);
+          },
+        );
+      } else if (filtersRef.current?.readStatus === 'read') {
+        // note the toast id, for updated in queryFn useQuery
+        markingAsReadToastIdRef.current = toastId;
+
+        await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+
+        toast.success('Feedback marked as read successfully.');
+      } else {
+        queryClient.setQueryData(
+          ['feedbacks', filtersRef.current],
+          (oldData) => {
+            if (!oldData) return oldData;
+
+            return oldData.map((feedback) => ({
+              ...feedback,
+              is_read: feedback.id === id ? true : feedback.is_read,
+            }));
+          },
+        );
+      }
+
+      if (filtersRef.current?.readStatus !== 'read') {
+        queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
+        toast.success('Feedback marked as read successfully.', { id: toastId });
+      }
+    } else {
+      toast.error(editRes.message, { id: toastId });
+    }
+  }, []);
+
+  /*
+   * TODO: jika ini perdampak ke performence, maka boleh di improve. Ini terjadi ketika admin
+   *       melakukan mark as read atau editFeedbackReadStatus lebih dari 1 item bersamaan,
+   *       lalu ketika masih pending, admin ubah filters dan ketika proses update itu sukses maka
+   *       menyebabkan refetch berkali-kali.
+   *       Untuk aksi mark as read, itu ketika admin ubah filters yang sebelumnya null/all/unread menjadi
+   *       read sedangkan proses update masih pending. Di aksi editFeedbackReadStatus,
+   *       ketika admin ubah filters saja dan proses update di background masih pending.
+   */
+
   return (
     <>
       <div className="flex gap-6 items-start mb-4 flex-wrap">
@@ -423,11 +499,13 @@ export default function FeedbacksTable() {
             rowSelection,
             columnVisibility,
             filters,
+            markingAsReadIds,
           }}
           tableHandler={{
             onRowSelectionChange: setRowSelection,
             onColumnVisibilityChange: setColumnVisibility,
             onEditReadStatus: handleEditReadStatus,
+            onMarkAsRead: handleMarkAsRead,
           }}
         />
       )}

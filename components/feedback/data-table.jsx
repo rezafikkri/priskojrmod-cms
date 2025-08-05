@@ -24,7 +24,7 @@ import {
 import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { formatDateTimeWIB } from '@/lib/format-date';
-import { getTableHeaderWidth } from '@/lib/utils';
+import { cn, getTableHeaderWidth } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
 import SelectionAlert from '../ui/selection-alert';
 import { Minus } from 'lucide-react';
@@ -35,8 +35,13 @@ export default function DataTable({
   tableState,
   tableHandler,
 }) {
-  const {onRowSelectionChange, onColumnVisibilityChange, onEditReadStatus} = tableHandler;
-  const {rowSelection, columnVisibility} = tableState;
+  const {
+    onRowSelectionChange,
+    onColumnVisibilityChange,
+    onEditReadStatus,
+    onMarkAsRead,
+  } = tableHandler;
+  const {rowSelection, columnVisibility, markingAsReadIds} = tableState;
   const [detailData, setDetailData] = useState(null);
   const [isOpenDetailDialog, setIsOpenDetailDialog] = useState(false);
 
@@ -103,7 +108,10 @@ export default function DataTable({
             <Button
               variant="ghost"
               className="h-8 w-8 p-0 focus-visible:ring-ring"
-              disabled={row.original.is_read}
+              disabled={
+                row.original.is_read ||
+                markingAsReadIds.includes(row.original.id)
+              }
             >
               <MoreHorizontal />
             </Button>
@@ -114,7 +122,7 @@ export default function DataTable({
               className="w-full text-base"
               asChild
             >
-              <button>
+              <button onClick={() => onMarkAsRead(row.original.id)}>
                 Mark as Read
               </button>
             </DropdownMenuItem>
@@ -122,7 +130,7 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], []);
+  ], [markingAsReadIds]);
   const table = useReactTable({
     data: feedbacks,
     columns,
@@ -197,7 +205,10 @@ export default function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className={row.original.is_read ? 'bg-muted/80' : ''}
+                  className={cn(
+                    row.original.is_read && 'bg-muted/80',
+                    markingAsReadIds.includes(row.original.id) && 'opacity-50'
+                  )}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
