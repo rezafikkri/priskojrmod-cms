@@ -50,19 +50,25 @@ export default function FeedbacksTable() {
   // filters state
   const [filters, setFilters] = useState(null);
   const [isFilterActive, setIsFilterActive] = useState(false);
-
-  // This is for prevent double editFeedbackReadStatus process
+  
+  // This is for prevent double editFeedbackReadStatus process and prevent unnecessary multiple refetches 
+  // when running multiple editReadStatus concurrently
   const updatingReadStatusIdsRef = useRef([]);
+
+  // Works in conjunction with `updatingReadStatusIdsRef` to control
+  // when a single refetch should occur after a batch update.
+  const hasSuccessfulEditReadStatusRef = useRef(false);
 
   // read status state
   const [markingAsReadIds, setMarkingAsReadIds] = useState([]);
 
-  /* This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
+  /**
+   * This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
    * We need it because our async function (sent to the child) might "remember"
    * an old `searchedCustomer` and more state value, which is called a "stale closure" problem.
-  */
+   */
   const filtersRef = useRef(filters);
-  // This is for handleMarkAsRead actions process, that used for ui,
+  // This same as filtersRef but, This is too for handleMarkAsRead actions process, that used for ui,
   // like add opacity-50 to targeted row, disable button `mark as read`, and more
   const markingAsReadIdsRef = useRef(markingAsReadIds);
 
@@ -257,7 +263,7 @@ export default function FeedbacksTable() {
       markingAsReadIdsRef.current.includes(id)
     ) return false;
 
-    // note the id to state to prevent double process
+    // Note the id to state to prevent double process
     updatingReadStatusIdsRef.current = [ ...updatingReadStatusIdsRef.current, id ];
 
     let removedSnaphost = { filters };
@@ -308,10 +314,7 @@ export default function FeedbacksTable() {
     const editRes = await editFeedbackReadStatus(id, true);
 
     if (editRes.status === 'success') {
-      // invalidate all queryKey, except current queryKey
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryHash !== hashKey(['feedbacks', removedSnaphost.filters]),
-      });
+      hasSuccessfulEditReadStatusRef.current = true;
     } else {
       // if readStatus filters = unread and removedSnaphost item is exist
       if (removedSnaphost.filters?.readStatus === 'unread' && removedSnaphost.item) {
@@ -347,6 +350,23 @@ export default function FeedbacksTable() {
     // remove id from updatingReadStatusIdsRef.current
     updatingReadStatusIdsRef.current = updatingReadStatusIdsRef.current
       .filter(updatingId => updatingId !== id);
+
+    // For still invalidateQueries feedbacks, when last updating item fails, filters is changed while
+    // updating is pending and at least one editReadStatus succeeded.
+    if (
+      updatingReadStatusIdsRef.current.length === 0 &&
+      hasSuccessfulEditReadStatusRef.current
+    ) {
+      // Only directly trigger refetch when the filters changed while process is still pending
+      if (JSON.stringify(removedSnaphost.filters) !== JSON.stringify(filtersRef.current)) {
+        queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+      } else {
+        // invalidate all queryKey, but not trigger refetch for current active queryKey
+        queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
+      }
+
+      hasSuccessfulEditReadStatusRef.current = false;
+    }
   }
 
   const handleMarkAsRead = useCallback(async (id) => {
