@@ -5,7 +5,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
-import { useQuery, keepPreviousData, useQueryClient, hashKey } from '@tanstack/react-query';
+import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
   Alert,
@@ -59,8 +59,14 @@ export default function FeedbacksTable() {
   // when a single refetch should occur after a batch update.
   const hasSuccessfulEditReadStatusRef = useRef(false);
 
-  // read status state
+  // mark as read status state
   const [markingAsReadIds, setMarkingAsReadIds] = useState([]);
+  /**
+   * True if markAsRead is pending and filters.readStatus was changed to "read"
+   * during that time. Used to decide if a single invalidateQueries should occur
+   * and to avoid multiple unnecessary refetches.
+   */
+  const shouldInvalidateAfterMarkAsReadRef = useRef(false);
 
   /**
    * This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
@@ -82,7 +88,6 @@ export default function FeedbacksTable() {
   // Tracks the in-flight deletion and pull toast so it can be updated.
   const deletionToastIdRef = useRef(null);
   const pullFeedbacksToastIdRef = useRef(null);
-  const markingAsReadToastIdRef = useRef(null);
 
   // add readStatus filters
   function addFiltersToURL(url, appliedFilters) {
@@ -105,19 +110,15 @@ export default function FeedbacksTable() {
     queryFn: async () => {
       let toastId;
       if (!shouldShowSkeletonLoading.current) {
-        const activeToastId = deletionToastIdRef.current
-          ?? pullFeedbacksToastIdRef.current
-          ?? markingAsReadToastIdRef.current;
+        const activeToastId = deletionToastIdRef.current ?? pullFeedbacksToastIdRef.current;
 
         if (activeToastId) {
           toastId = toast.loading('Refreshing feedback...', { id: activeToastId });
 
           if (deletionToastIdRef.current) {
             deletionToastIdRef.current = null;
-          } else if (pullFeedbacksToastIdRef.current) {
-            pullFeedbacksToastIdRef.current = null;
           } else {
-            markingAsReadToastIdRef.current = null;
+            pullFeedbacksToastIdRef.current = null;
           }
         } else {
           toastId = toast.loading('Loading feedback...');
@@ -369,6 +370,15 @@ export default function FeedbacksTable() {
     }
   }
 
+  /*
+   * Scenario 1: filters readStatus = null/all, mark as read 2 item sekaligus, proses sukses, toast sukses
+   *             tampil 2 kali tanpa refetch, ketika data belum stale, ubah filters readStatus = unread,
+   *             lalu refetch akan dilakukan. [selesai]
+   *             
+   * Scenario 2: filters readStatus = null/all, mark as read 2 item sekaligus, proses masih pending,
+   *             ubah filters readStatus = read, proses sukses, toast sukses tampil 2 kali, refetch
+   *             dijalankan hanya sekali.
+   */
   const handleMarkAsRead = useCallback(async (id) => {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
@@ -400,12 +410,7 @@ export default function FeedbacksTable() {
           },
         );
       } else if (filtersRef.current?.readStatus === 'read') {
-        // note the toast id, for updated in queryFn useQuery
-        markingAsReadToastIdRef.current = toastId;
-
-        await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
-
-        toast.success('Feedback marked as read successfully.');
+        shouldInvalidateAfterMarkAsReadRef.current = true;
       } else {
         queryClient.setQueryData(
           ['feedbacks', filtersRef.current],
@@ -422,22 +427,21 @@ export default function FeedbacksTable() {
 
       if (filtersRef.current?.readStatus !== 'read') {
         queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
-        toast.success('Feedback marked as read successfully.', { id: toastId });
       }
+
+      toast.success('Feedback marked as read successfully.', { id: toastId });
     } else {
       toast.error(editRes.message, { id: toastId });
     }
-  }, []);
 
-  /*
-   * TODO: jika ini perdampak ke performence, maka boleh di improve. Ini terjadi ketika admin
-   *       melakukan mark as read atau editFeedbackReadStatus lebih dari 1 item bersamaan,
-   *       lalu ketika masih pending, admin ubah filters dan ketika proses update itu sukses maka
-   *       menyebabkan refetch berkali-kali.
-   *       Untuk aksi mark as read, itu ketika admin ubah filters yang sebelumnya null/all/unread menjadi
-   *       read sedangkan proses update masih pending. Di aksi editFeedbackReadStatus,
-   *       ketika admin ubah filters saja dan proses update di background masih pending.
-   */
+    if (
+      markingAsReadIdsRef.current.length === 0 &&
+      shouldInvalidateAfterMarkAsReadRef.current
+    ) {
+      queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+      shouldInvalidateAfterMarkAsReadRef.current = false;
+    }
+  }, []);
 
   return (
     <>
