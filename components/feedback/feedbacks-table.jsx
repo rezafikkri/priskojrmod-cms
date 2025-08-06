@@ -44,7 +44,6 @@ export default function FeedbacksTable() {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState({
     created_at: true,
-    updated_at: false,
   });
 
   // filters state

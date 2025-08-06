@@ -28,7 +28,7 @@ export default function DetailDialog({
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
-        className="sm:max-w-lg"
+        className="sm:max-w-lg overflow-y-auto max-h-full"
         onInteractOutside={handleClickOutside}
       >
         <DialogHeader>

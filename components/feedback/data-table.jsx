@@ -95,11 +95,6 @@ export default function DataTable({
       cell: ({ row }) => formatDateTimeWIB(row.getValue('created_at')),
     },
     {
-      accessorKey: 'updated_at',
-      header: () => 'Updated At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('updated_at')),
-    },
-    {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => (
@@ -152,7 +147,6 @@ export default function DataTable({
       case 'user_info':
       case 'message':
       case 'created_at':
-      case 'updated_at':
         return `${!isRead ? 'font-semibold' : 'text-zinc-800 dark:text-zinc-300'} hover:cursor-pointer`;
 
       default:
