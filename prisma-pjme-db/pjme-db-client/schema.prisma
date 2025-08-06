@@ -22,7 +22,7 @@ model Admin {
   id                    String @id @db.VarChar(255)
   first_name            String @db.VarChar(100)
   last_name             String @db.VarChar(100)
-  email                 String @unique @db.VarChar(100)
+  email                 String @unique @db.VarChar(254)
   whatsapp_phone_number String @db.VarChar(20)
   picture               String @db.VarChar(255)
 
@@ -70,7 +70,7 @@ model Customer {
   is_banned    Boolean @default(false)
   first_name   String  @db.VarChar(100)
   last_name    String  @db.VarChar(100)
-  email        String  @unique @db.VarChar(100)
+  email        String  @unique @db.VarChar(254)
   phone_number String? @db.VarChar(20)
   picture      String? @db.VarChar(255)
   last_active  BigInt?
@@ -317,7 +317,7 @@ model Feedback {
   id         String  @id @default(uuid(7)) @db.Uuid
   is_read    Boolean @default(false)
   name       String? @db.VarChar(100)
-  email      String? @db.VarChar(100)
+  email      String? @db.VarChar(254)
   message    String
   created_at BigInt  @unique
 
