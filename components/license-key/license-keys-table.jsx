@@ -90,6 +90,9 @@ export default function LicenseKeysTable() {
 
   // set can regenerate state
   const [isRegenerating, setIsRegenerating] = useState(false);
+  // Used to persist toast ID for the grant regenerate action,
+  // allowing us to update the loading toast instead of showing a new one.
+  const grantRegenerateToastIdRef = useRef(null);
 
   // add secretKeyId and canRegenerate filters
   function addFiltersToURL(url, appliedFilters) {
@@ -116,7 +119,15 @@ export default function LicenseKeysTable() {
     queryFn: async () => {
       let toastId;
       if (!shouldShowSkeletonLoading.current) {
-        toastId = toast.loading('Loading license keys...');
+        const activeToastId = grantRegenerateToastIdRef.current;
+
+        if (activeToastId) {
+          toastId = toast.loading('Loading license keys...', { id: activeToastId });
+
+          grantRegenerateToastIdRef.current = null;
+        } else {
+          toastId = toast.loading('Loading license keys...');
+        }
       }
 
       const results = await safeFetch({
@@ -149,7 +160,15 @@ export default function LicenseKeysTable() {
           // for all table, besides that, then show toast loading only
           let toastId;
           if (searchedLicenseKey) {
-            toastId = toast.loading('Searching license keys...');
+            const activeToastId = grantRegenerateToastIdRef.current;
+
+            if (activeToastId) {
+              toastId = toast.loading('Searching license keys...', { id: activeToastId });
+
+              grantRegenerateToastIdRef.current = null;
+            } else {
+              toastId = toast.loading('Searching license keys...');
+            }
           }
 
           return await safeFetch({
@@ -183,6 +202,7 @@ export default function LicenseKeysTable() {
   }
 
   function handleClearSearchInput() {
+    setRowSelection({});
     handlePaginationChange({
       ...pagination,
       pageIndex: 0,
@@ -391,9 +411,9 @@ export default function LicenseKeysTable() {
     // not use try/catch because in actions already using try/catch
     const setCanRegenerateRes = await setCanRegenerateKeys(rowSelections);
 
-    toast.dismiss(toastId);
-
     if (setCanRegenerateRes.status === 'success') {
+      grantRegenerateToastIdRef.current = toastId;
+
       await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
 
@@ -426,7 +446,7 @@ export default function LicenseKeysTable() {
         toast.info('No license keys were updated. They may have already been deleted.');
       }
     } else {
-      toast.error(setCanRegenerateRes.message);
+      toast.error(setCanRegenerateRes.message, { id: toastId });
     }
 
     setIsRegenerating(false);

@@ -84,7 +84,8 @@ export default function FeedbacksTable() {
   // isDeleting state
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Tracks the in-flight deletion and pull toast so it can be updated.
+  // Used to persist toast ID for deletion and pullFeedbacks action,
+  // allowing us to update the loading toast instead of showing a new one.
   const deletionToastIdRef = useRef(null);
   const pullFeedbacksToastIdRef = useRef(null);
 
