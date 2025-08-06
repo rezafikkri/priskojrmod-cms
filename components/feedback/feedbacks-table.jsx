@@ -369,15 +369,6 @@ export default function FeedbacksTable() {
     }
   }
 
-  /*
-   * Scenario 1: filters readStatus = null/all, mark as read 2 item sekaligus, proses sukses, toast sukses
-   *             tampil 2 kali tanpa refetch, ketika data belum stale, ubah filters readStatus = unread,
-   *             lalu refetch akan dilakukan. [selesai]
-   *             
-   * Scenario 2: filters readStatus = null/all, mark as read 2 item sekaligus, proses masih pending,
-   *             ubah filters readStatus = read, proses sukses, toast sukses tampil 2 kali, refetch
-   *             dijalankan hanya sekali.
-   */
   const handleMarkAsRead = useCallback(async (id) => {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
@@ -408,6 +399,13 @@ export default function FeedbacksTable() {
             return oldData.filter((feedback) => feedback.id !== id);
           },
         );
+
+        // if id exist in rowSelection then remove
+        setRowSelection(prev => {
+          if (!id in prev) return prev;
+          const { [id]:_, ...next } = prev;
+          return next;
+        });
       } else if (filtersRef.current?.readStatus === 'read') {
         shouldInvalidateAfterMarkAsReadRef.current = true;
       } else {
