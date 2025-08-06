@@ -27797,12 +27797,10 @@ export namespace Prisma {
 
   export type FeedbackAvgAggregateOutputType = {
     created_at: number | null
-    updated_at: number | null
   }
 
   export type FeedbackSumAggregateOutputType = {
     created_at: bigint | null
-    updated_at: bigint | null
   }
 
   export type FeedbackMinAggregateOutputType = {
@@ -27812,7 +27810,6 @@ export namespace Prisma {
     email: string | null
     message: string | null
     created_at: bigint | null
-    updated_at: bigint | null
   }
 
   export type FeedbackMaxAggregateOutputType = {
@@ -27822,7 +27819,6 @@ export namespace Prisma {
     email: string | null
     message: string | null
     created_at: bigint | null
-    updated_at: bigint | null
   }
 
   export type FeedbackCountAggregateOutputType = {
@@ -27832,19 +27828,16 @@ export namespace Prisma {
     email: number
     message: number
     created_at: number
-    updated_at: number
     _all: number
   }
 
 
   export type FeedbackAvgAggregateInputType = {
     created_at?: true
-    updated_at?: true
   }
 
   export type FeedbackSumAggregateInputType = {
     created_at?: true
-    updated_at?: true
   }
 
   export type FeedbackMinAggregateInputType = {
@@ -27854,7 +27847,6 @@ export namespace Prisma {
     email?: true
     message?: true
     created_at?: true
-    updated_at?: true
   }
 
   export type FeedbackMaxAggregateInputType = {
@@ -27864,7 +27856,6 @@ export namespace Prisma {
     email?: true
     message?: true
     created_at?: true
-    updated_at?: true
   }
 
   export type FeedbackCountAggregateInputType = {
@@ -27874,7 +27865,6 @@ export namespace Prisma {
     email?: true
     message?: true
     created_at?: true
-    updated_at?: true
     _all?: true
   }
 
@@ -27971,7 +27961,6 @@ export namespace Prisma {
     email: string | null
     message: string
     created_at: bigint
-    updated_at: bigint
     _count: FeedbackCountAggregateOutputType | null
     _avg: FeedbackAvgAggregateOutputType | null
     _sum: FeedbackSumAggregateOutputType | null
@@ -28000,7 +27989,6 @@ export namespace Prisma {
     email?: boolean
     message?: boolean
     created_at?: boolean
-    updated_at?: boolean
   }, ExtArgs["result"]["feedback"]>
 
   export type FeedbackSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -28010,7 +27998,6 @@ export namespace Prisma {
     email?: boolean
     message?: boolean
     created_at?: boolean
-    updated_at?: boolean
   }, ExtArgs["result"]["feedback"]>
 
   export type FeedbackSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -28020,7 +28007,6 @@ export namespace Prisma {
     email?: boolean
     message?: boolean
     created_at?: boolean
-    updated_at?: boolean
   }, ExtArgs["result"]["feedback"]>
 
   export type FeedbackSelectScalar = {
@@ -28030,10 +28016,9 @@ export namespace Prisma {
     email?: boolean
     message?: boolean
     created_at?: boolean
-    updated_at?: boolean
   }
 
-  export type FeedbackOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "is_read" | "name" | "email" | "message" | "created_at" | "updated_at", ExtArgs["result"]["feedback"]>
+  export type FeedbackOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "is_read" | "name" | "email" | "message" | "created_at", ExtArgs["result"]["feedback"]>
 
   export type $FeedbackPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Feedback"
@@ -28045,7 +28030,6 @@ export namespace Prisma {
       email: string | null
       message: string
       created_at: bigint
-      updated_at: bigint
     }, ExtArgs["result"]["feedback"]>
     composites: {}
   }
@@ -28475,7 +28459,6 @@ export namespace Prisma {
     readonly email: FieldRef<"Feedback", 'String'>
     readonly message: FieldRef<"Feedback", 'String'>
     readonly created_at: FieldRef<"Feedback", 'BigInt'>
-    readonly updated_at: FieldRef<"Feedback", 'BigInt'>
   }
     
 
@@ -31312,8 +31295,7 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     message: 'message',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    created_at: 'created_at'
   };
 
   export type FeedbackScalarFieldEnum = (typeof FeedbackScalarFieldEnum)[keyof typeof FeedbackScalarFieldEnum]
@@ -32766,7 +32748,6 @@ export namespace Prisma {
     email?: StringNullableFilter<"Feedback"> | string | null
     message?: StringFilter<"Feedback"> | string
     created_at?: BigIntFilter<"Feedback"> | bigint | number
-    updated_at?: BigIntFilter<"Feedback"> | bigint | number
   }
 
   export type FeedbackOrderByWithRelationInput = {
@@ -32776,7 +32757,6 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     message?: SortOrder
     created_at?: SortOrder
-    updated_at?: SortOrder
   }
 
   export type FeedbackWhereUniqueInput = Prisma.AtLeast<{
@@ -32789,7 +32769,6 @@ export namespace Prisma {
     name?: StringNullableFilter<"Feedback"> | string | null
     email?: StringNullableFilter<"Feedback"> | string | null
     message?: StringFilter<"Feedback"> | string
-    updated_at?: BigIntFilter<"Feedback"> | bigint | number
   }, "id" | "created_at">
 
   export type FeedbackOrderByWithAggregationInput = {
@@ -32799,7 +32778,6 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     message?: SortOrder
     created_at?: SortOrder
-    updated_at?: SortOrder
     _count?: FeedbackCountOrderByAggregateInput
     _avg?: FeedbackAvgOrderByAggregateInput
     _max?: FeedbackMaxOrderByAggregateInput
@@ -32817,7 +32795,6 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Feedback"> | string | null
     message?: StringWithAggregatesFilter<"Feedback"> | string
     created_at?: BigIntWithAggregatesFilter<"Feedback"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"Feedback"> | bigint | number
   }
 
   export type TestimonialWhereInput = {
@@ -34177,7 +34154,6 @@ export namespace Prisma {
     email?: string | null
     message: string
     created_at: bigint | number
-    updated_at: bigint | number
   }
 
   export type FeedbackUncheckedCreateInput = {
@@ -34187,7 +34163,6 @@ export namespace Prisma {
     email?: string | null
     message: string
     created_at: bigint | number
-    updated_at: bigint | number
   }
 
   export type FeedbackUpdateInput = {
@@ -34197,7 +34172,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type FeedbackUncheckedUpdateInput = {
@@ -34207,7 +34181,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type FeedbackCreateManyInput = {
@@ -34217,7 +34190,6 @@ export namespace Prisma {
     email?: string | null
     message: string
     created_at: bigint | number
-    updated_at: bigint | number
   }
 
   export type FeedbackUpdateManyMutationInput = {
@@ -34227,7 +34199,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type FeedbackUncheckedUpdateManyInput = {
@@ -34237,7 +34208,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type TestimonialCreateInput = {
@@ -35507,12 +35477,10 @@ export namespace Prisma {
     email?: SortOrder
     message?: SortOrder
     created_at?: SortOrder
-    updated_at?: SortOrder
   }
 
   export type FeedbackAvgOrderByAggregateInput = {
     created_at?: SortOrder
-    updated_at?: SortOrder
   }
 
   export type FeedbackMaxOrderByAggregateInput = {
@@ -35522,7 +35490,6 @@ export namespace Prisma {
     email?: SortOrder
     message?: SortOrder
     created_at?: SortOrder
-    updated_at?: SortOrder
   }
 
   export type FeedbackMinOrderByAggregateInput = {
@@ -35532,12 +35499,10 @@ export namespace Prisma {
     email?: SortOrder
     message?: SortOrder
     created_at?: SortOrder
-    updated_at?: SortOrder
   }
 
   export type FeedbackSumOrderByAggregateInput = {
     created_at?: SortOrder
-    updated_at?: SortOrder
   }
 
   export type TestimonialTranslationListRelationFilter = {
