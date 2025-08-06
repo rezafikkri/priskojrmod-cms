@@ -287,6 +287,12 @@ export default function LicenseKeysTable() {
         }
       }
       
+      // if id exist in rowSelection then remove
+      setRowSelection(prev => {
+        if (!deleteData.id in prev) return prev;
+        const { [deleteData.id]:_, ...next } = prev;
+        return next;
+      });
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       toast.success(`License key deleted successfully.`, { id: toastId });
     } else {
