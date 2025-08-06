@@ -31,7 +31,7 @@ import Link from 'next/link';
 import { formatDateTimeWIB } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
-import SelectionAlert from './selection-alert';
+import SelectionAlert from '../ui/selection-alert';
 import { Minus } from 'lucide-react';
 
 export default function DataTable({
