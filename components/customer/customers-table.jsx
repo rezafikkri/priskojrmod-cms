@@ -264,10 +264,10 @@ export default function CustomersTable() {
 
             queryClient.setQueryData(
               ['customers', paginationRef.current.pageIndex - 1, filtersRef.current],
-              (oldData) => ({
-                ...oldData,
-                rowCount: newRowCount,
-              }),
+              (oldData) => {
+                if (!oldData) return oldData;
+                return { ...oldData, rowCount: newRowCount };
+              },
             );
 
             setPagination((pagination) => ({
@@ -376,10 +376,10 @@ export default function CustomersTable() {
             
             queryClient.setQueryData(
               ['customers', paginationRef.current.pageIndex - 1, filtersRef.current],
-              (oldData) => ({
-                ...oldData,
-                rowCount: newRowCount,
-              }),
+              (oldData) => {
+                if (!oldData) return oldData;
+                return { ...oldData, rowCount: newRowCount };
+              },
             );
 
             setPagination((pagination) => ({

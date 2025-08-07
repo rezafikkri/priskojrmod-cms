@@ -81,6 +81,8 @@ export default function ProductsTable() {
 
     if (editRes.status === 'success') {
       queryClient.setQueryData(['products'], (oldData) => {
+        if (!oldData) return oldData;
+
         let updatedProduct = { ...oldData.find(data => data.id === editRes.data.id) };
         updatedProduct.updated_at = editRes.data.updated_at;
         updatedProduct.is_pinned = !isPinned;
@@ -122,6 +124,8 @@ export default function ProductsTable() {
 
     if (editRes.status === 'success') {
       queryClient.setQueryData(['products'], (oldData) => {
+        if (!oldData) return oldData;
+
         let updatedProduct = { ...oldData.find(data => data.id === editRes.data.id) };
         updatedProduct.updated_at = editRes.data.updated_at;
         updatedProduct.is_published = !isPublished;
@@ -160,6 +164,8 @@ export default function ProductsTable() {
 
     if (removeRes.status === 'success') {
       queryClient.setQueryData(['products'], (oldData) => {
+        if (!oldData) return oldData;
+
         return [...oldData.filter((data) => data.id !== deleteData.id)];
       });
 

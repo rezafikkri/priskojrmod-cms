@@ -289,7 +289,11 @@ export default function LicenseKeysTable() {
 
             queryClient.setQueryData(
               ['licenseKeys', paginationRef.current.pageIndex - 1, filtersRef.current],
-              (oldData) => ({ ...oldData, rowCount: newRowCount }),
+              (oldData) => {
+                if (!oldData) return oldData;
+
+                return { ...oldData, rowCount: newRowCount };
+              },
             );
 
             setPagination((pagination) => ({
