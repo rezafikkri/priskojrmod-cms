@@ -302,8 +302,7 @@ exports.Prisma.FeedbackScalarFieldEnum = {
   name: 'name',
   email: 'email',
   message: 'message',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  created_at: 'created_at'
 };
 
 exports.Prisma.TestimonialScalarFieldEnum = {

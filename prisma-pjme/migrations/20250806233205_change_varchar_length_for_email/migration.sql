@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "admins" ALTER COLUMN "email" SET DATA TYPE VARCHAR(254);
+
+-- AlterTable
+ALTER TABLE "customers" ALTER COLUMN "email" SET DATA TYPE VARCHAR(254);
+
+-- AlterTable
+ALTER TABLE "feedbacks" ALTER COLUMN "email" SET DATA TYPE VARCHAR(254);

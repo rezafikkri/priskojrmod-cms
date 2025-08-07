@@ -28,7 +28,7 @@ async function main() {
   // seed license keys
   const licenseKeys = [];
 
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < 0; i++) {
     const email = faker.internet.email().toLowerCase();
     const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
     const secret = await pjmaDBPrismaClient.secretKeyLicense.findFirst({
@@ -77,7 +77,7 @@ async function main() {
 
   // seed customers
   const customers = [];
-  for (let i = 0; i < 160; i++) {
+  for (let i = 0; i < 4; i++) {
     const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
     const createData = {
       first_name: faker.person.firstName(),
