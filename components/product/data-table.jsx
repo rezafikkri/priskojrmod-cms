@@ -64,7 +64,7 @@ export default function DataTable({
               <span>{row.getValue('name')}</span>
               <Badge
                 variant="secondary"
-                className="bg-green-100 dark:bg-green-900 ms-3 text-xs text-green-800 dark:text-green-300"
+                className="bg-green-50 dark:bg-green-900 ms-3 text-xs text-green-700 dark:text-green-300"
               >
                 Pinned
               </Badge>
