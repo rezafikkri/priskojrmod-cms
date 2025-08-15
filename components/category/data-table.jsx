@@ -77,6 +77,8 @@ export default function DataTable({ categories: data }) {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
+        if (row.original.slug === 'application') return null;
+
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
