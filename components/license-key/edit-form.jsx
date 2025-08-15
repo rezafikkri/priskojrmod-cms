@@ -36,7 +36,6 @@ export default function EditForm({ licenseKey }) {
       id: licenseKey.id,
       type: licenseKey.parsedKey.type,
       used_for_activate: licenseKey.used_for_activate,
-      used_for_download: licenseKey.used_for_download,
       change_expiration_date: false,
     },
   });
@@ -124,27 +123,6 @@ export default function EditForm({ licenseKey }) {
                   <FormLabel className="text-base leading-none">Used For Activate</FormLabel>
                   <FormDescription>
                     Check this if the License Key has been used to activate the application.
-                  </FormDescription>
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="used_for_download"
-            render={({ field }) => (
-              <FormItem className="flex space-x-2 items-start">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    disabled={isSubmitting}
-                  />
-                </FormControl>
-                <div className="space-y-2">
-                  <FormLabel className="text-base leading-none">Used For Download</FormLabel>
-                  <FormDescription>
-                    Check this if the customer has downloaded the file associated with the application (e.g., Default Addon).
                   </FormDescription>
                 </div>
               </FormItem>

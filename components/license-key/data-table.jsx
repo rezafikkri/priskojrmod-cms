@@ -109,18 +109,6 @@ export default function DataTable({
       enableHiding: false,
     },
     {
-      accessorKey: 'used_for_download',
-      header: <div className="text-center">Download</div>,
-      cell: ({ row }) => (
-        <div className="text-center">{
-          row.getValue('used_for_download')
-            ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
-        }</div>
-      ),
-      enableHiding: false,
-    },
-    {
       accessorKey: 'expired_at',
       header: () => 'Expired At',
       cell: ({ row }) => formatDateTimeWIB(row.getValue('expired_at')),

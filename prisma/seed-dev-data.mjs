@@ -43,7 +43,6 @@ export default async function seedDevData() {
       customer_id: v7(),
       secret_key_id: secret.id,
       used_for_activate: false,
-      used_for_download: false,
       created_at: currentTime,
       updated_at: currentTime,
     });

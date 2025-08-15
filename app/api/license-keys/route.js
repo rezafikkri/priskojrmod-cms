@@ -21,7 +21,6 @@ export async function GET(req) {
     email: true,
     key: true,
     used_for_activate: true,
-    used_for_download: true,
     created_at: true,
     updated_at: true,
     regenerated_at: true,

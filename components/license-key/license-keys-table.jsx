@@ -608,7 +608,7 @@ export default function LicenseKeysTable() {
         />
       )}
 
-      <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: <i>Activate</i> indicates that the license key has been used to activate the application, while <i>Download</i> indicates that the license key has been used to download something associated with the application. For example, the Sider Manager app has a Default Addon; this means <i>Download</i> indicates the license key has been used to download this Default Addon.</small>
+      <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: <i>Activate</i> indicates that the license key has been used to activate the application</small>
     </>
   );
 }

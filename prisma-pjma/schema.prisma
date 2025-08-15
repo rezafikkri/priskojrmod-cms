@@ -39,7 +39,6 @@ model LicenseKey {
   email             String           @db.VarChar(254)
   key               String
   used_for_activate Boolean          @default(false)
-  used_for_download Boolean          @default(false)
   can_regenerate    Boolean          @default(false)
   created_at        BigInt
   updated_at        BigInt
