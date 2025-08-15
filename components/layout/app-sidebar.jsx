@@ -27,8 +27,7 @@ import { NavUser } from './nav-user';
 // Menu items.
 const items = {
   nav: [
-    { title: 'Transactions', url: '/transactions', icon: Activity },
-    { title: 'Backup', url: '/backup', icon: DatabaseBackup },
+    { title: 'Transactions', url: '/transaction', icon: Activity },
   ],
   customers: {
     title: 'Customers',
