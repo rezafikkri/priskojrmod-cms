@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 
 export default function Dashboard() {
+  console.log(`From dashboard. NODE_ENV in server component: ${process.env.NODE_ENV}`);
+
   return (
     <>
       <div className="flex max-lg:flex-col mb-7 lg:items-center max-lg:gap-5 lg:gap-10">
