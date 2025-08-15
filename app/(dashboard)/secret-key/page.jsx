@@ -14,7 +14,7 @@ export default async function SecretKeyListPage() {
   return (
     <>
       <h1 className="text-2xl mb-1 font-bold">Secret Keys</h1>
-      <h2 className="text-zinc-700 dark:text-zinc-300/80 mb-7">The Secret Key is used to generate License Keys for the application.</h2>
+      <h2 className="text-zinc-700 dark:text-zinc-300/80 mb-7">Used to generate license keys for the application.</h2>
       
       <TooltipWrapper text="Create secret key">
         <Button asChild variant="outline" className="mb-5 h-auto text-base px-3 py-1.5 inline-block">
