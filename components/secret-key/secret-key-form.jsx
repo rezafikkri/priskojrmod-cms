@@ -10,7 +10,15 @@ import CreateForm from './create-form';
 
 export default async function SecretKeyForm({ mode = 'create', id }) {
   if (mode === 'create') {
-    const products = await getProducts({ id: true, name: true });
+    const products = await getProducts({
+      select: { id: true, name: true },
+      filters: {
+        price_type: 'paid',
+        category: {
+          slug: 'application',
+        },
+      },
+    });
     return <CreateForm products={products} />;
   }
 
