@@ -137,6 +137,7 @@ exports.Prisma.LicenseKeyScalarFieldEnum = {
   code: 'code',
   used_for_activate: 'used_for_activate',
   can_regenerate: 'can_regenerate',
+  is_revoked: 'is_revoked',
   created_at: 'created_at',
   updated_at: 'updated_at',
   regenerated_at: 'regenerated_at'

@@ -2149,6 +2149,7 @@ export namespace Prisma {
     code: string | null
     used_for_activate: boolean | null
     can_regenerate: boolean | null
+    is_revoked: boolean | null
     created_at: bigint | null
     updated_at: bigint | null
     regenerated_at: bigint | null
@@ -2162,6 +2163,7 @@ export namespace Prisma {
     code: string | null
     used_for_activate: boolean | null
     can_regenerate: boolean | null
+    is_revoked: boolean | null
     created_at: bigint | null
     updated_at: bigint | null
     regenerated_at: bigint | null
@@ -2175,6 +2177,7 @@ export namespace Prisma {
     code: number
     used_for_activate: number
     can_regenerate: number
+    is_revoked: number
     created_at: number
     updated_at: number
     regenerated_at: number
@@ -2204,6 +2207,7 @@ export namespace Prisma {
     code?: true
     used_for_activate?: true
     can_regenerate?: true
+    is_revoked?: true
     created_at?: true
     updated_at?: true
     regenerated_at?: true
@@ -2217,6 +2221,7 @@ export namespace Prisma {
     code?: true
     used_for_activate?: true
     can_regenerate?: true
+    is_revoked?: true
     created_at?: true
     updated_at?: true
     regenerated_at?: true
@@ -2230,6 +2235,7 @@ export namespace Prisma {
     code?: true
     used_for_activate?: true
     can_regenerate?: true
+    is_revoked?: true
     created_at?: true
     updated_at?: true
     regenerated_at?: true
@@ -2330,6 +2336,7 @@ export namespace Prisma {
     code: string
     used_for_activate: boolean
     can_regenerate: boolean
+    is_revoked: boolean
     created_at: bigint
     updated_at: bigint
     regenerated_at: bigint | null
@@ -2362,6 +2369,7 @@ export namespace Prisma {
     code?: boolean
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at?: boolean
     updated_at?: boolean
     regenerated_at?: boolean
@@ -2376,6 +2384,7 @@ export namespace Prisma {
     code?: boolean
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at?: boolean
     updated_at?: boolean
     regenerated_at?: boolean
@@ -2390,6 +2399,7 @@ export namespace Prisma {
     code?: boolean
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at?: boolean
     updated_at?: boolean
     regenerated_at?: boolean
@@ -2404,12 +2414,13 @@ export namespace Prisma {
     code?: boolean
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at?: boolean
     updated_at?: boolean
     regenerated_at?: boolean
   }
 
-  export type LicenseKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "secret_key_id" | "customer_id" | "email" | "code" | "used_for_activate" | "can_regenerate" | "created_at" | "updated_at" | "regenerated_at", ExtArgs["result"]["licenseKey"]>
+  export type LicenseKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "secret_key_id" | "customer_id" | "email" | "code" | "used_for_activate" | "can_regenerate" | "is_revoked" | "created_at" | "updated_at" | "regenerated_at", ExtArgs["result"]["licenseKey"]>
   export type LicenseKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     secret_key?: boolean | SecretKeyLicenseDefaultArgs<ExtArgs>
   }
@@ -2433,6 +2444,7 @@ export namespace Prisma {
       code: string
       used_for_activate: boolean
       can_regenerate: boolean
+      is_revoked: boolean
       created_at: bigint
       updated_at: bigint
       regenerated_at: bigint | null
@@ -2867,6 +2879,7 @@ export namespace Prisma {
     readonly code: FieldRef<"LicenseKey", 'String'>
     readonly used_for_activate: FieldRef<"LicenseKey", 'Boolean'>
     readonly can_regenerate: FieldRef<"LicenseKey", 'Boolean'>
+    readonly is_revoked: FieldRef<"LicenseKey", 'Boolean'>
     readonly created_at: FieldRef<"LicenseKey", 'BigInt'>
     readonly updated_at: FieldRef<"LicenseKey", 'BigInt'>
     readonly regenerated_at: FieldRef<"LicenseKey", 'BigInt'>
@@ -3318,6 +3331,7 @@ export namespace Prisma {
     code: 'code',
     used_for_activate: 'used_for_activate',
     can_regenerate: 'can_regenerate',
+    is_revoked: 'is_revoked',
     created_at: 'created_at',
     updated_at: 'updated_at',
     regenerated_at: 'regenerated_at'
@@ -3494,6 +3508,7 @@ export namespace Prisma {
     code?: StringFilter<"LicenseKey"> | string
     used_for_activate?: BoolFilter<"LicenseKey"> | boolean
     can_regenerate?: BoolFilter<"LicenseKey"> | boolean
+    is_revoked?: BoolFilter<"LicenseKey"> | boolean
     created_at?: BigIntFilter<"LicenseKey"> | bigint | number
     updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
     regenerated_at?: BigIntNullableFilter<"LicenseKey"> | bigint | number | null
@@ -3508,6 +3523,7 @@ export namespace Prisma {
     code?: SortOrder
     used_for_activate?: SortOrder
     can_regenerate?: SortOrder
+    is_revoked?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     regenerated_at?: SortOrderInput | SortOrder
@@ -3526,6 +3542,7 @@ export namespace Prisma {
     code?: StringFilter<"LicenseKey"> | string
     used_for_activate?: BoolFilter<"LicenseKey"> | boolean
     can_regenerate?: BoolFilter<"LicenseKey"> | boolean
+    is_revoked?: BoolFilter<"LicenseKey"> | boolean
     created_at?: BigIntFilter<"LicenseKey"> | bigint | number
     updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
     regenerated_at?: BigIntNullableFilter<"LicenseKey"> | bigint | number | null
@@ -3540,6 +3557,7 @@ export namespace Prisma {
     code?: SortOrder
     used_for_activate?: SortOrder
     can_regenerate?: SortOrder
+    is_revoked?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     regenerated_at?: SortOrderInput | SortOrder
@@ -3561,6 +3579,7 @@ export namespace Prisma {
     code?: StringWithAggregatesFilter<"LicenseKey"> | string
     used_for_activate?: BoolWithAggregatesFilter<"LicenseKey"> | boolean
     can_regenerate?: BoolWithAggregatesFilter<"LicenseKey"> | boolean
+    is_revoked?: BoolWithAggregatesFilter<"LicenseKey"> | boolean
     created_at?: BigIntWithAggregatesFilter<"LicenseKey"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"LicenseKey"> | bigint | number
     regenerated_at?: BigIntNullableWithAggregatesFilter<"LicenseKey"> | bigint | number | null
@@ -3640,6 +3659,7 @@ export namespace Prisma {
     code: string
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at: bigint | number
     updated_at: bigint | number
     regenerated_at?: bigint | number | null
@@ -3654,6 +3674,7 @@ export namespace Prisma {
     code: string
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at: bigint | number
     updated_at: bigint | number
     regenerated_at?: bigint | number | null
@@ -3666,6 +3687,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
+    is_revoked?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -3680,6 +3702,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
+    is_revoked?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -3693,6 +3716,7 @@ export namespace Prisma {
     code: string
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at: bigint | number
     updated_at: bigint | number
     regenerated_at?: bigint | number | null
@@ -3705,6 +3729,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
+    is_revoked?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -3718,6 +3743,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
+    is_revoked?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -3914,6 +3940,7 @@ export namespace Prisma {
     code?: SortOrder
     used_for_activate?: SortOrder
     can_regenerate?: SortOrder
+    is_revoked?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     regenerated_at?: SortOrder
@@ -3934,6 +3961,7 @@ export namespace Prisma {
     code?: SortOrder
     used_for_activate?: SortOrder
     can_regenerate?: SortOrder
+    is_revoked?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     regenerated_at?: SortOrder
@@ -3947,6 +3975,7 @@ export namespace Prisma {
     code?: SortOrder
     used_for_activate?: SortOrder
     can_regenerate?: SortOrder
+    is_revoked?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     regenerated_at?: SortOrder
@@ -4221,6 +4250,7 @@ export namespace Prisma {
     code: string
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at: bigint | number
     updated_at: bigint | number
     regenerated_at?: bigint | number | null
@@ -4233,6 +4263,7 @@ export namespace Prisma {
     code: string
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at: bigint | number
     updated_at: bigint | number
     regenerated_at?: bigint | number | null
@@ -4275,6 +4306,7 @@ export namespace Prisma {
     code?: StringFilter<"LicenseKey"> | string
     used_for_activate?: BoolFilter<"LicenseKey"> | boolean
     can_regenerate?: BoolFilter<"LicenseKey"> | boolean
+    is_revoked?: BoolFilter<"LicenseKey"> | boolean
     created_at?: BigIntFilter<"LicenseKey"> | bigint | number
     updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
     regenerated_at?: BigIntNullableFilter<"LicenseKey"> | bigint | number | null
@@ -4339,6 +4371,7 @@ export namespace Prisma {
     code: string
     used_for_activate?: boolean
     can_regenerate?: boolean
+    is_revoked?: boolean
     created_at: bigint | number
     updated_at: bigint | number
     regenerated_at?: bigint | number | null
@@ -4351,6 +4384,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
+    is_revoked?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -4363,6 +4397,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
+    is_revoked?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -4375,6 +4410,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
+    is_revoked?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
