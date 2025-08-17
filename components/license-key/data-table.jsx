@@ -155,7 +155,7 @@ export default function DataTable({
               asChild
             >
               <button onClick={() => navigator.clipboard.writeText(row.original.key)}>
-                Copy License Key
+                Copy Code
               </button>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="-mx-1.5" />

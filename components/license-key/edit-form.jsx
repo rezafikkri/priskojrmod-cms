@@ -9,9 +9,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from '../ui/form';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { editLicenseKeySchema } from '@/lib/validators/license-key-validator';
 import { toast } from 'sonner';
 import Link from 'next/link';
@@ -34,7 +32,6 @@ export default function EditForm({ licenseKey }) {
     resolver: zodResolver(editLicenseKeySchema),
     defaultValues: {
       id: licenseKey.id,
-      type: licenseKey.parsedKey.type,
       used_for_activate: licenseKey.used_for_activate,
       change_expiration_date: false,
     },
@@ -65,47 +62,14 @@ export default function EditForm({ licenseKey }) {
           <FormItem>
             <FormLabel className="text-base">Secret Key</FormLabel>
             <p>{licenseKey.appName}</p>
-            <FormDescription>What’s displayed here is the app name, which represents the Secret Key used by this license key. It cannot be changed after creation.</FormDescription>
+            <FormDescription>What’s displayed here is the app name, which represents the secret key used by this license key. It cannot be changed after creation.</FormDescription>
           </FormItem>
 
           <FormItem>
             <FormLabel className="text-base">Customer</FormLabel>
             <p>{licenseKey.customer}</p>
-            <FormDescription>What’s displayed here is the customer who owns this license key. It cannot be changed after creation, and updates to the customer data do not affect the license key payload.</FormDescription>
+            <FormDescription>What’s displayed here is the customer who owns this license key. Updates to the customer’s details won’t affect the license key code.</FormDescription>
           </FormItem>
-
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel className="text-base">Type</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    className="flex space-x-2"
-                    disabled={isSubmitting}
-                  >
-                    <FormItem className="flex items-center space-x-1 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="online" />
-                      </FormControl>
-                      <FormLabel className="font-normal text-base">Online</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-1 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="offline" />
-                      </FormControl>
-                      <FormLabel className="font-normal text-base">Offline</FormLabel>
-                    </FormItem>
-                  </RadioGroup>
-                </FormControl>
-                <FormDescription>Select activation type: online or offline.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <FormField
             control={form.control}
@@ -122,7 +86,7 @@ export default function EditForm({ licenseKey }) {
                 <div className="space-y-2">
                   <FormLabel className="text-base leading-none">Used For Activate</FormLabel>
                   <FormDescription>
-                    Check this if the License Key has been used to activate the application.
+                    Check this if the license ley has been used to activate the application.
                   </FormDescription>
                 </div>
               </FormItem>
