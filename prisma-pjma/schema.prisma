@@ -37,7 +37,7 @@ model LicenseKey {
   secret_key_id     BigInt
   customer_id       String           @db.Uuid
   email             String           @db.VarChar(254)
-  key               String
+  code              String
   used_for_activate Boolean          @default(false)
   can_regenerate    Boolean          @default(false)
   created_at        BigInt

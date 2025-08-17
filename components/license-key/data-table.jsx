@@ -154,7 +154,7 @@ export default function DataTable({
               className="w-full text-base"
               asChild
             >
-              <button onClick={() => navigator.clipboard.writeText(row.original.key)}>
+              <button onClick={() => navigator.clipboard.writeText(row.original.code)}>
                 Copy Code
               </button>
             </DropdownMenuItem>

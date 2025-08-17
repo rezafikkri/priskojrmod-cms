@@ -19,7 +19,7 @@ export async function GET(req) {
   const select = {
     id: true,
     email: true,
-    key: true,
+    code: true,
     used_for_activate: true,
     created_at: true,
     updated_at: true,
