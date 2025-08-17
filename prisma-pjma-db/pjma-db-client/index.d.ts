@@ -2146,9 +2146,8 @@ export namespace Prisma {
     secret_key_id: bigint | null
     customer_id: string | null
     email: string | null
-    key: string | null
+    code: string | null
     used_for_activate: boolean | null
-    used_for_download: boolean | null
     can_regenerate: boolean | null
     created_at: bigint | null
     updated_at: bigint | null
@@ -2160,9 +2159,8 @@ export namespace Prisma {
     secret_key_id: bigint | null
     customer_id: string | null
     email: string | null
-    key: string | null
+    code: string | null
     used_for_activate: boolean | null
-    used_for_download: boolean | null
     can_regenerate: boolean | null
     created_at: bigint | null
     updated_at: bigint | null
@@ -2174,9 +2172,8 @@ export namespace Prisma {
     secret_key_id: number
     customer_id: number
     email: number
-    key: number
+    code: number
     used_for_activate: number
-    used_for_download: number
     can_regenerate: number
     created_at: number
     updated_at: number
@@ -2204,9 +2201,8 @@ export namespace Prisma {
     secret_key_id?: true
     customer_id?: true
     email?: true
-    key?: true
+    code?: true
     used_for_activate?: true
-    used_for_download?: true
     can_regenerate?: true
     created_at?: true
     updated_at?: true
@@ -2218,9 +2214,8 @@ export namespace Prisma {
     secret_key_id?: true
     customer_id?: true
     email?: true
-    key?: true
+    code?: true
     used_for_activate?: true
-    used_for_download?: true
     can_regenerate?: true
     created_at?: true
     updated_at?: true
@@ -2232,9 +2227,8 @@ export namespace Prisma {
     secret_key_id?: true
     customer_id?: true
     email?: true
-    key?: true
+    code?: true
     used_for_activate?: true
-    used_for_download?: true
     can_regenerate?: true
     created_at?: true
     updated_at?: true
@@ -2333,9 +2327,8 @@ export namespace Prisma {
     secret_key_id: bigint
     customer_id: string
     email: string
-    key: string
+    code: string
     used_for_activate: boolean
-    used_for_download: boolean
     can_regenerate: boolean
     created_at: bigint
     updated_at: bigint
@@ -2366,9 +2359,8 @@ export namespace Prisma {
     secret_key_id?: boolean
     customer_id?: boolean
     email?: boolean
-    key?: boolean
+    code?: boolean
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -2381,9 +2373,8 @@ export namespace Prisma {
     secret_key_id?: boolean
     customer_id?: boolean
     email?: boolean
-    key?: boolean
+    code?: boolean
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -2396,9 +2387,8 @@ export namespace Prisma {
     secret_key_id?: boolean
     customer_id?: boolean
     email?: boolean
-    key?: boolean
+    code?: boolean
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -2411,16 +2401,15 @@ export namespace Prisma {
     secret_key_id?: boolean
     customer_id?: boolean
     email?: boolean
-    key?: boolean
+    code?: boolean
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at?: boolean
     updated_at?: boolean
     regenerated_at?: boolean
   }
 
-  export type LicenseKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "secret_key_id" | "customer_id" | "email" | "key" | "used_for_activate" | "used_for_download" | "can_regenerate" | "created_at" | "updated_at" | "regenerated_at", ExtArgs["result"]["licenseKey"]>
+  export type LicenseKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "secret_key_id" | "customer_id" | "email" | "code" | "used_for_activate" | "can_regenerate" | "created_at" | "updated_at" | "regenerated_at", ExtArgs["result"]["licenseKey"]>
   export type LicenseKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     secret_key?: boolean | SecretKeyLicenseDefaultArgs<ExtArgs>
   }
@@ -2441,9 +2430,8 @@ export namespace Prisma {
       secret_key_id: bigint
       customer_id: string
       email: string
-      key: string
+      code: string
       used_for_activate: boolean
-      used_for_download: boolean
       can_regenerate: boolean
       created_at: bigint
       updated_at: bigint
@@ -2876,9 +2864,8 @@ export namespace Prisma {
     readonly secret_key_id: FieldRef<"LicenseKey", 'BigInt'>
     readonly customer_id: FieldRef<"LicenseKey", 'String'>
     readonly email: FieldRef<"LicenseKey", 'String'>
-    readonly key: FieldRef<"LicenseKey", 'String'>
+    readonly code: FieldRef<"LicenseKey", 'String'>
     readonly used_for_activate: FieldRef<"LicenseKey", 'Boolean'>
-    readonly used_for_download: FieldRef<"LicenseKey", 'Boolean'>
     readonly can_regenerate: FieldRef<"LicenseKey", 'Boolean'>
     readonly created_at: FieldRef<"LicenseKey", 'BigInt'>
     readonly updated_at: FieldRef<"LicenseKey", 'BigInt'>
@@ -3328,9 +3315,8 @@ export namespace Prisma {
     secret_key_id: 'secret_key_id',
     customer_id: 'customer_id',
     email: 'email',
-    key: 'key',
+    code: 'code',
     used_for_activate: 'used_for_activate',
-    used_for_download: 'used_for_download',
     can_regenerate: 'can_regenerate',
     created_at: 'created_at',
     updated_at: 'updated_at',
@@ -3505,9 +3491,8 @@ export namespace Prisma {
     secret_key_id?: BigIntFilter<"LicenseKey"> | bigint | number
     customer_id?: UuidFilter<"LicenseKey"> | string
     email?: StringFilter<"LicenseKey"> | string
-    key?: StringFilter<"LicenseKey"> | string
+    code?: StringFilter<"LicenseKey"> | string
     used_for_activate?: BoolFilter<"LicenseKey"> | boolean
-    used_for_download?: BoolFilter<"LicenseKey"> | boolean
     can_regenerate?: BoolFilter<"LicenseKey"> | boolean
     created_at?: BigIntFilter<"LicenseKey"> | bigint | number
     updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
@@ -3520,9 +3505,8 @@ export namespace Prisma {
     secret_key_id?: SortOrder
     customer_id?: SortOrder
     email?: SortOrder
-    key?: SortOrder
+    code?: SortOrder
     used_for_activate?: SortOrder
-    used_for_download?: SortOrder
     can_regenerate?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -3539,9 +3523,8 @@ export namespace Prisma {
     secret_key_id?: BigIntFilter<"LicenseKey"> | bigint | number
     customer_id?: UuidFilter<"LicenseKey"> | string
     email?: StringFilter<"LicenseKey"> | string
-    key?: StringFilter<"LicenseKey"> | string
+    code?: StringFilter<"LicenseKey"> | string
     used_for_activate?: BoolFilter<"LicenseKey"> | boolean
-    used_for_download?: BoolFilter<"LicenseKey"> | boolean
     can_regenerate?: BoolFilter<"LicenseKey"> | boolean
     created_at?: BigIntFilter<"LicenseKey"> | bigint | number
     updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
@@ -3554,9 +3537,8 @@ export namespace Prisma {
     secret_key_id?: SortOrder
     customer_id?: SortOrder
     email?: SortOrder
-    key?: SortOrder
+    code?: SortOrder
     used_for_activate?: SortOrder
-    used_for_download?: SortOrder
     can_regenerate?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -3576,9 +3558,8 @@ export namespace Prisma {
     secret_key_id?: BigIntWithAggregatesFilter<"LicenseKey"> | bigint | number
     customer_id?: UuidWithAggregatesFilter<"LicenseKey"> | string
     email?: StringWithAggregatesFilter<"LicenseKey"> | string
-    key?: StringWithAggregatesFilter<"LicenseKey"> | string
+    code?: StringWithAggregatesFilter<"LicenseKey"> | string
     used_for_activate?: BoolWithAggregatesFilter<"LicenseKey"> | boolean
-    used_for_download?: BoolWithAggregatesFilter<"LicenseKey"> | boolean
     can_regenerate?: BoolWithAggregatesFilter<"LicenseKey"> | boolean
     created_at?: BigIntWithAggregatesFilter<"LicenseKey"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"LicenseKey"> | bigint | number
@@ -3656,9 +3637,8 @@ export namespace Prisma {
     id?: string
     customer_id: string
     email: string
-    key: string
+    code: string
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at: bigint | number
     updated_at: bigint | number
@@ -3671,9 +3651,8 @@ export namespace Prisma {
     secret_key_id: bigint | number
     customer_id: string
     email: string
-    key: string
+    code: string
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at: bigint | number
     updated_at: bigint | number
@@ -3684,9 +3663,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
-    used_for_download?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -3699,9 +3677,8 @@ export namespace Prisma {
     secret_key_id?: BigIntFieldUpdateOperationsInput | bigint | number
     customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
-    used_for_download?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -3713,9 +3690,8 @@ export namespace Prisma {
     secret_key_id: bigint | number
     customer_id: string
     email: string
-    key: string
+    code: string
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at: bigint | number
     updated_at: bigint | number
@@ -3726,9 +3702,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
-    used_for_download?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -3740,9 +3715,8 @@ export namespace Prisma {
     secret_key_id?: BigIntFieldUpdateOperationsInput | bigint | number
     customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
-    used_for_download?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -3937,9 +3911,8 @@ export namespace Prisma {
     secret_key_id?: SortOrder
     customer_id?: SortOrder
     email?: SortOrder
-    key?: SortOrder
+    code?: SortOrder
     used_for_activate?: SortOrder
-    used_for_download?: SortOrder
     can_regenerate?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -3958,9 +3931,8 @@ export namespace Prisma {
     secret_key_id?: SortOrder
     customer_id?: SortOrder
     email?: SortOrder
-    key?: SortOrder
+    code?: SortOrder
     used_for_activate?: SortOrder
-    used_for_download?: SortOrder
     can_regenerate?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -3972,9 +3944,8 @@ export namespace Prisma {
     secret_key_id?: SortOrder
     customer_id?: SortOrder
     email?: SortOrder
-    key?: SortOrder
+    code?: SortOrder
     used_for_activate?: SortOrder
-    used_for_download?: SortOrder
     can_regenerate?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -4247,9 +4218,8 @@ export namespace Prisma {
     id?: string
     customer_id: string
     email: string
-    key: string
+    code: string
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at: bigint | number
     updated_at: bigint | number
@@ -4260,9 +4230,8 @@ export namespace Prisma {
     id?: string
     customer_id: string
     email: string
-    key: string
+    code: string
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at: bigint | number
     updated_at: bigint | number
@@ -4303,9 +4272,8 @@ export namespace Prisma {
     secret_key_id?: BigIntFilter<"LicenseKey"> | bigint | number
     customer_id?: UuidFilter<"LicenseKey"> | string
     email?: StringFilter<"LicenseKey"> | string
-    key?: StringFilter<"LicenseKey"> | string
+    code?: StringFilter<"LicenseKey"> | string
     used_for_activate?: BoolFilter<"LicenseKey"> | boolean
-    used_for_download?: BoolFilter<"LicenseKey"> | boolean
     can_regenerate?: BoolFilter<"LicenseKey"> | boolean
     created_at?: BigIntFilter<"LicenseKey"> | bigint | number
     updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
@@ -4368,9 +4336,8 @@ export namespace Prisma {
     id?: string
     customer_id: string
     email: string
-    key: string
+    code: string
     used_for_activate?: boolean
-    used_for_download?: boolean
     can_regenerate?: boolean
     created_at: bigint | number
     updated_at: bigint | number
@@ -4381,9 +4348,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
-    used_for_download?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -4394,9 +4360,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
-    used_for_download?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -4407,9 +4372,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    key?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     used_for_activate?: BoolFieldUpdateOperationsInput | boolean
-    used_for_download?: BoolFieldUpdateOperationsInput | boolean
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
