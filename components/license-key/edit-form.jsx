@@ -46,13 +46,23 @@ export default function EditForm({ licenseKey }) {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       form.setValue('change_expiration_date', false);
+
       if (editRes.data.exp) {
         setLicenseKeyExpire(formatDateTimeWIB(editRes.data.exp));
+        form.resetField('used_for_activate', { defaultValue: editRes.data.used_for_activate });
+      } else {
+        form.resetField('used_for_activate', { defaultValue: data.used_for_activate });
       }
+
       toast.success('License key updated successfully.');
     } else {
       toast.error(editRes.message);
     }
+  }
+
+  function handleExpirationDateCheckboxChange(isChecked, onChange) {
+    form.resetField('used_for_activate');
+    onChange(isChecked);
   }
 
   return (
@@ -80,7 +90,7 @@ export default function EditForm({ licenseKey }) {
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || form.getValues('change_expiration_date')}
                   />
                 </FormControl>
                 <div className="space-y-2">
@@ -100,13 +110,14 @@ export default function EditForm({ licenseKey }) {
                 <FormControl>
                   <Checkbox
                     checked={field.value}
-                    onCheckedChange={field.onChange}
+                    onCheckedChange={(isChecked) =>
+                      handleExpirationDateCheckboxChange(isChecked, field.onChange)}
                     disabled={isSubmitting}
                   />
                 </FormControl>
                 <div className="space-y-2">
                   <FormLabel className="text-base leading-none">Change Expiration Date</FormLabel>
-                  <FormDescription>Check this if you want to change the License Key expiration date. The expiration date will then be extended by 1 year from the current date; ignore otherwise. For now, the License Key will expire on {licenseKeyExpire}.</FormDescription>
+                  <FormDescription>Check this if you want to change the License Key expiration date. The expiration date will then be extended by 1 year from the current date, and the status <i>used for activate</i> will be reset to <i>not used to activate the application</i>; ignore otherwise. For now, the License Key will expire on {licenseKeyExpire}.</FormDescription>
                 </div>
               </FormItem>
             )}
