@@ -14,7 +14,7 @@ import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import { removeLicenseKey, setCanRegenerateKeys } from '@/actions/license-key-actions';
+import { editLicenseKeyRevokeStatus, removeLicenseKey, setCanRegenerateKeys } from '@/actions/license-key-actions';
 import { toast } from 'sonner';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { Input } from '../ui/input';
@@ -42,7 +42,7 @@ export default function LicenseKeysTable() {
   const searchRef = useRef(null);
 
   // filters state
-  const [filters, setFilters] = useState(null);
+  const [filters, setFilters] = useState({ showRevoked: false });
   const [isFilterActive, setIsFilterActive] = useState(false);
 
   // determine show table skeleton or not in normal mode
@@ -67,12 +67,14 @@ export default function LicenseKeysTable() {
     updated_at: false,
   });
 
-  // deleting ids and ban/unban state
+  // deleting ids and revoke/unrevoke state
   const [deletingIds, setDeletingIds] = useState([]);
+  const [updatingRevokeStatusIds, setUpdatingRevokeStatusIds] = useState([]);
 
   // Ensures that in normal mode and not on the last page,
-  // invalidateQueries is still triggered even if not all deletions or banning succeed.
+  // invalidateQueries is still triggered even if not all deletions or revoke/unrevoke succeed.
   const hasSuccessfulDeleteRef = useRef(false);
+  const hasSuccessfulRevokeRef = useRef(false);
 
   // This `useRef` is here to **always keep the newest `searchedLicenseKey and more state` value**.
   // We need it because our async function (sent to the child) might "remember"
@@ -81,6 +83,7 @@ export default function LicenseKeysTable() {
   const filtersRef = useRef(filters);
   const paginationRef = useRef(pagination);
   const deletingIdsRef = useRef(deletingIds);
+  const updatingRevokeStatusIdsRef = useRef(updatingRevokeStatusIds);
 
   useEffect(() => {
     searchedLicenseKeyRef.current = searchedLicenseKey;
@@ -96,15 +99,15 @@ export default function LicenseKeysTable() {
 
   // add secretKeyId and canRegenerate filters
   function addFiltersToURL(url, appliedFilters) {
-    if (!appliedFilters) return url;
+    let newUrl = url + `&ir=${appliedFilters.showRevoked}`;
 
-    let newUrl = url;
-    if (appliedFilters.secretKeyId !== 'all') {
+    if (appliedFilters.secretKeyId && appliedFilters.secretKeyId !== 'all') {
       newUrl += `&ski=${appliedFilters.secretKeyId}`;
     }
-    if (appliedFilters.canRegenerate !== 'all') {
+    if (appliedFilters.secretKeyId && appliedFilters.canRegenerate !== 'all') {
       newUrl += `&cr=${appliedFilters.canRegenerate}`;
     }
+
     return newUrl;
   }
 
@@ -141,8 +144,8 @@ export default function LicenseKeysTable() {
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 60 * 3,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
     enabled: !searchedLicenseKey,
   });
 
@@ -183,8 +186,8 @@ export default function LicenseKeysTable() {
             errorMessage: 'Something went wrong while searching. Please try again.',
           });
         },
-        staleTime: 10_000,
-        gcTime: 10_000,
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 5,
       });
 
       setSearchedLicenseKey(result.data);
@@ -344,9 +347,9 @@ export default function LicenseKeysTable() {
 
   // set isFilterActive when apply and clear
   function syncIsFilterActive(appliedFilters) {
-    if (appliedFilters && !isFilterActive) {
+    if (appliedFilters.showRevoked || Object.keys(appliedFilters).length > 1) {
       setIsFilterActive(true);
-    } else if (!appliedFilters && isFilterActive) {
+    } else {
       setIsFilterActive(false);
     }
   }
@@ -384,7 +387,7 @@ export default function LicenseKeysTable() {
     }
 
     // if secretKeyId != 'all'
-    if (newFilters && newFilters.secretKeyId !== 'all') {
+    if (newFilters.secretKeyId && newFilters.secretKeyId !== 'all') {
       if (columnVisibility.app_name) {
         setColumnVisibility(prev => ({
           ...prev,
@@ -454,6 +457,123 @@ export default function LicenseKeysTable() {
     }
 
     setIsRegenerating(false);
+  }
+
+  async function handleEditRevokeStatus({ editRevokeStatusData, toastId }) {
+    // not show table skeleton loading
+    if (!searchedLicenseKey) {
+      shouldShowSkeletonLoading.current = false;
+    }
+
+    // This is for add opacity-50 style to updated revoke status row
+    setUpdatingRevokeStatusIds((prev) => {
+      const newIds = [...prev, editRevokeStatusData.id];
+      updatingRevokeStatusIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const editRes = await editLicenseKeyRevokeStatus(editRevokeStatusData.id, !editRevokeStatusData.isRevoked);
+
+    setUpdatingRevokeStatusIds((prev) => {
+      const newIds = prev.filter(id => id !== editRevokeStatusData.id);
+      updatingRevokeStatusIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const licenseKey = queryClient.getQueryData([
+      'licenseKeys',
+      paginationRef.current.pageIndex,
+      filtersRef.current,
+    ]);
+
+    if (editRes.status === 'success') {
+      if (searchedLicenseKeyRef.current) {
+        setSearchedLicenseKey((prevLicenseKey) => ({
+          ...prevLicenseKey,
+          licenseKeys: prevLicenseKey.licenseKeys.filter(slk => slk.id !== editRevokeStatusData.id),
+        }));
+
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+      } else {
+        const newLicenseKeys = licenseKey.licenseKeys.filter(lk => lk.id !== editRevokeStatusData.id);
+        const newRowCount = licenseKey.rowCount - 1;
+
+        if (!isLastPage({
+          pageIndex: paginationRef.current.pageIndex,
+          pageSize: paginationRef.current.pageSize,
+          rowCount: licenseKey.rowCount,
+        })) {
+          queryClient.setQueryData(
+            ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+            { licenseKeys: newLicenseKeys, rowCount: newRowCount },
+          );
+
+          hasSuccessfulRevokeRef.current = true;
+        } else {
+          if (newLicenseKeys.length === 0 && newRowCount > 0) {
+            queryClient.removeQueries({
+              queryKey: ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+              exact: true,
+            });
+
+            queryClient.setQueryData(
+              ['licenseKeys', paginationRef.current.pageIndex - 1, filtersRef.current],
+              (oldData) => {
+                if (!oldData) return oldData;
+
+                return { ...oldData, rowCount: newRowCount };
+              },
+            );
+
+            setPagination((pagination) => ({
+              ...pagination,
+              pageIndex: pagination.pageIndex - 1,
+            }));
+          } else {
+            queryClient.setQueryData(
+              ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+              { licenseKeys: newLicenseKeys, rowCount: newRowCount },
+            );
+          }
+
+          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });         
+        }
+      }
+
+      // if id exist in rowSelection then remove
+      setRowSelection(prev => {
+        if (!editRevokeStatusData.id in prev) return prev;
+        const { [editRevokeStatusData.id]:_, ...next } = prev;
+        return next;
+      });
+      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+      toast.success(
+        editRevokeStatusData.isRevoked
+          ? 'License key unrevoked successfully.'
+          : 'License key revoked successfully.',
+        { id: toastId },
+      );
+    } else {
+      toast.error(editRes.message, { id: toastId });
+    }
+
+    // For still invalidateQueries licenseKeys, when not in last page, last revoke/unrevoke item fails, and 
+    // at least one revoke/unrevoke succeeded.
+    if (
+      !searchedLicenseKeyRef.current &&
+      updatingRevokeStatusIdsRef.current.length === 0 &&
+      hasSuccessfulRevokeRef.current
+    ) {
+      if (!isLastPage({
+        pageIndex: paginationRef.current.pageIndex,
+        pageSize: paginationRef.current.pageSize,
+        rowCount: licenseKey.rowCount,
+      })) {
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+      }
+
+      hasSuccessfulRevokeRef.current = false;
+    }
   }
 
   let licenseKey;
@@ -596,12 +716,14 @@ export default function LicenseKeysTable() {
             rowSelection,
             columnVisibility,
             deletingIds,
+            updatingRevokeStatusIds,
           }}
           tableHandler={{ 
             onPaginationChange: handlePaginationChange,
             onRowSelectionChange: setRowSelection,
             onColumnVisibilityChange: setColumnVisibility,
             onDelete: handleDelete,
+            onEditRevokeStatus: handleEditRevokeStatus,
           }}
           isPlaceholderData={isPlaceholderDataLK}
           hasSearched={!!searchedLicenseKey}

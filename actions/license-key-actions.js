@@ -1,6 +1,6 @@
 'use server';
 
-import { createLicenseKey, deleteLicenseKey, setCanRegenerateLicenseKeys, updateLicenseKey } from '@/lib/services/license-key-service';
+import { createLicenseKey, deleteLicenseKey, setCanRegenerateLicenseKeys, updateLicenseKey, updateLicenseKeyRevokeStatus } from '@/lib/services/license-key-service';
 
 export async function addLicenseKey(data) {
   try {
@@ -33,6 +33,15 @@ export async function setCanRegenerateKeys(ids) {
   try {
     const updateResult = await setCanRegenerateLicenseKeys(ids);
     return { status: 'success', data: updateResult };
+  } catch (err) {
+    return { status: 'error', message: err.message };
+  }
+}
+
+export async function editLicenseKeyRevokeStatus(id, is_revoked) {
+  try {
+    await updateLicenseKeyRevokeStatus(id, is_revoked);
+    return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };
   }

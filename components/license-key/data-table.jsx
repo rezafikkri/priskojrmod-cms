@@ -33,6 +33,7 @@ import { getTableHeaderWidth } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
 import SelectionAlert from '../ui/selection-alert';
 import { Minus } from 'lucide-react';
+import EditRevokeStatusDialog from './edit-revoke-status-dialog';
 
 export default function DataTable({
   licenseKey,
@@ -48,15 +49,19 @@ export default function DataTable({
     onRowSelectionChange,
     onColumnVisibilityChange,
     onDelete,
+    onEditRevokeStatus,
   } = tableHandler;
   const {
     columnVisibility,
     pagination,
     rowSelection,
     deletingIds,
+    updatingRevokeStatusIds,
   } = tableState;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const [editRevokeStatusData, setEditRevokeStatusData] = useState(null);
+  const [isOpenEditRevokeStatusDialog, setIsOpenEditRevokeStatusDialog] = useState(false);
 
   // table definition
   const columns = useMemo(() => [
@@ -140,7 +145,10 @@ export default function DataTable({
             <Button
               variant="ghost"
               className="h-8 w-8 p-0 focus-visible:ring-ring"
-              disabled={deletingIds.includes(row.original.id)}
+              disabled={
+                deletingIds.includes(row.original.id) ||
+                updatingRevokeStatusIds.includes(row.original.id)
+              }
             >
               <MoreHorizontal />
             </Button>
@@ -156,6 +164,24 @@ export default function DataTable({
             >
               <button onClick={() => navigator.clipboard.writeText(row.original.code)}>
                 Copy Code
+              </button>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+              asChild
+            >
+              <button
+                onClick={() => {
+                  setEditRevokeStatusData({
+                    id: row.original.id,
+                    email: row.getValue('email'),
+                    appName: row.getValue('app_name'),
+                    isRevoked: row.original.is_revoked,
+                  });
+                  setIsOpenEditRevokeStatusDialog(true);
+                }}
+              >
+                {row.original.is_revoked ? 'Unrevoke' : 'Revoke'}
               </button>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="-mx-1.5" />
@@ -180,7 +206,7 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], [deletingIds]);
+  ], [deletingIds, updatingRevokeStatusIds]);
   const table = useReactTable({
     data: licenseKeys,
     columns,
@@ -229,7 +255,14 @@ export default function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
+                  className={
+                    (
+                      deletingIds.includes(row.original.id) ||
+                      updatingRevokeStatusIds.includes(row.original.id)
+                    )
+                      ? 'opacity-50'
+                      : ''
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -290,6 +323,13 @@ export default function DataTable({
         onIsOpenChange={setIsOpenDeleteDialog}
         onDeleteDataChange={setDeleteData}
         deleteData={deleteData}
+      />
+      <EditRevokeStatusDialog
+        onEditRevokeStatus={onEditRevokeStatus}
+        isOpen={isOpenEditRevokeStatusDialog}
+        onIsOpenChange={setIsOpenEditRevokeStatusDialog}
+        onEditRevokeStatusDataChange={setEditRevokeStatusData}
+        editRevokeStatusData={editRevokeStatusData}
       />
     </>
   );

@@ -32,11 +32,13 @@ export default function FiltersPopover({
   const [isLoading, setIsLoading] = useState(false);
   const [secretKeyId, setSecretKeyId] = useState('all');
   const [canRegenerate, setCanRegenerate] = useState('all');
+  const [showRevoked, setShowRevoked] = useState(false);
 
   function handleClear() {
     setSecretKeyId('all');
     setCanRegenerate('all');
-    onFilter(null);
+    setShowRevoked(false);
+    onFilter({ showRevoked: false });
   }
 
   // handler for select app_name onOpenChange event
@@ -77,7 +79,7 @@ export default function FiltersPopover({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-80 space-y-5"
+        className="w-90 space-y-5"
         onInteractOutside={(e) => {
           if (e.target?.hasAttribute('lang')) e.preventDefault();
         }}
@@ -111,7 +113,7 @@ export default function FiltersPopover({
         <div className="space-y-2 flex items-start gap-4"> 
           <div className="flex-1"> 
             <Label className="text-base mb-1.5">Can Regenerate</Label> 
-            <p className="text-muted-foreground text-sm">Filter by regenerate status.</p> 
+            <p className="text-muted-foreground text-sm">Filter by can regenerate condition.</p> 
           </div> 
           <Select
             value={canRegenerate}
@@ -129,6 +131,27 @@ export default function FiltersPopover({
             </SelectContent> 
           </Select> 
         </div> 
+        <div className="space-y-2 flex items-start gap-4"> 
+          <div className="flex-1"> 
+            <Label className="text-base mb-1.5">Revoked</Label> 
+            <p className="text-muted-foreground text-sm">Filter by revoked condition.</p> 
+          </div> 
+          <Select
+            value={showRevoked}
+            onValueChange={(value) => setShowRevoked(value)}
+          > 
+            <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-30"> 
+              <SelectValue /> 
+            </SelectTrigger> 
+            <SelectContent> 
+              <SelectGroup> 
+                <SelectItem className="text-base" value={false}>No</SelectItem> 
+                <SelectItem className="text-base" value={true}>Yes</SelectItem> 
+              </SelectGroup> 
+            </SelectContent> 
+          </Select> 
+        </div> 
+
         <div className="space-x-3 mt-6 flex"> 
           {isFilterActive && ( 
             <PopoverClose asChild>
@@ -144,8 +167,8 @@ export default function FiltersPopover({
           <PopoverClose asChild>
             <Button 
               className="text-base px-3 py-1.5 h-auto border border-primary" 
-              onClick={() => onFilter({ secretKeyId, canRegenerate })} 
-              disabled={secretKeyId === 'all' & canRegenerate === 'all'}
+              onClick={() => onFilter({ secretKeyId, canRegenerate, showRevoked })} 
+              disabled={secretKeyId === 'all' && canRegenerate === 'all' && !showRevoked}
             > 
               Apply 
             </Button>
