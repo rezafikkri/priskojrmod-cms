@@ -24,6 +24,8 @@ import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { createProductBasicSchema, editProductBasicSchema } from '@/lib/validators/product-validator';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
+import { PriceType } from '@/constants/enums';
+import DriveFileIDFields from './drive-file-id-fields';
 
 export default function BasicForm({
   onNextStep,
@@ -170,6 +172,47 @@ export default function BasicForm({
             </FormItem>
           )}
         />
+
+        {(mode === 'edit' && basic.price_type === PriceType.PAID) ? (
+          <FormItem>
+            <FormLabel className="text-base">Price Type</FormLabel>
+            <p className="capitalize">{basic.price_type}</p>
+            <FormDescription>This is a paid product. Price type cannot be changed.</FormDescription>
+          </FormItem>
+        ) : (
+          <FormField
+            control={form.control}
+            name="price_type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Price Type</FormLabel>
+                <Select
+                  onValueChange={(priceType) => handlePriceTypeChange({ selectedValue: priceType, field: field })}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-full capitalize">
+                      <SelectValue placeholder="Select price type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem className="text-base capitalize" value={PriceType.FREE}>
+                      {PriceType.FREE}
+                    </SelectItem>
+                    <SelectItem className="text-base capitalize" value={PriceType.PAID}>
+                      {PriceType.PAID}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select whether this product is free or paid.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        <DriveFileIDFields form={form} />
+
         <FormField
           control={form.control}
           name="download_link"

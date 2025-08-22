@@ -10,6 +10,7 @@ import {
   deleteProductVariant,
   deleteProductImage,
   updateProduct,
+  getDriveFileInfo,
 } from '@/lib/services/product-service';
 
 export async function addProduct(data) {
@@ -88,6 +89,15 @@ export async function editProduct(data) {
   try {
     const updatedData = await updateProduct(data);
     return { status: 'success', data: updatedData };
+  } catch (err) {
+    return { status: 'error', message: err.message };
+  }
+}
+
+export async function fetchDriveFileInfo(fileId) {
+  try {
+    const fileInfo = await getDriveFileInfo(fileId);
+    return { status: 'success', data: fileInfo };
   } catch (err) {
     return { status: 'error', message: err.message };
   }
