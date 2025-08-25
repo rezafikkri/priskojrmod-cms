@@ -232,7 +232,7 @@ model ProductVariant {
   product_id    String  @db.Uuid
   name          String  @db.VarChar(100)
   download_link String?
-  file_password String?  @db.VarChar(100)
+  file_access_password String?  @db.VarChar(100)
 
   product Product        @relation(fields: [product_id], references: [id], onDelete: Cascade)
   prices  ProductPrice[]
@@ -388,7 +388,7 @@ model TransactionDetail {
   product_name           String @db.VarChar(150)
   product_variant        String @db.VarChar(100)
   variant_download_link  String? @db.Text
-  variant_file_password  String? @db.VarChar(100)
+  variant_file_access_password  String? @db.VarChar(100)
   product_currency_code  CurrencyCode
   product_price          Int
   product_discount       Int? @db.SmallInt

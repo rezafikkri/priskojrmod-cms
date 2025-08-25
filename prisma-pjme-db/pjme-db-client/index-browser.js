@@ -250,7 +250,7 @@ exports.Prisma.ProductVariantScalarFieldEnum = {
   product_id: 'product_id',
   name: 'name',
   download_link: 'download_link',
-  file_password: 'file_password'
+  file_access_password: 'file_access_password'
 };
 
 exports.Prisma.ProductPriceScalarFieldEnum = {
@@ -335,7 +335,7 @@ exports.Prisma.TransactionDetailScalarFieldEnum = {
   product_name: 'product_name',
   product_variant: 'product_variant',
   variant_download_link: 'variant_download_link',
-  variant_file_password: 'variant_file_password',
+  variant_file_access_password: 'variant_file_access_password',
   product_currency_code: 'product_currency_code',
   product_price: 'product_price',
   product_discount: 'product_discount',
