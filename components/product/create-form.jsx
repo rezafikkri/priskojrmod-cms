@@ -12,51 +12,25 @@ export default function CreateForm({
   owners,
   licenses,
 }) {
+  const stepDefinitions = [
+    { label: 'Basic', component: BasicForm, extraProps: { categories, owners, licenses } },
+    { label: 'Content', component: ContentForm, extraProps: {} },
+    { label: 'Extras', component: ExtrasForm, extraProps: {} },
+    { label: 'Pricing', component: PricingForm, extraProps: {} },
+  ];
 
-  const [formSteps, setFormSteps] = useState([
-    {
-      label: 'Basic',
-      status: 'active',
-      render: ({ key, onNextStep }) =>
-        <BasicForm
-          key={key}
-          onNextStep={onNextStep}
-          categories={categories}
-          owners={owners}
-          licenses={licenses}
-        />,
-    },
-    {
-      label: 'Content',
-      status: 'nonactive',
-      render: ({ key, onNextStep, onPrevStep }) =>
-        <ContentForm
-          key={key}
-          onNextStep={onNextStep}
-          onPrevStep={onPrevStep}
-        />,
-    },
-    {
-      label: 'Extras',
-      status: 'nonactive',
-      render: ({ key, onNextStep, onPrevStep }) =>
-        <ExtrasForm
-          key={key}
-          onNextStep={onNextStep}
-          onPrevStep={onPrevStep}
-        />
-    },
-    {
-      label: 'Pricing',
-      status: 'nonactive',
-      render: ({ key, onPrevStep, onResetStep }) =>
-        <PricingForm
-          key={key}
-          onPrevStep={onPrevStep}
-          onResetStep={onResetStep}
-        />
-    },
-  ]);
+  const [formSteps, setFormSteps] = useState(
+    stepDefinitions.map((step, index) => ({
+      label: step.label,
+      status: index === 0 ? 'active' : 'nonactive',
+    })),
+  );
 
-  return <FormStepManager formSteps={formSteps} onFormStepsChange={setFormSteps} />;
+  return (
+    <FormStepManager
+      stepDefinitions={stepDefinitions}
+      formSteps={formSteps}
+      onFormStepsChange={setFormSteps}
+    />
+  );
 }

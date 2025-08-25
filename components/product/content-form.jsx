@@ -40,8 +40,6 @@ export default function ContentForm({
   }
 
   function handlePrev() {
-    // save too to localstorage, this is for keep the data
-    // when admin want go back to prev step
     const data = form.getValues();
     setContent(data);
     onPrevStep();

@@ -22,6 +22,7 @@ import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import { Separator } from '../ui/separator';
 import { useQueryClient } from '@tanstack/react-query';
+import PasswordInput from './password-input';
 
 export default function VariantFields({
   form,
@@ -43,6 +44,7 @@ export default function VariantFields({
       id: v4(),
       name: '',
       download_link: '',
+      file_access_password: '',
     });
   }
 
@@ -118,9 +120,20 @@ export default function VariantFields({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name={`variants.${index}.file_access_password`}
+              render={({ field }) => (
+                <PasswordInput
+                  field={field}
+                  description='Enter a strong password for the extra file in the download link. Click Generate to create one automatically or use an online password generator.'
+                  disabled={isDeleting(variant.dbId)}
+                />
+              )}
+            />
           </div>
 
-          <Separator orientation="vertical" className="h-30!" />
+          <Separator orientation="vertical" className="h-40!" />
 
           <div className="flex flex-col gap-3">
             {(variants.length > 1 || variant.dbId) && (

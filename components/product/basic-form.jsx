@@ -25,10 +25,12 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { createProductBasicSchema, editProductBasicSchema } from '@/lib/validators/product-validator';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
 import { PriceType } from '@/constants/enums';
-import DriveFileIDFields from './drive-file-id-fields';
+import MainFileFields from './main-file-fields';
+import { isSemverFormat } from '@/lib/utils';
 
 export default function BasicForm({
   onNextStep,
+  onPricingStepVisibility,
   categories,
   owners,
   licenses,
@@ -56,9 +58,44 @@ export default function BasicForm({
     defaultValues,
   });
 
+  const applicationCategoryId = categories.find((category) => category.slug === 'application')?.id ?? null;
+
   function handleNext(data) {
+    let isError = false;
+
+    // validate drive_file_id, download_link, and version
+    if (data.category_id === applicationCategoryId || data.price_type === PriceType.FREE) {
+      if (data.download_link === '') {
+        form.setError('download_link', { message: 'Can\'t be empty' });
+        isError = true;
+      }
+    }
+    
+    if (data.category_id === applicationCategoryId) {
+      if (!isSemverFormat(data.version)) {
+        form.setError('version', { message: 'Must follow simplified semantic versioning' });
+        isError = true;
+      }
+    }
+
+    if (isError) return;
+
+    onPricingStepVisibility(data.price_type);
     setBasic(data);
     onNextStep();
+  }
+
+  function beforeNext(e) {
+    if (
+      form.getValues('category_id') === applicationCategoryId.toString() ||
+      form.getValues('price_type') === PriceType.FREE
+    ) {
+      form.setValue('drive_file_id', '');
+    } else {
+      form.setValue('download_link', '');
+    }
+
+    form.handleSubmit(handleNext)(e);
   }
 
   function clearProductDraft() {
@@ -67,7 +104,7 @@ export default function BasicForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleNext)} className="space-y-6 mb-10">
+      <form onSubmit={beforeNext} className="space-y-6 mb-10">
         <FormField
           control={form.control}
           name="name"
@@ -94,7 +131,7 @@ export default function BasicForm({
               >
                 <FormControl>
                   <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5">
-                    <SelectValue placeholder="Select a category" suppressHydrationWarning />
+                    <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -186,10 +223,7 @@ export default function BasicForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base">Price Type</FormLabel>
-                <Select
-                  onValueChange={(priceType) => handlePriceTypeChange({ selectedValue: priceType, field: field })}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-full capitalize">
                       <SelectValue placeholder="Select price type" />
@@ -211,21 +245,21 @@ export default function BasicForm({
           />
         )}
 
-        <DriveFileIDFields form={form} />
+        <MainFileFields form={form} applicationCategoryId={applicationCategoryId} />
 
         <FormField
           control={form.control}
-          name="download_link"
+          name="version"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-base">Download Link</FormLabel>
+              <FormLabel className="text-base">Version</FormLabel>
               <FormControl>
                 <Input
                   className="md:text-base h-auto px-3 py-1.5 shadow-none"
                   {...field}
                 />
               </FormControl>
-              <FormDescription>Enter a direct download link for the product's main file. Leave empty if the file will be delivered manually after purchase (e.g. via email or Google Drive).</FormDescription>
+              <FormDescription>Enter the product version. If the category is “Application”, use the simplified semantic version format <code>X.Y.Z</code> (e.g. 1.0.0). Otherwise, you may enter any version format.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

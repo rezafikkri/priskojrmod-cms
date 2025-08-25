@@ -133,6 +133,14 @@
     -moz-appearance: textfield;
     appearance: textfield;
   }
+
+  code {
+    @apply font-mono px-1.5 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-100;
+  }
+
+  pre code {
+    @apply p-0 bg-transparent;
+  }
 }
 
 @layer components {

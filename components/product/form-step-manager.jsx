@@ -4,10 +4,13 @@ import { Separator } from '../ui/separator';
 import { ChevronRightIcon } from 'lucide-react';
 import FormStepItem from './form-step-item';
 import { Fragment } from 'react';
+import { PriceType } from '@/constants/enums';
 
 export default function FormStepManager({
+  stepDefinitions,
   formSteps,
   onFormStepsChange,
+  mode = 'create',
 }) {
   const handleNextStep = () => {
     let activeIndex;
@@ -68,8 +71,25 @@ export default function FormStepManager({
     }));
   };
 
+  const handlePricingStepVisibility = (priceType) => {
+    if (mode === 'edit') {
+      if (priceType === PriceType.FREE) {
+        onFormStepsChange(formSteps.filter((step) => step.label !== 'Pricing'));
+      } else {
+        const hasPricingStep = formSteps.some((step) => step.label === 'Pricing');
+        
+        if (!hasPricingStep) {
+          onFormStepsChange([
+            ...formSteps,
+            stepDefinitions[stepDefinitions.length - 1],
+          ]);
+        }
+      }
+    }
+  };
+
   return (
-    <div className="lg:max-w-2/3">
+    <>
       <div className="flex gap-4 mb-5 font-medium text-zinc-700/90 dark:text-zinc-200 items-center">
         {formSteps.map((step, index) => (
           <Fragment key={step.label}>
@@ -84,17 +104,25 @@ export default function FormStepManager({
 
       <Separator className="mb-7" />
 
-      {formSteps.map(step => {
+      {formSteps.map((step, index) => {
         if (step.status === 'active') {
-          return step.render({
-            key: step.label,
-            onNextStep: handleNextStep,
-            onPrevStep: handlePrevStep,
-            onResetStep: handleResetStep,
-          });
+          const StepComponent = stepDefinitions[index].component;
+
+          return (
+            <StepComponent
+              key={step.label}
+              mode={mode}
+              onNextStep={() => handleNextStep(index)}
+              onPrevStep={() => handlePrevStep(index)}
+              onResetStep={handleResetStep}             
+              {...(step.label === 'Basic' ? { onPricingStepVisibility: handlePricingStepVisibility } : {})}
+              {...stepDefinitions[index].extraProps}
+            />
+          );
         }
+
         return null;
       })}
-    </div>
+    </>
   );
 }

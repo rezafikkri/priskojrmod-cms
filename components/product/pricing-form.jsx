@@ -9,16 +9,8 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from '../ui/form';
 import { CurrencyCode, PriceType } from '@/constants/enums';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
@@ -59,31 +51,10 @@ export default function PricingForm({
 
   const queryClient = useQueryClient();
 
-  function getDefaultPrices(priceType) {
-    if (priceType === PriceType.FREE) return [];
-
-    let prices = [];
-    for (const variant of extras.variants) {
-      prices.push({
-        variantId: variant.id ?? variant.dbId,
-        variantName: variant.name,
-        price: '',
-        currency_code: CurrencyCode.IDR,
-      });
-      prices.push({
-        variantId: variant.id ?? variant.dbId,
-        variantName: variant.name,
-        price: '',
-        currency_code: CurrencyCode.USD,
-      });
-    }
-    return prices;
-  }
-
   function syncPrices(pricing) {
     let newPrices = [];
 
-    if (pricing.price_type === PriceType.PAID) {
+    if (basic.price_type === PriceType.PAID) {
       for (const variant of extras.variants) {
         // This is for updating prices. It ensures that when the admin goes back to the previous step 
         // and edits a variant name, the new variant name will be reflected here.
@@ -122,10 +93,7 @@ export default function PricingForm({
       }
     }
 
-    if (newPrices.length > 0) {
-      return { ...pricing, prices: newPrices };
-    }
-    return pricing;
+    return { ...pricing, prices: newPrices };
   }
 
   const initialDefaultValues = useMemo(() => syncPrices(pricing), []);
@@ -136,7 +104,6 @@ export default function PricingForm({
   const isSubmitting = form.formState.isSubmitting;
   const {
     fields: prices,
-    replace: replacePrices,
   } = useFieldArray({
     control: form.control,
     name: 'prices',
@@ -147,11 +114,6 @@ export default function PricingForm({
     decrementPending,
     isBlocking,
   } = useEditPendingTracker();
-
-  function handlePriceTypeChange({ selectedValue, field }) {
-    field.onChange(selectedValue);
-    replacePrices(getDefaultPrices(selectedValue));
-  }
 
   function getExpiredAtEpoch(date) {
     if (date instanceof Date) {
@@ -165,17 +127,14 @@ export default function PricingForm({
       ...basic,
       ...content,
       ...extras,
-      price_type: data.price_type,
     };
 
     if (mode === 'create') {
       product.is_published = data.is_published;
-    } else {
-      product.should_update_released_at = data.should_update_released_at;
     }
 
     // if price type == paid
-    if (data.price_type === PriceType.PAID) {
+    if (product.price_type === PriceType.PAID) {
       product.variants = product.variants.map(variant => {
         let newVariant = { ...variant, prices: [] };
 
@@ -290,52 +249,12 @@ export default function PricingForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
-        {(mode === 'edit' && pricing.price_type === PriceType.PAID) ? (
-          <FormItem>
-            <FormLabel className="text-base">Price Type</FormLabel>
-            <p className="capitalize">{pricing.price_type}</p>
-            <FormDescription>This is a paid product. Price type cannot be changed.</FormDescription>
-          </FormItem>
-        ) : (
-          <FormField
-            control={form.control}
-            name="price_type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Price Type</FormLabel>
-                <Select
-                  onValueChange={(priceType) => handlePriceTypeChange({ selectedValue: priceType, field: field })}
-                  defaultValue={field.value}
-                  disabled={isSubmitting}
-                >
-                  <FormControl>
-                    <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-full capitalize">
-                      <SelectValue placeholder="Select price type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem className="text-base capitalize" value={PriceType.FREE}>
-                      {PriceType.FREE}
-                    </SelectItem>
-                    <SelectItem className="text-base capitalize" value={PriceType.PAID}>
-                      {PriceType.PAID}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>Select whether this product is free or paid.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
-
-        {form.getValues('price_type') === PriceType.PAID && (
+        {basic.price_type === PriceType.PAID && (
           <>
-            <Separator />
             <section className="space-y-6 mb-9">
               <h3 className="text-lg font-bold mb-0">Prices</h3>
               <h4 className="text-zinc-700 dark:text-zinc-300/80">
-                Each variant has its own price in two currencies, USD and IDR.
+                Each variant has its own price in two currencies, IDR and USD.
               </h4>
 
               <PriceFields prices={prices} form={form} />
@@ -378,7 +297,7 @@ export default function PricingForm({
           </>
         )}
 
-        {mode === 'create' ? (
+        {mode === 'create' && (
           <FormField
             control={form.control}
             name="is_published"
@@ -395,28 +314,6 @@ export default function PricingForm({
                   <FormLabel className="text-base leading-none">Publish</FormLabel>
                   <FormDescription>
                     Make this product visible on the website.
-                  </FormDescription>
-                </div>
-              </FormItem>
-            )}
-          />
-        ) : (
-          <FormField
-            control={form.control}
-            name="should_update_released_at"
-            render={({ field }) => (
-              <FormItem className="flex space-x-2 items-start">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    disabled={isSubmitting}
-                  />
-                </FormControl>
-                <div className="space-y-2">
-                  <FormLabel className="text-base leading-none">Update "Released At"</FormLabel>
-                  <FormDescription>
-                    Check this if you want to change the product’s "Released At" value.
                   </FormDescription>
                 </div>
               </FormItem>

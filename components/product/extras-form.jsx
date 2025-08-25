@@ -66,6 +66,23 @@ export default function ExtrasForm({
   } = useEditPendingTracker();
 
   function handleNext(data) {
+    let isError = false;
+    let fieldNameToFocus = null;
+
+    data.variants.forEach((variant, index) => {
+      if (variant.download_link && !variant.file_access_password) {
+        if (!fieldNameToFocus) fieldNameToFocus = `variants.${index}.file_access_password`;
+        
+        form.setError(`variants.${index}.file_access_password`, { message: 'Can\'t be empty' });
+        isError = true;
+      }
+    });
+
+    if (isError) {
+      form.setFocus(fieldNameToFocus);
+      return;
+    }
+
     setExtras(data);
     onNextStep();
   }
