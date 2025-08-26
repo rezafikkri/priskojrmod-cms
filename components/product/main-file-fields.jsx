@@ -59,7 +59,7 @@ export default function MainFileFields({ form, applicationCategoryId }) {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>Enter a direct download link for the product's main file.</FormDescription>
+              <FormDescription>Enter a direct download link for the product's main file. Make sure the link always points to the latest version.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -98,7 +98,7 @@ export default function MainFileFields({ form, applicationCategoryId }) {
                   )}
                 </div>
               </div>
-              <FormDescription>Enter the Google Drive file ID for the product’s main file, then click “Get Info” to confirm the file details. Leave empty if shared manually.</FormDescription>
+              <FormDescription>Enter the Google Drive file ID for the product’s main file, then click “Get Info” to confirm the file details. Leave empty if shared manually. Ensure the file ID refers to the latest version.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

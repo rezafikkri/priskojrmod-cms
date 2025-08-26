@@ -58,7 +58,8 @@ export default function BasicForm({
     defaultValues,
   });
 
-  const applicationCategoryId = categories.find((category) => category.slug === 'application')?.id ?? null;
+  const applicationCategory = categories.find((category) => category.slug === 'application');
+  const applicationCategoryId = applicationCategory?.id ?? null;
 
   function handleNext(data) {
     let isError = false;
@@ -102,6 +103,12 @@ export default function BasicForm({
     clearDraft();
   }
 
+  // categories for showed in select option
+  let availableCategories = categories;
+  if (basic.category_id !== applicationCategoryId) {
+    availableCategories = categories.filter((category) => category.id !== applicationCategoryId);
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={beforeNext} className="space-y-6 mb-10">
@@ -119,38 +126,48 @@ export default function BasicForm({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="category_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base">Category</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5">
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {categories.map(category => (
-                    <SelectItem
-                      key={category.id}
-                      value={category.id.toString()}
-                      className="text-base"
-                    >
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormDescription>Select the most relevant category for this product.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
+        {(mode === 'edit' && basic.category_id === applicationCategoryId) ? (
+          <FormItem>
+            <FormLabel className="text-base">Category</FormLabel>
+            <p className="capitalize">{applicationCategory.name}</p>
+            <FormDescription>This is an application product. Category cannot be changed.</FormDescription>
+          </FormItem>
+        ) : (
+          <FormField
+            control={form.control}
+            name="category_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Category</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {availableCategories.map(category => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                        className="text-base"
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select the most relevant category for this product. {mode === 'edit' && 'Changing a category to \'Application\' is not allowed.'}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <FormField
           control={form.control}
           name="owner_id"

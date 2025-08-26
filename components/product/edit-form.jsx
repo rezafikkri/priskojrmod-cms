@@ -12,54 +12,26 @@ export default function EditForm({
   owners,
   licenses,
 }) {
-  const [formSteps, setFormSteps] = useState([
-    {
-      label: 'Basic',
-      status: 'active',
-      render: ({ key, onNextStep }) =>
-        <BasicForm
-          key={key}
-          mode="edit"
-          onNextStep={onNextStep}
-          categories={categories}
-          owners={owners}
-          licenses={licenses}
-        />,
-    },
-    {
-      label: 'Content',
-      status: 'nonactive',
-      render: ({ key, onNextStep, onPrevStep }) =>
-        <ContentForm
-          key={key}
-          mode="edit"
-          onNextStep={onNextStep}
-          onPrevStep={onPrevStep}
-        />,
-    },
-    {
-      label: 'Extras',
-      status: 'nonactive',
-      render: ({ key, onNextStep, onPrevStep }) =>
-        <ExtrasForm
-          key={key}
-          mode="edit"
-          onNextStep={onNextStep}
-          onPrevStep={onPrevStep}
-        />
-    },
-    {
-      label: 'Pricing',
-      status: 'nonactive',
-      render: ({ key, onPrevStep, onResetStep }) =>
-        <PricingForm
-          key={key}
-          mode="edit"
-          onPrevStep={onPrevStep}
-          onResetStep={onResetStep}
-        />
-    },
-  ]);
+  const stepDefinitions = [
+    { label: 'Basic', component: BasicForm, extraProps: { categories, owners, licenses } },
+    { label: 'Content', component: ContentForm, extraProps: {} },
+    { label: 'Extras', component: ExtrasForm, extraProps: {} },
+    { label: 'Pricing', component: PricingForm, extraProps: {} },
+  ];
 
-  return <FormStepManager formSteps={formSteps} onFormStepsChange={setFormSteps} />;
+  const [formSteps, setFormSteps] = useState(
+    stepDefinitions.map((step, index) => ({
+      label: step.label,
+      status: index === 0 ? 'active' : 'nonactive',
+    })),
+  );
+
+  return (
+    <FormStepManager
+      stepDefinitions={stepDefinitions}
+      formSteps={formSteps}
+      onFormStepsChange={setFormSteps}
+      mode="edit"
+    />
+  );
 }
