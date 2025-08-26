@@ -47,6 +47,8 @@ export default function ProductsTable() {
     select: (products) => {
       return products.map(product => {
         let newProduct = { ...product };
+
+        // mapping prices
         if (newProduct.price_type === PriceType.PAID) {
           const prices = newProduct.variants.flatMap(variant => variant.prices);
           newProduct.prices = prices.reduce((acc, { currency_code, price }) => {
@@ -60,6 +62,11 @@ export default function ProductsTable() {
           }, {});
         }
         delete newProduct.variants;
+
+        // mapping released_at
+        newProduct.released_at = newProduct.versions[0].released_at;
+        delete newProduct.versions;
+
         return newProduct;
       });
     },
