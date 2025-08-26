@@ -41,11 +41,13 @@ export default function PricingForm({
 
   // edit mode only
   let setExtras;
+  let setBasic;
 
   if (mode === 'create') {
     pricingSchema = createProductPricingSchema;
   } else {
     setExtras = useProductFormStore(state => state.setExtras);
+    setBasic = useProductFormStore(state => state.setBasic);
     pricingSchema = editProductPricingSchema;
   }
 
@@ -197,6 +199,8 @@ export default function PricingForm({
         onResetStep();
         toast.success('Product created successfully.');
       } else {
+        setBasic({ ...basic, dbPriceType: basic.price_type });
+
         // if success, set extras and pricing data, like id, etc.
         setExtras(saveRes.data.extras);
 

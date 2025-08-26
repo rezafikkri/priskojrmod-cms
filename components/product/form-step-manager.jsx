@@ -14,7 +14,7 @@ export default function FormStepManager({
 }) {
   const handleNextStep = () => {
     let activeIndex;
-    onFormStepsChange(formSteps.map((step, index) => {
+    onFormStepsChange((prevSteps) => prevSteps.map((step, index) => {
       if (step.status === 'active') {
         activeIndex = index;
         return {
@@ -36,8 +36,8 @@ export default function FormStepManager({
 
   const handlePrevStep = () => {
     let prevActiveIndex;
-    onFormStepsChange(formSteps.map((step, index) => {
-      if (formSteps[index + 1]?.status === 'active') {
+    onFormStepsChange((prevSteps) => prevSteps.map((step, index) => {
+      if (prevSteps[index + 1]?.status === 'active') {
         prevActiveIndex = index + 1;
         return {
           ...step,
@@ -57,7 +57,7 @@ export default function FormStepManager({
   };
 
   const handleResetStep = () => {
-    onFormStepsChange(formSteps.map(step => {
+    onFormStepsChange((prevSteps) => prevSteps.map(step => {
       if (step.label === 'Basic') {
         return {
           ...step,
@@ -74,16 +74,23 @@ export default function FormStepManager({
   const handlePricingStepVisibility = (priceType) => {
     if (mode === 'edit') {
       if (priceType === PriceType.FREE) {
-        onFormStepsChange(formSteps.filter((step) => step.label !== 'Pricing'));
+        onFormStepsChange((prevSteps) => prevSteps.filter((step) => step.label !== 'Pricing'));
       } else {
-        const hasPricingStep = formSteps.some((step) => step.label === 'Pricing');
-        
-        if (!hasPricingStep) {
-          onFormStepsChange([
-            ...formSteps,
-            stepDefinitions[stepDefinitions.length - 1],
-          ]);
-        }
+        onFormStepsChange((prevSteps) => {
+          const hasPricingStep = prevSteps.some((step) => step.label === 'Pricing');
+
+          if (!hasPricingStep) {
+            return [
+              ...prevSteps,
+              {
+                label: stepDefinitions[stepDefinitions.length - 1].label,
+                status: 'nonactive',
+              },
+            ];
+          }
+
+          return prevSteps;
+        });
       }
     }
   };
@@ -94,7 +101,7 @@ export default function FormStepManager({
         {formSteps.map((step, index) => (
           <Fragment key={step.label}>
             <FormStepItem stepNumber={index + 1} status={step.status} label={step.label} />
-            {index < 3 &&
+            {index < formSteps.length - 1 &&
               <ChevronRightIcon
                 className={`size-4 text-zinc-700/60 dark:text-zinc-500 ${step.status === 'nonactive' ? 'opacity-50' : ''}`}
               />}

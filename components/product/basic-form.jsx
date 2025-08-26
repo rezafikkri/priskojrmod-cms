@@ -227,7 +227,7 @@ export default function BasicForm({
           )}
         />
 
-        {(mode === 'edit' && basic.price_type === PriceType.PAID) ? (
+        {(mode === 'edit' && basic.dbPriceType === PriceType.PAID) ? (
           <FormItem>
             <FormLabel className="text-base">Price Type</FormLabel>
             <p className="capitalize">{basic.price_type}</p>
@@ -242,10 +242,12 @@ export default function BasicForm({
                 <FormLabel className="text-base">Price Type</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-full capitalize">
+                    <SelectTrigger
+                      className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5 capitalize"
+                    >
                       <SelectValue placeholder="Select price type" />
                     </SelectTrigger>
-                  </FormControl>
+                    </FormControl>
                   <SelectContent>
                     <SelectItem className="text-base capitalize" value={PriceType.FREE}>
                       {PriceType.FREE}
