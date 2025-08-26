@@ -77,16 +77,17 @@ export default function PricingForm({
           }
         }
         
-        // if new variant exist, then add to newPrices array.
-        if (variant.id && !pricing.prices.some(price => variant.id === price.variantId)) {
+        // if new variant exist, or price_type changed to paid (that mean, each variant doesn't have
+        // any prices), then add prices for each variant to newPrices array. 
+        if (!pricing.prices.some(price => (variant.id ?? variant.dbId) === price.variantId)) {
           newPrices.push({
-            variantId: variant.id,
+            variantId: variant.id ?? variant.dbId,
             variantName: variant.name,
             price: '',
             currency_code: CurrencyCode.IDR,
           });
           newPrices.push({
-            variantId: variant.id,
+            variantId: variant.id ?? variant.dbId,
             variantName: variant.name,
             price: '',
             currency_code: CurrencyCode.USD,
@@ -133,6 +134,8 @@ export default function PricingForm({
 
     if (mode === 'create') {
       product.is_published = data.is_published;
+    } else {
+      delete product.dbPriceType;
     }
 
     // if price type == paid
@@ -199,6 +202,7 @@ export default function PricingForm({
         onResetStep();
         toast.success('Product created successfully.');
       } else {
+        console.dir(basic);
         setBasic({ ...basic, dbPriceType: basic.price_type });
 
         // if success, set extras and pricing data, like id, etc.
