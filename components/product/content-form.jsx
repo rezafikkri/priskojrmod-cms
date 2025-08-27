@@ -51,7 +51,7 @@ export default function ContentForm({
         activeLang={activeLang}
         onToggle={setActiveLang}
         errors={errors}
-        fieldNames={['description']}
+        fieldNames={['description','changelog']}
       />
 
       <Form {...form}>

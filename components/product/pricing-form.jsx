@@ -42,12 +42,14 @@ export default function PricingForm({
   // edit mode only
   let setExtras;
   let setBasic;
+  let setContent;
 
   if (mode === 'create') {
     pricingSchema = createProductPricingSchema;
   } else {
     setExtras = useProductFormStore(state => state.setExtras);
     setBasic = useProductFormStore(state => state.setBasic);
+    setContent = useProductFormStore(state => state.setContent);
     pricingSchema = editProductPricingSchema;
   }
 
@@ -202,16 +204,22 @@ export default function PricingForm({
         onResetStep();
         toast.success('Product created successfully.');
       } else {
-        console.dir(basic);
-        setBasic({ ...basic, dbPriceType: basic.price_type });
+        // if success, set basic, conten, extras and pricing data, like id, etc.
+        setBasic({
+          ...basic,
+          dbPriceType: basic.price_type,
+          versionId: saveRes.data.basic.versionId,
+        });
 
-        // if success, set extras and pricing data, like id, etc.
+        setContent({
+          ...content,
+          versionTranslationId: saveRes.data.content.versionTranslationId,
+        });
+
         setExtras(saveRes.data.extras);
 
         let newPricing = {
-          price_type: data.price_type,
           prices: saveRes.data.pricing.prices,
-          should_update_released_at: false,
           discount: data.discount,
           coupon: data.coupon,
         };
@@ -301,32 +309,34 @@ export default function PricingForm({
                 disabled={isSubmitting}
               />
             </section>
-            <Separator />
           </>
         )}
 
         {mode === 'create' && (
-          <FormField
-            control={form.control}
-            name="is_published"
-            render={({ field }) => (
-              <FormItem className="flex space-x-2 items-start">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    disabled={isSubmitting}
-                  />
-                </FormControl>
-                <div className="space-y-2">
-                  <FormLabel className="text-base leading-none">Publish</FormLabel>
-                  <FormDescription>
-                    Make this product visible on the website.
-                  </FormDescription>
-                </div>
-              </FormItem>
-            )}
-          />
+          <>
+            <Separator />
+            <FormField
+              control={form.control}
+              name="is_published"
+              render={({ field }) => (
+                <FormItem className="flex space-x-2 items-start">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <div className="space-y-2">
+                    <FormLabel className="text-base leading-none">Publish</FormLabel>
+                    <FormDescription>
+                      Make this product visible on the website.
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+          </>
         )}
 
         <Button
