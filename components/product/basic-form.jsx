@@ -27,6 +27,7 @@ import { useProductFormStore } from '@/lib/providers/product-form-store-provider
 import { PriceType } from '@/constants/enums';
 import MainFileFields from './main-file-fields';
 import { isSemverFormat } from '@/lib/utils';
+import { useRef, useEffect } from 'react';
 
 export default function BasicForm({
   onNextStep,
@@ -47,10 +48,16 @@ export default function BasicForm({
   };
   let basicSchema;
 
+  // edit mode only
+  let setVersionStatus;
+  let versionStatus;
+
   if (mode === 'create') {
     basicSchema = createProductBasicSchema;
   } else {
     basicSchema = editProductBasicSchema;
+    setVersionStatus = useProductFormStore(state => state.setVersionStatus);
+    versionStatus = useProductFormStore(state => state.versionStatus);
   }
 
   const form = useForm({
@@ -101,6 +108,20 @@ export default function BasicForm({
 
   function clearProductDraft() {
     clearDraft();
+  }
+
+  function handleVersionChange(version, fieldOnChange) {
+    if (version !== basic.dbVersion && versionStatus === 'pristine') {
+      setVersionStatus('changed');
+    } else if (version === basic.dbVersion && versionStatus === 'neutralized') {
+      setVersionStatus('rollback');
+    } else if (version !== basic.dbVersion && versionStatus === 'rollback') {
+      setVersionStatus('neutralized');
+    } else if (version === basic.dbVersion && versionStatus === 'changed') {
+      setVersionStatus('pristine');
+    }
+
+    fieldOnChange(version);
   }
 
   // categories for showed in select option
@@ -276,6 +297,7 @@ export default function BasicForm({
                 <Input
                   className="md:text-base h-auto px-3 py-1.5 shadow-none"
                   {...field}
+                  onChange={(e) => handleVersionChange(e.target.value, field.onChange)}
                 />
               </FormControl>
               <FormDescription>Enter the product version. If the category is “Application”, use the simplified semantic version format <code>X.Y.Z</code> (e.g. 1.0.0). Otherwise, you may enter any version format.</FormDescription>

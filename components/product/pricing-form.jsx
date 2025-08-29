@@ -43,6 +43,7 @@ export default function PricingForm({
   let setExtras;
   let setBasic;
   let setContent;
+  let setVersionStatus;
 
   if (mode === 'create') {
     pricingSchema = createProductPricingSchema;
@@ -51,6 +52,7 @@ export default function PricingForm({
     setBasic = useProductFormStore(state => state.setBasic);
     setContent = useProductFormStore(state => state.setContent);
     pricingSchema = editProductPricingSchema;
+    setVersionStatus = useProductFormStore(state => state.setVersionStatus);
   }
 
   const queryClient = useQueryClient();
@@ -138,6 +140,8 @@ export default function PricingForm({
       product.is_published = data.is_published;
     } else {
       delete product.dbPriceType;
+      delete product.dbVersion;
+      delete product.dbChangelog;
     }
 
     // if price type == paid
@@ -204,17 +208,24 @@ export default function PricingForm({
         onResetStep();
         toast.success('Product created successfully.');
       } else {
+        // reset versionStatus state
+        setVersionStatus('pristine');
+
         // if success, set basic, conten, extras and pricing data, like id, etc.
         setBasic({
           ...basic,
           dbPriceType: basic.price_type,
+          dbVersion: basic.version,
           versionId: saveRes.data.basic.versionId,
         });
 
-        setContent({
-          ...content,
-          versionTranslationId: saveRes.data.content.versionTranslationId,
-        });
+        if (saveRes.data.content.versionTranslationId) {
+          setContent({
+            ...content,
+            dbChangelog: content.changelog,
+            versionTranslationId: saveRes.data.content.versionTranslationId,
+          });
+        }
 
         setExtras(saveRes.data.extras);
 
