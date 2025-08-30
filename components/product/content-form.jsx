@@ -90,6 +90,13 @@ export default function ContentForm({
     }
   }, []);
 
+  const shouldShowChangelogInput = 
+    mode === 'edit' &&
+    (
+      content.versionTranslationId ||
+      basic.version !== dbVersion
+    );
+
   return (
     <>
       <FormLanguageToggle
@@ -116,7 +123,7 @@ export default function ContentForm({
                   />
                 )}
               />
-              {mode === 'edit' && (
+              {shouldShowChangelogInput && (
                 <FormField
                   control={form.control}
                   name={`changelog.${Language.ID}`}
@@ -148,7 +155,7 @@ export default function ContentForm({
                   />
                 )}
               />
-              {mode === 'edit' && (
+              {shouldShowChangelogInput && (
                 <FormField
                   control={form.control}
                   name={`changelog.${Language.EN}`}
