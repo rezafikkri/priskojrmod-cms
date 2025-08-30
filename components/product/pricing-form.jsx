@@ -31,12 +31,12 @@ export default function PricingForm({
   onResetStep,
   mode = 'create',
 }) {
-  const pricing = useProductFormStore(state => state.pricing);
+  const pricing = useProductFormStore(state => state.form.pricing);
   const setPricing = useProductFormStore(state => state.setPricing);
   const clearDraft = useProductFormStore(state => state.clearDraft);
-  const basic = useProductFormStore(state => state.basic);
-  const content = useProductFormStore(state => state.content);
-  const extras = useProductFormStore(state => state.extras);
+  const basic = useProductFormStore(state => state.form.basic);
+  const content = useProductFormStore(state => state.form.content);
+  const extras = useProductFormStore(state => state.form.extras);
   let pricingSchema;
 
   // edit mode only
@@ -44,6 +44,7 @@ export default function PricingForm({
   let setBasic;
   let setContent;
   let setVersionStatus;
+  let setReference;
 
   if (mode === 'create') {
     pricingSchema = createProductPricingSchema;
@@ -53,6 +54,7 @@ export default function PricingForm({
     setContent = useProductFormStore(state => state.setContent);
     pricingSchema = editProductPricingSchema;
     setVersionStatus = useProductFormStore(state => state.setVersionStatus);
+    setReference = useProductFormStore(state => state.setReference);
   }
 
   const queryClient = useQueryClient();
@@ -138,12 +140,8 @@ export default function PricingForm({
 
     if (mode === 'create') {
       product.is_published = data.is_published;
-    } else {
-      delete product.dbPriceType;
-      delete product.dbVersion;
-      delete product.dbChangelog;
     }
-
+    
     // if price type == paid
     if (product.price_type === PriceType.PAID) {
       product.variants = product.variants.map(variant => {
@@ -208,21 +206,23 @@ export default function PricingForm({
         onResetStep();
         toast.success('Product created successfully.');
       } else {
-        // reset versionStatus state
+        // reset versionStatus state and update reference (dbVersion, dsb)
         setVersionStatus('pristine');
-
-        // if success, set basic, conten, extras and pricing data, like id, etc.
-        setBasic({
-          ...basic,
+        setReference({
           dbPriceType: basic.price_type,
           dbVersion: basic.version,
+          dbChangelog: content.changelog,
+        });
+
+        // if success, set basic, content, extras and pricing data, like id, etc.
+        setBasic({
+          ...basic,
           versionId: saveRes.data.basic.versionId,
         });
 
         if (saveRes.data.content.versionTranslationId) {
           setContent({
             ...content,
-            dbChangelog: content.changelog,
             versionTranslationId: saveRes.data.content.versionTranslationId,
           });
         }

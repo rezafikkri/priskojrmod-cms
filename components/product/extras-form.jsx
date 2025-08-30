@@ -23,7 +23,7 @@ export default function ExtrasForm({
   onPrevStep,
   mode = 'create',
 }) {
-  const extras = useProductFormStore(state => state.extras);
+  const extras = useProductFormStore(state => state.form.extras);
   const setExtras = useProductFormStore(state => state.setExtras);
   let extrasSchema;
 
@@ -34,7 +34,7 @@ export default function ExtrasForm({
     extrasSchema = createProductExtrasSchema;
   } else {
     extrasSchema = editProductExtrasSchema;
-    basic = useProductFormStore(state => state.basic);
+    basic = useProductFormStore(state => state.form.basic);
   }
   const form = useForm({
     resolver: zodResolver(extrasSchema),

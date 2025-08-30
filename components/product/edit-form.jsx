@@ -21,7 +21,7 @@ export default function EditForm({
     { label: 'Pricing', component: PricingForm, extraProps: {} },
   ];
 
-  const priceType = useProductFormStore((state) => state.basic.price_type);
+  const priceType = useProductFormStore((state) => state.form.basic.price_type);
 
   let availableSteps = stepDefinitions.map((step, index) => ({
     label: step.label,

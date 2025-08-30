@@ -13,7 +13,6 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { createProductContentSchema, editProductContentSchema } from '@/lib/validators/product-validator';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
 import { contentCustomSchema } from '@/lib/validators/base-validator';
-import { version } from 'react-dom';
 
 export default function ContentForm({
   onNextStep,
@@ -21,21 +20,25 @@ export default function ContentForm({
   mode = 'create'
 }) {
   const [activeLang, setActiveLang] = useState(Language.ID);
-  const basic = useProductFormStore(state => state.basic);
-  const content = useProductFormStore(state => state.content);
+  const basic = useProductFormStore(state => state.form.basic);
+  const content = useProductFormStore(state => state.form.content);
   const setContent = useProductFormStore(state => state.setContent);
   let contentSchema;
 
   let defaultValues = content;
   let setVersionStatus;
   let versionStatus;
+  let dbVersion;
+  let dbChangelog;
 
   if (mode === 'create') {
     contentSchema = createProductContentSchema;
   } else {
     contentSchema = editProductContentSchema;
     setVersionStatus = useProductFormStore(state => state.setVersionStatus);
-    versionStatus = useProductFormStore(state => state.versionStatus);
+    versionStatus = useProductFormStore(state => state.meta.versionStatus);
+    dbVersion = useProductFormStore(state => state.reference.dbVersion);
+    dbChangelog = useProductFormStore(state => state.reference.dbChangelog);
   }
 
   const form = useForm({
@@ -46,7 +49,7 @@ export default function ContentForm({
 
   function handleNext(data) {
     // validate changelog in edit mode
-    if (mode === 'edit' && basic.version !== basic.dbVersion) {
+    if (mode === 'edit' && basic.version !== dbVersion) {
       const changelogIdResult = contentCustomSchema.safeParse(data.changelog.id);
       const changelogEnResult = contentCustomSchema.safeParse(data.changelog.en);
       let isError = false;
@@ -81,7 +84,7 @@ export default function ContentForm({
         form.setValue('changelog', { id: '', en: '' });
         setVersionStatus('neutralized');
       } else if (versionStatus === 'rollback') {
-        form.setValue('changelog', content.dbChangelog);
+        form.setValue('changelog', dbChangelog);
         setVersionStatus('pristine');
       }
     }

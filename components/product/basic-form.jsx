@@ -27,7 +27,6 @@ import { useProductFormStore } from '@/lib/providers/product-form-store-provider
 import { PriceType } from '@/constants/enums';
 import MainFileFields from './main-file-fields';
 import { isSemverFormat } from '@/lib/utils';
-import { useRef, useEffect } from 'react';
 
 export default function BasicForm({
   onNextStep,
@@ -37,7 +36,7 @@ export default function BasicForm({
   licenses,
   mode = 'create',
 }) {
-  const basic = useProductFormStore(state => state.basic);
+  const basic = useProductFormStore(state => state.form.basic);
   const setBasic = useProductFormStore(state => state.setBasic);
   const clearDraft = useProductFormStore(state => state.clearDraft);
   const defaultValues = {
@@ -51,13 +50,17 @@ export default function BasicForm({
   // edit mode only
   let setVersionStatus;
   let versionStatus;
+  let dbVersion;
+  let dbPriceType;
 
   if (mode === 'create') {
     basicSchema = createProductBasicSchema;
   } else {
     basicSchema = editProductBasicSchema;
     setVersionStatus = useProductFormStore(state => state.setVersionStatus);
-    versionStatus = useProductFormStore(state => state.versionStatus);
+    versionStatus = useProductFormStore(state => state.meta.versionStatus);
+    dbVersion = useProductFormStore(state => state.reference.dbVersion);
+    dbPriceType = useProductFormStore(state => state.reference.dbPriceType);
   }
 
   const form = useForm({
@@ -111,14 +114,16 @@ export default function BasicForm({
   }
 
   function handleVersionChange(version, fieldOnChange) {
-    if (version !== basic.dbVersion && versionStatus === 'pristine') {
-      setVersionStatus('changed');
-    } else if (version === basic.dbVersion && versionStatus === 'neutralized') {
-      setVersionStatus('rollback');
-    } else if (version !== basic.dbVersion && versionStatus === 'rollback') {
-      setVersionStatus('neutralized');
-    } else if (version === basic.dbVersion && versionStatus === 'changed') {
-      setVersionStatus('pristine');
+    if (mode === 'edit') {
+      if (version !== dbVersion && versionStatus === 'pristine') {
+        setVersionStatus('changed');
+      } else if (version === dbVersion && versionStatus === 'neutralized') {
+        setVersionStatus('rollback');
+      } else if (version !== dbVersion && versionStatus === 'rollback') {
+        setVersionStatus('neutralized');
+      } else if (version === dbVersion && versionStatus === 'changed') {
+        setVersionStatus('pristine');
+      }
     }
 
     fieldOnChange(version);
@@ -126,7 +131,7 @@ export default function BasicForm({
 
   // categories for showed in select option
   let availableCategories = categories;
-  if (basic.category_id !== applicationCategoryId) {
+  if (mode === 'edit' && basic.category_id !== applicationCategoryId) {
     availableCategories = categories.filter((category) => category.id !== applicationCategoryId);
   }
 
@@ -248,7 +253,7 @@ export default function BasicForm({
           )}
         />
 
-        {(mode === 'edit' && basic.dbPriceType === PriceType.PAID) ? (
+        {(mode === 'edit' && dbPriceType === PriceType.PAID) ? (
           <FormItem>
             <FormLabel className="text-base">Price Type</FormLabel>
             <p className="capitalize">{basic.price_type}</p>
