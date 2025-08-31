@@ -8,22 +8,14 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Button } from '../ui/button';
-import cryptoRandomString from 'crypto-random-string';
 import { Input } from '../ui/input';
+import { generatePassword } from '@/lib/utils';
 
 export default function PasswordInput({
   field,
   description,
   disabled = false,
 }) {
-  function handleGeneratePassword() {
-    const password = cryptoRandomString({
-      length: 16,
-      characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=?',
-    });
-    field.onChange(password);
-  }
-
   return (
     <FormItem>
       <FormLabel className="text-base">File Access Password</FormLabel>
@@ -38,7 +30,7 @@ export default function PasswordInput({
         <Button
           variant="secondary"
           type="button"
-          onClick={handleGeneratePassword}
+          onClick={() => field.onChange(generatePassword())}
           className={'h-auto text-base px-3 py-1.5 border rounded-s-none'}
           disabled={disabled}
         >

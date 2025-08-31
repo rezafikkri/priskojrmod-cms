@@ -102,15 +102,3 @@ export async function fetchDriveFileInfo(fileId) {
     return { status: 'error', message: err.message };
   }
 }
-
-export async function generatePassword() {
-  try {
-    const password = GeneratePassword({
-      length: 12,
-      symbols: true,
-    });
-    return { status: 'success', data: password };
-  } catch (err) {
-    return { status: 'error', message: err.message };
-  }
-}
