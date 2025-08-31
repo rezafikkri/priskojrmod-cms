@@ -27,7 +27,7 @@ import PasswordInput from './password-input';
 export default function VariantFields({
   form,
   variants,
-  basic,
+  productId,
   handlers,
 }) {
   const {
@@ -55,7 +55,7 @@ export default function VariantFields({
       // set pending state for disabled prev next button and show loading
       onIncrementPending();
       setDeletingIds([...deletingIds, dbId]);
-      const removeRes = await removeProductVariant(dbId, basic.id);
+      const removeRes = await removeProductVariant(dbId, productId);
 
       if (removeRes.status === 'success') {
         const currentVariants = form.getValues('variants');

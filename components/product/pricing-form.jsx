@@ -325,7 +325,9 @@ export default function PricingForm({
 
         {mode === 'create' && (
           <>
-            <Separator />
+            {basic.price_type === PriceType.PAID && (
+              <Separator />
+            )}
             <FormField
               control={form.control}
               name="is_published"
