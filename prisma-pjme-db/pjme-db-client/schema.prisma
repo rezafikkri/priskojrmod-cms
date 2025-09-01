@@ -132,14 +132,13 @@ model Product {
   drive_file_id String?
   download_link String?
 
-  is_published    Boolean   @default(false)
-  is_pinned       Boolean   @default(false)
-  is_buy_disabled Boolean   @default(false)
-  name            String    @db.VarChar(150)
-  slug            String    @unique @db.VarChar(150)
-  price_type      PriceType
-  created_at      BigInt
-  updated_at      BigInt
+  is_published Boolean   @default(false)
+  is_pinned    Boolean   @default(false)
+  name         String    @db.VarChar(150)
+  slug         String    @unique @db.VarChar(150)
+  price_type   PriceType
+  created_at   BigInt
+  updated_at   BigInt
 
   admin    Admin    @relation(fields: [admin_id], references: [id])
   category Category @relation(fields: [category_id], references: [id])

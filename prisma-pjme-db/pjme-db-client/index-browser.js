@@ -192,7 +192,6 @@ exports.Prisma.ProductScalarFieldEnum = {
   download_link: 'download_link',
   is_published: 'is_published',
   is_pinned: 'is_pinned',
-  is_buy_disabled: 'is_buy_disabled',
   name: 'name',
   slug: 'slug',
   price_type: 'price_type',

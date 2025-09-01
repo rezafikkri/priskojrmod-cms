@@ -134,7 +134,6 @@ model Product {
 
   is_published  Boolean   @default(false)
   is_pinned     Boolean   @default(false)
-  is_buy_disabled Boolean @default(false)
   name          String    @db.VarChar(150)
   slug          String    @unique @db.VarChar(150)
   price_type    PriceType

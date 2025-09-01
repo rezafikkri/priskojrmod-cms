@@ -11735,7 +11735,6 @@ export namespace Prisma {
     download_link: string | null
     is_published: boolean | null
     is_pinned: boolean | null
-    is_buy_disabled: boolean | null
     name: string | null
     slug: string | null
     price_type: $Enums.PriceType | null
@@ -11753,7 +11752,6 @@ export namespace Prisma {
     download_link: string | null
     is_published: boolean | null
     is_pinned: boolean | null
-    is_buy_disabled: boolean | null
     name: string | null
     slug: string | null
     price_type: $Enums.PriceType | null
@@ -11771,7 +11769,6 @@ export namespace Prisma {
     download_link: number
     is_published: number
     is_pinned: number
-    is_buy_disabled: number
     name: number
     slug: number
     price_type: number
@@ -11807,7 +11804,6 @@ export namespace Prisma {
     download_link?: true
     is_published?: true
     is_pinned?: true
-    is_buy_disabled?: true
     name?: true
     slug?: true
     price_type?: true
@@ -11825,7 +11821,6 @@ export namespace Prisma {
     download_link?: true
     is_published?: true
     is_pinned?: true
-    is_buy_disabled?: true
     name?: true
     slug?: true
     price_type?: true
@@ -11843,7 +11838,6 @@ export namespace Prisma {
     download_link?: true
     is_published?: true
     is_pinned?: true
-    is_buy_disabled?: true
     name?: true
     slug?: true
     price_type?: true
@@ -11948,7 +11942,6 @@ export namespace Prisma {
     download_link: string | null
     is_published: boolean
     is_pinned: boolean
-    is_buy_disabled: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -11985,7 +11978,6 @@ export namespace Prisma {
     download_link?: boolean
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name?: boolean
     slug?: boolean
     price_type?: boolean
@@ -12014,7 +12006,6 @@ export namespace Prisma {
     download_link?: boolean
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name?: boolean
     slug?: boolean
     price_type?: boolean
@@ -12036,7 +12027,6 @@ export namespace Prisma {
     download_link?: boolean
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name?: boolean
     slug?: boolean
     price_type?: boolean
@@ -12058,7 +12048,6 @@ export namespace Prisma {
     download_link?: boolean
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name?: boolean
     slug?: boolean
     price_type?: boolean
@@ -12066,7 +12055,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category_id" | "admin_id" | "owner_id" | "license_id" | "drive_file_id" | "download_link" | "is_published" | "is_pinned" | "is_buy_disabled" | "name" | "slug" | "price_type" | "created_at" | "updated_at", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category_id" | "admin_id" | "owner_id" | "license_id" | "drive_file_id" | "download_link" | "is_published" | "is_pinned" | "name" | "slug" | "price_type" | "created_at" | "updated_at", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -12117,7 +12106,6 @@ export namespace Prisma {
       download_link: string | null
       is_published: boolean
       is_pinned: boolean
-      is_buy_disabled: boolean
       name: string
       slug: string
       price_type: $Enums.PriceType
@@ -12565,7 +12553,6 @@ export namespace Prisma {
     readonly download_link: FieldRef<"Product", 'String'>
     readonly is_published: FieldRef<"Product", 'Boolean'>
     readonly is_pinned: FieldRef<"Product", 'Boolean'>
-    readonly is_buy_disabled: FieldRef<"Product", 'Boolean'>
     readonly name: FieldRef<"Product", 'String'>
     readonly slug: FieldRef<"Product", 'String'>
     readonly price_type: FieldRef<"Product", 'PriceType'>
@@ -36238,7 +36225,6 @@ export namespace Prisma {
     download_link: 'download_link',
     is_published: 'is_published',
     is_pinned: 'is_pinned',
-    is_buy_disabled: 'is_buy_disabled',
     name: 'name',
     slug: 'slug',
     price_type: 'price_type',
@@ -37089,7 +37075,6 @@ export namespace Prisma {
     download_link?: StringNullableFilter<"Product"> | string | null
     is_published?: BoolFilter<"Product"> | boolean
     is_pinned?: BoolFilter<"Product"> | boolean
-    is_buy_disabled?: BoolFilter<"Product"> | boolean
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
@@ -37117,7 +37102,6 @@ export namespace Prisma {
     download_link?: SortOrderInput | SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
-    is_buy_disabled?: SortOrder
     name?: SortOrder
     slug?: SortOrder
     price_type?: SortOrder
@@ -37149,7 +37133,6 @@ export namespace Prisma {
     download_link?: StringNullableFilter<"Product"> | string | null
     is_published?: BoolFilter<"Product"> | boolean
     is_pinned?: BoolFilter<"Product"> | boolean
-    is_buy_disabled?: BoolFilter<"Product"> | boolean
     name?: StringFilter<"Product"> | string
     price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
     created_at?: BigIntFilter<"Product"> | bigint | number
@@ -37176,7 +37159,6 @@ export namespace Prisma {
     download_link?: SortOrderInput | SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
-    is_buy_disabled?: SortOrder
     name?: SortOrder
     slug?: SortOrder
     price_type?: SortOrder
@@ -37202,7 +37184,6 @@ export namespace Prisma {
     download_link?: StringNullableWithAggregatesFilter<"Product"> | string | null
     is_published?: BoolWithAggregatesFilter<"Product"> | boolean
     is_pinned?: BoolWithAggregatesFilter<"Product"> | boolean
-    is_buy_disabled?: BoolWithAggregatesFilter<"Product"> | boolean
     name?: StringWithAggregatesFilter<"Product"> | string
     slug?: StringWithAggregatesFilter<"Product"> | string
     price_type?: EnumPriceTypeWithAggregatesFilter<"Product"> | $Enums.PriceType
@@ -38856,7 +38837,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -38884,7 +38864,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -38904,7 +38883,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -38932,7 +38910,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -38956,7 +38933,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -38970,7 +38946,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -38988,7 +38963,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -40757,7 +40731,6 @@ export namespace Prisma {
     download_link?: SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
-    is_buy_disabled?: SortOrder
     name?: SortOrder
     slug?: SortOrder
     price_type?: SortOrder
@@ -40783,7 +40756,6 @@ export namespace Prisma {
     download_link?: SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
-    is_buy_disabled?: SortOrder
     name?: SortOrder
     slug?: SortOrder
     price_type?: SortOrder
@@ -40801,7 +40773,6 @@ export namespace Prisma {
     download_link?: SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
-    is_buy_disabled?: SortOrder
     name?: SortOrder
     slug?: SortOrder
     price_type?: SortOrder
@@ -43272,7 +43243,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -43298,7 +43268,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -43377,7 +43346,6 @@ export namespace Prisma {
     download_link?: StringNullableFilter<"Product"> | string | null
     is_published?: BoolFilter<"Product"> | boolean
     is_pinned?: BoolFilter<"Product"> | boolean
-    is_buy_disabled?: BoolFilter<"Product"> | boolean
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
@@ -43447,7 +43415,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -43473,7 +43440,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -43519,7 +43485,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -43545,7 +43510,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -43683,7 +43647,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -43709,7 +43672,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44238,7 +44200,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44265,7 +44226,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44300,7 +44260,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44327,7 +44286,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44346,7 +44304,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44373,7 +44330,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44430,7 +44386,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44457,7 +44412,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44546,7 +44500,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44573,7 +44526,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44608,7 +44560,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44635,7 +44586,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44654,7 +44604,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44681,7 +44630,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44716,7 +44664,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44743,7 +44690,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44762,7 +44708,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44789,7 +44734,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44824,7 +44768,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44851,7 +44794,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44870,7 +44812,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44897,7 +44838,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -44954,7 +44894,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -44981,7 +44920,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45673,7 +45611,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -45704,7 +45641,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45730,7 +45666,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45753,7 +45688,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45770,7 +45704,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -45784,7 +45717,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45810,7 +45742,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45833,7 +45764,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45850,7 +45780,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -45871,7 +45800,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45897,7 +45825,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45920,7 +45847,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45957,7 +45883,6 @@ export namespace Prisma {
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
-    is_buy_disabled?: boolean
     name: string
     slug: string
     price_type: $Enums.PriceType
@@ -45971,7 +45896,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -45997,7 +45921,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
@@ -46020,7 +45943,6 @@ export namespace Prisma {
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
-    is_buy_disabled?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
