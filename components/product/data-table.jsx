@@ -170,12 +170,10 @@ export default function DataTable({
                 asChild
               >
                 <button
-                  onClick={() =>
-                    onEditPinnedStatus({
-                      id: row.original.id,
-                      isPinned: row.original.is_pinned,
-                    })
-                  }
+                  onClick={() => onEditPinnedStatus(
+                    row.original.id,
+                    row.original.is_pinned,
+                  )}
                 >
                   {row.original.is_pinned ? 'Unpin' : 'Pin'}
                 </button>
@@ -185,10 +183,10 @@ export default function DataTable({
                 asChild
               >
                 <button
-                  onClick={() => onEditPublishedStatus({
-                    id: row.original.id,
-                    isPublished: row.original.is_published,
-                  })}
+                  onClick={() => onEditPublishedStatus(
+                    row.original.id,
+                    row.original.is_published,
+                  )}
                 >
                   {row.getValue('is_published') ? 'Unpublish' : 'Publish'}
                 </button>

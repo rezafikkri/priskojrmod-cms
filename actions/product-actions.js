@@ -22,18 +22,18 @@ export async function addProduct(data) {
   }
 }
 
-export async function editProductPinnedStatus({ id, is_pinned }) {
+export async function editProductPinnedStatus(id, isPinned) {
   try {
-    const updatedData = await updateProductPinnedStatus({ id, is_pinned });
+    const updatedData = await updateProductPinnedStatus(id, isPinned);
     return { status: 'success', data: updatedData };
   } catch (err) {
     return { status: 'error', message: err.message };
   }
 }
 
-export async function editProductPublishedStatus({ id, is_published }) {
+export async function editProductPublishedStatus(id, isPublished) {
   try {
-    const updatedData = await updateProductPublishedStatus({ id, is_published });
+    const updatedData = await updateProductPublishedStatus(id, isPublished);
     return { status: 'success', data: updatedData };
   } catch (err) {
     return { status: 'error', message: err.message };

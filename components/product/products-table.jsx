@@ -74,13 +74,13 @@ export default function ProductsTable() {
     gcTime: 1000 * 60,
   });
 
-  async function handleEditPinnedStatus({ id, isPinned }) {
+  async function handleEditPinnedStatus(id, isPinned) {
     // This is for add opacity-50 style to deleted row
     setUpdatingPinnedStatusIds((prevUpdatingPinnedStatusIds) => [...prevUpdatingPinnedStatusIds, id]);
     // show loading
     const toastId = toast.loading(!isPinned ? 'Pinning product...' : 'Unpinning product...');
 
-    const editRes = await editProductPinnedStatus({ id, is_pinned: !isPinned });
+    const editRes = await editProductPinnedStatus(id, !isPinned);
 
     setUpdatingPinnedStatusIds((prevUpdatingPinnedStatusIds) =>
       prevUpdatingPinnedStatusIds.filter((updatingId) => updatingId !== id)
@@ -116,14 +116,14 @@ export default function ProductsTable() {
     }
   }
 
-  async function handleEditPublishedStatus({ id, isPublished }) {
+  async function handleEditPublishedStatus(id, isPublished) {
     // This is for add opacity-50 style to deleted row
     setUpdatingPublishedIds((prevUpdatingPublishedIds) => [...prevUpdatingPublishedIds, id]);
 
     // show loading
     const toastId = toast.loading(!isPublished ? 'Publishing product...' : 'Unpublishing product...');
 
-    const editRes = await editProductPublishedStatus({ id, is_published: !isPublished });
+    const editRes = await editProductPublishedStatus(id, !isPublished);
 
     setUpdatingPublishedIds((prevUpdatingPublishedIds) =>
       prevUpdatingPublishedIds.filter((updatingId) => updatingId !== id)
