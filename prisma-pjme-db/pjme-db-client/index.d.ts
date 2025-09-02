@@ -20702,25 +20702,25 @@ export namespace Prisma {
   }
 
   export type ProductPriceAvgAggregateOutputType = {
-    price: number | null
+    price: Decimal | null
   }
 
   export type ProductPriceSumAggregateOutputType = {
-    price: number | null
+    price: Decimal | null
   }
 
   export type ProductPriceMinAggregateOutputType = {
     id: string | null
     variant_id: string | null
     currency_code: $Enums.CurrencyCode | null
-    price: number | null
+    price: Decimal | null
   }
 
   export type ProductPriceMaxAggregateOutputType = {
     id: string | null
     variant_id: string | null
     currency_code: $Enums.CurrencyCode | null
-    price: number | null
+    price: Decimal | null
   }
 
   export type ProductPriceCountAggregateOutputType = {
@@ -20852,7 +20852,7 @@ export namespace Prisma {
     id: string
     variant_id: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal
     _count: ProductPriceCountAggregateOutputType | null
     _avg: ProductPriceAvgAggregateOutputType | null
     _sum: ProductPriceSumAggregateOutputType | null
@@ -20925,7 +20925,7 @@ export namespace Prisma {
       id: string
       variant_id: string
       currency_code: $Enums.CurrencyCode
-      price: number
+      price: Prisma.Decimal
     }, ExtArgs["result"]["productPrice"]>
     composites: {}
   }
@@ -21353,7 +21353,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductPrice", 'String'>
     readonly variant_id: FieldRef<"ProductPrice", 'String'>
     readonly currency_code: FieldRef<"ProductPrice", 'CurrencyCode'>
-    readonly price: FieldRef<"ProductPrice", 'Int'>
+    readonly price: FieldRef<"ProductPrice", 'Decimal'>
   }
     
 
@@ -36588,6 +36588,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
    * Reference to a field of type 'TransactionStatus'
    */
   export type EnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus'>
@@ -37582,7 +37596,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductPrice"> | string
     variant_id?: UuidFilter<"ProductPrice"> | string
     currency_code?: EnumCurrencyCodeFilter<"ProductPrice"> | $Enums.CurrencyCode
-    price?: IntFilter<"ProductPrice"> | number
+    price?: DecimalFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
     variant?: XOR<ProductVariantScalarRelationFilter, ProductVariantWhereInput>
   }
 
@@ -37601,7 +37615,7 @@ export namespace Prisma {
     NOT?: ProductPriceWhereInput | ProductPriceWhereInput[]
     variant_id?: UuidFilter<"ProductPrice"> | string
     currency_code?: EnumCurrencyCodeFilter<"ProductPrice"> | $Enums.CurrencyCode
-    price?: IntFilter<"ProductPrice"> | number
+    price?: DecimalFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
     variant?: XOR<ProductVariantScalarRelationFilter, ProductVariantWhereInput>
   }, "id">
 
@@ -37624,7 +37638,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"ProductPrice"> | string
     variant_id?: UuidWithAggregatesFilter<"ProductPrice"> | string
     currency_code?: EnumCurrencyCodeWithAggregatesFilter<"ProductPrice"> | $Enums.CurrencyCode
-    price?: IntWithAggregatesFilter<"ProductPrice"> | number
+    price?: DecimalWithAggregatesFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
   }
 
   export type TermsOfServiceWhereInput = {
@@ -39339,7 +39353,7 @@ export namespace Prisma {
   export type ProductPriceCreateInput = {
     id?: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
     variant: ProductVariantCreateNestedOneWithoutPricesInput
   }
 
@@ -39347,13 +39361,13 @@ export namespace Prisma {
     id?: string
     variant_id: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     variant?: ProductVariantUpdateOneRequiredWithoutPricesNestedInput
   }
 
@@ -39361,27 +39375,27 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     variant_id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceCreateManyInput = {
     id?: string
     variant_id: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     variant_id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TermsOfServiceCreateInput = {
@@ -41029,6 +41043,17 @@ export namespace Prisma {
     file_access_password?: SortOrder
   }
 
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
   export type ProductVariantScalarRelationFilter = {
     is?: ProductVariantWhereInput
     isNot?: ProductVariantWhereInput
@@ -41061,6 +41086,22 @@ export namespace Prisma {
 
   export type ProductPriceSumOrderByAggregateInput = {
     price?: SortOrder
+  }
+
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type TermsOfServiceTranslationListRelationFilter = {
@@ -42516,6 +42557,14 @@ export namespace Prisma {
     connect?: ProductVariantWhereUniqueInput
   }
 
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
   export type ProductVariantUpdateOneRequiredWithoutPricesNestedInput = {
     create?: XOR<ProductVariantCreateWithoutPricesInput, ProductVariantUncheckedCreateWithoutPricesInput>
     connectOrCreate?: ProductVariantCreateOrConnectWithoutPricesInput
@@ -43139,6 +43188,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPriceTypeFilter<$PrismaModel>
     _max?: NestedEnumPriceTypeFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type NestedUuidNullableFilter<$PrismaModel = never> = {
@@ -44858,13 +44934,13 @@ export namespace Prisma {
   export type ProductPriceCreateWithoutVariantInput = {
     id?: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUncheckedCreateWithoutVariantInput = {
     id?: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceCreateOrConnectWithoutVariantInput = {
@@ -44955,7 +45031,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductPrice"> | string
     variant_id?: UuidFilter<"ProductPrice"> | string
     currency_code?: EnumCurrencyCodeFilter<"ProductPrice"> | $Enums.CurrencyCode
-    price?: IntFilter<"ProductPrice"> | number
+    price?: DecimalFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductVariantCreateWithoutPricesInput = {
@@ -46089,25 +46165,25 @@ export namespace Prisma {
   export type ProductPriceCreateManyVariantInput = {
     id?: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUpdateWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUncheckedUpdateWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUncheckedUpdateManyWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TermsOfServiceTranslationCreateManyTerms_of_serviceInput = {

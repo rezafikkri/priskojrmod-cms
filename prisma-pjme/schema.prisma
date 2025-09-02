@@ -243,7 +243,7 @@ model ProductPrice {
   id            String       @id @default(uuid(7)) @db.Uuid
   variant_id    String       @db.Uuid
   currency_code CurrencyCode
-  price         Int
+  price         Decimal      @db.Decimal(10, 2)
 
   variant ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
 
