@@ -17,7 +17,7 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import { createProductPricingSchema, editProductPricingSchema } from '@/lib/validators/product-validator';
 import { toast } from 'sonner';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { addProduct, editProduct } from '@/actions/product-actions';
 import PriceFields from './price-fields';
 import DiscountFields from './discount-fields';
@@ -69,17 +69,12 @@ export default function PricingForm({
         // It also handles the case when the admin deletes some variants in the previous step — 
         // this function will ignore prices from deleted variants, 
         // so their associated prices will appear as removed.
-        for (const [index, price] of pricing.prices.entries()) {
+        for (const price of pricing.prices) {
           if (price.variantId === (variant.id ?? variant.dbId)) {
             newPrices.push({
               ...price,
               variantName: variant.name,
             });
-            newPrices.push({
-              ...pricing.prices[index + 1],
-              variantName: variant.name,
-            });
-            break;
           }
         }
         
@@ -89,14 +84,10 @@ export default function PricingForm({
           newPrices.push({
             variantId: variant.id ?? variant.dbId,
             variantName: variant.name,
-            price: '',
-            currency_code: CurrencyCode.IDR,
-          });
-          newPrices.push({
-            variantId: variant.id ?? variant.dbId,
-            variantName: variant.name,
-            price: '',
-            currency_code: CurrencyCode.USD,
+            currencies: [
+              { price: '', currency_code: CurrencyCode.IDR },
+              { price: '', currency_code: CurrencyCode.USD },
+            ],
           });
         }
       }
@@ -132,6 +123,32 @@ export default function PricingForm({
   }
 
   async function handleSubmit(data) {
+    // validate prices: if currencyCode = IDR, then only integer, if USD allow decimal
+    let isError = false;
+    let fieldNameToFocus = null;
+
+    data.prices.forEach((price, i) => {
+      price.currencies.forEach((currency, j) => {
+        if (currency.currency_code === CurrencyCode.IDR && !Number.isInteger(currency.price)) {
+          const fieldName = `prices.${i}.currencies.${j}.price`;
+
+          if (!fieldNameToFocus) fieldNameToFocus = fieldName;
+          form.setError(fieldName, { message: 'Must not contain decimals' }, { shouldFocus: true });
+          isError = true;
+        }
+      });
+    });
+
+    if (isError) {
+      // Use requestAnimationFrame to ensure focus happens 
+      // right after the DOM update but before the next paint.
+      // This avoids timing issues where the input ref is not yet ready.
+      requestAnimationFrame(() => {
+        form.setFocus(fieldNameToFocus);
+      });
+      return;
+    }
+
     let product = {
       ...basic,
       ...content,
@@ -145,25 +162,11 @@ export default function PricingForm({
     // if price type == paid
     if (product.price_type === PriceType.PAID) {
       product.variants = product.variants.map(variant => {
-        let newVariant = { ...variant, prices: [] };
+        let newVariant = { ...variant };
 
-        for (const [i, price] of data.prices.entries()) {
+        for (const price of data.prices) {
           if ((variant.id ?? variant.dbId) === price.variantId) {
-            let priceIDR = {
-              price: price.price,
-              currency_code: price.currency_code,
-            };
-            if (price.id) priceIDR.id = price.id;
-
-            let priceUSD = {
-              price: data.prices[i + 1].price,
-              currency_code: data.prices[i + 1].currency_code,
-            };
-            if (data.prices[i + 1].id) priceUSD.id = data.prices[i + 1].id;
-
-            newVariant.prices.push(priceIDR);
-            newVariant.prices.push(priceUSD);
-
+            newVariant.prices = price.currencies;
             break;
           }
         }
@@ -284,7 +287,20 @@ export default function PricingForm({
                 Each variant has its own price in two currencies, IDR and USD.
               </h4>
 
-              <PriceFields prices={prices} form={form} />
+              {prices.map((price, index) => (
+                <Fragment key={price.variantId}>
+                  <PriceFields
+                    price={price}
+                    name={`prices.${index}.currencies`}
+                    form={form}
+                  />
+                  {index < prices.length - 1 && (
+                    <div className="pe-15">
+                      <Separator />
+                    </div>
+                  )}
+                </Fragment>
+              ))}
             </section>
             <Separator />
             <section className="space-y-6 mb-9">

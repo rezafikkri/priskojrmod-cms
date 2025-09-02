@@ -82,7 +82,7 @@ export default function VariantFields({
   return (
     variants.map((variant, index) => (
       <Fragment key={variant.id}>
-        <div key={variant.id} className="flex gap-5 items-center">
+        <div className="flex gap-5 items-center">
           <div className="flex-1 space-y-6">
             <FormField
               control={form.control}

@@ -154,7 +154,12 @@ export default function ExtrasForm({
     });
 
     if (isError) {
-      form.setFocus(fieldNameToFocus);
+      // Use requestAnimationFrame to ensure focus happens 
+      // right after the DOM update but before the next paint.
+      // This avoids timing issues where the input ref is not yet ready.
+      requestAnimationFrame(() => {
+        form.setFocus(fieldNameToFocus);
+      });
       return;
     }
 
