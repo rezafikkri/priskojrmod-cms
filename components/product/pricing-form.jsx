@@ -319,23 +319,27 @@ export default function PricingForm({
                 disabled={isSubmitting}
               />
             </section>
-            <Separator />
-            <section className="space-y-6 mb-9">
-              <h3 className="text-lg font-bold mb-0">Coupon</h3>
-              <h4 className="text-zinc-700 dark:text-zinc-300/80">
-                Optional. Provides a discount for previous buyers when purchasing product upgrades.
-              </h4>
+            {mode === 'edit' && (
+              <>
+                <Separator />
+                <section className="space-y-6 mb-9">
+                  <h3 className="text-lg font-bold mb-0">Coupon</h3>
+                  <h4 className="text-zinc-700 dark:text-zinc-300/80">
+                    Optional. Provides a discount for previous buyers when purchasing product upgrades.
+                  </h4>
 
-              <CouponFields
-                form={form}
-                basic={basic}
-                handlers={{
-                  onIncrementPending: incrementPending,
-                  onDecrementPending: decrementPending,
-                }}
-                disabled={isSubmitting}
-              />
-            </section>
+                  <CouponFields
+                    form={form}
+                    basic={basic}
+                    handlers={{
+                      onIncrementPending: incrementPending,
+                      onDecrementPending: decrementPending,
+                    }}
+                    disabled={isSubmitting}
+                  />
+                </section>
+              </>
+            )}
           </>
         )}
 
