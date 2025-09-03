@@ -103,7 +103,7 @@ export default function CreateForm({ products }) {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="p-0" align="start">
+                  <PopoverContent className="p-0 w-auto" align="start">
                     <Command>
                       <CommandInput
                         placeholder="Search a product..."
