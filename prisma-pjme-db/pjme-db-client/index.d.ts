@@ -31628,7 +31628,7 @@ export namespace Prisma {
   export type TransactionDetailAvgAggregateOutputType = {
     product_coupon_id: number | null
     quantity: number | null
-    product_price: number | null
+    product_price: Decimal | null
     product_discount: number | null
     product_coupon_discount: number | null
     shared_at: number | null
@@ -31637,7 +31637,7 @@ export namespace Prisma {
   export type TransactionDetailSumAggregateOutputType = {
     product_coupon_id: number | null
     quantity: number | null
-    product_price: number | null
+    product_price: Decimal | null
     product_discount: number | null
     product_coupon_discount: number | null
     shared_at: bigint | null
@@ -31655,7 +31655,7 @@ export namespace Prisma {
     variant_download_link: string | null
     variant_file_access_password: string | null
     product_currency_code: $Enums.CurrencyCode | null
-    product_price: number | null
+    product_price: Decimal | null
     product_discount: number | null
     product_coupon_discount: number | null
     share_method: $Enums.ShareMethod | null
@@ -31674,7 +31674,7 @@ export namespace Prisma {
     variant_download_link: string | null
     variant_file_access_password: string | null
     product_currency_code: $Enums.CurrencyCode | null
-    product_price: number | null
+    product_price: Decimal | null
     product_discount: number | null
     product_coupon_discount: number | null
     share_method: $Enums.ShareMethod | null
@@ -31876,7 +31876,7 @@ export namespace Prisma {
     variant_download_link: string | null
     variant_file_access_password: string | null
     product_currency_code: $Enums.CurrencyCode
-    product_price: number
+    product_price: Decimal
     product_discount: number | null
     product_coupon_discount: number | null
     share_method: $Enums.ShareMethod | null
@@ -32009,7 +32009,7 @@ export namespace Prisma {
       variant_download_link: string | null
       variant_file_access_password: string | null
       product_currency_code: $Enums.CurrencyCode
-      product_price: number
+      product_price: Prisma.Decimal
       product_discount: number | null
       product_coupon_discount: number | null
       share_method: $Enums.ShareMethod | null
@@ -32449,7 +32449,7 @@ export namespace Prisma {
     readonly variant_download_link: FieldRef<"TransactionDetail", 'String'>
     readonly variant_file_access_password: FieldRef<"TransactionDetail", 'String'>
     readonly product_currency_code: FieldRef<"TransactionDetail", 'CurrencyCode'>
-    readonly product_price: FieldRef<"TransactionDetail", 'Int'>
+    readonly product_price: FieldRef<"TransactionDetail", 'Decimal'>
     readonly product_discount: FieldRef<"TransactionDetail", 'Int'>
     readonly product_coupon_discount: FieldRef<"TransactionDetail", 'Int'>
     readonly share_method: FieldRef<"TransactionDetail", 'ShareMethod'>
@@ -38134,7 +38134,7 @@ export namespace Prisma {
     variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
-    product_price?: IntFilter<"TransactionDetail"> | number
+    product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
     product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
@@ -38177,7 +38177,7 @@ export namespace Prisma {
     variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
-    product_price?: IntFilter<"TransactionDetail"> | number
+    product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
     product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
@@ -38224,7 +38224,7 @@ export namespace Prisma {
     variant_download_link?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeWithAggregatesFilter<"TransactionDetail"> | $Enums.CurrencyCode
-    product_price?: IntWithAggregatesFilter<"TransactionDetail"> | number
+    product_price?: DecimalWithAggregatesFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
     product_discount?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
     product_coupon_discount?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
     share_method?: EnumShareMethodNullableWithAggregatesFilter<"TransactionDetail"> | $Enums.ShareMethod | null
@@ -39857,7 +39857,7 @@ export namespace Prisma {
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
-    product_price: number
+    product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
@@ -39877,7 +39877,7 @@ export namespace Prisma {
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
-    product_price: number
+    product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
@@ -39895,7 +39895,7 @@ export namespace Prisma {
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    product_price?: IntFieldUpdateOperationsInput | number
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
@@ -39915,7 +39915,7 @@ export namespace Prisma {
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    product_price?: IntFieldUpdateOperationsInput | number
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
@@ -39934,7 +39934,7 @@ export namespace Prisma {
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
-    product_price: number
+    product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
@@ -39952,7 +39952,7 @@ export namespace Prisma {
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    product_price?: IntFieldUpdateOperationsInput | number
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
@@ -39971,7 +39971,7 @@ export namespace Prisma {
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    product_price?: IntFieldUpdateOperationsInput | number
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
@@ -45430,7 +45430,7 @@ export namespace Prisma {
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
-    product_price: number
+    product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
@@ -45448,7 +45448,7 @@ export namespace Prisma {
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
-    product_price: number
+    product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
@@ -45496,7 +45496,7 @@ export namespace Prisma {
     variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
-    product_price?: IntFilter<"TransactionDetail"> | number
+    product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
     product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
@@ -46293,7 +46293,7 @@ export namespace Prisma {
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
-    product_price: number
+    product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
@@ -46311,7 +46311,7 @@ export namespace Prisma {
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    product_price?: IntFieldUpdateOperationsInput | number
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
@@ -46329,7 +46329,7 @@ export namespace Prisma {
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    product_price?: IntFieldUpdateOperationsInput | number
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
@@ -46347,7 +46347,7 @@ export namespace Prisma {
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    product_price?: IntFieldUpdateOperationsInput | number
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null

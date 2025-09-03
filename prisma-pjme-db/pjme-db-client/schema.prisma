@@ -389,7 +389,7 @@ model TransactionDetail {
   variant_download_link        String?      @db.Text
   variant_file_access_password String?      @db.VarChar(100)
   product_currency_code        CurrencyCode
-  product_price                Int
+  product_price                Decimal      @db.Decimal(10, 2)
   product_discount             Int?         @db.SmallInt
   product_coupon_discount      Int?         @db.SmallInt
 
