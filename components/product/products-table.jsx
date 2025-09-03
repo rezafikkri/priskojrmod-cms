@@ -246,7 +246,11 @@ export default function ProductsTable() {
         />
       )}
 
-      <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: Pinned products will have higher display priority on the Products page and the homepage. A maximum of 4 products can be pinned.</p>
+      <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Notes</b>:</p>
+      <ul className="text-muted-foreground text-sm list-disc list-inside">
+        <li>Pinned products will have higher display priority on the Products page and the homepage. A maximum of 4 products can be pinned.</li>
+        <li>Prices are displayed using each currency’s standard number format.</li>
+      </ul>
     </>
   );
 }
