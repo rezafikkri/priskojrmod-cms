@@ -8,6 +8,7 @@ import {
 } from 'vitest';
 import { createPrivacyPolicy, updatePrivacyPolicy } from '@/lib/services/privacy-policy-service';
 import { Language } from '@/constants/enums';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -45,7 +46,7 @@ describe('createPrivacyPolicy function', () => {
           en: 'policy en',
         },
       })
-    ).rejects.toThrowError('Unauthenticated');
+    ).rejects.toThrowError(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.PrivacyPolicy.create).not.toHaveBeenCalled();
@@ -123,7 +124,7 @@ describe('updatePrivacyPolicy function', () => {
           en: 'updated policy en',
         },
       })
-    ).rejects.toThrowError('Unauthenticated');
+    ).rejects.toThrowError(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.PrivacyPolicy.update).not.toHaveBeenCalled();

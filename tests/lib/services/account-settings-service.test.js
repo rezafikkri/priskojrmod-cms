@@ -11,6 +11,7 @@ import {
   updateAccount,
   deleteDonationLink,
 } from '@/lib/services/account-settings-service';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -43,7 +44,7 @@ describe('getAccount function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(getAccount()).rejects.toThrow('Unauthenticated');
+    await expect(getAccount()).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Admin.findUnique).not.toHaveBeenCalled();
@@ -102,7 +103,7 @@ describe('updateAccount function', () => {
         { id: 1, currency_code: 'IDR', link: 'https://donate1.com' },
         { currency_code: 'USD', link: 'https://donate2.com' },
       ],
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Admin.update).not.toHaveBeenCalled();
@@ -176,7 +177,7 @@ describe('deleteDonationLink function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteDonationLink(1)).rejects.toThrow('Unauthenticated');
+    await expect(deleteDonationLink(1)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.DonationLink.delete).not.toHaveBeenCalled();

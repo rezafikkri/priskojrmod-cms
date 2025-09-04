@@ -11,6 +11,7 @@ import {
   deleteOwner,
   updateOwner,
 } from '@/lib/services/owner-service';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -47,7 +48,7 @@ describe('createOwner function', () => {
       last_name: 'Doe',
       sm_username: 'johndoe123',
       picture: 'https://example.com/pic.jpg',
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Owner.create).not.toHaveBeenCalled();
@@ -90,7 +91,7 @@ describe('deleteOwner function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteOwner(1)).rejects.toThrow('Unauthenticated');
+    await expect(deleteOwner(1)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Owner.delete).not.toHaveBeenCalled();
@@ -124,7 +125,7 @@ describe('updateOwner function', () => {
       last_name: 'Owner',
       sm_username: 'updatedowner',
       picture: 'https://updated.com/pic.jpg',
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Owner.update).not.toHaveBeenCalled();

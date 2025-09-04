@@ -15,6 +15,7 @@ import {
   getSecretKey,
   saveRegeneratedSecretKey,
 } from '@/lib/services/secret-key-service';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -58,7 +59,10 @@ describe('createSecretKey function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(createSecretKey({ key: 'test-key', app_name: 'test-app' })).rejects.toThrow('Unauthenticated');
+    await expect(createSecretKey({
+      key: 'test-key',
+      app_name: 'test-app',
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.SecretKeyLicense.create).not.toHaveBeenCalled();
@@ -105,7 +109,7 @@ describe('updateAppName function', () => {
         product_id: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
         name: 'New Product Name',
       }),
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.SecretKeyLicense.updateMany).not.toHaveBeenCalled();
@@ -136,7 +140,7 @@ describe('deleteSecretKey function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteSecretKey('1')).rejects.toThrow('Unauthenticated');
+    await expect(deleteSecretKey('1')).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.SecretKeyLicense.delete).not.toHaveBeenCalled();
@@ -172,7 +176,7 @@ describe('getSecretKeys function', () => {
     await expect(getSecretKeys({
       id: true,
       app_name: true,
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.SecretKeyLicense.findMany).not.toHaveBeenCalled();
@@ -213,7 +217,7 @@ describe('getSpecificSecretKey function', () => {
     await expect(getSpecificSecretKey(
       '1',
       { key: true },
-    )).rejects.toThrow('Unauthenticated');
+    )).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.SecretKeyLicense.findUnique).not.toHaveBeenCalled();
@@ -247,7 +251,7 @@ describe('getSecretKey function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(getSecretKey('123')).rejects.toThrow('Unauthenticated');
+    await expect(getSecretKey('123')).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.SecretKeyLicense.findUnique).not.toHaveBeenCalled();
@@ -289,7 +293,7 @@ describe('saveRegeneratedSecretKey function', () => {
     await expect(saveRegeneratedSecretKey({
       id: '123',
       key: 'a'.repeat(64),
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.SecretKeyLicense.update).not.toHaveBeenCalled();

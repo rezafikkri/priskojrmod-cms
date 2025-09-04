@@ -8,6 +8,7 @@ import {
 } from 'vitest';
 import { Language } from '@/constants/enums';
 import { createLicense, deleteLicense, updateLicense } from '@/lib/services/license-service';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -48,7 +49,7 @@ describe('createLicense function', () => {
         id: 'Konten',
         en: 'Content',
       },
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.License.create).not.toHaveBeenCalled();
@@ -123,7 +124,7 @@ describe('updateLicense function', () => {
         id: 'Konten ID',
         en: 'Content EN',
       },
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.License.update).not.toHaveBeenCalled();
@@ -193,7 +194,7 @@ describe('deleteLicense function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteLicense(1)).rejects.toThrow('Unauthenticated');
+    await expect(deleteLicense(1)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.License.delete).not.toHaveBeenCalled();
