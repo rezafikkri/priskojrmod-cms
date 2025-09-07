@@ -20,7 +20,6 @@ export async function GET(req) {
     id: true,
     email: true,
     code: true,
-    used_for_activate: true,
     is_revoked: true,
     created_at: true,
     updated_at: true,

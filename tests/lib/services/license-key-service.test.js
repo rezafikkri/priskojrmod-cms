@@ -281,7 +281,6 @@ describe('getLicenseKey function', () => {
       id: '33c993ad-097f-499d-9899-61186bb31b72',
       customer_id: '930ee77a-2b41-4099-87a7-28e1f309d73f',
       code: 'fake-key',
-      used_for_activate: true,
       secret_key: {
         app_name: 'app-name',
       },
@@ -296,7 +295,6 @@ describe('getLicenseKey function', () => {
         customer_id: true,
         code: true,
         email: true,
-        used_for_activate: true,
         secret_key: {
           select: {
             app_name: true,
@@ -318,7 +316,6 @@ describe('updateLicenseKey function', () => {
       updateLicenseKey({
         id: '3f50e7ba-9c3e-4cf1-8a98-77be2c32c71a',
         type: 'online',
-        used_for_activate: true,
         change_expiration_date: false,
       })
     ).rejects.toThrow(UnauthenticatedError);
@@ -341,7 +338,6 @@ describe('updateLicenseKey function', () => {
     await updateLicenseKey({
       id: '3f50e7ba-9c3e-4cf1-8a98-77be2c32c71a',
       type: 'online',
-      used_for_activate: true,
       change_expiration_date: true,
     });
 
@@ -352,7 +348,6 @@ describe('updateLicenseKey function', () => {
       },
       data: {
         updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
-        used_for_activate: true,
       },
     });
   });
