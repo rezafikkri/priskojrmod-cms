@@ -72,6 +72,17 @@ export default function EditForm({ licenseKey }) {
             <FormDescription>What’s displayed here is the customer who owns this license key. Updates to the customer’s details won’t affect the license key code.</FormDescription>
           </FormItem>
 
+          <FormItem>
+            <FormLabel className="text-base">Device Reset Status</FormLabel>
+            <p>{licenseKey.resetCount} / {process.env.NEXT_PUBLIC_MAX_DEVICE_RESETS_PER_PERIOD} resets used (Period: {licenseKey.resetPeriod})</p>
+            <FormDescription>
+              This status is managed automatically by the system (based on global time, UTC). It updates only when the customer resets their device binding via the <strong>My Products</strong> page.
+            </FormDescription>
+            <FormDescription>
+              The device can be reset directly using the action menu in the license key table, but this does <strong>not</strong> affect the reset count or period.
+            </FormDescription>
+          </FormItem>
+          
           <FormField
             control={form.control}
             name="change_expiration_date"
