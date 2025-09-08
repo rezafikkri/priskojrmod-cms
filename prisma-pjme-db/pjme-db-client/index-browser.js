@@ -188,14 +188,14 @@ exports.Prisma.ProductScalarFieldEnum = {
   admin_id: 'admin_id',
   owner_id: 'owner_id',
   license_id: 'license_id',
-  name: 'name',
-  slug: 'slug',
-  price_type: 'price_type',
+  drive_file_id: 'drive_file_id',
   download_link: 'download_link',
   is_published: 'is_published',
   is_pinned: 'is_pinned',
+  name: 'name',
+  slug: 'slug',
+  price_type: 'price_type',
   created_at: 'created_at',
-  released_at: 'released_at',
   updated_at: 'updated_at'
 };
 
@@ -203,7 +203,20 @@ exports.Prisma.ProductTranslationScalarFieldEnum = {
   id: 'id',
   product_id: 'product_id',
   language: 'language',
-  description: 'description',
+  description: 'description'
+};
+
+exports.Prisma.ProductVersionScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  version: 'version',
+  released_at: 'released_at'
+};
+
+exports.Prisma.ProductVersionTranslationScalarFieldEnum = {
+  id: 'id',
+  product_version_id: 'product_version_id',
+  language: 'language',
   changelog: 'changelog'
 };
 
@@ -235,7 +248,8 @@ exports.Prisma.ProductVariantScalarFieldEnum = {
   id: 'id',
   product_id: 'product_id',
   name: 'name',
-  download_link: 'download_link'
+  download_link: 'download_link',
+  file_access_password: 'file_access_password'
 };
 
 exports.Prisma.ProductPriceScalarFieldEnum = {
@@ -296,6 +310,39 @@ exports.Prisma.FaqTranslationScalarFieldEnum = {
   content: 'content'
 };
 
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  customer_id: 'customer_id',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  currency_code: 'currency_code',
+  total_amount: 'total_amount',
+  customer_name: 'customer_name',
+  customer_email: 'customer_email',
+  customer_phone_number: 'customer_phone_number'
+};
+
+exports.Prisma.TransactionDetailScalarFieldEnum = {
+  id: 'id',
+  transaction_id: 'transaction_id',
+  product_id: 'product_id',
+  product_price_id: 'product_price_id',
+  product_coupon_id: 'product_coupon_id',
+  quantity: 'quantity',
+  product_name: 'product_name',
+  product_variant: 'product_variant',
+  variant_download_link: 'variant_download_link',
+  variant_file_access_password: 'variant_file_access_password',
+  product_currency_code: 'product_currency_code',
+  product_price: 'product_price',
+  product_discount: 'product_discount',
+  product_coupon_discount: 'product_coupon_discount',
+  share_method: 'share_method',
+  shared_at: 'shared_at'
+};
+
 exports.Prisma.FeedbackScalarFieldEnum = {
   id: 'id',
   is_read: 'is_read',
@@ -350,6 +397,19 @@ exports.PriceType = exports.$Enums.PriceType = {
   free: 'free'
 };
 
+exports.TransactionStatus = exports.$Enums.TransactionStatus = {
+  pending: 'pending',
+  paid: 'paid',
+  cancelled: 'cancelled',
+  refund: 'refund'
+};
+
+exports.ShareMethod = exports.$Enums.ShareMethod = {
+  download_link: 'download_link',
+  drive_share: 'drive_share',
+  manual_required: 'manual_required'
+};
+
 exports.Prisma.ModelName = {
   Admin: 'Admin',
   DonationLink: 'DonationLink',
@@ -360,6 +420,8 @@ exports.Prisma.ModelName = {
   Category: 'Category',
   Product: 'Product',
   ProductTranslation: 'ProductTranslation',
+  ProductVersion: 'ProductVersion',
+  ProductVersionTranslation: 'ProductVersionTranslation',
   ProductDiscount: 'ProductDiscount',
   ProductCoupon: 'ProductCoupon',
   ProductImage: 'ProductImage',
@@ -373,6 +435,8 @@ exports.Prisma.ModelName = {
   AboutUsTranslation: 'AboutUsTranslation',
   Faq: 'Faq',
   FaqTranslation: 'FaqTranslation',
+  Transaction: 'Transaction',
+  TransactionDetail: 'TransactionDetail',
   Feedback: 'Feedback',
   Testimonial: 'Testimonial',
   TestimonialTranslation: 'TestimonialTranslation'

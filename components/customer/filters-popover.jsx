@@ -55,7 +55,7 @@ export default function FiltersPopover({
       >
         <div className="space-y-2 flex items-start gap-4"> 
           <div className="flex-1"> 
-            <Label className="text-base mb-1.5">Status</Label> 
+            <Label className="text-base mb-1.5">Banned</Label> 
             <p className="text-muted-foreground text-sm">Filter by banned status.</p> 
           </div> 
           <Select
@@ -67,8 +67,8 @@ export default function FiltersPopover({
             </SelectTrigger> 
             <SelectContent> 
               <SelectGroup> 
-                <SelectItem className="text-base" value={false}>Active</SelectItem> 
-                <SelectItem className="text-base" value={true}>Banned</SelectItem> 
+                <SelectItem className="text-base" value={false}>No</SelectItem> 
+                <SelectItem className="text-base" value={true}>Yes</SelectItem> 
               </SelectGroup> 
             </SelectContent> 
           </Select> 

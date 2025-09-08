@@ -10,7 +10,7 @@ import TooltipWrapper from '../ui/tooltip-wrapper';
 export default function ImageGrid({
   form,
   images,
-  basic,
+  productId,
   handlers,
 }) {
   const {
@@ -44,7 +44,7 @@ export default function ImageGrid({
       // set pending state for disabled prev next button and show loading
       onIncrementPending();
       setDeletingIds([...deletingIds, dbId]);
-      const removeRes = await removeProductImage(dbId, basic.id);
+      const removeRes = await removeProductImage(dbId, productId);
 
       if (removeRes.status === 'success') {
         const currentImages = form.getValues('images');

@@ -66,11 +66,11 @@ model Owner {
 
 model Customer {
   id           String  @id @default(uuid(7)) @db.Uuid
-  oauth_id     String?  @db.VarChar(255) @unique 
+  oauth_id     String? @unique @db.VarChar(255)
   is_banned    Boolean @default(false)
   first_name   String  @db.VarChar(100)
   last_name    String  @db.VarChar(100)
-  email        String  @db.VarChar(254) @unique
+  email        String  @unique @db.VarChar(254)
   phone_number String? @db.VarChar(20)
   picture      String? @db.VarChar(255)
   last_active  BigInt?
@@ -123,20 +123,22 @@ enum PriceType {
 }
 
 model Product {
-  id            String    @id @default(uuid(7)) @db.Uuid
-  category_id   Int
-  admin_id      String    @db.VarChar(255)
-  owner_id      Int
-  license_id    Int
-  name          String    @db.VarChar(150)
-  slug          String    @unique @db.VarChar(150)
-  price_type    PriceType
-  download_link String?   @db.VarChar(255)
-  is_published  Boolean   @default(false)
-  is_pinned     Boolean   @default(false)
-  created_at    BigInt
-  released_at   BigInt
-  updated_at    BigInt
+  id          String @id @default(uuid(7)) @db.Uuid
+  category_id Int
+  admin_id    String @db.VarChar(255)
+  owner_id    Int
+  license_id  Int
+
+  drive_file_id String?
+  download_link String?
+
+  is_published Boolean   @default(false)
+  is_pinned    Boolean   @default(false)
+  name         String    @db.VarChar(150)
+  slug         String    @unique @db.VarChar(150)
+  price_type   PriceType
+  created_at   BigInt
+  updated_at   BigInt
 
   admin    Admin    @relation(fields: [admin_id], references: [id])
   category Category @relation(fields: [category_id], references: [id])
@@ -144,6 +146,7 @@ model Product {
   license  License  @relation(fields: [license_id], references: [id])
 
   translations ProductTranslation[]
+  versions     ProductVersion[]
   discount     ProductDiscount?
   coupon       ProductCoupon?
   images       ProductImage[]
@@ -157,11 +160,34 @@ model ProductTranslation {
   product_id  String   @db.Uuid
   language    Language
   description String
-  changelog   String?
 
   product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
   @@map("product_translations")
+}
+
+model ProductVersion {
+  id          String @id @default(uuid(7)) @db.Uuid
+  product_id  String @db.Uuid
+  version     String @db.VarChar(50)
+  released_at BigInt
+
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  translations ProductVersionTranslation[]
+
+  @@map("product_versions")
+}
+
+model ProductVersionTranslation {
+  id                 String   @id @default(uuid(7)) @db.Uuid
+  product_version_id String   @db.Uuid
+  language           Language
+  changelog          String?
+
+  productVersion ProductVersion @relation(fields: [product_version_id], references: [id], onDelete: Cascade)
+
+  @@map("product_version_translations")
 }
 
 model ProductDiscount {
@@ -190,7 +216,7 @@ model ProductCoupon {
 model ProductImage {
   id           String  @id @default(uuid(7)) @db.Uuid
   product_id   String  @db.Uuid
-  url          String  @db.VarChar(255)
+  url          String
   is_thumbnail Boolean
   width        Int     @db.SmallInt
   height       Int     @db.SmallInt
@@ -201,10 +227,11 @@ model ProductImage {
 }
 
 model ProductVariant {
-  id            String  @id @default(uuid(7)) @db.Uuid
-  product_id    String  @db.Uuid
-  name          String  @db.VarChar(100)
-  download_link String? @db.VarChar(255)
+  id                   String  @id @default(uuid(7)) @db.Uuid
+  product_id           String  @db.Uuid
+  name                 String  @db.VarChar(100)
+  download_link        String?
+  file_access_password String? @db.VarChar(100)
 
   product Product        @relation(fields: [product_id], references: [id], onDelete: Cascade)
   prices  ProductPrice[]
@@ -216,7 +243,7 @@ model ProductPrice {
   id            String       @id @default(uuid(7)) @db.Uuid
   variant_id    String       @db.Uuid
   currency_code CurrencyCode
-  price         Int
+  price         Decimal      @db.Decimal(10, 2)
 
   variant ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
 
@@ -313,22 +340,83 @@ model FaqTranslation {
   @@map("faq_translations")
 }
 
+enum TransactionStatus {
+  pending
+  paid
+  cancelled
+  refund
+
+  @@map("transaction_status")
+}
+
+enum ShareMethod {
+  download_link
+  drive_share
+  manual_required
+
+  @@map("share_method")
+}
+
+model Transaction {
+  id            String            @id @db.Uuid
+  code          String            @unique @db.VarChar(32)
+  customer_id   String?           @db.Uuid
+  status        TransactionStatus
+  created_at    BigInt
+  updated_at    BigInt
+  currency_code CurrencyCode
+  total_amount  Int
+
+  customer_name         String  @db.VarChar(200)
+  customer_email        String  @db.VarChar(254)
+  customer_phone_number String? @db.VarChar(20)
+
+  details TransactionDetail[]
+
+  @@map("transactions")
+}
+
+model TransactionDetail {
+  id                String  @id @db.Uuid
+  transaction_id    String  @db.Uuid
+  product_id        String? @db.Uuid
+  product_price_id  String? @db.Uuid
+  product_coupon_id Int?    @db.SmallInt
+  quantity          Int     @db.SmallInt
+
+  product_name                 String       @db.VarChar(150)
+  product_variant              String       @db.VarChar(100)
+  variant_download_link        String?      @db.Text
+  variant_file_access_password String?      @db.VarChar(100)
+  product_currency_code        CurrencyCode
+  product_price                Decimal      @db.Decimal(10, 2)
+  product_discount             Int?         @db.SmallInt
+  product_coupon_discount      Int?         @db.SmallInt
+
+  share_method ShareMethod?
+  shared_at    BigInt?
+
+  transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+
+  @@map("transaction_details")
+}
+
 model Feedback {
   id         String  @id @default(uuid(7)) @db.Uuid
   is_read    Boolean @default(false)
   name       String? @db.VarChar(100)
   email      String? @db.VarChar(254)
   message    String
-  created_at BigInt @unique
+  created_at BigInt  @unique
 
   @@map("feedbacks")
 }
 
 model Testimonial {
-  id          Int     @id @default(autoincrement()) @db.SmallInt
-  picture     String  @db.VarChar(255)
-  name        String  @db.VarChar(100)
-  sm_username String  @db.VarChar(100)
+  id          Int    @id @default(autoincrement()) @db.SmallInt
+  picture     String @db.VarChar(255)
+  name        String @db.VarChar(100)
+  sm_username String @db.VarChar(100)
   created_at  BigInt
   updated_at  BigInt
 
@@ -338,12 +426,12 @@ model Testimonial {
 }
 
 model TestimonialTranslation {
-  id              Int     @id @default(autoincrement()) @db.SmallInt
-  testimonial_id  Int     @db.SmallInt
-  language        Language
-  message         String
+  id             Int      @id @default(autoincrement()) @db.SmallInt
+  testimonial_id Int      @db.SmallInt
+  language       Language
+  message        String
 
-  testimonial     Testimonial @relation(fields: [testimonial_id], references: [id], onDelete: Cascade)
+  testimonial Testimonial @relation(fields: [testimonial_id], references: [id], onDelete: Cascade)
 
   @@map("testimonial_translations")
 }

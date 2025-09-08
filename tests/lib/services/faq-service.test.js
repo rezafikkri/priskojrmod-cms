@@ -12,6 +12,7 @@ import {
   updateFaq,
 } from '@/lib/services/faq-service';
 import { Language } from '@/constants/enums';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -52,7 +53,7 @@ describe('createFaq function', () => {
         id: 'konten',
         en: 'content',
       },
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Faq.create).not.toHaveBeenCalled();
@@ -103,7 +104,7 @@ describe('deleteFaq function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteFaq(1)).rejects.toThrow('Unauthenticated');
+    await expect(deleteFaq(1)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Faq.delete).not.toHaveBeenCalled();
@@ -131,7 +132,7 @@ describe('updateFaq function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(updateFaq({})).rejects.toThrow('Unauthenticated');
+    await expect(updateFaq({})).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Faq.update).not.toHaveBeenCalled();

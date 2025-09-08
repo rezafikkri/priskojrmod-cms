@@ -11,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -37,7 +36,6 @@ export default function CreateForm({ secretKeys }) {
     defaultValues: {
       secret_key_id: '',
       customer_id: '',
-      type: 'online',
     },
   });
 
@@ -94,38 +92,6 @@ export default function CreateForm({ secretKeys }) {
 
           <CustomerCombobox form={form} disabled={isSubmitting} />
           
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel className="text-base">Type</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    className="flex space-x-2"
-                    disabled={isSubmitting}
-                  >
-                    <FormItem className="flex items-center space-x-1 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="online" />
-                      </FormControl>
-                      <FormLabel className="font-normal text-base">Online</FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-1 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="offline" />
-                      </FormControl>
-                      <FormLabel className="font-normal text-base">Offline</FormLabel>
-                    </FormItem>
-                  </RadioGroup>
-                </FormControl>
-                <FormDescription>Select activation type: online or offline.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <Button asChild variant="outline" className="me-3 mb-0 h-auto inline-block text-base px-3 py-1.5">
             <Link href="/license-key"><ArrowLeft className="icon" /> Back</Link>
           </Button>

@@ -59,6 +59,16 @@ export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
  */
 export type ProductTranslation = $Result.DefaultSelection<Prisma.$ProductTranslationPayload>
 /**
+ * Model ProductVersion
+ * 
+ */
+export type ProductVersion = $Result.DefaultSelection<Prisma.$ProductVersionPayload>
+/**
+ * Model ProductVersionTranslation
+ * 
+ */
+export type ProductVersionTranslation = $Result.DefaultSelection<Prisma.$ProductVersionTranslationPayload>
+/**
  * Model ProductDiscount
  * 
  */
@@ -124,6 +134,16 @@ export type Faq = $Result.DefaultSelection<Prisma.$FaqPayload>
  */
 export type FaqTranslation = $Result.DefaultSelection<Prisma.$FaqTranslationPayload>
 /**
+ * Model Transaction
+ * 
+ */
+export type Transaction = $Result.DefaultSelection<Prisma.$TransactionPayload>
+/**
+ * Model TransactionDetail
+ * 
+ */
+export type TransactionDetail = $Result.DefaultSelection<Prisma.$TransactionDetailPayload>
+/**
  * Model Feedback
  * 
  */
@@ -166,6 +186,25 @@ export const Language: {
 
 export type Language = (typeof Language)[keyof typeof Language]
 
+
+export const TransactionStatus: {
+  pending: 'pending',
+  paid: 'paid',
+  cancelled: 'cancelled',
+  refund: 'refund'
+};
+
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
+
+
+export const ShareMethod: {
+  download_link: 'download_link',
+  drive_share: 'drive_share',
+  manual_required: 'manual_required'
+};
+
+export type ShareMethod = (typeof ShareMethod)[keyof typeof ShareMethod]
+
 }
 
 export type CurrencyCode = $Enums.CurrencyCode
@@ -179,6 +218,14 @@ export const PriceType: typeof $Enums.PriceType
 export type Language = $Enums.Language
 
 export const Language: typeof $Enums.Language
+
+export type TransactionStatus = $Enums.TransactionStatus
+
+export const TransactionStatus: typeof $Enums.TransactionStatus
+
+export type ShareMethod = $Enums.ShareMethod
+
+export const ShareMethod: typeof $Enums.ShareMethod
 
 /**
  * ##  Prisma Client ʲˢ
@@ -396,6 +443,26 @@ export class PrismaClient<
   get productTranslation(): Prisma.ProductTranslationDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.productVersion`: Exposes CRUD operations for the **ProductVersion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductVersions
+    * const productVersions = await prisma.productVersion.findMany()
+    * ```
+    */
+  get productVersion(): Prisma.ProductVersionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.productVersionTranslation`: Exposes CRUD operations for the **ProductVersionTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductVersionTranslations
+    * const productVersionTranslations = await prisma.productVersionTranslation.findMany()
+    * ```
+    */
+  get productVersionTranslation(): Prisma.ProductVersionTranslationDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.productDiscount`: Exposes CRUD operations for the **ProductDiscount** model.
     * Example usage:
     * ```ts
@@ -524,6 +591,26 @@ export class PrismaClient<
     * ```
     */
   get faqTranslation(): Prisma.FaqTranslationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.transaction`: Exposes CRUD operations for the **Transaction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Transactions
+    * const transactions = await prisma.transaction.findMany()
+    * ```
+    */
+  get transaction(): Prisma.TransactionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.transactionDetail`: Exposes CRUD operations for the **TransactionDetail** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TransactionDetails
+    * const transactionDetails = await prisma.transactionDetail.findMany()
+    * ```
+    */
+  get transactionDetail(): Prisma.TransactionDetailDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.feedback`: Exposes CRUD operations for the **Feedback** model.
@@ -1003,6 +1090,8 @@ export namespace Prisma {
     Category: 'Category',
     Product: 'Product',
     ProductTranslation: 'ProductTranslation',
+    ProductVersion: 'ProductVersion',
+    ProductVersionTranslation: 'ProductVersionTranslation',
     ProductDiscount: 'ProductDiscount',
     ProductCoupon: 'ProductCoupon',
     ProductImage: 'ProductImage',
@@ -1016,6 +1105,8 @@ export namespace Prisma {
     AboutUsTranslation: 'AboutUsTranslation',
     Faq: 'Faq',
     FaqTranslation: 'FaqTranslation',
+    Transaction: 'Transaction',
+    TransactionDetail: 'TransactionDetail',
     Feedback: 'Feedback',
     Testimonial: 'Testimonial',
     TestimonialTranslation: 'TestimonialTranslation'
@@ -1037,7 +1128,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "donationLink" | "owner" | "customer" | "license" | "licenseTranslation" | "category" | "product" | "productTranslation" | "productDiscount" | "productCoupon" | "productImage" | "productVariant" | "productPrice" | "termsOfService" | "termsOfServiceTranslation" | "privacyPolicy" | "privacyPolicyTranslation" | "aboutUs" | "aboutUsTranslation" | "faq" | "faqTranslation" | "feedback" | "testimonial" | "testimonialTranslation"
+      modelProps: "admin" | "donationLink" | "owner" | "customer" | "license" | "licenseTranslation" | "category" | "product" | "productTranslation" | "productVersion" | "productVersionTranslation" | "productDiscount" | "productCoupon" | "productImage" | "productVariant" | "productPrice" | "termsOfService" | "termsOfServiceTranslation" | "privacyPolicy" | "privacyPolicyTranslation" | "aboutUs" | "aboutUsTranslation" | "faq" | "faqTranslation" | "transaction" | "transactionDetail" | "feedback" | "testimonial" | "testimonialTranslation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1704,6 +1795,154 @@ export namespace Prisma {
           count: {
             args: Prisma.ProductTranslationCountArgs<ExtArgs>
             result: $Utils.Optional<ProductTranslationCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductVersion: {
+        payload: Prisma.$ProductVersionPayload<ExtArgs>
+        fields: Prisma.ProductVersionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductVersionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductVersionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductVersionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductVersionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload>
+          }
+          findMany: {
+            args: Prisma.ProductVersionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload>[]
+          }
+          create: {
+            args: Prisma.ProductVersionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload>
+          }
+          createMany: {
+            args: Prisma.ProductVersionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductVersionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductVersionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload>
+          }
+          update: {
+            args: Prisma.ProductVersionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductVersionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductVersionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductVersionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductVersionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductVersionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductVersion>
+          }
+          groupBy: {
+            args: Prisma.ProductVersionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductVersionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductVersionCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductVersionCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductVersionTranslation: {
+        payload: Prisma.$ProductVersionTranslationPayload<ExtArgs>
+        fields: Prisma.ProductVersionTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductVersionTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductVersionTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductVersionTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductVersionTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.ProductVersionTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.ProductVersionTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.ProductVersionTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductVersionTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductVersionTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload>
+          }
+          update: {
+            args: Prisma.ProductVersionTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductVersionTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductVersionTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductVersionTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductVersionTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductVersionTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductVersionTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductVersionTranslation>
+          }
+          groupBy: {
+            args: Prisma.ProductVersionTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductVersionTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductVersionTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductVersionTranslationCountAggregateOutputType> | number
           }
         }
       }
@@ -2669,6 +2908,154 @@ export namespace Prisma {
           }
         }
       }
+      Transaction: {
+        payload: Prisma.$TransactionPayload<ExtArgs>
+        fields: Prisma.TransactionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TransactionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TransactionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findFirst: {
+            args: Prisma.TransactionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TransactionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findMany: {
+            args: Prisma.TransactionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          create: {
+            args: Prisma.TransactionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          createMany: {
+            args: Prisma.TransactionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TransactionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          delete: {
+            args: Prisma.TransactionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          update: {
+            args: Prisma.TransactionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          deleteMany: {
+            args: Prisma.TransactionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TransactionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TransactionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          upsert: {
+            args: Prisma.TransactionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          aggregate: {
+            args: Prisma.TransactionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTransaction>
+          }
+          groupBy: {
+            args: Prisma.TransactionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TransactionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TransactionCountArgs<ExtArgs>
+            result: $Utils.Optional<TransactionCountAggregateOutputType> | number
+          }
+        }
+      }
+      TransactionDetail: {
+        payload: Prisma.$TransactionDetailPayload<ExtArgs>
+        fields: Prisma.TransactionDetailFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TransactionDetailFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TransactionDetailFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload>
+          }
+          findFirst: {
+            args: Prisma.TransactionDetailFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TransactionDetailFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload>
+          }
+          findMany: {
+            args: Prisma.TransactionDetailFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload>[]
+          }
+          create: {
+            args: Prisma.TransactionDetailCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload>
+          }
+          createMany: {
+            args: Prisma.TransactionDetailCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TransactionDetailCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload>[]
+          }
+          delete: {
+            args: Prisma.TransactionDetailDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload>
+          }
+          update: {
+            args: Prisma.TransactionDetailUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload>
+          }
+          deleteMany: {
+            args: Prisma.TransactionDetailDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TransactionDetailUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TransactionDetailUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload>[]
+          }
+          upsert: {
+            args: Prisma.TransactionDetailUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionDetailPayload>
+          }
+          aggregate: {
+            args: Prisma.TransactionDetailAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTransactionDetail>
+          }
+          groupBy: {
+            args: Prisma.TransactionDetailGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TransactionDetailGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TransactionDetailCountArgs<ExtArgs>
+            result: $Utils.Optional<TransactionDetailCountAggregateOutputType> | number
+          }
+        }
+      }
       Feedback: {
         payload: Prisma.$FeedbackPayload<ExtArgs>
         fields: Prisma.FeedbackFieldRefs
@@ -2984,6 +3371,8 @@ export namespace Prisma {
     category?: CategoryOmit
     product?: ProductOmit
     productTranslation?: ProductTranslationOmit
+    productVersion?: ProductVersionOmit
+    productVersionTranslation?: ProductVersionTranslationOmit
     productDiscount?: ProductDiscountOmit
     productCoupon?: ProductCouponOmit
     productImage?: ProductImageOmit
@@ -2997,6 +3386,8 @@ export namespace Prisma {
     aboutUsTranslation?: AboutUsTranslationOmit
     faq?: FaqOmit
     faqTranslation?: FaqTranslationOmit
+    transaction?: TransactionOmit
+    transactionDetail?: TransactionDetailOmit
     feedback?: FeedbackOmit
     testimonial?: TestimonialOmit
     testimonialTranslation?: TestimonialTranslationOmit
@@ -3237,12 +3628,14 @@ export namespace Prisma {
 
   export type ProductCountOutputType = {
     translations: number
+    versions: number
     images: number
     variants: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     translations?: boolean | ProductCountOutputTypeCountTranslationsArgs
+    versions?: boolean | ProductCountOutputTypeCountVersionsArgs
     images?: boolean | ProductCountOutputTypeCountImagesArgs
     variants?: boolean | ProductCountOutputTypeCountVariantsArgs
   }
@@ -3268,6 +3661,13 @@ export namespace Prisma {
   /**
    * ProductCountOutputType without action
    */
+  export type ProductCountOutputTypeCountVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductVersionWhereInput
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
   export type ProductCountOutputTypeCountImagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductImageWhereInput
   }
@@ -3277,6 +3677,37 @@ export namespace Prisma {
    */
   export type ProductCountOutputTypeCountVariantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductVariantWhereInput
+  }
+
+
+  /**
+   * Count Type ProductVersionCountOutputType
+   */
+
+  export type ProductVersionCountOutputType = {
+    translations: number
+  }
+
+  export type ProductVersionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | ProductVersionCountOutputTypeCountTranslationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductVersionCountOutputType without action
+   */
+  export type ProductVersionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionCountOutputType
+     */
+    select?: ProductVersionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductVersionCountOutputType without action
+   */
+  export type ProductVersionCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductVersionTranslationWhereInput
   }
 
 
@@ -3432,6 +3863,37 @@ export namespace Prisma {
    */
   export type FaqCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FaqTranslationWhereInput
+  }
+
+
+  /**
+   * Count Type TransactionCountOutputType
+   */
+
+  export type TransactionCountOutputType = {
+    details: number
+  }
+
+  export type TransactionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    details?: boolean | TransactionCountOutputTypeCountDetailsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TransactionCountOutputType without action
+   */
+  export type TransactionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionCountOutputType
+     */
+    select?: TransactionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TransactionCountOutputType without action
+   */
+  export type TransactionCountOutputTypeCountDetailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionDetailWhereInput
   }
 
 
@@ -11252,7 +11714,6 @@ export namespace Prisma {
     owner_id: number | null
     license_id: number | null
     created_at: number | null
-    released_at: number | null
     updated_at: number | null
   }
 
@@ -11261,7 +11722,6 @@ export namespace Prisma {
     owner_id: number | null
     license_id: number | null
     created_at: bigint | null
-    released_at: bigint | null
     updated_at: bigint | null
   }
 
@@ -11271,14 +11731,14 @@ export namespace Prisma {
     admin_id: string | null
     owner_id: number | null
     license_id: number | null
-    name: string | null
-    slug: string | null
-    price_type: $Enums.PriceType | null
+    drive_file_id: string | null
     download_link: string | null
     is_published: boolean | null
     is_pinned: boolean | null
+    name: string | null
+    slug: string | null
+    price_type: $Enums.PriceType | null
     created_at: bigint | null
-    released_at: bigint | null
     updated_at: bigint | null
   }
 
@@ -11288,14 +11748,14 @@ export namespace Prisma {
     admin_id: string | null
     owner_id: number | null
     license_id: number | null
-    name: string | null
-    slug: string | null
-    price_type: $Enums.PriceType | null
+    drive_file_id: string | null
     download_link: string | null
     is_published: boolean | null
     is_pinned: boolean | null
+    name: string | null
+    slug: string | null
+    price_type: $Enums.PriceType | null
     created_at: bigint | null
-    released_at: bigint | null
     updated_at: bigint | null
   }
 
@@ -11305,14 +11765,14 @@ export namespace Prisma {
     admin_id: number
     owner_id: number
     license_id: number
-    name: number
-    slug: number
-    price_type: number
+    drive_file_id: number
     download_link: number
     is_published: number
     is_pinned: number
+    name: number
+    slug: number
+    price_type: number
     created_at: number
-    released_at: number
     updated_at: number
     _all: number
   }
@@ -11323,7 +11783,6 @@ export namespace Prisma {
     owner_id?: true
     license_id?: true
     created_at?: true
-    released_at?: true
     updated_at?: true
   }
 
@@ -11332,7 +11791,6 @@ export namespace Prisma {
     owner_id?: true
     license_id?: true
     created_at?: true
-    released_at?: true
     updated_at?: true
   }
 
@@ -11342,14 +11800,14 @@ export namespace Prisma {
     admin_id?: true
     owner_id?: true
     license_id?: true
-    name?: true
-    slug?: true
-    price_type?: true
+    drive_file_id?: true
     download_link?: true
     is_published?: true
     is_pinned?: true
+    name?: true
+    slug?: true
+    price_type?: true
     created_at?: true
-    released_at?: true
     updated_at?: true
   }
 
@@ -11359,14 +11817,14 @@ export namespace Prisma {
     admin_id?: true
     owner_id?: true
     license_id?: true
-    name?: true
-    slug?: true
-    price_type?: true
+    drive_file_id?: true
     download_link?: true
     is_published?: true
     is_pinned?: true
+    name?: true
+    slug?: true
+    price_type?: true
     created_at?: true
-    released_at?: true
     updated_at?: true
   }
 
@@ -11376,14 +11834,14 @@ export namespace Prisma {
     admin_id?: true
     owner_id?: true
     license_id?: true
-    name?: true
-    slug?: true
-    price_type?: true
+    drive_file_id?: true
     download_link?: true
     is_published?: true
     is_pinned?: true
+    name?: true
+    slug?: true
+    price_type?: true
     created_at?: true
-    released_at?: true
     updated_at?: true
     _all?: true
   }
@@ -11480,14 +11938,14 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id: string | null
     download_link: string | null
     is_published: boolean
     is_pinned: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint
-    released_at: bigint
     updated_at: bigint
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
@@ -11516,20 +11974,21 @@ export namespace Prisma {
     admin_id?: boolean
     owner_id?: boolean
     license_id?: boolean
-    name?: boolean
-    slug?: boolean
-    price_type?: boolean
+    drive_file_id?: boolean
     download_link?: boolean
     is_published?: boolean
     is_pinned?: boolean
+    name?: boolean
+    slug?: boolean
+    price_type?: boolean
     created_at?: boolean
-    released_at?: boolean
     updated_at?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     owner?: boolean | OwnerDefaultArgs<ExtArgs>
     license?: boolean | LicenseDefaultArgs<ExtArgs>
     translations?: boolean | Product$translationsArgs<ExtArgs>
+    versions?: boolean | Product$versionsArgs<ExtArgs>
     discount?: boolean | Product$discountArgs<ExtArgs>
     coupon?: boolean | Product$couponArgs<ExtArgs>
     images?: boolean | Product$imagesArgs<ExtArgs>
@@ -11543,14 +12002,14 @@ export namespace Prisma {
     admin_id?: boolean
     owner_id?: boolean
     license_id?: boolean
-    name?: boolean
-    slug?: boolean
-    price_type?: boolean
+    drive_file_id?: boolean
     download_link?: boolean
     is_published?: boolean
     is_pinned?: boolean
+    name?: boolean
+    slug?: boolean
+    price_type?: boolean
     created_at?: boolean
-    released_at?: boolean
     updated_at?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -11564,14 +12023,14 @@ export namespace Prisma {
     admin_id?: boolean
     owner_id?: boolean
     license_id?: boolean
-    name?: boolean
-    slug?: boolean
-    price_type?: boolean
+    drive_file_id?: boolean
     download_link?: boolean
     is_published?: boolean
     is_pinned?: boolean
+    name?: boolean
+    slug?: boolean
+    price_type?: boolean
     created_at?: boolean
-    released_at?: boolean
     updated_at?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -11585,24 +12044,25 @@ export namespace Prisma {
     admin_id?: boolean
     owner_id?: boolean
     license_id?: boolean
-    name?: boolean
-    slug?: boolean
-    price_type?: boolean
+    drive_file_id?: boolean
     download_link?: boolean
     is_published?: boolean
     is_pinned?: boolean
+    name?: boolean
+    slug?: boolean
+    price_type?: boolean
     created_at?: boolean
-    released_at?: boolean
     updated_at?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category_id" | "admin_id" | "owner_id" | "license_id" | "name" | "slug" | "price_type" | "download_link" | "is_published" | "is_pinned" | "created_at" | "released_at" | "updated_at", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category_id" | "admin_id" | "owner_id" | "license_id" | "drive_file_id" | "download_link" | "is_published" | "is_pinned" | "name" | "slug" | "price_type" | "created_at" | "updated_at", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     owner?: boolean | OwnerDefaultArgs<ExtArgs>
     license?: boolean | LicenseDefaultArgs<ExtArgs>
     translations?: boolean | Product$translationsArgs<ExtArgs>
+    versions?: boolean | Product$versionsArgs<ExtArgs>
     discount?: boolean | Product$discountArgs<ExtArgs>
     coupon?: boolean | Product$couponArgs<ExtArgs>
     images?: boolean | Product$imagesArgs<ExtArgs>
@@ -11630,6 +12090,7 @@ export namespace Prisma {
       owner: Prisma.$OwnerPayload<ExtArgs>
       license: Prisma.$LicensePayload<ExtArgs>
       translations: Prisma.$ProductTranslationPayload<ExtArgs>[]
+      versions: Prisma.$ProductVersionPayload<ExtArgs>[]
       discount: Prisma.$ProductDiscountPayload<ExtArgs> | null
       coupon: Prisma.$ProductCouponPayload<ExtArgs> | null
       images: Prisma.$ProductImagePayload<ExtArgs>[]
@@ -11641,14 +12102,14 @@ export namespace Prisma {
       admin_id: string
       owner_id: number
       license_id: number
-      name: string
-      slug: string
-      price_type: $Enums.PriceType
+      drive_file_id: string | null
       download_link: string | null
       is_published: boolean
       is_pinned: boolean
+      name: string
+      slug: string
+      price_type: $Enums.PriceType
       created_at: bigint
-      released_at: bigint
       updated_at: bigint
     }, ExtArgs["result"]["product"]>
     composites: {}
@@ -12049,6 +12510,7 @@ export namespace Prisma {
     owner<T extends OwnerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OwnerDefaultArgs<ExtArgs>>): Prisma__OwnerClient<$Result.GetResult<Prisma.$OwnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     license<T extends LicenseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LicenseDefaultArgs<ExtArgs>>): Prisma__LicenseClient<$Result.GetResult<Prisma.$LicensePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     translations<T extends Product$translationsArgs<ExtArgs> = {}>(args?: Subset<T, Product$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    versions<T extends Product$versionsArgs<ExtArgs> = {}>(args?: Subset<T, Product$versionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     discount<T extends Product$discountArgs<ExtArgs> = {}>(args?: Subset<T, Product$discountArgs<ExtArgs>>): Prisma__ProductDiscountClient<$Result.GetResult<Prisma.$ProductDiscountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     coupon<T extends Product$couponArgs<ExtArgs> = {}>(args?: Subset<T, Product$couponArgs<ExtArgs>>): Prisma__ProductCouponClient<$Result.GetResult<Prisma.$ProductCouponPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     images<T extends Product$imagesArgs<ExtArgs> = {}>(args?: Subset<T, Product$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -12087,14 +12549,14 @@ export namespace Prisma {
     readonly admin_id: FieldRef<"Product", 'String'>
     readonly owner_id: FieldRef<"Product", 'Int'>
     readonly license_id: FieldRef<"Product", 'Int'>
-    readonly name: FieldRef<"Product", 'String'>
-    readonly slug: FieldRef<"Product", 'String'>
-    readonly price_type: FieldRef<"Product", 'PriceType'>
+    readonly drive_file_id: FieldRef<"Product", 'String'>
     readonly download_link: FieldRef<"Product", 'String'>
     readonly is_published: FieldRef<"Product", 'Boolean'>
     readonly is_pinned: FieldRef<"Product", 'Boolean'>
+    readonly name: FieldRef<"Product", 'String'>
+    readonly slug: FieldRef<"Product", 'String'>
+    readonly price_type: FieldRef<"Product", 'PriceType'>
     readonly created_at: FieldRef<"Product", 'BigInt'>
-    readonly released_at: FieldRef<"Product", 'BigInt'>
     readonly updated_at: FieldRef<"Product", 'BigInt'>
   }
     
@@ -12516,6 +12978,30 @@ export namespace Prisma {
   }
 
   /**
+   * Product.versions
+   */
+  export type Product$versionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    where?: ProductVersionWhereInput
+    orderBy?: ProductVersionOrderByWithRelationInput | ProductVersionOrderByWithRelationInput[]
+    cursor?: ProductVersionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductVersionScalarFieldEnum | ProductVersionScalarFieldEnum[]
+  }
+
+  /**
    * Product.discount
    */
   export type Product$discountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12635,7 +13121,6 @@ export namespace Prisma {
     product_id: string | null
     language: $Enums.Language | null
     description: string | null
-    changelog: string | null
   }
 
   export type ProductTranslationMaxAggregateOutputType = {
@@ -12643,7 +13128,6 @@ export namespace Prisma {
     product_id: string | null
     language: $Enums.Language | null
     description: string | null
-    changelog: string | null
   }
 
   export type ProductTranslationCountAggregateOutputType = {
@@ -12651,7 +13135,6 @@ export namespace Prisma {
     product_id: number
     language: number
     description: number
-    changelog: number
     _all: number
   }
 
@@ -12661,7 +13144,6 @@ export namespace Prisma {
     product_id?: true
     language?: true
     description?: true
-    changelog?: true
   }
 
   export type ProductTranslationMaxAggregateInputType = {
@@ -12669,7 +13151,6 @@ export namespace Prisma {
     product_id?: true
     language?: true
     description?: true
-    changelog?: true
   }
 
   export type ProductTranslationCountAggregateInputType = {
@@ -12677,7 +13158,6 @@ export namespace Prisma {
     product_id?: true
     language?: true
     description?: true
-    changelog?: true
     _all?: true
   }
 
@@ -12758,7 +13238,6 @@ export namespace Prisma {
     product_id: string
     language: $Enums.Language
     description: string
-    changelog: string | null
     _count: ProductTranslationCountAggregateOutputType | null
     _min: ProductTranslationMinAggregateOutputType | null
     _max: ProductTranslationMaxAggregateOutputType | null
@@ -12783,7 +13262,6 @@ export namespace Prisma {
     product_id?: boolean
     language?: boolean
     description?: boolean
-    changelog?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productTranslation"]>
 
@@ -12792,7 +13270,6 @@ export namespace Prisma {
     product_id?: boolean
     language?: boolean
     description?: boolean
-    changelog?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productTranslation"]>
 
@@ -12801,7 +13278,6 @@ export namespace Prisma {
     product_id?: boolean
     language?: boolean
     description?: boolean
-    changelog?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productTranslation"]>
 
@@ -12810,10 +13286,9 @@ export namespace Prisma {
     product_id?: boolean
     language?: boolean
     description?: boolean
-    changelog?: boolean
   }
 
-  export type ProductTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_id" | "language" | "description" | "changelog", ExtArgs["result"]["productTranslation"]>
+  export type ProductTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_id" | "language" | "description", ExtArgs["result"]["productTranslation"]>
   export type ProductTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }
@@ -12834,7 +13309,6 @@ export namespace Prisma {
       product_id: string
       language: $Enums.Language
       description: string
-      changelog: string | null
     }, ExtArgs["result"]["productTranslation"]>
     composites: {}
   }
@@ -13263,7 +13737,6 @@ export namespace Prisma {
     readonly product_id: FieldRef<"ProductTranslation", 'String'>
     readonly language: FieldRef<"ProductTranslation", 'Language'>
     readonly description: FieldRef<"ProductTranslation", 'String'>
-    readonly changelog: FieldRef<"ProductTranslation", 'String'>
   }
     
 
@@ -13675,6 +14148,2160 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProductTranslationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProductVersion
+   */
+
+  export type AggregateProductVersion = {
+    _count: ProductVersionCountAggregateOutputType | null
+    _avg: ProductVersionAvgAggregateOutputType | null
+    _sum: ProductVersionSumAggregateOutputType | null
+    _min: ProductVersionMinAggregateOutputType | null
+    _max: ProductVersionMaxAggregateOutputType | null
+  }
+
+  export type ProductVersionAvgAggregateOutputType = {
+    released_at: number | null
+  }
+
+  export type ProductVersionSumAggregateOutputType = {
+    released_at: bigint | null
+  }
+
+  export type ProductVersionMinAggregateOutputType = {
+    id: string | null
+    product_id: string | null
+    version: string | null
+    released_at: bigint | null
+  }
+
+  export type ProductVersionMaxAggregateOutputType = {
+    id: string | null
+    product_id: string | null
+    version: string | null
+    released_at: bigint | null
+  }
+
+  export type ProductVersionCountAggregateOutputType = {
+    id: number
+    product_id: number
+    version: number
+    released_at: number
+    _all: number
+  }
+
+
+  export type ProductVersionAvgAggregateInputType = {
+    released_at?: true
+  }
+
+  export type ProductVersionSumAggregateInputType = {
+    released_at?: true
+  }
+
+  export type ProductVersionMinAggregateInputType = {
+    id?: true
+    product_id?: true
+    version?: true
+    released_at?: true
+  }
+
+  export type ProductVersionMaxAggregateInputType = {
+    id?: true
+    product_id?: true
+    version?: true
+    released_at?: true
+  }
+
+  export type ProductVersionCountAggregateInputType = {
+    id?: true
+    product_id?: true
+    version?: true
+    released_at?: true
+    _all?: true
+  }
+
+  export type ProductVersionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductVersion to aggregate.
+     */
+    where?: ProductVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductVersions to fetch.
+     */
+    orderBy?: ProductVersionOrderByWithRelationInput | ProductVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductVersions
+    **/
+    _count?: true | ProductVersionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProductVersionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductVersionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductVersionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductVersionMaxAggregateInputType
+  }
+
+  export type GetProductVersionAggregateType<T extends ProductVersionAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductVersion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductVersion[P]>
+      : GetScalarType<T[P], AggregateProductVersion[P]>
+  }
+
+
+
+
+  export type ProductVersionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductVersionWhereInput
+    orderBy?: ProductVersionOrderByWithAggregationInput | ProductVersionOrderByWithAggregationInput[]
+    by: ProductVersionScalarFieldEnum[] | ProductVersionScalarFieldEnum
+    having?: ProductVersionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductVersionCountAggregateInputType | true
+    _avg?: ProductVersionAvgAggregateInputType
+    _sum?: ProductVersionSumAggregateInputType
+    _min?: ProductVersionMinAggregateInputType
+    _max?: ProductVersionMaxAggregateInputType
+  }
+
+  export type ProductVersionGroupByOutputType = {
+    id: string
+    product_id: string
+    version: string
+    released_at: bigint
+    _count: ProductVersionCountAggregateOutputType | null
+    _avg: ProductVersionAvgAggregateOutputType | null
+    _sum: ProductVersionSumAggregateOutputType | null
+    _min: ProductVersionMinAggregateOutputType | null
+    _max: ProductVersionMaxAggregateOutputType | null
+  }
+
+  type GetProductVersionGroupByPayload<T extends ProductVersionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductVersionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductVersionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductVersionGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductVersionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_id?: boolean
+    version?: boolean
+    released_at?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    translations?: boolean | ProductVersion$translationsArgs<ExtArgs>
+    _count?: boolean | ProductVersionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productVersion"]>
+
+  export type ProductVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_id?: boolean
+    version?: boolean
+    released_at?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productVersion"]>
+
+  export type ProductVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_id?: boolean
+    version?: boolean
+    released_at?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productVersion"]>
+
+  export type ProductVersionSelectScalar = {
+    id?: boolean
+    product_id?: boolean
+    version?: boolean
+    released_at?: boolean
+  }
+
+  export type ProductVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_id" | "version" | "released_at", ExtArgs["result"]["productVersion"]>
+  export type ProductVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    translations?: boolean | ProductVersion$translationsArgs<ExtArgs>
+    _count?: boolean | ProductVersionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProductVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }
+  export type ProductVersionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductVersion"
+    objects: {
+      product: Prisma.$ProductPayload<ExtArgs>
+      translations: Prisma.$ProductVersionTranslationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      product_id: string
+      version: string
+      released_at: bigint
+    }, ExtArgs["result"]["productVersion"]>
+    composites: {}
+  }
+
+  type ProductVersionGetPayload<S extends boolean | null | undefined | ProductVersionDefaultArgs> = $Result.GetResult<Prisma.$ProductVersionPayload, S>
+
+  type ProductVersionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductVersionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductVersionCountAggregateInputType | true
+    }
+
+  export interface ProductVersionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductVersion'], meta: { name: 'ProductVersion' } }
+    /**
+     * Find zero or one ProductVersion that matches the filter.
+     * @param {ProductVersionFindUniqueArgs} args - Arguments to find a ProductVersion
+     * @example
+     * // Get one ProductVersion
+     * const productVersion = await prisma.productVersion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductVersionFindUniqueArgs>(args: SelectSubset<T, ProductVersionFindUniqueArgs<ExtArgs>>): Prisma__ProductVersionClient<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProductVersion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductVersionFindUniqueOrThrowArgs} args - Arguments to find a ProductVersion
+     * @example
+     * // Get one ProductVersion
+     * const productVersion = await prisma.productVersion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductVersionFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductVersionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductVersionClient<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductVersion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionFindFirstArgs} args - Arguments to find a ProductVersion
+     * @example
+     * // Get one ProductVersion
+     * const productVersion = await prisma.productVersion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductVersionFindFirstArgs>(args?: SelectSubset<T, ProductVersionFindFirstArgs<ExtArgs>>): Prisma__ProductVersionClient<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductVersion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionFindFirstOrThrowArgs} args - Arguments to find a ProductVersion
+     * @example
+     * // Get one ProductVersion
+     * const productVersion = await prisma.productVersion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductVersionFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductVersionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductVersionClient<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProductVersions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductVersions
+     * const productVersions = await prisma.productVersion.findMany()
+     * 
+     * // Get first 10 ProductVersions
+     * const productVersions = await prisma.productVersion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productVersionWithIdOnly = await prisma.productVersion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductVersionFindManyArgs>(args?: SelectSubset<T, ProductVersionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProductVersion.
+     * @param {ProductVersionCreateArgs} args - Arguments to create a ProductVersion.
+     * @example
+     * // Create one ProductVersion
+     * const ProductVersion = await prisma.productVersion.create({
+     *   data: {
+     *     // ... data to create a ProductVersion
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductVersionCreateArgs>(args: SelectSubset<T, ProductVersionCreateArgs<ExtArgs>>): Prisma__ProductVersionClient<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProductVersions.
+     * @param {ProductVersionCreateManyArgs} args - Arguments to create many ProductVersions.
+     * @example
+     * // Create many ProductVersions
+     * const productVersion = await prisma.productVersion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductVersionCreateManyArgs>(args?: SelectSubset<T, ProductVersionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductVersions and returns the data saved in the database.
+     * @param {ProductVersionCreateManyAndReturnArgs} args - Arguments to create many ProductVersions.
+     * @example
+     * // Create many ProductVersions
+     * const productVersion = await prisma.productVersion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductVersions and only return the `id`
+     * const productVersionWithIdOnly = await prisma.productVersion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductVersionCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductVersionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProductVersion.
+     * @param {ProductVersionDeleteArgs} args - Arguments to delete one ProductVersion.
+     * @example
+     * // Delete one ProductVersion
+     * const ProductVersion = await prisma.productVersion.delete({
+     *   where: {
+     *     // ... filter to delete one ProductVersion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductVersionDeleteArgs>(args: SelectSubset<T, ProductVersionDeleteArgs<ExtArgs>>): Prisma__ProductVersionClient<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProductVersion.
+     * @param {ProductVersionUpdateArgs} args - Arguments to update one ProductVersion.
+     * @example
+     * // Update one ProductVersion
+     * const productVersion = await prisma.productVersion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductVersionUpdateArgs>(args: SelectSubset<T, ProductVersionUpdateArgs<ExtArgs>>): Prisma__ProductVersionClient<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProductVersions.
+     * @param {ProductVersionDeleteManyArgs} args - Arguments to filter ProductVersions to delete.
+     * @example
+     * // Delete a few ProductVersions
+     * const { count } = await prisma.productVersion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductVersionDeleteManyArgs>(args?: SelectSubset<T, ProductVersionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductVersions
+     * const productVersion = await prisma.productVersion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductVersionUpdateManyArgs>(args: SelectSubset<T, ProductVersionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductVersions and returns the data updated in the database.
+     * @param {ProductVersionUpdateManyAndReturnArgs} args - Arguments to update many ProductVersions.
+     * @example
+     * // Update many ProductVersions
+     * const productVersion = await prisma.productVersion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProductVersions and only return the `id`
+     * const productVersionWithIdOnly = await prisma.productVersion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductVersionUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductVersionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProductVersion.
+     * @param {ProductVersionUpsertArgs} args - Arguments to update or create a ProductVersion.
+     * @example
+     * // Update or create a ProductVersion
+     * const productVersion = await prisma.productVersion.upsert({
+     *   create: {
+     *     // ... data to create a ProductVersion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductVersion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductVersionUpsertArgs>(args: SelectSubset<T, ProductVersionUpsertArgs<ExtArgs>>): Prisma__ProductVersionClient<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProductVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionCountArgs} args - Arguments to filter ProductVersions to count.
+     * @example
+     * // Count the number of ProductVersions
+     * const count = await prisma.productVersion.count({
+     *   where: {
+     *     // ... the filter for the ProductVersions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductVersionCountArgs>(
+      args?: Subset<T, ProductVersionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductVersionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductVersionAggregateArgs>(args: Subset<T, ProductVersionAggregateArgs>): Prisma.PrismaPromise<GetProductVersionAggregateType<T>>
+
+    /**
+     * Group by ProductVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductVersionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductVersionGroupByArgs['orderBy'] }
+        : { orderBy?: ProductVersionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductVersionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductVersionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductVersion model
+   */
+  readonly fields: ProductVersionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductVersion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductVersionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    translations<T extends ProductVersion$translationsArgs<ExtArgs> = {}>(args?: Subset<T, ProductVersion$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductVersion model
+   */
+  interface ProductVersionFieldRefs {
+    readonly id: FieldRef<"ProductVersion", 'String'>
+    readonly product_id: FieldRef<"ProductVersion", 'String'>
+    readonly version: FieldRef<"ProductVersion", 'String'>
+    readonly released_at: FieldRef<"ProductVersion", 'BigInt'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductVersion findUnique
+   */
+  export type ProductVersionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersion to fetch.
+     */
+    where: ProductVersionWhereUniqueInput
+  }
+
+  /**
+   * ProductVersion findUniqueOrThrow
+   */
+  export type ProductVersionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersion to fetch.
+     */
+    where: ProductVersionWhereUniqueInput
+  }
+
+  /**
+   * ProductVersion findFirst
+   */
+  export type ProductVersionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersion to fetch.
+     */
+    where?: ProductVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductVersions to fetch.
+     */
+    orderBy?: ProductVersionOrderByWithRelationInput | ProductVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductVersions.
+     */
+    cursor?: ProductVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductVersions.
+     */
+    distinct?: ProductVersionScalarFieldEnum | ProductVersionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductVersion findFirstOrThrow
+   */
+  export type ProductVersionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersion to fetch.
+     */
+    where?: ProductVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductVersions to fetch.
+     */
+    orderBy?: ProductVersionOrderByWithRelationInput | ProductVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductVersions.
+     */
+    cursor?: ProductVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductVersions.
+     */
+    distinct?: ProductVersionScalarFieldEnum | ProductVersionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductVersion findMany
+   */
+  export type ProductVersionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersions to fetch.
+     */
+    where?: ProductVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductVersions to fetch.
+     */
+    orderBy?: ProductVersionOrderByWithRelationInput | ProductVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductVersions.
+     */
+    cursor?: ProductVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductVersions.
+     */
+    skip?: number
+    distinct?: ProductVersionScalarFieldEnum | ProductVersionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductVersion create
+   */
+  export type ProductVersionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductVersion.
+     */
+    data: XOR<ProductVersionCreateInput, ProductVersionUncheckedCreateInput>
+  }
+
+  /**
+   * ProductVersion createMany
+   */
+  export type ProductVersionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductVersions.
+     */
+    data: ProductVersionCreateManyInput | ProductVersionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductVersion createManyAndReturn
+   */
+  export type ProductVersionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductVersions.
+     */
+    data: ProductVersionCreateManyInput | ProductVersionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductVersion update
+   */
+  export type ProductVersionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductVersion.
+     */
+    data: XOR<ProductVersionUpdateInput, ProductVersionUncheckedUpdateInput>
+    /**
+     * Choose, which ProductVersion to update.
+     */
+    where: ProductVersionWhereUniqueInput
+  }
+
+  /**
+   * ProductVersion updateMany
+   */
+  export type ProductVersionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductVersions.
+     */
+    data: XOR<ProductVersionUpdateManyMutationInput, ProductVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductVersions to update
+     */
+    where?: ProductVersionWhereInput
+    /**
+     * Limit how many ProductVersions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductVersion updateManyAndReturn
+   */
+  export type ProductVersionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductVersions.
+     */
+    data: XOR<ProductVersionUpdateManyMutationInput, ProductVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductVersions to update
+     */
+    where?: ProductVersionWhereInput
+    /**
+     * Limit how many ProductVersions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductVersion upsert
+   */
+  export type ProductVersionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductVersion to update in case it exists.
+     */
+    where: ProductVersionWhereUniqueInput
+    /**
+     * In case the ProductVersion found by the `where` argument doesn't exist, create a new ProductVersion with this data.
+     */
+    create: XOR<ProductVersionCreateInput, ProductVersionUncheckedCreateInput>
+    /**
+     * In case the ProductVersion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductVersionUpdateInput, ProductVersionUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductVersion delete
+   */
+  export type ProductVersionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+    /**
+     * Filter which ProductVersion to delete.
+     */
+    where: ProductVersionWhereUniqueInput
+  }
+
+  /**
+   * ProductVersion deleteMany
+   */
+  export type ProductVersionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductVersions to delete
+     */
+    where?: ProductVersionWhereInput
+    /**
+     * Limit how many ProductVersions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductVersion.translations
+   */
+  export type ProductVersion$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    where?: ProductVersionTranslationWhereInput
+    orderBy?: ProductVersionTranslationOrderByWithRelationInput | ProductVersionTranslationOrderByWithRelationInput[]
+    cursor?: ProductVersionTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductVersionTranslationScalarFieldEnum | ProductVersionTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductVersion without action
+   */
+  export type ProductVersionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersion
+     */
+    select?: ProductVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersion
+     */
+    omit?: ProductVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProductVersionTranslation
+   */
+
+  export type AggregateProductVersionTranslation = {
+    _count: ProductVersionTranslationCountAggregateOutputType | null
+    _min: ProductVersionTranslationMinAggregateOutputType | null
+    _max: ProductVersionTranslationMaxAggregateOutputType | null
+  }
+
+  export type ProductVersionTranslationMinAggregateOutputType = {
+    id: string | null
+    product_version_id: string | null
+    language: $Enums.Language | null
+    changelog: string | null
+  }
+
+  export type ProductVersionTranslationMaxAggregateOutputType = {
+    id: string | null
+    product_version_id: string | null
+    language: $Enums.Language | null
+    changelog: string | null
+  }
+
+  export type ProductVersionTranslationCountAggregateOutputType = {
+    id: number
+    product_version_id: number
+    language: number
+    changelog: number
+    _all: number
+  }
+
+
+  export type ProductVersionTranslationMinAggregateInputType = {
+    id?: true
+    product_version_id?: true
+    language?: true
+    changelog?: true
+  }
+
+  export type ProductVersionTranslationMaxAggregateInputType = {
+    id?: true
+    product_version_id?: true
+    language?: true
+    changelog?: true
+  }
+
+  export type ProductVersionTranslationCountAggregateInputType = {
+    id?: true
+    product_version_id?: true
+    language?: true
+    changelog?: true
+    _all?: true
+  }
+
+  export type ProductVersionTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductVersionTranslation to aggregate.
+     */
+    where?: ProductVersionTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductVersionTranslations to fetch.
+     */
+    orderBy?: ProductVersionTranslationOrderByWithRelationInput | ProductVersionTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductVersionTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductVersionTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductVersionTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductVersionTranslations
+    **/
+    _count?: true | ProductVersionTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductVersionTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductVersionTranslationMaxAggregateInputType
+  }
+
+  export type GetProductVersionTranslationAggregateType<T extends ProductVersionTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductVersionTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductVersionTranslation[P]>
+      : GetScalarType<T[P], AggregateProductVersionTranslation[P]>
+  }
+
+
+
+
+  export type ProductVersionTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductVersionTranslationWhereInput
+    orderBy?: ProductVersionTranslationOrderByWithAggregationInput | ProductVersionTranslationOrderByWithAggregationInput[]
+    by: ProductVersionTranslationScalarFieldEnum[] | ProductVersionTranslationScalarFieldEnum
+    having?: ProductVersionTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductVersionTranslationCountAggregateInputType | true
+    _min?: ProductVersionTranslationMinAggregateInputType
+    _max?: ProductVersionTranslationMaxAggregateInputType
+  }
+
+  export type ProductVersionTranslationGroupByOutputType = {
+    id: string
+    product_version_id: string
+    language: $Enums.Language
+    changelog: string | null
+    _count: ProductVersionTranslationCountAggregateOutputType | null
+    _min: ProductVersionTranslationMinAggregateOutputType | null
+    _max: ProductVersionTranslationMaxAggregateOutputType | null
+  }
+
+  type GetProductVersionTranslationGroupByPayload<T extends ProductVersionTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductVersionTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductVersionTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductVersionTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductVersionTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductVersionTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_version_id?: boolean
+    language?: boolean
+    changelog?: boolean
+    productVersion?: boolean | ProductVersionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productVersionTranslation"]>
+
+  export type ProductVersionTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_version_id?: boolean
+    language?: boolean
+    changelog?: boolean
+    productVersion?: boolean | ProductVersionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productVersionTranslation"]>
+
+  export type ProductVersionTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_version_id?: boolean
+    language?: boolean
+    changelog?: boolean
+    productVersion?: boolean | ProductVersionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productVersionTranslation"]>
+
+  export type ProductVersionTranslationSelectScalar = {
+    id?: boolean
+    product_version_id?: boolean
+    language?: boolean
+    changelog?: boolean
+  }
+
+  export type ProductVersionTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_version_id" | "language" | "changelog", ExtArgs["result"]["productVersionTranslation"]>
+  export type ProductVersionTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productVersion?: boolean | ProductVersionDefaultArgs<ExtArgs>
+  }
+  export type ProductVersionTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productVersion?: boolean | ProductVersionDefaultArgs<ExtArgs>
+  }
+  export type ProductVersionTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productVersion?: boolean | ProductVersionDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductVersionTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductVersionTranslation"
+    objects: {
+      productVersion: Prisma.$ProductVersionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      product_version_id: string
+      language: $Enums.Language
+      changelog: string | null
+    }, ExtArgs["result"]["productVersionTranslation"]>
+    composites: {}
+  }
+
+  type ProductVersionTranslationGetPayload<S extends boolean | null | undefined | ProductVersionTranslationDefaultArgs> = $Result.GetResult<Prisma.$ProductVersionTranslationPayload, S>
+
+  type ProductVersionTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductVersionTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductVersionTranslationCountAggregateInputType | true
+    }
+
+  export interface ProductVersionTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductVersionTranslation'], meta: { name: 'ProductVersionTranslation' } }
+    /**
+     * Find zero or one ProductVersionTranslation that matches the filter.
+     * @param {ProductVersionTranslationFindUniqueArgs} args - Arguments to find a ProductVersionTranslation
+     * @example
+     * // Get one ProductVersionTranslation
+     * const productVersionTranslation = await prisma.productVersionTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductVersionTranslationFindUniqueArgs>(args: SelectSubset<T, ProductVersionTranslationFindUniqueArgs<ExtArgs>>): Prisma__ProductVersionTranslationClient<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProductVersionTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductVersionTranslationFindUniqueOrThrowArgs} args - Arguments to find a ProductVersionTranslation
+     * @example
+     * // Get one ProductVersionTranslation
+     * const productVersionTranslation = await prisma.productVersionTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductVersionTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductVersionTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductVersionTranslationClient<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductVersionTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionTranslationFindFirstArgs} args - Arguments to find a ProductVersionTranslation
+     * @example
+     * // Get one ProductVersionTranslation
+     * const productVersionTranslation = await prisma.productVersionTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductVersionTranslationFindFirstArgs>(args?: SelectSubset<T, ProductVersionTranslationFindFirstArgs<ExtArgs>>): Prisma__ProductVersionTranslationClient<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductVersionTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionTranslationFindFirstOrThrowArgs} args - Arguments to find a ProductVersionTranslation
+     * @example
+     * // Get one ProductVersionTranslation
+     * const productVersionTranslation = await prisma.productVersionTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductVersionTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductVersionTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductVersionTranslationClient<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProductVersionTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductVersionTranslations
+     * const productVersionTranslations = await prisma.productVersionTranslation.findMany()
+     * 
+     * // Get first 10 ProductVersionTranslations
+     * const productVersionTranslations = await prisma.productVersionTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productVersionTranslationWithIdOnly = await prisma.productVersionTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductVersionTranslationFindManyArgs>(args?: SelectSubset<T, ProductVersionTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProductVersionTranslation.
+     * @param {ProductVersionTranslationCreateArgs} args - Arguments to create a ProductVersionTranslation.
+     * @example
+     * // Create one ProductVersionTranslation
+     * const ProductVersionTranslation = await prisma.productVersionTranslation.create({
+     *   data: {
+     *     // ... data to create a ProductVersionTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductVersionTranslationCreateArgs>(args: SelectSubset<T, ProductVersionTranslationCreateArgs<ExtArgs>>): Prisma__ProductVersionTranslationClient<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProductVersionTranslations.
+     * @param {ProductVersionTranslationCreateManyArgs} args - Arguments to create many ProductVersionTranslations.
+     * @example
+     * // Create many ProductVersionTranslations
+     * const productVersionTranslation = await prisma.productVersionTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductVersionTranslationCreateManyArgs>(args?: SelectSubset<T, ProductVersionTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductVersionTranslations and returns the data saved in the database.
+     * @param {ProductVersionTranslationCreateManyAndReturnArgs} args - Arguments to create many ProductVersionTranslations.
+     * @example
+     * // Create many ProductVersionTranslations
+     * const productVersionTranslation = await prisma.productVersionTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductVersionTranslations and only return the `id`
+     * const productVersionTranslationWithIdOnly = await prisma.productVersionTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductVersionTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductVersionTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProductVersionTranslation.
+     * @param {ProductVersionTranslationDeleteArgs} args - Arguments to delete one ProductVersionTranslation.
+     * @example
+     * // Delete one ProductVersionTranslation
+     * const ProductVersionTranslation = await prisma.productVersionTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one ProductVersionTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductVersionTranslationDeleteArgs>(args: SelectSubset<T, ProductVersionTranslationDeleteArgs<ExtArgs>>): Prisma__ProductVersionTranslationClient<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProductVersionTranslation.
+     * @param {ProductVersionTranslationUpdateArgs} args - Arguments to update one ProductVersionTranslation.
+     * @example
+     * // Update one ProductVersionTranslation
+     * const productVersionTranslation = await prisma.productVersionTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductVersionTranslationUpdateArgs>(args: SelectSubset<T, ProductVersionTranslationUpdateArgs<ExtArgs>>): Prisma__ProductVersionTranslationClient<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProductVersionTranslations.
+     * @param {ProductVersionTranslationDeleteManyArgs} args - Arguments to filter ProductVersionTranslations to delete.
+     * @example
+     * // Delete a few ProductVersionTranslations
+     * const { count } = await prisma.productVersionTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductVersionTranslationDeleteManyArgs>(args?: SelectSubset<T, ProductVersionTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductVersionTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductVersionTranslations
+     * const productVersionTranslation = await prisma.productVersionTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductVersionTranslationUpdateManyArgs>(args: SelectSubset<T, ProductVersionTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductVersionTranslations and returns the data updated in the database.
+     * @param {ProductVersionTranslationUpdateManyAndReturnArgs} args - Arguments to update many ProductVersionTranslations.
+     * @example
+     * // Update many ProductVersionTranslations
+     * const productVersionTranslation = await prisma.productVersionTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProductVersionTranslations and only return the `id`
+     * const productVersionTranslationWithIdOnly = await prisma.productVersionTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductVersionTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductVersionTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProductVersionTranslation.
+     * @param {ProductVersionTranslationUpsertArgs} args - Arguments to update or create a ProductVersionTranslation.
+     * @example
+     * // Update or create a ProductVersionTranslation
+     * const productVersionTranslation = await prisma.productVersionTranslation.upsert({
+     *   create: {
+     *     // ... data to create a ProductVersionTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductVersionTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductVersionTranslationUpsertArgs>(args: SelectSubset<T, ProductVersionTranslationUpsertArgs<ExtArgs>>): Prisma__ProductVersionTranslationClient<$Result.GetResult<Prisma.$ProductVersionTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProductVersionTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionTranslationCountArgs} args - Arguments to filter ProductVersionTranslations to count.
+     * @example
+     * // Count the number of ProductVersionTranslations
+     * const count = await prisma.productVersionTranslation.count({
+     *   where: {
+     *     // ... the filter for the ProductVersionTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductVersionTranslationCountArgs>(
+      args?: Subset<T, ProductVersionTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductVersionTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductVersionTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductVersionTranslationAggregateArgs>(args: Subset<T, ProductVersionTranslationAggregateArgs>): Prisma.PrismaPromise<GetProductVersionTranslationAggregateType<T>>
+
+    /**
+     * Group by ProductVersionTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductVersionTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductVersionTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductVersionTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: ProductVersionTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductVersionTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductVersionTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductVersionTranslation model
+   */
+  readonly fields: ProductVersionTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductVersionTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductVersionTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    productVersion<T extends ProductVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductVersionDefaultArgs<ExtArgs>>): Prisma__ProductVersionClient<$Result.GetResult<Prisma.$ProductVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductVersionTranslation model
+   */
+  interface ProductVersionTranslationFieldRefs {
+    readonly id: FieldRef<"ProductVersionTranslation", 'String'>
+    readonly product_version_id: FieldRef<"ProductVersionTranslation", 'String'>
+    readonly language: FieldRef<"ProductVersionTranslation", 'Language'>
+    readonly changelog: FieldRef<"ProductVersionTranslation", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductVersionTranslation findUnique
+   */
+  export type ProductVersionTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersionTranslation to fetch.
+     */
+    where: ProductVersionTranslationWhereUniqueInput
+  }
+
+  /**
+   * ProductVersionTranslation findUniqueOrThrow
+   */
+  export type ProductVersionTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersionTranslation to fetch.
+     */
+    where: ProductVersionTranslationWhereUniqueInput
+  }
+
+  /**
+   * ProductVersionTranslation findFirst
+   */
+  export type ProductVersionTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersionTranslation to fetch.
+     */
+    where?: ProductVersionTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductVersionTranslations to fetch.
+     */
+    orderBy?: ProductVersionTranslationOrderByWithRelationInput | ProductVersionTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductVersionTranslations.
+     */
+    cursor?: ProductVersionTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductVersionTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductVersionTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductVersionTranslations.
+     */
+    distinct?: ProductVersionTranslationScalarFieldEnum | ProductVersionTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductVersionTranslation findFirstOrThrow
+   */
+  export type ProductVersionTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersionTranslation to fetch.
+     */
+    where?: ProductVersionTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductVersionTranslations to fetch.
+     */
+    orderBy?: ProductVersionTranslationOrderByWithRelationInput | ProductVersionTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductVersionTranslations.
+     */
+    cursor?: ProductVersionTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductVersionTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductVersionTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductVersionTranslations.
+     */
+    distinct?: ProductVersionTranslationScalarFieldEnum | ProductVersionTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductVersionTranslation findMany
+   */
+  export type ProductVersionTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductVersionTranslations to fetch.
+     */
+    where?: ProductVersionTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductVersionTranslations to fetch.
+     */
+    orderBy?: ProductVersionTranslationOrderByWithRelationInput | ProductVersionTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductVersionTranslations.
+     */
+    cursor?: ProductVersionTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductVersionTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductVersionTranslations.
+     */
+    skip?: number
+    distinct?: ProductVersionTranslationScalarFieldEnum | ProductVersionTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ProductVersionTranslation create
+   */
+  export type ProductVersionTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductVersionTranslation.
+     */
+    data: XOR<ProductVersionTranslationCreateInput, ProductVersionTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * ProductVersionTranslation createMany
+   */
+  export type ProductVersionTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductVersionTranslations.
+     */
+    data: ProductVersionTranslationCreateManyInput | ProductVersionTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductVersionTranslation createManyAndReturn
+   */
+  export type ProductVersionTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductVersionTranslations.
+     */
+    data: ProductVersionTranslationCreateManyInput | ProductVersionTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductVersionTranslation update
+   */
+  export type ProductVersionTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductVersionTranslation.
+     */
+    data: XOR<ProductVersionTranslationUpdateInput, ProductVersionTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which ProductVersionTranslation to update.
+     */
+    where: ProductVersionTranslationWhereUniqueInput
+  }
+
+  /**
+   * ProductVersionTranslation updateMany
+   */
+  export type ProductVersionTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductVersionTranslations.
+     */
+    data: XOR<ProductVersionTranslationUpdateManyMutationInput, ProductVersionTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductVersionTranslations to update
+     */
+    where?: ProductVersionTranslationWhereInput
+    /**
+     * Limit how many ProductVersionTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductVersionTranslation updateManyAndReturn
+   */
+  export type ProductVersionTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductVersionTranslations.
+     */
+    data: XOR<ProductVersionTranslationUpdateManyMutationInput, ProductVersionTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductVersionTranslations to update
+     */
+    where?: ProductVersionTranslationWhereInput
+    /**
+     * Limit how many ProductVersionTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductVersionTranslation upsert
+   */
+  export type ProductVersionTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductVersionTranslation to update in case it exists.
+     */
+    where: ProductVersionTranslationWhereUniqueInput
+    /**
+     * In case the ProductVersionTranslation found by the `where` argument doesn't exist, create a new ProductVersionTranslation with this data.
+     */
+    create: XOR<ProductVersionTranslationCreateInput, ProductVersionTranslationUncheckedCreateInput>
+    /**
+     * In case the ProductVersionTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductVersionTranslationUpdateInput, ProductVersionTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductVersionTranslation delete
+   */
+  export type ProductVersionTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which ProductVersionTranslation to delete.
+     */
+    where: ProductVersionTranslationWhereUniqueInput
+  }
+
+  /**
+   * ProductVersionTranslation deleteMany
+   */
+  export type ProductVersionTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductVersionTranslations to delete
+     */
+    where?: ProductVersionTranslationWhereInput
+    /**
+     * Limit how many ProductVersionTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductVersionTranslation without action
+   */
+  export type ProductVersionTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductVersionTranslation
+     */
+    select?: ProductVersionTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductVersionTranslation
+     */
+    omit?: ProductVersionTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductVersionTranslationInclude<ExtArgs> | null
   }
 
 
@@ -16989,6 +19616,7 @@ export namespace Prisma {
     product_id: string | null
     name: string | null
     download_link: string | null
+    file_access_password: string | null
   }
 
   export type ProductVariantMaxAggregateOutputType = {
@@ -16996,6 +19624,7 @@ export namespace Prisma {
     product_id: string | null
     name: string | null
     download_link: string | null
+    file_access_password: string | null
   }
 
   export type ProductVariantCountAggregateOutputType = {
@@ -17003,6 +19632,7 @@ export namespace Prisma {
     product_id: number
     name: number
     download_link: number
+    file_access_password: number
     _all: number
   }
 
@@ -17012,6 +19642,7 @@ export namespace Prisma {
     product_id?: true
     name?: true
     download_link?: true
+    file_access_password?: true
   }
 
   export type ProductVariantMaxAggregateInputType = {
@@ -17019,6 +19650,7 @@ export namespace Prisma {
     product_id?: true
     name?: true
     download_link?: true
+    file_access_password?: true
   }
 
   export type ProductVariantCountAggregateInputType = {
@@ -17026,6 +19658,7 @@ export namespace Prisma {
     product_id?: true
     name?: true
     download_link?: true
+    file_access_password?: true
     _all?: true
   }
 
@@ -17106,6 +19739,7 @@ export namespace Prisma {
     product_id: string
     name: string
     download_link: string | null
+    file_access_password: string | null
     _count: ProductVariantCountAggregateOutputType | null
     _min: ProductVariantMinAggregateOutputType | null
     _max: ProductVariantMaxAggregateOutputType | null
@@ -17130,6 +19764,7 @@ export namespace Prisma {
     product_id?: boolean
     name?: boolean
     download_link?: boolean
+    file_access_password?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
     prices?: boolean | ProductVariant$pricesArgs<ExtArgs>
     _count?: boolean | ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
@@ -17140,6 +19775,7 @@ export namespace Prisma {
     product_id?: boolean
     name?: boolean
     download_link?: boolean
+    file_access_password?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productVariant"]>
 
@@ -17148,6 +19784,7 @@ export namespace Prisma {
     product_id?: boolean
     name?: boolean
     download_link?: boolean
+    file_access_password?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productVariant"]>
 
@@ -17156,9 +19793,10 @@ export namespace Prisma {
     product_id?: boolean
     name?: boolean
     download_link?: boolean
+    file_access_password?: boolean
   }
 
-  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_id" | "name" | "download_link", ExtArgs["result"]["productVariant"]>
+  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_id" | "name" | "download_link" | "file_access_password", ExtArgs["result"]["productVariant"]>
   export type ProductVariantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     prices?: boolean | ProductVariant$pricesArgs<ExtArgs>
@@ -17182,6 +19820,7 @@ export namespace Prisma {
       product_id: string
       name: string
       download_link: string | null
+      file_access_password: string | null
     }, ExtArgs["result"]["productVariant"]>
     composites: {}
   }
@@ -17611,6 +20250,7 @@ export namespace Prisma {
     readonly product_id: FieldRef<"ProductVariant", 'String'>
     readonly name: FieldRef<"ProductVariant", 'String'>
     readonly download_link: FieldRef<"ProductVariant", 'String'>
+    readonly file_access_password: FieldRef<"ProductVariant", 'String'>
   }
     
 
@@ -18062,25 +20702,25 @@ export namespace Prisma {
   }
 
   export type ProductPriceAvgAggregateOutputType = {
-    price: number | null
+    price: Decimal | null
   }
 
   export type ProductPriceSumAggregateOutputType = {
-    price: number | null
+    price: Decimal | null
   }
 
   export type ProductPriceMinAggregateOutputType = {
     id: string | null
     variant_id: string | null
     currency_code: $Enums.CurrencyCode | null
-    price: number | null
+    price: Decimal | null
   }
 
   export type ProductPriceMaxAggregateOutputType = {
     id: string | null
     variant_id: string | null
     currency_code: $Enums.CurrencyCode | null
-    price: number | null
+    price: Decimal | null
   }
 
   export type ProductPriceCountAggregateOutputType = {
@@ -18212,7 +20852,7 @@ export namespace Prisma {
     id: string
     variant_id: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal
     _count: ProductPriceCountAggregateOutputType | null
     _avg: ProductPriceAvgAggregateOutputType | null
     _sum: ProductPriceSumAggregateOutputType | null
@@ -18285,7 +20925,7 @@ export namespace Prisma {
       id: string
       variant_id: string
       currency_code: $Enums.CurrencyCode
-      price: number
+      price: Prisma.Decimal
     }, ExtArgs["result"]["productPrice"]>
     composites: {}
   }
@@ -18713,7 +21353,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductPrice", 'String'>
     readonly variant_id: FieldRef<"ProductPrice", 'String'>
     readonly currency_code: FieldRef<"ProductPrice", 'CurrencyCode'>
-    readonly price: FieldRef<"ProductPrice", 'Int'>
+    readonly price: FieldRef<"ProductPrice", 'Decimal'>
   }
     
 
@@ -27784,6 +30424,2451 @@ export namespace Prisma {
 
 
   /**
+   * Model Transaction
+   */
+
+  export type AggregateTransaction = {
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  export type TransactionAvgAggregateOutputType = {
+    created_at: number | null
+    updated_at: number | null
+    total_amount: number | null
+  }
+
+  export type TransactionSumAggregateOutputType = {
+    created_at: bigint | null
+    updated_at: bigint | null
+    total_amount: number | null
+  }
+
+  export type TransactionMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    customer_id: string | null
+    status: $Enums.TransactionStatus | null
+    created_at: bigint | null
+    updated_at: bigint | null
+    currency_code: $Enums.CurrencyCode | null
+    total_amount: number | null
+    customer_name: string | null
+    customer_email: string | null
+    customer_phone_number: string | null
+  }
+
+  export type TransactionMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    customer_id: string | null
+    status: $Enums.TransactionStatus | null
+    created_at: bigint | null
+    updated_at: bigint | null
+    currency_code: $Enums.CurrencyCode | null
+    total_amount: number | null
+    customer_name: string | null
+    customer_email: string | null
+    customer_phone_number: string | null
+  }
+
+  export type TransactionCountAggregateOutputType = {
+    id: number
+    code: number
+    customer_id: number
+    status: number
+    created_at: number
+    updated_at: number
+    currency_code: number
+    total_amount: number
+    customer_name: number
+    customer_email: number
+    customer_phone_number: number
+    _all: number
+  }
+
+
+  export type TransactionAvgAggregateInputType = {
+    created_at?: true
+    updated_at?: true
+    total_amount?: true
+  }
+
+  export type TransactionSumAggregateInputType = {
+    created_at?: true
+    updated_at?: true
+    total_amount?: true
+  }
+
+  export type TransactionMinAggregateInputType = {
+    id?: true
+    code?: true
+    customer_id?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+    currency_code?: true
+    total_amount?: true
+    customer_name?: true
+    customer_email?: true
+    customer_phone_number?: true
+  }
+
+  export type TransactionMaxAggregateInputType = {
+    id?: true
+    code?: true
+    customer_id?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+    currency_code?: true
+    total_amount?: true
+    customer_name?: true
+    customer_email?: true
+    customer_phone_number?: true
+  }
+
+  export type TransactionCountAggregateInputType = {
+    id?: true
+    code?: true
+    customer_id?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+    currency_code?: true
+    total_amount?: true
+    customer_name?: true
+    customer_email?: true
+    customer_phone_number?: true
+    _all?: true
+  }
+
+  export type TransactionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transaction to aggregate.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Transactions
+    **/
+    _count?: true | TransactionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TransactionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TransactionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TransactionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type GetTransactionAggregateType<T extends TransactionAggregateArgs> = {
+        [P in keyof T & keyof AggregateTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTransaction[P]>
+      : GetScalarType<T[P], AggregateTransaction[P]>
+  }
+
+
+
+
+  export type TransactionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithAggregationInput | TransactionOrderByWithAggregationInput[]
+    by: TransactionScalarFieldEnum[] | TransactionScalarFieldEnum
+    having?: TransactionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TransactionCountAggregateInputType | true
+    _avg?: TransactionAvgAggregateInputType
+    _sum?: TransactionSumAggregateInputType
+    _min?: TransactionMinAggregateInputType
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type TransactionGroupByOutputType = {
+    id: string
+    code: string
+    customer_id: string | null
+    status: $Enums.TransactionStatus
+    created_at: bigint
+    updated_at: bigint
+    currency_code: $Enums.CurrencyCode
+    total_amount: number
+    customer_name: string
+    customer_email: string
+    customer_phone_number: string | null
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  type GetTransactionGroupByPayload<T extends TransactionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TransactionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TransactionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    customer_id?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    currency_code?: boolean
+    total_amount?: boolean
+    customer_name?: boolean
+    customer_email?: boolean
+    customer_phone_number?: boolean
+    details?: boolean | Transaction$detailsArgs<ExtArgs>
+    _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    customer_id?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    currency_code?: boolean
+    total_amount?: boolean
+    customer_name?: boolean
+    customer_email?: boolean
+    customer_phone_number?: boolean
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    customer_id?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    currency_code?: boolean
+    total_amount?: boolean
+    customer_name?: boolean
+    customer_email?: boolean
+    customer_phone_number?: boolean
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectScalar = {
+    id?: boolean
+    code?: boolean
+    customer_id?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    currency_code?: boolean
+    total_amount?: boolean
+    customer_name?: boolean
+    customer_email?: boolean
+    customer_phone_number?: boolean
+  }
+
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "customer_id" | "status" | "created_at" | "updated_at" | "currency_code" | "total_amount" | "customer_name" | "customer_email" | "customer_phone_number", ExtArgs["result"]["transaction"]>
+  export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    details?: boolean | Transaction$detailsArgs<ExtArgs>
+    _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $TransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Transaction"
+    objects: {
+      details: Prisma.$TransactionDetailPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      customer_id: string | null
+      status: $Enums.TransactionStatus
+      created_at: bigint
+      updated_at: bigint
+      currency_code: $Enums.CurrencyCode
+      total_amount: number
+      customer_name: string
+      customer_email: string
+      customer_phone_number: string | null
+    }, ExtArgs["result"]["transaction"]>
+    composites: {}
+  }
+
+  type TransactionGetPayload<S extends boolean | null | undefined | TransactionDefaultArgs> = $Result.GetResult<Prisma.$TransactionPayload, S>
+
+  type TransactionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TransactionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TransactionCountAggregateInputType | true
+    }
+
+  export interface TransactionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Transaction'], meta: { name: 'Transaction' } }
+    /**
+     * Find zero or one Transaction that matches the filter.
+     * @param {TransactionFindUniqueArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TransactionFindUniqueArgs>(args: SelectSubset<T, TransactionFindUniqueArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Transaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TransactionFindUniqueOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TransactionFindUniqueOrThrowArgs>(args: SelectSubset<T, TransactionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TransactionFindFirstArgs>(args?: SelectSubset<T, TransactionFindFirstArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TransactionFindFirstOrThrowArgs>(args?: SelectSubset<T, TransactionFindFirstOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Transactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Transactions
+     * const transactions = await prisma.transaction.findMany()
+     * 
+     * // Get first 10 Transactions
+     * const transactions = await prisma.transaction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const transactionWithIdOnly = await prisma.transaction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TransactionFindManyArgs>(args?: SelectSubset<T, TransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Transaction.
+     * @param {TransactionCreateArgs} args - Arguments to create a Transaction.
+     * @example
+     * // Create one Transaction
+     * const Transaction = await prisma.transaction.create({
+     *   data: {
+     *     // ... data to create a Transaction
+     *   }
+     * })
+     * 
+     */
+    create<T extends TransactionCreateArgs>(args: SelectSubset<T, TransactionCreateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Transactions.
+     * @param {TransactionCreateManyArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TransactionCreateManyArgs>(args?: SelectSubset<T, TransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Transactions and returns the data saved in the database.
+     * @param {TransactionCreateManyAndReturnArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TransactionCreateManyAndReturnArgs>(args?: SelectSubset<T, TransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Transaction.
+     * @param {TransactionDeleteArgs} args - Arguments to delete one Transaction.
+     * @example
+     * // Delete one Transaction
+     * const Transaction = await prisma.transaction.delete({
+     *   where: {
+     *     // ... filter to delete one Transaction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TransactionDeleteArgs>(args: SelectSubset<T, TransactionDeleteArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Transaction.
+     * @param {TransactionUpdateArgs} args - Arguments to update one Transaction.
+     * @example
+     * // Update one Transaction
+     * const transaction = await prisma.transaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TransactionUpdateArgs>(args: SelectSubset<T, TransactionUpdateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Transactions.
+     * @param {TransactionDeleteManyArgs} args - Arguments to filter Transactions to delete.
+     * @example
+     * // Delete a few Transactions
+     * const { count } = await prisma.transaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TransactionDeleteManyArgs>(args?: SelectSubset<T, TransactionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TransactionUpdateManyArgs>(args: SelectSubset<T, TransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions and returns the data updated in the database.
+     * @param {TransactionUpdateManyAndReturnArgs} args - Arguments to update many Transactions.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TransactionUpdateManyAndReturnArgs>(args: SelectSubset<T, TransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Transaction.
+     * @param {TransactionUpsertArgs} args - Arguments to update or create a Transaction.
+     * @example
+     * // Update or create a Transaction
+     * const transaction = await prisma.transaction.upsert({
+     *   create: {
+     *     // ... data to create a Transaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Transaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TransactionUpsertArgs>(args: SelectSubset<T, TransactionUpsertArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionCountArgs} args - Arguments to filter Transactions to count.
+     * @example
+     * // Count the number of Transactions
+     * const count = await prisma.transaction.count({
+     *   where: {
+     *     // ... the filter for the Transactions we want to count
+     *   }
+     * })
+    **/
+    count<T extends TransactionCountArgs>(
+      args?: Subset<T, TransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TransactionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TransactionAggregateArgs>(args: Subset<T, TransactionAggregateArgs>): Prisma.PrismaPromise<GetTransactionAggregateType<T>>
+
+    /**
+     * Group by Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TransactionGroupByArgs['orderBy'] }
+        : { orderBy?: TransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TransactionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTransactionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Transaction model
+   */
+  readonly fields: TransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Transaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    details<T extends Transaction$detailsArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$detailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Transaction model
+   */
+  interface TransactionFieldRefs {
+    readonly id: FieldRef<"Transaction", 'String'>
+    readonly code: FieldRef<"Transaction", 'String'>
+    readonly customer_id: FieldRef<"Transaction", 'String'>
+    readonly status: FieldRef<"Transaction", 'TransactionStatus'>
+    readonly created_at: FieldRef<"Transaction", 'BigInt'>
+    readonly updated_at: FieldRef<"Transaction", 'BigInt'>
+    readonly currency_code: FieldRef<"Transaction", 'CurrencyCode'>
+    readonly total_amount: FieldRef<"Transaction", 'Int'>
+    readonly customer_name: FieldRef<"Transaction", 'String'>
+    readonly customer_email: FieldRef<"Transaction", 'String'>
+    readonly customer_phone_number: FieldRef<"Transaction", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Transaction findUnique
+   */
+  export type TransactionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findUniqueOrThrow
+   */
+  export type TransactionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findFirst
+   */
+  export type TransactionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findFirstOrThrow
+   */
+  export type TransactionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findMany
+   */
+  export type TransactionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transactions to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction create
+   */
+  export type TransactionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Transaction.
+     */
+    data: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+  }
+
+  /**
+   * Transaction createMany
+   */
+  export type TransactionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Transaction createManyAndReturn
+   */
+  export type TransactionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Transaction update
+   */
+  export type TransactionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Transaction.
+     */
+    data: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+    /**
+     * Choose, which Transaction to update.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction updateMany
+   */
+  export type TransactionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction updateManyAndReturn
+   */
+  export type TransactionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction upsert
+   */
+  export type TransactionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Transaction to update in case it exists.
+     */
+    where: TransactionWhereUniqueInput
+    /**
+     * In case the Transaction found by the `where` argument doesn't exist, create a new Transaction with this data.
+     */
+    create: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+    /**
+     * In case the Transaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+  }
+
+  /**
+   * Transaction delete
+   */
+  export type TransactionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter which Transaction to delete.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction deleteMany
+   */
+  export type TransactionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transactions to delete
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction.details
+   */
+  export type Transaction$detailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    where?: TransactionDetailWhereInput
+    orderBy?: TransactionDetailOrderByWithRelationInput | TransactionDetailOrderByWithRelationInput[]
+    cursor?: TransactionDetailWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionDetailScalarFieldEnum | TransactionDetailScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction without action
+   */
+  export type TransactionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TransactionDetail
+   */
+
+  export type AggregateTransactionDetail = {
+    _count: TransactionDetailCountAggregateOutputType | null
+    _avg: TransactionDetailAvgAggregateOutputType | null
+    _sum: TransactionDetailSumAggregateOutputType | null
+    _min: TransactionDetailMinAggregateOutputType | null
+    _max: TransactionDetailMaxAggregateOutputType | null
+  }
+
+  export type TransactionDetailAvgAggregateOutputType = {
+    product_coupon_id: number | null
+    quantity: number | null
+    product_price: Decimal | null
+    product_discount: number | null
+    product_coupon_discount: number | null
+    shared_at: number | null
+  }
+
+  export type TransactionDetailSumAggregateOutputType = {
+    product_coupon_id: number | null
+    quantity: number | null
+    product_price: Decimal | null
+    product_discount: number | null
+    product_coupon_discount: number | null
+    shared_at: bigint | null
+  }
+
+  export type TransactionDetailMinAggregateOutputType = {
+    id: string | null
+    transaction_id: string | null
+    product_id: string | null
+    product_price_id: string | null
+    product_coupon_id: number | null
+    quantity: number | null
+    product_name: string | null
+    product_variant: string | null
+    variant_download_link: string | null
+    variant_file_access_password: string | null
+    product_currency_code: $Enums.CurrencyCode | null
+    product_price: Decimal | null
+    product_discount: number | null
+    product_coupon_discount: number | null
+    share_method: $Enums.ShareMethod | null
+    shared_at: bigint | null
+  }
+
+  export type TransactionDetailMaxAggregateOutputType = {
+    id: string | null
+    transaction_id: string | null
+    product_id: string | null
+    product_price_id: string | null
+    product_coupon_id: number | null
+    quantity: number | null
+    product_name: string | null
+    product_variant: string | null
+    variant_download_link: string | null
+    variant_file_access_password: string | null
+    product_currency_code: $Enums.CurrencyCode | null
+    product_price: Decimal | null
+    product_discount: number | null
+    product_coupon_discount: number | null
+    share_method: $Enums.ShareMethod | null
+    shared_at: bigint | null
+  }
+
+  export type TransactionDetailCountAggregateOutputType = {
+    id: number
+    transaction_id: number
+    product_id: number
+    product_price_id: number
+    product_coupon_id: number
+    quantity: number
+    product_name: number
+    product_variant: number
+    variant_download_link: number
+    variant_file_access_password: number
+    product_currency_code: number
+    product_price: number
+    product_discount: number
+    product_coupon_discount: number
+    share_method: number
+    shared_at: number
+    _all: number
+  }
+
+
+  export type TransactionDetailAvgAggregateInputType = {
+    product_coupon_id?: true
+    quantity?: true
+    product_price?: true
+    product_discount?: true
+    product_coupon_discount?: true
+    shared_at?: true
+  }
+
+  export type TransactionDetailSumAggregateInputType = {
+    product_coupon_id?: true
+    quantity?: true
+    product_price?: true
+    product_discount?: true
+    product_coupon_discount?: true
+    shared_at?: true
+  }
+
+  export type TransactionDetailMinAggregateInputType = {
+    id?: true
+    transaction_id?: true
+    product_id?: true
+    product_price_id?: true
+    product_coupon_id?: true
+    quantity?: true
+    product_name?: true
+    product_variant?: true
+    variant_download_link?: true
+    variant_file_access_password?: true
+    product_currency_code?: true
+    product_price?: true
+    product_discount?: true
+    product_coupon_discount?: true
+    share_method?: true
+    shared_at?: true
+  }
+
+  export type TransactionDetailMaxAggregateInputType = {
+    id?: true
+    transaction_id?: true
+    product_id?: true
+    product_price_id?: true
+    product_coupon_id?: true
+    quantity?: true
+    product_name?: true
+    product_variant?: true
+    variant_download_link?: true
+    variant_file_access_password?: true
+    product_currency_code?: true
+    product_price?: true
+    product_discount?: true
+    product_coupon_discount?: true
+    share_method?: true
+    shared_at?: true
+  }
+
+  export type TransactionDetailCountAggregateInputType = {
+    id?: true
+    transaction_id?: true
+    product_id?: true
+    product_price_id?: true
+    product_coupon_id?: true
+    quantity?: true
+    product_name?: true
+    product_variant?: true
+    variant_download_link?: true
+    variant_file_access_password?: true
+    product_currency_code?: true
+    product_price?: true
+    product_discount?: true
+    product_coupon_discount?: true
+    share_method?: true
+    shared_at?: true
+    _all?: true
+  }
+
+  export type TransactionDetailAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TransactionDetail to aggregate.
+     */
+    where?: TransactionDetailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransactionDetails to fetch.
+     */
+    orderBy?: TransactionDetailOrderByWithRelationInput | TransactionDetailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TransactionDetailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransactionDetails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransactionDetails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TransactionDetails
+    **/
+    _count?: true | TransactionDetailCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TransactionDetailAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TransactionDetailSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TransactionDetailMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TransactionDetailMaxAggregateInputType
+  }
+
+  export type GetTransactionDetailAggregateType<T extends TransactionDetailAggregateArgs> = {
+        [P in keyof T & keyof AggregateTransactionDetail]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTransactionDetail[P]>
+      : GetScalarType<T[P], AggregateTransactionDetail[P]>
+  }
+
+
+
+
+  export type TransactionDetailGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionDetailWhereInput
+    orderBy?: TransactionDetailOrderByWithAggregationInput | TransactionDetailOrderByWithAggregationInput[]
+    by: TransactionDetailScalarFieldEnum[] | TransactionDetailScalarFieldEnum
+    having?: TransactionDetailScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TransactionDetailCountAggregateInputType | true
+    _avg?: TransactionDetailAvgAggregateInputType
+    _sum?: TransactionDetailSumAggregateInputType
+    _min?: TransactionDetailMinAggregateInputType
+    _max?: TransactionDetailMaxAggregateInputType
+  }
+
+  export type TransactionDetailGroupByOutputType = {
+    id: string
+    transaction_id: string
+    product_id: string | null
+    product_price_id: string | null
+    product_coupon_id: number | null
+    quantity: number
+    product_name: string
+    product_variant: string
+    variant_download_link: string | null
+    variant_file_access_password: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal
+    product_discount: number | null
+    product_coupon_discount: number | null
+    share_method: $Enums.ShareMethod | null
+    shared_at: bigint | null
+    _count: TransactionDetailCountAggregateOutputType | null
+    _avg: TransactionDetailAvgAggregateOutputType | null
+    _sum: TransactionDetailSumAggregateOutputType | null
+    _min: TransactionDetailMinAggregateOutputType | null
+    _max: TransactionDetailMaxAggregateOutputType | null
+  }
+
+  type GetTransactionDetailGroupByPayload<T extends TransactionDetailGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TransactionDetailGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TransactionDetailGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TransactionDetailGroupByOutputType[P]>
+            : GetScalarType<T[P], TransactionDetailGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TransactionDetailSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transaction_id?: boolean
+    product_id?: boolean
+    product_price_id?: boolean
+    product_coupon_id?: boolean
+    quantity?: boolean
+    product_name?: boolean
+    product_variant?: boolean
+    variant_download_link?: boolean
+    variant_file_access_password?: boolean
+    product_currency_code?: boolean
+    product_price?: boolean
+    product_discount?: boolean
+    product_coupon_discount?: boolean
+    share_method?: boolean
+    shared_at?: boolean
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transactionDetail"]>
+
+  export type TransactionDetailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transaction_id?: boolean
+    product_id?: boolean
+    product_price_id?: boolean
+    product_coupon_id?: boolean
+    quantity?: boolean
+    product_name?: boolean
+    product_variant?: boolean
+    variant_download_link?: boolean
+    variant_file_access_password?: boolean
+    product_currency_code?: boolean
+    product_price?: boolean
+    product_discount?: boolean
+    product_coupon_discount?: boolean
+    share_method?: boolean
+    shared_at?: boolean
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transactionDetail"]>
+
+  export type TransactionDetailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transaction_id?: boolean
+    product_id?: boolean
+    product_price_id?: boolean
+    product_coupon_id?: boolean
+    quantity?: boolean
+    product_name?: boolean
+    product_variant?: boolean
+    variant_download_link?: boolean
+    variant_file_access_password?: boolean
+    product_currency_code?: boolean
+    product_price?: boolean
+    product_discount?: boolean
+    product_coupon_discount?: boolean
+    share_method?: boolean
+    shared_at?: boolean
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transactionDetail"]>
+
+  export type TransactionDetailSelectScalar = {
+    id?: boolean
+    transaction_id?: boolean
+    product_id?: boolean
+    product_price_id?: boolean
+    product_coupon_id?: boolean
+    quantity?: boolean
+    product_name?: boolean
+    product_variant?: boolean
+    variant_download_link?: boolean
+    variant_file_access_password?: boolean
+    product_currency_code?: boolean
+    product_price?: boolean
+    product_discount?: boolean
+    product_coupon_discount?: boolean
+    share_method?: boolean
+    shared_at?: boolean
+  }
+
+  export type TransactionDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "product_id" | "product_price_id" | "product_coupon_id" | "quantity" | "product_name" | "product_variant" | "variant_download_link" | "variant_file_access_password" | "product_currency_code" | "product_price" | "product_discount" | "product_coupon_discount" | "share_method" | "shared_at", ExtArgs["result"]["transactionDetail"]>
+  export type TransactionDetailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+  }
+  export type TransactionDetailIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+  }
+  export type TransactionDetailIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+  }
+
+  export type $TransactionDetailPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TransactionDetail"
+    objects: {
+      transaction: Prisma.$TransactionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      transaction_id: string
+      product_id: string | null
+      product_price_id: string | null
+      product_coupon_id: number | null
+      quantity: number
+      product_name: string
+      product_variant: string
+      variant_download_link: string | null
+      variant_file_access_password: string | null
+      product_currency_code: $Enums.CurrencyCode
+      product_price: Prisma.Decimal
+      product_discount: number | null
+      product_coupon_discount: number | null
+      share_method: $Enums.ShareMethod | null
+      shared_at: bigint | null
+    }, ExtArgs["result"]["transactionDetail"]>
+    composites: {}
+  }
+
+  type TransactionDetailGetPayload<S extends boolean | null | undefined | TransactionDetailDefaultArgs> = $Result.GetResult<Prisma.$TransactionDetailPayload, S>
+
+  type TransactionDetailCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TransactionDetailFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TransactionDetailCountAggregateInputType | true
+    }
+
+  export interface TransactionDetailDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TransactionDetail'], meta: { name: 'TransactionDetail' } }
+    /**
+     * Find zero or one TransactionDetail that matches the filter.
+     * @param {TransactionDetailFindUniqueArgs} args - Arguments to find a TransactionDetail
+     * @example
+     * // Get one TransactionDetail
+     * const transactionDetail = await prisma.transactionDetail.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TransactionDetailFindUniqueArgs>(args: SelectSubset<T, TransactionDetailFindUniqueArgs<ExtArgs>>): Prisma__TransactionDetailClient<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TransactionDetail that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TransactionDetailFindUniqueOrThrowArgs} args - Arguments to find a TransactionDetail
+     * @example
+     * // Get one TransactionDetail
+     * const transactionDetail = await prisma.transactionDetail.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TransactionDetailFindUniqueOrThrowArgs>(args: SelectSubset<T, TransactionDetailFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TransactionDetailClient<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TransactionDetail that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionDetailFindFirstArgs} args - Arguments to find a TransactionDetail
+     * @example
+     * // Get one TransactionDetail
+     * const transactionDetail = await prisma.transactionDetail.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TransactionDetailFindFirstArgs>(args?: SelectSubset<T, TransactionDetailFindFirstArgs<ExtArgs>>): Prisma__TransactionDetailClient<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TransactionDetail that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionDetailFindFirstOrThrowArgs} args - Arguments to find a TransactionDetail
+     * @example
+     * // Get one TransactionDetail
+     * const transactionDetail = await prisma.transactionDetail.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TransactionDetailFindFirstOrThrowArgs>(args?: SelectSubset<T, TransactionDetailFindFirstOrThrowArgs<ExtArgs>>): Prisma__TransactionDetailClient<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TransactionDetails that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionDetailFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TransactionDetails
+     * const transactionDetails = await prisma.transactionDetail.findMany()
+     * 
+     * // Get first 10 TransactionDetails
+     * const transactionDetails = await prisma.transactionDetail.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const transactionDetailWithIdOnly = await prisma.transactionDetail.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TransactionDetailFindManyArgs>(args?: SelectSubset<T, TransactionDetailFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TransactionDetail.
+     * @param {TransactionDetailCreateArgs} args - Arguments to create a TransactionDetail.
+     * @example
+     * // Create one TransactionDetail
+     * const TransactionDetail = await prisma.transactionDetail.create({
+     *   data: {
+     *     // ... data to create a TransactionDetail
+     *   }
+     * })
+     * 
+     */
+    create<T extends TransactionDetailCreateArgs>(args: SelectSubset<T, TransactionDetailCreateArgs<ExtArgs>>): Prisma__TransactionDetailClient<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TransactionDetails.
+     * @param {TransactionDetailCreateManyArgs} args - Arguments to create many TransactionDetails.
+     * @example
+     * // Create many TransactionDetails
+     * const transactionDetail = await prisma.transactionDetail.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TransactionDetailCreateManyArgs>(args?: SelectSubset<T, TransactionDetailCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TransactionDetails and returns the data saved in the database.
+     * @param {TransactionDetailCreateManyAndReturnArgs} args - Arguments to create many TransactionDetails.
+     * @example
+     * // Create many TransactionDetails
+     * const transactionDetail = await prisma.transactionDetail.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TransactionDetails and only return the `id`
+     * const transactionDetailWithIdOnly = await prisma.transactionDetail.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TransactionDetailCreateManyAndReturnArgs>(args?: SelectSubset<T, TransactionDetailCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TransactionDetail.
+     * @param {TransactionDetailDeleteArgs} args - Arguments to delete one TransactionDetail.
+     * @example
+     * // Delete one TransactionDetail
+     * const TransactionDetail = await prisma.transactionDetail.delete({
+     *   where: {
+     *     // ... filter to delete one TransactionDetail
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TransactionDetailDeleteArgs>(args: SelectSubset<T, TransactionDetailDeleteArgs<ExtArgs>>): Prisma__TransactionDetailClient<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TransactionDetail.
+     * @param {TransactionDetailUpdateArgs} args - Arguments to update one TransactionDetail.
+     * @example
+     * // Update one TransactionDetail
+     * const transactionDetail = await prisma.transactionDetail.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TransactionDetailUpdateArgs>(args: SelectSubset<T, TransactionDetailUpdateArgs<ExtArgs>>): Prisma__TransactionDetailClient<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TransactionDetails.
+     * @param {TransactionDetailDeleteManyArgs} args - Arguments to filter TransactionDetails to delete.
+     * @example
+     * // Delete a few TransactionDetails
+     * const { count } = await prisma.transactionDetail.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TransactionDetailDeleteManyArgs>(args?: SelectSubset<T, TransactionDetailDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TransactionDetails.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionDetailUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TransactionDetails
+     * const transactionDetail = await prisma.transactionDetail.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TransactionDetailUpdateManyArgs>(args: SelectSubset<T, TransactionDetailUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TransactionDetails and returns the data updated in the database.
+     * @param {TransactionDetailUpdateManyAndReturnArgs} args - Arguments to update many TransactionDetails.
+     * @example
+     * // Update many TransactionDetails
+     * const transactionDetail = await prisma.transactionDetail.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TransactionDetails and only return the `id`
+     * const transactionDetailWithIdOnly = await prisma.transactionDetail.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TransactionDetailUpdateManyAndReturnArgs>(args: SelectSubset<T, TransactionDetailUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TransactionDetail.
+     * @param {TransactionDetailUpsertArgs} args - Arguments to update or create a TransactionDetail.
+     * @example
+     * // Update or create a TransactionDetail
+     * const transactionDetail = await prisma.transactionDetail.upsert({
+     *   create: {
+     *     // ... data to create a TransactionDetail
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TransactionDetail we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TransactionDetailUpsertArgs>(args: SelectSubset<T, TransactionDetailUpsertArgs<ExtArgs>>): Prisma__TransactionDetailClient<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TransactionDetails.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionDetailCountArgs} args - Arguments to filter TransactionDetails to count.
+     * @example
+     * // Count the number of TransactionDetails
+     * const count = await prisma.transactionDetail.count({
+     *   where: {
+     *     // ... the filter for the TransactionDetails we want to count
+     *   }
+     * })
+    **/
+    count<T extends TransactionDetailCountArgs>(
+      args?: Subset<T, TransactionDetailCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TransactionDetailCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TransactionDetail.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionDetailAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TransactionDetailAggregateArgs>(args: Subset<T, TransactionDetailAggregateArgs>): Prisma.PrismaPromise<GetTransactionDetailAggregateType<T>>
+
+    /**
+     * Group by TransactionDetail.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionDetailGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TransactionDetailGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TransactionDetailGroupByArgs['orderBy'] }
+        : { orderBy?: TransactionDetailGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TransactionDetailGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTransactionDetailGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TransactionDetail model
+   */
+  readonly fields: TransactionDetailFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TransactionDetail.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TransactionDetailClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    transaction<T extends TransactionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TransactionDefaultArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TransactionDetail model
+   */
+  interface TransactionDetailFieldRefs {
+    readonly id: FieldRef<"TransactionDetail", 'String'>
+    readonly transaction_id: FieldRef<"TransactionDetail", 'String'>
+    readonly product_id: FieldRef<"TransactionDetail", 'String'>
+    readonly product_price_id: FieldRef<"TransactionDetail", 'String'>
+    readonly product_coupon_id: FieldRef<"TransactionDetail", 'Int'>
+    readonly quantity: FieldRef<"TransactionDetail", 'Int'>
+    readonly product_name: FieldRef<"TransactionDetail", 'String'>
+    readonly product_variant: FieldRef<"TransactionDetail", 'String'>
+    readonly variant_download_link: FieldRef<"TransactionDetail", 'String'>
+    readonly variant_file_access_password: FieldRef<"TransactionDetail", 'String'>
+    readonly product_currency_code: FieldRef<"TransactionDetail", 'CurrencyCode'>
+    readonly product_price: FieldRef<"TransactionDetail", 'Decimal'>
+    readonly product_discount: FieldRef<"TransactionDetail", 'Int'>
+    readonly product_coupon_discount: FieldRef<"TransactionDetail", 'Int'>
+    readonly share_method: FieldRef<"TransactionDetail", 'ShareMethod'>
+    readonly shared_at: FieldRef<"TransactionDetail", 'BigInt'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TransactionDetail findUnique
+   */
+  export type TransactionDetailFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionDetail to fetch.
+     */
+    where: TransactionDetailWhereUniqueInput
+  }
+
+  /**
+   * TransactionDetail findUniqueOrThrow
+   */
+  export type TransactionDetailFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionDetail to fetch.
+     */
+    where: TransactionDetailWhereUniqueInput
+  }
+
+  /**
+   * TransactionDetail findFirst
+   */
+  export type TransactionDetailFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionDetail to fetch.
+     */
+    where?: TransactionDetailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransactionDetails to fetch.
+     */
+    orderBy?: TransactionDetailOrderByWithRelationInput | TransactionDetailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TransactionDetails.
+     */
+    cursor?: TransactionDetailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransactionDetails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransactionDetails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TransactionDetails.
+     */
+    distinct?: TransactionDetailScalarFieldEnum | TransactionDetailScalarFieldEnum[]
+  }
+
+  /**
+   * TransactionDetail findFirstOrThrow
+   */
+  export type TransactionDetailFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionDetail to fetch.
+     */
+    where?: TransactionDetailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransactionDetails to fetch.
+     */
+    orderBy?: TransactionDetailOrderByWithRelationInput | TransactionDetailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TransactionDetails.
+     */
+    cursor?: TransactionDetailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransactionDetails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransactionDetails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TransactionDetails.
+     */
+    distinct?: TransactionDetailScalarFieldEnum | TransactionDetailScalarFieldEnum[]
+  }
+
+  /**
+   * TransactionDetail findMany
+   */
+  export type TransactionDetailFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionDetails to fetch.
+     */
+    where?: TransactionDetailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransactionDetails to fetch.
+     */
+    orderBy?: TransactionDetailOrderByWithRelationInput | TransactionDetailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TransactionDetails.
+     */
+    cursor?: TransactionDetailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransactionDetails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransactionDetails.
+     */
+    skip?: number
+    distinct?: TransactionDetailScalarFieldEnum | TransactionDetailScalarFieldEnum[]
+  }
+
+  /**
+   * TransactionDetail create
+   */
+  export type TransactionDetailCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TransactionDetail.
+     */
+    data: XOR<TransactionDetailCreateInput, TransactionDetailUncheckedCreateInput>
+  }
+
+  /**
+   * TransactionDetail createMany
+   */
+  export type TransactionDetailCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TransactionDetails.
+     */
+    data: TransactionDetailCreateManyInput | TransactionDetailCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TransactionDetail createManyAndReturn
+   */
+  export type TransactionDetailCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * The data used to create many TransactionDetails.
+     */
+    data: TransactionDetailCreateManyInput | TransactionDetailCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TransactionDetail update
+   */
+  export type TransactionDetailUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TransactionDetail.
+     */
+    data: XOR<TransactionDetailUpdateInput, TransactionDetailUncheckedUpdateInput>
+    /**
+     * Choose, which TransactionDetail to update.
+     */
+    where: TransactionDetailWhereUniqueInput
+  }
+
+  /**
+   * TransactionDetail updateMany
+   */
+  export type TransactionDetailUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TransactionDetails.
+     */
+    data: XOR<TransactionDetailUpdateManyMutationInput, TransactionDetailUncheckedUpdateManyInput>
+    /**
+     * Filter which TransactionDetails to update
+     */
+    where?: TransactionDetailWhereInput
+    /**
+     * Limit how many TransactionDetails to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TransactionDetail updateManyAndReturn
+   */
+  export type TransactionDetailUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * The data used to update TransactionDetails.
+     */
+    data: XOR<TransactionDetailUpdateManyMutationInput, TransactionDetailUncheckedUpdateManyInput>
+    /**
+     * Filter which TransactionDetails to update
+     */
+    where?: TransactionDetailWhereInput
+    /**
+     * Limit how many TransactionDetails to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TransactionDetail upsert
+   */
+  export type TransactionDetailUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TransactionDetail to update in case it exists.
+     */
+    where: TransactionDetailWhereUniqueInput
+    /**
+     * In case the TransactionDetail found by the `where` argument doesn't exist, create a new TransactionDetail with this data.
+     */
+    create: XOR<TransactionDetailCreateInput, TransactionDetailUncheckedCreateInput>
+    /**
+     * In case the TransactionDetail was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TransactionDetailUpdateInput, TransactionDetailUncheckedUpdateInput>
+  }
+
+  /**
+   * TransactionDetail delete
+   */
+  export type TransactionDetailDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    /**
+     * Filter which TransactionDetail to delete.
+     */
+    where: TransactionDetailWhereUniqueInput
+  }
+
+  /**
+   * TransactionDetail deleteMany
+   */
+  export type TransactionDetailDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TransactionDetails to delete
+     */
+    where?: TransactionDetailWhereInput
+    /**
+     * Limit how many TransactionDetails to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TransactionDetail without action
+   */
+  export type TransactionDetailDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Feedback
    */
 
@@ -31136,14 +36221,14 @@ export namespace Prisma {
     admin_id: 'admin_id',
     owner_id: 'owner_id',
     license_id: 'license_id',
-    name: 'name',
-    slug: 'slug',
-    price_type: 'price_type',
+    drive_file_id: 'drive_file_id',
     download_link: 'download_link',
     is_published: 'is_published',
     is_pinned: 'is_pinned',
+    name: 'name',
+    slug: 'slug',
+    price_type: 'price_type',
     created_at: 'created_at',
-    released_at: 'released_at',
     updated_at: 'updated_at'
   };
 
@@ -31154,11 +36239,30 @@ export namespace Prisma {
     id: 'id',
     product_id: 'product_id',
     language: 'language',
-    description: 'description',
-    changelog: 'changelog'
+    description: 'description'
   };
 
   export type ProductTranslationScalarFieldEnum = (typeof ProductTranslationScalarFieldEnum)[keyof typeof ProductTranslationScalarFieldEnum]
+
+
+  export const ProductVersionScalarFieldEnum: {
+    id: 'id',
+    product_id: 'product_id',
+    version: 'version',
+    released_at: 'released_at'
+  };
+
+  export type ProductVersionScalarFieldEnum = (typeof ProductVersionScalarFieldEnum)[keyof typeof ProductVersionScalarFieldEnum]
+
+
+  export const ProductVersionTranslationScalarFieldEnum: {
+    id: 'id',
+    product_version_id: 'product_version_id',
+    language: 'language',
+    changelog: 'changelog'
+  };
+
+  export type ProductVersionTranslationScalarFieldEnum = (typeof ProductVersionTranslationScalarFieldEnum)[keyof typeof ProductVersionTranslationScalarFieldEnum]
 
 
   export const ProductDiscountScalarFieldEnum: {
@@ -31198,7 +36302,8 @@ export namespace Prisma {
     id: 'id',
     product_id: 'product_id',
     name: 'name',
-    download_link: 'download_link'
+    download_link: 'download_link',
+    file_access_password: 'file_access_password'
   };
 
   export type ProductVariantScalarFieldEnum = (typeof ProductVariantScalarFieldEnum)[keyof typeof ProductVariantScalarFieldEnum]
@@ -31287,6 +36392,45 @@ export namespace Prisma {
   };
 
   export type FaqTranslationScalarFieldEnum = (typeof FaqTranslationScalarFieldEnum)[keyof typeof FaqTranslationScalarFieldEnum]
+
+
+  export const TransactionScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    customer_id: 'customer_id',
+    status: 'status',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    currency_code: 'currency_code',
+    total_amount: 'total_amount',
+    customer_name: 'customer_name',
+    customer_email: 'customer_email',
+    customer_phone_number: 'customer_phone_number'
+  };
+
+  export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+  export const TransactionDetailScalarFieldEnum: {
+    id: 'id',
+    transaction_id: 'transaction_id',
+    product_id: 'product_id',
+    product_price_id: 'product_price_id',
+    product_coupon_id: 'product_coupon_id',
+    quantity: 'quantity',
+    product_name: 'product_name',
+    product_variant: 'product_variant',
+    variant_download_link: 'variant_download_link',
+    variant_file_access_password: 'variant_file_access_password',
+    product_currency_code: 'product_currency_code',
+    product_price: 'product_price',
+    product_discount: 'product_discount',
+    product_coupon_discount: 'product_coupon_discount',
+    share_method: 'share_method',
+    shared_at: 'shared_at'
+  };
+
+  export type TransactionDetailScalarFieldEnum = (typeof TransactionDetailScalarFieldEnum)[keyof typeof TransactionDetailScalarFieldEnum]
 
 
   export const FeedbackScalarFieldEnum: {
@@ -31440,6 +36584,48 @@ export namespace Prisma {
    * Reference to a field of type 'PriceType[]'
    */
   export type ListEnumPriceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransactionStatus'
+   */
+  export type EnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransactionStatus[]'
+   */
+  export type ListEnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ShareMethod'
+   */
+  export type EnumShareMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShareMethod'>
+    
+
+
+  /**
+   * Reference to a field of type 'ShareMethod[]'
+   */
+  export type ListEnumShareMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShareMethod[]'>
     
 
 
@@ -31899,20 +37085,21 @@ export namespace Prisma {
     admin_id?: StringFilter<"Product"> | string
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
-    name?: StringFilter<"Product"> | string
-    slug?: StringFilter<"Product"> | string
-    price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
+    drive_file_id?: StringNullableFilter<"Product"> | string | null
     download_link?: StringNullableFilter<"Product"> | string | null
     is_published?: BoolFilter<"Product"> | boolean
     is_pinned?: BoolFilter<"Product"> | boolean
+    name?: StringFilter<"Product"> | string
+    slug?: StringFilter<"Product"> | string
+    price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
     created_at?: BigIntFilter<"Product"> | bigint | number
-    released_at?: BigIntFilter<"Product"> | bigint | number
     updated_at?: BigIntFilter<"Product"> | bigint | number
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     owner?: XOR<OwnerScalarRelationFilter, OwnerWhereInput>
     license?: XOR<LicenseScalarRelationFilter, LicenseWhereInput>
     translations?: ProductTranslationListRelationFilter
+    versions?: ProductVersionListRelationFilter
     discount?: XOR<ProductDiscountNullableScalarRelationFilter, ProductDiscountWhereInput> | null
     coupon?: XOR<ProductCouponNullableScalarRelationFilter, ProductCouponWhereInput> | null
     images?: ProductImageListRelationFilter
@@ -31925,20 +37112,21 @@ export namespace Prisma {
     admin_id?: SortOrder
     owner_id?: SortOrder
     license_id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    price_type?: SortOrder
+    drive_file_id?: SortOrderInput | SortOrder
     download_link?: SortOrderInput | SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    price_type?: SortOrder
     created_at?: SortOrder
-    released_at?: SortOrder
     updated_at?: SortOrder
     admin?: AdminOrderByWithRelationInput
     category?: CategoryOrderByWithRelationInput
     owner?: OwnerOrderByWithRelationInput
     license?: LicenseOrderByWithRelationInput
     translations?: ProductTranslationOrderByRelationAggregateInput
+    versions?: ProductVersionOrderByRelationAggregateInput
     discount?: ProductDiscountOrderByWithRelationInput
     coupon?: ProductCouponOrderByWithRelationInput
     images?: ProductImageOrderByRelationAggregateInput
@@ -31955,19 +37143,20 @@ export namespace Prisma {
     admin_id?: StringFilter<"Product"> | string
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
-    name?: StringFilter<"Product"> | string
-    price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
+    drive_file_id?: StringNullableFilter<"Product"> | string | null
     download_link?: StringNullableFilter<"Product"> | string | null
     is_published?: BoolFilter<"Product"> | boolean
     is_pinned?: BoolFilter<"Product"> | boolean
+    name?: StringFilter<"Product"> | string
+    price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
     created_at?: BigIntFilter<"Product"> | bigint | number
-    released_at?: BigIntFilter<"Product"> | bigint | number
     updated_at?: BigIntFilter<"Product"> | bigint | number
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     owner?: XOR<OwnerScalarRelationFilter, OwnerWhereInput>
     license?: XOR<LicenseScalarRelationFilter, LicenseWhereInput>
     translations?: ProductTranslationListRelationFilter
+    versions?: ProductVersionListRelationFilter
     discount?: XOR<ProductDiscountNullableScalarRelationFilter, ProductDiscountWhereInput> | null
     coupon?: XOR<ProductCouponNullableScalarRelationFilter, ProductCouponWhereInput> | null
     images?: ProductImageListRelationFilter
@@ -31980,14 +37169,14 @@ export namespace Prisma {
     admin_id?: SortOrder
     owner_id?: SortOrder
     license_id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    price_type?: SortOrder
+    drive_file_id?: SortOrderInput | SortOrder
     download_link?: SortOrderInput | SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    price_type?: SortOrder
     created_at?: SortOrder
-    released_at?: SortOrder
     updated_at?: SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
@@ -32005,14 +37194,14 @@ export namespace Prisma {
     admin_id?: StringWithAggregatesFilter<"Product"> | string
     owner_id?: IntWithAggregatesFilter<"Product"> | number
     license_id?: IntWithAggregatesFilter<"Product"> | number
-    name?: StringWithAggregatesFilter<"Product"> | string
-    slug?: StringWithAggregatesFilter<"Product"> | string
-    price_type?: EnumPriceTypeWithAggregatesFilter<"Product"> | $Enums.PriceType
+    drive_file_id?: StringNullableWithAggregatesFilter<"Product"> | string | null
     download_link?: StringNullableWithAggregatesFilter<"Product"> | string | null
     is_published?: BoolWithAggregatesFilter<"Product"> | boolean
     is_pinned?: BoolWithAggregatesFilter<"Product"> | boolean
+    name?: StringWithAggregatesFilter<"Product"> | string
+    slug?: StringWithAggregatesFilter<"Product"> | string
+    price_type?: EnumPriceTypeWithAggregatesFilter<"Product"> | $Enums.PriceType
     created_at?: BigIntWithAggregatesFilter<"Product"> | bigint | number
-    released_at?: BigIntWithAggregatesFilter<"Product"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"Product"> | bigint | number
   }
 
@@ -32024,7 +37213,6 @@ export namespace Prisma {
     product_id?: UuidFilter<"ProductTranslation"> | string
     language?: EnumLanguageFilter<"ProductTranslation"> | $Enums.Language
     description?: StringFilter<"ProductTranslation"> | string
-    changelog?: StringNullableFilter<"ProductTranslation"> | string | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
 
@@ -32033,7 +37221,6 @@ export namespace Prisma {
     product_id?: SortOrder
     language?: SortOrder
     description?: SortOrder
-    changelog?: SortOrderInput | SortOrder
     product?: ProductOrderByWithRelationInput
   }
 
@@ -32045,7 +37232,6 @@ export namespace Prisma {
     product_id?: UuidFilter<"ProductTranslation"> | string
     language?: EnumLanguageFilter<"ProductTranslation"> | $Enums.Language
     description?: StringFilter<"ProductTranslation"> | string
-    changelog?: StringNullableFilter<"ProductTranslation"> | string | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "id">
 
@@ -32054,7 +37240,6 @@ export namespace Prisma {
     product_id?: SortOrder
     language?: SortOrder
     description?: SortOrder
-    changelog?: SortOrderInput | SortOrder
     _count?: ProductTranslationCountOrderByAggregateInput
     _max?: ProductTranslationMaxOrderByAggregateInput
     _min?: ProductTranslationMinOrderByAggregateInput
@@ -32068,7 +37253,111 @@ export namespace Prisma {
     product_id?: UuidWithAggregatesFilter<"ProductTranslation"> | string
     language?: EnumLanguageWithAggregatesFilter<"ProductTranslation"> | $Enums.Language
     description?: StringWithAggregatesFilter<"ProductTranslation"> | string
-    changelog?: StringNullableWithAggregatesFilter<"ProductTranslation"> | string | null
+  }
+
+  export type ProductVersionWhereInput = {
+    AND?: ProductVersionWhereInput | ProductVersionWhereInput[]
+    OR?: ProductVersionWhereInput[]
+    NOT?: ProductVersionWhereInput | ProductVersionWhereInput[]
+    id?: UuidFilter<"ProductVersion"> | string
+    product_id?: UuidFilter<"ProductVersion"> | string
+    version?: StringFilter<"ProductVersion"> | string
+    released_at?: BigIntFilter<"ProductVersion"> | bigint | number
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    translations?: ProductVersionTranslationListRelationFilter
+  }
+
+  export type ProductVersionOrderByWithRelationInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    version?: SortOrder
+    released_at?: SortOrder
+    product?: ProductOrderByWithRelationInput
+    translations?: ProductVersionTranslationOrderByRelationAggregateInput
+  }
+
+  export type ProductVersionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductVersionWhereInput | ProductVersionWhereInput[]
+    OR?: ProductVersionWhereInput[]
+    NOT?: ProductVersionWhereInput | ProductVersionWhereInput[]
+    product_id?: UuidFilter<"ProductVersion"> | string
+    version?: StringFilter<"ProductVersion"> | string
+    released_at?: BigIntFilter<"ProductVersion"> | bigint | number
+    product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
+    translations?: ProductVersionTranslationListRelationFilter
+  }, "id">
+
+  export type ProductVersionOrderByWithAggregationInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    version?: SortOrder
+    released_at?: SortOrder
+    _count?: ProductVersionCountOrderByAggregateInput
+    _avg?: ProductVersionAvgOrderByAggregateInput
+    _max?: ProductVersionMaxOrderByAggregateInput
+    _min?: ProductVersionMinOrderByAggregateInput
+    _sum?: ProductVersionSumOrderByAggregateInput
+  }
+
+  export type ProductVersionScalarWhereWithAggregatesInput = {
+    AND?: ProductVersionScalarWhereWithAggregatesInput | ProductVersionScalarWhereWithAggregatesInput[]
+    OR?: ProductVersionScalarWhereWithAggregatesInput[]
+    NOT?: ProductVersionScalarWhereWithAggregatesInput | ProductVersionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ProductVersion"> | string
+    product_id?: UuidWithAggregatesFilter<"ProductVersion"> | string
+    version?: StringWithAggregatesFilter<"ProductVersion"> | string
+    released_at?: BigIntWithAggregatesFilter<"ProductVersion"> | bigint | number
+  }
+
+  export type ProductVersionTranslationWhereInput = {
+    AND?: ProductVersionTranslationWhereInput | ProductVersionTranslationWhereInput[]
+    OR?: ProductVersionTranslationWhereInput[]
+    NOT?: ProductVersionTranslationWhereInput | ProductVersionTranslationWhereInput[]
+    id?: UuidFilter<"ProductVersionTranslation"> | string
+    product_version_id?: UuidFilter<"ProductVersionTranslation"> | string
+    language?: EnumLanguageFilter<"ProductVersionTranslation"> | $Enums.Language
+    changelog?: StringNullableFilter<"ProductVersionTranslation"> | string | null
+    productVersion?: XOR<ProductVersionScalarRelationFilter, ProductVersionWhereInput>
+  }
+
+  export type ProductVersionTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    product_version_id?: SortOrder
+    language?: SortOrder
+    changelog?: SortOrderInput | SortOrder
+    productVersion?: ProductVersionOrderByWithRelationInput
+  }
+
+  export type ProductVersionTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductVersionTranslationWhereInput | ProductVersionTranslationWhereInput[]
+    OR?: ProductVersionTranslationWhereInput[]
+    NOT?: ProductVersionTranslationWhereInput | ProductVersionTranslationWhereInput[]
+    product_version_id?: UuidFilter<"ProductVersionTranslation"> | string
+    language?: EnumLanguageFilter<"ProductVersionTranslation"> | $Enums.Language
+    changelog?: StringNullableFilter<"ProductVersionTranslation"> | string | null
+    productVersion?: XOR<ProductVersionScalarRelationFilter, ProductVersionWhereInput>
+  }, "id">
+
+  export type ProductVersionTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    product_version_id?: SortOrder
+    language?: SortOrder
+    changelog?: SortOrderInput | SortOrder
+    _count?: ProductVersionTranslationCountOrderByAggregateInput
+    _max?: ProductVersionTranslationMaxOrderByAggregateInput
+    _min?: ProductVersionTranslationMinOrderByAggregateInput
+  }
+
+  export type ProductVersionTranslationScalarWhereWithAggregatesInput = {
+    AND?: ProductVersionTranslationScalarWhereWithAggregatesInput | ProductVersionTranslationScalarWhereWithAggregatesInput[]
+    OR?: ProductVersionTranslationScalarWhereWithAggregatesInput[]
+    NOT?: ProductVersionTranslationScalarWhereWithAggregatesInput | ProductVersionTranslationScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ProductVersionTranslation"> | string
+    product_version_id?: UuidWithAggregatesFilter<"ProductVersionTranslation"> | string
+    language?: EnumLanguageWithAggregatesFilter<"ProductVersionTranslation"> | $Enums.Language
+    changelog?: StringNullableWithAggregatesFilter<"ProductVersionTranslation"> | string | null
   }
 
   export type ProductDiscountWhereInput = {
@@ -32250,6 +37539,7 @@ export namespace Prisma {
     product_id?: UuidFilter<"ProductVariant"> | string
     name?: StringFilter<"ProductVariant"> | string
     download_link?: StringNullableFilter<"ProductVariant"> | string | null
+    file_access_password?: StringNullableFilter<"ProductVariant"> | string | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     prices?: ProductPriceListRelationFilter
   }
@@ -32259,6 +37549,7 @@ export namespace Prisma {
     product_id?: SortOrder
     name?: SortOrder
     download_link?: SortOrderInput | SortOrder
+    file_access_password?: SortOrderInput | SortOrder
     product?: ProductOrderByWithRelationInput
     prices?: ProductPriceOrderByRelationAggregateInput
   }
@@ -32271,6 +37562,7 @@ export namespace Prisma {
     product_id?: UuidFilter<"ProductVariant"> | string
     name?: StringFilter<"ProductVariant"> | string
     download_link?: StringNullableFilter<"ProductVariant"> | string | null
+    file_access_password?: StringNullableFilter<"ProductVariant"> | string | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     prices?: ProductPriceListRelationFilter
   }, "id">
@@ -32280,6 +37572,7 @@ export namespace Prisma {
     product_id?: SortOrder
     name?: SortOrder
     download_link?: SortOrderInput | SortOrder
+    file_access_password?: SortOrderInput | SortOrder
     _count?: ProductVariantCountOrderByAggregateInput
     _max?: ProductVariantMaxOrderByAggregateInput
     _min?: ProductVariantMinOrderByAggregateInput
@@ -32293,6 +37586,7 @@ export namespace Prisma {
     product_id?: UuidWithAggregatesFilter<"ProductVariant"> | string
     name?: StringWithAggregatesFilter<"ProductVariant"> | string
     download_link?: StringNullableWithAggregatesFilter<"ProductVariant"> | string | null
+    file_access_password?: StringNullableWithAggregatesFilter<"ProductVariant"> | string | null
   }
 
   export type ProductPriceWhereInput = {
@@ -32302,7 +37596,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductPrice"> | string
     variant_id?: UuidFilter<"ProductPrice"> | string
     currency_code?: EnumCurrencyCodeFilter<"ProductPrice"> | $Enums.CurrencyCode
-    price?: IntFilter<"ProductPrice"> | number
+    price?: DecimalFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
     variant?: XOR<ProductVariantScalarRelationFilter, ProductVariantWhereInput>
   }
 
@@ -32321,7 +37615,7 @@ export namespace Prisma {
     NOT?: ProductPriceWhereInput | ProductPriceWhereInput[]
     variant_id?: UuidFilter<"ProductPrice"> | string
     currency_code?: EnumCurrencyCodeFilter<"ProductPrice"> | $Enums.CurrencyCode
-    price?: IntFilter<"ProductPrice"> | number
+    price?: DecimalFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
     variant?: XOR<ProductVariantScalarRelationFilter, ProductVariantWhereInput>
   }, "id">
 
@@ -32344,7 +37638,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"ProductPrice"> | string
     variant_id?: UuidWithAggregatesFilter<"ProductPrice"> | string
     currency_code?: EnumCurrencyCodeWithAggregatesFilter<"ProductPrice"> | $Enums.CurrencyCode
-    price?: IntWithAggregatesFilter<"ProductPrice"> | number
+    price?: DecimalWithAggregatesFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
   }
 
   export type TermsOfServiceWhereInput = {
@@ -32736,6 +38030,205 @@ export namespace Prisma {
     language?: EnumLanguageWithAggregatesFilter<"FaqTranslation"> | $Enums.Language
     title?: StringWithAggregatesFilter<"FaqTranslation"> | string
     content?: StringWithAggregatesFilter<"FaqTranslation"> | string
+  }
+
+  export type TransactionWhereInput = {
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    id?: UuidFilter<"Transaction"> | string
+    code?: StringFilter<"Transaction"> | string
+    customer_id?: UuidNullableFilter<"Transaction"> | string | null
+    status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
+    created_at?: BigIntFilter<"Transaction"> | bigint | number
+    updated_at?: BigIntFilter<"Transaction"> | bigint | number
+    currency_code?: EnumCurrencyCodeFilter<"Transaction"> | $Enums.CurrencyCode
+    total_amount?: IntFilter<"Transaction"> | number
+    customer_name?: StringFilter<"Transaction"> | string
+    customer_email?: StringFilter<"Transaction"> | string
+    customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
+    details?: TransactionDetailListRelationFilter
+  }
+
+  export type TransactionOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    customer_id?: SortOrderInput | SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    currency_code?: SortOrder
+    total_amount?: SortOrder
+    customer_name?: SortOrder
+    customer_email?: SortOrder
+    customer_phone_number?: SortOrderInput | SortOrder
+    details?: TransactionDetailOrderByRelationAggregateInput
+  }
+
+  export type TransactionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    customer_id?: UuidNullableFilter<"Transaction"> | string | null
+    status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
+    created_at?: BigIntFilter<"Transaction"> | bigint | number
+    updated_at?: BigIntFilter<"Transaction"> | bigint | number
+    currency_code?: EnumCurrencyCodeFilter<"Transaction"> | $Enums.CurrencyCode
+    total_amount?: IntFilter<"Transaction"> | number
+    customer_name?: StringFilter<"Transaction"> | string
+    customer_email?: StringFilter<"Transaction"> | string
+    customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
+    details?: TransactionDetailListRelationFilter
+  }, "id" | "code">
+
+  export type TransactionOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    customer_id?: SortOrderInput | SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    currency_code?: SortOrder
+    total_amount?: SortOrder
+    customer_name?: SortOrder
+    customer_email?: SortOrder
+    customer_phone_number?: SortOrderInput | SortOrder
+    _count?: TransactionCountOrderByAggregateInput
+    _avg?: TransactionAvgOrderByAggregateInput
+    _max?: TransactionMaxOrderByAggregateInput
+    _min?: TransactionMinOrderByAggregateInput
+    _sum?: TransactionSumOrderByAggregateInput
+  }
+
+  export type TransactionScalarWhereWithAggregatesInput = {
+    AND?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    OR?: TransactionScalarWhereWithAggregatesInput[]
+    NOT?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Transaction"> | string
+    code?: StringWithAggregatesFilter<"Transaction"> | string
+    customer_id?: UuidNullableWithAggregatesFilter<"Transaction"> | string | null
+    status?: EnumTransactionStatusWithAggregatesFilter<"Transaction"> | $Enums.TransactionStatus
+    created_at?: BigIntWithAggregatesFilter<"Transaction"> | bigint | number
+    updated_at?: BigIntWithAggregatesFilter<"Transaction"> | bigint | number
+    currency_code?: EnumCurrencyCodeWithAggregatesFilter<"Transaction"> | $Enums.CurrencyCode
+    total_amount?: IntWithAggregatesFilter<"Transaction"> | number
+    customer_name?: StringWithAggregatesFilter<"Transaction"> | string
+    customer_email?: StringWithAggregatesFilter<"Transaction"> | string
+    customer_phone_number?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  }
+
+  export type TransactionDetailWhereInput = {
+    AND?: TransactionDetailWhereInput | TransactionDetailWhereInput[]
+    OR?: TransactionDetailWhereInput[]
+    NOT?: TransactionDetailWhereInput | TransactionDetailWhereInput[]
+    id?: UuidFilter<"TransactionDetail"> | string
+    transaction_id?: UuidFilter<"TransactionDetail"> | string
+    product_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    product_coupon_id?: IntNullableFilter<"TransactionDetail"> | number | null
+    quantity?: IntFilter<"TransactionDetail"> | number
+    product_name?: StringFilter<"TransactionDetail"> | string
+    product_variant?: StringFilter<"TransactionDetail"> | string
+    variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
+    product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
+    product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
+    shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
+    transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
+  }
+
+  export type TransactionDetailOrderByWithRelationInput = {
+    id?: SortOrder
+    transaction_id?: SortOrder
+    product_id?: SortOrderInput | SortOrder
+    product_price_id?: SortOrderInput | SortOrder
+    product_coupon_id?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    product_name?: SortOrder
+    product_variant?: SortOrder
+    variant_download_link?: SortOrderInput | SortOrder
+    variant_file_access_password?: SortOrderInput | SortOrder
+    product_currency_code?: SortOrder
+    product_price?: SortOrder
+    product_discount?: SortOrderInput | SortOrder
+    product_coupon_discount?: SortOrderInput | SortOrder
+    share_method?: SortOrderInput | SortOrder
+    shared_at?: SortOrderInput | SortOrder
+    transaction?: TransactionOrderByWithRelationInput
+  }
+
+  export type TransactionDetailWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TransactionDetailWhereInput | TransactionDetailWhereInput[]
+    OR?: TransactionDetailWhereInput[]
+    NOT?: TransactionDetailWhereInput | TransactionDetailWhereInput[]
+    transaction_id?: UuidFilter<"TransactionDetail"> | string
+    product_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    product_coupon_id?: IntNullableFilter<"TransactionDetail"> | number | null
+    quantity?: IntFilter<"TransactionDetail"> | number
+    product_name?: StringFilter<"TransactionDetail"> | string
+    product_variant?: StringFilter<"TransactionDetail"> | string
+    variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
+    product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
+    product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
+    shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
+    transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
+  }, "id">
+
+  export type TransactionDetailOrderByWithAggregationInput = {
+    id?: SortOrder
+    transaction_id?: SortOrder
+    product_id?: SortOrderInput | SortOrder
+    product_price_id?: SortOrderInput | SortOrder
+    product_coupon_id?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    product_name?: SortOrder
+    product_variant?: SortOrder
+    variant_download_link?: SortOrderInput | SortOrder
+    variant_file_access_password?: SortOrderInput | SortOrder
+    product_currency_code?: SortOrder
+    product_price?: SortOrder
+    product_discount?: SortOrderInput | SortOrder
+    product_coupon_discount?: SortOrderInput | SortOrder
+    share_method?: SortOrderInput | SortOrder
+    shared_at?: SortOrderInput | SortOrder
+    _count?: TransactionDetailCountOrderByAggregateInput
+    _avg?: TransactionDetailAvgOrderByAggregateInput
+    _max?: TransactionDetailMaxOrderByAggregateInput
+    _min?: TransactionDetailMinOrderByAggregateInput
+    _sum?: TransactionDetailSumOrderByAggregateInput
+  }
+
+  export type TransactionDetailScalarWhereWithAggregatesInput = {
+    AND?: TransactionDetailScalarWhereWithAggregatesInput | TransactionDetailScalarWhereWithAggregatesInput[]
+    OR?: TransactionDetailScalarWhereWithAggregatesInput[]
+    NOT?: TransactionDetailScalarWhereWithAggregatesInput | TransactionDetailScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"TransactionDetail"> | string
+    transaction_id?: UuidWithAggregatesFilter<"TransactionDetail"> | string
+    product_id?: UuidNullableWithAggregatesFilter<"TransactionDetail"> | string | null
+    product_price_id?: UuidNullableWithAggregatesFilter<"TransactionDetail"> | string | null
+    product_coupon_id?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
+    quantity?: IntWithAggregatesFilter<"TransactionDetail"> | number
+    product_name?: StringWithAggregatesFilter<"TransactionDetail"> | string
+    product_variant?: StringWithAggregatesFilter<"TransactionDetail"> | string
+    variant_download_link?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
+    variant_file_access_password?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
+    product_currency_code?: EnumCurrencyCodeWithAggregatesFilter<"TransactionDetail"> | $Enums.CurrencyCode
+    product_price?: DecimalWithAggregatesFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
+    product_discount?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
+    product_coupon_discount?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
+    share_method?: EnumShareMethodNullableWithAggregatesFilter<"TransactionDetail"> | $Enums.ShareMethod | null
+    shared_at?: BigIntNullableWithAggregatesFilter<"TransactionDetail"> | bigint | number | null
   }
 
   export type FeedbackWhereInput = {
@@ -33354,20 +38847,21 @@ export namespace Prisma {
 
   export type ProductCreateInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
     translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     discount?: ProductDiscountCreateNestedOneWithoutProductInput
     coupon?: ProductCouponCreateNestedOneWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -33380,16 +38874,17 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -33398,20 +38893,21 @@ export namespace Prisma {
 
   export type ProductUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
     translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUpdateOneWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -33424,16 +38920,17 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -33446,27 +38943,27 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
   }
 
   export type ProductUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -33476,14 +38973,14 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -33491,7 +38988,6 @@ export namespace Prisma {
     id?: string
     language: $Enums.Language
     description: string
-    changelog?: string | null
     product: ProductCreateNestedOneWithoutTranslationsInput
   }
 
@@ -33500,14 +38996,12 @@ export namespace Prisma {
     product_id: string
     language: $Enums.Language
     description: string
-    changelog?: string | null
   }
 
   export type ProductTranslationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
     product?: ProductUpdateOneRequiredWithoutTranslationsNestedInput
   }
 
@@ -33516,7 +39010,6 @@ export namespace Prisma {
     product_id?: StringFieldUpdateOperationsInput | string
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductTranslationCreateManyInput = {
@@ -33524,14 +39017,12 @@ export namespace Prisma {
     product_id: string
     language: $Enums.Language
     description: string
-    changelog?: string | null
   }
 
   export type ProductTranslationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductTranslationUncheckedUpdateManyInput = {
@@ -33539,6 +39030,105 @@ export namespace Prisma {
     product_id?: StringFieldUpdateOperationsInput | string
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     description?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProductVersionCreateInput = {
+    id?: string
+    version: string
+    released_at: bigint | number
+    product: ProductCreateNestedOneWithoutVersionsInput
+    translations?: ProductVersionTranslationCreateNestedManyWithoutProductVersionInput
+  }
+
+  export type ProductVersionUncheckedCreateInput = {
+    id?: string
+    product_id: string
+    version: string
+    released_at: bigint | number
+    translations?: ProductVersionTranslationUncheckedCreateNestedManyWithoutProductVersionInput
+  }
+
+  export type ProductVersionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    product?: ProductUpdateOneRequiredWithoutVersionsNestedInput
+    translations?: ProductVersionTranslationUpdateManyWithoutProductVersionNestedInput
+  }
+
+  export type ProductVersionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: ProductVersionTranslationUncheckedUpdateManyWithoutProductVersionNestedInput
+  }
+
+  export type ProductVersionCreateManyInput = {
+    id?: string
+    product_id: string
+    version: string
+    released_at: bigint | number
+  }
+
+  export type ProductVersionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type ProductVersionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type ProductVersionTranslationCreateInput = {
+    id?: string
+    language: $Enums.Language
+    changelog?: string | null
+    productVersion: ProductVersionCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type ProductVersionTranslationUncheckedCreateInput = {
+    id?: string
+    product_version_id: string
+    language: $Enums.Language
+    changelog?: string | null
+  }
+
+  export type ProductVersionTranslationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+    productVersion?: ProductVersionUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type ProductVersionTranslationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_version_id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductVersionTranslationCreateManyInput = {
+    id?: string
+    product_version_id: string
+    language: $Enums.Language
+    changelog?: string | null
+  }
+
+  export type ProductVersionTranslationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductVersionTranslationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_version_id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     changelog?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -33705,6 +39295,7 @@ export namespace Prisma {
     id?: string
     name: string
     download_link?: string | null
+    file_access_password?: string | null
     product: ProductCreateNestedOneWithoutVariantsInput
     prices?: ProductPriceCreateNestedManyWithoutVariantInput
   }
@@ -33714,6 +39305,7 @@ export namespace Prisma {
     product_id: string
     name: string
     download_link?: string | null
+    file_access_password?: string | null
     prices?: ProductPriceUncheckedCreateNestedManyWithoutVariantInput
   }
 
@@ -33721,6 +39313,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product?: ProductUpdateOneRequiredWithoutVariantsNestedInput
     prices?: ProductPriceUpdateManyWithoutVariantNestedInput
   }
@@ -33730,6 +39323,7 @@ export namespace Prisma {
     product_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     prices?: ProductPriceUncheckedUpdateManyWithoutVariantNestedInput
   }
 
@@ -33738,12 +39332,14 @@ export namespace Prisma {
     product_id: string
     name: string
     download_link?: string | null
+    file_access_password?: string | null
   }
 
   export type ProductVariantUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductVariantUncheckedUpdateManyInput = {
@@ -33751,12 +39347,13 @@ export namespace Prisma {
     product_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductPriceCreateInput = {
     id?: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
     variant: ProductVariantCreateNestedOneWithoutPricesInput
   }
 
@@ -33764,13 +39361,13 @@ export namespace Prisma {
     id?: string
     variant_id: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     variant?: ProductVariantUpdateOneRequiredWithoutPricesNestedInput
   }
 
@@ -33778,27 +39375,27 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     variant_id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceCreateManyInput = {
     id?: string
     variant_id: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     variant_id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TermsOfServiceCreateInput = {
@@ -34145,6 +39742,240 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TransactionCreateInput = {
+    id: string
+    code: string
+    customer_id?: string | null
+    status: $Enums.TransactionStatus
+    created_at: bigint | number
+    updated_at: bigint | number
+    currency_code: $Enums.CurrencyCode
+    total_amount: number
+    customer_name: string
+    customer_email: string
+    customer_phone_number?: string | null
+    details?: TransactionDetailCreateNestedManyWithoutTransactionInput
+  }
+
+  export type TransactionUncheckedCreateInput = {
+    id: string
+    code: string
+    customer_id?: string | null
+    status: $Enums.TransactionStatus
+    created_at: bigint | number
+    updated_at: bigint | number
+    currency_code: $Enums.CurrencyCode
+    total_amount: number
+    customer_name: string
+    customer_email: string
+    customer_phone_number?: string | null
+    details?: TransactionDetailUncheckedCreateNestedManyWithoutTransactionInput
+  }
+
+  export type TransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    total_amount?: IntFieldUpdateOperationsInput | number
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: TransactionDetailUpdateManyWithoutTransactionNestedInput
+  }
+
+  export type TransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    total_amount?: IntFieldUpdateOperationsInput | number
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: TransactionDetailUncheckedUpdateManyWithoutTransactionNestedInput
+  }
+
+  export type TransactionCreateManyInput = {
+    id: string
+    code: string
+    customer_id?: string | null
+    status: $Enums.TransactionStatus
+    created_at: bigint | number
+    updated_at: bigint | number
+    currency_code: $Enums.CurrencyCode
+    total_amount: number
+    customer_name: string
+    customer_email: string
+    customer_phone_number?: string | null
+  }
+
+  export type TransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    total_amount?: IntFieldUpdateOperationsInput | number
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    total_amount?: IntFieldUpdateOperationsInput | number
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TransactionDetailCreateInput = {
+    id: string
+    product_id?: string | null
+    product_price_id?: string | null
+    product_coupon_id?: number | null
+    quantity: number
+    product_name: string
+    product_variant: string
+    variant_download_link?: string | null
+    variant_file_access_password?: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal | DecimalJsLike | number | string
+    product_discount?: number | null
+    product_coupon_discount?: number | null
+    share_method?: $Enums.ShareMethod | null
+    shared_at?: bigint | number | null
+    transaction: TransactionCreateNestedOneWithoutDetailsInput
+  }
+
+  export type TransactionDetailUncheckedCreateInput = {
+    id: string
+    transaction_id: string
+    product_id?: string | null
+    product_price_id?: string | null
+    product_coupon_id?: number | null
+    quantity: number
+    product_name: string
+    product_variant: string
+    variant_download_link?: string | null
+    variant_file_access_password?: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal | DecimalJsLike | number | string
+    product_discount?: number | null
+    product_coupon_discount?: number | null
+    share_method?: $Enums.ShareMethod | null
+    shared_at?: bigint | number | null
+  }
+
+  export type TransactionDetailUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    transaction?: TransactionUpdateOneRequiredWithoutDetailsNestedInput
+  }
+
+  export type TransactionDetailUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transaction_id?: StringFieldUpdateOperationsInput | string
+    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  }
+
+  export type TransactionDetailCreateManyInput = {
+    id: string
+    transaction_id: string
+    product_id?: string | null
+    product_price_id?: string | null
+    product_coupon_id?: number | null
+    quantity: number
+    product_name: string
+    product_variant: string
+    variant_download_link?: string | null
+    variant_file_access_password?: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal | DecimalJsLike | number | string
+    product_discount?: number | null
+    product_coupon_discount?: number | null
+    share_method?: $Enums.ShareMethod | null
+    shared_at?: bigint | number | null
+  }
+
+  export type TransactionDetailUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  }
+
+  export type TransactionDetailUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transaction_id?: StringFieldUpdateOperationsInput | string
+    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type FeedbackCreateInput = {
@@ -34860,6 +40691,12 @@ export namespace Prisma {
     none?: ProductTranslationWhereInput
   }
 
+  export type ProductVersionListRelationFilter = {
+    every?: ProductVersionWhereInput
+    some?: ProductVersionWhereInput
+    none?: ProductVersionWhereInput
+  }
+
   export type ProductDiscountNullableScalarRelationFilter = {
     is?: ProductDiscountWhereInput | null
     isNot?: ProductDiscountWhereInput | null
@@ -34886,6 +40723,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ProductVersionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProductImageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -34900,14 +40741,14 @@ export namespace Prisma {
     admin_id?: SortOrder
     owner_id?: SortOrder
     license_id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    price_type?: SortOrder
+    drive_file_id?: SortOrder
     download_link?: SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    price_type?: SortOrder
     created_at?: SortOrder
-    released_at?: SortOrder
     updated_at?: SortOrder
   }
 
@@ -34916,7 +40757,6 @@ export namespace Prisma {
     owner_id?: SortOrder
     license_id?: SortOrder
     created_at?: SortOrder
-    released_at?: SortOrder
     updated_at?: SortOrder
   }
 
@@ -34926,14 +40766,14 @@ export namespace Prisma {
     admin_id?: SortOrder
     owner_id?: SortOrder
     license_id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    price_type?: SortOrder
+    drive_file_id?: SortOrder
     download_link?: SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    price_type?: SortOrder
     created_at?: SortOrder
-    released_at?: SortOrder
     updated_at?: SortOrder
   }
 
@@ -34943,14 +40783,14 @@ export namespace Prisma {
     admin_id?: SortOrder
     owner_id?: SortOrder
     license_id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    price_type?: SortOrder
+    drive_file_id?: SortOrder
     download_link?: SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    price_type?: SortOrder
     created_at?: SortOrder
-    released_at?: SortOrder
     updated_at?: SortOrder
   }
 
@@ -34959,7 +40799,6 @@ export namespace Prisma {
     owner_id?: SortOrder
     license_id?: SortOrder
     created_at?: SortOrder
-    released_at?: SortOrder
     updated_at?: SortOrder
   }
 
@@ -34983,7 +40822,6 @@ export namespace Prisma {
     product_id?: SortOrder
     language?: SortOrder
     description?: SortOrder
-    changelog?: SortOrder
   }
 
   export type ProductTranslationMaxOrderByAggregateInput = {
@@ -34991,7 +40829,6 @@ export namespace Prisma {
     product_id?: SortOrder
     language?: SortOrder
     description?: SortOrder
-    changelog?: SortOrder
   }
 
   export type ProductTranslationMinOrderByAggregateInput = {
@@ -34999,6 +40836,70 @@ export namespace Prisma {
     product_id?: SortOrder
     language?: SortOrder
     description?: SortOrder
+  }
+
+  export type ProductVersionTranslationListRelationFilter = {
+    every?: ProductVersionTranslationWhereInput
+    some?: ProductVersionTranslationWhereInput
+    none?: ProductVersionTranslationWhereInput
+  }
+
+  export type ProductVersionTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductVersionCountOrderByAggregateInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    version?: SortOrder
+    released_at?: SortOrder
+  }
+
+  export type ProductVersionAvgOrderByAggregateInput = {
+    released_at?: SortOrder
+  }
+
+  export type ProductVersionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    version?: SortOrder
+    released_at?: SortOrder
+  }
+
+  export type ProductVersionMinOrderByAggregateInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    version?: SortOrder
+    released_at?: SortOrder
+  }
+
+  export type ProductVersionSumOrderByAggregateInput = {
+    released_at?: SortOrder
+  }
+
+  export type ProductVersionScalarRelationFilter = {
+    is?: ProductVersionWhereInput
+    isNot?: ProductVersionWhereInput
+  }
+
+  export type ProductVersionTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    product_version_id?: SortOrder
+    language?: SortOrder
+    changelog?: SortOrder
+  }
+
+  export type ProductVersionTranslationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    product_version_id?: SortOrder
+    language?: SortOrder
+    changelog?: SortOrder
+  }
+
+  export type ProductVersionTranslationMinOrderByAggregateInput = {
+    id?: SortOrder
+    product_version_id?: SortOrder
+    language?: SortOrder
     changelog?: SortOrder
   }
 
@@ -35123,6 +41024,7 @@ export namespace Prisma {
     product_id?: SortOrder
     name?: SortOrder
     download_link?: SortOrder
+    file_access_password?: SortOrder
   }
 
   export type ProductVariantMaxOrderByAggregateInput = {
@@ -35130,6 +41032,7 @@ export namespace Prisma {
     product_id?: SortOrder
     name?: SortOrder
     download_link?: SortOrder
+    file_access_password?: SortOrder
   }
 
   export type ProductVariantMinOrderByAggregateInput = {
@@ -35137,6 +41040,18 @@ export namespace Prisma {
     product_id?: SortOrder
     name?: SortOrder
     download_link?: SortOrder
+    file_access_password?: SortOrder
+  }
+
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductVariantScalarRelationFilter = {
@@ -35171,6 +41086,22 @@ export namespace Prisma {
 
   export type ProductPriceSumOrderByAggregateInput = {
     price?: SortOrder
+  }
+
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type TermsOfServiceTranslationListRelationFilter = {
@@ -35468,6 +41399,238 @@ export namespace Prisma {
   export type FaqTranslationSumOrderByAggregateInput = {
     id?: SortOrder
     faq_id?: SortOrder
+  }
+
+  export type UuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type EnumTransactionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionStatus | EnumTransactionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionStatusFilter<$PrismaModel> | $Enums.TransactionStatus
+  }
+
+  export type TransactionDetailListRelationFilter = {
+    every?: TransactionDetailWhereInput
+    some?: TransactionDetailWhereInput
+    none?: TransactionDetailWhereInput
+  }
+
+  export type TransactionDetailOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TransactionCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    customer_id?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    currency_code?: SortOrder
+    total_amount?: SortOrder
+    customer_name?: SortOrder
+    customer_email?: SortOrder
+    customer_phone_number?: SortOrder
+  }
+
+  export type TransactionAvgOrderByAggregateInput = {
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    total_amount?: SortOrder
+  }
+
+  export type TransactionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    customer_id?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    currency_code?: SortOrder
+    total_amount?: SortOrder
+    customer_name?: SortOrder
+    customer_email?: SortOrder
+    customer_phone_number?: SortOrder
+  }
+
+  export type TransactionMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    customer_id?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    currency_code?: SortOrder
+    total_amount?: SortOrder
+    customer_name?: SortOrder
+    customer_email?: SortOrder
+    customer_phone_number?: SortOrder
+  }
+
+  export type TransactionSumOrderByAggregateInput = {
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    total_amount?: SortOrder
+  }
+
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type EnumTransactionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionStatus | EnumTransactionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionStatusWithAggregatesFilter<$PrismaModel> | $Enums.TransactionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionStatusFilter<$PrismaModel>
+    _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type EnumShareMethodNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShareMethod | EnumShareMethodFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumShareMethodNullableFilter<$PrismaModel> | $Enums.ShareMethod | null
+  }
+
+  export type TransactionScalarRelationFilter = {
+    is?: TransactionWhereInput
+    isNot?: TransactionWhereInput
+  }
+
+  export type TransactionDetailCountOrderByAggregateInput = {
+    id?: SortOrder
+    transaction_id?: SortOrder
+    product_id?: SortOrder
+    product_price_id?: SortOrder
+    product_coupon_id?: SortOrder
+    quantity?: SortOrder
+    product_name?: SortOrder
+    product_variant?: SortOrder
+    variant_download_link?: SortOrder
+    variant_file_access_password?: SortOrder
+    product_currency_code?: SortOrder
+    product_price?: SortOrder
+    product_discount?: SortOrder
+    product_coupon_discount?: SortOrder
+    share_method?: SortOrder
+    shared_at?: SortOrder
+  }
+
+  export type TransactionDetailAvgOrderByAggregateInput = {
+    product_coupon_id?: SortOrder
+    quantity?: SortOrder
+    product_price?: SortOrder
+    product_discount?: SortOrder
+    product_coupon_discount?: SortOrder
+    shared_at?: SortOrder
+  }
+
+  export type TransactionDetailMaxOrderByAggregateInput = {
+    id?: SortOrder
+    transaction_id?: SortOrder
+    product_id?: SortOrder
+    product_price_id?: SortOrder
+    product_coupon_id?: SortOrder
+    quantity?: SortOrder
+    product_name?: SortOrder
+    product_variant?: SortOrder
+    variant_download_link?: SortOrder
+    variant_file_access_password?: SortOrder
+    product_currency_code?: SortOrder
+    product_price?: SortOrder
+    product_discount?: SortOrder
+    product_coupon_discount?: SortOrder
+    share_method?: SortOrder
+    shared_at?: SortOrder
+  }
+
+  export type TransactionDetailMinOrderByAggregateInput = {
+    id?: SortOrder
+    transaction_id?: SortOrder
+    product_id?: SortOrder
+    product_price_id?: SortOrder
+    product_coupon_id?: SortOrder
+    quantity?: SortOrder
+    product_name?: SortOrder
+    product_variant?: SortOrder
+    variant_download_link?: SortOrder
+    variant_file_access_password?: SortOrder
+    product_currency_code?: SortOrder
+    product_price?: SortOrder
+    product_discount?: SortOrder
+    product_coupon_discount?: SortOrder
+    share_method?: SortOrder
+    shared_at?: SortOrder
+  }
+
+  export type TransactionDetailSumOrderByAggregateInput = {
+    product_coupon_id?: SortOrder
+    quantity?: SortOrder
+    product_price?: SortOrder
+    product_discount?: SortOrder
+    product_coupon_discount?: SortOrder
+    shared_at?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumShareMethodNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShareMethod | EnumShareMethodFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumShareMethodNullableWithAggregatesFilter<$PrismaModel> | $Enums.ShareMethod | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumShareMethodNullableFilter<$PrismaModel>
+    _max?: NestedEnumShareMethodNullableFilter<$PrismaModel>
   }
 
   export type FeedbackCountOrderByAggregateInput = {
@@ -35945,6 +42108,13 @@ export namespace Prisma {
     connect?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
   }
 
+  export type ProductVersionCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductVersionCreateWithoutProductInput, ProductVersionUncheckedCreateWithoutProductInput> | ProductVersionCreateWithoutProductInput[] | ProductVersionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductVersionCreateOrConnectWithoutProductInput | ProductVersionCreateOrConnectWithoutProductInput[]
+    createMany?: ProductVersionCreateManyProductInputEnvelope
+    connect?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
+  }
+
   export type ProductDiscountCreateNestedOneWithoutProductInput = {
     create?: XOR<ProductDiscountCreateWithoutProductInput, ProductDiscountUncheckedCreateWithoutProductInput>
     connectOrCreate?: ProductDiscountCreateOrConnectWithoutProductInput
@@ -35976,6 +42146,13 @@ export namespace Prisma {
     connectOrCreate?: ProductTranslationCreateOrConnectWithoutProductInput | ProductTranslationCreateOrConnectWithoutProductInput[]
     createMany?: ProductTranslationCreateManyProductInputEnvelope
     connect?: ProductTranslationWhereUniqueInput | ProductTranslationWhereUniqueInput[]
+  }
+
+  export type ProductVersionUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductVersionCreateWithoutProductInput, ProductVersionUncheckedCreateWithoutProductInput> | ProductVersionCreateWithoutProductInput[] | ProductVersionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductVersionCreateOrConnectWithoutProductInput | ProductVersionCreateOrConnectWithoutProductInput[]
+    createMany?: ProductVersionCreateManyProductInputEnvelope
+    connect?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
   }
 
   export type ProductDiscountUncheckedCreateNestedOneWithoutProductInput = {
@@ -36054,6 +42231,20 @@ export namespace Prisma {
     deleteMany?: ProductTranslationScalarWhereInput | ProductTranslationScalarWhereInput[]
   }
 
+  export type ProductVersionUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductVersionCreateWithoutProductInput, ProductVersionUncheckedCreateWithoutProductInput> | ProductVersionCreateWithoutProductInput[] | ProductVersionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductVersionCreateOrConnectWithoutProductInput | ProductVersionCreateOrConnectWithoutProductInput[]
+    upsert?: ProductVersionUpsertWithWhereUniqueWithoutProductInput | ProductVersionUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductVersionCreateManyProductInputEnvelope
+    set?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
+    disconnect?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
+    delete?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
+    connect?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
+    update?: ProductVersionUpdateWithWhereUniqueWithoutProductInput | ProductVersionUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductVersionUpdateManyWithWhereWithoutProductInput | ProductVersionUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductVersionScalarWhereInput | ProductVersionScalarWhereInput[]
+  }
+
   export type ProductDiscountUpdateOneWithoutProductNestedInput = {
     create?: XOR<ProductDiscountCreateWithoutProductInput, ProductDiscountUncheckedCreateWithoutProductInput>
     connectOrCreate?: ProductDiscountCreateOrConnectWithoutProductInput
@@ -36116,6 +42307,20 @@ export namespace Prisma {
     deleteMany?: ProductTranslationScalarWhereInput | ProductTranslationScalarWhereInput[]
   }
 
+  export type ProductVersionUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductVersionCreateWithoutProductInput, ProductVersionUncheckedCreateWithoutProductInput> | ProductVersionCreateWithoutProductInput[] | ProductVersionUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductVersionCreateOrConnectWithoutProductInput | ProductVersionCreateOrConnectWithoutProductInput[]
+    upsert?: ProductVersionUpsertWithWhereUniqueWithoutProductInput | ProductVersionUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductVersionCreateManyProductInputEnvelope
+    set?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
+    disconnect?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
+    delete?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
+    connect?: ProductVersionWhereUniqueInput | ProductVersionWhereUniqueInput[]
+    update?: ProductVersionUpdateWithWhereUniqueWithoutProductInput | ProductVersionUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductVersionUpdateManyWithWhereWithoutProductInput | ProductVersionUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductVersionScalarWhereInput | ProductVersionScalarWhereInput[]
+  }
+
   export type ProductDiscountUncheckedUpdateOneWithoutProductNestedInput = {
     create?: XOR<ProductDiscountCreateWithoutProductInput, ProductDiscountUncheckedCreateWithoutProductInput>
     connectOrCreate?: ProductDiscountCreateOrConnectWithoutProductInput
@@ -36176,6 +42381,76 @@ export namespace Prisma {
     upsert?: ProductUpsertWithoutTranslationsInput
     connect?: ProductWhereUniqueInput
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutTranslationsInput, ProductUpdateWithoutTranslationsInput>, ProductUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type ProductCreateNestedOneWithoutVersionsInput = {
+    create?: XOR<ProductCreateWithoutVersionsInput, ProductUncheckedCreateWithoutVersionsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutVersionsInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type ProductVersionTranslationCreateNestedManyWithoutProductVersionInput = {
+    create?: XOR<ProductVersionTranslationCreateWithoutProductVersionInput, ProductVersionTranslationUncheckedCreateWithoutProductVersionInput> | ProductVersionTranslationCreateWithoutProductVersionInput[] | ProductVersionTranslationUncheckedCreateWithoutProductVersionInput[]
+    connectOrCreate?: ProductVersionTranslationCreateOrConnectWithoutProductVersionInput | ProductVersionTranslationCreateOrConnectWithoutProductVersionInput[]
+    createMany?: ProductVersionTranslationCreateManyProductVersionInputEnvelope
+    connect?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+  }
+
+  export type ProductVersionTranslationUncheckedCreateNestedManyWithoutProductVersionInput = {
+    create?: XOR<ProductVersionTranslationCreateWithoutProductVersionInput, ProductVersionTranslationUncheckedCreateWithoutProductVersionInput> | ProductVersionTranslationCreateWithoutProductVersionInput[] | ProductVersionTranslationUncheckedCreateWithoutProductVersionInput[]
+    connectOrCreate?: ProductVersionTranslationCreateOrConnectWithoutProductVersionInput | ProductVersionTranslationCreateOrConnectWithoutProductVersionInput[]
+    createMany?: ProductVersionTranslationCreateManyProductVersionInputEnvelope
+    connect?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+  }
+
+  export type ProductUpdateOneRequiredWithoutVersionsNestedInput = {
+    create?: XOR<ProductCreateWithoutVersionsInput, ProductUncheckedCreateWithoutVersionsInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutVersionsInput
+    upsert?: ProductUpsertWithoutVersionsInput
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutVersionsInput, ProductUpdateWithoutVersionsInput>, ProductUncheckedUpdateWithoutVersionsInput>
+  }
+
+  export type ProductVersionTranslationUpdateManyWithoutProductVersionNestedInput = {
+    create?: XOR<ProductVersionTranslationCreateWithoutProductVersionInput, ProductVersionTranslationUncheckedCreateWithoutProductVersionInput> | ProductVersionTranslationCreateWithoutProductVersionInput[] | ProductVersionTranslationUncheckedCreateWithoutProductVersionInput[]
+    connectOrCreate?: ProductVersionTranslationCreateOrConnectWithoutProductVersionInput | ProductVersionTranslationCreateOrConnectWithoutProductVersionInput[]
+    upsert?: ProductVersionTranslationUpsertWithWhereUniqueWithoutProductVersionInput | ProductVersionTranslationUpsertWithWhereUniqueWithoutProductVersionInput[]
+    createMany?: ProductVersionTranslationCreateManyProductVersionInputEnvelope
+    set?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+    disconnect?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+    delete?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+    connect?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+    update?: ProductVersionTranslationUpdateWithWhereUniqueWithoutProductVersionInput | ProductVersionTranslationUpdateWithWhereUniqueWithoutProductVersionInput[]
+    updateMany?: ProductVersionTranslationUpdateManyWithWhereWithoutProductVersionInput | ProductVersionTranslationUpdateManyWithWhereWithoutProductVersionInput[]
+    deleteMany?: ProductVersionTranslationScalarWhereInput | ProductVersionTranslationScalarWhereInput[]
+  }
+
+  export type ProductVersionTranslationUncheckedUpdateManyWithoutProductVersionNestedInput = {
+    create?: XOR<ProductVersionTranslationCreateWithoutProductVersionInput, ProductVersionTranslationUncheckedCreateWithoutProductVersionInput> | ProductVersionTranslationCreateWithoutProductVersionInput[] | ProductVersionTranslationUncheckedCreateWithoutProductVersionInput[]
+    connectOrCreate?: ProductVersionTranslationCreateOrConnectWithoutProductVersionInput | ProductVersionTranslationCreateOrConnectWithoutProductVersionInput[]
+    upsert?: ProductVersionTranslationUpsertWithWhereUniqueWithoutProductVersionInput | ProductVersionTranslationUpsertWithWhereUniqueWithoutProductVersionInput[]
+    createMany?: ProductVersionTranslationCreateManyProductVersionInputEnvelope
+    set?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+    disconnect?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+    delete?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+    connect?: ProductVersionTranslationWhereUniqueInput | ProductVersionTranslationWhereUniqueInput[]
+    update?: ProductVersionTranslationUpdateWithWhereUniqueWithoutProductVersionInput | ProductVersionTranslationUpdateWithWhereUniqueWithoutProductVersionInput[]
+    updateMany?: ProductVersionTranslationUpdateManyWithWhereWithoutProductVersionInput | ProductVersionTranslationUpdateManyWithWhereWithoutProductVersionInput[]
+    deleteMany?: ProductVersionTranslationScalarWhereInput | ProductVersionTranslationScalarWhereInput[]
+  }
+
+  export type ProductVersionCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<ProductVersionCreateWithoutTranslationsInput, ProductVersionUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: ProductVersionCreateOrConnectWithoutTranslationsInput
+    connect?: ProductVersionWhereUniqueInput
+  }
+
+  export type ProductVersionUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<ProductVersionCreateWithoutTranslationsInput, ProductVersionUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: ProductVersionCreateOrConnectWithoutTranslationsInput
+    upsert?: ProductVersionUpsertWithoutTranslationsInput
+    connect?: ProductVersionWhereUniqueInput
+    update?: XOR<XOR<ProductVersionUpdateToOneWithWhereWithoutTranslationsInput, ProductVersionUpdateWithoutTranslationsInput>, ProductVersionUncheckedUpdateWithoutTranslationsInput>
   }
 
   export type ProductCreateNestedOneWithoutDiscountInput = {
@@ -36280,6 +42555,14 @@ export namespace Prisma {
     create?: XOR<ProductVariantCreateWithoutPricesInput, ProductVariantUncheckedCreateWithoutPricesInput>
     connectOrCreate?: ProductVariantCreateOrConnectWithoutPricesInput
     connect?: ProductVariantWhereUniqueInput
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductVariantUpdateOneRequiredWithoutPricesNestedInput = {
@@ -36512,6 +42795,78 @@ export namespace Prisma {
     upsert?: FaqUpsertWithoutTranslationsInput
     connect?: FaqWhereUniqueInput
     update?: XOR<XOR<FaqUpdateToOneWithWhereWithoutTranslationsInput, FaqUpdateWithoutTranslationsInput>, FaqUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type TransactionDetailCreateNestedManyWithoutTransactionInput = {
+    create?: XOR<TransactionDetailCreateWithoutTransactionInput, TransactionDetailUncheckedCreateWithoutTransactionInput> | TransactionDetailCreateWithoutTransactionInput[] | TransactionDetailUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: TransactionDetailCreateOrConnectWithoutTransactionInput | TransactionDetailCreateOrConnectWithoutTransactionInput[]
+    createMany?: TransactionDetailCreateManyTransactionInputEnvelope
+    connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+  }
+
+  export type TransactionDetailUncheckedCreateNestedManyWithoutTransactionInput = {
+    create?: XOR<TransactionDetailCreateWithoutTransactionInput, TransactionDetailUncheckedCreateWithoutTransactionInput> | TransactionDetailCreateWithoutTransactionInput[] | TransactionDetailUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: TransactionDetailCreateOrConnectWithoutTransactionInput | TransactionDetailCreateOrConnectWithoutTransactionInput[]
+    createMany?: TransactionDetailCreateManyTransactionInputEnvelope
+    connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+  }
+
+  export type EnumTransactionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TransactionStatus
+  }
+
+  export type TransactionDetailUpdateManyWithoutTransactionNestedInput = {
+    create?: XOR<TransactionDetailCreateWithoutTransactionInput, TransactionDetailUncheckedCreateWithoutTransactionInput> | TransactionDetailCreateWithoutTransactionInput[] | TransactionDetailUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: TransactionDetailCreateOrConnectWithoutTransactionInput | TransactionDetailCreateOrConnectWithoutTransactionInput[]
+    upsert?: TransactionDetailUpsertWithWhereUniqueWithoutTransactionInput | TransactionDetailUpsertWithWhereUniqueWithoutTransactionInput[]
+    createMany?: TransactionDetailCreateManyTransactionInputEnvelope
+    set?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    disconnect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    delete?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    update?: TransactionDetailUpdateWithWhereUniqueWithoutTransactionInput | TransactionDetailUpdateWithWhereUniqueWithoutTransactionInput[]
+    updateMany?: TransactionDetailUpdateManyWithWhereWithoutTransactionInput | TransactionDetailUpdateManyWithWhereWithoutTransactionInput[]
+    deleteMany?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
+  }
+
+  export type TransactionDetailUncheckedUpdateManyWithoutTransactionNestedInput = {
+    create?: XOR<TransactionDetailCreateWithoutTransactionInput, TransactionDetailUncheckedCreateWithoutTransactionInput> | TransactionDetailCreateWithoutTransactionInput[] | TransactionDetailUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: TransactionDetailCreateOrConnectWithoutTransactionInput | TransactionDetailCreateOrConnectWithoutTransactionInput[]
+    upsert?: TransactionDetailUpsertWithWhereUniqueWithoutTransactionInput | TransactionDetailUpsertWithWhereUniqueWithoutTransactionInput[]
+    createMany?: TransactionDetailCreateManyTransactionInputEnvelope
+    set?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    disconnect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    delete?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    update?: TransactionDetailUpdateWithWhereUniqueWithoutTransactionInput | TransactionDetailUpdateWithWhereUniqueWithoutTransactionInput[]
+    updateMany?: TransactionDetailUpdateManyWithWhereWithoutTransactionInput | TransactionDetailUpdateManyWithWhereWithoutTransactionInput[]
+    deleteMany?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
+  }
+
+  export type TransactionCreateNestedOneWithoutDetailsInput = {
+    create?: XOR<TransactionCreateWithoutDetailsInput, TransactionUncheckedCreateWithoutDetailsInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutDetailsInput
+    connect?: TransactionWhereUniqueInput
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableEnumShareMethodFieldUpdateOperationsInput = {
+    set?: $Enums.ShareMethod | null
+  }
+
+  export type TransactionUpdateOneRequiredWithoutDetailsNestedInput = {
+    create?: XOR<TransactionCreateWithoutDetailsInput, TransactionUncheckedCreateWithoutDetailsInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutDetailsInput
+    upsert?: TransactionUpsertWithoutDetailsInput
+    connect?: TransactionWhereUniqueInput
+    update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutDetailsInput, TransactionUpdateWithoutDetailsInput>, TransactionUncheckedUpdateWithoutDetailsInput>
   }
 
   export type TestimonialTranslationCreateNestedManyWithoutTestimonialInput = {
@@ -36835,6 +43190,108 @@ export namespace Prisma {
     _max?: NestedEnumPriceTypeFilter<$PrismaModel>
   }
 
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedEnumTransactionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionStatus | EnumTransactionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionStatusFilter<$PrismaModel> | $Enums.TransactionStatus
+  }
+
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTransactionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionStatus | EnumTransactionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionStatusWithAggregatesFilter<$PrismaModel> | $Enums.TransactionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionStatusFilter<$PrismaModel>
+    _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumShareMethodNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShareMethod | EnumShareMethodFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumShareMethodNullableFilter<$PrismaModel> | $Enums.ShareMethod | null
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumShareMethodNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShareMethod | EnumShareMethodFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumShareMethodNullableWithAggregatesFilter<$PrismaModel> | $Enums.ShareMethod | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumShareMethodNullableFilter<$PrismaModel>
+    _max?: NestedEnumShareMethodNullableFilter<$PrismaModel>
+  }
+
   export type DonationLinkCreateWithoutAdminInput = {
     currency_code: $Enums.CurrencyCode
     link: string
@@ -36858,19 +43315,20 @@ export namespace Prisma {
 
   export type ProductCreateWithoutAdminInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
     translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     discount?: ProductDiscountCreateNestedOneWithoutProductInput
     coupon?: ProductCouponCreateNestedOneWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -36882,16 +43340,17 @@ export namespace Prisma {
     category_id: number
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -36959,14 +43418,14 @@ export namespace Prisma {
     admin_id?: StringFilter<"Product"> | string
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
-    name?: StringFilter<"Product"> | string
-    slug?: StringFilter<"Product"> | string
-    price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
+    drive_file_id?: StringNullableFilter<"Product"> | string | null
     download_link?: StringNullableFilter<"Product"> | string | null
     is_published?: BoolFilter<"Product"> | boolean
     is_pinned?: BoolFilter<"Product"> | boolean
+    name?: StringFilter<"Product"> | string
+    slug?: StringFilter<"Product"> | string
+    price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
     created_at?: BigIntFilter<"Product"> | bigint | number
-    released_at?: BigIntFilter<"Product"> | bigint | number
     updated_at?: BigIntFilter<"Product"> | bigint | number
   }
 
@@ -37028,19 +43487,20 @@ export namespace Prisma {
 
   export type ProductCreateWithoutOwnerInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
     translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     discount?: ProductDiscountCreateNestedOneWithoutProductInput
     coupon?: ProductCouponCreateNestedOneWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -37052,16 +43512,17 @@ export namespace Prisma {
     category_id: number
     admin_id: string
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -37096,19 +43557,20 @@ export namespace Prisma {
 
   export type ProductCreateWithoutLicenseInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     discount?: ProductDiscountCreateNestedOneWithoutProductInput
     coupon?: ProductCouponCreateNestedOneWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -37120,16 +43582,17 @@ export namespace Prisma {
     category_id: number
     admin_id: string
     owner_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -37256,19 +43719,20 @@ export namespace Prisma {
 
   export type ProductCreateWithoutCategoryInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
     translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     discount?: ProductDiscountCreateNestedOneWithoutProductInput
     coupon?: ProductCouponCreateNestedOneWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -37280,16 +43744,17 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -37413,14 +43878,12 @@ export namespace Prisma {
     id?: string
     language: $Enums.Language
     description: string
-    changelog?: string | null
   }
 
   export type ProductTranslationUncheckedCreateWithoutProductInput = {
     id?: string
     language: $Enums.Language
     description: string
-    changelog?: string | null
   }
 
   export type ProductTranslationCreateOrConnectWithoutProductInput = {
@@ -37430,6 +43893,30 @@ export namespace Prisma {
 
   export type ProductTranslationCreateManyProductInputEnvelope = {
     data: ProductTranslationCreateManyProductInput | ProductTranslationCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductVersionCreateWithoutProductInput = {
+    id?: string
+    version: string
+    released_at: bigint | number
+    translations?: ProductVersionTranslationCreateNestedManyWithoutProductVersionInput
+  }
+
+  export type ProductVersionUncheckedCreateWithoutProductInput = {
+    id?: string
+    version: string
+    released_at: bigint | number
+    translations?: ProductVersionTranslationUncheckedCreateNestedManyWithoutProductVersionInput
+  }
+
+  export type ProductVersionCreateOrConnectWithoutProductInput = {
+    where: ProductVersionWhereUniqueInput
+    create: XOR<ProductVersionCreateWithoutProductInput, ProductVersionUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductVersionCreateManyProductInputEnvelope = {
+    data: ProductVersionCreateManyProductInput | ProductVersionCreateManyProductInput[]
     skipDuplicates?: boolean
   }
 
@@ -37497,6 +43984,7 @@ export namespace Prisma {
     id?: string
     name: string
     download_link?: string | null
+    file_access_password?: string | null
     prices?: ProductPriceCreateNestedManyWithoutVariantInput
   }
 
@@ -37504,6 +43992,7 @@ export namespace Prisma {
     id?: string
     name: string
     download_link?: string | null
+    file_access_password?: string | null
     prices?: ProductPriceUncheckedCreateNestedManyWithoutVariantInput
   }
 
@@ -37652,7 +44141,32 @@ export namespace Prisma {
     product_id?: UuidFilter<"ProductTranslation"> | string
     language?: EnumLanguageFilter<"ProductTranslation"> | $Enums.Language
     description?: StringFilter<"ProductTranslation"> | string
-    changelog?: StringNullableFilter<"ProductTranslation"> | string | null
+  }
+
+  export type ProductVersionUpsertWithWhereUniqueWithoutProductInput = {
+    where: ProductVersionWhereUniqueInput
+    update: XOR<ProductVersionUpdateWithoutProductInput, ProductVersionUncheckedUpdateWithoutProductInput>
+    create: XOR<ProductVersionCreateWithoutProductInput, ProductVersionUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductVersionUpdateWithWhereUniqueWithoutProductInput = {
+    where: ProductVersionWhereUniqueInput
+    data: XOR<ProductVersionUpdateWithoutProductInput, ProductVersionUncheckedUpdateWithoutProductInput>
+  }
+
+  export type ProductVersionUpdateManyWithWhereWithoutProductInput = {
+    where: ProductVersionScalarWhereInput
+    data: XOR<ProductVersionUpdateManyMutationInput, ProductVersionUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type ProductVersionScalarWhereInput = {
+    AND?: ProductVersionScalarWhereInput | ProductVersionScalarWhereInput[]
+    OR?: ProductVersionScalarWhereInput[]
+    NOT?: ProductVersionScalarWhereInput | ProductVersionScalarWhereInput[]
+    id?: UuidFilter<"ProductVersion"> | string
+    product_id?: UuidFilter<"ProductVersion"> | string
+    version?: StringFilter<"ProductVersion"> | string
+    released_at?: BigIntFilter<"ProductVersion"> | bigint | number
   }
 
   export type ProductDiscountUpsertWithoutProductInput = {
@@ -37753,23 +44267,25 @@ export namespace Prisma {
     product_id?: UuidFilter<"ProductVariant"> | string
     name?: StringFilter<"ProductVariant"> | string
     download_link?: StringNullableFilter<"ProductVariant"> | string | null
+    file_access_password?: StringNullableFilter<"ProductVariant"> | string | null
   }
 
   export type ProductCreateWithoutTranslationsInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     discount?: ProductDiscountCreateNestedOneWithoutProductInput
     coupon?: ProductCouponCreateNestedOneWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -37782,15 +44298,16 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -37815,19 +44332,20 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutTranslationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUpdateOneWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -37840,37 +44358,235 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
   }
 
-  export type ProductCreateWithoutDiscountInput = {
+  export type ProductCreateWithoutVersionsInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
     translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponCreateNestedOneWithoutProductInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutVersionsInput = {
+    id?: string
+    category_id: number
+    admin_id: string
+    owner_id: number
+    license_id: number
+    drive_file_id?: string | null
+    download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
+    created_at: bigint | number
+    updated_at: bigint | number
+    translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
+    coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutVersionsInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutVersionsInput, ProductUncheckedCreateWithoutVersionsInput>
+  }
+
+  export type ProductVersionTranslationCreateWithoutProductVersionInput = {
+    id?: string
+    language: $Enums.Language
+    changelog?: string | null
+  }
+
+  export type ProductVersionTranslationUncheckedCreateWithoutProductVersionInput = {
+    id?: string
+    language: $Enums.Language
+    changelog?: string | null
+  }
+
+  export type ProductVersionTranslationCreateOrConnectWithoutProductVersionInput = {
+    where: ProductVersionTranslationWhereUniqueInput
+    create: XOR<ProductVersionTranslationCreateWithoutProductVersionInput, ProductVersionTranslationUncheckedCreateWithoutProductVersionInput>
+  }
+
+  export type ProductVersionTranslationCreateManyProductVersionInputEnvelope = {
+    data: ProductVersionTranslationCreateManyProductVersionInput | ProductVersionTranslationCreateManyProductVersionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductUpsertWithoutVersionsInput = {
+    update: XOR<ProductUpdateWithoutVersionsInput, ProductUncheckedUpdateWithoutVersionsInput>
+    create: XOR<ProductCreateWithoutVersionsInput, ProductUncheckedCreateWithoutVersionsInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutVersionsInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutVersionsInput, ProductUncheckedUpdateWithoutVersionsInput>
+  }
+
+  export type ProductUpdateWithoutVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
+    category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
+    owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
+    license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
+    translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUpdateOneWithoutProductNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category_id?: IntFieldUpdateOperationsInput | number
+    admin_id?: StringFieldUpdateOperationsInput | string
+    owner_id?: IntFieldUpdateOperationsInput | number
+    license_id?: IntFieldUpdateOperationsInput | number
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    is_published?: BoolFieldUpdateOperationsInput | boolean
+    is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
+    coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductVersionTranslationUpsertWithWhereUniqueWithoutProductVersionInput = {
+    where: ProductVersionTranslationWhereUniqueInput
+    update: XOR<ProductVersionTranslationUpdateWithoutProductVersionInput, ProductVersionTranslationUncheckedUpdateWithoutProductVersionInput>
+    create: XOR<ProductVersionTranslationCreateWithoutProductVersionInput, ProductVersionTranslationUncheckedCreateWithoutProductVersionInput>
+  }
+
+  export type ProductVersionTranslationUpdateWithWhereUniqueWithoutProductVersionInput = {
+    where: ProductVersionTranslationWhereUniqueInput
+    data: XOR<ProductVersionTranslationUpdateWithoutProductVersionInput, ProductVersionTranslationUncheckedUpdateWithoutProductVersionInput>
+  }
+
+  export type ProductVersionTranslationUpdateManyWithWhereWithoutProductVersionInput = {
+    where: ProductVersionTranslationScalarWhereInput
+    data: XOR<ProductVersionTranslationUpdateManyMutationInput, ProductVersionTranslationUncheckedUpdateManyWithoutProductVersionInput>
+  }
+
+  export type ProductVersionTranslationScalarWhereInput = {
+    AND?: ProductVersionTranslationScalarWhereInput | ProductVersionTranslationScalarWhereInput[]
+    OR?: ProductVersionTranslationScalarWhereInput[]
+    NOT?: ProductVersionTranslationScalarWhereInput | ProductVersionTranslationScalarWhereInput[]
+    id?: UuidFilter<"ProductVersionTranslation"> | string
+    product_version_id?: UuidFilter<"ProductVersionTranslation"> | string
+    language?: EnumLanguageFilter<"ProductVersionTranslation"> | $Enums.Language
+    changelog?: StringNullableFilter<"ProductVersionTranslation"> | string | null
+  }
+
+  export type ProductVersionCreateWithoutTranslationsInput = {
+    id?: string
+    version: string
+    released_at: bigint | number
+    product: ProductCreateNestedOneWithoutVersionsInput
+  }
+
+  export type ProductVersionUncheckedCreateWithoutTranslationsInput = {
+    id?: string
+    product_id: string
+    version: string
+    released_at: bigint | number
+  }
+
+  export type ProductVersionCreateOrConnectWithoutTranslationsInput = {
+    where: ProductVersionWhereUniqueInput
+    create: XOR<ProductVersionCreateWithoutTranslationsInput, ProductVersionUncheckedCreateWithoutTranslationsInput>
+  }
+
+  export type ProductVersionUpsertWithoutTranslationsInput = {
+    update: XOR<ProductVersionUpdateWithoutTranslationsInput, ProductVersionUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<ProductVersionCreateWithoutTranslationsInput, ProductVersionUncheckedCreateWithoutTranslationsInput>
+    where?: ProductVersionWhereInput
+  }
+
+  export type ProductVersionUpdateToOneWithWhereWithoutTranslationsInput = {
+    where?: ProductVersionWhereInput
+    data: XOR<ProductVersionUpdateWithoutTranslationsInput, ProductVersionUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type ProductVersionUpdateWithoutTranslationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    product?: ProductUpdateOneRequiredWithoutVersionsNestedInput
+  }
+
+  export type ProductVersionUncheckedUpdateWithoutTranslationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type ProductCreateWithoutDiscountInput = {
+    id?: string
+    drive_file_id?: string | null
+    download_link?: string | null
+    is_published?: boolean
+    is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
+    created_at: bigint | number
+    updated_at: bigint | number
+    admin: AdminCreateNestedOneWithoutProductsInput
+    category: CategoryCreateNestedOneWithoutProductsInput
+    owner: OwnerCreateNestedOneWithoutProductsInput
+    license: LicenseCreateNestedOneWithoutProductsInput
+    translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     coupon?: ProductCouponCreateNestedOneWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
     variants?: ProductVariantCreateNestedManyWithoutProductInput
@@ -37882,16 +44598,17 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -37915,20 +44632,21 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutDiscountInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
     translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     coupon?: ProductCouponUpdateOneWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
     variants?: ProductVariantUpdateManyWithoutProductNestedInput
@@ -37940,16 +44658,17 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -37957,20 +44676,21 @@ export namespace Prisma {
 
   export type ProductCreateWithoutCouponInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
     translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     discount?: ProductDiscountCreateNestedOneWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
     variants?: ProductVariantCreateNestedManyWithoutProductInput
@@ -37982,16 +44702,17 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -38015,20 +44736,21 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutCouponInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
     translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUpdateOneWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
     variants?: ProductVariantUpdateManyWithoutProductNestedInput
@@ -38040,16 +44762,17 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -38057,20 +44780,21 @@ export namespace Prisma {
 
   export type ProductCreateWithoutImagesInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
     translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     discount?: ProductDiscountCreateNestedOneWithoutProductInput
     coupon?: ProductCouponCreateNestedOneWithoutProductInput
     variants?: ProductVariantCreateNestedManyWithoutProductInput
@@ -38082,16 +44806,17 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
     variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -38115,20 +44840,21 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutImagesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
     translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUpdateOneWithoutProductNestedInput
     variants?: ProductVariantUpdateManyWithoutProductNestedInput
@@ -38140,16 +44866,17 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
     variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -38157,20 +44884,21 @@ export namespace Prisma {
 
   export type ProductCreateWithoutVariantsInput = {
     id?: string
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
     translations?: ProductTranslationCreateNestedManyWithoutProductInput
+    versions?: ProductVersionCreateNestedManyWithoutProductInput
     discount?: ProductDiscountCreateNestedOneWithoutProductInput
     coupon?: ProductCouponCreateNestedOneWithoutProductInput
     images?: ProductImageCreateNestedManyWithoutProductInput
@@ -38182,16 +44910,17 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
+    versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
@@ -38205,13 +44934,13 @@ export namespace Prisma {
   export type ProductPriceCreateWithoutVariantInput = {
     id?: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUncheckedCreateWithoutVariantInput = {
     id?: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceCreateOrConnectWithoutVariantInput = {
@@ -38237,20 +44966,21 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutVariantsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
     translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUpdateOneWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -38262,16 +44992,17 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -38300,13 +45031,14 @@ export namespace Prisma {
     id?: UuidFilter<"ProductPrice"> | string
     variant_id?: UuidFilter<"ProductPrice"> | string
     currency_code?: EnumCurrencyCodeFilter<"ProductPrice"> | $Enums.CurrencyCode
-    price?: IntFilter<"ProductPrice"> | number
+    price?: DecimalFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductVariantCreateWithoutPricesInput = {
     id?: string
     name: string
     download_link?: string | null
+    file_access_password?: string | null
     product: ProductCreateNestedOneWithoutVariantsInput
   }
 
@@ -38315,6 +45047,7 @@ export namespace Prisma {
     product_id: string
     name: string
     download_link?: string | null
+    file_access_password?: string | null
   }
 
   export type ProductVariantCreateOrConnectWithoutPricesInput = {
@@ -38337,6 +45070,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product?: ProductUpdateOneRequiredWithoutVariantsNestedInput
   }
 
@@ -38345,6 +45079,7 @@ export namespace Prisma {
     product_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput = {
@@ -38684,6 +45419,162 @@ export namespace Prisma {
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
+  export type TransactionDetailCreateWithoutTransactionInput = {
+    id: string
+    product_id?: string | null
+    product_price_id?: string | null
+    product_coupon_id?: number | null
+    quantity: number
+    product_name: string
+    product_variant: string
+    variant_download_link?: string | null
+    variant_file_access_password?: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal | DecimalJsLike | number | string
+    product_discount?: number | null
+    product_coupon_discount?: number | null
+    share_method?: $Enums.ShareMethod | null
+    shared_at?: bigint | number | null
+  }
+
+  export type TransactionDetailUncheckedCreateWithoutTransactionInput = {
+    id: string
+    product_id?: string | null
+    product_price_id?: string | null
+    product_coupon_id?: number | null
+    quantity: number
+    product_name: string
+    product_variant: string
+    variant_download_link?: string | null
+    variant_file_access_password?: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal | DecimalJsLike | number | string
+    product_discount?: number | null
+    product_coupon_discount?: number | null
+    share_method?: $Enums.ShareMethod | null
+    shared_at?: bigint | number | null
+  }
+
+  export type TransactionDetailCreateOrConnectWithoutTransactionInput = {
+    where: TransactionDetailWhereUniqueInput
+    create: XOR<TransactionDetailCreateWithoutTransactionInput, TransactionDetailUncheckedCreateWithoutTransactionInput>
+  }
+
+  export type TransactionDetailCreateManyTransactionInputEnvelope = {
+    data: TransactionDetailCreateManyTransactionInput | TransactionDetailCreateManyTransactionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TransactionDetailUpsertWithWhereUniqueWithoutTransactionInput = {
+    where: TransactionDetailWhereUniqueInput
+    update: XOR<TransactionDetailUpdateWithoutTransactionInput, TransactionDetailUncheckedUpdateWithoutTransactionInput>
+    create: XOR<TransactionDetailCreateWithoutTransactionInput, TransactionDetailUncheckedCreateWithoutTransactionInput>
+  }
+
+  export type TransactionDetailUpdateWithWhereUniqueWithoutTransactionInput = {
+    where: TransactionDetailWhereUniqueInput
+    data: XOR<TransactionDetailUpdateWithoutTransactionInput, TransactionDetailUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type TransactionDetailUpdateManyWithWhereWithoutTransactionInput = {
+    where: TransactionDetailScalarWhereInput
+    data: XOR<TransactionDetailUpdateManyMutationInput, TransactionDetailUncheckedUpdateManyWithoutTransactionInput>
+  }
+
+  export type TransactionDetailScalarWhereInput = {
+    AND?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
+    OR?: TransactionDetailScalarWhereInput[]
+    NOT?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
+    id?: UuidFilter<"TransactionDetail"> | string
+    transaction_id?: UuidFilter<"TransactionDetail"> | string
+    product_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    product_coupon_id?: IntNullableFilter<"TransactionDetail"> | number | null
+    quantity?: IntFilter<"TransactionDetail"> | number
+    product_name?: StringFilter<"TransactionDetail"> | string
+    product_variant?: StringFilter<"TransactionDetail"> | string
+    variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
+    product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
+    product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
+    shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
+  }
+
+  export type TransactionCreateWithoutDetailsInput = {
+    id: string
+    code: string
+    customer_id?: string | null
+    status: $Enums.TransactionStatus
+    created_at: bigint | number
+    updated_at: bigint | number
+    currency_code: $Enums.CurrencyCode
+    total_amount: number
+    customer_name: string
+    customer_email: string
+    customer_phone_number?: string | null
+  }
+
+  export type TransactionUncheckedCreateWithoutDetailsInput = {
+    id: string
+    code: string
+    customer_id?: string | null
+    status: $Enums.TransactionStatus
+    created_at: bigint | number
+    updated_at: bigint | number
+    currency_code: $Enums.CurrencyCode
+    total_amount: number
+    customer_name: string
+    customer_email: string
+    customer_phone_number?: string | null
+  }
+
+  export type TransactionCreateOrConnectWithoutDetailsInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutDetailsInput, TransactionUncheckedCreateWithoutDetailsInput>
+  }
+
+  export type TransactionUpsertWithoutDetailsInput = {
+    update: XOR<TransactionUpdateWithoutDetailsInput, TransactionUncheckedUpdateWithoutDetailsInput>
+    create: XOR<TransactionCreateWithoutDetailsInput, TransactionUncheckedCreateWithoutDetailsInput>
+    where?: TransactionWhereInput
+  }
+
+  export type TransactionUpdateToOneWithWhereWithoutDetailsInput = {
+    where?: TransactionWhereInput
+    data: XOR<TransactionUpdateWithoutDetailsInput, TransactionUncheckedUpdateWithoutDetailsInput>
+  }
+
+  export type TransactionUpdateWithoutDetailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    total_amount?: IntFieldUpdateOperationsInput | number
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TransactionUncheckedUpdateWithoutDetailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    total_amount?: IntFieldUpdateOperationsInput | number
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type TestimonialTranslationCreateWithoutTestimonialInput = {
     language: $Enums.Language
     message: string
@@ -38792,14 +45683,14 @@ export namespace Prisma {
     category_id: number
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
   }
 
@@ -38822,19 +45713,20 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
     translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUpdateOneWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -38846,16 +45738,17 @@ export namespace Prisma {
     category_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -38867,14 +45760,14 @@ export namespace Prisma {
     category_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -38883,32 +45776,33 @@ export namespace Prisma {
     category_id: number
     admin_id: string
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
   }
 
   export type ProductUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
     translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUpdateOneWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -38920,16 +45814,17 @@ export namespace Prisma {
     category_id?: IntFieldUpdateOperationsInput | number
     admin_id?: StringFieldUpdateOperationsInput | string
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -38941,14 +45836,14 @@ export namespace Prisma {
     category_id?: IntFieldUpdateOperationsInput | number
     admin_id?: StringFieldUpdateOperationsInput | string
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -38957,14 +45852,14 @@ export namespace Prisma {
     category_id: number
     admin_id: string
     owner_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
   }
 
@@ -38977,19 +45872,20 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutLicenseInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUpdateOneWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -39001,16 +45897,17 @@ export namespace Prisma {
     category_id?: IntFieldUpdateOperationsInput | number
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -39022,14 +45919,14 @@ export namespace Prisma {
     category_id?: IntFieldUpdateOperationsInput | number
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -39058,32 +45955,33 @@ export namespace Prisma {
     admin_id: string
     owner_id: number
     license_id: number
-    name: string
-    slug: string
-    price_type: $Enums.PriceType
+    drive_file_id?: string | null
     download_link?: string | null
     is_published?: boolean
     is_pinned?: boolean
+    name: string
+    slug: string
+    price_type: $Enums.PriceType
     created_at: bigint | number
-    released_at: bigint | number
     updated_at: bigint | number
   }
 
   export type ProductUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
     translations?: ProductTranslationUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUpdateOneWithoutProductNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
@@ -39095,16 +45993,17 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
+    versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
@@ -39116,14 +46015,14 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
+    drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
@@ -39131,7 +46030,12 @@ export namespace Prisma {
     id?: string
     language: $Enums.Language
     description: string
-    changelog?: string | null
+  }
+
+  export type ProductVersionCreateManyProductInput = {
+    id?: string
+    version: string
+    released_at: bigint | number
   }
 
   export type ProductImageCreateManyProductInput = {
@@ -39146,27 +46050,45 @@ export namespace Prisma {
     id?: string
     name: string
     download_link?: string | null
+    file_access_password?: string | null
   }
 
   export type ProductTranslationUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductTranslationUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductTranslationUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     description?: StringFieldUpdateOperationsInput | string
-    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductVersionUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: ProductVersionTranslationUpdateManyWithoutProductVersionNestedInput
+  }
+
+  export type ProductVersionUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    translations?: ProductVersionTranslationUncheckedUpdateManyWithoutProductVersionNestedInput
+  }
+
+  export type ProductVersionUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductImageUpdateWithoutProductInput = {
@@ -39197,6 +46119,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     prices?: ProductPriceUpdateManyWithoutVariantNestedInput
   }
 
@@ -39204,6 +46127,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     prices?: ProductPriceUncheckedUpdateManyWithoutVariantNestedInput
   }
 
@@ -39211,30 +46135,55 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductVersionTranslationCreateManyProductVersionInput = {
+    id?: string
+    language: $Enums.Language
+    changelog?: string | null
+  }
+
+  export type ProductVersionTranslationUpdateWithoutProductVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductVersionTranslationUncheckedUpdateWithoutProductVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProductVersionTranslationUncheckedUpdateManyWithoutProductVersionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    changelog?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductPriceCreateManyVariantInput = {
     id?: string
     currency_code: $Enums.CurrencyCode
-    price: number
+    price: Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUpdateWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUncheckedUpdateWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ProductPriceUncheckedUpdateManyWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    price?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TermsOfServiceTranslationCreateManyTerms_of_serviceInput = {
@@ -39331,6 +46280,78 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TransactionDetailCreateManyTransactionInput = {
+    id: string
+    product_id?: string | null
+    product_price_id?: string | null
+    product_coupon_id?: number | null
+    quantity: number
+    product_name: string
+    product_variant: string
+    variant_download_link?: string | null
+    variant_file_access_password?: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal | DecimalJsLike | number | string
+    product_discount?: number | null
+    product_coupon_discount?: number | null
+    share_method?: $Enums.ShareMethod | null
+    shared_at?: bigint | number | null
+  }
+
+  export type TransactionDetailUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  }
+
+  export type TransactionDetailUncheckedUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  }
+
+  export type TransactionDetailUncheckedUpdateManyWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type TestimonialTranslationCreateManyTestimonialInput = {

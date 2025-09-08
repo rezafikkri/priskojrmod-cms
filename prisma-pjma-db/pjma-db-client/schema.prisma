@@ -32,18 +32,21 @@ model SecretKeyLicense {
 }
 
 model LicenseKey {
-  id                String           @id @default(uuid(7)) @db.Uuid
-  secret_key        SecretKeyLicense @relation(fields: [secret_key_id], references: [id])
-  secret_key_id     BigInt
-  customer_id       String           @db.Uuid
-  email             String           @db.VarChar(254)
-  key               String
-  used_for_activate Boolean          @default(false)
-  used_for_download Boolean          @default(false)
-  can_regenerate    Boolean          @default(false)
-  created_at        BigInt
-  updated_at        BigInt
-  regenerated_at    BigInt?
+  id             String           @id @default(uuid(7)) @db.Uuid
+  secret_key     SecretKeyLicense @relation(fields: [secret_key_id], references: [id])
+  secret_key_id  BigInt
+  customer_id    String           @db.Uuid
+  email          String           @db.VarChar(254)
+  code           String
+  can_regenerate Boolean          @default(false)
+  is_revoked     Boolean          @default(false)
+  created_at     BigInt
+  updated_at     BigInt
+  regenerated_at BigInt?
+
+  device_id         String? @db.VarChar(100)
+  last_reset_period String? @db.VarChar(10)
+  reset_count       Int     @default(0) @db.SmallInt
 
   @@unique([customer_id, secret_key_id])
   @@map("license_keys")

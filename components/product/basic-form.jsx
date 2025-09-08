@@ -24,15 +24,19 @@ import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { createProductBasicSchema, editProductBasicSchema } from '@/lib/validators/product-validator';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
+import { PriceType } from '@/constants/enums';
+import MainFileFields from './main-file-fields';
+import { isSemverFormat } from '@/lib/utils';
 
 export default function BasicForm({
   onNextStep,
+  onPricingStepVisibility,
   categories,
   owners,
   licenses,
   mode = 'create',
 }) {
-  const basic = useProductFormStore(state => state.basic);
+  const basic = useProductFormStore(state => state.form.basic);
   const setBasic = useProductFormStore(state => state.setBasic);
   const clearDraft = useProductFormStore(state => state.clearDraft);
   const defaultValues = {
@@ -43,10 +47,20 @@ export default function BasicForm({
   };
   let basicSchema;
 
+  // edit mode only
+  let setVersionStatus;
+  let versionStatus;
+  let dbVersion;
+  let dbPriceType;
+
   if (mode === 'create') {
     basicSchema = createProductBasicSchema;
   } else {
     basicSchema = editProductBasicSchema;
+    setVersionStatus = useProductFormStore(state => state.setVersionStatus);
+    versionStatus = useProductFormStore(state => state.meta.versionStatus);
+    dbVersion = useProductFormStore(state => state.reference.dbVersion);
+    dbPriceType = useProductFormStore(state => state.reference.dbPriceType);
   }
 
   const form = useForm({
@@ -54,18 +68,76 @@ export default function BasicForm({
     defaultValues,
   });
 
+  const applicationCategory = categories.find((category) => category.slug === 'application');
+  const applicationCategoryId = applicationCategory?.id ?? null;
+
   function handleNext(data) {
+    let isError = false;
+
+    // validate drive_file_id, download_link, and version
+    if (data.category_id === applicationCategoryId || data.price_type === PriceType.FREE) {
+      if (data.download_link === '') {
+        form.setError('download_link', { message: 'Can\'t be empty' });
+        isError = true;
+      }
+    }
+    
+    if (data.category_id === applicationCategoryId) {
+      if (!isSemverFormat(data.version)) {
+        form.setError('version', { message: 'Must follow simplified semantic versioning' });
+        isError = true;
+      }
+    }
+
+    if (isError) return;
+
+    onPricingStepVisibility(data.price_type);
     setBasic(data);
     onNextStep();
+  }
+
+  function beforeNext(e) {
+    if (
+      form.getValues('category_id') === applicationCategoryId.toString() ||
+      form.getValues('price_type') === PriceType.FREE
+    ) {
+      form.setValue('drive_file_id', '');
+    } else {
+      form.setValue('download_link', '');
+    }
+
+    form.handleSubmit(handleNext)(e);
   }
 
   function clearProductDraft() {
     clearDraft();
   }
 
+  function handleVersionChange(version, fieldOnChange) {
+    if (mode === 'edit') {
+      if (version !== dbVersion && versionStatus === 'pristine') {
+        setVersionStatus('changed');
+      } else if (version === dbVersion && versionStatus === 'neutralized') {
+        setVersionStatus('rollback');
+      } else if (version !== dbVersion && versionStatus === 'rollback') {
+        setVersionStatus('neutralized');
+      } else if (version === dbVersion && versionStatus === 'changed') {
+        setVersionStatus('pristine');
+      }
+    }
+
+    fieldOnChange(version);
+  }
+
+  // categories for showed in select option
+  let availableCategories = categories;
+  if (mode === 'edit' && basic.category_id !== applicationCategoryId) {
+    availableCategories = categories.filter((category) => category.id !== applicationCategoryId);
+  }
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleNext)} className="space-y-6 mb-10">
+      <form onSubmit={beforeNext} className="space-y-6 mb-10">
         <FormField
           control={form.control}
           name="name"
@@ -80,38 +152,48 @@ export default function BasicForm({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="category_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base">Category</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5">
-                    <SelectValue placeholder="Select a category" suppressHydrationWarning />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {categories.map(category => (
-                    <SelectItem
-                      key={category.id}
-                      value={category.id.toString()}
-                      className="text-base"
-                    >
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormDescription>Select the most relevant category for this product.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
+        {(mode === 'edit' && basic.category_id === applicationCategoryId) ? (
+          <FormItem>
+            <FormLabel className="text-base">Category</FormLabel>
+            <p className="capitalize">{applicationCategory.name}</p>
+            <FormDescription>This is an application product. Category cannot be changed.</FormDescription>
+          </FormItem>
+        ) : (
+          <FormField
+            control={form.control}
+            name="category_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Category</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {availableCategories.map(category => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                        className="text-base"
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select the most relevant category for this product. {mode === 'edit' && 'Changing a category to \'Application\' is not allowed.'}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <FormField
           control={form.control}
           name="owner_id"
@@ -170,19 +252,60 @@ export default function BasicForm({
             </FormItem>
           )}
         />
+
+        {(mode === 'edit' && dbPriceType === PriceType.PAID) ? (
+          <FormItem>
+            <FormLabel className="text-base">Price Type</FormLabel>
+            <p className="capitalize">{basic.price_type}</p>
+            <FormDescription>This is a paid product. Price type cannot be changed.</FormDescription>
+          </FormItem>
+        ) : (
+          <FormField
+            control={form.control}
+            name="price_type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Price Type</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger
+                      className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5 capitalize"
+                    >
+                      <SelectValue placeholder="Select price type" />
+                    </SelectTrigger>
+                    </FormControl>
+                  <SelectContent>
+                    <SelectItem className="text-base capitalize" value={PriceType.FREE}>
+                      {PriceType.FREE}
+                    </SelectItem>
+                    <SelectItem className="text-base capitalize" value={PriceType.PAID}>
+                      {PriceType.PAID}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select whether this product is free or paid.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        <MainFileFields form={form} applicationCategoryId={applicationCategoryId} />
+
         <FormField
           control={form.control}
-          name="download_link"
+          name="version"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-base">Download Link</FormLabel>
+              <FormLabel className="text-base">Version</FormLabel>
               <FormControl>
                 <Input
                   className="md:text-base h-auto px-3 py-1.5 shadow-none"
                   {...field}
+                  onChange={(e) => handleVersionChange(e.target.value, field.onChange)}
                 />
               </FormControl>
-              <FormDescription>Enter a direct download link for the product's main file. Leave empty if the file will be delivered manually after purchase (e.g. via email or Google Drive).</FormDescription>
+              <FormDescription>Enter the product version. If the category is “Application”, use the simplified semantic version format <code>X.Y.Z</code> (e.g. 1.0.0). Otherwise, you may enter any version format.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

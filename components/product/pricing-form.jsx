@@ -9,23 +9,15 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from '../ui/form';
 import { CurrencyCode, PriceType } from '@/constants/enums';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { createProductPricingSchema, editProductPricingSchema } from '@/lib/validators/product-validator';
 import { toast } from 'sonner';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { addProduct, editProduct } from '@/actions/product-actions';
 import PriceFields from './price-fields';
 import DiscountFields from './discount-fields';
@@ -39,93 +31,69 @@ export default function PricingForm({
   onResetStep,
   mode = 'create',
 }) {
-  const pricing = useProductFormStore(state => state.pricing);
+  const pricing = useProductFormStore(state => state.form.pricing);
   const setPricing = useProductFormStore(state => state.setPricing);
   const clearDraft = useProductFormStore(state => state.clearDraft);
-  const basic = useProductFormStore(state => state.basic);
-  const content = useProductFormStore(state => state.content);
-  const extras = useProductFormStore(state => state.extras);
+  const basic = useProductFormStore(state => state.form.basic);
+  const content = useProductFormStore(state => state.form.content);
+  const extras = useProductFormStore(state => state.form.extras);
   let pricingSchema;
 
   // edit mode only
   let setExtras;
+  let setBasic;
+  let setContent;
+  let setVersionStatus;
+  let setReference;
 
   if (mode === 'create') {
     pricingSchema = createProductPricingSchema;
   } else {
     setExtras = useProductFormStore(state => state.setExtras);
+    setBasic = useProductFormStore(state => state.setBasic);
+    setContent = useProductFormStore(state => state.setContent);
     pricingSchema = editProductPricingSchema;
+    setVersionStatus = useProductFormStore(state => state.setVersionStatus);
+    setReference = useProductFormStore(state => state.setReference);
   }
 
   const queryClient = useQueryClient();
 
-  function getDefaultPrices(priceType) {
-    if (priceType === PriceType.FREE) return [];
-
-    let prices = [];
-    for (const variant of extras.variants) {
-      prices.push({
-        variantId: variant.id ?? variant.dbId,
-        variantName: variant.name,
-        price: '',
-        currency_code: CurrencyCode.IDR,
-      });
-      prices.push({
-        variantId: variant.id ?? variant.dbId,
-        variantName: variant.name,
-        price: '',
-        currency_code: CurrencyCode.USD,
-      });
-    }
-    return prices;
-  }
-
   function syncPrices(pricing) {
     let newPrices = [];
 
-    if (pricing.price_type === PriceType.PAID) {
+    if (basic.price_type === PriceType.PAID) {
       for (const variant of extras.variants) {
         // This is for updating prices. It ensures that when the admin goes back to the previous step 
         // and edits a variant name, the new variant name will be reflected here.
         // It also handles the case when the admin deletes some variants in the previous step — 
         // this function will ignore prices from deleted variants, 
         // so their associated prices will appear as removed.
-        for (const [index, price] of pricing.prices.entries()) {
+        for (const price of pricing.prices) {
           if (price.variantId === (variant.id ?? variant.dbId)) {
             newPrices.push({
               ...price,
               variantName: variant.name,
             });
-            newPrices.push({
-              ...pricing.prices[index + 1],
-              variantName: variant.name,
-            });
-            break;
           }
         }
         
-        // if new variant exist, then add to newPrices array.
-        if (variant.id && !pricing.prices.some(price => variant.id === price.variantId)) {
+        // if new variant exist, or price_type changed to paid (that mean, each variant doesn't have
+        // any prices), then add prices for each variant to newPrices array. 
+        if (!pricing.prices.some(price => (variant.id ?? variant.dbId) === price.variantId)) {
           newPrices.push({
-            variantId: variant.id,
+            variantId: variant.id ?? variant.dbId,
             variantName: variant.name,
-            price: '',
-            currency_code: CurrencyCode.IDR,
-          });
-          newPrices.push({
-            variantId: variant.id,
-            variantName: variant.name,
-            price: '',
-            currency_code: CurrencyCode.USD,
+            currencies: [
+              { price: '', currency_code: CurrencyCode.IDR },
+              { price: '', currency_code: CurrencyCode.USD },
+            ],
           });
         }
       }
     }
 
-    if (newPrices.length > 0) {
-      return { ...pricing, prices: newPrices };
-    }
-    return pricing;
+    return { ...pricing, prices: newPrices };
   }
 
   const initialDefaultValues = useMemo(() => syncPrices(pricing), []);
@@ -136,7 +104,6 @@ export default function PricingForm({
   const isSubmitting = form.formState.isSubmitting;
   const {
     fields: prices,
-    replace: replacePrices,
   } = useFieldArray({
     control: form.control,
     name: 'prices',
@@ -148,11 +115,6 @@ export default function PricingForm({
     isBlocking,
   } = useEditPendingTracker();
 
-  function handlePriceTypeChange({ selectedValue, field }) {
-    field.onChange(selectedValue);
-    replacePrices(getDefaultPrices(selectedValue));
-  }
-
   function getExpiredAtEpoch(date) {
     if (date instanceof Date) {
       return Math.floor(date.getTime() / 1000);
@@ -161,41 +123,50 @@ export default function PricingForm({
   }
 
   async function handleSubmit(data) {
+    // validate prices: if currencyCode = IDR, then only integer, if USD allow decimal
+    let isError = false;
+    let fieldNameToFocus = null;
+
+    data.prices.forEach((price, i) => {
+      price.currencies.forEach((currency, j) => {
+        if (currency.currency_code === CurrencyCode.IDR && !Number.isInteger(currency.price)) {
+          const fieldName = `prices.${i}.currencies.${j}.price`;
+
+          if (!fieldNameToFocus) fieldNameToFocus = fieldName;
+          form.setError(fieldName, { message: 'Must not contain decimals' }, { shouldFocus: true });
+          isError = true;
+        }
+      });
+    });
+
+    if (isError) {
+      // Use requestAnimationFrame to ensure focus happens 
+      // right after the DOM update but before the next paint.
+      // This avoids timing issues where the input ref is not yet ready.
+      requestAnimationFrame(() => {
+        form.setFocus(fieldNameToFocus);
+      });
+      return;
+    }
+
     let product = {
       ...basic,
       ...content,
       ...extras,
-      price_type: data.price_type,
     };
 
     if (mode === 'create') {
       product.is_published = data.is_published;
-    } else {
-      product.should_update_released_at = data.should_update_released_at;
     }
-
+    
     // if price type == paid
-    if (data.price_type === PriceType.PAID) {
+    if (product.price_type === PriceType.PAID) {
       product.variants = product.variants.map(variant => {
-        let newVariant = { ...variant, prices: [] };
+        let newVariant = { ...variant };
 
-        for (const [i, price] of data.prices.entries()) {
+        for (const price of data.prices) {
           if ((variant.id ?? variant.dbId) === price.variantId) {
-            let priceIDR = {
-              price: price.price,
-              currency_code: price.currency_code,
-            };
-            if (price.id) priceIDR.id = price.id;
-
-            let priceUSD = {
-              price: data.prices[i + 1].price,
-              currency_code: data.prices[i + 1].currency_code,
-            };
-            if (data.prices[i + 1].id) priceUSD.id = data.prices[i + 1].id;
-
-            newVariant.prices.push(priceIDR);
-            newVariant.prices.push(priceUSD);
-
+            newVariant.prices = price.currencies;
             break;
           }
         }
@@ -238,13 +209,31 @@ export default function PricingForm({
         onResetStep();
         toast.success('Product created successfully.');
       } else {
-        // if success, set extras and pricing data, like id, etc.
+        // reset versionStatus state and update reference (dbVersion, dsb)
+        setVersionStatus('pristine');
+        setReference({
+          dbPriceType: basic.price_type,
+          dbVersion: basic.version,
+          dbChangelog: content.changelog,
+        });
+
+        // if success, set basic, content, extras and pricing data, like id, etc.
+        setBasic({
+          ...basic,
+          versionId: saveRes.data.basic.versionId,
+        });
+
+        if (saveRes.data.content.versionTranslationId) {
+          setContent({
+            ...content,
+            versionTranslationId: saveRes.data.content.versionTranslationId,
+          });
+        }
+
         setExtras(saveRes.data.extras);
 
         let newPricing = {
-          price_type: data.price_type,
           prices: saveRes.data.pricing.prices,
-          should_update_released_at: false,
           discount: data.discount,
           coupon: data.coupon,
         };
@@ -290,55 +279,28 @@ export default function PricingForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
-        {(mode === 'edit' && pricing.price_type === PriceType.PAID) ? (
-          <FormItem>
-            <FormLabel className="text-base">Price Type</FormLabel>
-            <p className="capitalize">{pricing.price_type}</p>
-            <FormDescription>This is a paid product. Price type cannot be changed.</FormDescription>
-          </FormItem>
-        ) : (
-          <FormField
-            control={form.control}
-            name="price_type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Price Type</FormLabel>
-                <Select
-                  onValueChange={(priceType) => handlePriceTypeChange({ selectedValue: priceType, field: field })}
-                  defaultValue={field.value}
-                  disabled={isSubmitting}
-                >
-                  <FormControl>
-                    <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-full capitalize">
-                      <SelectValue placeholder="Select price type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem className="text-base capitalize" value={PriceType.FREE}>
-                      {PriceType.FREE}
-                    </SelectItem>
-                    <SelectItem className="text-base capitalize" value={PriceType.PAID}>
-                      {PriceType.PAID}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>Select whether this product is free or paid.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
-
-        {form.getValues('price_type') === PriceType.PAID && (
+        {basic.price_type === PriceType.PAID && (
           <>
-            <Separator />
             <section className="space-y-6 mb-9">
               <h3 className="text-lg font-bold mb-0">Prices</h3>
               <h4 className="text-zinc-700 dark:text-zinc-300/80">
-                Each variant has its own price in two currencies, USD and IDR.
+                Each variant has its own price in two currencies, IDR and USD.
               </h4>
 
-              <PriceFields prices={prices} form={form} />
+              {prices.map((price, index) => (
+                <Fragment key={price.variantId}>
+                  <PriceFields
+                    price={price}
+                    name={`prices.${index}.currencies`}
+                    form={form}
+                  />
+                  {index < prices.length - 1 && (
+                    <div className="pe-15">
+                      <Separator />
+                    </div>
+                  )}
+                </Fragment>
+              ))}
             </section>
             <Separator />
             <section className="space-y-6 mb-9">
@@ -357,71 +319,57 @@ export default function PricingForm({
                 disabled={isSubmitting}
               />
             </section>
-            <Separator />
-            <section className="space-y-6 mb-9">
-              <h3 className="text-lg font-bold mb-0">Coupon</h3>
-              <h4 className="text-zinc-700 dark:text-zinc-300/80">
-                Optional. Provides a discount for previous buyers when purchasing product upgrades.
-              </h4>
+            {mode === 'edit' && (
+              <>
+                <Separator />
+                <section className="space-y-6 mb-9">
+                  <h3 className="text-lg font-bold mb-0">Coupon</h3>
+                  <h4 className="text-zinc-700 dark:text-zinc-300/80">
+                    Optional. Provides a discount for previous buyers when purchasing product upgrades.
+                  </h4>
 
-              <CouponFields
-                form={form}
-                basic={basic}
-                handlers={{
-                  onIncrementPending: incrementPending,
-                  onDecrementPending: decrementPending,
-                }}
-                disabled={isSubmitting}
-              />
-            </section>
-            <Separator />
+                  <CouponFields
+                    form={form}
+                    basic={basic}
+                    handlers={{
+                      onIncrementPending: incrementPending,
+                      onDecrementPending: decrementPending,
+                    }}
+                    disabled={isSubmitting}
+                  />
+                </section>
+              </>
+            )}
           </>
         )}
 
-        {mode === 'create' ? (
-          <FormField
-            control={form.control}
-            name="is_published"
-            render={({ field }) => (
-              <FormItem className="flex space-x-2 items-start">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    disabled={isSubmitting}
-                  />
-                </FormControl>
-                <div className="space-y-2">
-                  <FormLabel className="text-base leading-none">Publish</FormLabel>
-                  <FormDescription>
-                    Make this product visible on the website.
-                  </FormDescription>
-                </div>
-              </FormItem>
+        {mode === 'create' && (
+          <>
+            {basic.price_type === PriceType.PAID && (
+              <Separator />
             )}
-          />
-        ) : (
-          <FormField
-            control={form.control}
-            name="should_update_released_at"
-            render={({ field }) => (
-              <FormItem className="flex space-x-2 items-start">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    disabled={isSubmitting}
-                  />
-                </FormControl>
-                <div className="space-y-2">
-                  <FormLabel className="text-base leading-none">Update "Released At"</FormLabel>
-                  <FormDescription>
-                    Check this if you want to change the product’s "Released At" value.
-                  </FormDescription>
-                </div>
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="is_published"
+              render={({ field }) => (
+                <FormItem className="flex space-x-2 items-start">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <div className="space-y-2">
+                    <FormLabel className="text-base leading-none">Publish</FormLabel>
+                    <FormDescription>
+                      Make this product visible on the website.
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+          </>
         )}
 
         <Button

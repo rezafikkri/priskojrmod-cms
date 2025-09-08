@@ -18,6 +18,7 @@ import {
   updateProduct,
 } from '@/lib/services/product-service';
 import { CurrencyCode, Language, PriceType } from '@/constants/enums';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -28,11 +29,15 @@ beforeAll(() => {
 
   vi.mock('@/lib/pjme-prisma-client', () => ({
     default: {
+      Category: {
+        findUnique: vi.fn(),
+      },
       Product: {
         create: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
         count: vi.fn(),
+        findUnique: vi.fn(),
       },
       ProductVariant: { delete: vi.fn() },
       ProductImage: { delete: vi.fn() },
@@ -65,7 +70,7 @@ describe('createProduct function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(createProduct({})).rejects.toThrow('Unauthenticated');
+    await expect(createProduct({})).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Product.create).not.toHaveBeenCalled();
@@ -78,6 +83,7 @@ describe('createProduct function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
+    pjmeDBPrismaClient.Category.findUnique.mockResolvedValue(null);
     verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id-123' });
 
     const input = {
@@ -91,15 +97,16 @@ describe('createProduct function', () => {
         en: 'Awesome product description',
       },
       variants: [
-        { name: 'Standard', prices: [{ price: 10000, currency_code: 'IDR' }] },
+        {
+          name: 'Standard',
+        },
       ],
       images: [
         { url: 'https://images.unsplash.com/photo-1750222382424-610417abf3b1', is_thumbnail: true, width: 100, height: 100 },
       ],
-      discount: { value: 10, expired_at: '1735689600' },
-      coupon: { code: 'NICE', discount: 5, expired_at: '1735689600' },
       is_published: true,
-      price_type: PriceType.PAID,
+      price_type: PriceType.FREE,
+      version: '1.0.0',
     };
 
     await createProduct(input);
@@ -117,7 +124,6 @@ describe('createProduct function', () => {
         price_type: input.price_type,
         is_published: input.is_published,
         created_at: currentTime,
-        released_at: currentTime,
         updated_at: currentTime,
         download_link: input.download_link,
         translations: {
@@ -126,26 +132,17 @@ describe('createProduct function', () => {
             { language: Language.EN, description: input.description.en },
           ],
         },
+        versions: {
+          create: {
+            released_at: 1744853503n,
+            version: '1.0.0',
+          },
+        },
         images: {
           create: input.images,
         },
         variants: {
-          create: [{
-            ...input.variants[0],
-            prices: { create: input.variants[0].prices },
-          }],
-        },
-        discount: {
-          create: {
-            discount: input.discount.value,
-            expired_at: BigInt(input.discount.expired_at),
-          },
-        },
-        coupon: {
-          create: {
-            ...input.coupon,
-            expired_at: BigInt(input.coupon.expired_at),
-          },
+          create: input.variants,
         },
       },
       select: { id: true },
@@ -160,8 +157,7 @@ describe('updateProductPinnedStatus function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(updateProductPinnedStatus({ id: '999c549f-33d7-461e-9f0e-928b17097e42', is_pinned: true }))
-      .rejects.toThrow('Unauthenticated');
+    await expect(updateProductPinnedStatus()).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Product.update).not.toHaveBeenCalled();
@@ -182,7 +178,7 @@ describe('updateProductPinnedStatus function', () => {
       updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
     });
 
-    await updateProductPinnedStatus({ id: '999c549f-33d7-461e-9f0e-928b17097e42', is_pinned: true });
+    await updateProductPinnedStatus('999c549f-33d7-461e-9f0e-928b17097e42', true);
 
     expect(pjmeDBPrismaClient.Product.count).toHaveBeenCalledWith({ where: { is_pinned: true }});
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({
@@ -203,10 +199,7 @@ describe('updateProductPublishedStatus function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(updateProductPublishedStatus({
-      id: 'fd209fe2-3f60-42b2-9985-99b3fc4f8600',
-      is_published: true,
-    })).rejects.toThrow('Unauthenticated');
+    await expect(updateProductPublishedStatus({})).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Product.update).not.toHaveBeenCalled();
@@ -226,7 +219,7 @@ describe('updateProductPublishedStatus function', () => {
       updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
     });
 
-    await updateProductPublishedStatus({ id: 'fd209fe2-3f60-42b2-9985-99b3fc4f8600', is_published: false });
+    await updateProductPublishedStatus('fd209fe2-3f60-42b2-9985-99b3fc4f8600', false);
 
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({
       where: { id: 'fd209fe2-3f60-42b2-9985-99b3fc4f8600' },
@@ -246,7 +239,7 @@ describe('deleteProduct function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteProduct('6cb32c0f-a38a-4e42-bf45-d5a964205ab3')).rejects.toThrow('Unauthenticated');
+    await expect(deleteProduct('6cb32c0f-a38a-4e42-bf45-d5a964205ab3')).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Product.delete).not.toHaveBeenCalled();
@@ -257,6 +250,10 @@ describe('deleteProduct function', () => {
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id-123' });
+    pjmeDBPrismaClient.Product.findUnique.mockResolvedValue({
+      is_pinned: false,
+      is_published: false,
+    });
 
     await deleteProduct('6cb32c0f-a38a-4e42-bf45-d5a964205ab3');
 
@@ -277,7 +274,7 @@ describe('deleteProductVariant function', () => {
     await expect(deleteProductVariant(
       'c9274c35-7561-4824-8bde-a2db2e81f101',
       '629f8469-ff43-4d49-bca6-4875b93f4b69',
-    )).rejects.toThrow('Unauthenticated');
+    )).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.$transaction).not.toHaveBeenCalled();
@@ -320,7 +317,7 @@ describe('deleteProductImage function', () => {
     await expect(deleteProductImage(
       '2e497c7c-3aa2-450a-ac53-e199f5c3cc83',
       '2e497c7c-3aa2-450a-ac53-e199f5c3cc84',
-    )).rejects.toThrow('Unauthenticated');
+    )).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.$transaction).not.toHaveBeenCalled();
@@ -361,7 +358,7 @@ describe('deleteProductDiscount function', () => {
     verifySession.mockResolvedValue(false);
 
     await expect(deleteProductDiscount(1, '2e497c7c-3aa2-450a-ac53-e199f5c3cc94'))
-      .rejects.toThrow('Unauthenticated');
+      .rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.$transaction).not.toHaveBeenCalled();
@@ -402,7 +399,7 @@ describe('deleteProductCoupon function', () => {
     verifySession.mockResolvedValue(false);
 
     await expect(deleteProductCoupon(1, '2e497c7c-3aa2-450a-ac53-e129f5c3cc94'))
-      .rejects.toThrow('Unauthenticated');
+      .rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.$transaction).not.toHaveBeenCalled();
@@ -444,7 +441,7 @@ describe('updateProduct function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(updateProduct({})).rejects.toThrow('Unauthenticated');
+    await expect(updateProduct({})).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.$transaction).not.toHaveBeenCalled();
@@ -459,7 +456,6 @@ describe('updateProduct function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id-123' });
     const input = {
       id: '2e497c7c-3aa2-450a-ac53-e129f5c4cc34',
       name: 'Updated Awesome Product',
@@ -467,44 +463,57 @@ describe('updateProduct function', () => {
       owner_id: 2,
       license_id: 2,
       download_link: 'https://example.com/new-download',
+      drive_file_id: '',
       translationId: {
         id: '2e497c7c-3aa2-450a-ac53-e129f5c3cc34',
         en: '1e497c7c-3aa2-450a-ac53-e129f5c3cc34',
       },
       description: { id: 'Deskripsi baru', en: 'New description' },
-      changelog: { id: 'Catatan perubahan', en: 'Changelog' },
+      changelog: { id: '', en: '' },
+      versionId: '1e497c7c-3aa2-450a-ac53-e129f5c3cc34',
+      version: '1.0.0',
+      price_type: PriceType.PAID,
       variants: [
         {
           dbId: '2e497c7c-3aa2-450a-ac53-e129f5c4cc34',
           name: 'Middle',
-          download_link: '',
-          prices: [
-            {
-              id: '2e497c7c-3aa2-450a-ac53-e129f5c4cc35',
-              currency_code: CurrencyCode.IDR,
-              price: 20000,
-            },
-          ],
+          download_link: 'https://chatgpt.com/c/68b8ccfa-fb94-832e-aadc-0108da26bc6e',
+          file_access_password: 'lN384%_Z7f4ivJVd',
         },
       ],
       images: [
         {
-          dbId: '2e497c7c-3aa2-450a-ac53-e129f5c4ac34',
+          dbId: '2e497c7c-3aa2-450a-ac53-e129f5c4ac36',
           url: 'https://images.unsplash.com/photo-1750797636255-8c939940bcad',
           is_thumbnail: true,
           width: 123,
           height: 456,
         },
       ],
-      discount: { id: 1, value: 15, expired_at: '1735776000' },
-      coupon: { id: 1, code: 'NEW', discount: 10, expired_at: '1735776000' },
-      price_type: PriceType.PAID,
-      should_update_released_at: true,
     };
+    pjmeDBPrismaClient.Category.findUnique.mockResolvedValue({ slug: 'scoreboard' });
+    pjmeDBPrismaClient.Product.findUnique.mockResolvedValue({
+      name: input.name,
+      versions: [
+        {
+          released_at: currentTime,
+          version: input.version,
+        },
+      ],
+      category:  {
+        slug: 'scoreboard',
+      },
+    });
+    verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id-123' });
     pjmeDBPrismaClient.$transaction.mockResolvedValue([
-      { id: '2e497c7c-3aa2-450a-ac53-e129f5c4cc34', variants: input.variants, images: input.images }, 
-      { id: 1 },
-      { id: 1 },
+      {
+        id: '2e497c7c-3aa2-450a-ac53-e129f5c4cc34',
+        versions: [
+          { id: '2e497c7a-3aa2-450a-ac53-e129f5c4cc35', translations: [] },
+        ],
+        variants: input.variants.map(variant => ({ ...variant, prices: [] })),
+        images: input.images,
+      }, 
     ]);
 
     await updateProduct(input);
@@ -519,15 +528,16 @@ describe('updateProduct function', () => {
         name: input.name,
         slug: 'updated-awesome-product',
         download_link: input.download_link,
+        drive_file_id: null,
         updated_at: currentTime,
         translations: {
           update: [
             {
-              data: { description: input.description.id, changelog: input.changelog.id },
+              data: { description: input.description.id },
               where: { id: input.translationId.id },
             },
             {
-              data: { description: input.description.en, changelog: input.changelog.en },
+              data: { description: input.description.en },
               where: { id: input.translationId.en },
             },
           ],
@@ -552,28 +562,30 @@ describe('updateProduct function', () => {
             return {
               create: {
                 ...variant,
-                prices: {
-                  create: variant.prices,
-                },
               },
               update: {
                 ...variant,
-                prices: {
-                  upsert: variant.prices.map(price => ({
-                    create: { price: price.price, currency_code: price.currency_code },
-                    update: { price: price.price, currency_code: price.currency_code },
-                    where: { id: price.id },
-                  })),
-                },
               },
               where: { id: variantId },
             };
           }),
         },
-        released_at: currentTime,
         price_type: input.price_type,
       },
       select: {
+        versions: {
+          orderBy: [
+            { released_at: 'desc' },
+            { id: 'desc' },
+          ],
+          take: 1,
+          select: {
+            id: true,
+            translations: {
+              select: { id: true, language: true },
+            },
+          },
+        },
         images: {
           select: {
             id: true,
@@ -588,6 +600,7 @@ describe('updateProduct function', () => {
             id: true,
             name: true,
             download_link: true,
+            file_access_password: true,
             prices: {
               select: {
                 id: true,
@@ -598,23 +611,6 @@ describe('updateProduct function', () => {
           },
         },
       },
-    });
-    expect(pjmeDBPrismaClient.ProductDiscount.update).toHaveBeenCalledWith({
-      where: { id: input.discount.id },
-      data: {
-        discount: input.discount.value,
-        expired_at: BigInt(input.discount.expired_at)
-      },
-      select: { id: true }
-    });
-    expect(pjmeDBPrismaClient.ProductCoupon.update).toHaveBeenCalledWith({
-      where: { id: input.coupon.id },
-      data: {
-        code: input.coupon.code,
-        discount: input.coupon.discount,
-        expired_at: BigInt(input.coupon.expired_at)
-      },
-      select: { id: true }
     });
   });
 });

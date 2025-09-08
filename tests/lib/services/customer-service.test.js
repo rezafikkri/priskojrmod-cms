@@ -16,6 +16,7 @@ import {
   getCustomersForAutocomplete,
   deleteCustomer,
 } from '@/lib/services/customer-service';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -66,7 +67,7 @@ describe('createCustomer function', () => {
         email: 'reza@domain.com',
         picture: null,
       }),
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Customer.create).not.toHaveBeenCalled();
@@ -118,7 +119,7 @@ describe('getCustomers function', () => {
         pageSize: 10,
         filters: {},
       })
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Customer.findMany).not.toHaveBeenCalled();
@@ -186,7 +187,7 @@ describe('searchCustomers function', () => {
         limit: 10,
         filters: { is_banned: false },
       }),
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Customer.findMany).not.toHaveBeenCalled();
@@ -259,7 +260,7 @@ describe('getCustomer function', () => {
 
     await expect(
       getCustomer({ id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' })
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Customer.findUnique).not.toHaveBeenCalled();
@@ -305,7 +306,7 @@ describe('updateCustomer function', () => {
         email: 'reza@x.com',
         picture: null,
       }),
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Customer.update).not.toHaveBeenCalled();
@@ -360,7 +361,7 @@ describe('updateCustomerBanStatus function', () => {
 
     await expect(
       updateCustomerBanStatus('c705f67d-4f2b-45f7-99fd-2fc193f5e000', true)
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Customer.update).not.toHaveBeenCalled();
@@ -399,7 +400,7 @@ describe('getCustomersForAutocomplete function', () => {
 
     await expect(
       getCustomersForAutocomplete('example')
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Customer.findMany).not.toHaveBeenCalled();
@@ -443,7 +444,7 @@ describe('deleteCustomer function', () => {
 
     verifySession.mockResolvedValue(null);
 
-    await expect(deleteCustomer('28c841fc-8efb-4469-b7c9-d3c90b417e60')).rejects.toThrow('Unauthenticated');
+    await expect(deleteCustomer('28c841fc-8efb-4469-b7c9-d3c90b417e60')).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Customer.delete).not.toHaveBeenCalled();

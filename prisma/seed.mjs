@@ -10,7 +10,6 @@ const pjmeDBPrismaClient = new PjmeDBPrismaClient();
 async function main() {
   await seedCategory();
 
-  console.log(`from seed. NODE_ENV in server component: ${process.env.NODE_ENV}`);
   if (process.env.NODE_ENV === 'development') {
     await seedDevData();
   }

@@ -134,13 +134,15 @@ exports.Prisma.LicenseKeyScalarFieldEnum = {
   secret_key_id: 'secret_key_id',
   customer_id: 'customer_id',
   email: 'email',
-  key: 'key',
-  used_for_activate: 'used_for_activate',
-  used_for_download: 'used_for_download',
+  code: 'code',
   can_regenerate: 'can_regenerate',
+  is_revoked: 'is_revoked',
   created_at: 'created_at',
   updated_at: 'updated_at',
-  regenerated_at: 'regenerated_at'
+  regenerated_at: 'regenerated_at',
+  device_id: 'device_id',
+  last_reset_period: 'last_reset_period',
+  reset_count: 'reset_count'
 };
 
 exports.Prisma.SortOrder = {

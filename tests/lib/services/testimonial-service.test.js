@@ -11,6 +11,7 @@ import {
   updateTestimonial,
 } from '@/lib/services/testimonial-service';
 import { Language } from '@/constants/enums';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -50,7 +51,7 @@ describe('createTestimonial function', () => {
         id: 'Pesan ID',
         en: 'Message EN',
       },
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Testimonial.create).not.toHaveBeenCalled();
@@ -122,7 +123,7 @@ describe('updateTestimonial function', () => {
         id: 'Pesan ID',
         en: 'Message EN',
       },
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Testimonial.update).not.toHaveBeenCalled();

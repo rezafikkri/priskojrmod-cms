@@ -17,30 +17,52 @@ import { useProductFormStore } from '@/lib/providers/product-form-store-provider
 import VariantFields from './variant-fields';
 import ImageGrid from './image-grid';
 import useEditPendingTracker from '@/hooks/use-edit-pending-tracker';
+import { PriceType } from '@/constants/enums';
+import { editProduct } from '@/actions/product-actions';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ExtrasForm({
   onNextStep,
   onPrevStep,
   mode = 'create',
 }) {
-  const extras = useProductFormStore(state => state.extras);
+  const queryClient = useQueryClient();
+
+  const extras = useProductFormStore(state => state.form.extras);
   const setExtras = useProductFormStore(state => state.setExtras);
   let extrasSchema;
 
+  // for create mode only
+  let productId;
+
   // for edit mode only
   let basic;
+  let setBasic;
+  let content;
+  let setContent;
+  let setVersionStatus;
+  let setReference;
 
   if (mode === 'create') {
     extrasSchema = createProductExtrasSchema;
+    productId = useProductFormStore(state => state.form.basic.id);
   } else {
     extrasSchema = editProductExtrasSchema;
-    basic = useProductFormStore(state => state.basic);
+    basic = useProductFormStore(state => state.form.basic);
+    setBasic = useProductFormStore(state => state.setBasic);
+    content = useProductFormStore(state => state.form.content);
+    setContent = useProductFormStore(state => state.setContent);
+    setVersionStatus = useProductFormStore(state => state.setVersionStatus);
+    setReference = useProductFormStore(state => state.setReference);
   }
   const form = useForm({
     resolver: zodResolver(extrasSchema),
     defaultValues: extras,
   });
   const errors = form.formState.errors;
+  const isSubmitting = form.formState.isSubmitting;
   const {
     fields: variants,
     remove: removeVariant,
@@ -70,6 +92,84 @@ export default function ExtrasForm({
     onNextStep();
   }
 
+  async function handleSubmit(data) {
+    let product = {
+      ...basic,
+      ...content,
+      ...data,
+    };
+
+    product.variants = data.variants.map(variant => {
+      let newVariant = { ...variant };
+      delete newVariant.id;
+      return newVariant;
+    });
+
+    const saveRes = await editProduct(product);
+
+    if (saveRes.status === 'success') {
+      // reset versionStatus state and update reference (dbVersion, dsb)
+      setVersionStatus('pristine');
+      setReference({
+        dbPriceType: basic.price_type,
+        dbVersion: basic.version,
+        dbChangelog: content.changelog,
+      });
+
+      // if success, set basic, content, extras and pricing data, like id, etc.
+      setBasic({
+        ...basic,
+        versionId: saveRes.data.basic.versionId,
+      });
+
+      if (saveRes.data.content.versionTranslationId) {
+        setContent({
+          ...content,
+          versionTranslationId: saveRes.data.content.versionTranslationId,
+        });
+      }
+
+      setExtras(saveRes.data.extras);
+
+      form.reset(saveRes.data.extras);
+      toast.success('Product updated successfully.');
+
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    } else {
+      toast.error(saveRes.message);
+    }
+  }
+
+  async function handleProceed(data) {
+    let isError = false;
+    let fieldNameToFocus = null;
+
+    data.variants.forEach((variant, index) => {
+      if (variant.download_link && !variant.file_access_password) {
+        if (!fieldNameToFocus) fieldNameToFocus = `variants.${index}.file_access_password`;
+        
+        form.setError(`variants.${index}.file_access_password`, { message: 'Can\'t be empty' });
+        isError = true;
+      }
+    });
+
+    if (isError) {
+      // Use requestAnimationFrame to ensure focus happens 
+      // right after the DOM update but before the next paint.
+      // This avoids timing issues where the input ref is not yet ready.
+      requestAnimationFrame(() => {
+        form.setFocus(fieldNameToFocus);
+      });
+      return;
+    }
+
+    if (mode == 'edit' && basic.price_type === PriceType.FREE) {
+      await handleSubmit(data);
+    } else {
+      handleNext(data);
+    }
+  }
+
   function handlePrev() {
     const data = form.getValues();
     setExtras(data);
@@ -78,7 +178,7 @@ export default function ExtrasForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleNext)} className="space-y-6 mb-10">
+      <form onSubmit={form.handleSubmit(handleProceed)} className="space-y-6 mb-10">
         <section className="space-y-6 mb-9">
           <h3 className="text-lg font-bold mb-0">Variants</h3>
           <h4 className="text-zinc-700 dark:text-zinc-300/80">List available variants that represent different options for this product.</h4>
@@ -86,7 +186,7 @@ export default function ExtrasForm({
           <VariantFields
             form={form}
             variants={variants}
-            basic={basic}
+            productId={productId ?? basic?.id}
             handlers={{
               onAppend: appendVariant,
               onRemove: removeVariant,
@@ -108,7 +208,7 @@ export default function ExtrasForm({
           <ImageGrid
             form={form}
             images={images}
-            basic={basic}
+            productId={productId ?? basic?.id}
             handlers={{
               onRemove: removeImage,
               onUpdate: updateImage,
@@ -134,13 +234,32 @@ export default function ExtrasForm({
           <ArrowLeft className="icon" /> Previous
         </Button>
 
-        <Button
-          type="submit"
-          className={`h-auto text-base px-3 py-1.5 border border-primary inline-block`}
-          disabled={isBlocking}
-        >
-          Next <ArrowRight className="icon" />
-        </Button>
+        {(mode === 'edit' && basic.price_type === PriceType.FREE) ? (
+          <div className="relative inline-block">
+            <Button
+              type="submit"
+              className={`h-auto text-base px-3 py-1.5 ${isSubmitting ? 'transition-none disabled:opacity-100' : ''} border border-primary inline-block`}
+              disabled={isSubmitting || isBlocking}
+            >
+              <span className={isSubmitting ? 'opacity-0' : ''}>
+                {mode === 'create' ? 'Create' : 'Update'}
+              </span>
+            </Button>
+            {isSubmitting && (
+              <div className="absolute h-full top-0 left-0 right-0 flex justify-center items-center">
+                <Loader2 className="animate-spin text-primary-foreground" size={16} />
+              </div>
+            )}
+          </div>
+        ) : (
+          <Button
+            type="submit"
+            className={`h-auto text-base px-3 py-1.5 border border-primary inline-block`}
+            disabled={isBlocking}
+          >
+            Next <ArrowRight className="icon" />
+          </Button>
+        )}
       </form>
     </Form>
   );

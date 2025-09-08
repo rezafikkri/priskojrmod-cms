@@ -1,7 +1,7 @@
 import CreateForm from '@/components/owner/create-form';
 
 export const metadata = {
-  title: 'Create Secret Key',
+  title: 'Create Owner',
 };
 
 export default function OwnerCreatePage() {

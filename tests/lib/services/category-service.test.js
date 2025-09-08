@@ -11,6 +11,7 @@ import {
   deleteCategory,
   updateCategory,
 } from '@/lib/services/category-service';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -25,6 +26,7 @@ beforeAll(() => {
         create: vi.fn(),
         delete: vi.fn(),
         update: vi.fn(),
+        findUnique: async () => null,
       },
     },
   }));
@@ -43,7 +45,7 @@ describe('createCategory function', () => {
     verifySession.mockResolvedValue(false);
 
     await expect(createCategory({ name: 'Tech News' }))
-      .rejects.toThrow('Unauthenticated');
+      .rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Category.create).not.toHaveBeenCalled();
@@ -79,7 +81,7 @@ describe('deleteCategory function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteCategory(10)).rejects.toThrow('Unauthenticated');
+    await expect(deleteCategory(10)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Category.delete).not.toHaveBeenCalled();
@@ -110,7 +112,7 @@ describe('updateCategory function', () => {
     await expect(updateCategory({
       id: 4,
       name: 'Updated Category',
-    })).rejects.toThrow('Unauthenticated');
+    })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Category.update).not.toHaveBeenCalled();

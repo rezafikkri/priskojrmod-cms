@@ -27,7 +27,7 @@ import { MoreHorizontal, Check, Minus } from 'lucide-react';
 import Dot from '../icon/Dot';
 import Link from 'next/link';
 import { formatDateTimeWIB } from '@/lib/format-date';
-import { getTableHeaderWidth } from '@/lib/utils';
+import { formatCurrency, getTableHeaderWidth } from '@/lib/utils';
 import { CurrencyCode, PriceType } from '@/constants/enums';
 import { Badge } from '../ui/badge';
 import DeleteDialog from './delete-dialog';
@@ -100,18 +100,17 @@ export default function DataTable({
       cell: ({ row }) => {
         if (row.original.price_type === PriceType.PAID) {
           const prices = row.getValue('prices')[priceCurrency];
-          let locale = priceCurrency === CurrencyCode.IDR ? 'id-ID' : 'en-US';
+          const min = formatCurrency(prices.min, priceCurrency);
+          const max = formatCurrency(prices.max, priceCurrency);
 
           if (!prices) return <Minus className="size-4 text-zinc-300" />;
           if (prices.min === prices.max) {
-            return `${priceCurrency} ${prices.min.toLocaleString(locale)}`;
+            return <span className="tabular-nums">{min}</span>;
           }
-          return (
-            <>
-              {priceCurrency} <span className="tabular-nums">{prices.min.toLocaleString(locale)}</span>-<span className="tabular-nums">{prices.max.toLocaleString(locale)}</span>
-            </>
-          );
+          
+          return <span className="tabular-nums">{min}&ndash;{max}</span>;
         }
+        
         return PriceType.FREE[0].toUpperCase() + PriceType.FREE.substring(1);
       },
     },
@@ -170,12 +169,10 @@ export default function DataTable({
                 asChild
               >
                 <button
-                  onClick={() =>
-                    onEditPinnedStatus({
-                      id: row.original.id,
-                      isPinned: row.original.is_pinned,
-                    })
-                  }
+                  onClick={() => onEditPinnedStatus(
+                    row.original.id,
+                    row.original.is_pinned,
+                  )}
                 >
                   {row.original.is_pinned ? 'Unpin' : 'Pin'}
                 </button>
@@ -185,28 +182,32 @@ export default function DataTable({
                 asChild
               >
                 <button
-                  onClick={() => onEditPublishedStatus({
-                    id: row.original.id,
-                    isPublished: row.original.is_published,
-                  })}
+                  onClick={() => onEditPublishedStatus(
+                    row.original.id,
+                    row.original.is_published,
+                  )}
                 >
                   {row.getValue('is_published') ? 'Unpublish' : 'Publish'}
                 </button>
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="-mx-1.5" />
-              <DropdownMenuItem
-                className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                asChild
-              >
-                <button
-                  onClick={() => {
-                    setDeleteData({ id: row.original.id, name: row.getValue('name') });
-                    setIsOpenDeleteDialog(true);
-                  }}
-                >
-                  Delete
-                </button>
-              </DropdownMenuItem>
+              {!row.original.is_pinned && !row.getValue('is_published') && (
+                <>
+                  <DropdownMenuSeparator className="-mx-1.5" />
+                  <DropdownMenuItem
+                    className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
+                    asChild
+                  >
+                    <button
+                      onClick={() => {
+                        setDeleteData({ id: row.original.id, name: row.getValue('name') });
+                        setIsOpenDeleteDialog(true);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

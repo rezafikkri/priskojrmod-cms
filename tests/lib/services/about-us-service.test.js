@@ -8,6 +8,7 @@ import {
 } from 'vitest';
 import { createAboutUs, updateAboutUs } from '@/lib/services/about-us-service';
 import { Language } from '@/constants/enums';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -47,7 +48,7 @@ describe('createAboutUs function', () => {
           en: 'English Content',
         },
       })
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.AboutUs.create).not.toHaveBeenCalled();
@@ -117,7 +118,7 @@ describe('updateAboutUs function', () => {
           en: 'English Content',
         },
       })
-    ).rejects.toThrow('Unauthenticated');
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.$transaction).not.toHaveBeenCalled();

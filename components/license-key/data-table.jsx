@@ -24,8 +24,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
-import { Check } from 'lucide-react';
-import Dot from '../icon/Dot';
 import DeleteDialog from './delete-dialog';
 import Link from 'next/link';
 import { formatDateTimeWIB } from '@/lib/format-date';
@@ -33,6 +31,8 @@ import { getTableHeaderWidth } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
 import SelectionAlert from '../ui/selection-alert';
 import { Minus } from 'lucide-react';
+import EditRevokeStatusDialog from './edit-revoke-status-dialog';
+import ResetDeviceDialog from './reset-device-dialog';
 
 export default function DataTable({
   licenseKey,
@@ -48,15 +48,23 @@ export default function DataTable({
     onRowSelectionChange,
     onColumnVisibilityChange,
     onDelete,
+    onEditRevokeStatus,
+    onResetDevice,
   } = tableHandler;
   const {
     columnVisibility,
     pagination,
     rowSelection,
     deletingIds,
+    updatingRevokeStatusIds,
+    resetDeviceIds,
   } = tableState;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const [editRevokeStatusData, setEditRevokeStatusData] = useState(null);
+  const [isOpenEditRevokeStatusDialog, setIsOpenEditRevokeStatusDialog] = useState(false);
+  const [resetDeviceData, setResetDeviceData] = useState(null);
+  const [isOpenResetDeviceDialog, setIsOpenResetDeviceDialog] = useState(false);
 
   // table definition
   const columns = useMemo(() => [
@@ -97,30 +105,6 @@ export default function DataTable({
       header: 'App Name',
     },
     {
-      accessorKey: 'used_for_activate',
-      header: <div className="text-center">Activate</div>,
-      cell: ({ row }) => (
-        <div className="text-center">{
-          row.getValue('used_for_activate')
-            ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
-        }</div>
-      ),
-      enableHiding: false,
-    },
-    {
-      accessorKey: 'used_for_download',
-      header: <div className="text-center">Download</div>,
-      cell: ({ row }) => (
-        <div className="text-center">{
-          row.getValue('used_for_download')
-            ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
-        }</div>
-      ),
-      enableHiding: false,
-    },
-    {
       accessorKey: 'expired_at',
       header: () => 'Expired At',
       cell: ({ row }) => formatDateTimeWIB(row.getValue('expired_at')),
@@ -152,7 +136,11 @@ export default function DataTable({
             <Button
               variant="ghost"
               className="h-8 w-8 p-0 focus-visible:ring-ring"
-              disabled={deletingIds.includes(row.original.id)}
+              disabled={
+                deletingIds.includes(row.original.id) ||
+                updatingRevokeStatusIds.includes(row.original.id) ||
+                resetDeviceIds.includes(row.original.id)
+              }
             >
               <MoreHorizontal />
             </Button>
@@ -166,8 +154,47 @@ export default function DataTable({
               className="w-full text-base"
               asChild
             >
-              <button onClick={() => navigator.clipboard.writeText(row.original.key)}>
-                Copy License Key
+              <button onClick={() => navigator.clipboard.writeText(row.original.code)}>
+                Copy Code
+              </button>
+            </DropdownMenuItem>
+
+            {row.original.device_id && (
+              <DropdownMenuItem
+                className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+                asChild
+              >
+                <button
+                  onClick={() => {
+                    setResetDeviceData({
+                      id: row.original.id,
+                      email: row.getValue('email'),
+                      appName: row.getValue('app_name'),
+                    });
+                    setIsOpenResetDeviceDialog(true);
+                  }}
+                >
+                  Reset Device
+                </button>
+              </DropdownMenuItem>
+            )}
+
+            <DropdownMenuItem
+              className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+              asChild
+            >
+              <button
+                onClick={() => {
+                  setEditRevokeStatusData({
+                    id: row.original.id,
+                    email: row.getValue('email'),
+                    appName: row.getValue('app_name'),
+                    isRevoked: row.original.is_revoked,
+                  });
+                  setIsOpenEditRevokeStatusDialog(true);
+                }}
+              >
+                {row.original.is_revoked ? 'Unrevoke' : 'Revoke'}
               </button>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="-mx-1.5" />
@@ -192,7 +219,7 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], [deletingIds]);
+  ], [deletingIds, updatingRevokeStatusIds, resetDeviceIds]);
   const table = useReactTable({
     data: licenseKeys,
     columns,
@@ -241,7 +268,15 @@ export default function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
+                  className={
+                    (
+                      deletingIds.includes(row.original.id) ||
+                      updatingRevokeStatusIds.includes(row.original.id) ||
+                      resetDeviceIds.includes(row.original.id)
+                    )
+                      ? 'opacity-50'
+                      : ''
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -302,6 +337,20 @@ export default function DataTable({
         onIsOpenChange={setIsOpenDeleteDialog}
         onDeleteDataChange={setDeleteData}
         deleteData={deleteData}
+      />
+      <EditRevokeStatusDialog
+        onEditRevokeStatus={onEditRevokeStatus}
+        isOpen={isOpenEditRevokeStatusDialog}
+        onIsOpenChange={setIsOpenEditRevokeStatusDialog}
+        onEditRevokeStatusDataChange={setEditRevokeStatusData}
+        editRevokeStatusData={editRevokeStatusData}
+      />
+      <ResetDeviceDialog
+        onReset={onResetDevice}
+        isOpen={isOpenResetDeviceDialog}
+        onIsOpenChange={setIsOpenResetDeviceDialog}
+        onResetDataChange={setResetDeviceData}
+        resetData={resetDeviceData}
       />
     </>
   );

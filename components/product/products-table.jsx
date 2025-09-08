@@ -47,6 +47,8 @@ export default function ProductsTable() {
     select: (products) => {
       return products.map(product => {
         let newProduct = { ...product };
+
+        // mapping prices
         if (newProduct.price_type === PriceType.PAID) {
           const prices = newProduct.variants.flatMap(variant => variant.prices);
           newProduct.prices = prices.reduce((acc, { currency_code, price }) => {
@@ -60,6 +62,11 @@ export default function ProductsTable() {
           }, {});
         }
         delete newProduct.variants;
+
+        // mapping released_at
+        newProduct.released_at = newProduct.versions[0].released_at;
+        delete newProduct.versions;
+
         return newProduct;
       });
     },
@@ -67,13 +74,13 @@ export default function ProductsTable() {
     gcTime: 1000 * 60,
   });
 
-  async function handleEditPinnedStatus({ id, isPinned }) {
+  async function handleEditPinnedStatus(id, isPinned) {
     // This is for add opacity-50 style to deleted row
     setUpdatingPinnedStatusIds((prevUpdatingPinnedStatusIds) => [...prevUpdatingPinnedStatusIds, id]);
     // show loading
     const toastId = toast.loading(!isPinned ? 'Pinning product...' : 'Unpinning product...');
 
-    const editRes = await editProductPinnedStatus({ id, is_pinned: !isPinned });
+    const editRes = await editProductPinnedStatus(id, !isPinned);
 
     setUpdatingPinnedStatusIds((prevUpdatingPinnedStatusIds) =>
       prevUpdatingPinnedStatusIds.filter((updatingId) => updatingId !== id)
@@ -109,14 +116,14 @@ export default function ProductsTable() {
     }
   }
 
-  async function handleEditPublishedStatus({ id, isPublished }) {
+  async function handleEditPublishedStatus(id, isPublished) {
     // This is for add opacity-50 style to deleted row
     setUpdatingPublishedIds((prevUpdatingPublishedIds) => [...prevUpdatingPublishedIds, id]);
 
     // show loading
     const toastId = toast.loading(!isPublished ? 'Publishing product...' : 'Unpublishing product...');
 
-    const editRes = await editProductPublishedStatus({ id, is_published: !isPublished });
+    const editRes = await editProductPublishedStatus(id, !isPublished);
 
     setUpdatingPublishedIds((prevUpdatingPublishedIds) =>
       prevUpdatingPublishedIds.filter((updatingId) => updatingId !== id)
@@ -239,7 +246,11 @@ export default function ProductsTable() {
         />
       )}
 
-      <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: Pinned products will have higher display priority on the Products page and the homepage. A maximum of 4 products can be pinned.</p>
+      <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Notes</b>:</p>
+      <ul className="text-muted-foreground text-sm list-disc list-inside">
+        <li>Pinned products will have higher display priority on the Products page and the homepage. A maximum of 4 products can be pinned.</li>
+        <li>Prices are displayed using each currency’s standard number format.</li>
+      </ul>
     </>
   );
 }

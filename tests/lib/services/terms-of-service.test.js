@@ -8,6 +8,7 @@ import {
 } from 'vitest';
 import { createTermsOfService, updateTermsOfService } from '@/lib/services/terms-of-service-service';
 import { Language } from '@/constants/enums';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -45,7 +46,7 @@ describe('createTermsOfService function', () => {
           en: 'terms en',
         },
       })
-    ).rejects.toThrowError('Unauthenticated');
+    ).rejects.toThrowError(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.TermsOfService.create).not.toHaveBeenCalled();
@@ -117,7 +118,7 @@ describe('updateTermsOfService function', () => {
         translationId: { id: 1, en: 2 },
         content: { id: 'konten', en: 'content' },
       })
-    ).rejects.toThrowError('Unauthenticated');
+    ).rejects.toThrowError(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.TermsOfService.update).not.toHaveBeenCalled();

@@ -1,6 +1,5 @@
 'use client';
 
-import { CurrencyCode } from '@/constants/enums';
 import { Fragment } from 'react';
 import {
   FormControl,
@@ -11,85 +10,54 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { Separator } from '../ui/separator';
+import { formatCurrency } from '@/lib/utils';
+import { useFieldArray } from 'react-hook-form';
 
 export default function PriceFields({
-  prices,
+  price,
+  name,
   form,
 }) {
   const isSubmitting = form.formState.isSubmitting;
-  // to detect previous variant in prices loop
-  let prevVariant = null;
+  const { fields: currencies } = useFieldArray({
+    control: form.control,
+    name,
+  });
 
   return (
-    prices.map((price, index) => {
-      if (prevVariant !== price.variantName) {
-        prevVariant = price.variantName;
-      } else {
-        return null;
-      }
+    <Fragment>
+      <FormItem>
+        <FormLabel className="text-base">Variant</FormLabel>
+        <p>{price.variantName}</p>
+      </FormItem>
 
-      return (
-        <Fragment key={price.id}>
-          <FormItem>
-            <FormLabel className="text-base">Variant</FormLabel>
-            <p>{price.variantName}</p>
-          </FormItem>
-
-          <div className="flex gap-3 items-start">
-            <FormField
-              control={form.control}
-              name={`prices.${index}.price`}
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel className="text-base">{CurrencyCode.IDR} Price</FormLabel>
-                  <p className="text-sm text-zinc-500">
-                    Preview: IDR {Number(field.value).toLocaleString('id-ID')}
-                  </p>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      disabled={isSubmitting}
-                      className="md:text-base h-auto px-3 py-1.5 shadow-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Enter the product price in {CurrencyCode.IDR}.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={`prices.${index + 1}.price`}
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel className="text-base">{CurrencyCode.USD} Price</FormLabel>
-                  <p className="text-sm text-zinc-500">
-                    Preview: USD {Number(field.value).toLocaleString('en-US')}
-                  </p>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      disabled={isSubmitting}
-                      className="md:text-base h-auto px-3 py-1.5 shadow-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Enter the product price in {CurrencyCode.USD}.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {index !== prices.length - 2 && (
-            <div className="pe-15">
-              <Separator />
-            </div>
-          )}
-        </Fragment>
-      );
-    })
+      <div className="flex gap-3 items-start">
+        {currencies.map((currency, index) => (
+          <FormField
+            key={currency.id}
+            control={form.control}
+            name={`${name}.${index}.price`}
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel className="text-base">{currency.currency_code} Price</FormLabel>
+                <p className="text-sm text-zinc-500">
+                  Preview: {formatCurrency(Number(field.value), currency.currency_code)}
+                </p>
+                <FormControl>
+                  <Input
+                    type="number"
+                    disabled={isSubmitting}
+                    className="md:text-base h-auto px-3 py-1.5 shadow-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>Enter the product price in {currency.currency_code}.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
+      </div>
+    </Fragment>
   );
 }

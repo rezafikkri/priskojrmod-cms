@@ -37,14 +37,18 @@ model LicenseKey {
   secret_key_id     BigInt
   customer_id       String           @db.Uuid
   email             String           @db.VarChar(254)
-  key               String
-  used_for_activate Boolean          @default(false)
-  used_for_download Boolean          @default(false)
+  code              String
   can_regenerate    Boolean          @default(false)
+  is_revoked        Boolean          @default(false)
   created_at        BigInt
   updated_at        BigInt
   regenerated_at    BigInt?
 
+  device_id         String?          @db.VarChar(100)
+  last_reset_period String?          @db.VarChar(10)
+  reset_count       Int              @db.SmallInt @default(0)
+
   @@unique([customer_id, secret_key_id])
   @@map("license_keys")
 }
+

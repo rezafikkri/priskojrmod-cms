@@ -8,9 +8,9 @@ export async function GET(req) {
   const secretKeyId = searchParams.get('ski');
   const canRegenerate = searchParams.get('cr');
 
-  let filters;
+  let filters = { is_revoked: searchParams.get('ir') === 'false' ? false : true };
   if (secretKeyId) {
-    filters = { secret_key_id: secretKeyId };
+    filters = { ...filters, secret_key_id: secretKeyId };
   }
   if (canRegenerate) {
     filters = { ...filters, can_regenerate: canRegenerate === 'yes' ? true : false };
@@ -18,10 +18,10 @@ export async function GET(req) {
 
   const select = {
     id: true,
+    device_id: true,
     email: true,
-    key: true,
-    used_for_activate: true,
-    used_for_download: true,
+    code: true,
+    is_revoked: true,
     created_at: true,
     updated_at: true,
     regenerated_at: true,

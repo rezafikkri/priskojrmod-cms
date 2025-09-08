@@ -10,6 +10,7 @@ import {
   deleteFeedbacks,
   updateFeedbackReadStatus,
 } from '@/lib/services/feedback-service';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
   vi.mock('server-only', () => ({}));
@@ -42,7 +43,7 @@ describe('deleteFeedbacks function', () => {
     await expect(deleteFeedbacks([
       '550e8400-e29b-41d4-a716-446655440000',
       '550e8400-e29b-41d4-a716-446655440001',
-    ])).rejects.toThrow('Unauthenticated');
+    ])).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Feedback.deleteMany).not.toHaveBeenCalled();
@@ -82,7 +83,7 @@ describe('updateFeedbackReadStatus function', () => {
     await expect(updateFeedbackReadStatus(
       '550e8400-e29b-41d4-a716-446655440002',
       true
-    )).rejects.toThrow('Unauthenticated');
+    )).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.Feedback.update).not.toHaveBeenCalled();

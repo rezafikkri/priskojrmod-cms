@@ -85,7 +85,7 @@ export default function DeleteDialog({
         <DialogFooter className="relative">
           <Button
             variant="destructive"
-            className={`w-full h-auto text-base px-3 py-1.5 dark:bg-destructive dark:hover:bg-destructive/90 text-primary-foreground`}
+            className="w-full h-auto text-base px-3 py-1.5 dark:bg-destructive dark:hover:bg-destructive/90 text-primary-foreground"
             onClick={handleDelete}
             disabled={!isEmailConfirmed || !isAppConfirmed}
           > 

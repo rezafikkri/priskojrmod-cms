@@ -15,6 +15,7 @@ export default async function ProductForm({ mode = 'create', id = null }) {
   const categories = await getCategories({
     id: true,
     name: true,
+    slug: true,
   });
   const owners = await getOwners({
     id: true,
