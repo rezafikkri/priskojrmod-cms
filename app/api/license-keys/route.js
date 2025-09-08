@@ -18,6 +18,7 @@ export async function GET(req) {
 
   const select = {
     id: true,
+    device_id: true,
     email: true,
     code: true,
     is_revoked: true,

@@ -24,8 +24,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
-import { Check } from 'lucide-react';
-import Dot from '../icon/Dot';
 import DeleteDialog from './delete-dialog';
 import Link from 'next/link';
 import { formatDateTimeWIB } from '@/lib/format-date';
@@ -34,6 +32,7 @@ import { Checkbox } from '../ui/checkbox';
 import SelectionAlert from '../ui/selection-alert';
 import { Minus } from 'lucide-react';
 import EditRevokeStatusDialog from './edit-revoke-status-dialog';
+import ResetDeviceDialog from './reset-device-dialog';
 
 export default function DataTable({
   licenseKey,
@@ -50,6 +49,7 @@ export default function DataTable({
     onColumnVisibilityChange,
     onDelete,
     onEditRevokeStatus,
+    onResetDevice,
   } = tableHandler;
   const {
     columnVisibility,
@@ -57,11 +57,14 @@ export default function DataTable({
     rowSelection,
     deletingIds,
     updatingRevokeStatusIds,
+    resetDeviceIds,
   } = tableState;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [editRevokeStatusData, setEditRevokeStatusData] = useState(null);
   const [isOpenEditRevokeStatusDialog, setIsOpenEditRevokeStatusDialog] = useState(false);
+  const [resetDeviceData, setResetDeviceData] = useState(null);
+  const [isOpenResetDeviceDialog, setIsOpenResetDeviceDialog] = useState(false);
 
   // table definition
   const columns = useMemo(() => [
@@ -135,7 +138,8 @@ export default function DataTable({
               className="h-8 w-8 p-0 focus-visible:ring-ring"
               disabled={
                 deletingIds.includes(row.original.id) ||
-                updatingRevokeStatusIds.includes(row.original.id)
+                updatingRevokeStatusIds.includes(row.original.id) ||
+                resetDeviceIds.includes(row.original.id)
               }
             >
               <MoreHorizontal />
@@ -154,6 +158,27 @@ export default function DataTable({
                 Copy Code
               </button>
             </DropdownMenuItem>
+
+            {row.original.device_id && (
+              <DropdownMenuItem
+                className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+                asChild
+              >
+                <button
+                  onClick={() => {
+                    setResetDeviceData({
+                      id: row.original.id,
+                      email: row.getValue('email'),
+                      appName: row.getValue('app_name'),
+                    });
+                    setIsOpenResetDeviceDialog(true);
+                  }}
+                >
+                  Reset Device
+                </button>
+              </DropdownMenuItem>
+            )}
+
             <DropdownMenuItem
               className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
               asChild
@@ -194,7 +219,7 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], [deletingIds, updatingRevokeStatusIds]);
+  ], [deletingIds, updatingRevokeStatusIds, resetDeviceIds]);
   const table = useReactTable({
     data: licenseKeys,
     columns,
@@ -246,7 +271,8 @@ export default function DataTable({
                   className={
                     (
                       deletingIds.includes(row.original.id) ||
-                      updatingRevokeStatusIds.includes(row.original.id)
+                      updatingRevokeStatusIds.includes(row.original.id) ||
+                      resetDeviceIds.includes(row.original.id)
                     )
                       ? 'opacity-50'
                       : ''
@@ -318,6 +344,13 @@ export default function DataTable({
         onIsOpenChange={setIsOpenEditRevokeStatusDialog}
         onEditRevokeStatusDataChange={setEditRevokeStatusData}
         editRevokeStatusData={editRevokeStatusData}
+      />
+      <ResetDeviceDialog
+        onReset={onResetDevice}
+        isOpen={isOpenResetDeviceDialog}
+        onIsOpenChange={setIsOpenResetDeviceDialog}
+        onResetDataChange={setResetDeviceData}
+        resetData={resetDeviceData}
       />
     </>
   );

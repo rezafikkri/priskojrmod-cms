@@ -14,7 +14,12 @@ import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import { editLicenseKeyRevokeStatus, removeLicenseKey, setCanRegenerateKeys } from '@/actions/license-key-actions';
+import {
+  editLicenseKeyRevokeStatus,
+  releaseDevice,
+  removeLicenseKey,
+  setCanRegenerateKeys,
+} from '@/actions/license-key-actions';
 import { toast } from 'sonner';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { Input } from '../ui/input';
@@ -70,11 +75,13 @@ export default function LicenseKeysTable() {
   // deleting ids and revoke/unrevoke state
   const [deletingIds, setDeletingIds] = useState([]);
   const [updatingRevokeStatusIds, setUpdatingRevokeStatusIds] = useState([]);
+  const [resetDeviceIds, setResetDeviceIds] = useState([]);
 
   // Ensures that in normal mode and not on the last page,
   // invalidateQueries is still triggered even if not all deletions or revoke/unrevoke succeed.
   const hasSuccessfulDeleteRef = useRef(false);
   const hasSuccessfulRevokeRef = useRef(false);
+  const hasSuccessfulResetDeviceRef = useRef(false);
 
   // This `useRef` is here to **always keep the newest `searchedLicenseKey and more state` value**.
   // We need it because our async function (sent to the child) might "remember"
@@ -84,6 +91,7 @@ export default function LicenseKeysTable() {
   const paginationRef = useRef(pagination);
   const deletingIdsRef = useRef(deletingIds);
   const updatingRevokeStatusIdsRef = useRef(updatingRevokeStatusIds);
+  const resetDeviceIdsRef = useRef(resetDeviceIds);
 
   useEffect(() => {
     searchedLicenseKeyRef.current = searchedLicenseKey;
@@ -576,6 +584,115 @@ export default function LicenseKeysTable() {
     }
   }
 
+  async function handleResetDevice({ resetData, toastId }) {
+     // not show table skeleton loading
+    if (!searchedLicenseKey) {
+      shouldShowSkeletonLoading.current = false;
+    }   
+
+    // This is for add opacity-50 style target row
+    setResetDeviceIds((prev) => {
+      const newIds = [...prev, resetData.id];
+      resetDeviceIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const releaseRes = await releaseDevice(resetData.id);
+
+    setResetDeviceIds((prev) => {
+      const newIds = prev.filter(id => id !== resetData.id);
+      resetDeviceIdsRef.current = newIds;
+      return newIds;
+    });
+
+    if (releaseRes.status === 'success') {
+      if (searchedLicenseKeyRef.current) {
+        setSearchedLicenseKey((prevLicenseKey) => ({
+          ...prevLicenseKey,
+          licenseKeys: prevLicenseKey.licenseKeys.map(slk => {
+            if (slk.id === resetData.id) {
+              return {
+                ...slk,
+                device_id: null,
+                updated_at: releaseRes.data.updated_at,
+              };
+            }
+            return slk;
+          }),
+        }));
+
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });       
+      } else {
+        if (paginationRef.current.pageIndex === 0) {
+          queryClient.setQueryData(
+            ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+            (oldData) => {
+              if (!oldData) return oldData;
+              
+              const targetLicenseKey = oldData.licenseKeys.find(lk => lk.id === resetData.id);
+
+              if (targetLicenseKey) {
+                return {
+                  ...oldData,
+                  licenseKeys: [
+                    {
+                      ...targetLicenseKey,
+                      device_id: null,
+                      updated_at: releaseRes.data.updated_at,
+                    },
+                    ...oldData.licenseKeys.filter(lk => lk.id !== resetData.id),
+                  ],
+                };
+              }
+              return oldData;
+            },
+          );
+
+          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
+        } else {
+          queryClient.setQueryData(
+            ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+            (oldData) => {
+              if (!oldData) return oldData;
+
+              return {
+                ...oldData,
+                licenseKeys: oldData.licenseKeys.filter(lk => lk.id !== resetData.id),
+              };
+            },
+          );
+          
+          hasSuccessfulResetDeviceRef.current = true;
+        }
+      }
+
+      // if id exist in rowSelection then remove
+      setRowSelection(prev => {
+        if (!resetData.id in prev) return prev;
+        const { [resetData.id]:_, ...next } = prev;
+        return next;
+      });
+      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+      toast.success('License key device reset successfully.', { id: toastId });
+    } else {
+      toast.error(releaseRes.message, { id: toastId });
+    }
+
+    // For still invalidateQueries licenseKeys, when not in first page, last reset device item fails, and 
+    // at least one resetDevice succeeded.
+    if (
+      !searchedLicenseKeyRef.current &&
+      resetDeviceIdsRef.current.length === 0 &&
+      hasSuccessfulResetDeviceRef.current
+    ) {
+      if (paginationRef.current.pageIndex !== 0) {
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });       
+      }
+
+      hasSuccessfulResetDeviceRef.current = false;
+    }
+  }
+
   let licenseKey;
   if (searchedLicenseKey) {
     licenseKey = searchedLicenseKey;
@@ -717,6 +834,7 @@ export default function LicenseKeysTable() {
             columnVisibility,
             deletingIds,
             updatingRevokeStatusIds,
+            resetDeviceIds,
           }}
           tableHandler={{ 
             onPaginationChange: handlePaginationChange,
@@ -724,6 +842,7 @@ export default function LicenseKeysTable() {
             onColumnVisibilityChange: setColumnVisibility,
             onDelete: handleDelete,
             onEditRevokeStatus: handleEditRevokeStatus,
+            onResetDevice: handleResetDevice,
           }}
           isPlaceholderData={isPlaceholderDataLK}
           hasSearched={!!searchedLicenseKey}

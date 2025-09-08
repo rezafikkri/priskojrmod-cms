@@ -1,6 +1,13 @@
 'use server';
 
-import { createLicenseKey, deleteLicenseKey, setCanRegenerateLicenseKeys, updateLicenseKey, updateLicenseKeyRevokeStatus } from '@/lib/services/license-key-service';
+import {
+  createLicenseKey,
+  deleteLicenseKey,
+  setCanRegenerateLicenseKeys,
+  updateLicenseKey,
+  updateLicenseKeyRevokeStatus,
+  resetDevice,
+} from '@/lib/services/license-key-service';
 
 export async function addLicenseKey(data) {
   try {
@@ -22,7 +29,7 @@ export async function removeLicenseKey(id) {
 
 export async function editLicenseKey(data) {
   try {
-    const updatedData = await updateLicenseKey(data);
+    await updateLicenseKey(data);
     return { status: 'success', data: updatedData };
   } catch (err) {
     return { status: 'error', message: err.message };
@@ -42,6 +49,15 @@ export async function editLicenseKeyRevokeStatus(id, is_revoked) {
   try {
     await updateLicenseKeyRevokeStatus(id, is_revoked);
     return { status: 'success' };
+  } catch (err) {
+    return { status: 'error', message: err.message };
+  }
+}
+
+export async function releaseDevice(id) {
+  try {
+    const updateResult = await resetDevice(id);
+    return { status: 'success', data: updateResult };
   } catch (err) {
     return { status: 'error', message: err.message };
   }
