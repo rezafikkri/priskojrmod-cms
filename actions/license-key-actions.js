@@ -29,7 +29,7 @@ export async function removeLicenseKey(id) {
 
 export async function editLicenseKey(data) {
   try {
-    await updateLicenseKey(data);
+    const updatedData = await updateLicenseKey(data);
     return { status: 'success', data: updatedData };
   } catch (err) {
     return { status: 'error', message: err.message };
@@ -56,8 +56,8 @@ export async function editLicenseKeyRevokeStatus(id, is_revoked) {
 
 export async function releaseDevice(id) {
   try {
-    const updateResult = await resetDevice(id);
-    return { status: 'success', data: updateResult };
+    const updatedData = await resetDevice(id);
+    return { status: 'success', data: updatedData };
   } catch (err) {
     return { status: 'error', message: err.message };
   }
