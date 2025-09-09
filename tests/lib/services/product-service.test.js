@@ -17,7 +17,7 @@ import {
   deleteProductCoupon,
   updateProduct,
 } from '@/lib/services/product-service';
-import { CurrencyCode, Language, PriceType } from '@/constants/enums';
+import { Language, PriceType } from '@/constants/enums';
 import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 beforeAll(() => {
