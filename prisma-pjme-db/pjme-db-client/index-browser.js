@@ -324,6 +324,13 @@ exports.Prisma.TransactionScalarFieldEnum = {
   customer_phone_number: 'customer_phone_number'
 };
 
+exports.Prisma.InvoiceScalarFieldEnum = {
+  id: 'id',
+  transaction_id: 'transaction_id',
+  invoice_number: 'invoice_number',
+  issued_at: 'issued_at'
+};
+
 exports.Prisma.TransactionDetailScalarFieldEnum = {
   id: 'id',
   transaction_id: 'transaction_id',
@@ -436,6 +443,7 @@ exports.Prisma.ModelName = {
   Faq: 'Faq',
   FaqTranslation: 'FaqTranslation',
   Transaction: 'Transaction',
+  Invoice: 'Invoice',
   TransactionDetail: 'TransactionDetail',
   Feedback: 'Feedback',
   Testimonial: 'Testimonial',

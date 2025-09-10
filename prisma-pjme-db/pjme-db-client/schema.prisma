@@ -358,7 +358,7 @@ enum ShareMethod {
 }
 
 model Transaction {
-  id            String            @id @db.Uuid
+  id            String            @id @default(uuid(7)) @db.Uuid
   code          String            @unique @db.VarChar(32)
   customer_id   String?           @db.Uuid
   status        TransactionStatus
@@ -372,12 +372,24 @@ model Transaction {
   customer_phone_number String? @db.VarChar(20)
 
   details TransactionDetail[]
+  invoice Invoice?
 
   @@map("transactions")
 }
 
+model Invoice {
+  id             String @id @default(uuid(7)) @db.Uuid
+  transaction_id String @unique @db.Uuid
+  invoice_number String @unique @db.VarChar(32)
+  issued_at      BigInt
+
+  transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+
+  @@map("invoices")
+}
+
 model TransactionDetail {
-  id                String  @id @db.Uuid
+  id                String  @id @default(uuid(7)) @db.Uuid
   transaction_id    String  @db.Uuid
   product_id        String? @db.Uuid
   product_price_id  String? @db.Uuid
