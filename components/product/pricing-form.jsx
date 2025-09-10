@@ -45,6 +45,7 @@ export default function PricingForm({
   let setContent;
   let setVersionStatus;
   let setReference;
+  let dbVersion;
 
   if (mode === 'create') {
     pricingSchema = createProductPricingSchema;
@@ -55,6 +56,7 @@ export default function PricingForm({
     pricingSchema = editProductPricingSchema;
     setVersionStatus = useProductFormStore(state => state.setVersionStatus);
     setReference = useProductFormStore(state => state.setReference);
+    dbVersion = useProductFormStore(state => state.reference.dbVersion);
   }
 
   const queryClient = useQueryClient();
@@ -209,14 +211,6 @@ export default function PricingForm({
         onResetStep();
         toast.success('Product created successfully.');
       } else {
-        // reset versionStatus state and update reference (dbVersion, dsb)
-        setVersionStatus('pristine');
-        setReference({
-          dbPriceType: basic.price_type,
-          dbVersion: basic.version,
-          dbChangelog: content.changelog,
-        });
-
         // if success, set basic, content, extras and pricing data, like id, etc.
         setBasic({
           ...basic,
@@ -250,18 +244,29 @@ export default function PricingForm({
           newPricing.discount = { value: '', expired_at: '' };
         }
 
+        let successMessage = 'Product updated successfully.';
         if (!data.coupon.id && data.coupon.code) {
           newPricing.coupon = {
             id: saveRes.data.pricing.coupon.id,
             ...data.coupon,
           };
-        } else if (data.coupon.id && !data.coupon.code) {
+        } else if (data.coupon.id && (!data.coupon.code || dbVersion !== basic.version)) {
           newPricing.coupon = { code: '', discount: '', expired_at: '' };
+          successMessage += ' The old coupon has been removed because a new version was released.';
         }
 
         setPricing(newPricing);
         form.reset(newPricing);
-        toast.success('Product updated successfully.');
+
+        // reset versionStatus state and update reference (dbVersion, dsb)
+        setVersionStatus('pristine');
+        setReference({
+          dbPriceType: basic.price_type,
+          dbVersion: basic.version,
+          dbChangelog: content.changelog,
+        });
+
+        toast.success(successMessage);
       }
 
       queryClient.invalidateQueries({ queryKey: ['products'] });
