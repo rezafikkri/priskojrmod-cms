@@ -67,6 +67,18 @@ export default function TransactionsTable() {
     paginationRef.current = pagination;
   }, [searchedTranscation, filters, pagination]);
 
+  // add status filters
+  function addFiltersToURL(url, appliedFilters) {
+    if (!appliedFilters) return url;
+
+    let newUrl = url;
+    if (appliedFilters.status && appliedFilters.status !== 'all') {
+      newUrl += `&ts=${appliedFilters.status}`;
+    }
+
+    return newUrl;
+  }
+
   const {
     data: dataT,
     isFetching: isFetchingT,
@@ -82,7 +94,7 @@ export default function TransactionsTable() {
       }
 
       const results = await safeFetch({
-        url: `/api/transactions?pi=${pagination.pageIndex}`,
+        url: addFiltersToURL(`/api/transactions?pi=${pagination.pageIndex}`, filters),
         onFinally: () => {
           if (toastId) {
             toast.dismiss(toastId);
@@ -94,7 +106,7 @@ export default function TransactionsTable() {
     placeholderData: keepPreviousData,
     staleTime: 1000 * 20,
     gcTime: 1000 * 60 * 3,
-    enabled: false, //!searchedTranscation,
+    enabled: !searchedTranscation,
   });
 
   async function handleSearch(appliedFilters) {
@@ -188,18 +200,7 @@ export default function TransactionsTable() {
     }
   }
 
-  let transaction = {
-    transactions: [{
-      code: "PJM-20250814-A1B2C3",
-      email: "david.santoso@gmail.com",
-      status: "paid",
-      total_amount: 150000,
-      created_at: "1755143700",
-      updated_at: "1755144000"
-    }],
-    rowCount: 1,
-  };
-
+  let transaction;
   if (searchedTranscation) {
     transaction = searchedTranscation;
   } else if (dataT) {

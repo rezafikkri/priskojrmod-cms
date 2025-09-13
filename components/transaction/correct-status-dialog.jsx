@@ -13,35 +13,35 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 
-export default function OverrideStatusDialog({
-  onOverride,
+export default function CorrectStatusDialog({
+  onCorrect,
   isOpen,
   onIsOpenChange,
-  overrideData,
-  onOverrideDataChange,
+  correctData,
+  onCorrectDataChange,
 }) {
   const [transactionCode, setTransactionCode] = useState('');
 
-  function handleOverride() {
-    if (transactionCode !== overrideData.transactionCode) return false;
+  function handleCorrect() {
+    if (transactionCode !== correctData.transactionCode) return false;
 
     onIsOpenChange(false);
-    onOverrideDataChange(null);
+    onCorrectDataChange(null);
     setTransactionCode('');
     const toastId = toast.loading('Overriding transaction status...');
-    onOverride({ overrideData, toastId });
+    onCorrect({ correctData, toastId });
   }
 
   let checkTransactionCode = false;
-  if (transactionCode === overrideData?.transactionCode) checkTransactionCode = true;
-  const overrideTarget = overrideData?.transactionCode ? overrideData?.transactionCode : transactionCode;
+  if (transactionCode === correctData?.transactionCode) checkTransactionCode = true;
+  const correctTarget = correctData?.transactionCode ? correctData?.transactionCode : transactionCode;
 
   const currentStatus = 'cancelled';
   const newStatus = 'paid';
 
   function handleOpenChange() {
     onIsOpenChange(false);
-    onOverrideDataChange(null);
+    onCorrectDataChange(null);
     setTransactionCode('');
   }
 
@@ -58,17 +58,17 @@ export default function OverrideStatusDialog({
         onInteractOutside={handleClickOutside}
       >
         <DialogHeader>
-          <DialogTitle className="text-xl">Override Transaction Status</DialogTitle>
+          <DialogTitle className="text-xl">Correct Transaction Status</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300">
-            This feature is only intended to correct mistakes in changing the transaction status. Make sure you understand the consequences of this change.
+            This action is intended only to fix mistakes in setting the transaction status. Please make sure you understand the impact of this correction.
           </DialogDescription>
           
           <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            The transaction <b>{overrideTarget.transactionCode}</b> will be overridden <b>from <span className="capitalize">{currentStatus}</span> to <span className="capitalize">{newStatus}</span></b>.
+            The transaction <b>{correctTarget}</b> status will be changed <b>from <span className="capitalize">{currentStatus}</span> to <span className="capitalize">{newStatus}</span></b>.
           </DialogDescription>
 
           <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            To confirm, type the transaction code "<b>{overrideTarget}</b>" in the box below.
+            To confirm, type the transaction code "<b>{correctTarget}</b>" in the box below.
           </DialogDescription>
         </DialogHeader>
 
@@ -84,10 +84,10 @@ export default function OverrideStatusDialog({
           <Button
             variant="destructive"
             className="w-full h-auto text-base px-3 py-1.5 dark:bg-destructive dark:hover:bg-destructive/90 text-primary-foreground"
-            onClick={handleOverride}
+            onClick={handleCorrect}
             disabled={!checkTransactionCode}
           >
-            Yes, override
+            Yes, correct
           </Button>
         </DialogFooter>
       </DialogContent>

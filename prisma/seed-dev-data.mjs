@@ -3,7 +3,6 @@ import { faker } from '@faker-js/faker';
 import { PrismaClient as PjmaDBPrismaClient } from '../prisma-pjma-db/pjma-db-client/index.js';
 import { PrismaClient as PjmeDBPrismaClient } from '../prisma-pjme-db/pjme-db-client/index.js';
 import { v7 as uuidv7 } from 'uuid';
-import { PriceType, TransactionStatus } from '../constants/enums.js';
 import { generateDocumentCode } from '../lib/generate-document-code.js';
 
 const pjmaDBPrismaClient = new PjmaDBPrismaClient();
@@ -109,8 +108,8 @@ function getTransactionDetails({
 
       product_name: product.name,
       product_variant: product.variants[0].name,
-      product_currency_code: product.variants[0].prices[0].currency_code,
-      product_price: product.variants[0].prices[0].price.toNumber(),
+      product_currency_code: product.variants[0].prices[1].currency_code,
+      product_price: product.variants[0].prices[1].price.toNumber(),
     });
     if (transactionDetails.length === max) break;
   }
@@ -142,7 +141,7 @@ export default async function seedDevData() {
 
   // seed transaction
   const products = await pjmeDBPrismaClient.product.findMany({
-    where: { price_type: PriceType.PAID },
+    where: { price_type: 'free' },
     include: {
       variants: {
         include: {
@@ -168,7 +167,7 @@ export default async function seedDevData() {
     const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
     transactions.push({
       customer_id: selectedCustomer.id,
-      status: TransactionStatus.PENDING,
+      status: 'pending',
       code: generateDocumentCode('TRX'),
       currency_code: transactionDetails[0].product_currency_code,
       total_amount: transactionDetails

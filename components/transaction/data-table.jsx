@@ -25,10 +25,10 @@ import {
 import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { formatDateTimeWIB } from '@/lib/format-date';
-import { getTableHeaderWidth } from '@/lib/utils';
+import { formatCurrency, getTableHeaderWidth } from '@/lib/utils';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import InfoCircle from '../icon/info-circle';
-import OverrideStatusDialog from './override-dialog';
+import CorrectStatusDialog from './correct-status-dialog';
 
 export default function DataTable({
   transaction,
@@ -48,10 +48,10 @@ export default function DataTable({
     pagination,
   } = tableState;
 
-  const [overrideData, setOverrideData] = useState({
+  const [correctData, setCorrectData] = useState({
     transactionCode: 'PJM-20250814-ABC123',
   });
-  const [isOpenOverrideStatusDialog, setIsOpenOverrideStatusDialog] = useState(false);
+  const [isOpenCorrectStatusDialog, setIsOpenCorrectStatusDialog] = useState(false);
 
   // table definition
   const columns = useMemo(() => [
@@ -68,7 +68,7 @@ export default function DataTable({
       enableHiding: false,
     },
     {
-      accessorKey: 'email',
+      accessorKey: 'customer_email',
       header: 'Email',
       enableHiding: false,
     },
@@ -96,7 +96,9 @@ export default function DataTable({
         </>
       ),
       cell: ({ row }) => (
-        <div className="text-right">Rp{Number(row.getValue('total_amount')).toLocaleString('id-ID')}</div>
+        <div className="text-right">
+          { formatCurrency(row.getValue('total_amount'), row.original.currency_code) }
+        </div>
       ),
     },
     {
@@ -123,7 +125,7 @@ export default function DataTable({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-50">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Change Status</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Change Status To</DropdownMenuLabel>
             <DropdownMenuItem
               className="w-full text-base"
               asChild
@@ -143,20 +145,19 @@ export default function DataTable({
               <button>Refund</button>
             </DropdownMenuItem>
 
-            <DropdownMenuItem
-              className="w-full text-base mt-2 focus:bg-orange-100 dark:focus:bg-orange-300/10"
-              asChild
-            >
-              <button
-                onClick={() => setIsOpenOverrideStatusDialog(true)}
-              >
-                Override Status
-              </button>
-            </DropdownMenuItem>
-
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other Action</DropdownMenuLabel>
 
+            <DropdownMenuItem
+              className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+              asChild
+            >
+              <button
+                onClick={() => setIsOpenCorrectStatusDialog(true)}
+              >
+                Correct Status
+              </button>
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="w-full text-base"
               asChild
@@ -261,12 +262,12 @@ export default function DataTable({
         </div>
       ) : null}
 
-      <OverrideStatusDialog
-        onOverride={() => {}}
-        isOpen={isOpenOverrideStatusDialog}
-        onIsOpenChange={setIsOpenOverrideStatusDialog}
-        onOverrideDataChange={setOverrideData}
-        overrideData={overrideData}
+      <CorrectStatusDialog
+        onCorrect={() => {}}
+        isOpen={isOpenCorrectStatusDialog}
+        onIsOpenChange={setIsOpenCorrectStatusDialog}
+        onCorrectDataChange={setCorrectData}
+        correctData={correctData}
       />
     </>
   );
