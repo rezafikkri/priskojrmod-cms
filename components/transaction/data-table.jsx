@@ -29,6 +29,7 @@ import { formatCurrency, getTableHeaderWidth } from '@/lib/utils';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import InfoCircle from '../icon/info-circle';
 import CorrectStatusDialog from './correct-status-dialog';
+import { TransactionStatus } from '@/constants/enums';
 
 export default function DataTable({
   transaction,
@@ -52,6 +53,19 @@ export default function DataTable({
     transactionCode: 'PJM-20250814-ABC123',
   });
   const [isOpenCorrectStatusDialog, setIsOpenCorrectStatusDialog] = useState(false);
+
+  function getStatusClasses(status) {
+    switch (status) {
+      case TransactionStatus.PAID:
+        return 'bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300';
+      case TransactionStatus.REFUND:
+        return 'bg-amber-50 dark:bg-amber-900 text-amber-700 dark:text-amber-300';
+      case TransactionStatus.CANCELLED:
+        return 'bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-300';
+      default:
+        return 'bg-gray-100/50 dark:bg-gray-800 text-gray-700 dark:text-gray-300';
+    }
+  }
 
   // table definition
   const columns = useMemo(() => [
@@ -78,7 +92,7 @@ export default function DataTable({
       enableHiding: false,
       cell: ({ row }) => (
         <span
-          className="px-2 py-1 rounded-lg bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300 capitalize font-medium"
+          className={`px-2 py-1 rounded-lg capitalize font-medium ${getStatusClasses(row.getValue('status'))}`}
         >
           {row.getValue('status')}
         </span>

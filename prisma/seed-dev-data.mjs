@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { PrismaClient as PjmaDBPrismaClient } from '../prisma-pjma-db/pjma-db-client/index.js';
 import { PrismaClient as PjmeDBPrismaClient } from '../prisma-pjme-db/pjme-db-client/index.js';
 import { v7 as uuidv7 } from 'uuid';
-import { generateDocumentCode } from '../lib/generate-document-code.js';
+import { generateDocumentCode } from '../lib/generate-document-code.mjs';
 
 const pjmaDBPrismaClient = new PjmaDBPrismaClient();
 const pjmeDBPrismaClient = new PjmeDBPrismaClient();
@@ -108,8 +108,8 @@ function getTransactionDetails({
 
       product_name: product.name,
       product_variant: product.variants[0].name,
-      product_currency_code: product.variants[0].prices[1].currency_code,
-      product_price: product.variants[0].prices[1].price.toNumber(),
+      product_currency_code: product.variants[0].prices[0].currency_code,
+      product_price: product.variants[0].prices[0].price.toNumber(),
     });
     if (transactionDetails.length === max) break;
   }
@@ -141,7 +141,7 @@ export default async function seedDevData() {
 
   // seed transaction
   const products = await pjmeDBPrismaClient.product.findMany({
-    where: { price_type: 'free' },
+    where: { price_type: 'paid' },
     include: {
       variants: {
         include: {
@@ -153,7 +153,7 @@ export default async function seedDevData() {
   const customers = await pjmeDBPrismaClient.customer.findMany();
 
   const transactions = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 100; i++) {
     let transactionDetails = [];
     if (i % 2 === 0) {
       transactionDetails = getTransactionDetails({ max: 3, products });
