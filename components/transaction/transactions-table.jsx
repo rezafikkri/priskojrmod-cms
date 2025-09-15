@@ -127,7 +127,7 @@ export default function TransactionsTable() {
           }
 
           return await safeFetch({
-            url: `/api/transactions?sk=${parsedKey}&ib=${appliedFilters.showBanned}`,
+            url: addFiltersToURL(`/api/transactions?sk=${parsedKey}`, appliedFilters),
             onFinally: () => {
               if (toastId) {
                 toast.dismiss(toastId);
