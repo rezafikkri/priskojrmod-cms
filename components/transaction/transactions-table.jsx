@@ -15,7 +15,7 @@ import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { generatePageInfo, isLastPage } from '@/lib/utils';
+import { generatePageInfo } from '@/lib/utils';
 import {
   Alert,
   AlertTitle,
