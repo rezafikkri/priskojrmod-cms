@@ -32844,12 +32844,16 @@ export namespace Prisma {
     product_coupon_id: number | null
     quantity: number | null
     product_name: string | null
+    product_version: string | null
+    product_drive_file_id: string | null
+    product_download_link: string | null
     product_variant: string | null
     variant_download_link: string | null
     variant_file_access_password: string | null
     product_currency_code: $Enums.CurrencyCode | null
     product_price: Decimal | null
     product_discount: number | null
+    product_coupon_code: string | null
     product_coupon_discount: number | null
     share_method: $Enums.ShareMethod | null
     shared_at: bigint | null
@@ -32863,12 +32867,16 @@ export namespace Prisma {
     product_coupon_id: number | null
     quantity: number | null
     product_name: string | null
+    product_version: string | null
+    product_drive_file_id: string | null
+    product_download_link: string | null
     product_variant: string | null
     variant_download_link: string | null
     variant_file_access_password: string | null
     product_currency_code: $Enums.CurrencyCode | null
     product_price: Decimal | null
     product_discount: number | null
+    product_coupon_code: string | null
     product_coupon_discount: number | null
     share_method: $Enums.ShareMethod | null
     shared_at: bigint | null
@@ -32882,12 +32890,16 @@ export namespace Prisma {
     product_coupon_id: number
     quantity: number
     product_name: number
+    product_version: number
+    product_drive_file_id: number
+    product_download_link: number
     product_variant: number
     variant_download_link: number
     variant_file_access_password: number
     product_currency_code: number
     product_price: number
     product_discount: number
+    product_coupon_code: number
     product_coupon_discount: number
     share_method: number
     shared_at: number
@@ -32921,12 +32933,16 @@ export namespace Prisma {
     product_coupon_id?: true
     quantity?: true
     product_name?: true
+    product_version?: true
+    product_drive_file_id?: true
+    product_download_link?: true
     product_variant?: true
     variant_download_link?: true
     variant_file_access_password?: true
     product_currency_code?: true
     product_price?: true
     product_discount?: true
+    product_coupon_code?: true
     product_coupon_discount?: true
     share_method?: true
     shared_at?: true
@@ -32940,12 +32956,16 @@ export namespace Prisma {
     product_coupon_id?: true
     quantity?: true
     product_name?: true
+    product_version?: true
+    product_drive_file_id?: true
+    product_download_link?: true
     product_variant?: true
     variant_download_link?: true
     variant_file_access_password?: true
     product_currency_code?: true
     product_price?: true
     product_discount?: true
+    product_coupon_code?: true
     product_coupon_discount?: true
     share_method?: true
     shared_at?: true
@@ -32959,12 +32979,16 @@ export namespace Prisma {
     product_coupon_id?: true
     quantity?: true
     product_name?: true
+    product_version?: true
+    product_drive_file_id?: true
+    product_download_link?: true
     product_variant?: true
     variant_download_link?: true
     variant_file_access_password?: true
     product_currency_code?: true
     product_price?: true
     product_discount?: true
+    product_coupon_code?: true
     product_coupon_discount?: true
     share_method?: true
     shared_at?: true
@@ -33065,12 +33089,16 @@ export namespace Prisma {
     product_coupon_id: number | null
     quantity: number
     product_name: string
+    product_version: string
+    product_drive_file_id: string | null
+    product_download_link: string | null
     product_variant: string
     variant_download_link: string | null
     variant_file_access_password: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal
     product_discount: number | null
+    product_coupon_code: string | null
     product_coupon_discount: number | null
     share_method: $Enums.ShareMethod | null
     shared_at: bigint | null
@@ -33103,12 +33131,16 @@ export namespace Prisma {
     product_coupon_id?: boolean
     quantity?: boolean
     product_name?: boolean
+    product_version?: boolean
+    product_drive_file_id?: boolean
+    product_download_link?: boolean
     product_variant?: boolean
     variant_download_link?: boolean
     variant_file_access_password?: boolean
     product_currency_code?: boolean
     product_price?: boolean
     product_discount?: boolean
+    product_coupon_code?: boolean
     product_coupon_discount?: boolean
     share_method?: boolean
     shared_at?: boolean
@@ -33123,12 +33155,16 @@ export namespace Prisma {
     product_coupon_id?: boolean
     quantity?: boolean
     product_name?: boolean
+    product_version?: boolean
+    product_drive_file_id?: boolean
+    product_download_link?: boolean
     product_variant?: boolean
     variant_download_link?: boolean
     variant_file_access_password?: boolean
     product_currency_code?: boolean
     product_price?: boolean
     product_discount?: boolean
+    product_coupon_code?: boolean
     product_coupon_discount?: boolean
     share_method?: boolean
     shared_at?: boolean
@@ -33143,12 +33179,16 @@ export namespace Prisma {
     product_coupon_id?: boolean
     quantity?: boolean
     product_name?: boolean
+    product_version?: boolean
+    product_drive_file_id?: boolean
+    product_download_link?: boolean
     product_variant?: boolean
     variant_download_link?: boolean
     variant_file_access_password?: boolean
     product_currency_code?: boolean
     product_price?: boolean
     product_discount?: boolean
+    product_coupon_code?: boolean
     product_coupon_discount?: boolean
     share_method?: boolean
     shared_at?: boolean
@@ -33163,18 +33203,22 @@ export namespace Prisma {
     product_coupon_id?: boolean
     quantity?: boolean
     product_name?: boolean
+    product_version?: boolean
+    product_drive_file_id?: boolean
+    product_download_link?: boolean
     product_variant?: boolean
     variant_download_link?: boolean
     variant_file_access_password?: boolean
     product_currency_code?: boolean
     product_price?: boolean
     product_discount?: boolean
+    product_coupon_code?: boolean
     product_coupon_discount?: boolean
     share_method?: boolean
     shared_at?: boolean
   }
 
-  export type TransactionDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "product_id" | "product_price_id" | "product_coupon_id" | "quantity" | "product_name" | "product_variant" | "variant_download_link" | "variant_file_access_password" | "product_currency_code" | "product_price" | "product_discount" | "product_coupon_discount" | "share_method" | "shared_at", ExtArgs["result"]["transactionDetail"]>
+  export type TransactionDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "product_id" | "product_price_id" | "product_coupon_id" | "quantity" | "product_name" | "product_version" | "product_drive_file_id" | "product_download_link" | "product_variant" | "variant_download_link" | "variant_file_access_password" | "product_currency_code" | "product_price" | "product_discount" | "product_coupon_code" | "product_coupon_discount" | "share_method" | "shared_at", ExtArgs["result"]["transactionDetail"]>
   export type TransactionDetailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
   }
@@ -33198,12 +33242,16 @@ export namespace Prisma {
       product_coupon_id: number | null
       quantity: number
       product_name: string
+      product_version: string
+      product_drive_file_id: string | null
+      product_download_link: string | null
       product_variant: string
       variant_download_link: string | null
       variant_file_access_password: string | null
       product_currency_code: $Enums.CurrencyCode
       product_price: Prisma.Decimal
       product_discount: number | null
+      product_coupon_code: string | null
       product_coupon_discount: number | null
       share_method: $Enums.ShareMethod | null
       shared_at: bigint | null
@@ -33638,12 +33686,16 @@ export namespace Prisma {
     readonly product_coupon_id: FieldRef<"TransactionDetail", 'Int'>
     readonly quantity: FieldRef<"TransactionDetail", 'Int'>
     readonly product_name: FieldRef<"TransactionDetail", 'String'>
+    readonly product_version: FieldRef<"TransactionDetail", 'String'>
+    readonly product_drive_file_id: FieldRef<"TransactionDetail", 'String'>
+    readonly product_download_link: FieldRef<"TransactionDetail", 'String'>
     readonly product_variant: FieldRef<"TransactionDetail", 'String'>
     readonly variant_download_link: FieldRef<"TransactionDetail", 'String'>
     readonly variant_file_access_password: FieldRef<"TransactionDetail", 'String'>
     readonly product_currency_code: FieldRef<"TransactionDetail", 'CurrencyCode'>
     readonly product_price: FieldRef<"TransactionDetail", 'Decimal'>
     readonly product_discount: FieldRef<"TransactionDetail", 'Int'>
+    readonly product_coupon_code: FieldRef<"TransactionDetail", 'String'>
     readonly product_coupon_discount: FieldRef<"TransactionDetail", 'Int'>
     readonly share_method: FieldRef<"TransactionDetail", 'ShareMethod'>
     readonly shared_at: FieldRef<"TransactionDetail", 'BigInt'>
@@ -37622,12 +37674,16 @@ export namespace Prisma {
     product_coupon_id: 'product_coupon_id',
     quantity: 'quantity',
     product_name: 'product_name',
+    product_version: 'product_version',
+    product_drive_file_id: 'product_drive_file_id',
+    product_download_link: 'product_download_link',
     product_variant: 'product_variant',
     variant_download_link: 'variant_download_link',
     variant_file_access_password: 'variant_file_access_password',
     product_currency_code: 'product_currency_code',
     product_price: 'product_price',
     product_discount: 'product_discount',
+    product_coupon_code: 'product_coupon_code',
     product_coupon_discount: 'product_coupon_discount',
     share_method: 'share_method',
     shared_at: 'shared_at'
@@ -38481,6 +38537,7 @@ export namespace Prisma {
 
   export type ProductVersionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    product_id_version?: ProductVersionProduct_idVersionCompoundUniqueInput
     AND?: ProductVersionWhereInput | ProductVersionWhereInput[]
     OR?: ProductVersionWhereInput[]
     NOT?: ProductVersionWhereInput | ProductVersionWhereInput[]
@@ -38489,7 +38546,7 @@ export namespace Prisma {
     released_at?: BigIntFilter<"ProductVersion"> | bigint | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     translations?: ProductVersionTranslationListRelationFilter
-  }, "id">
+  }, "id" | "product_id_version">
 
   export type ProductVersionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -39388,12 +39445,16 @@ export namespace Prisma {
     product_coupon_id?: IntNullableFilter<"TransactionDetail"> | number | null
     quantity?: IntFilter<"TransactionDetail"> | number
     product_name?: StringFilter<"TransactionDetail"> | string
+    product_version?: StringFilter<"TransactionDetail"> | string
+    product_drive_file_id?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
     product_variant?: StringFilter<"TransactionDetail"> | string
     variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
     product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
     product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_code?: StringNullableFilter<"TransactionDetail"> | string | null
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
@@ -39408,12 +39469,16 @@ export namespace Prisma {
     product_coupon_id?: SortOrderInput | SortOrder
     quantity?: SortOrder
     product_name?: SortOrder
+    product_version?: SortOrder
+    product_drive_file_id?: SortOrderInput | SortOrder
+    product_download_link?: SortOrderInput | SortOrder
     product_variant?: SortOrder
     variant_download_link?: SortOrderInput | SortOrder
     variant_file_access_password?: SortOrderInput | SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
     product_discount?: SortOrderInput | SortOrder
+    product_coupon_code?: SortOrderInput | SortOrder
     product_coupon_discount?: SortOrderInput | SortOrder
     share_method?: SortOrderInput | SortOrder
     shared_at?: SortOrderInput | SortOrder
@@ -39431,12 +39496,16 @@ export namespace Prisma {
     product_coupon_id?: IntNullableFilter<"TransactionDetail"> | number | null
     quantity?: IntFilter<"TransactionDetail"> | number
     product_name?: StringFilter<"TransactionDetail"> | string
+    product_version?: StringFilter<"TransactionDetail"> | string
+    product_drive_file_id?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
     product_variant?: StringFilter<"TransactionDetail"> | string
     variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
     product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
     product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_code?: StringNullableFilter<"TransactionDetail"> | string | null
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
@@ -39451,12 +39520,16 @@ export namespace Prisma {
     product_coupon_id?: SortOrderInput | SortOrder
     quantity?: SortOrder
     product_name?: SortOrder
+    product_version?: SortOrder
+    product_drive_file_id?: SortOrderInput | SortOrder
+    product_download_link?: SortOrderInput | SortOrder
     product_variant?: SortOrder
     variant_download_link?: SortOrderInput | SortOrder
     variant_file_access_password?: SortOrderInput | SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
     product_discount?: SortOrderInput | SortOrder
+    product_coupon_code?: SortOrderInput | SortOrder
     product_coupon_discount?: SortOrderInput | SortOrder
     share_method?: SortOrderInput | SortOrder
     shared_at?: SortOrderInput | SortOrder
@@ -39478,12 +39551,16 @@ export namespace Prisma {
     product_coupon_id?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
     quantity?: IntWithAggregatesFilter<"TransactionDetail"> | number
     product_name?: StringWithAggregatesFilter<"TransactionDetail"> | string
+    product_version?: StringWithAggregatesFilter<"TransactionDetail"> | string
+    product_drive_file_id?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
+    product_download_link?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     product_variant?: StringWithAggregatesFilter<"TransactionDetail"> | string
     variant_download_link?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeWithAggregatesFilter<"TransactionDetail"> | $Enums.CurrencyCode
     product_price?: DecimalWithAggregatesFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
     product_discount?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
+    product_coupon_code?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     product_coupon_discount?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
     share_method?: EnumShareMethodNullableWithAggregatesFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableWithAggregatesFilter<"TransactionDetail"> | bigint | number | null
@@ -41163,12 +41240,16 @@ export namespace Prisma {
     product_coupon_id?: number | null
     quantity: number
     product_name: string
+    product_version: string
+    product_drive_file_id?: string | null
+    product_download_link?: string | null
     product_variant: string
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
+    product_coupon_code?: string | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
@@ -41183,12 +41264,16 @@ export namespace Prisma {
     product_coupon_id?: number | null
     quantity: number
     product_name: string
+    product_version: string
+    product_drive_file_id?: string | null
+    product_download_link?: string | null
     product_variant: string
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
+    product_coupon_code?: string | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
@@ -41201,12 +41286,16 @@ export namespace Prisma {
     product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -41221,12 +41310,16 @@ export namespace Prisma {
     product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -41240,12 +41333,16 @@ export namespace Prisma {
     product_coupon_id?: number | null
     quantity: number
     product_name: string
+    product_version: string
+    product_drive_file_id?: string | null
+    product_download_link?: string | null
     product_variant: string
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
+    product_coupon_code?: string | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
@@ -41258,12 +41355,16 @@ export namespace Prisma {
     product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -41277,12 +41378,16 @@ export namespace Prisma {
     product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -42158,6 +42263,11 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ProductVersionProduct_idVersionCompoundUniqueInput = {
+    product_id: string
+    version: string
+  }
+
   export type ProductVersionCountOrderByAggregateInput = {
     id?: SortOrder
     product_id?: SortOrder
@@ -42884,12 +42994,16 @@ export namespace Prisma {
     product_coupon_id?: SortOrder
     quantity?: SortOrder
     product_name?: SortOrder
+    product_version?: SortOrder
+    product_drive_file_id?: SortOrder
+    product_download_link?: SortOrder
     product_variant?: SortOrder
     variant_download_link?: SortOrder
     variant_file_access_password?: SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
     product_discount?: SortOrder
+    product_coupon_code?: SortOrder
     product_coupon_discount?: SortOrder
     share_method?: SortOrder
     shared_at?: SortOrder
@@ -42912,12 +43026,16 @@ export namespace Prisma {
     product_coupon_id?: SortOrder
     quantity?: SortOrder
     product_name?: SortOrder
+    product_version?: SortOrder
+    product_drive_file_id?: SortOrder
+    product_download_link?: SortOrder
     product_variant?: SortOrder
     variant_download_link?: SortOrder
     variant_file_access_password?: SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
     product_discount?: SortOrder
+    product_coupon_code?: SortOrder
     product_coupon_discount?: SortOrder
     share_method?: SortOrder
     shared_at?: SortOrder
@@ -42931,12 +43049,16 @@ export namespace Prisma {
     product_coupon_id?: SortOrder
     quantity?: SortOrder
     product_name?: SortOrder
+    product_version?: SortOrder
+    product_drive_file_id?: SortOrder
+    product_download_link?: SortOrder
     product_variant?: SortOrder
     variant_download_link?: SortOrder
     variant_file_access_password?: SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
     product_discount?: SortOrder
+    product_coupon_code?: SortOrder
     product_coupon_discount?: SortOrder
     share_method?: SortOrder
     shared_at?: SortOrder
@@ -46816,12 +46938,16 @@ export namespace Prisma {
     product_coupon_id?: number | null
     quantity: number
     product_name: string
+    product_version: string
+    product_drive_file_id?: string | null
+    product_download_link?: string | null
     product_variant: string
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
+    product_coupon_code?: string | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
@@ -46834,12 +46960,16 @@ export namespace Prisma {
     product_coupon_id?: number | null
     quantity: number
     product_name: string
+    product_version: string
+    product_drive_file_id?: string | null
+    product_download_link?: string | null
     product_variant: string
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
+    product_coupon_code?: string | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
@@ -46899,12 +47029,16 @@ export namespace Prisma {
     product_coupon_id?: IntNullableFilter<"TransactionDetail"> | number | null
     quantity?: IntFilter<"TransactionDetail"> | number
     product_name?: StringFilter<"TransactionDetail"> | string
+    product_version?: StringFilter<"TransactionDetail"> | string
+    product_drive_file_id?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
     product_variant?: StringFilter<"TransactionDetail"> | string
     variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
     product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
     product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_code?: StringNullableFilter<"TransactionDetail"> | string | null
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
@@ -47799,12 +47933,16 @@ export namespace Prisma {
     product_coupon_id?: number | null
     quantity: number
     product_name: string
+    product_version: string
+    product_drive_file_id?: string | null
+    product_download_link?: string | null
     product_variant: string
     variant_download_link?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
     product_discount?: number | null
+    product_coupon_code?: string | null
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
@@ -47817,12 +47955,16 @@ export namespace Prisma {
     product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -47835,12 +47977,16 @@ export namespace Prisma {
     product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -47853,12 +47999,16 @@ export namespace Prisma {
     product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
     variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null

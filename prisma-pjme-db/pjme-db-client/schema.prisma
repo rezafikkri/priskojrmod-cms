@@ -176,6 +176,7 @@ model ProductVersion {
 
   translations ProductVersionTranslation[]
 
+  @@unique([product_id, version])
   @@map("product_versions")
 }
 
@@ -396,14 +397,20 @@ model TransactionDetail {
   product_coupon_id Int?    @db.SmallInt
   quantity          Int     @db.SmallInt
 
-  product_name                 String       @db.VarChar(150)
-  product_variant              String       @db.VarChar(100)
-  variant_download_link        String?      @db.Text
-  variant_file_access_password String?      @db.VarChar(100)
-  product_currency_code        CurrencyCode
-  product_price                Decimal      @db.Decimal(10, 2)
-  product_discount             Int?         @db.SmallInt
-  product_coupon_discount      Int?         @db.SmallInt
+  product_name          String  @db.VarChar(150)
+  product_version       String  @db.VarChar(50)
+  product_drive_file_id String?
+  product_download_link String?
+
+  product_variant              String  @db.VarChar(100)
+  variant_download_link        String?
+  variant_file_access_password String? @db.VarChar(100)
+
+  product_currency_code   CurrencyCode
+  product_price           Decimal      @db.Decimal(10, 2)
+  product_discount        Int?         @db.SmallInt
+  product_coupon_code     String?      @db.VarChar(150)
+  product_coupon_discount Int?         @db.SmallInt
 
   share_method ShareMethod?
   shared_at    BigInt?
