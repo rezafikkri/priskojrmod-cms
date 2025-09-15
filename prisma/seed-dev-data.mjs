@@ -107,6 +107,10 @@ function getTransactionDetails({
       quantity: generateRandomInt(2, 5),
 
       product_name: product.name,
+      product_version: product.versions[0].version,
+      product_drive_file_id: product.drive_file_id,
+      product_download_link: product.download_link,
+
       product_variant: product.variants[0].name,
       product_currency_code: product.variants[0].prices[0].currency_code,
       product_price: product.variants[0].prices[0].price.toNumber(),
@@ -143,6 +147,14 @@ export default async function seedDevData() {
   const products = await pjmeDBPrismaClient.product.findMany({
     where: { price_type: 'paid' },
     include: {
+      versions: {
+        orderBy: [
+          { released_at: 'desc' },
+          { id: 'desc' },
+        ],
+        take: 1,
+        select: { version: true },
+      },
       variants: {
         include: {
           prices: true,
