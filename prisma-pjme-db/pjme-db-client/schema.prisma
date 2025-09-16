@@ -378,11 +378,20 @@ model Transaction {
   @@map("transactions")
 }
 
+enum InvoiceStatus {
+  active
+  void
+
+  @@map("invoice_status")
+}
+
 model Invoice {
-  id             String @id @default(uuid(7)) @db.Uuid
-  transaction_id String @unique @db.Uuid
-  invoice_number String @unique @db.VarChar(32)
+  id             String        @id @default(uuid(7)) @db.Uuid
+  transaction_id String        @unique @db.Uuid
+  invoice_number String        @unique @db.VarChar(32)
+  status         InvoiceStatus
   issued_at      BigInt
+  voided_at      BigInt?
 
   transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
 

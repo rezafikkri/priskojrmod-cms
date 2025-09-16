@@ -328,7 +328,9 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   id: 'id',
   transaction_id: 'transaction_id',
   invoice_number: 'invoice_number',
-  issued_at: 'issued_at'
+  status: 'status',
+  issued_at: 'issued_at',
+  voided_at: 'voided_at'
 };
 
 exports.Prisma.TransactionDetailScalarFieldEnum = {
@@ -413,6 +415,11 @@ exports.TransactionStatus = exports.$Enums.TransactionStatus = {
   paid: 'paid',
   cancelled: 'cancelled',
   refund: 'refund'
+};
+
+exports.InvoiceStatus = exports.$Enums.InvoiceStatus = {
+  active: 'active',
+  void: 'void'
 };
 
 exports.ShareMethod = exports.$Enums.ShareMethod = {

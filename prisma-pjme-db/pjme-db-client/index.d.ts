@@ -210,6 +210,14 @@ export const ShareMethod: {
 
 export type ShareMethod = (typeof ShareMethod)[keyof typeof ShareMethod]
 
+
+export const InvoiceStatus: {
+  active: 'active',
+  void: 'void'
+};
+
+export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
+
 }
 
 export type CurrencyCode = $Enums.CurrencyCode
@@ -231,6 +239,10 @@ export const TransactionStatus: typeof $Enums.TransactionStatus
 export type ShareMethod = $Enums.ShareMethod
 
 export const ShareMethod: typeof $Enums.ShareMethod
+
+export type InvoiceStatus = $Enums.InvoiceStatus
+
+export const InvoiceStatus: typeof $Enums.InvoiceStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -31741,62 +31753,78 @@ export namespace Prisma {
 
   export type InvoiceAvgAggregateOutputType = {
     issued_at: number | null
+    voided_at: number | null
   }
 
   export type InvoiceSumAggregateOutputType = {
     issued_at: bigint | null
+    voided_at: bigint | null
   }
 
   export type InvoiceMinAggregateOutputType = {
     id: string | null
     transaction_id: string | null
     invoice_number: string | null
+    status: $Enums.InvoiceStatus | null
     issued_at: bigint | null
+    voided_at: bigint | null
   }
 
   export type InvoiceMaxAggregateOutputType = {
     id: string | null
     transaction_id: string | null
     invoice_number: string | null
+    status: $Enums.InvoiceStatus | null
     issued_at: bigint | null
+    voided_at: bigint | null
   }
 
   export type InvoiceCountAggregateOutputType = {
     id: number
     transaction_id: number
     invoice_number: number
+    status: number
     issued_at: number
+    voided_at: number
     _all: number
   }
 
 
   export type InvoiceAvgAggregateInputType = {
     issued_at?: true
+    voided_at?: true
   }
 
   export type InvoiceSumAggregateInputType = {
     issued_at?: true
+    voided_at?: true
   }
 
   export type InvoiceMinAggregateInputType = {
     id?: true
     transaction_id?: true
     invoice_number?: true
+    status?: true
     issued_at?: true
+    voided_at?: true
   }
 
   export type InvoiceMaxAggregateInputType = {
     id?: true
     transaction_id?: true
     invoice_number?: true
+    status?: true
     issued_at?: true
+    voided_at?: true
   }
 
   export type InvoiceCountAggregateInputType = {
     id?: true
     transaction_id?: true
     invoice_number?: true
+    status?: true
     issued_at?: true
+    voided_at?: true
     _all?: true
   }
 
@@ -31890,7 +31918,9 @@ export namespace Prisma {
     id: string
     transaction_id: string
     invoice_number: string
+    status: $Enums.InvoiceStatus
     issued_at: bigint
+    voided_at: bigint | null
     _count: InvoiceCountAggregateOutputType | null
     _avg: InvoiceAvgAggregateOutputType | null
     _sum: InvoiceSumAggregateOutputType | null
@@ -31916,7 +31946,9 @@ export namespace Prisma {
     id?: boolean
     transaction_id?: boolean
     invoice_number?: boolean
+    status?: boolean
     issued_at?: boolean
+    voided_at?: boolean
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["invoice"]>
 
@@ -31924,7 +31956,9 @@ export namespace Prisma {
     id?: boolean
     transaction_id?: boolean
     invoice_number?: boolean
+    status?: boolean
     issued_at?: boolean
+    voided_at?: boolean
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["invoice"]>
 
@@ -31932,7 +31966,9 @@ export namespace Prisma {
     id?: boolean
     transaction_id?: boolean
     invoice_number?: boolean
+    status?: boolean
     issued_at?: boolean
+    voided_at?: boolean
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["invoice"]>
 
@@ -31940,10 +31976,12 @@ export namespace Prisma {
     id?: boolean
     transaction_id?: boolean
     invoice_number?: boolean
+    status?: boolean
     issued_at?: boolean
+    voided_at?: boolean
   }
 
-  export type InvoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "invoice_number" | "issued_at", ExtArgs["result"]["invoice"]>
+  export type InvoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "invoice_number" | "status" | "issued_at" | "voided_at", ExtArgs["result"]["invoice"]>
   export type InvoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
   }
@@ -31963,7 +32001,9 @@ export namespace Prisma {
       id: string
       transaction_id: string
       invoice_number: string
+      status: $Enums.InvoiceStatus
       issued_at: bigint
+      voided_at: bigint | null
     }, ExtArgs["result"]["invoice"]>
     composites: {}
   }
@@ -32391,7 +32431,9 @@ export namespace Prisma {
     readonly id: FieldRef<"Invoice", 'String'>
     readonly transaction_id: FieldRef<"Invoice", 'String'>
     readonly invoice_number: FieldRef<"Invoice", 'String'>
+    readonly status: FieldRef<"Invoice", 'InvoiceStatus'>
     readonly issued_at: FieldRef<"Invoice", 'BigInt'>
+    readonly voided_at: FieldRef<"Invoice", 'BigInt'>
   }
     
 
@@ -37660,7 +37702,9 @@ export namespace Prisma {
     id: 'id',
     transaction_id: 'transaction_id',
     invoice_number: 'invoice_number',
-    issued_at: 'issued_at'
+    status: 'status',
+    issued_at: 'issued_at',
+    voided_at: 'voided_at'
   };
 
   export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
@@ -37871,6 +37915,20 @@ export namespace Prisma {
    * Reference to a field of type 'TransactionStatus[]'
    */
   export type ListEnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InvoiceStatus'
+   */
+  export type EnumInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoiceStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InvoiceStatus[]'
+   */
+  export type ListEnumInvoiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoiceStatus[]'>
     
 
 
@@ -39389,7 +39447,9 @@ export namespace Prisma {
     id?: UuidFilter<"Invoice"> | string
     transaction_id?: UuidFilter<"Invoice"> | string
     invoice_number?: StringFilter<"Invoice"> | string
+    status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
     issued_at?: BigIntFilter<"Invoice"> | bigint | number
+    voided_at?: BigIntNullableFilter<"Invoice"> | bigint | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
   }
 
@@ -39397,7 +39457,9 @@ export namespace Prisma {
     id?: SortOrder
     transaction_id?: SortOrder
     invoice_number?: SortOrder
+    status?: SortOrder
     issued_at?: SortOrder
+    voided_at?: SortOrderInput | SortOrder
     transaction?: TransactionOrderByWithRelationInput
   }
 
@@ -39408,7 +39470,9 @@ export namespace Prisma {
     AND?: InvoiceWhereInput | InvoiceWhereInput[]
     OR?: InvoiceWhereInput[]
     NOT?: InvoiceWhereInput | InvoiceWhereInput[]
+    status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
     issued_at?: BigIntFilter<"Invoice"> | bigint | number
+    voided_at?: BigIntNullableFilter<"Invoice"> | bigint | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
   }, "id" | "transaction_id" | "invoice_number">
 
@@ -39416,7 +39480,9 @@ export namespace Prisma {
     id?: SortOrder
     transaction_id?: SortOrder
     invoice_number?: SortOrder
+    status?: SortOrder
     issued_at?: SortOrder
+    voided_at?: SortOrderInput | SortOrder
     _count?: InvoiceCountOrderByAggregateInput
     _avg?: InvoiceAvgOrderByAggregateInput
     _max?: InvoiceMaxOrderByAggregateInput
@@ -39431,7 +39497,9 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"Invoice"> | string
     transaction_id?: UuidWithAggregatesFilter<"Invoice"> | string
     invoice_number?: StringWithAggregatesFilter<"Invoice"> | string
+    status?: EnumInvoiceStatusWithAggregatesFilter<"Invoice"> | $Enums.InvoiceStatus
     issued_at?: BigIntWithAggregatesFilter<"Invoice"> | bigint | number
+    voided_at?: BigIntNullableWithAggregatesFilter<"Invoice"> | bigint | number | null
   }
 
   export type TransactionDetailWhereInput = {
@@ -41188,7 +41256,9 @@ export namespace Prisma {
   export type InvoiceCreateInput = {
     id?: string
     invoice_number: string
+    status: $Enums.InvoiceStatus
     issued_at: bigint | number
+    voided_at?: bigint | number | null
     transaction: TransactionCreateNestedOneWithoutInvoiceInput
   }
 
@@ -41196,13 +41266,17 @@ export namespace Prisma {
     id?: string
     transaction_id: string
     invoice_number: string
+    status: $Enums.InvoiceStatus
     issued_at: bigint | number
+    voided_at?: bigint | number | null
   }
 
   export type InvoiceUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     transaction?: TransactionUpdateOneRequiredWithoutInvoiceNestedInput
   }
 
@@ -41210,27 +41284,35 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     transaction_id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type InvoiceCreateManyInput = {
     id?: string
     transaction_id: string
     invoice_number: string
+    status: $Enums.InvoiceStatus
     issued_at: bigint | number
+    voided_at?: bigint | number | null
   }
 
   export type InvoiceUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type InvoiceUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     transaction_id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type TransactionDetailCreateInput = {
@@ -42934,6 +43016,13 @@ export namespace Prisma {
     _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
   }
 
+  export type EnumInvoiceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvoiceStatus | EnumInvoiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvoiceStatusFilter<$PrismaModel> | $Enums.InvoiceStatus
+  }
+
   export type TransactionScalarRelationFilter = {
     is?: TransactionWhereInput
     isNot?: TransactionWhereInput
@@ -42943,29 +43032,47 @@ export namespace Prisma {
     id?: SortOrder
     transaction_id?: SortOrder
     invoice_number?: SortOrder
+    status?: SortOrder
     issued_at?: SortOrder
+    voided_at?: SortOrder
   }
 
   export type InvoiceAvgOrderByAggregateInput = {
     issued_at?: SortOrder
+    voided_at?: SortOrder
   }
 
   export type InvoiceMaxOrderByAggregateInput = {
     id?: SortOrder
     transaction_id?: SortOrder
     invoice_number?: SortOrder
+    status?: SortOrder
     issued_at?: SortOrder
+    voided_at?: SortOrder
   }
 
   export type InvoiceMinOrderByAggregateInput = {
     id?: SortOrder
     transaction_id?: SortOrder
     invoice_number?: SortOrder
+    status?: SortOrder
     issued_at?: SortOrder
+    voided_at?: SortOrder
   }
 
   export type InvoiceSumOrderByAggregateInput = {
     issued_at?: SortOrder
+    voided_at?: SortOrder
+  }
+
+  export type EnumInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvoiceStatus | EnumInvoiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvoiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvoiceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInvoiceStatusFilter<$PrismaModel>
+    _max?: NestedEnumInvoiceStatusFilter<$PrismaModel>
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -44347,6 +44454,10 @@ export namespace Prisma {
     connect?: TransactionWhereUniqueInput
   }
 
+  export type EnumInvoiceStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InvoiceStatus
+  }
+
   export type TransactionUpdateOneRequiredWithoutInvoiceNestedInput = {
     create?: XOR<TransactionCreateWithoutInvoiceInput, TransactionUncheckedCreateWithoutInvoiceInput>
     connectOrCreate?: TransactionCreateOrConnectWithoutInvoiceInput
@@ -44769,6 +44880,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTransactionStatusFilter<$PrismaModel>
     _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInvoiceStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvoiceStatus | EnumInvoiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvoiceStatusFilter<$PrismaModel> | $Enums.InvoiceStatus
+  }
+
+  export type NestedEnumInvoiceStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InvoiceStatus | EnumInvoiceStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InvoiceStatus[] | ListEnumInvoiceStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInvoiceStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvoiceStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInvoiceStatusFilter<$PrismaModel>
+    _max?: NestedEnumInvoiceStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumShareMethodNullableFilter<$PrismaModel = never> = {
@@ -46988,13 +47116,17 @@ export namespace Prisma {
   export type InvoiceCreateWithoutTransactionInput = {
     id?: string
     invoice_number: string
+    status: $Enums.InvoiceStatus
     issued_at: bigint | number
+    voided_at?: bigint | number | null
   }
 
   export type InvoiceUncheckedCreateWithoutTransactionInput = {
     id?: string
     invoice_number: string
+    status: $Enums.InvoiceStatus
     issued_at: bigint | number
+    voided_at?: bigint | number | null
   }
 
   export type InvoiceCreateOrConnectWithoutTransactionInput = {
@@ -47058,13 +47190,17 @@ export namespace Prisma {
   export type InvoiceUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type InvoiceUncheckedUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type TransactionCreateWithoutInvoiceInput = {
