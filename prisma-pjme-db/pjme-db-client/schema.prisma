@@ -366,7 +366,7 @@ model Transaction {
   created_at    BigInt
   updated_at    BigInt
   currency_code CurrencyCode
-  total_amount  Int
+  total_amount  Decimal           @db.Decimal(10, 2)
 
   customer_name         String  @db.VarChar(200)
   customer_email        String  @db.VarChar(254)

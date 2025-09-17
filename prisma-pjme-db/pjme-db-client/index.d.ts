@@ -30541,13 +30541,13 @@ export namespace Prisma {
   export type TransactionAvgAggregateOutputType = {
     created_at: number | null
     updated_at: number | null
-    total_amount: number | null
+    total_amount: Decimal | null
   }
 
   export type TransactionSumAggregateOutputType = {
     created_at: bigint | null
     updated_at: bigint | null
-    total_amount: number | null
+    total_amount: Decimal | null
   }
 
   export type TransactionMinAggregateOutputType = {
@@ -30558,7 +30558,7 @@ export namespace Prisma {
     created_at: bigint | null
     updated_at: bigint | null
     currency_code: $Enums.CurrencyCode | null
-    total_amount: number | null
+    total_amount: Decimal | null
     customer_name: string | null
     customer_email: string | null
     customer_phone_number: string | null
@@ -30572,7 +30572,7 @@ export namespace Prisma {
     created_at: bigint | null
     updated_at: bigint | null
     currency_code: $Enums.CurrencyCode | null
-    total_amount: number | null
+    total_amount: Decimal | null
     customer_name: string | null
     customer_email: string | null
     customer_phone_number: string | null
@@ -30743,7 +30743,7 @@ export namespace Prisma {
     created_at: bigint
     updated_at: bigint
     currency_code: $Enums.CurrencyCode
-    total_amount: number
+    total_amount: Decimal
     customer_name: string
     customer_email: string
     customer_phone_number: string | null
@@ -30850,7 +30850,7 @@ export namespace Prisma {
       created_at: bigint
       updated_at: bigint
       currency_code: $Enums.CurrencyCode
-      total_amount: number
+      total_amount: Prisma.Decimal
       customer_name: string
       customer_email: string
       customer_phone_number: string | null
@@ -31286,7 +31286,7 @@ export namespace Prisma {
     readonly created_at: FieldRef<"Transaction", 'BigInt'>
     readonly updated_at: FieldRef<"Transaction", 'BigInt'>
     readonly currency_code: FieldRef<"Transaction", 'CurrencyCode'>
-    readonly total_amount: FieldRef<"Transaction", 'Int'>
+    readonly total_amount: FieldRef<"Transaction", 'Decimal'>
     readonly customer_name: FieldRef<"Transaction", 'String'>
     readonly customer_email: FieldRef<"Transaction", 'String'>
     readonly customer_phone_number: FieldRef<"Transaction", 'String'>
@@ -39361,7 +39361,7 @@ export namespace Prisma {
     created_at?: BigIntFilter<"Transaction"> | bigint | number
     updated_at?: BigIntFilter<"Transaction"> | bigint | number
     currency_code?: EnumCurrencyCodeFilter<"Transaction"> | $Enums.CurrencyCode
-    total_amount?: IntFilter<"Transaction"> | number
+    total_amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customer_name?: StringFilter<"Transaction"> | string
     customer_email?: StringFilter<"Transaction"> | string
     customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
@@ -39396,7 +39396,7 @@ export namespace Prisma {
     created_at?: BigIntFilter<"Transaction"> | bigint | number
     updated_at?: BigIntFilter<"Transaction"> | bigint | number
     currency_code?: EnumCurrencyCodeFilter<"Transaction"> | $Enums.CurrencyCode
-    total_amount?: IntFilter<"Transaction"> | number
+    total_amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customer_name?: StringFilter<"Transaction"> | string
     customer_email?: StringFilter<"Transaction"> | string
     customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
@@ -39434,7 +39434,7 @@ export namespace Prisma {
     created_at?: BigIntWithAggregatesFilter<"Transaction"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"Transaction"> | bigint | number
     currency_code?: EnumCurrencyCodeWithAggregatesFilter<"Transaction"> | $Enums.CurrencyCode
-    total_amount?: IntWithAggregatesFilter<"Transaction"> | number
+    total_amount?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customer_name?: StringWithAggregatesFilter<"Transaction"> | string
     customer_email?: StringWithAggregatesFilter<"Transaction"> | string
     customer_phone_number?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
@@ -41155,7 +41155,7 @@ export namespace Prisma {
     created_at: bigint | number
     updated_at: bigint | number
     currency_code: $Enums.CurrencyCode
-    total_amount: number
+    total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
@@ -41171,7 +41171,7 @@ export namespace Prisma {
     created_at: bigint | number
     updated_at: bigint | number
     currency_code: $Enums.CurrencyCode
-    total_amount: number
+    total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
@@ -41187,7 +41187,7 @@ export namespace Prisma {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    total_amount?: IntFieldUpdateOperationsInput | number
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41203,7 +41203,7 @@ export namespace Prisma {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    total_amount?: IntFieldUpdateOperationsInput | number
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41219,7 +41219,7 @@ export namespace Prisma {
     created_at: bigint | number
     updated_at: bigint | number
     currency_code: $Enums.CurrencyCode
-    total_amount: number
+    total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
@@ -41233,7 +41233,7 @@ export namespace Prisma {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    total_amount?: IntFieldUpdateOperationsInput | number
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41247,7 +41247,7 @@ export namespace Prisma {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    total_amount?: IntFieldUpdateOperationsInput | number
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47211,7 +47211,7 @@ export namespace Prisma {
     created_at: bigint | number
     updated_at: bigint | number
     currency_code: $Enums.CurrencyCode
-    total_amount: number
+    total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
@@ -47226,7 +47226,7 @@ export namespace Prisma {
     created_at: bigint | number
     updated_at: bigint | number
     currency_code: $Enums.CurrencyCode
-    total_amount: number
+    total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
@@ -47257,7 +47257,7 @@ export namespace Prisma {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    total_amount?: IntFieldUpdateOperationsInput | number
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47272,7 +47272,7 @@ export namespace Prisma {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    total_amount?: IntFieldUpdateOperationsInput | number
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47287,7 +47287,7 @@ export namespace Prisma {
     created_at: bigint | number
     updated_at: bigint | number
     currency_code: $Enums.CurrencyCode
-    total_amount: number
+    total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
@@ -47302,7 +47302,7 @@ export namespace Prisma {
     created_at: bigint | number
     updated_at: bigint | number
     currency_code: $Enums.CurrencyCode
-    total_amount: number
+    total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
@@ -47333,7 +47333,7 @@ export namespace Prisma {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    total_amount?: IntFieldUpdateOperationsInput | number
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47348,7 +47348,7 @@ export namespace Prisma {
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    total_amount?: IntFieldUpdateOperationsInput | number
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
