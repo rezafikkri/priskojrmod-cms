@@ -30,6 +30,7 @@ import TooltipWrapper from '../ui/tooltip-wrapper';
 import InfoCircle from '../icon/info-circle';
 import CorrectStatusDialog from './correct-status-dialog';
 import { TransactionStatus } from '@/constants/enums';
+import Link from 'next/link';
 
 export default function DataTable({
   transaction,
@@ -172,11 +173,8 @@ export default function DataTable({
                 Correct Status
               </button>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button>See Detail</button>
+            <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
+              <Link href={`/transaction/${row.original.id}/details`}>See Details</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

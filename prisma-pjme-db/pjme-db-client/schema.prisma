@@ -372,8 +372,8 @@ model Transaction {
   customer_email        String  @db.VarChar(254)
   customer_phone_number String? @db.VarChar(20)
 
-  details TransactionDetail[]
-  invoice Invoice?
+  details  TransactionDetail[]
+  invoices Invoice?
 
   @@map("transactions")
 }

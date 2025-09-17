@@ -30781,7 +30781,7 @@ export namespace Prisma {
     customer_email?: boolean
     customer_phone_number?: boolean
     details?: boolean | Transaction$detailsArgs<ExtArgs>
-    invoice?: boolean | Transaction$invoiceArgs<ExtArgs>
+    invoices?: boolean | Transaction$invoicesArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
@@ -30830,7 +30830,7 @@ export namespace Prisma {
   export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "customer_id" | "status" | "created_at" | "updated_at" | "currency_code" | "total_amount" | "customer_name" | "customer_email" | "customer_phone_number", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     details?: boolean | Transaction$detailsArgs<ExtArgs>
-    invoice?: boolean | Transaction$invoiceArgs<ExtArgs>
+    invoices?: boolean | Transaction$invoicesArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -30840,7 +30840,7 @@ export namespace Prisma {
     name: "Transaction"
     objects: {
       details: Prisma.$TransactionDetailPayload<ExtArgs>[]
-      invoice: Prisma.$InvoicePayload<ExtArgs> | null
+      invoices: Prisma.$InvoicePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -31249,7 +31249,7 @@ export namespace Prisma {
   export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     details<T extends Transaction$detailsArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$detailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    invoice<T extends Transaction$invoiceArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$invoiceArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    invoices<T extends Transaction$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$invoicesArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -31702,9 +31702,9 @@ export namespace Prisma {
   }
 
   /**
-   * Transaction.invoice
+   * Transaction.invoices
    */
-  export type Transaction$invoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Transaction$invoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Invoice
      */
@@ -39366,7 +39366,7 @@ export namespace Prisma {
     customer_email?: StringFilter<"Transaction"> | string
     customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
     details?: TransactionDetailListRelationFilter
-    invoice?: XOR<InvoiceNullableScalarRelationFilter, InvoiceWhereInput> | null
+    invoices?: XOR<InvoiceNullableScalarRelationFilter, InvoiceWhereInput> | null
   }
 
   export type TransactionOrderByWithRelationInput = {
@@ -39382,7 +39382,7 @@ export namespace Prisma {
     customer_email?: SortOrder
     customer_phone_number?: SortOrderInput | SortOrder
     details?: TransactionDetailOrderByRelationAggregateInput
-    invoice?: InvoiceOrderByWithRelationInput
+    invoices?: InvoiceOrderByWithRelationInput
   }
 
   export type TransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -39401,7 +39401,7 @@ export namespace Prisma {
     customer_email?: StringFilter<"Transaction"> | string
     customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
     details?: TransactionDetailListRelationFilter
-    invoice?: XOR<InvoiceNullableScalarRelationFilter, InvoiceWhereInput> | null
+    invoices?: XOR<InvoiceNullableScalarRelationFilter, InvoiceWhereInput> | null
   }, "id" | "code">
 
   export type TransactionOrderByWithAggregationInput = {
@@ -41160,7 +41160,7 @@ export namespace Prisma {
     customer_email: string
     customer_phone_number?: string | null
     details?: TransactionDetailCreateNestedManyWithoutTransactionInput
-    invoice?: InvoiceCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateInput = {
@@ -41176,7 +41176,7 @@ export namespace Prisma {
     customer_email: string
     customer_phone_number?: string | null
     details?: TransactionDetailUncheckedCreateNestedManyWithoutTransactionInput
-    invoice?: InvoiceUncheckedCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUpdateInput = {
@@ -41192,7 +41192,7 @@ export namespace Prisma {
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     details?: TransactionDetailUpdateManyWithoutTransactionNestedInput
-    invoice?: InvoiceUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateInput = {
@@ -41208,7 +41208,7 @@ export namespace Prisma {
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     details?: TransactionDetailUncheckedUpdateManyWithoutTransactionNestedInput
-    invoice?: InvoiceUncheckedUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionCreateManyInput = {
@@ -41259,7 +41259,7 @@ export namespace Prisma {
     status: $Enums.InvoiceStatus
     issued_at: bigint | number
     voided_at?: bigint | number | null
-    transaction: TransactionCreateNestedOneWithoutInvoiceInput
+    transaction: TransactionCreateNestedOneWithoutInvoicesInput
   }
 
   export type InvoiceUncheckedCreateInput = {
@@ -41277,7 +41277,7 @@ export namespace Prisma {
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
     voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    transaction?: TransactionUpdateOneRequiredWithoutInvoiceNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutInvoicesNestedInput
   }
 
   export type InvoiceUncheckedUpdateInput = {
@@ -44448,9 +44448,9 @@ export namespace Prisma {
     update?: XOR<XOR<InvoiceUpdateToOneWithWhereWithoutTransactionInput, InvoiceUpdateWithoutTransactionInput>, InvoiceUncheckedUpdateWithoutTransactionInput>
   }
 
-  export type TransactionCreateNestedOneWithoutInvoiceInput = {
-    create?: XOR<TransactionCreateWithoutInvoiceInput, TransactionUncheckedCreateWithoutInvoiceInput>
-    connectOrCreate?: TransactionCreateOrConnectWithoutInvoiceInput
+  export type TransactionCreateNestedOneWithoutInvoicesInput = {
+    create?: XOR<TransactionCreateWithoutInvoicesInput, TransactionUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutInvoicesInput
     connect?: TransactionWhereUniqueInput
   }
 
@@ -44458,12 +44458,12 @@ export namespace Prisma {
     set?: $Enums.InvoiceStatus
   }
 
-  export type TransactionUpdateOneRequiredWithoutInvoiceNestedInput = {
-    create?: XOR<TransactionCreateWithoutInvoiceInput, TransactionUncheckedCreateWithoutInvoiceInput>
-    connectOrCreate?: TransactionCreateOrConnectWithoutInvoiceInput
-    upsert?: TransactionUpsertWithoutInvoiceInput
+  export type TransactionUpdateOneRequiredWithoutInvoicesNestedInput = {
+    create?: XOR<TransactionCreateWithoutInvoicesInput, TransactionUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutInvoicesInput
+    upsert?: TransactionUpsertWithoutInvoicesInput
     connect?: TransactionWhereUniqueInput
-    update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutInvoiceInput, TransactionUpdateWithoutInvoiceInput>, TransactionUncheckedUpdateWithoutInvoiceInput>
+    update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutInvoicesInput, TransactionUpdateWithoutInvoicesInput>, TransactionUncheckedUpdateWithoutInvoicesInput>
   }
 
   export type TransactionCreateNestedOneWithoutDetailsInput = {
@@ -47203,7 +47203,7 @@ export namespace Prisma {
     voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
-  export type TransactionCreateWithoutInvoiceInput = {
+  export type TransactionCreateWithoutInvoicesInput = {
     id?: string
     code: string
     customer_id?: string | null
@@ -47218,7 +47218,7 @@ export namespace Prisma {
     details?: TransactionDetailCreateNestedManyWithoutTransactionInput
   }
 
-  export type TransactionUncheckedCreateWithoutInvoiceInput = {
+  export type TransactionUncheckedCreateWithoutInvoicesInput = {
     id?: string
     code: string
     customer_id?: string | null
@@ -47233,23 +47233,23 @@ export namespace Prisma {
     details?: TransactionDetailUncheckedCreateNestedManyWithoutTransactionInput
   }
 
-  export type TransactionCreateOrConnectWithoutInvoiceInput = {
+  export type TransactionCreateOrConnectWithoutInvoicesInput = {
     where: TransactionWhereUniqueInput
-    create: XOR<TransactionCreateWithoutInvoiceInput, TransactionUncheckedCreateWithoutInvoiceInput>
+    create: XOR<TransactionCreateWithoutInvoicesInput, TransactionUncheckedCreateWithoutInvoicesInput>
   }
 
-  export type TransactionUpsertWithoutInvoiceInput = {
-    update: XOR<TransactionUpdateWithoutInvoiceInput, TransactionUncheckedUpdateWithoutInvoiceInput>
-    create: XOR<TransactionCreateWithoutInvoiceInput, TransactionUncheckedCreateWithoutInvoiceInput>
+  export type TransactionUpsertWithoutInvoicesInput = {
+    update: XOR<TransactionUpdateWithoutInvoicesInput, TransactionUncheckedUpdateWithoutInvoicesInput>
+    create: XOR<TransactionCreateWithoutInvoicesInput, TransactionUncheckedCreateWithoutInvoicesInput>
     where?: TransactionWhereInput
   }
 
-  export type TransactionUpdateToOneWithWhereWithoutInvoiceInput = {
+  export type TransactionUpdateToOneWithWhereWithoutInvoicesInput = {
     where?: TransactionWhereInput
-    data: XOR<TransactionUpdateWithoutInvoiceInput, TransactionUncheckedUpdateWithoutInvoiceInput>
+    data: XOR<TransactionUpdateWithoutInvoicesInput, TransactionUncheckedUpdateWithoutInvoicesInput>
   }
 
-  export type TransactionUpdateWithoutInvoiceInput = {
+  export type TransactionUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     customer_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47264,7 +47264,7 @@ export namespace Prisma {
     details?: TransactionDetailUpdateManyWithoutTransactionNestedInput
   }
 
-  export type TransactionUncheckedUpdateWithoutInvoiceInput = {
+  export type TransactionUncheckedUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     customer_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47291,7 +47291,7 @@ export namespace Prisma {
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
-    invoice?: InvoiceCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutDetailsInput = {
@@ -47306,7 +47306,7 @@ export namespace Prisma {
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
-    invoice?: InvoiceUncheckedCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutDetailsInput = {
@@ -47337,7 +47337,7 @@ export namespace Prisma {
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    invoice?: InvoiceUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutDetailsInput = {
@@ -47352,7 +47352,7 @@ export namespace Prisma {
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    invoice?: InvoiceUncheckedUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type TestimonialTranslationCreateWithoutTestimonialInput = {

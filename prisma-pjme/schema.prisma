@@ -373,7 +373,7 @@ model Transaction {
   customer_phone_number String? @db.VarChar(20)
 
   details       TransactionDetail[]
-  invoice       Invoice?
+  invoices      Invoice?
 
   @@map("transactions")
 }
