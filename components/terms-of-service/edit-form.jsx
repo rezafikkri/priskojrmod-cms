@@ -13,7 +13,7 @@ import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import FormLanguageToggle from '../ui/form-language-toggle';
 import ContentInput from '../ui/content-input';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 import { addTermsOfService, editTermsOfService } from '@/actions/terms-of-service-actions';
 import { termsOfServiceSchema } from '@/lib/validators/terms-of-service-validator';
 
@@ -119,8 +119,8 @@ export default function EditForm({ termsOfService }) {
 
           {hasTermsOfService && (
             <p className="text-sm text-zinc-600 [&_span]:block space-y-2.5">
-              <span>Created on: {formatDateTimeWIB(createdAt)}</span>
-              <span>Last updated: {formatDateTimeWIB(updatedAt)}</span>
+              <span>Created on: {formatDateTime(createdAt)}</span>
+              <span>Last updated: {formatDateTime(updatedAt)}</span>
             </p>
           )}
 

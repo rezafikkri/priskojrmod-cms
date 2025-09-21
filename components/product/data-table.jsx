@@ -26,7 +26,7 @@ import { Button } from '../ui/button';
 import { MoreHorizontal, Check, Minus } from 'lucide-react';
 import Dot from '../icon/Dot';
 import Link from 'next/link';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 import { formatCurrency, getTableHeaderWidth } from '@/lib/utils';
 import { CurrencyCode, PriceType } from '@/constants/enums';
 import { Badge } from '../ui/badge';
@@ -128,17 +128,17 @@ export default function DataTable({
     {
       accessorKey: 'released_at',
       header: 'Released At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('released_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('released_at')),
     },
     {
       accessorKey: 'created_at',
       header: 'Created At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
     },
     {
       accessorKey: 'updated_at',
       header: 'Updated At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('updated_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
     },
     {
       id: 'actions',

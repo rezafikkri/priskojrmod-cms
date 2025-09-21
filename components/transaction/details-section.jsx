@@ -11,7 +11,7 @@ import { Minus } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Fragment } from 'react';
 import { formatCurrency } from '@/lib/utils';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 
 export default function DetailsSection({ details }) {
   return details.map((detail, index) => (
@@ -100,7 +100,7 @@ export default function DetailsSection({ details }) {
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Shared At</TableHead>
               <TableCell>
                 {detail.shared_at
-                  ? formatDateTimeWIB(detail.shared_at)
+                  ? formatDateTime(detail.shared_at)
                   : <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>

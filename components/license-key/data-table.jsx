@@ -26,7 +26,7 @@ import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import DeleteDialog from './delete-dialog';
 import Link from 'next/link';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
 import SelectionAlert from '../ui/selection-alert';
@@ -107,25 +107,25 @@ export default function DataTable({
     {
       accessorKey: 'expired_at',
       header: () => 'Expired At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('expired_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('expired_at')),
     },
     {
       accessorKey: 'regenerated_at',
       header: () => 'Regenerated At',
       cell: ({ row }) => 
         row.getValue('regenerated_at')
-          ? formatDateTimeWIB(row.getValue('regenerated_at'))
+          ? formatDateTime(row.getValue('regenerated_at'))
           : <Minus className="size-4 text-zinc-300" />,
     },
     {
       accessorKey: 'created_at',
       header: () => 'Created At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
     },
     {
       accessorKey: 'updated_at',
       header: () => 'Updated At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('updated_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
     },
     {
       id: 'actions',

@@ -28,7 +28,7 @@ import { toast } from 'sonner';
 import { removeFaq } from '@/actions/faq-actions';
 import Link from 'next/link';
 import { Language } from '@/constants/enums';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 
 export default function DataTable({ faqs: data }) {
@@ -88,12 +88,12 @@ export default function DataTable({ faqs: data }) {
     {
       accessorKey: 'created_at',
       header: 'Created At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
     },
     {
       accessorKey: 'updated_at',
       header: 'Updated At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('updated_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
     },
     {
       id: 'actions',

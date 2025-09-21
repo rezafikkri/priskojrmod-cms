@@ -10,7 +10,7 @@ import {
 import { Minus } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Fragment } from 'react';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 import {
   Alert,
   AlertTitle,
@@ -50,13 +50,13 @@ export default function InvoicesSection({ invoices }) {
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Issued At</TableHead>
-              <TableCell>{formatDateTimeWIB(invoice.issued_at)}</TableCell>
+              <TableCell>{formatDateTime(invoice.issued_at)}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Voided At</TableHead>
               <TableCell>
                 {invoice.voided_at
-                  ? formatDateTimeWIB(invoice.voided_at)
+                  ? formatDateTime(invoice.voided_at)
                   : <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>

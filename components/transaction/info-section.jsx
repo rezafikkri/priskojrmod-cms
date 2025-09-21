@@ -1,6 +1,6 @@
 'use client';
 
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 import { formatCurrency, getStatusClasses } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { Banknote, Minus } from 'lucide-react';
@@ -37,10 +37,10 @@ export default function InfoSection({ info }) {
       <div className="flex gap-10">
         <dl>
           <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Created At</dt>
-          <dd className="mb-6">{formatDateTimeWIB(info.created_at)}</dd>
+          <dd className="mb-6">{formatDateTime(info.created_at)}</dd>
 
           <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Updated At</dt>
-          <dd>{formatDateTimeWIB(info.updated_at)}</dd>
+          <dd>{formatDateTime(info.updated_at)}</dd>
         </dl>
 
         <Separator orientation="vertical" className="!h-25 mt-3" />

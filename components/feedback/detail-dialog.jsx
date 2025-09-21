@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 
 export default function DetailDialog({
   isOpen,
@@ -44,7 +44,7 @@ export default function DetailDialog({
           </p>
 
           <time className="text-[13px] text-zinc-500 leading-3">
-            Created {formatDateTimeWIB(detailData?.created_at)}
+            Created {formatDateTime(detailData?.created_at)}
           </time>
         </DialogHeader>
       </DialogContent>
