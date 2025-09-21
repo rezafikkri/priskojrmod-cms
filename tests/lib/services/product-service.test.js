@@ -398,7 +398,10 @@ describe('deleteProductCoupon function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteProductCoupon(1, '2e497c7c-3aa2-450a-ac53-e129f5c3cc94'))
+    await expect(deleteProductCoupon(
+      '2e497c7c-3aa2-450a-ac53-e129f5c3cc99',
+      '2e497c7c-3aa2-450a-ac53-e129f5c3cc94',
+    ))
       .rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
@@ -417,13 +420,13 @@ describe('deleteProductCoupon function', () => {
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id-123' });
 
-    await deleteProductCoupon(1, '2e497c7c-3aa2-450a-ac53-e129f5c3cc94');
+    await deleteProductCoupon('2e497c7c-3aa2-450a-ac53-e129f5c3cc99', '2e497c7c-3aa2-450a-ac53-e129f5c3cc94');
 
     expect(pjmeDBPrismaClient.$transaction).toHaveBeenCalled();
     expect(pjmeDBPrismaClient.$transaction.mock.calls[0][0]).toHaveLength(2);
 
     expect(pjmeDBPrismaClient.ProductCoupon.delete).toHaveBeenCalledWith({
-      where: { id: 1 },
+      where: { id: '2e497c7c-3aa2-450a-ac53-e129f5c3cc99' },
       select: { id: true },
     });
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({

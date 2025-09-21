@@ -203,7 +203,7 @@ model ProductDiscount {
 }
 
 model ProductCoupon {
-  id         Int    @id @default(autoincrement()) @db.SmallInt
+  id         String @id @default(uuid(7)) @db.Uuid
   product_id String @unique @db.Uuid
   code       String @db.VarChar(150)
   discount   Int    @db.SmallInt
@@ -403,7 +403,7 @@ model TransactionDetail {
   transaction_id    String  @db.Uuid
   product_id        String? @db.Uuid
   product_price_id  String? @db.Uuid
-  product_coupon_id Int?    @db.SmallInt
+  product_coupon_id String? @db.Uuid
   quantity          Int     @db.SmallInt
 
   product_name                 String       @db.VarChar(150)

@@ -17508,19 +17508,17 @@ export namespace Prisma {
   }
 
   export type ProductCouponAvgAggregateOutputType = {
-    id: number | null
     discount: number | null
     expired_at: number | null
   }
 
   export type ProductCouponSumAggregateOutputType = {
-    id: number | null
     discount: number | null
     expired_at: bigint | null
   }
 
   export type ProductCouponMinAggregateOutputType = {
-    id: number | null
+    id: string | null
     product_id: string | null
     code: string | null
     discount: number | null
@@ -17528,7 +17526,7 @@ export namespace Prisma {
   }
 
   export type ProductCouponMaxAggregateOutputType = {
-    id: number | null
+    id: string | null
     product_id: string | null
     code: string | null
     discount: number | null
@@ -17546,13 +17544,11 @@ export namespace Prisma {
 
 
   export type ProductCouponAvgAggregateInputType = {
-    id?: true
     discount?: true
     expired_at?: true
   }
 
   export type ProductCouponSumAggregateInputType = {
-    id?: true
     discount?: true
     expired_at?: true
   }
@@ -17669,7 +17665,7 @@ export namespace Prisma {
   }
 
   export type ProductCouponGroupByOutputType = {
-    id: number
+    id: string
     product_id: string
     code: string
     discount: number
@@ -17747,7 +17743,7 @@ export namespace Prisma {
       product: Prisma.$ProductPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: number
+      id: string
       product_id: string
       code: string
       discount: number
@@ -18176,7 +18172,7 @@ export namespace Prisma {
    * Fields of the ProductCoupon model
    */
   interface ProductCouponFieldRefs {
-    readonly id: FieldRef<"ProductCoupon", 'Int'>
+    readonly id: FieldRef<"ProductCoupon", 'String'>
     readonly product_id: FieldRef<"ProductCoupon", 'String'>
     readonly code: FieldRef<"ProductCoupon", 'String'>
     readonly discount: FieldRef<"ProductCoupon", 'Int'>
@@ -32861,7 +32857,6 @@ export namespace Prisma {
   }
 
   export type TransactionDetailAvgAggregateOutputType = {
-    product_coupon_id: number | null
     quantity: number | null
     product_price: Decimal | null
     product_discount: number | null
@@ -32870,7 +32865,6 @@ export namespace Prisma {
   }
 
   export type TransactionDetailSumAggregateOutputType = {
-    product_coupon_id: number | null
     quantity: number | null
     product_price: Decimal | null
     product_discount: number | null
@@ -32883,7 +32877,7 @@ export namespace Prisma {
     transaction_id: string | null
     product_id: string | null
     product_price_id: string | null
-    product_coupon_id: number | null
+    product_coupon_id: string | null
     quantity: number | null
     product_name: string | null
     product_version: string | null
@@ -32906,7 +32900,7 @@ export namespace Prisma {
     transaction_id: string | null
     product_id: string | null
     product_price_id: string | null
-    product_coupon_id: number | null
+    product_coupon_id: string | null
     quantity: number | null
     product_name: string | null
     product_version: string | null
@@ -32950,7 +32944,6 @@ export namespace Prisma {
 
 
   export type TransactionDetailAvgAggregateInputType = {
-    product_coupon_id?: true
     quantity?: true
     product_price?: true
     product_discount?: true
@@ -32959,7 +32952,6 @@ export namespace Prisma {
   }
 
   export type TransactionDetailSumAggregateInputType = {
-    product_coupon_id?: true
     quantity?: true
     product_price?: true
     product_discount?: true
@@ -33128,7 +33120,7 @@ export namespace Prisma {
     transaction_id: string
     product_id: string | null
     product_price_id: string | null
-    product_coupon_id: number | null
+    product_coupon_id: string | null
     quantity: number
     product_name: string
     product_version: string
@@ -33281,7 +33273,7 @@ export namespace Prisma {
       transaction_id: string
       product_id: string | null
       product_price_id: string | null
-      product_coupon_id: number | null
+      product_coupon_id: string | null
       quantity: number
       product_name: string
       product_version: string
@@ -33725,7 +33717,7 @@ export namespace Prisma {
     readonly transaction_id: FieldRef<"TransactionDetail", 'String'>
     readonly product_id: FieldRef<"TransactionDetail", 'String'>
     readonly product_price_id: FieldRef<"TransactionDetail", 'String'>
-    readonly product_coupon_id: FieldRef<"TransactionDetail", 'Int'>
+    readonly product_coupon_id: FieldRef<"TransactionDetail", 'String'>
     readonly quantity: FieldRef<"TransactionDetail", 'Int'>
     readonly product_name: FieldRef<"TransactionDetail", 'String'>
     readonly product_version: FieldRef<"TransactionDetail", 'String'>
@@ -38734,7 +38726,7 @@ export namespace Prisma {
     AND?: ProductCouponWhereInput | ProductCouponWhereInput[]
     OR?: ProductCouponWhereInput[]
     NOT?: ProductCouponWhereInput | ProductCouponWhereInput[]
-    id?: IntFilter<"ProductCoupon"> | number
+    id?: UuidFilter<"ProductCoupon"> | string
     product_id?: UuidFilter<"ProductCoupon"> | string
     code?: StringFilter<"ProductCoupon"> | string
     discount?: IntFilter<"ProductCoupon"> | number
@@ -38752,7 +38744,7 @@ export namespace Prisma {
   }
 
   export type ProductCouponWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
+    id?: string
     product_id?: string
     AND?: ProductCouponWhereInput | ProductCouponWhereInput[]
     OR?: ProductCouponWhereInput[]
@@ -38780,7 +38772,7 @@ export namespace Prisma {
     AND?: ProductCouponScalarWhereWithAggregatesInput | ProductCouponScalarWhereWithAggregatesInput[]
     OR?: ProductCouponScalarWhereWithAggregatesInput[]
     NOT?: ProductCouponScalarWhereWithAggregatesInput | ProductCouponScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"ProductCoupon"> | number
+    id?: UuidWithAggregatesFilter<"ProductCoupon"> | string
     product_id?: UuidWithAggregatesFilter<"ProductCoupon"> | string
     code?: StringWithAggregatesFilter<"ProductCoupon"> | string
     discount?: IntWithAggregatesFilter<"ProductCoupon"> | number
@@ -39510,7 +39502,7 @@ export namespace Prisma {
     transaction_id?: UuidFilter<"TransactionDetail"> | string
     product_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
-    product_coupon_id?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     quantity?: IntFilter<"TransactionDetail"> | number
     product_name?: StringFilter<"TransactionDetail"> | string
     product_version?: StringFilter<"TransactionDetail"> | string
@@ -39561,7 +39553,7 @@ export namespace Prisma {
     transaction_id?: UuidFilter<"TransactionDetail"> | string
     product_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
-    product_coupon_id?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     quantity?: IntFilter<"TransactionDetail"> | number
     product_name?: StringFilter<"TransactionDetail"> | string
     product_version?: StringFilter<"TransactionDetail"> | string
@@ -39616,7 +39608,7 @@ export namespace Prisma {
     transaction_id?: UuidWithAggregatesFilter<"TransactionDetail"> | string
     product_id?: UuidNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     product_price_id?: UuidNullableWithAggregatesFilter<"TransactionDetail"> | string | null
-    product_coupon_id?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
+    product_coupon_id?: UuidNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     quantity?: IntWithAggregatesFilter<"TransactionDetail"> | number
     product_name?: StringWithAggregatesFilter<"TransactionDetail"> | string
     product_version?: StringWithAggregatesFilter<"TransactionDetail"> | string
@@ -40581,6 +40573,7 @@ export namespace Prisma {
   }
 
   export type ProductCouponCreateInput = {
+    id?: string
     code: string
     discount: number
     expired_at: bigint | number
@@ -40588,7 +40581,7 @@ export namespace Prisma {
   }
 
   export type ProductCouponUncheckedCreateInput = {
-    id?: number
+    id?: string
     product_id: string
     code: string
     discount: number
@@ -40596,6 +40589,7 @@ export namespace Prisma {
   }
 
   export type ProductCouponUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -40603,7 +40597,7 @@ export namespace Prisma {
   }
 
   export type ProductCouponUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
@@ -40611,7 +40605,7 @@ export namespace Prisma {
   }
 
   export type ProductCouponCreateManyInput = {
-    id?: number
+    id?: string
     product_id: string
     code: string
     discount: number
@@ -40619,13 +40613,14 @@ export namespace Prisma {
   }
 
   export type ProductCouponUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductCouponUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
@@ -41319,7 +41314,7 @@ export namespace Prisma {
     id?: string
     product_id?: string | null
     product_price_id?: string | null
-    product_coupon_id?: number | null
+    product_coupon_id?: string | null
     quantity: number
     product_name: string
     product_version: string
@@ -41343,7 +41338,7 @@ export namespace Prisma {
     transaction_id: string
     product_id?: string | null
     product_price_id?: string | null
-    product_coupon_id?: number | null
+    product_coupon_id?: string | null
     quantity: number
     product_name: string
     product_version: string
@@ -41365,7 +41360,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
@@ -41389,7 +41384,7 @@ export namespace Prisma {
     transaction_id?: StringFieldUpdateOperationsInput | string
     product_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
@@ -41412,7 +41407,7 @@ export namespace Prisma {
     transaction_id: string
     product_id?: string | null
     product_price_id?: string | null
-    product_coupon_id?: number | null
+    product_coupon_id?: string | null
     quantity: number
     product_name: string
     product_version: string
@@ -41434,7 +41429,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
@@ -41457,7 +41452,7 @@ export namespace Prisma {
     transaction_id?: StringFieldUpdateOperationsInput | string
     product_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
@@ -42447,7 +42442,6 @@ export namespace Prisma {
   }
 
   export type ProductCouponAvgOrderByAggregateInput = {
-    id?: SortOrder
     discount?: SortOrder
     expired_at?: SortOrder
   }
@@ -42469,7 +42463,6 @@ export namespace Prisma {
   }
 
   export type ProductCouponSumOrderByAggregateInput = {
-    id?: SortOrder
     discount?: SortOrder
     expired_at?: SortOrder
   }
@@ -43117,7 +43110,6 @@ export namespace Prisma {
   }
 
   export type TransactionDetailAvgOrderByAggregateInput = {
-    product_coupon_id?: SortOrder
     quantity?: SortOrder
     product_price?: SortOrder
     product_discount?: SortOrder
@@ -43172,7 +43164,6 @@ export namespace Prisma {
   }
 
   export type TransactionDetailSumOrderByAggregateInput = {
-    product_coupon_id?: SortOrder
     quantity?: SortOrder
     product_price?: SortOrder
     product_discount?: SortOrder
@@ -45577,13 +45568,14 @@ export namespace Prisma {
   }
 
   export type ProductCouponCreateWithoutProductInput = {
+    id?: string
     code: string
     discount: number
     expired_at: bigint | number
   }
 
   export type ProductCouponUncheckedCreateWithoutProductInput = {
-    id?: number
+    id?: string
     code: string
     discount: number
     expired_at: bigint | number
@@ -45843,13 +45835,14 @@ export namespace Prisma {
   }
 
   export type ProductCouponUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
   export type ProductCouponUncheckedUpdateWithoutProductInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
     expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -47063,7 +47056,7 @@ export namespace Prisma {
     id?: string
     product_id?: string | null
     product_price_id?: string | null
-    product_coupon_id?: number | null
+    product_coupon_id?: string | null
     quantity: number
     product_name: string
     product_version: string
@@ -47085,7 +47078,7 @@ export namespace Prisma {
     id?: string
     product_id?: string | null
     product_price_id?: string | null
-    product_coupon_id?: number | null
+    product_coupon_id?: string | null
     quantity: number
     product_name: string
     product_version: string
@@ -47158,7 +47151,7 @@ export namespace Prisma {
     transaction_id?: UuidFilter<"TransactionDetail"> | string
     product_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
-    product_coupon_id?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     quantity?: IntFilter<"TransactionDetail"> | number
     product_name?: StringFilter<"TransactionDetail"> | string
     product_version?: StringFilter<"TransactionDetail"> | string
@@ -48066,7 +48059,7 @@ export namespace Prisma {
     id?: string
     product_id?: string | null
     product_price_id?: string | null
-    product_coupon_id?: number | null
+    product_coupon_id?: string | null
     quantity: number
     product_name: string
     product_version: string
@@ -48088,7 +48081,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
@@ -48110,7 +48103,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
@@ -48132,7 +48125,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_coupon_id?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
