@@ -25,12 +25,11 @@ import {
 import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { formatDateTimeWIB } from '@/lib/format-date';
-import { formatCurrency, getTableHeaderWidth } from '@/lib/utils';
+import { formatCurrency, getStatusClasses, getTableHeaderWidth } from '@/lib/utils';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import InfoCircle from '../icon/info-circle';
 import CorrectStatusDialog from './correct-status-dialog';
-import { TransactionStatus } from '@/constants/enums';
-import Link from 'next/link';
+import DetailsSheet from './details-sheet';
 
 export default function DataTable({
   transaction,
@@ -55,18 +54,7 @@ export default function DataTable({
   });
   const [isOpenCorrectStatusDialog, setIsOpenCorrectStatusDialog] = useState(false);
 
-  function getStatusClasses(status) {
-    switch (status) {
-      case TransactionStatus.PAID:
-        return 'bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300';
-      case TransactionStatus.REFUND:
-        return 'bg-amber-50 dark:bg-amber-900 text-amber-700 dark:text-amber-300';
-      case TransactionStatus.CANCELLED:
-        return 'bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-300';
-      default:
-        return 'bg-gray-100/50 dark:bg-gray-800 text-gray-700 dark:text-gray-300';
-    }
-  }
+  const [seeDetailsId, setSeeDetailsId] = useState(null);
 
   // table definition
   const columns = useMemo(() => [
@@ -112,7 +100,7 @@ export default function DataTable({
       ),
       cell: ({ row }) => (
         <div className="text-right">
-          { formatCurrency(row.getValue('total_amount'), row.original.currency_code) }
+          {formatCurrency(row.getValue('total_amount'), row.original.currency_code)}
         </div>
       ),
     },
@@ -173,8 +161,12 @@ export default function DataTable({
                 Correct Status
               </button>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
-              <Link href={`/transaction/${row.original.id}/details`}>See Details</Link>
+            <DropdownMenuItem
+              className="w-full text-base"
+              asChild
+              onClick={() => setSeeDetailsId(row.original.id)}
+            >
+              <button>See Details</button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -281,6 +273,8 @@ export default function DataTable({
         onCorrectDataChange={setCorrectData}
         correctData={correctData}
       />
+
+      <DetailsSheet detailsId={seeDetailsId} onDetailsIdChange={setSeeDetailsId} />
     </>
   );
 }
