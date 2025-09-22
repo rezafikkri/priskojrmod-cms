@@ -123,26 +123,6 @@ function getTransactionDetails({
 export default async function seedDevData() {
   await seedCustomersAndLicenseKeys();
 
-  // seed admin
-  const admin = await pjmeDBPrismaClient.admin.findFirst({
-    where: { id: '117467377036271286193' },
-    select: { id: true },
-  });
-  if (!admin) {
-    await pjmeDBPrismaClient.admin.create({
-      data: {
-        id: '117467377036271286193',
-        email: 'fikkri.reza@gmail.com',
-        picture: 'https://res.cloudinary.com/priskojrmod/image/upload/q_auto/IIC_1795_owpaav.jpg',
-        first_name: 'Reza',
-        last_name: 'Sariful Fikri',
-        whatsapp_phone_number: '+6285758438583',
-      },
-      select: { id: true },
-    });
-    console.log(`✅ Seeded admin fikkri.reza@gmail.com`);
-  }
-
   // seed transaction
   const products = await pjmeDBPrismaClient.product.findMany({
     where: { price_type: 'paid' },
@@ -165,7 +145,7 @@ export default async function seedDevData() {
   const customers = await pjmeDBPrismaClient.customer.findMany();
 
   const transactions = [];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 0; i++) {
     let transactionDetails = [];
     if (i % 2 === 0) {
       transactionDetails = getTransactionDetails({ max: 3, products });

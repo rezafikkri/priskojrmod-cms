@@ -3,12 +3,14 @@ import seedDevData from './seed-dev-data.mjs';
 
 import { PrismaClient as PjmaDBPrismaClient } from '../prisma-pjma-db/pjma-db-client/index.js';
 import { PrismaClient as PjmeDBPrismaClient } from '../prisma-pjme-db/pjme-db-client/index.js';
+import { seedAdmin } from './seed-admin.mjs';
 
 const pjmaDBPrismaClient = new PjmaDBPrismaClient();
 const pjmeDBPrismaClient = new PjmeDBPrismaClient();
 
 async function main() {
   await seedCategory();
+  await seedAdmin();
 
   if (process.env.NODE_ENV === 'development') {
     await seedDevData();
