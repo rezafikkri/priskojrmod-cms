@@ -77,6 +77,8 @@ model Customer {
   created_at   BigInt
   updated_at   BigInt
 
+  transactions  Transaction[]
+
   @@map("customers")
 }
 
@@ -246,7 +248,8 @@ model ProductPrice {
   currency_code CurrencyCode
   price         Decimal      @db.Decimal(10, 2)
 
-  variant ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  variant            ProductVariant       @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  transcationDetails TransactionDetail[]
 
   @@map("product_prices")
 }
@@ -359,9 +362,13 @@ enum ShareMethod {
 }
 
 model Transaction {
-  id            String            @id @default(uuid(7)) @db.Uuid
-  code          String            @unique @db.VarChar(32)
-  customer_id   String?           @db.Uuid
+  id            String     @id @default(uuid(7)) @db.Uuid
+  code          String     @unique @db.VarChar(32)
+  customer_id   String?    @db.Uuid
+
+  admin_id      String  @db.VarChar(255) // only for reference
+  admin_email   String  @db.VarChar(254)
+
   status        TransactionStatus
   created_at    BigInt
   updated_at    BigInt
@@ -374,6 +381,7 @@ model Transaction {
 
   details       TransactionDetail[]
   invoices      Invoice?
+  customer      Customer?           @relation(fields: [customer_id], references: [id], onDelete: SetNull)
 
   @@map("transactions")
 }
@@ -401,7 +409,7 @@ model Invoice {
 model TransactionDetail {
   id                String  @id @default(uuid(7)) @db.Uuid
   transaction_id    String  @db.Uuid
-  product_id        String? @db.Uuid
+  product_id        String  @db.Uuid
   product_price_id  String? @db.Uuid
   product_coupon_id String? @db.Uuid
   quantity          Int     @db.SmallInt
@@ -424,7 +432,8 @@ model TransactionDetail {
   share_method ShareMethod?
   shared_at    BigInt?
 
-  transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+  transaction Transaction   @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+  price       ProductPrice?  @relation(fields: [product_price_id], references: [id], onDelete: SetNull)
 
   @@map("transaction_details")
 }

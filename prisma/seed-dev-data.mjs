@@ -4,6 +4,7 @@ import { PrismaClient as PjmaDBPrismaClient } from '../prisma-pjma-db/pjma-db-cl
 import { PrismaClient as PjmeDBPrismaClient } from '../prisma-pjme-db/pjme-db-client/index.js';
 import { v7 as uuidv7 } from 'uuid';
 import { generateDocumentCode } from '../lib/generate-document-code.mjs';
+import 'dotenv/config';
 
 const pjmaDBPrismaClient = new PjmaDBPrismaClient();
 const pjmeDBPrismaClient = new PjmeDBPrismaClient();
@@ -145,7 +146,7 @@ export default async function seedDevData() {
   const customers = await pjmeDBPrismaClient.customer.findMany();
 
   const transactions = [];
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 5; i++) {
     let transactionDetails = [];
     if (i % 2 === 0) {
       transactionDetails = getTransactionDetails({ max: 3, products });
@@ -158,6 +159,8 @@ export default async function seedDevData() {
     const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];
     const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
     transactions.push({
+      admin_id: process.env.ADMIN_ID,
+      admin_email: 'fikkri.reza@gmail.com',
       customer_id: selectedCustomer.id,
       status: 'pending',
       code: generateDocumentCode('TRX'),

@@ -3655,6 +3655,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type CustomerCountOutputType
+   */
+
+  export type CustomerCountOutputType = {
+    transactions: number
+  }
+
+  export type CustomerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transactions?: boolean | CustomerCountOutputTypeCountTransactionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CustomerCountOutputType without action
+   */
+  export type CustomerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CustomerCountOutputType
+     */
+    select?: CustomerCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CustomerCountOutputType without action
+   */
+  export type CustomerCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
+  }
+
+
+  /**
    * Count Type LicenseCountOutputType
    */
 
@@ -3842,6 +3873,37 @@ export namespace Prisma {
    */
   export type ProductVariantCountOutputTypeCountPricesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductPriceWhereInput
+  }
+
+
+  /**
+   * Count Type ProductPriceCountOutputType
+   */
+
+  export type ProductPriceCountOutputType = {
+    transcationDetails: number
+  }
+
+  export type ProductPriceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transcationDetails?: boolean | ProductPriceCountOutputTypeCountTranscationDetailsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductPriceCountOutputType without action
+   */
+  export type ProductPriceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductPriceCountOutputType
+     */
+    select?: ProductPriceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductPriceCountOutputType without action
+   */
+  export type ProductPriceCountOutputTypeCountTranscationDetailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionDetailWhereInput
   }
 
 
@@ -7617,6 +7679,8 @@ export namespace Prisma {
     last_active?: boolean
     created_at?: boolean
     updated_at?: boolean
+    transactions?: boolean | Customer$transactionsArgs<ExtArgs>
+    _count?: boolean | CustomerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["customer"]>
 
   export type CustomerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7662,10 +7726,18 @@ export namespace Prisma {
   }
 
   export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "oauth_id" | "is_banned" | "first_name" | "last_name" | "email" | "phone_number" | "picture" | "last_active" | "created_at" | "updated_at", ExtArgs["result"]["customer"]>
+  export type CustomerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transactions?: boolean | Customer$transactionsArgs<ExtArgs>
+    _count?: boolean | CustomerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CustomerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type CustomerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $CustomerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Customer"
-    objects: {}
+    objects: {
+      transactions: Prisma.$TransactionPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       oauth_id: string | null
@@ -8072,6 +8144,7 @@ export namespace Prisma {
    */
   export interface Prisma__CustomerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    transactions<T extends Customer$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Customer$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8129,6 +8202,10 @@ export namespace Prisma {
      */
     omit?: CustomerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
+    /**
      * Filter, which Customer to fetch.
      */
     where: CustomerWhereUniqueInput
@@ -8147,6 +8224,10 @@ export namespace Prisma {
      */
     omit?: CustomerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
+    /**
      * Filter, which Customer to fetch.
      */
     where: CustomerWhereUniqueInput
@@ -8164,6 +8245,10 @@ export namespace Prisma {
      * Omit specific fields from the Customer
      */
     omit?: CustomerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
     /**
      * Filter, which Customer to fetch.
      */
@@ -8213,6 +8298,10 @@ export namespace Prisma {
      */
     omit?: CustomerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
+    /**
      * Filter, which Customer to fetch.
      */
     where?: CustomerWhereInput
@@ -8261,6 +8350,10 @@ export namespace Prisma {
      */
     omit?: CustomerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
+    /**
      * Filter, which Customers to fetch.
      */
     where?: CustomerWhereInput
@@ -8303,6 +8396,10 @@ export namespace Prisma {
      * Omit specific fields from the Customer
      */
     omit?: CustomerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
     /**
      * The data needed to create a Customer.
      */
@@ -8351,6 +8448,10 @@ export namespace Prisma {
      * Omit specific fields from the Customer
      */
     omit?: CustomerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
     /**
      * The data needed to update a Customer.
      */
@@ -8418,6 +8519,10 @@ export namespace Prisma {
      */
     omit?: CustomerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
+    /**
      * The filter to search for the Customer to update in case it exists.
      */
     where: CustomerWhereUniqueInput
@@ -8444,6 +8549,10 @@ export namespace Prisma {
      */
     omit?: CustomerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
+    /**
      * Filter which Customer to delete.
      */
     where: CustomerWhereUniqueInput
@@ -8464,6 +8573,30 @@ export namespace Prisma {
   }
 
   /**
+   * Customer.transactions
+   */
+  export type Customer$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    cursor?: TransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
    * Customer without action
    */
   export type CustomerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8475,6 +8608,10 @@ export namespace Prisma {
      * Omit specific fields from the Customer
      */
     omit?: CustomerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
   }
 
 
@@ -20979,6 +21116,8 @@ export namespace Prisma {
     currency_code?: boolean
     price?: boolean
     variant?: boolean | ProductVariantDefaultArgs<ExtArgs>
+    transcationDetails?: boolean | ProductPrice$transcationDetailsArgs<ExtArgs>
+    _count?: boolean | ProductPriceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productPrice"]>
 
   export type ProductPriceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -21007,6 +21146,8 @@ export namespace Prisma {
   export type ProductPriceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "variant_id" | "currency_code" | "price", ExtArgs["result"]["productPrice"]>
   export type ProductPriceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     variant?: boolean | ProductVariantDefaultArgs<ExtArgs>
+    transcationDetails?: boolean | ProductPrice$transcationDetailsArgs<ExtArgs>
+    _count?: boolean | ProductPriceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductPriceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     variant?: boolean | ProductVariantDefaultArgs<ExtArgs>
@@ -21019,6 +21160,7 @@ export namespace Prisma {
     name: "ProductPrice"
     objects: {
       variant: Prisma.$ProductVariantPayload<ExtArgs>
+      transcationDetails: Prisma.$TransactionDetailPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -21420,6 +21562,7 @@ export namespace Prisma {
   export interface Prisma__ProductPriceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     variant<T extends ProductVariantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductVariantDefaultArgs<ExtArgs>>): Prisma__ProductVariantClient<$Result.GetResult<Prisma.$ProductVariantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    transcationDetails<T extends ProductPrice$transcationDetailsArgs<ExtArgs> = {}>(args?: Subset<T, ProductPrice$transcationDetailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -21846,6 +21989,30 @@ export namespace Prisma {
      * Limit how many ProductPrices to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ProductPrice.transcationDetails
+   */
+  export type ProductPrice$transcationDetailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionDetail
+     */
+    select?: TransactionDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionDetail
+     */
+    omit?: TransactionDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionDetailInclude<ExtArgs> | null
+    where?: TransactionDetailWhereInput
+    orderBy?: TransactionDetailOrderByWithRelationInput | TransactionDetailOrderByWithRelationInput[]
+    cursor?: TransactionDetailWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionDetailScalarFieldEnum | TransactionDetailScalarFieldEnum[]
   }
 
   /**
@@ -30550,6 +30717,8 @@ export namespace Prisma {
     id: string | null
     code: string | null
     customer_id: string | null
+    admin_id: string | null
+    admin_email: string | null
     status: $Enums.TransactionStatus | null
     created_at: bigint | null
     updated_at: bigint | null
@@ -30564,6 +30733,8 @@ export namespace Prisma {
     id: string | null
     code: string | null
     customer_id: string | null
+    admin_id: string | null
+    admin_email: string | null
     status: $Enums.TransactionStatus | null
     created_at: bigint | null
     updated_at: bigint | null
@@ -30578,6 +30749,8 @@ export namespace Prisma {
     id: number
     code: number
     customer_id: number
+    admin_id: number
+    admin_email: number
     status: number
     created_at: number
     updated_at: number
@@ -30606,6 +30779,8 @@ export namespace Prisma {
     id?: true
     code?: true
     customer_id?: true
+    admin_id?: true
+    admin_email?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -30620,6 +30795,8 @@ export namespace Prisma {
     id?: true
     code?: true
     customer_id?: true
+    admin_id?: true
+    admin_email?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -30634,6 +30811,8 @@ export namespace Prisma {
     id?: true
     code?: true
     customer_id?: true
+    admin_id?: true
+    admin_email?: true
     status?: true
     created_at?: true
     updated_at?: true
@@ -30735,6 +30914,8 @@ export namespace Prisma {
     id: string
     code: string
     customer_id: string | null
+    admin_id: string
+    admin_email: string
     status: $Enums.TransactionStatus
     created_at: bigint
     updated_at: bigint
@@ -30768,6 +30949,8 @@ export namespace Prisma {
     id?: boolean
     code?: boolean
     customer_id?: boolean
+    admin_id?: boolean
+    admin_email?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -30778,6 +30961,7 @@ export namespace Prisma {
     customer_phone_number?: boolean
     details?: boolean | Transaction$detailsArgs<ExtArgs>
     invoices?: boolean | Transaction$invoicesArgs<ExtArgs>
+    customer?: boolean | Transaction$customerArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
@@ -30785,6 +30969,8 @@ export namespace Prisma {
     id?: boolean
     code?: boolean
     customer_id?: boolean
+    admin_id?: boolean
+    admin_email?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -30793,12 +30979,15 @@ export namespace Prisma {
     customer_name?: boolean
     customer_email?: boolean
     customer_phone_number?: boolean
+    customer?: boolean | Transaction$customerArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
   export type TransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     code?: boolean
     customer_id?: boolean
+    admin_id?: boolean
+    admin_email?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -30807,12 +30996,15 @@ export namespace Prisma {
     customer_name?: boolean
     customer_email?: boolean
     customer_phone_number?: boolean
+    customer?: boolean | Transaction$customerArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
   export type TransactionSelectScalar = {
     id?: boolean
     code?: boolean
     customer_id?: boolean
+    admin_id?: boolean
+    admin_email?: boolean
     status?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -30823,25 +31015,33 @@ export namespace Prisma {
     customer_phone_number?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "customer_id" | "status" | "created_at" | "updated_at" | "currency_code" | "total_amount" | "customer_name" | "customer_email" | "customer_phone_number", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "customer_id" | "admin_id" | "admin_email" | "status" | "created_at" | "updated_at" | "currency_code" | "total_amount" | "customer_name" | "customer_email" | "customer_phone_number", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     details?: boolean | Transaction$detailsArgs<ExtArgs>
     invoices?: boolean | Transaction$invoicesArgs<ExtArgs>
+    customer?: boolean | Transaction$customerArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    customer?: boolean | Transaction$customerArgs<ExtArgs>
+  }
+  export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    customer?: boolean | Transaction$customerArgs<ExtArgs>
+  }
 
   export type $TransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Transaction"
     objects: {
       details: Prisma.$TransactionDetailPayload<ExtArgs>[]
       invoices: Prisma.$InvoicePayload<ExtArgs> | null
+      customer: Prisma.$CustomerPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       code: string
       customer_id: string | null
+      admin_id: string
+      admin_email: string
       status: $Enums.TransactionStatus
       created_at: bigint
       updated_at: bigint
@@ -31246,6 +31446,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     details<T extends Transaction$detailsArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$detailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invoices<T extends Transaction$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$invoicesArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    customer<T extends Transaction$customerArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$customerArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -31278,6 +31479,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Transaction", 'String'>
     readonly code: FieldRef<"Transaction", 'String'>
     readonly customer_id: FieldRef<"Transaction", 'String'>
+    readonly admin_id: FieldRef<"Transaction", 'String'>
+    readonly admin_email: FieldRef<"Transaction", 'String'>
     readonly status: FieldRef<"Transaction", 'TransactionStatus'>
     readonly created_at: FieldRef<"Transaction", 'BigInt'>
     readonly updated_at: FieldRef<"Transaction", 'BigInt'>
@@ -31535,6 +31738,10 @@ export namespace Prisma {
      */
     data: TransactionCreateManyInput | TransactionCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -31605,6 +31812,10 @@ export namespace Prisma {
      * Limit how many Transactions to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -31714,6 +31925,25 @@ export namespace Prisma {
      */
     include?: InvoiceInclude<ExtArgs> | null
     where?: InvoiceWhereInput
+  }
+
+  /**
+   * Transaction.customer
+   */
+  export type Transaction$customerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Customer
+     */
+    select?: CustomerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Customer
+     */
+    omit?: CustomerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
+    where?: CustomerWhereInput
   }
 
   /**
@@ -33118,7 +33348,7 @@ export namespace Prisma {
   export type TransactionDetailGroupByOutputType = {
     id: string
     transaction_id: string
-    product_id: string | null
+    product_id: string
     product_price_id: string | null
     product_coupon_id: string | null
     quantity: number
@@ -33179,6 +33409,7 @@ export namespace Prisma {
     share_method?: boolean
     shared_at?: boolean
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    price?: boolean | TransactionDetail$priceArgs<ExtArgs>
   }, ExtArgs["result"]["transactionDetail"]>
 
   export type TransactionDetailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -33203,6 +33434,7 @@ export namespace Prisma {
     share_method?: boolean
     shared_at?: boolean
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    price?: boolean | TransactionDetail$priceArgs<ExtArgs>
   }, ExtArgs["result"]["transactionDetail"]>
 
   export type TransactionDetailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -33227,6 +33459,7 @@ export namespace Prisma {
     share_method?: boolean
     shared_at?: boolean
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    price?: boolean | TransactionDetail$priceArgs<ExtArgs>
   }, ExtArgs["result"]["transactionDetail"]>
 
   export type TransactionDetailSelectScalar = {
@@ -33255,23 +33488,27 @@ export namespace Prisma {
   export type TransactionDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "product_id" | "product_price_id" | "product_coupon_id" | "quantity" | "product_name" | "product_version" | "product_drive_file_id" | "product_download_link" | "product_variant" | "variant_download_link" | "variant_file_access_password" | "product_currency_code" | "product_price" | "product_discount" | "product_coupon_code" | "product_coupon_discount" | "share_method" | "shared_at", ExtArgs["result"]["transactionDetail"]>
   export type TransactionDetailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    price?: boolean | TransactionDetail$priceArgs<ExtArgs>
   }
   export type TransactionDetailIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    price?: boolean | TransactionDetail$priceArgs<ExtArgs>
   }
   export type TransactionDetailIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    price?: boolean | TransactionDetail$priceArgs<ExtArgs>
   }
 
   export type $TransactionDetailPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "TransactionDetail"
     objects: {
       transaction: Prisma.$TransactionPayload<ExtArgs>
+      price: Prisma.$ProductPricePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       transaction_id: string
-      product_id: string | null
+      product_id: string
       product_price_id: string | null
       product_coupon_id: string | null
       quantity: number
@@ -33684,6 +33921,7 @@ export namespace Prisma {
   export interface Prisma__TransactionDetailClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     transaction<T extends TransactionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TransactionDefaultArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    price<T extends TransactionDetail$priceArgs<ExtArgs> = {}>(args?: Subset<T, TransactionDetail$priceArgs<ExtArgs>>): Prisma__ProductPriceClient<$Result.GetResult<Prisma.$ProductPricePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -34126,6 +34364,25 @@ export namespace Prisma {
      * Limit how many TransactionDetails to delete.
      */
     limit?: number
+  }
+
+  /**
+   * TransactionDetail.price
+   */
+  export type TransactionDetail$priceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductPrice
+     */
+    select?: ProductPriceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductPrice
+     */
+    omit?: ProductPriceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductPriceInclude<ExtArgs> | null
+    where?: ProductPriceWhereInput
   }
 
   /**
@@ -37677,6 +37934,8 @@ export namespace Prisma {
     id: 'id',
     code: 'code',
     customer_id: 'customer_id',
+    admin_id: 'admin_id',
+    admin_email: 'admin_email',
     status: 'status',
     created_at: 'created_at',
     updated_at: 'updated_at',
@@ -38152,6 +38411,7 @@ export namespace Prisma {
     last_active?: BigIntNullableFilter<"Customer"> | bigint | number | null
     created_at?: BigIntFilter<"Customer"> | bigint | number
     updated_at?: BigIntFilter<"Customer"> | bigint | number
+    transactions?: TransactionListRelationFilter
   }
 
   export type CustomerOrderByWithRelationInput = {
@@ -38166,6 +38426,7 @@ export namespace Prisma {
     last_active?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    transactions?: TransactionOrderByRelationAggregateInput
   }
 
   export type CustomerWhereUniqueInput = Prisma.AtLeast<{
@@ -38183,6 +38444,7 @@ export namespace Prisma {
     last_active?: BigIntNullableFilter<"Customer"> | bigint | number | null
     created_at?: BigIntFilter<"Customer"> | bigint | number
     updated_at?: BigIntFilter<"Customer"> | bigint | number
+    transactions?: TransactionListRelationFilter
   }, "id" | "oauth_id" | "email">
 
   export type CustomerOrderByWithAggregationInput = {
@@ -38908,6 +39170,7 @@ export namespace Prisma {
     currency_code?: EnumCurrencyCodeFilter<"ProductPrice"> | $Enums.CurrencyCode
     price?: DecimalFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
     variant?: XOR<ProductVariantScalarRelationFilter, ProductVariantWhereInput>
+    transcationDetails?: TransactionDetailListRelationFilter
   }
 
   export type ProductPriceOrderByWithRelationInput = {
@@ -38916,6 +39179,7 @@ export namespace Prisma {
     currency_code?: SortOrder
     price?: SortOrder
     variant?: ProductVariantOrderByWithRelationInput
+    transcationDetails?: TransactionDetailOrderByRelationAggregateInput
   }
 
   export type ProductPriceWhereUniqueInput = Prisma.AtLeast<{
@@ -38927,6 +39191,7 @@ export namespace Prisma {
     currency_code?: EnumCurrencyCodeFilter<"ProductPrice"> | $Enums.CurrencyCode
     price?: DecimalFilter<"ProductPrice"> | Decimal | DecimalJsLike | number | string
     variant?: XOR<ProductVariantScalarRelationFilter, ProductVariantWhereInput>
+    transcationDetails?: TransactionDetailListRelationFilter
   }, "id">
 
   export type ProductPriceOrderByWithAggregationInput = {
@@ -39349,6 +39614,8 @@ export namespace Prisma {
     id?: UuidFilter<"Transaction"> | string
     code?: StringFilter<"Transaction"> | string
     customer_id?: UuidNullableFilter<"Transaction"> | string | null
+    admin_id?: StringFilter<"Transaction"> | string
+    admin_email?: StringFilter<"Transaction"> | string
     status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
     created_at?: BigIntFilter<"Transaction"> | bigint | number
     updated_at?: BigIntFilter<"Transaction"> | bigint | number
@@ -39359,12 +39626,15 @@ export namespace Prisma {
     customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
     details?: TransactionDetailListRelationFilter
     invoices?: XOR<InvoiceNullableScalarRelationFilter, InvoiceWhereInput> | null
+    customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
   }
 
   export type TransactionOrderByWithRelationInput = {
     id?: SortOrder
     code?: SortOrder
     customer_id?: SortOrderInput | SortOrder
+    admin_id?: SortOrder
+    admin_email?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -39375,6 +39645,7 @@ export namespace Prisma {
     customer_phone_number?: SortOrderInput | SortOrder
     details?: TransactionDetailOrderByRelationAggregateInput
     invoices?: InvoiceOrderByWithRelationInput
+    customer?: CustomerOrderByWithRelationInput
   }
 
   export type TransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -39384,6 +39655,8 @@ export namespace Prisma {
     OR?: TransactionWhereInput[]
     NOT?: TransactionWhereInput | TransactionWhereInput[]
     customer_id?: UuidNullableFilter<"Transaction"> | string | null
+    admin_id?: StringFilter<"Transaction"> | string
+    admin_email?: StringFilter<"Transaction"> | string
     status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
     created_at?: BigIntFilter<"Transaction"> | bigint | number
     updated_at?: BigIntFilter<"Transaction"> | bigint | number
@@ -39394,12 +39667,15 @@ export namespace Prisma {
     customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
     details?: TransactionDetailListRelationFilter
     invoices?: XOR<InvoiceNullableScalarRelationFilter, InvoiceWhereInput> | null
+    customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
   }, "id" | "code">
 
   export type TransactionOrderByWithAggregationInput = {
     id?: SortOrder
     code?: SortOrder
     customer_id?: SortOrderInput | SortOrder
+    admin_id?: SortOrder
+    admin_email?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -39422,6 +39698,8 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"Transaction"> | string
     code?: StringWithAggregatesFilter<"Transaction"> | string
     customer_id?: UuidNullableWithAggregatesFilter<"Transaction"> | string | null
+    admin_id?: StringWithAggregatesFilter<"Transaction"> | string
+    admin_email?: StringWithAggregatesFilter<"Transaction"> | string
     status?: EnumTransactionStatusWithAggregatesFilter<"Transaction"> | $Enums.TransactionStatus
     created_at?: BigIntWithAggregatesFilter<"Transaction"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"Transaction"> | bigint | number
@@ -39500,7 +39778,7 @@ export namespace Prisma {
     NOT?: TransactionDetailWhereInput | TransactionDetailWhereInput[]
     id?: UuidFilter<"TransactionDetail"> | string
     transaction_id?: UuidFilter<"TransactionDetail"> | string
-    product_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    product_id?: UuidFilter<"TransactionDetail"> | string
     product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     product_coupon_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     quantity?: IntFilter<"TransactionDetail"> | number
@@ -39519,12 +39797,13 @@ export namespace Prisma {
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
+    price?: XOR<ProductPriceNullableScalarRelationFilter, ProductPriceWhereInput> | null
   }
 
   export type TransactionDetailOrderByWithRelationInput = {
     id?: SortOrder
     transaction_id?: SortOrder
-    product_id?: SortOrderInput | SortOrder
+    product_id?: SortOrder
     product_price_id?: SortOrderInput | SortOrder
     product_coupon_id?: SortOrderInput | SortOrder
     quantity?: SortOrder
@@ -39543,6 +39822,7 @@ export namespace Prisma {
     share_method?: SortOrderInput | SortOrder
     shared_at?: SortOrderInput | SortOrder
     transaction?: TransactionOrderByWithRelationInput
+    price?: ProductPriceOrderByWithRelationInput
   }
 
   export type TransactionDetailWhereUniqueInput = Prisma.AtLeast<{
@@ -39551,7 +39831,7 @@ export namespace Prisma {
     OR?: TransactionDetailWhereInput[]
     NOT?: TransactionDetailWhereInput | TransactionDetailWhereInput[]
     transaction_id?: UuidFilter<"TransactionDetail"> | string
-    product_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    product_id?: UuidFilter<"TransactionDetail"> | string
     product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     product_coupon_id?: UuidNullableFilter<"TransactionDetail"> | string | null
     quantity?: IntFilter<"TransactionDetail"> | number
@@ -39570,12 +39850,13 @@ export namespace Prisma {
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
+    price?: XOR<ProductPriceNullableScalarRelationFilter, ProductPriceWhereInput> | null
   }, "id">
 
   export type TransactionDetailOrderByWithAggregationInput = {
     id?: SortOrder
     transaction_id?: SortOrder
-    product_id?: SortOrderInput | SortOrder
+    product_id?: SortOrder
     product_price_id?: SortOrderInput | SortOrder
     product_coupon_id?: SortOrderInput | SortOrder
     quantity?: SortOrder
@@ -39606,7 +39887,7 @@ export namespace Prisma {
     NOT?: TransactionDetailScalarWhereWithAggregatesInput | TransactionDetailScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"TransactionDetail"> | string
     transaction_id?: UuidWithAggregatesFilter<"TransactionDetail"> | string
-    product_id?: UuidNullableWithAggregatesFilter<"TransactionDetail"> | string | null
+    product_id?: UuidWithAggregatesFilter<"TransactionDetail"> | string
     product_price_id?: UuidNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     product_coupon_id?: UuidNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     quantity?: IntWithAggregatesFilter<"TransactionDetail"> | number
@@ -39998,6 +40279,7 @@ export namespace Prisma {
     last_active?: bigint | number | null
     created_at: bigint | number
     updated_at: bigint | number
+    transactions?: TransactionCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUncheckedCreateInput = {
@@ -40012,6 +40294,7 @@ export namespace Prisma {
     last_active?: bigint | number | null
     created_at: bigint | number
     updated_at: bigint | number
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCustomerInput
   }
 
   export type CustomerUpdateInput = {
@@ -40026,6 +40309,7 @@ export namespace Prisma {
     last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    transactions?: TransactionUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerUncheckedUpdateInput = {
@@ -40040,6 +40324,7 @@ export namespace Prisma {
     last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    transactions?: TransactionUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
   export type CustomerCreateManyInput = {
@@ -40753,6 +41038,7 @@ export namespace Prisma {
     currency_code: $Enums.CurrencyCode
     price: Decimal | DecimalJsLike | number | string
     variant: ProductVariantCreateNestedOneWithoutPricesInput
+    transcationDetails?: TransactionDetailCreateNestedManyWithoutPriceInput
   }
 
   export type ProductPriceUncheckedCreateInput = {
@@ -40760,6 +41046,7 @@ export namespace Prisma {
     variant_id: string
     currency_code: $Enums.CurrencyCode
     price: Decimal | DecimalJsLike | number | string
+    transcationDetails?: TransactionDetailUncheckedCreateNestedManyWithoutPriceInput
   }
 
   export type ProductPriceUpdateInput = {
@@ -40767,6 +41054,7 @@ export namespace Prisma {
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     variant?: ProductVariantUpdateOneRequiredWithoutPricesNestedInput
+    transcationDetails?: TransactionDetailUpdateManyWithoutPriceNestedInput
   }
 
   export type ProductPriceUncheckedUpdateInput = {
@@ -40774,6 +41062,7 @@ export namespace Prisma {
     variant_id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    transcationDetails?: TransactionDetailUncheckedUpdateManyWithoutPriceNestedInput
   }
 
   export type ProductPriceCreateManyInput = {
@@ -41145,7 +41434,8 @@ export namespace Prisma {
   export type TransactionCreateInput = {
     id?: string
     code: string
-    customer_id?: string | null
+    admin_id: string
+    admin_email: string
     status: $Enums.TransactionStatus
     created_at: bigint | number
     updated_at: bigint | number
@@ -41156,12 +41446,15 @@ export namespace Prisma {
     customer_phone_number?: string | null
     details?: TransactionDetailCreateNestedManyWithoutTransactionInput
     invoices?: InvoiceCreateNestedOneWithoutTransactionInput
+    customer?: CustomerCreateNestedOneWithoutTransactionsInput
   }
 
   export type TransactionUncheckedCreateInput = {
     id?: string
     code: string
     customer_id?: string | null
+    admin_id: string
+    admin_email: string
     status: $Enums.TransactionStatus
     created_at: bigint | number
     updated_at: bigint | number
@@ -41177,7 +41470,8 @@ export namespace Prisma {
   export type TransactionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -41188,12 +41482,15 @@ export namespace Prisma {
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     details?: TransactionDetailUpdateManyWithoutTransactionNestedInput
     invoices?: InvoiceUpdateOneWithoutTransactionNestedInput
+    customer?: CustomerUpdateOneWithoutTransactionsNestedInput
   }
 
   export type TransactionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -41210,6 +41507,8 @@ export namespace Prisma {
     id?: string
     code: string
     customer_id?: string | null
+    admin_id: string
+    admin_email: string
     status: $Enums.TransactionStatus
     created_at: bigint | number
     updated_at: bigint | number
@@ -41223,7 +41522,8 @@ export namespace Prisma {
   export type TransactionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -41238,6 +41538,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -41312,8 +41614,7 @@ export namespace Prisma {
 
   export type TransactionDetailCreateInput = {
     id?: string
-    product_id?: string | null
-    product_price_id?: string | null
+    product_id: string
     product_coupon_id?: string | null
     quantity: number
     product_name: string
@@ -41331,12 +41632,13 @@ export namespace Prisma {
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
     transaction: TransactionCreateNestedOneWithoutDetailsInput
+    price?: ProductPriceCreateNestedOneWithoutTranscationDetailsInput
   }
 
   export type TransactionDetailUncheckedCreateInput = {
     id?: string
     transaction_id: string
-    product_id?: string | null
+    product_id: string
     product_price_id?: string | null
     product_coupon_id?: string | null
     quantity: number
@@ -41358,8 +41660,7 @@ export namespace Prisma {
 
   export type TransactionDetailUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    product_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_id?: StringFieldUpdateOperationsInput | string
     product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
@@ -41377,12 +41678,13 @@ export namespace Prisma {
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     transaction?: TransactionUpdateOneRequiredWithoutDetailsNestedInput
+    price?: ProductPriceUpdateOneWithoutTranscationDetailsNestedInput
   }
 
   export type TransactionDetailUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     transaction_id?: StringFieldUpdateOperationsInput | string
-    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_id?: StringFieldUpdateOperationsInput | string
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
@@ -41405,7 +41707,7 @@ export namespace Prisma {
   export type TransactionDetailCreateManyInput = {
     id?: string
     transaction_id: string
-    product_id?: string | null
+    product_id: string
     product_price_id?: string | null
     product_coupon_id?: string | null
     quantity: number
@@ -41427,8 +41729,7 @@ export namespace Prisma {
 
   export type TransactionDetailUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    product_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_id?: StringFieldUpdateOperationsInput | string
     product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
@@ -41450,7 +41751,7 @@ export namespace Prisma {
   export type TransactionDetailUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     transaction_id?: StringFieldUpdateOperationsInput | string
-    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_id?: StringFieldUpdateOperationsInput | string
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
@@ -41912,9 +42213,19 @@ export namespace Prisma {
     not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
   }
 
+  export type TransactionListRelationFilter = {
+    every?: TransactionWhereInput
+    some?: TransactionWhereInput
+    none?: TransactionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type TransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type CustomerCountOrderByAggregateInput = {
@@ -42554,6 +42865,16 @@ export namespace Prisma {
     isNot?: ProductVariantWhereInput
   }
 
+  export type TransactionDetailListRelationFilter = {
+    every?: TransactionDetailWhereInput
+    some?: TransactionDetailWhereInput
+    none?: TransactionDetailWhereInput
+  }
+
+  export type TransactionDetailOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProductPriceCountOrderByAggregateInput = {
     id?: SortOrder
     variant_id?: SortOrder
@@ -42915,25 +43236,22 @@ export namespace Prisma {
     not?: NestedEnumTransactionStatusFilter<$PrismaModel> | $Enums.TransactionStatus
   }
 
-  export type TransactionDetailListRelationFilter = {
-    every?: TransactionDetailWhereInput
-    some?: TransactionDetailWhereInput
-    none?: TransactionDetailWhereInput
-  }
-
   export type InvoiceNullableScalarRelationFilter = {
     is?: InvoiceWhereInput | null
     isNot?: InvoiceWhereInput | null
   }
 
-  export type TransactionDetailOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type CustomerNullableScalarRelationFilter = {
+    is?: CustomerWhereInput | null
+    isNot?: CustomerWhereInput | null
   }
 
   export type TransactionCountOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
     customer_id?: SortOrder
+    admin_id?: SortOrder
+    admin_email?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -42954,6 +43272,8 @@ export namespace Prisma {
     id?: SortOrder
     code?: SortOrder
     customer_id?: SortOrder
+    admin_id?: SortOrder
+    admin_email?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -42968,6 +43288,8 @@ export namespace Prisma {
     id?: SortOrder
     code?: SortOrder
     customer_id?: SortOrder
+    admin_id?: SortOrder
+    admin_email?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -43084,6 +43406,11 @@ export namespace Prisma {
     in?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
     not?: NestedEnumShareMethodNullableFilter<$PrismaModel> | $Enums.ShareMethod | null
+  }
+
+  export type ProductPriceNullableScalarRelationFilter = {
+    is?: ProductPriceWhereInput | null
+    isNot?: ProductPriceWhereInput | null
   }
 
   export type TransactionDetailCountOrderByAggregateInput = {
@@ -43481,6 +43808,20 @@ export namespace Prisma {
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
   }
 
+  export type TransactionCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<TransactionCreateWithoutCustomerInput, TransactionUncheckedCreateWithoutCustomerInput> | TransactionCreateWithoutCustomerInput[] | TransactionUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutCustomerInput | TransactionCreateOrConnectWithoutCustomerInput[]
+    createMany?: TransactionCreateManyCustomerInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
+  export type TransactionUncheckedCreateNestedManyWithoutCustomerInput = {
+    create?: XOR<TransactionCreateWithoutCustomerInput, TransactionUncheckedCreateWithoutCustomerInput> | TransactionCreateWithoutCustomerInput[] | TransactionUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutCustomerInput | TransactionCreateOrConnectWithoutCustomerInput[]
+    createMany?: TransactionCreateManyCustomerInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
@@ -43495,6 +43836,34 @@ export namespace Prisma {
     decrement?: bigint | number
     multiply?: bigint | number
     divide?: bigint | number
+  }
+
+  export type TransactionUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<TransactionCreateWithoutCustomerInput, TransactionUncheckedCreateWithoutCustomerInput> | TransactionCreateWithoutCustomerInput[] | TransactionUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutCustomerInput | TransactionCreateOrConnectWithoutCustomerInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutCustomerInput | TransactionUpsertWithWhereUniqueWithoutCustomerInput[]
+    createMany?: TransactionCreateManyCustomerInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutCustomerInput | TransactionUpdateWithWhereUniqueWithoutCustomerInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutCustomerInput | TransactionUpdateManyWithWhereWithoutCustomerInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutCustomerNestedInput = {
+    create?: XOR<TransactionCreateWithoutCustomerInput, TransactionUncheckedCreateWithoutCustomerInput> | TransactionCreateWithoutCustomerInput[] | TransactionUncheckedCreateWithoutCustomerInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutCustomerInput | TransactionCreateOrConnectWithoutCustomerInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutCustomerInput | TransactionUpsertWithWhereUniqueWithoutCustomerInput[]
+    createMany?: TransactionCreateManyCustomerInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutCustomerInput | TransactionUpdateWithWhereUniqueWithoutCustomerInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutCustomerInput | TransactionUpdateManyWithWhereWithoutCustomerInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
   export type ProductCreateNestedManyWithoutLicenseInput = {
@@ -44121,6 +44490,20 @@ export namespace Prisma {
     connect?: ProductVariantWhereUniqueInput
   }
 
+  export type TransactionDetailCreateNestedManyWithoutPriceInput = {
+    create?: XOR<TransactionDetailCreateWithoutPriceInput, TransactionDetailUncheckedCreateWithoutPriceInput> | TransactionDetailCreateWithoutPriceInput[] | TransactionDetailUncheckedCreateWithoutPriceInput[]
+    connectOrCreate?: TransactionDetailCreateOrConnectWithoutPriceInput | TransactionDetailCreateOrConnectWithoutPriceInput[]
+    createMany?: TransactionDetailCreateManyPriceInputEnvelope
+    connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+  }
+
+  export type TransactionDetailUncheckedCreateNestedManyWithoutPriceInput = {
+    create?: XOR<TransactionDetailCreateWithoutPriceInput, TransactionDetailUncheckedCreateWithoutPriceInput> | TransactionDetailCreateWithoutPriceInput[] | TransactionDetailUncheckedCreateWithoutPriceInput[]
+    connectOrCreate?: TransactionDetailCreateOrConnectWithoutPriceInput | TransactionDetailCreateOrConnectWithoutPriceInput[]
+    createMany?: TransactionDetailCreateManyPriceInputEnvelope
+    connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+  }
+
   export type DecimalFieldUpdateOperationsInput = {
     set?: Decimal | DecimalJsLike | number | string
     increment?: Decimal | DecimalJsLike | number | string
@@ -44135,6 +44518,34 @@ export namespace Prisma {
     upsert?: ProductVariantUpsertWithoutPricesInput
     connect?: ProductVariantWhereUniqueInput
     update?: XOR<XOR<ProductVariantUpdateToOneWithWhereWithoutPricesInput, ProductVariantUpdateWithoutPricesInput>, ProductVariantUncheckedUpdateWithoutPricesInput>
+  }
+
+  export type TransactionDetailUpdateManyWithoutPriceNestedInput = {
+    create?: XOR<TransactionDetailCreateWithoutPriceInput, TransactionDetailUncheckedCreateWithoutPriceInput> | TransactionDetailCreateWithoutPriceInput[] | TransactionDetailUncheckedCreateWithoutPriceInput[]
+    connectOrCreate?: TransactionDetailCreateOrConnectWithoutPriceInput | TransactionDetailCreateOrConnectWithoutPriceInput[]
+    upsert?: TransactionDetailUpsertWithWhereUniqueWithoutPriceInput | TransactionDetailUpsertWithWhereUniqueWithoutPriceInput[]
+    createMany?: TransactionDetailCreateManyPriceInputEnvelope
+    set?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    disconnect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    delete?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    update?: TransactionDetailUpdateWithWhereUniqueWithoutPriceInput | TransactionDetailUpdateWithWhereUniqueWithoutPriceInput[]
+    updateMany?: TransactionDetailUpdateManyWithWhereWithoutPriceInput | TransactionDetailUpdateManyWithWhereWithoutPriceInput[]
+    deleteMany?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
+  }
+
+  export type TransactionDetailUncheckedUpdateManyWithoutPriceNestedInput = {
+    create?: XOR<TransactionDetailCreateWithoutPriceInput, TransactionDetailUncheckedCreateWithoutPriceInput> | TransactionDetailCreateWithoutPriceInput[] | TransactionDetailUncheckedCreateWithoutPriceInput[]
+    connectOrCreate?: TransactionDetailCreateOrConnectWithoutPriceInput | TransactionDetailCreateOrConnectWithoutPriceInput[]
+    upsert?: TransactionDetailUpsertWithWhereUniqueWithoutPriceInput | TransactionDetailUpsertWithWhereUniqueWithoutPriceInput[]
+    createMany?: TransactionDetailCreateManyPriceInputEnvelope
+    set?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    disconnect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    delete?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
+    update?: TransactionDetailUpdateWithWhereUniqueWithoutPriceInput | TransactionDetailUpdateWithWhereUniqueWithoutPriceInput[]
+    updateMany?: TransactionDetailUpdateManyWithWhereWithoutPriceInput | TransactionDetailUpdateManyWithWhereWithoutPriceInput[]
+    deleteMany?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
   }
 
   export type TermsOfServiceTranslationCreateNestedManyWithoutTerms_of_serviceInput = {
@@ -44374,6 +44785,12 @@ export namespace Prisma {
     connect?: InvoiceWhereUniqueInput
   }
 
+  export type CustomerCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<CustomerCreateWithoutTransactionsInput, CustomerUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutTransactionsInput
+    connect?: CustomerWhereUniqueInput
+  }
+
   export type TransactionDetailUncheckedCreateNestedManyWithoutTransactionInput = {
     create?: XOR<TransactionDetailCreateWithoutTransactionInput, TransactionDetailUncheckedCreateWithoutTransactionInput> | TransactionDetailCreateWithoutTransactionInput[] | TransactionDetailUncheckedCreateWithoutTransactionInput[]
     connectOrCreate?: TransactionDetailCreateOrConnectWithoutTransactionInput | TransactionDetailCreateOrConnectWithoutTransactionInput[]
@@ -44413,6 +44830,16 @@ export namespace Prisma {
     delete?: InvoiceWhereInput | boolean
     connect?: InvoiceWhereUniqueInput
     update?: XOR<XOR<InvoiceUpdateToOneWithWhereWithoutTransactionInput, InvoiceUpdateWithoutTransactionInput>, InvoiceUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type CustomerUpdateOneWithoutTransactionsNestedInput = {
+    create?: XOR<CustomerCreateWithoutTransactionsInput, CustomerUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutTransactionsInput
+    upsert?: CustomerUpsertWithoutTransactionsInput
+    disconnect?: CustomerWhereInput | boolean
+    delete?: CustomerWhereInput | boolean
+    connect?: CustomerWhereUniqueInput
+    update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutTransactionsInput, CustomerUpdateWithoutTransactionsInput>, CustomerUncheckedUpdateWithoutTransactionsInput>
   }
 
   export type TransactionDetailUncheckedUpdateManyWithoutTransactionNestedInput = {
@@ -44463,6 +44890,12 @@ export namespace Prisma {
     connect?: TransactionWhereUniqueInput
   }
 
+  export type ProductPriceCreateNestedOneWithoutTranscationDetailsInput = {
+    create?: XOR<ProductPriceCreateWithoutTranscationDetailsInput, ProductPriceUncheckedCreateWithoutTranscationDetailsInput>
+    connectOrCreate?: ProductPriceCreateOrConnectWithoutTranscationDetailsInput
+    connect?: ProductPriceWhereUniqueInput
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -44481,6 +44914,16 @@ export namespace Prisma {
     upsert?: TransactionUpsertWithoutDetailsInput
     connect?: TransactionWhereUniqueInput
     update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutDetailsInput, TransactionUpdateWithoutDetailsInput>, TransactionUncheckedUpdateWithoutDetailsInput>
+  }
+
+  export type ProductPriceUpdateOneWithoutTranscationDetailsNestedInput = {
+    create?: XOR<ProductPriceCreateWithoutTranscationDetailsInput, ProductPriceUncheckedCreateWithoutTranscationDetailsInput>
+    connectOrCreate?: ProductPriceCreateOrConnectWithoutTranscationDetailsInput
+    upsert?: ProductPriceUpsertWithoutTranscationDetailsInput
+    disconnect?: ProductPriceWhereInput | boolean
+    delete?: ProductPriceWhereInput | boolean
+    connect?: ProductPriceWhereUniqueInput
+    update?: XOR<XOR<ProductPriceUpdateToOneWithWhereWithoutTranscationDetailsInput, ProductPriceUpdateWithoutTranscationDetailsInput>, ProductPriceUncheckedUpdateWithoutTranscationDetailsInput>
   }
 
   export type TestimonialTranslationCreateNestedManyWithoutTestimonialInput = {
@@ -45184,6 +45627,85 @@ export namespace Prisma {
   export type ProductUpdateManyWithWhereWithoutOwnerInput = {
     where: ProductScalarWhereInput
     data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutOwnerInput>
+  }
+
+  export type TransactionCreateWithoutCustomerInput = {
+    id?: string
+    code: string
+    admin_id: string
+    admin_email: string
+    status: $Enums.TransactionStatus
+    created_at: bigint | number
+    updated_at: bigint | number
+    currency_code: $Enums.CurrencyCode
+    total_amount: Decimal | DecimalJsLike | number | string
+    customer_name: string
+    customer_email: string
+    customer_phone_number?: string | null
+    details?: TransactionDetailCreateNestedManyWithoutTransactionInput
+    invoices?: InvoiceCreateNestedOneWithoutTransactionInput
+  }
+
+  export type TransactionUncheckedCreateWithoutCustomerInput = {
+    id?: string
+    code: string
+    admin_id: string
+    admin_email: string
+    status: $Enums.TransactionStatus
+    created_at: bigint | number
+    updated_at: bigint | number
+    currency_code: $Enums.CurrencyCode
+    total_amount: Decimal | DecimalJsLike | number | string
+    customer_name: string
+    customer_email: string
+    customer_phone_number?: string | null
+    details?: TransactionDetailUncheckedCreateNestedManyWithoutTransactionInput
+    invoices?: InvoiceUncheckedCreateNestedOneWithoutTransactionInput
+  }
+
+  export type TransactionCreateOrConnectWithoutCustomerInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutCustomerInput, TransactionUncheckedCreateWithoutCustomerInput>
+  }
+
+  export type TransactionCreateManyCustomerInputEnvelope = {
+    data: TransactionCreateManyCustomerInput | TransactionCreateManyCustomerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TransactionUpsertWithWhereUniqueWithoutCustomerInput = {
+    where: TransactionWhereUniqueInput
+    update: XOR<TransactionUpdateWithoutCustomerInput, TransactionUncheckedUpdateWithoutCustomerInput>
+    create: XOR<TransactionCreateWithoutCustomerInput, TransactionUncheckedCreateWithoutCustomerInput>
+  }
+
+  export type TransactionUpdateWithWhereUniqueWithoutCustomerInput = {
+    where: TransactionWhereUniqueInput
+    data: XOR<TransactionUpdateWithoutCustomerInput, TransactionUncheckedUpdateWithoutCustomerInput>
+  }
+
+  export type TransactionUpdateManyWithWhereWithoutCustomerInput = {
+    where: TransactionScalarWhereInput
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutCustomerInput>
+  }
+
+  export type TransactionScalarWhereInput = {
+    AND?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    OR?: TransactionScalarWhereInput[]
+    NOT?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    id?: UuidFilter<"Transaction"> | string
+    code?: StringFilter<"Transaction"> | string
+    customer_id?: UuidNullableFilter<"Transaction"> | string | null
+    admin_id?: StringFilter<"Transaction"> | string
+    admin_email?: StringFilter<"Transaction"> | string
+    status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
+    created_at?: BigIntFilter<"Transaction"> | bigint | number
+    updated_at?: BigIntFilter<"Transaction"> | bigint | number
+    currency_code?: EnumCurrencyCodeFilter<"Transaction"> | $Enums.CurrencyCode
+    total_amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
+    customer_name?: StringFilter<"Transaction"> | string
+    customer_email?: StringFilter<"Transaction"> | string
+    customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
   }
 
   export type ProductCreateWithoutLicenseInput = {
@@ -46568,12 +47090,14 @@ export namespace Prisma {
     id?: string
     currency_code: $Enums.CurrencyCode
     price: Decimal | DecimalJsLike | number | string
+    transcationDetails?: TransactionDetailCreateNestedManyWithoutPriceInput
   }
 
   export type ProductPriceUncheckedCreateWithoutVariantInput = {
     id?: string
     currency_code: $Enums.CurrencyCode
     price: Decimal | DecimalJsLike | number | string
+    transcationDetails?: TransactionDetailUncheckedCreateNestedManyWithoutPriceInput
   }
 
   export type ProductPriceCreateOrConnectWithoutVariantInput = {
@@ -46688,6 +47212,60 @@ export namespace Prisma {
     create: XOR<ProductVariantCreateWithoutPricesInput, ProductVariantUncheckedCreateWithoutPricesInput>
   }
 
+  export type TransactionDetailCreateWithoutPriceInput = {
+    id?: string
+    product_id: string
+    product_coupon_id?: string | null
+    quantity: number
+    product_name: string
+    product_version: string
+    product_drive_file_id?: string | null
+    product_download_link?: string | null
+    product_variant: string
+    variant_download_link?: string | null
+    variant_file_access_password?: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal | DecimalJsLike | number | string
+    product_discount?: number | null
+    product_coupon_code?: string | null
+    product_coupon_discount?: number | null
+    share_method?: $Enums.ShareMethod | null
+    shared_at?: bigint | number | null
+    transaction: TransactionCreateNestedOneWithoutDetailsInput
+  }
+
+  export type TransactionDetailUncheckedCreateWithoutPriceInput = {
+    id?: string
+    transaction_id: string
+    product_id: string
+    product_coupon_id?: string | null
+    quantity: number
+    product_name: string
+    product_version: string
+    product_drive_file_id?: string | null
+    product_download_link?: string | null
+    product_variant: string
+    variant_download_link?: string | null
+    variant_file_access_password?: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal | DecimalJsLike | number | string
+    product_discount?: number | null
+    product_coupon_code?: string | null
+    product_coupon_discount?: number | null
+    share_method?: $Enums.ShareMethod | null
+    shared_at?: bigint | number | null
+  }
+
+  export type TransactionDetailCreateOrConnectWithoutPriceInput = {
+    where: TransactionDetailWhereUniqueInput
+    create: XOR<TransactionDetailCreateWithoutPriceInput, TransactionDetailUncheckedCreateWithoutPriceInput>
+  }
+
+  export type TransactionDetailCreateManyPriceInputEnvelope = {
+    data: TransactionDetailCreateManyPriceInput | TransactionDetailCreateManyPriceInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProductVariantUpsertWithoutPricesInput = {
     update: XOR<ProductVariantUpdateWithoutPricesInput, ProductVariantUncheckedUpdateWithoutPricesInput>
     create: XOR<ProductVariantCreateWithoutPricesInput, ProductVariantUncheckedCreateWithoutPricesInput>
@@ -46713,6 +47291,48 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TransactionDetailUpsertWithWhereUniqueWithoutPriceInput = {
+    where: TransactionDetailWhereUniqueInput
+    update: XOR<TransactionDetailUpdateWithoutPriceInput, TransactionDetailUncheckedUpdateWithoutPriceInput>
+    create: XOR<TransactionDetailCreateWithoutPriceInput, TransactionDetailUncheckedCreateWithoutPriceInput>
+  }
+
+  export type TransactionDetailUpdateWithWhereUniqueWithoutPriceInput = {
+    where: TransactionDetailWhereUniqueInput
+    data: XOR<TransactionDetailUpdateWithoutPriceInput, TransactionDetailUncheckedUpdateWithoutPriceInput>
+  }
+
+  export type TransactionDetailUpdateManyWithWhereWithoutPriceInput = {
+    where: TransactionDetailScalarWhereInput
+    data: XOR<TransactionDetailUpdateManyMutationInput, TransactionDetailUncheckedUpdateManyWithoutPriceInput>
+  }
+
+  export type TransactionDetailScalarWhereInput = {
+    AND?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
+    OR?: TransactionDetailScalarWhereInput[]
+    NOT?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
+    id?: UuidFilter<"TransactionDetail"> | string
+    transaction_id?: UuidFilter<"TransactionDetail"> | string
+    product_id?: UuidFilter<"TransactionDetail"> | string
+    product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    product_coupon_id?: UuidNullableFilter<"TransactionDetail"> | string | null
+    quantity?: IntFilter<"TransactionDetail"> | number
+    product_name?: StringFilter<"TransactionDetail"> | string
+    product_version?: StringFilter<"TransactionDetail"> | string
+    product_drive_file_id?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_variant?: StringFilter<"TransactionDetail"> | string
+    variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
+    product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
+    product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    product_coupon_code?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
+    shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
   }
 
   export type TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput = {
@@ -47054,8 +47674,7 @@ export namespace Prisma {
 
   export type TransactionDetailCreateWithoutTransactionInput = {
     id?: string
-    product_id?: string | null
-    product_price_id?: string | null
+    product_id: string
     product_coupon_id?: string | null
     quantity: number
     product_name: string
@@ -47072,11 +47691,12 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
+    price?: ProductPriceCreateNestedOneWithoutTranscationDetailsInput
   }
 
   export type TransactionDetailUncheckedCreateWithoutTransactionInput = {
     id?: string
-    product_id?: string | null
+    product_id: string
     product_price_id?: string | null
     product_coupon_id?: string | null
     quantity: number
@@ -47127,6 +47747,39 @@ export namespace Prisma {
     create: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput>
   }
 
+  export type CustomerCreateWithoutTransactionsInput = {
+    id?: string
+    oauth_id?: string | null
+    is_banned?: boolean
+    first_name: string
+    last_name: string
+    email: string
+    phone_number?: string | null
+    picture?: string | null
+    last_active?: bigint | number | null
+    created_at: bigint | number
+    updated_at: bigint | number
+  }
+
+  export type CustomerUncheckedCreateWithoutTransactionsInput = {
+    id?: string
+    oauth_id?: string | null
+    is_banned?: boolean
+    first_name: string
+    last_name: string
+    email: string
+    phone_number?: string | null
+    picture?: string | null
+    last_active?: bigint | number | null
+    created_at: bigint | number
+    updated_at: bigint | number
+  }
+
+  export type CustomerCreateOrConnectWithoutTransactionsInput = {
+    where: CustomerWhereUniqueInput
+    create: XOR<CustomerCreateWithoutTransactionsInput, CustomerUncheckedCreateWithoutTransactionsInput>
+  }
+
   export type TransactionDetailUpsertWithWhereUniqueWithoutTransactionInput = {
     where: TransactionDetailWhereUniqueInput
     update: XOR<TransactionDetailUpdateWithoutTransactionInput, TransactionDetailUncheckedUpdateWithoutTransactionInput>
@@ -47141,32 +47794,6 @@ export namespace Prisma {
   export type TransactionDetailUpdateManyWithWhereWithoutTransactionInput = {
     where: TransactionDetailScalarWhereInput
     data: XOR<TransactionDetailUpdateManyMutationInput, TransactionDetailUncheckedUpdateManyWithoutTransactionInput>
-  }
-
-  export type TransactionDetailScalarWhereInput = {
-    AND?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
-    OR?: TransactionDetailScalarWhereInput[]
-    NOT?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
-    id?: UuidFilter<"TransactionDetail"> | string
-    transaction_id?: UuidFilter<"TransactionDetail"> | string
-    product_id?: UuidNullableFilter<"TransactionDetail"> | string | null
-    product_price_id?: UuidNullableFilter<"TransactionDetail"> | string | null
-    product_coupon_id?: UuidNullableFilter<"TransactionDetail"> | string | null
-    quantity?: IntFilter<"TransactionDetail"> | number
-    product_name?: StringFilter<"TransactionDetail"> | string
-    product_version?: StringFilter<"TransactionDetail"> | string
-    product_drive_file_id?: StringNullableFilter<"TransactionDetail"> | string | null
-    product_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
-    product_variant?: StringFilter<"TransactionDetail"> | string
-    variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
-    variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
-    product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
-    product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
-    product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
-    product_coupon_code?: StringNullableFilter<"TransactionDetail"> | string | null
-    product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
-    share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
-    shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
   }
 
   export type InvoiceUpsertWithoutTransactionInput = {
@@ -47196,10 +47823,50 @@ export namespace Prisma {
     voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
+  export type CustomerUpsertWithoutTransactionsInput = {
+    update: XOR<CustomerUpdateWithoutTransactionsInput, CustomerUncheckedUpdateWithoutTransactionsInput>
+    create: XOR<CustomerCreateWithoutTransactionsInput, CustomerUncheckedCreateWithoutTransactionsInput>
+    where?: CustomerWhereInput
+  }
+
+  export type CustomerUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: CustomerWhereInput
+    data: XOR<CustomerUpdateWithoutTransactionsInput, CustomerUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type CustomerUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    oauth_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_banned?: BoolFieldUpdateOperationsInput | boolean
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableStringFieldUpdateOperationsInput | string | null
+    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type CustomerUncheckedUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    oauth_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_banned?: BoolFieldUpdateOperationsInput | boolean
+    first_name?: StringFieldUpdateOperationsInput | string
+    last_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    picture?: NullableStringFieldUpdateOperationsInput | string | null
+    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
   export type TransactionCreateWithoutInvoicesInput = {
     id?: string
     code: string
-    customer_id?: string | null
+    admin_id: string
+    admin_email: string
     status: $Enums.TransactionStatus
     created_at: bigint | number
     updated_at: bigint | number
@@ -47209,12 +47876,15 @@ export namespace Prisma {
     customer_email: string
     customer_phone_number?: string | null
     details?: TransactionDetailCreateNestedManyWithoutTransactionInput
+    customer?: CustomerCreateNestedOneWithoutTransactionsInput
   }
 
   export type TransactionUncheckedCreateWithoutInvoicesInput = {
     id?: string
     code: string
     customer_id?: string | null
+    admin_id: string
+    admin_email: string
     status: $Enums.TransactionStatus
     created_at: bigint | number
     updated_at: bigint | number
@@ -47245,7 +47915,8 @@ export namespace Prisma {
   export type TransactionUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -47255,12 +47926,15 @@ export namespace Prisma {
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     details?: TransactionDetailUpdateManyWithoutTransactionNestedInput
+    customer?: CustomerUpdateOneWithoutTransactionsNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -47275,7 +47949,8 @@ export namespace Prisma {
   export type TransactionCreateWithoutDetailsInput = {
     id?: string
     code: string
-    customer_id?: string | null
+    admin_id: string
+    admin_email: string
     status: $Enums.TransactionStatus
     created_at: bigint | number
     updated_at: bigint | number
@@ -47285,12 +47960,15 @@ export namespace Prisma {
     customer_email: string
     customer_phone_number?: string | null
     invoices?: InvoiceCreateNestedOneWithoutTransactionInput
+    customer?: CustomerCreateNestedOneWithoutTransactionsInput
   }
 
   export type TransactionUncheckedCreateWithoutDetailsInput = {
     id?: string
     code: string
     customer_id?: string | null
+    admin_id: string
+    admin_email: string
     status: $Enums.TransactionStatus
     created_at: bigint | number
     updated_at: bigint | number
@@ -47307,6 +47985,25 @@ export namespace Prisma {
     create: XOR<TransactionCreateWithoutDetailsInput, TransactionUncheckedCreateWithoutDetailsInput>
   }
 
+  export type ProductPriceCreateWithoutTranscationDetailsInput = {
+    id?: string
+    currency_code: $Enums.CurrencyCode
+    price: Decimal | DecimalJsLike | number | string
+    variant: ProductVariantCreateNestedOneWithoutPricesInput
+  }
+
+  export type ProductPriceUncheckedCreateWithoutTranscationDetailsInput = {
+    id?: string
+    variant_id: string
+    currency_code: $Enums.CurrencyCode
+    price: Decimal | DecimalJsLike | number | string
+  }
+
+  export type ProductPriceCreateOrConnectWithoutTranscationDetailsInput = {
+    where: ProductPriceWhereUniqueInput
+    create: XOR<ProductPriceCreateWithoutTranscationDetailsInput, ProductPriceUncheckedCreateWithoutTranscationDetailsInput>
+  }
+
   export type TransactionUpsertWithoutDetailsInput = {
     update: XOR<TransactionUpdateWithoutDetailsInput, TransactionUncheckedUpdateWithoutDetailsInput>
     create: XOR<TransactionCreateWithoutDetailsInput, TransactionUncheckedCreateWithoutDetailsInput>
@@ -47321,7 +48018,8 @@ export namespace Prisma {
   export type TransactionUpdateWithoutDetailsInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
-    customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -47331,12 +48029,15 @@ export namespace Prisma {
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     invoices?: InvoiceUpdateOneWithoutTransactionNestedInput
+    customer?: CustomerUpdateOneWithoutTransactionsNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutDetailsInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     customer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -47346,6 +48047,31 @@ export namespace Prisma {
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     invoices?: InvoiceUncheckedUpdateOneWithoutTransactionNestedInput
+  }
+
+  export type ProductPriceUpsertWithoutTranscationDetailsInput = {
+    update: XOR<ProductPriceUpdateWithoutTranscationDetailsInput, ProductPriceUncheckedUpdateWithoutTranscationDetailsInput>
+    create: XOR<ProductPriceCreateWithoutTranscationDetailsInput, ProductPriceUncheckedCreateWithoutTranscationDetailsInput>
+    where?: ProductPriceWhereInput
+  }
+
+  export type ProductPriceUpdateToOneWithWhereWithoutTranscationDetailsInput = {
+    where?: ProductPriceWhereInput
+    data: XOR<ProductPriceUpdateWithoutTranscationDetailsInput, ProductPriceUncheckedUpdateWithoutTranscationDetailsInput>
+  }
+
+  export type ProductPriceUpdateWithoutTranscationDetailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    variant?: ProductVariantUpdateOneRequiredWithoutPricesNestedInput
+  }
+
+  export type ProductPriceUncheckedUpdateWithoutTranscationDetailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    variant_id?: StringFieldUpdateOperationsInput | string
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TestimonialTranslationCreateWithoutTestimonialInput = {
@@ -47618,6 +48344,70 @@ export namespace Prisma {
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type TransactionCreateManyCustomerInput = {
+    id?: string
+    code: string
+    admin_id: string
+    admin_email: string
+    status: $Enums.TransactionStatus
+    created_at: bigint | number
+    updated_at: bigint | number
+    currency_code: $Enums.CurrencyCode
+    total_amount: Decimal | DecimalJsLike | number | string
+    customer_name: string
+    customer_email: string
+    customer_phone_number?: string | null
+  }
+
+  export type TransactionUpdateWithoutCustomerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: TransactionDetailUpdateManyWithoutTransactionNestedInput
+    invoices?: InvoiceUpdateOneWithoutTransactionNestedInput
+  }
+
+  export type TransactionUncheckedUpdateWithoutCustomerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: TransactionDetailUncheckedUpdateManyWithoutTransactionNestedInput
+    invoices?: InvoiceUncheckedUpdateOneWithoutTransactionNestedInput
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutCustomerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_email?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_email?: StringFieldUpdateOperationsInput | string
+    customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductCreateManyLicenseInput = {
@@ -47945,18 +48735,108 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    transcationDetails?: TransactionDetailUpdateManyWithoutPriceNestedInput
   }
 
   export type ProductPriceUncheckedUpdateWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    transcationDetails?: TransactionDetailUncheckedUpdateManyWithoutPriceNestedInput
   }
 
   export type ProductPriceUncheckedUpdateManyWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type TransactionDetailCreateManyPriceInput = {
+    id?: string
+    transaction_id: string
+    product_id: string
+    product_coupon_id?: string | null
+    quantity: number
+    product_name: string
+    product_version: string
+    product_drive_file_id?: string | null
+    product_download_link?: string | null
+    product_variant: string
+    variant_download_link?: string | null
+    variant_file_access_password?: string | null
+    product_currency_code: $Enums.CurrencyCode
+    product_price: Decimal | DecimalJsLike | number | string
+    product_discount?: number | null
+    product_coupon_code?: string | null
+    product_coupon_discount?: number | null
+    share_method?: $Enums.ShareMethod | null
+    shared_at?: bigint | number | null
+  }
+
+  export type TransactionDetailUpdateWithoutPriceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    transaction?: TransactionUpdateOneRequiredWithoutDetailsNestedInput
+  }
+
+  export type TransactionDetailUncheckedUpdateWithoutPriceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transaction_id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  }
+
+  export type TransactionDetailUncheckedUpdateManyWithoutPriceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transaction_id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    product_name?: StringFieldUpdateOperationsInput | string
+    product_version?: StringFieldUpdateOperationsInput | string
+    product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_variant?: StringFieldUpdateOperationsInput | string
+    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
+    product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+    product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
+    product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
+    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type TermsOfServiceTranslationCreateManyTerms_of_serviceInput = {
@@ -48057,7 +48937,7 @@ export namespace Prisma {
 
   export type TransactionDetailCreateManyTransactionInput = {
     id?: string
-    product_id?: string | null
+    product_id: string
     product_price_id?: string | null
     product_coupon_id?: string | null
     quantity: number
@@ -48079,8 +48959,7 @@ export namespace Prisma {
 
   export type TransactionDetailUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    product_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_id?: StringFieldUpdateOperationsInput | string
     product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     product_name?: StringFieldUpdateOperationsInput | string
@@ -48097,11 +48976,12 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    price?: ProductPriceUpdateOneWithoutTranscationDetailsNestedInput
   }
 
   export type TransactionDetailUncheckedUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_id?: StringFieldUpdateOperationsInput | string
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
@@ -48123,7 +49003,7 @@ export namespace Prisma {
 
   export type TransactionDetailUncheckedUpdateManyWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    product_id?: NullableStringFieldUpdateOperationsInput | string | null
+    product_id?: StringFieldUpdateOperationsInput | string
     product_price_id?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_id?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number

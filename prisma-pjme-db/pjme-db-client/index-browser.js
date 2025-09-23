@@ -314,6 +314,8 @@ exports.Prisma.TransactionScalarFieldEnum = {
   id: 'id',
   code: 'code',
   customer_id: 'customer_id',
+  admin_id: 'admin_id',
+  admin_email: 'admin_email',
   status: 'status',
   created_at: 'created_at',
   updated_at: 'updated_at',
