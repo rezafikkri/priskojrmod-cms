@@ -33121,6 +33121,7 @@ export namespace Prisma {
     product_discount: number | null
     product_coupon_code: string | null
     product_coupon_discount: number | null
+    drive_permission_id: string | null
     share_method: $Enums.ShareMethod | null
     shared_at: bigint | null
   }
@@ -33144,6 +33145,7 @@ export namespace Prisma {
     product_discount: number | null
     product_coupon_code: string | null
     product_coupon_discount: number | null
+    drive_permission_id: string | null
     share_method: $Enums.ShareMethod | null
     shared_at: bigint | null
   }
@@ -33167,6 +33169,7 @@ export namespace Prisma {
     product_discount: number
     product_coupon_code: number
     product_coupon_discount: number
+    drive_permission_id: number
     share_method: number
     shared_at: number
     _all: number
@@ -33208,6 +33211,7 @@ export namespace Prisma {
     product_discount?: true
     product_coupon_code?: true
     product_coupon_discount?: true
+    drive_permission_id?: true
     share_method?: true
     shared_at?: true
   }
@@ -33231,6 +33235,7 @@ export namespace Prisma {
     product_discount?: true
     product_coupon_code?: true
     product_coupon_discount?: true
+    drive_permission_id?: true
     share_method?: true
     shared_at?: true
   }
@@ -33254,6 +33259,7 @@ export namespace Prisma {
     product_discount?: true
     product_coupon_code?: true
     product_coupon_discount?: true
+    drive_permission_id?: true
     share_method?: true
     shared_at?: true
     _all?: true
@@ -33364,6 +33370,7 @@ export namespace Prisma {
     product_discount: number | null
     product_coupon_code: string | null
     product_coupon_discount: number | null
+    drive_permission_id: string | null
     share_method: $Enums.ShareMethod | null
     shared_at: bigint | null
     _count: TransactionDetailCountAggregateOutputType | null
@@ -33406,6 +33413,7 @@ export namespace Prisma {
     product_discount?: boolean
     product_coupon_code?: boolean
     product_coupon_discount?: boolean
+    drive_permission_id?: boolean
     share_method?: boolean
     shared_at?: boolean
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
@@ -33431,6 +33439,7 @@ export namespace Prisma {
     product_discount?: boolean
     product_coupon_code?: boolean
     product_coupon_discount?: boolean
+    drive_permission_id?: boolean
     share_method?: boolean
     shared_at?: boolean
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
@@ -33456,6 +33465,7 @@ export namespace Prisma {
     product_discount?: boolean
     product_coupon_code?: boolean
     product_coupon_discount?: boolean
+    drive_permission_id?: boolean
     share_method?: boolean
     shared_at?: boolean
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
@@ -33481,11 +33491,12 @@ export namespace Prisma {
     product_discount?: boolean
     product_coupon_code?: boolean
     product_coupon_discount?: boolean
+    drive_permission_id?: boolean
     share_method?: boolean
     shared_at?: boolean
   }
 
-  export type TransactionDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "product_id" | "product_price_id" | "product_coupon_id" | "quantity" | "product_name" | "product_version" | "product_drive_file_id" | "product_download_link" | "product_variant" | "variant_download_link" | "variant_file_access_password" | "product_currency_code" | "product_price" | "product_discount" | "product_coupon_code" | "product_coupon_discount" | "share_method" | "shared_at", ExtArgs["result"]["transactionDetail"]>
+  export type TransactionDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "product_id" | "product_price_id" | "product_coupon_id" | "quantity" | "product_name" | "product_version" | "product_drive_file_id" | "product_download_link" | "product_variant" | "variant_download_link" | "variant_file_access_password" | "product_currency_code" | "product_price" | "product_discount" | "product_coupon_code" | "product_coupon_discount" | "drive_permission_id" | "share_method" | "shared_at", ExtArgs["result"]["transactionDetail"]>
   export type TransactionDetailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
     price?: boolean | TransactionDetail$priceArgs<ExtArgs>
@@ -33524,6 +33535,7 @@ export namespace Prisma {
       product_discount: number | null
       product_coupon_code: string | null
       product_coupon_discount: number | null
+      drive_permission_id: string | null
       share_method: $Enums.ShareMethod | null
       shared_at: bigint | null
     }, ExtArgs["result"]["transactionDetail"]>
@@ -33969,6 +33981,7 @@ export namespace Prisma {
     readonly product_discount: FieldRef<"TransactionDetail", 'Int'>
     readonly product_coupon_code: FieldRef<"TransactionDetail", 'String'>
     readonly product_coupon_discount: FieldRef<"TransactionDetail", 'Int'>
+    readonly drive_permission_id: FieldRef<"TransactionDetail", 'String'>
     readonly share_method: FieldRef<"TransactionDetail", 'ShareMethod'>
     readonly shared_at: FieldRef<"TransactionDetail", 'BigInt'>
   }
@@ -37980,6 +37993,7 @@ export namespace Prisma {
     product_discount: 'product_discount',
     product_coupon_code: 'product_coupon_code',
     product_coupon_discount: 'product_coupon_discount',
+    drive_permission_id: 'drive_permission_id',
     share_method: 'share_method',
     shared_at: 'shared_at'
   };
@@ -39794,6 +39808,7 @@ export namespace Prisma {
     product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     product_coupon_code?: StringNullableFilter<"TransactionDetail"> | string | null
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    drive_permission_id?: StringNullableFilter<"TransactionDetail"> | string | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
@@ -39819,6 +39834,7 @@ export namespace Prisma {
     product_discount?: SortOrderInput | SortOrder
     product_coupon_code?: SortOrderInput | SortOrder
     product_coupon_discount?: SortOrderInput | SortOrder
+    drive_permission_id?: SortOrderInput | SortOrder
     share_method?: SortOrderInput | SortOrder
     shared_at?: SortOrderInput | SortOrder
     transaction?: TransactionOrderByWithRelationInput
@@ -39847,6 +39863,7 @@ export namespace Prisma {
     product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     product_coupon_code?: StringNullableFilter<"TransactionDetail"> | string | null
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    drive_permission_id?: StringNullableFilter<"TransactionDetail"> | string | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
@@ -39872,6 +39889,7 @@ export namespace Prisma {
     product_discount?: SortOrderInput | SortOrder
     product_coupon_code?: SortOrderInput | SortOrder
     product_coupon_discount?: SortOrderInput | SortOrder
+    drive_permission_id?: SortOrderInput | SortOrder
     share_method?: SortOrderInput | SortOrder
     shared_at?: SortOrderInput | SortOrder
     _count?: TransactionDetailCountOrderByAggregateInput
@@ -39903,6 +39921,7 @@ export namespace Prisma {
     product_discount?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
     product_coupon_code?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     product_coupon_discount?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
+    drive_permission_id?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     share_method?: EnumShareMethodNullableWithAggregatesFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableWithAggregatesFilter<"TransactionDetail"> | bigint | number | null
   }
@@ -41629,6 +41648,7 @@ export namespace Prisma {
     product_discount?: number | null
     product_coupon_code?: string | null
     product_coupon_discount?: number | null
+    drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
     transaction: TransactionCreateNestedOneWithoutDetailsInput
@@ -41654,6 +41674,7 @@ export namespace Prisma {
     product_discount?: number | null
     product_coupon_code?: string | null
     product_coupon_discount?: number | null
+    drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
   }
@@ -41675,6 +41696,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     transaction?: TransactionUpdateOneRequiredWithoutDetailsNestedInput
@@ -41700,6 +41722,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
@@ -41723,6 +41746,7 @@ export namespace Prisma {
     product_discount?: number | null
     product_coupon_code?: string | null
     product_coupon_discount?: number | null
+    drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
   }
@@ -41744,6 +41768,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
@@ -41767,6 +41792,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
@@ -43432,6 +43458,7 @@ export namespace Prisma {
     product_discount?: SortOrder
     product_coupon_code?: SortOrder
     product_coupon_discount?: SortOrder
+    drive_permission_id?: SortOrder
     share_method?: SortOrder
     shared_at?: SortOrder
   }
@@ -43463,6 +43490,7 @@ export namespace Prisma {
     product_discount?: SortOrder
     product_coupon_code?: SortOrder
     product_coupon_discount?: SortOrder
+    drive_permission_id?: SortOrder
     share_method?: SortOrder
     shared_at?: SortOrder
   }
@@ -43486,6 +43514,7 @@ export namespace Prisma {
     product_discount?: SortOrder
     product_coupon_code?: SortOrder
     product_coupon_discount?: SortOrder
+    drive_permission_id?: SortOrder
     share_method?: SortOrder
     shared_at?: SortOrder
   }
@@ -47229,6 +47258,7 @@ export namespace Prisma {
     product_discount?: number | null
     product_coupon_code?: string | null
     product_coupon_discount?: number | null
+    drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
     transaction: TransactionCreateNestedOneWithoutDetailsInput
@@ -47252,6 +47282,7 @@ export namespace Prisma {
     product_discount?: number | null
     product_coupon_code?: string | null
     product_coupon_discount?: number | null
+    drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
   }
@@ -47331,6 +47362,7 @@ export namespace Prisma {
     product_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     product_coupon_code?: StringNullableFilter<"TransactionDetail"> | string | null
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
+    drive_permission_id?: StringNullableFilter<"TransactionDetail"> | string | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
     shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
   }
@@ -47689,6 +47721,7 @@ export namespace Prisma {
     product_discount?: number | null
     product_coupon_code?: string | null
     product_coupon_discount?: number | null
+    drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
     price?: ProductPriceCreateNestedOneWithoutTranscationDetailsInput
@@ -47712,6 +47745,7 @@ export namespace Prisma {
     product_discount?: number | null
     product_coupon_code?: string | null
     product_coupon_discount?: number | null
+    drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
   }
@@ -48769,6 +48803,7 @@ export namespace Prisma {
     product_discount?: number | null
     product_coupon_code?: string | null
     product_coupon_discount?: number | null
+    drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
   }
@@ -48790,6 +48825,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     transaction?: TransactionUpdateOneRequiredWithoutDetailsNestedInput
@@ -48813,6 +48849,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
@@ -48835,6 +48872,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
@@ -48953,6 +48991,7 @@ export namespace Prisma {
     product_discount?: number | null
     product_coupon_code?: string | null
     product_coupon_discount?: number | null
+    drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
     shared_at?: bigint | number | null
   }
@@ -48974,6 +49013,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     price?: ProductPriceUpdateOneWithoutTranscationDetailsNestedInput
@@ -48997,6 +49037,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
@@ -49019,6 +49060,7 @@ export namespace Prisma {
     product_discount?: NullableIntFieldUpdateOperationsInput | number | null
     product_coupon_code?: NullableStringFieldUpdateOperationsInput | string | null
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
+    drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }

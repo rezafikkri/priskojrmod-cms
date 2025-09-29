@@ -354,6 +354,7 @@ exports.Prisma.TransactionDetailScalarFieldEnum = {
   product_discount: 'product_discount',
   product_coupon_code: 'product_coupon_code',
   product_coupon_discount: 'product_coupon_discount',
+  drive_permission_id: 'drive_permission_id',
   share_method: 'share_method',
   shared_at: 'shared_at'
 };
