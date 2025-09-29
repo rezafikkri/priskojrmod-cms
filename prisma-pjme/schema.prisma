@@ -429,8 +429,9 @@ model TransactionDetail {
   product_coupon_code          String?      @db.VarChar(150)
   product_coupon_discount      Int?         @db.SmallInt
 
-  share_method ShareMethod?
-  shared_at    BigInt?
+  drive_permission_id   String?       @db.VarChar(100)
+  share_method          ShareMethod?
+  shared_at             BigInt?
 
   transaction Transaction   @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
   price       ProductPrice?  @relation(fields: [product_price_id], references: [id], onDelete: SetNull)

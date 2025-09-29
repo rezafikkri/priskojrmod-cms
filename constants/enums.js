@@ -37,7 +37,7 @@ export const AdminRole = Object.freeze({
    * Note: Admins are not necessarily the "owners" of a product,
    * but they are always the ones responsible for it—especially in contexts like checkout or customer support.
    */
-  owner: 'owner',
+  OWNER: 'owner',
 
   /**
    * Staff can perform all operational tasks within the system,
@@ -45,5 +45,5 @@ export const AdminRole = Object.freeze({
    * In other words, Staff can manage their own products and handle most CMS functions,
    * but cannot manage admin accounts or reassign product responsibility.
    */
-  staff: 'staff',
+  STAFF: 'staff',
 });
