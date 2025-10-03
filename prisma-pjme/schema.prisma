@@ -395,7 +395,7 @@ enum InvoiceStatus {
 
 model Invoice {
   id              String       @id @default(uuid(7)) @db.Uuid
-  transaction_id  String       @db.Uuid @unique
+  transaction_id  String       @db.Uuid
   invoice_number  String       @db.VarChar(32) @unique
   status          InvoiceStatus
   issued_at       BigInt
