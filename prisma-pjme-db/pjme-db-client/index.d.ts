@@ -39763,16 +39763,16 @@ export namespace Prisma {
 
   export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    transaction_id?: string
     invoice_number?: string
     AND?: InvoiceWhereInput | InvoiceWhereInput[]
     OR?: InvoiceWhereInput[]
     NOT?: InvoiceWhereInput | InvoiceWhereInput[]
+    transaction_id?: UuidFilter<"Invoice"> | string
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
     issued_at?: BigIntFilter<"Invoice"> | bigint | number
     voided_at?: BigIntNullableFilter<"Invoice"> | bigint | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
-  }, "id" | "transaction_id" | "invoice_number">
+  }, "id" | "invoice_number">
 
   export type InvoiceOrderByWithAggregationInput = {
     id?: SortOrder
