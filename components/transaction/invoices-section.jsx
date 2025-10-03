@@ -18,7 +18,7 @@ import {
 import Error404 from '../icon/error-404';
 
 export default function InvoicesSection({ invoices }) {
-  if (!invoices) {
+  if (invoices.length <= 0) {
     return (
       <Alert className="text-base mt-2.5 mb-4">
         <Error404 />
@@ -46,7 +46,7 @@ export default function InvoicesSection({ invoices }) {
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Status</TableHead>
-              <TableCell>{invoice.status}</TableCell>
+              <TableCell className="capitalize">{invoice.status}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Issued At</TableHead>

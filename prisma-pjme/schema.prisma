@@ -380,7 +380,7 @@ model Transaction {
   customer_phone_number String? @db.VarChar(20)
 
   details       TransactionDetail[]
-  invoices      Invoice?
+  invoices      Invoice[]
   customer      Customer?           @relation(fields: [customer_id], references: [id], onDelete: SetNull)
 
   @@map("transactions")

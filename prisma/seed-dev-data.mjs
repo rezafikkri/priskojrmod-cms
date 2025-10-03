@@ -127,6 +127,7 @@ export default async function seedDevData() {
   // seed transaction
   const products = await pjmeDBPrismaClient.product.findMany({
     where: { price_type: 'paid' },
+    orderBy: { updated_at: 'desc' },
     include: {
       versions: {
         orderBy: [
@@ -146,7 +147,7 @@ export default async function seedDevData() {
   const customers = await pjmeDBPrismaClient.customer.findMany();
 
   const transactions = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 1; i++) {
     let transactionDetails = [];
     if (i % 2 === 0) {
       transactionDetails = getTransactionDetails({ max: 3, products });

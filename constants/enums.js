@@ -26,6 +26,11 @@ export const ShareMethod = Object.freeze({
   MANUAL_REQUIRED: 'manual_required',
 });
 
+export const InvoiceStatus = Object.freeze({
+  ACTIVE: 'active',
+  VOID: 'void',
+});
+
 export const AdminRole = Object.freeze({
   /**
    * Owner has full access to the system.

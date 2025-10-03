@@ -30,6 +30,7 @@ import TooltipWrapper from '../ui/tooltip-wrapper';
 import InfoCircle from '../icon/info-circle';
 import CorrectStatusDialog from './correct-status-dialog';
 import DetailsSheet from './details-sheet';
+import { TransactionStatus } from '@/constants/enums';
 
 export default function DataTable({
   transaction,
@@ -41,13 +42,15 @@ export default function DataTable({
 }) {
   const {transactions, rowCount} = transaction;
   const {
-    onPaginationChange,
-    onColumnVisibilityChange,
-  } = tableHandler;
-  const {
     columnVisibility,
     pagination,
+    updatingTransactionStatusIds,
   } = tableState;
+  const {
+    onPaginationChange,
+    onColumnVisibilityChange,
+    onEditTransactionStatus,
+  } = tableHandler;
 
   const [correctData, setCorrectData] = useState({
     transactionCode: 'PJM-20250814-ABC123',
@@ -55,6 +58,28 @@ export default function DataTable({
   const [isOpenCorrectStatusDialog, setIsOpenCorrectStatusDialog] = useState(false);
 
   const [seeDetailsId, setSeeDetailsId] = useState(null);
+
+  function getChangeStatusMenu(currentStatus) {
+    if (
+      currentStatus === TransactionStatus.CANCELLED ||
+      currentStatus === TransactionStatus.REFUND
+    ) return null;
+
+    let excludedStatuses = [
+      TransactionStatus.PENDING,
+      TransactionStatus.REFUND,
+    ];
+
+    if (currentStatus === TransactionStatus.PAID) {
+      excludedStatuses = [
+        TransactionStatus.PENDING,
+        TransactionStatus.CANCELLED,
+        TransactionStatus.PAID,
+      ];
+    }
+
+    return Object.values(TransactionStatus).filter(ts => !excludedStatuses.includes(ts));
+  }
 
   // table definition
   const columns = useMemo(() => [
@@ -123,30 +148,28 @@ export default function DataTable({
             <Button
               variant="ghost"
               className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={
+                updatingTransactionStatusIds.includes(row.original.id)
+              }
             >
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-50">
             <DropdownMenuLabel className="text-muted-foreground text-[15px]">Change Status To</DropdownMenuLabel>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button>Paid</button>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button>Cancelled</button>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button>Refund</button>
-            </DropdownMenuItem>
+            {getChangeStatusMenu(row.getValue('status')).map(cs => (
+              <DropdownMenuItem
+                key={cs}
+                className="w-full text-base capitalize"
+                asChild
+              >
+                <button
+                  onClick={() => {
+                    onEditTransactionStatus(row.original.id, cs);
+                  }}
+                >{cs}</button>
+              </DropdownMenuItem>
+            ))}
 
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other Action</DropdownMenuLabel>
@@ -172,7 +195,7 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], []);
+  ], [updatingTransactionStatusIds]);
   const table = useReactTable({
     data: transactions,
     rowCount,
@@ -216,6 +239,13 @@ export default function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className={
+                    (
+                      updatingTransactionStatusIds.includes(row.original.id)
+                    )
+                      ? 'opacity-50'
+                      : ''
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

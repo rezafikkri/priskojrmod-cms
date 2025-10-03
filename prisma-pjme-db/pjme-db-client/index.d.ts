@@ -4037,10 +4037,12 @@ export namespace Prisma {
 
   export type TransactionCountOutputType = {
     details: number
+    invoices: number
   }
 
   export type TransactionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     details?: boolean | TransactionCountOutputTypeCountDetailsArgs
+    invoices?: boolean | TransactionCountOutputTypeCountInvoicesArgs
   }
 
   // Custom InputTypes
@@ -4059,6 +4061,13 @@ export namespace Prisma {
    */
   export type TransactionCountOutputTypeCountDetailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TransactionDetailWhereInput
+  }
+
+  /**
+   * TransactionCountOutputType without action
+   */
+  export type TransactionCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvoiceWhereInput
   }
 
 
@@ -31033,7 +31042,7 @@ export namespace Prisma {
     name: "Transaction"
     objects: {
       details: Prisma.$TransactionDetailPayload<ExtArgs>[]
-      invoices: Prisma.$InvoicePayload<ExtArgs> | null
+      invoices: Prisma.$InvoicePayload<ExtArgs>[]
       customer: Prisma.$CustomerPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -31445,7 +31454,7 @@ export namespace Prisma {
   export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     details<T extends Transaction$detailsArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$detailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    invoices<T extends Transaction$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$invoicesArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    invoices<T extends Transaction$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     customer<T extends Transaction$customerArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$customerArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -31925,6 +31934,11 @@ export namespace Prisma {
      */
     include?: InvoiceInclude<ExtArgs> | null
     where?: InvoiceWhereInput
+    orderBy?: InvoiceOrderByWithRelationInput | InvoiceOrderByWithRelationInput[]
+    cursor?: InvoiceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvoiceScalarFieldEnum | InvoiceScalarFieldEnum[]
   }
 
   /**
@@ -39639,7 +39653,7 @@ export namespace Prisma {
     customer_email?: StringFilter<"Transaction"> | string
     customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
     details?: TransactionDetailListRelationFilter
-    invoices?: XOR<InvoiceNullableScalarRelationFilter, InvoiceWhereInput> | null
+    invoices?: InvoiceListRelationFilter
     customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
   }
 
@@ -39658,7 +39672,7 @@ export namespace Prisma {
     customer_email?: SortOrder
     customer_phone_number?: SortOrderInput | SortOrder
     details?: TransactionDetailOrderByRelationAggregateInput
-    invoices?: InvoiceOrderByWithRelationInput
+    invoices?: InvoiceOrderByRelationAggregateInput
     customer?: CustomerOrderByWithRelationInput
   }
 
@@ -39680,7 +39694,7 @@ export namespace Prisma {
     customer_email?: StringFilter<"Transaction"> | string
     customer_phone_number?: StringNullableFilter<"Transaction"> | string | null
     details?: TransactionDetailListRelationFilter
-    invoices?: XOR<InvoiceNullableScalarRelationFilter, InvoiceWhereInput> | null
+    invoices?: InvoiceListRelationFilter
     customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
   }, "id" | "code">
 
@@ -41464,7 +41478,7 @@ export namespace Prisma {
     customer_email: string
     customer_phone_number?: string | null
     details?: TransactionDetailCreateNestedManyWithoutTransactionInput
-    invoices?: InvoiceCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceCreateNestedManyWithoutTransactionInput
     customer?: CustomerCreateNestedOneWithoutTransactionsInput
   }
 
@@ -41483,7 +41497,7 @@ export namespace Prisma {
     customer_email: string
     customer_phone_number?: string | null
     details?: TransactionDetailUncheckedCreateNestedManyWithoutTransactionInput
-    invoices?: InvoiceUncheckedCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUpdateInput = {
@@ -41500,7 +41514,7 @@ export namespace Prisma {
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     details?: TransactionDetailUpdateManyWithoutTransactionNestedInput
-    invoices?: InvoiceUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUpdateManyWithoutTransactionNestedInput
     customer?: CustomerUpdateOneWithoutTransactionsNestedInput
   }
 
@@ -41519,7 +41533,7 @@ export namespace Prisma {
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     details?: TransactionDetailUncheckedUpdateManyWithoutTransactionNestedInput
-    invoices?: InvoiceUncheckedUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionCreateManyInput = {
@@ -43262,14 +43276,19 @@ export namespace Prisma {
     not?: NestedEnumTransactionStatusFilter<$PrismaModel> | $Enums.TransactionStatus
   }
 
-  export type InvoiceNullableScalarRelationFilter = {
-    is?: InvoiceWhereInput | null
-    isNot?: InvoiceWhereInput | null
+  export type InvoiceListRelationFilter = {
+    every?: InvoiceWhereInput
+    some?: InvoiceWhereInput
+    none?: InvoiceWhereInput
   }
 
   export type CustomerNullableScalarRelationFilter = {
     is?: CustomerWhereInput | null
     isNot?: CustomerWhereInput | null
+  }
+
+  export type InvoiceOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type TransactionCountOrderByAggregateInput = {
@@ -44808,10 +44827,11 @@ export namespace Prisma {
     connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
   }
 
-  export type InvoiceCreateNestedOneWithoutTransactionInput = {
-    create?: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput>
-    connectOrCreate?: InvoiceCreateOrConnectWithoutTransactionInput
-    connect?: InvoiceWhereUniqueInput
+  export type InvoiceCreateNestedManyWithoutTransactionInput = {
+    create?: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput> | InvoiceCreateWithoutTransactionInput[] | InvoiceUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutTransactionInput | InvoiceCreateOrConnectWithoutTransactionInput[]
+    createMany?: InvoiceCreateManyTransactionInputEnvelope
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
   }
 
   export type CustomerCreateNestedOneWithoutTransactionsInput = {
@@ -44827,10 +44847,11 @@ export namespace Prisma {
     connect?: TransactionDetailWhereUniqueInput | TransactionDetailWhereUniqueInput[]
   }
 
-  export type InvoiceUncheckedCreateNestedOneWithoutTransactionInput = {
-    create?: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput>
-    connectOrCreate?: InvoiceCreateOrConnectWithoutTransactionInput
-    connect?: InvoiceWhereUniqueInput
+  export type InvoiceUncheckedCreateNestedManyWithoutTransactionInput = {
+    create?: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput> | InvoiceCreateWithoutTransactionInput[] | InvoiceUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutTransactionInput | InvoiceCreateOrConnectWithoutTransactionInput[]
+    createMany?: InvoiceCreateManyTransactionInputEnvelope
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
   }
 
   export type EnumTransactionStatusFieldUpdateOperationsInput = {
@@ -44851,14 +44872,18 @@ export namespace Prisma {
     deleteMany?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
   }
 
-  export type InvoiceUpdateOneWithoutTransactionNestedInput = {
-    create?: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput>
-    connectOrCreate?: InvoiceCreateOrConnectWithoutTransactionInput
-    upsert?: InvoiceUpsertWithoutTransactionInput
-    disconnect?: InvoiceWhereInput | boolean
-    delete?: InvoiceWhereInput | boolean
-    connect?: InvoiceWhereUniqueInput
-    update?: XOR<XOR<InvoiceUpdateToOneWithWhereWithoutTransactionInput, InvoiceUpdateWithoutTransactionInput>, InvoiceUncheckedUpdateWithoutTransactionInput>
+  export type InvoiceUpdateManyWithoutTransactionNestedInput = {
+    create?: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput> | InvoiceCreateWithoutTransactionInput[] | InvoiceUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutTransactionInput | InvoiceCreateOrConnectWithoutTransactionInput[]
+    upsert?: InvoiceUpsertWithWhereUniqueWithoutTransactionInput | InvoiceUpsertWithWhereUniqueWithoutTransactionInput[]
+    createMany?: InvoiceCreateManyTransactionInputEnvelope
+    set?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    disconnect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    delete?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    update?: InvoiceUpdateWithWhereUniqueWithoutTransactionInput | InvoiceUpdateWithWhereUniqueWithoutTransactionInput[]
+    updateMany?: InvoiceUpdateManyWithWhereWithoutTransactionInput | InvoiceUpdateManyWithWhereWithoutTransactionInput[]
+    deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
   }
 
   export type CustomerUpdateOneWithoutTransactionsNestedInput = {
@@ -44885,14 +44910,18 @@ export namespace Prisma {
     deleteMany?: TransactionDetailScalarWhereInput | TransactionDetailScalarWhereInput[]
   }
 
-  export type InvoiceUncheckedUpdateOneWithoutTransactionNestedInput = {
-    create?: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput>
-    connectOrCreate?: InvoiceCreateOrConnectWithoutTransactionInput
-    upsert?: InvoiceUpsertWithoutTransactionInput
-    disconnect?: InvoiceWhereInput | boolean
-    delete?: InvoiceWhereInput | boolean
-    connect?: InvoiceWhereUniqueInput
-    update?: XOR<XOR<InvoiceUpdateToOneWithWhereWithoutTransactionInput, InvoiceUpdateWithoutTransactionInput>, InvoiceUncheckedUpdateWithoutTransactionInput>
+  export type InvoiceUncheckedUpdateManyWithoutTransactionNestedInput = {
+    create?: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput> | InvoiceCreateWithoutTransactionInput[] | InvoiceUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutTransactionInput | InvoiceCreateOrConnectWithoutTransactionInput[]
+    upsert?: InvoiceUpsertWithWhereUniqueWithoutTransactionInput | InvoiceUpsertWithWhereUniqueWithoutTransactionInput[]
+    createMany?: InvoiceCreateManyTransactionInputEnvelope
+    set?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    disconnect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    delete?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    update?: InvoiceUpdateWithWhereUniqueWithoutTransactionInput | InvoiceUpdateWithWhereUniqueWithoutTransactionInput[]
+    updateMany?: InvoiceUpdateManyWithWhereWithoutTransactionInput | InvoiceUpdateManyWithWhereWithoutTransactionInput[]
+    deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
   }
 
   export type TransactionCreateNestedOneWithoutInvoicesInput = {
@@ -45672,7 +45701,7 @@ export namespace Prisma {
     customer_email: string
     customer_phone_number?: string | null
     details?: TransactionDetailCreateNestedManyWithoutTransactionInput
-    invoices?: InvoiceCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutCustomerInput = {
@@ -45689,7 +45718,7 @@ export namespace Prisma {
     customer_email: string
     customer_phone_number?: string | null
     details?: TransactionDetailUncheckedCreateNestedManyWithoutTransactionInput
-    invoices?: InvoiceUncheckedCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutCustomerInput = {
@@ -47781,6 +47810,11 @@ export namespace Prisma {
     create: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput>
   }
 
+  export type InvoiceCreateManyTransactionInputEnvelope = {
+    data: InvoiceCreateManyTransactionInput | InvoiceCreateManyTransactionInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CustomerCreateWithoutTransactionsInput = {
     id?: string
     oauth_id?: string | null
@@ -47830,31 +47864,32 @@ export namespace Prisma {
     data: XOR<TransactionDetailUpdateManyMutationInput, TransactionDetailUncheckedUpdateManyWithoutTransactionInput>
   }
 
-  export type InvoiceUpsertWithoutTransactionInput = {
+  export type InvoiceUpsertWithWhereUniqueWithoutTransactionInput = {
+    where: InvoiceWhereUniqueInput
     update: XOR<InvoiceUpdateWithoutTransactionInput, InvoiceUncheckedUpdateWithoutTransactionInput>
     create: XOR<InvoiceCreateWithoutTransactionInput, InvoiceUncheckedCreateWithoutTransactionInput>
-    where?: InvoiceWhereInput
   }
 
-  export type InvoiceUpdateToOneWithWhereWithoutTransactionInput = {
-    where?: InvoiceWhereInput
+  export type InvoiceUpdateWithWhereUniqueWithoutTransactionInput = {
+    where: InvoiceWhereUniqueInput
     data: XOR<InvoiceUpdateWithoutTransactionInput, InvoiceUncheckedUpdateWithoutTransactionInput>
   }
 
-  export type InvoiceUpdateWithoutTransactionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    invoice_number?: StringFieldUpdateOperationsInput | string
-    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  export type InvoiceUpdateManyWithWhereWithoutTransactionInput = {
+    where: InvoiceScalarWhereInput
+    data: XOR<InvoiceUpdateManyMutationInput, InvoiceUncheckedUpdateManyWithoutTransactionInput>
   }
 
-  export type InvoiceUncheckedUpdateWithoutTransactionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    invoice_number?: StringFieldUpdateOperationsInput | string
-    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  export type InvoiceScalarWhereInput = {
+    AND?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+    OR?: InvoiceScalarWhereInput[]
+    NOT?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+    id?: UuidFilter<"Invoice"> | string
+    transaction_id?: UuidFilter<"Invoice"> | string
+    invoice_number?: StringFilter<"Invoice"> | string
+    status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
+    issued_at?: BigIntFilter<"Invoice"> | bigint | number
+    voided_at?: BigIntNullableFilter<"Invoice"> | bigint | number | null
   }
 
   export type CustomerUpsertWithoutTransactionsInput = {
@@ -47993,7 +48028,7 @@ export namespace Prisma {
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
-    invoices?: InvoiceCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceCreateNestedManyWithoutTransactionInput
     customer?: CustomerCreateNestedOneWithoutTransactionsInput
   }
 
@@ -48011,7 +48046,7 @@ export namespace Prisma {
     customer_name: string
     customer_email: string
     customer_phone_number?: string | null
-    invoices?: InvoiceUncheckedCreateNestedOneWithoutTransactionInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutDetailsInput = {
@@ -48062,7 +48097,7 @@ export namespace Prisma {
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    invoices?: InvoiceUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUpdateManyWithoutTransactionNestedInput
     customer?: CustomerUpdateOneWithoutTransactionsNestedInput
   }
 
@@ -48080,7 +48115,7 @@ export namespace Prisma {
     customer_name?: StringFieldUpdateOperationsInput | string
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    invoices?: InvoiceUncheckedUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type ProductPriceUpsertWithoutTranscationDetailsInput = {
@@ -48409,7 +48444,7 @@ export namespace Prisma {
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     details?: TransactionDetailUpdateManyWithoutTransactionNestedInput
-    invoices?: InvoiceUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutCustomerInput = {
@@ -48426,7 +48461,7 @@ export namespace Prisma {
     customer_email?: StringFieldUpdateOperationsInput | string
     customer_phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     details?: TransactionDetailUncheckedUpdateManyWithoutTransactionNestedInput
-    invoices?: InvoiceUncheckedUpdateOneWithoutTransactionNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutCustomerInput = {
@@ -48996,6 +49031,14 @@ export namespace Prisma {
     shared_at?: bigint | number | null
   }
 
+  export type InvoiceCreateManyTransactionInput = {
+    id?: string
+    invoice_number: string
+    status: $Enums.InvoiceStatus
+    issued_at: bigint | number
+    voided_at?: bigint | number | null
+  }
+
   export type TransactionDetailUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
@@ -49063,6 +49106,30 @@ export namespace Prisma {
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
     shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  }
+
+  export type InvoiceUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  }
+
+  export type InvoiceUncheckedUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  }
+
+  export type InvoiceUncheckedUpdateManyWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   }
 
   export type TestimonialTranslationCreateManyTestimonialInput = {

@@ -92,8 +92,10 @@ export default function DetailsSection({ details }) {
           <TableBody>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-50">Share Method</TableHead>
-              <TableCell>
-                {detail.share_method ?? <Minus className="icon text-zinc-300" />}
+              <TableCell className="capitalize">
+                {detail.share_method
+                  ? detail.share_method.replace('_', ' ')
+                  : <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
             <TableRow>
