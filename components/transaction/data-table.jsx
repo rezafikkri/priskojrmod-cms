@@ -156,22 +156,30 @@ export default function DataTable({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-50">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Change Status To</DropdownMenuLabel>
-            {getChangeStatusMenu(row.getValue('status')).map(cs => (
-              <DropdownMenuItem
-                key={cs}
-                className="w-full text-base capitalize"
-                asChild
-              >
-                <button
-                  onClick={() => {
-                    onEditTransactionStatus(row.original.id, cs);
-                  }}
-                >{cs}</button>
-              </DropdownMenuItem>
-            ))}
+            {getChangeStatusMenu(row.getValue('status')) && (
+              <>
+                <DropdownMenuLabel
+                  className="text-muted-foreground text-[15px]"
+                >
+                  Change Status To
+                </DropdownMenuLabel>
+                {getChangeStatusMenu(row.getValue('status')).map(cs => (
+                  <DropdownMenuItem
+                    key={cs}
+                    className="w-full text-base capitalize"
+                    asChild
+                  >
+                    <button
+                      onClick={() => {
+                        onEditTransactionStatus(row.original.id, cs);
+                      }}
+                    >{cs}</button>
+                  </DropdownMenuItem>
+                ))}
 
-            <DropdownMenuSeparator />
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other Action</DropdownMenuLabel>
 
             <DropdownMenuItem
