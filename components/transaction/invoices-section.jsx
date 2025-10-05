@@ -30,14 +30,14 @@ export default function InvoicesSection({ invoices }) {
   return invoices.map((invoice, index) => (
     <Fragment key={invoice.id}>
       {invoices.length > 1 && (
-        <div className="relative flex items-center mt-2.5 mb-1.5">
+        <div className="relative flex items-center mt-2.5">
           <Separator className="!w-5 me-1" />
           <h4>Invoice {index + 1}</h4>
           <Separator className="flex-1 ms-1" />
         </div>
       )}
 
-      <div className="rounded-md border mb-4">
+      <div className="rounded-md border mb-4 mt-1.5">
         <Table className="text-base">
           <TableBody>
             <TableRow>
