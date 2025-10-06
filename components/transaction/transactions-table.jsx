@@ -321,9 +321,7 @@ export default function TransactionsTable() {
             { transactions: newTransactions, rowCount: newRowCount },
           );
 
-          if (!hasSuccessfulStatusChangeRef.current) {
-            hasSuccessfulStatusChangeRef.current = true;
-          }
+          hasSuccessfulStatusChangeRef.current = true;
         } else {
           if (newTransactions.length === 0 && newRowCount > 0) {
             queryClient.removeQueries({
@@ -368,15 +366,14 @@ export default function TransactionsTable() {
       updatingTransactionStatusIdsRef.current.length === 0 &&
       hasSuccessfulStatusChangeRef.current
     ) {
-      const isCurrentStatusApplicable = filtersRef.current?.status === status ||
-        !filtersRef.current?.status;
-      const isFilterMatched = isCurrentStatusApplicable
-        ? !isLastPage({
+      const isStatusFilterEmpty = !filtersRef.current?.status;
+      const isFilterMatched = isStatusFilterEmpty
+        ? paginationRef.current.pageIndex !== 0
+        : !isLastPage({
           pageIndex: paginationRef.current.pageIndex,
           pageSize: paginationRef.current.pageSize,
           rowCount: transaction.rowCount,
-        })
-        : paginationRef.current.pageIndex !== 0;
+        });
 
       if (isFilterMatched) {
         queryClient.invalidateQueries({ queryKey: ['transactions'] });

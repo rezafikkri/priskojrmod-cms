@@ -128,6 +128,7 @@ export default async function seedDevData() {
   const products = await pjmeDBPrismaClient.product.findMany({
     where: { price_type: 'paid' },
     orderBy: { updated_at: 'desc' },
+    take: 1,
     include: {
       versions: {
         orderBy: [
@@ -144,18 +145,20 @@ export default async function seedDevData() {
       },
     },
   });
-  const customers = await pjmeDBPrismaClient.customer.findMany();
+  const customers = await pjmeDBPrismaClient.customer.findMany({
+    where: { is_banned: false },
+  });
 
   const transactions = [];
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 7; i++) {
     let transactionDetails = [];
-    if (i % 2 === 0) {
-      transactionDetails = getTransactionDetails({ max: 3, products });
-    } else if (i % 3 === 0) {
-      transactionDetails = getTransactionDetails({ max: 2, products });
-    } else {
+    // if (i % 2 === 0) {
+    //   transactionDetails = getTransactionDetails({ max: 3, products });
+    // } else if (i % 3 === 0) {
+    //   transactionDetails = getTransactionDetails({ max: 2, products });
+    // } else {
       transactionDetails = getTransactionDetails({ max: 1, products });
-    }
+    // }
 
     const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];
     const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
