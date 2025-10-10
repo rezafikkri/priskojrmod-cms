@@ -31,6 +31,7 @@ import InfoCircle from '../icon/info-circle';
 import CorrectStatusDialog from './correct-status-dialog';
 import DetailsSheet from './details-sheet';
 import { TransactionStatus } from '@/constants/enums';
+import Link from 'next/link';
 
 export default function DataTable({
   transaction,
@@ -199,6 +200,15 @@ export default function DataTable({
             >
               <button>See Details</button>
             </DropdownMenuItem>
+            
+            {row.original.invoices.length > 0 && (
+              <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+                <Link
+                  href={`/invoices/${row.original.invoices[0].invoice_number}/pdf`}
+                  target='_blank'
+                >View Invoice</Link>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       ),

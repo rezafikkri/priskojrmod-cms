@@ -21,6 +21,13 @@ export async function GET(req) {
     customer_email: true,
     created_at: true,
     updated_at: true,
+    invoices: {
+      select: {
+        invoice_number: true,
+      },
+      take: 1,
+      orderBy: { issued_at: 'desc' },
+    },
   };
 
   let dataResponse;
