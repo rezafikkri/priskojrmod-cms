@@ -55,6 +55,8 @@ model Owner {
   first_name  String @db.VarChar(100)
   last_name   String @db.VarChar(100)
   sm_username String @db.VarChar(100)
+  email       String? @db.VarChar(254)
+  location    String? @db.VarChar(100)
   picture     String @db.VarChar(255)
   created_at  BigInt
   updated_at  BigInt
@@ -77,7 +79,7 @@ model Customer {
   created_at   BigInt
   updated_at   BigInt
 
-  transactions  Transaction[]
+  transactions Transaction[]
 
   @@map("customers")
 }
@@ -248,7 +250,7 @@ model ProductPrice {
   currency_code CurrencyCode
   price         Decimal      @db.Decimal(10, 2)
 
-  variant            ProductVariant       @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  variant            ProductVariant      @relation(fields: [variant_id], references: [id], onDelete: Cascade)
   transcationDetails TransactionDetail[]
 
   @@map("product_prices")
@@ -362,12 +364,12 @@ enum ShareMethod {
 }
 
 model Transaction {
-  id            String     @id @default(uuid(7)) @db.Uuid
-  code          String     @unique @db.VarChar(32)
-  customer_id   String?    @db.Uuid
+  id          String  @id @default(uuid(7)) @db.Uuid
+  code        String  @unique @db.VarChar(32)
+  customer_id String? @db.Uuid
 
-  admin_id      String  @db.VarChar(255) // only for reference
-  admin_email   String  @db.VarChar(254)
+  admin_id    String @db.VarChar(255) // only for reference
+  admin_email String @db.VarChar(254)
 
   status        TransactionStatus
   created_at    BigInt
@@ -379,9 +381,9 @@ model Transaction {
   customer_email        String  @db.VarChar(254)
   customer_phone_number String? @db.VarChar(20)
 
-  details       TransactionDetail[]
-  invoices      Invoice[]
-  customer      Customer?           @relation(fields: [customer_id], references: [id], onDelete: SetNull)
+  details  TransactionDetail[]
+  invoices Invoice[]
+  customer Customer?           @relation(fields: [customer_id], references: [id], onDelete: SetNull)
 
   @@map("transactions")
 }
@@ -394,14 +396,14 @@ enum InvoiceStatus {
 }
 
 model Invoice {
-  id              String       @id @default(uuid(7)) @db.Uuid
-  transaction_id  String       @db.Uuid
-  invoice_number  String       @db.VarChar(32) @unique
-  status          InvoiceStatus
-  issued_at       BigInt
-  voided_at       BigInt?
+  id             String        @id @default(uuid(7)) @db.Uuid
+  transaction_id String        @db.Uuid
+  invoice_number String        @unique @db.VarChar(32)
+  status         InvoiceStatus
+  issued_at      BigInt
+  voided_at      BigInt?
 
-  transaction     Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+  transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
 
   @@map("invoices")
 }
@@ -414,27 +416,27 @@ model TransactionDetail {
   product_coupon_id String? @db.Uuid
   quantity          Int     @db.SmallInt
 
-  product_name                 String       @db.VarChar(150)
-  product_version              String       @db.VarChar(50)
-  product_drive_file_id        String?
-  product_download_link        String?
+  product_name          String  @db.VarChar(150)
+  product_version       String  @db.VarChar(50)
+  product_drive_file_id String?
+  product_download_link String?
 
-  product_variant              String       @db.VarChar(100)
+  product_variant              String  @db.VarChar(100)
   variant_download_link        String?
-  variant_file_access_password String?      @db.VarChar(100)
-  
-  product_currency_code        CurrencyCode
-  product_price                Decimal      @db.Decimal(10, 2)
-  product_discount             Int?         @db.SmallInt
-  product_coupon_code          String?      @db.VarChar(150)
-  product_coupon_discount      Int?         @db.SmallInt
+  variant_file_access_password String? @db.VarChar(100)
 
-  drive_permission_id   String?       @db.VarChar(100)
-  share_method          ShareMethod?
-  shared_at             BigInt?
+  product_currency_code   CurrencyCode
+  product_price           Decimal      @db.Decimal(10, 2)
+  product_discount        Int?         @db.SmallInt
+  product_coupon_code     String?      @db.VarChar(150)
+  product_coupon_discount Int?         @db.SmallInt
+
+  drive_permission_id String?      @db.VarChar(100)
+  share_method        ShareMethod?
+  shared_at           BigInt?
 
   transaction Transaction   @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
-  price       ProductPrice?  @relation(fields: [product_price_id], references: [id], onDelete: SetNull)
+  price       ProductPrice? @relation(fields: [product_price_id], references: [id], onDelete: SetNull)
 
   @@map("transaction_details")
 }
