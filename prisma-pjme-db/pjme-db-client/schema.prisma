@@ -51,13 +51,13 @@ model DonationLink {
 }
 
 model Owner {
-  id          Int     @id @default(autoincrement())
-  first_name  String  @db.VarChar(100)
-  last_name   String  @db.VarChar(100)
-  sm_username String  @db.VarChar(100)
-  email       String? @db.VarChar(254)
-  location    String? @db.VarChar(100)
-  picture     String  @db.VarChar(255)
+  id          Int    @id @default(autoincrement())
+  first_name  String @db.VarChar(100)
+  last_name   String @db.VarChar(100)
+  sm_username String @db.VarChar(100)
+  email       String @db.VarChar(254)
+  location    String @db.VarChar(100)
+  picture     String @db.VarChar(255)
   created_at  BigInt
   updated_at  BigInt
 
