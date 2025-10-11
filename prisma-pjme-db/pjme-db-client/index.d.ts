@@ -6325,8 +6325,6 @@ export namespace Prisma {
     first_name: string | null
     last_name: string | null
     sm_username: string | null
-    email: string | null
-    location: string | null
     picture: string | null
     created_at: bigint | null
     updated_at: bigint | null
@@ -6337,8 +6335,6 @@ export namespace Prisma {
     first_name: string | null
     last_name: string | null
     sm_username: string | null
-    email: string | null
-    location: string | null
     picture: string | null
     created_at: bigint | null
     updated_at: bigint | null
@@ -6349,8 +6345,6 @@ export namespace Prisma {
     first_name: number
     last_name: number
     sm_username: number
-    email: number
-    location: number
     picture: number
     created_at: number
     updated_at: number
@@ -6375,8 +6369,6 @@ export namespace Prisma {
     first_name?: true
     last_name?: true
     sm_username?: true
-    email?: true
-    location?: true
     picture?: true
     created_at?: true
     updated_at?: true
@@ -6387,8 +6379,6 @@ export namespace Prisma {
     first_name?: true
     last_name?: true
     sm_username?: true
-    email?: true
-    location?: true
     picture?: true
     created_at?: true
     updated_at?: true
@@ -6399,8 +6389,6 @@ export namespace Prisma {
     first_name?: true
     last_name?: true
     sm_username?: true
-    email?: true
-    location?: true
     picture?: true
     created_at?: true
     updated_at?: true
@@ -6498,8 +6486,6 @@ export namespace Prisma {
     first_name: string
     last_name: string
     sm_username: string
-    email: string
-    location: string
     picture: string
     created_at: bigint
     updated_at: bigint
@@ -6529,8 +6515,6 @@ export namespace Prisma {
     first_name?: boolean
     last_name?: boolean
     sm_username?: boolean
-    email?: boolean
-    location?: boolean
     picture?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -6543,8 +6527,6 @@ export namespace Prisma {
     first_name?: boolean
     last_name?: boolean
     sm_username?: boolean
-    email?: boolean
-    location?: boolean
     picture?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -6555,8 +6537,6 @@ export namespace Prisma {
     first_name?: boolean
     last_name?: boolean
     sm_username?: boolean
-    email?: boolean
-    location?: boolean
     picture?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -6567,14 +6547,12 @@ export namespace Prisma {
     first_name?: boolean
     last_name?: boolean
     sm_username?: boolean
-    email?: boolean
-    location?: boolean
     picture?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OwnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "sm_username" | "email" | "location" | "picture" | "created_at" | "updated_at", ExtArgs["result"]["owner"]>
+  export type OwnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "sm_username" | "picture" | "created_at" | "updated_at", ExtArgs["result"]["owner"]>
   export type OwnerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | Owner$productsArgs<ExtArgs>
     _count?: boolean | OwnerCountOutputTypeDefaultArgs<ExtArgs>
@@ -6592,8 +6570,6 @@ export namespace Prisma {
       first_name: string
       last_name: string
       sm_username: string
-      email: string
-      location: string
       picture: string
       created_at: bigint
       updated_at: bigint
@@ -7025,8 +7001,6 @@ export namespace Prisma {
     readonly first_name: FieldRef<"Owner", 'String'>
     readonly last_name: FieldRef<"Owner", 'String'>
     readonly sm_username: FieldRef<"Owner", 'String'>
-    readonly email: FieldRef<"Owner", 'String'>
-    readonly location: FieldRef<"Owner", 'String'>
     readonly picture: FieldRef<"Owner", 'String'>
     readonly created_at: FieldRef<"Owner", 'BigInt'>
     readonly updated_at: FieldRef<"Owner", 'BigInt'>
@@ -37748,8 +37722,6 @@ export namespace Prisma {
     first_name: 'first_name',
     last_name: 'last_name',
     sm_username: 'sm_username',
-    email: 'email',
-    location: 'location',
     picture: 'picture',
     created_at: 'created_at',
     updated_at: 'updated_at'
@@ -38393,8 +38365,6 @@ export namespace Prisma {
     first_name?: StringFilter<"Owner"> | string
     last_name?: StringFilter<"Owner"> | string
     sm_username?: StringFilter<"Owner"> | string
-    email?: StringFilter<"Owner"> | string
-    location?: StringFilter<"Owner"> | string
     picture?: StringFilter<"Owner"> | string
     created_at?: BigIntFilter<"Owner"> | bigint | number
     updated_at?: BigIntFilter<"Owner"> | bigint | number
@@ -38406,8 +38376,6 @@ export namespace Prisma {
     first_name?: SortOrder
     last_name?: SortOrder
     sm_username?: SortOrder
-    email?: SortOrder
-    location?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -38422,8 +38390,6 @@ export namespace Prisma {
     first_name?: StringFilter<"Owner"> | string
     last_name?: StringFilter<"Owner"> | string
     sm_username?: StringFilter<"Owner"> | string
-    email?: StringFilter<"Owner"> | string
-    location?: StringFilter<"Owner"> | string
     picture?: StringFilter<"Owner"> | string
     created_at?: BigIntFilter<"Owner"> | bigint | number
     updated_at?: BigIntFilter<"Owner"> | bigint | number
@@ -38435,8 +38401,6 @@ export namespace Prisma {
     first_name?: SortOrder
     last_name?: SortOrder
     sm_username?: SortOrder
-    email?: SortOrder
-    location?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -38455,8 +38419,6 @@ export namespace Prisma {
     first_name?: StringWithAggregatesFilter<"Owner"> | string
     last_name?: StringWithAggregatesFilter<"Owner"> | string
     sm_username?: StringWithAggregatesFilter<"Owner"> | string
-    email?: StringWithAggregatesFilter<"Owner"> | string
-    location?: StringWithAggregatesFilter<"Owner"> | string
     picture?: StringWithAggregatesFilter<"Owner"> | string
     created_at?: BigIntWithAggregatesFilter<"Owner"> | bigint | number
     updated_at?: BigIntWithAggregatesFilter<"Owner"> | bigint | number
@@ -40271,8 +40233,6 @@ export namespace Prisma {
     first_name: string
     last_name: string
     sm_username: string
-    email: string
-    location: string
     picture: string
     created_at: bigint | number
     updated_at: bigint | number
@@ -40284,8 +40244,6 @@ export namespace Prisma {
     first_name: string
     last_name: string
     sm_username: string
-    email: string
-    location: string
     picture: string
     created_at: bigint | number
     updated_at: bigint | number
@@ -40296,8 +40254,6 @@ export namespace Prisma {
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    location?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -40309,8 +40265,6 @@ export namespace Prisma {
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    location?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -40322,8 +40276,6 @@ export namespace Prisma {
     first_name: string
     last_name: string
     sm_username: string
-    email: string
-    location: string
     picture: string
     created_at: bigint | number
     updated_at: bigint | number
@@ -40333,8 +40285,6 @@ export namespace Prisma {
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    location?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -40345,8 +40295,6 @@ export namespace Prisma {
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    location?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -42209,8 +42157,6 @@ export namespace Prisma {
     first_name?: SortOrder
     last_name?: SortOrder
     sm_username?: SortOrder
-    email?: SortOrder
-    location?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -42227,8 +42173,6 @@ export namespace Prisma {
     first_name?: SortOrder
     last_name?: SortOrder
     sm_username?: SortOrder
-    email?: SortOrder
-    location?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -42239,8 +42183,6 @@ export namespace Prisma {
     first_name?: SortOrder
     last_name?: SortOrder
     sm_username?: SortOrder
-    email?: SortOrder
-    location?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -46105,8 +46047,6 @@ export namespace Prisma {
     first_name: string
     last_name: string
     sm_username: string
-    email: string
-    location: string
     picture: string
     created_at: bigint | number
     updated_at: bigint | number
@@ -46117,8 +46057,6 @@ export namespace Prisma {
     first_name: string
     last_name: string
     sm_username: string
-    email: string
-    location: string
     picture: string
     created_at: bigint | number
     updated_at: bigint | number
@@ -46352,8 +46290,6 @@ export namespace Prisma {
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    location?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
@@ -46364,8 +46300,6 @@ export namespace Prisma {
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    location?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: BigIntFieldUpdateOperationsInput | bigint | number
     updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
