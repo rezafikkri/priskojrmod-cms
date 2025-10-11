@@ -90,6 +90,36 @@ export default function FormFields({
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base">Email</FormLabel>
+              <FormControl>
+                <Input type="email" disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
+              </FormControl>
+              <FormDescription>Enter a valid email address.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="location"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base">Location</FormLabel>
+              <FormControl>
+                <Input disabled={isSubmitting} {...field} className="md:text-base h-auto px-3 py-1.5 shadow-none" />
+              </FormControl>
+              <FormDescription>Enter your location, at minimum your city and country.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button asChild variant="outline" className="me-3 mb-0 h-auto inline-block text-base px-3 py-1.5">
           <Link href="/owner"><ArrowLeft className="icon" /> Back</Link>
         </Button>

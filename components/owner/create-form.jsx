@@ -19,6 +19,8 @@ export default function CreateForm() {
       last_name: '',
       sm_username: '',
       picture: '',
+      email: '',
+      location: '',
     },
   });
   const isSubmitting = form.formState.isSubmitting;
@@ -46,8 +48,9 @@ export default function CreateForm() {
       form.setValue('first_name', admin.data.first_name);
       form.setValue('last_name', admin.data.last_name);
       form.setValue('picture', admin.data.picture);
+      form.setValue('email', admin.data.email);
 
-      toast.success('Got your admin info! Now just enter your social media username.');
+      toast.success('Got your admin info! Now just add your social media username and location (city and country).');
     } catch (err) {
       toast.error(err.message);
     } finally {
