@@ -26,6 +26,7 @@ import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
 import { editTransactionStatus } from '@/actions/transaction-actions';
+import { TransactionStatus } from '@/constants/enums';
 
 export default function TransactionsTable() {
   const queryClient = useQueryClient();
@@ -243,14 +244,19 @@ export default function TransactionsTable() {
         setSearchedTransaction(prevTransaction => {
           let newTransactions;
 
-          if (filtersRef.current?.status === status || !filtersRef.current?.status) {
+          if (!filtersRef.current?.status) {
             newTransactions = prevTransaction.transactions.map(transaction => {
               if (transaction.id === id) {
-                return {
+                const result = {
                   ...transaction,
                   status,
                   updated_at: editRes.data.updated_at,
                 };
+                if (status === TransactionStatus.PAID) {
+                  result.invoices = editRes.data.invoices;
+                }
+
+                return result;
               }
               return transaction;
             });
@@ -265,7 +271,7 @@ export default function TransactionsTable() {
         });
 
         queryClient.invalidateQueries({ queryKey: ['transactions'] });
-      } else if (filtersRef.current?.status === status || !filtersRef.current?.status) {
+      } else if (!filtersRef.current?.status) {
         if (paginationRef.current.pageIndex === 0) {
           queryClient.setQueryData(
             ['transactions', paginationRef.current.pageIndex, filtersRef.current],
@@ -275,14 +281,19 @@ export default function TransactionsTable() {
               const targetTransaction = oldData.transactions.find(t => t.id === id);
 
               if (targetTransaction) {
+                const newTargetTransaction = {
+                  ...targetTransaction,
+                  status,
+                  updated_at: editRes.data.updated_at,
+                };
+                if (status === TransactionStatus.PAID) {
+                  newTargetTransaction.invoices = editRes.data.invoices;
+                }
+
                 return {
                   ...oldData,
                   transactions: [
-                    {
-                      ...targetTransaction,
-                      status,
-                      updated_at: editRes.data.updated_at,
-                    },
+                    newTargetTransaction,
                     ...oldData.transactions.filter(t => t.id !== id),
                   ],
                 };

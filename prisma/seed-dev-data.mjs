@@ -113,8 +113,8 @@ function getTransactionDetails({
       product_download_link: product.download_link,
 
       product_variant: product.variants[0].name,
-      product_currency_code: product.variants[0].prices[0].currency_code,
-      product_price: product.variants[0].prices[0].price.toNumber(),
+      product_currency_code: product.variants[0].prices[1].currency_code,
+      product_price: product.variants[0].prices[1].price.toNumber(),
     });
     if (transactionDetails.length === max) break;
   }
