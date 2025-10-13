@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/alert';
 import Error404 from '../icon/error-404';
 import { AlertCircle } from 'lucide-react';
+import { CancelledError } from '@tanstack/react-query';
 
 function DetailsContent({ isLoading, data, error }) {
   if (!isLoading) {
@@ -102,7 +103,7 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
     try {
       const result = await queryClient.fetchQuery({
         queryKey: ['transactionDetails', detailsId],
-        queryFn: async () => {
+        queryFn: async ({ signal }) => {
           setIsLoading(true);
 
           return await safeFetch({
@@ -111,6 +112,7 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
               setIsLoading(false);
             },
             errorMessage: 'Something went wrong while searching. Please try again.',
+            signal,
           });
         },
         staleTime: 10_000,
@@ -119,6 +121,8 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
 
       setDetails(result.data);
     } catch (err) {
+      if (err instanceof CancelledError) return;
+
       console.error(err);
       setError(err.message);
     }
@@ -133,6 +137,8 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
       setDetails(null);
       setError(null);
       onDetailsIdChange(null);
+      // abort fetch
+      queryClient.cancelQueries({ queryKey: ['transactionDetails', detailsId] });
     }
   }
 
