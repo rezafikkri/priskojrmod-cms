@@ -128,7 +128,6 @@ export default async function seedDevData() {
   const products = await pjmeDBPrismaClient.product.findMany({
     where: { price_type: 'paid' },
     orderBy: { updated_at: 'desc' },
-    take: 1,
     include: {
       versions: {
         orderBy: [
@@ -150,14 +149,14 @@ export default async function seedDevData() {
   });
 
   const transactions = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 2; i++) {
     let transactionDetails = [];
     // if (i % 2 === 0) {
-    //   transactionDetails = getTransactionDetails({ max: 3, products });
+      transactionDetails = getTransactionDetails({ max: 3, products });
     // } else if (i % 3 === 0) {
-    //   transactionDetails = getTransactionDetails({ max: 2, products });
+      // transactionDetails = getTransactionDetails({ max: 2, products });
     // } else {
-      transactionDetails = getTransactionDetails({ max: 1, products });
+      // transactionDetails = getTransactionDetails({ max: 1, products });
     // }
 
     const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];

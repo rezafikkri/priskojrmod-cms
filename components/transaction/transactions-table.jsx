@@ -25,7 +25,7 @@ import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
-import { editTransactionStatus } from '@/actions/transaction-actions';
+import { editTransactionStatus, prepareConfirmationMessage } from '@/actions/transaction-actions';
 import { TransactionStatus } from '@/constants/enums';
 
 export default function TransactionsTable() {
@@ -394,6 +394,15 @@ export default function TransactionsTable() {
     }
   }, []);
 
+  const handleCopyableMessage = useCallback(async (id) => {
+    const toastId = toast.loading('Preparing the message...');
+
+    const prepareRes = await prepareConfirmationMessage(id);
+    navigator.clipboard.writeText(prepareRes.data.message);
+
+    toast.success('Message copied to clipboard!', { id: toastId });
+  }, []);
+
   let transaction;
   if (searchedTransaction) {
     transaction = searchedTransaction;
@@ -514,6 +523,7 @@ export default function TransactionsTable() {
             onPaginationChange: handlePaginationChange,
             onColumnVisibilityChange: setColumnVisibility,
             onEditTransactionStatus: handleEditTransactionStatus,
+            onCopyableMessage: handleCopyableMessage,
           }}
           isPlaceholderData={isPlaceholderDataC}
           hasSearched={!!searchedTransaction}

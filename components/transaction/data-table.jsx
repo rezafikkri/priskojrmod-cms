@@ -51,6 +51,7 @@ export default function DataTable({
     onPaginationChange,
     onColumnVisibilityChange,
     onEditTransactionStatus,
+    onCopyableMessage,
   } = tableHandler;
 
   const [correctData, setCorrectData] = useState({
@@ -208,6 +209,17 @@ export default function DataTable({
                   target='_blank'
                 >View Invoice</Link>
               </DropdownMenuItem>
+            )}
+
+            {row.getValue('status') === TransactionStatus.PAID && (
+            <DropdownMenuItem
+              className="w-full text-base"
+              asChild
+            >
+              <button onClick={() => onCopyableMessage(row.original.id)}>
+                Copy Confirmation Message
+              </button>
+            </DropdownMenuItem>
             )}
           </DropdownMenuContent>
         </DropdownMenu>
