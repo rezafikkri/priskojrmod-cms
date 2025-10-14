@@ -33,6 +33,7 @@ import SelectionAlert from '../ui/selection-alert';
 import { Minus } from 'lucide-react';
 import EditRevokeStatusDialog from './edit-revoke-status-dialog';
 import ResetDeviceDialog from './reset-device-dialog';
+import { toast } from 'sonner';
 
 export default function DataTable({
   licenseKey,
@@ -154,7 +155,10 @@ export default function DataTable({
               className="w-full text-base"
               asChild
             >
-              <button onClick={() => navigator.clipboard.writeText(row.original.code)}>
+              <button onClick={() => {
+                navigator.clipboard.writeText(row.original.code);
+                toast.success('License key code copied to clipboard.');
+              }}>
                 Copy Code
               </button>
             </DropdownMenuItem>

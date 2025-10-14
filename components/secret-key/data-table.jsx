@@ -99,7 +99,10 @@ export default function DataTable({ secretKeys: data }) {
                 className="w-full text-base"
                 asChild
               >
-                <button onClick={() => navigator.clipboard.writeText(row.original.key)}>
+                <button onClick={() => {
+                  navigator.clipboard.writeText(row.original.key);
+                  toast.success('Secret key copied to clipboard.');
+                }}>
                   Copy Secret Key
                 </button>
               </DropdownMenuItem>
