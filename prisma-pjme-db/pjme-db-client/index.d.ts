@@ -6316,8 +6316,8 @@ export namespace Prisma {
 
   export type OwnerSumAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type OwnerMinAggregateOutputType = {
@@ -6326,8 +6326,8 @@ export namespace Prisma {
     last_name: string | null
     sm_username: string | null
     picture: string | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type OwnerMaxAggregateOutputType = {
@@ -6336,8 +6336,8 @@ export namespace Prisma {
     last_name: string | null
     sm_username: string | null
     picture: string | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type OwnerCountAggregateOutputType = {
@@ -6487,8 +6487,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
-    created_at: bigint
-    updated_at: bigint
+    created_at: number
+    updated_at: number
     _count: OwnerCountAggregateOutputType | null
     _avg: OwnerAvgAggregateOutputType | null
     _sum: OwnerSumAggregateOutputType | null
@@ -6571,8 +6571,8 @@ export namespace Prisma {
       last_name: string
       sm_username: string
       picture: string
-      created_at: bigint
-      updated_at: bigint
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["owner"]>
     composites: {}
   }
@@ -7002,8 +7002,8 @@ export namespace Prisma {
     readonly last_name: FieldRef<"Owner", 'String'>
     readonly sm_username: FieldRef<"Owner", 'String'>
     readonly picture: FieldRef<"Owner", 'String'>
-    readonly created_at: FieldRef<"Owner", 'BigInt'>
-    readonly updated_at: FieldRef<"Owner", 'BigInt'>
+    readonly created_at: FieldRef<"Owner", 'Int'>
+    readonly updated_at: FieldRef<"Owner", 'Int'>
   }
     
 
@@ -7453,9 +7453,9 @@ export namespace Prisma {
   }
 
   export type CustomerSumAggregateOutputType = {
-    last_active: bigint | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    last_active: number | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type CustomerMinAggregateOutputType = {
@@ -7467,9 +7467,9 @@ export namespace Prisma {
     email: string | null
     phone_number: string | null
     picture: string | null
-    last_active: bigint | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    last_active: number | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type CustomerMaxAggregateOutputType = {
@@ -7481,9 +7481,9 @@ export namespace Prisma {
     email: string | null
     phone_number: string | null
     picture: string | null
-    last_active: bigint | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    last_active: number | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type CustomerCountAggregateOutputType = {
@@ -7652,9 +7652,9 @@ export namespace Prisma {
     email: string
     phone_number: string | null
     picture: string | null
-    last_active: bigint | null
-    created_at: bigint
-    updated_at: bigint
+    last_active: number | null
+    created_at: number
+    updated_at: number
     _count: CustomerCountAggregateOutputType | null
     _avg: CustomerAvgAggregateOutputType | null
     _sum: CustomerSumAggregateOutputType | null
@@ -7756,9 +7756,9 @@ export namespace Prisma {
       email: string
       phone_number: string | null
       picture: string | null
-      last_active: bigint | null
-      created_at: bigint
-      updated_at: bigint
+      last_active: number | null
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["customer"]>
     composites: {}
   }
@@ -8191,9 +8191,9 @@ export namespace Prisma {
     readonly email: FieldRef<"Customer", 'String'>
     readonly phone_number: FieldRef<"Customer", 'String'>
     readonly picture: FieldRef<"Customer", 'String'>
-    readonly last_active: FieldRef<"Customer", 'BigInt'>
-    readonly created_at: FieldRef<"Customer", 'BigInt'>
-    readonly updated_at: FieldRef<"Customer", 'BigInt'>
+    readonly last_active: FieldRef<"Customer", 'Int'>
+    readonly created_at: FieldRef<"Customer", 'Int'>
+    readonly updated_at: FieldRef<"Customer", 'Int'>
   }
     
 
@@ -8644,20 +8644,20 @@ export namespace Prisma {
 
   export type LicenseSumAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type LicenseMinAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type LicenseMaxAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type LicenseCountAggregateOutputType = {
@@ -8787,8 +8787,8 @@ export namespace Prisma {
 
   export type LicenseGroupByOutputType = {
     id: number
-    created_at: bigint
-    updated_at: bigint
+    created_at: number
+    updated_at: number
     _count: LicenseCountAggregateOutputType | null
     _avg: LicenseAvgAggregateOutputType | null
     _sum: LicenseSumAggregateOutputType | null
@@ -8854,8 +8854,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      created_at: bigint
-      updated_at: bigint
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["license"]>
     composites: {}
   }
@@ -9282,8 +9282,8 @@ export namespace Prisma {
    */
   interface LicenseFieldRefs {
     readonly id: FieldRef<"License", 'Int'>
-    readonly created_at: FieldRef<"License", 'BigInt'>
-    readonly updated_at: FieldRef<"License", 'BigInt'>
+    readonly created_at: FieldRef<"License", 'Int'>
+    readonly updated_at: FieldRef<"License", 'Int'>
   }
     
 
@@ -10854,24 +10854,24 @@ export namespace Prisma {
 
   export type CategorySumAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type CategoryMinAggregateOutputType = {
     id: number | null
     name: string | null
     slug: string | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type CategoryMaxAggregateOutputType = {
     id: number | null
     name: string | null
     slug: string | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type CategoryCountAggregateOutputType = {
@@ -11011,8 +11011,8 @@ export namespace Prisma {
     id: number
     name: string
     slug: string
-    created_at: bigint
-    updated_at: bigint
+    created_at: number
+    updated_at: number
     _count: CategoryCountAggregateOutputType | null
     _avg: CategoryAvgAggregateOutputType | null
     _sum: CategorySumAggregateOutputType | null
@@ -11085,8 +11085,8 @@ export namespace Prisma {
       id: number
       name: string
       slug: string
-      created_at: bigint
-      updated_at: bigint
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["category"]>
     composites: {}
   }
@@ -11514,8 +11514,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Category", 'Int'>
     readonly name: FieldRef<"Category", 'String'>
     readonly slug: FieldRef<"Category", 'String'>
-    readonly created_at: FieldRef<"Category", 'BigInt'>
-    readonly updated_at: FieldRef<"Category", 'BigInt'>
+    readonly created_at: FieldRef<"Category", 'Int'>
+    readonly updated_at: FieldRef<"Category", 'Int'>
   }
     
 
@@ -11970,8 +11970,8 @@ export namespace Prisma {
     category_id: number | null
     owner_id: number | null
     license_id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -11987,8 +11987,8 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     price_type: $Enums.PriceType | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type ProductMaxAggregateOutputType = {
@@ -12004,8 +12004,8 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     price_type: $Enums.PriceType | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type ProductCountAggregateOutputType = {
@@ -12194,8 +12194,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint
-    updated_at: bigint
+    created_at: number
+    updated_at: number
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
     _sum: ProductSumAggregateOutputType | null
@@ -12358,8 +12358,8 @@ export namespace Prisma {
       name: string
       slug: string
       price_type: $Enums.PriceType
-      created_at: bigint
-      updated_at: bigint
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["product"]>
     composites: {}
   }
@@ -12805,8 +12805,8 @@ export namespace Prisma {
     readonly name: FieldRef<"Product", 'String'>
     readonly slug: FieldRef<"Product", 'String'>
     readonly price_type: FieldRef<"Product", 'PriceType'>
-    readonly created_at: FieldRef<"Product", 'BigInt'>
-    readonly updated_at: FieldRef<"Product", 'BigInt'>
+    readonly created_at: FieldRef<"Product", 'Int'>
+    readonly updated_at: FieldRef<"Product", 'Int'>
   }
     
 
@@ -14417,21 +14417,21 @@ export namespace Prisma {
   }
 
   export type ProductVersionSumAggregateOutputType = {
-    released_at: bigint | null
+    released_at: number | null
   }
 
   export type ProductVersionMinAggregateOutputType = {
     id: string | null
     product_id: string | null
     version: string | null
-    released_at: bigint | null
+    released_at: number | null
   }
 
   export type ProductVersionMaxAggregateOutputType = {
     id: string | null
     product_id: string | null
     version: string | null
-    released_at: bigint | null
+    released_at: number | null
   }
 
   export type ProductVersionCountAggregateOutputType = {
@@ -14563,7 +14563,7 @@ export namespace Prisma {
     id: string
     product_id: string
     version: string
-    released_at: bigint
+    released_at: number
     _count: ProductVersionCountAggregateOutputType | null
     _avg: ProductVersionAvgAggregateOutputType | null
     _sum: ProductVersionSumAggregateOutputType | null
@@ -14641,7 +14641,7 @@ export namespace Prisma {
       id: string
       product_id: string
       version: string
-      released_at: bigint
+      released_at: number
     }, ExtArgs["result"]["productVersion"]>
     composites: {}
   }
@@ -15070,7 +15070,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductVersion", 'String'>
     readonly product_id: FieldRef<"ProductVersion", 'String'>
     readonly version: FieldRef<"ProductVersion", 'String'>
-    readonly released_at: FieldRef<"ProductVersion", 'BigInt'>
+    readonly released_at: FieldRef<"ProductVersion", 'Int'>
   }
     
 
@@ -16575,21 +16575,21 @@ export namespace Prisma {
   export type ProductDiscountSumAggregateOutputType = {
     id: number | null
     discount: number | null
-    expired_at: bigint | null
+    expired_at: number | null
   }
 
   export type ProductDiscountMinAggregateOutputType = {
     id: number | null
     product_id: string | null
     discount: number | null
-    expired_at: bigint | null
+    expired_at: number | null
   }
 
   export type ProductDiscountMaxAggregateOutputType = {
     id: number | null
     product_id: string | null
     discount: number | null
-    expired_at: bigint | null
+    expired_at: number | null
   }
 
   export type ProductDiscountCountAggregateOutputType = {
@@ -16725,7 +16725,7 @@ export namespace Prisma {
     id: number
     product_id: string
     discount: number
-    expired_at: bigint
+    expired_at: number
     _count: ProductDiscountCountAggregateOutputType | null
     _avg: ProductDiscountAvgAggregateOutputType | null
     _sum: ProductDiscountSumAggregateOutputType | null
@@ -16798,7 +16798,7 @@ export namespace Prisma {
       id: number
       product_id: string
       discount: number
-      expired_at: bigint
+      expired_at: number
     }, ExtArgs["result"]["productDiscount"]>
     composites: {}
   }
@@ -17226,7 +17226,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductDiscount", 'Int'>
     readonly product_id: FieldRef<"ProductDiscount", 'String'>
     readonly discount: FieldRef<"ProductDiscount", 'Int'>
-    readonly expired_at: FieldRef<"ProductDiscount", 'BigInt'>
+    readonly expired_at: FieldRef<"ProductDiscount", 'Int'>
   }
     
 
@@ -17660,7 +17660,7 @@ export namespace Prisma {
 
   export type ProductCouponSumAggregateOutputType = {
     discount: number | null
-    expired_at: bigint | null
+    expired_at: number | null
   }
 
   export type ProductCouponMinAggregateOutputType = {
@@ -17668,7 +17668,7 @@ export namespace Prisma {
     product_id: string | null
     code: string | null
     discount: number | null
-    expired_at: bigint | null
+    expired_at: number | null
   }
 
   export type ProductCouponMaxAggregateOutputType = {
@@ -17676,7 +17676,7 @@ export namespace Prisma {
     product_id: string | null
     code: string | null
     discount: number | null
-    expired_at: bigint | null
+    expired_at: number | null
   }
 
   export type ProductCouponCountAggregateOutputType = {
@@ -17815,7 +17815,7 @@ export namespace Prisma {
     product_id: string
     code: string
     discount: number
-    expired_at: bigint
+    expired_at: number
     _count: ProductCouponCountAggregateOutputType | null
     _avg: ProductCouponAvgAggregateOutputType | null
     _sum: ProductCouponSumAggregateOutputType | null
@@ -17893,7 +17893,7 @@ export namespace Prisma {
       product_id: string
       code: string
       discount: number
-      expired_at: bigint
+      expired_at: number
     }, ExtArgs["result"]["productCoupon"]>
     composites: {}
   }
@@ -18322,7 +18322,7 @@ export namespace Prisma {
     readonly product_id: FieldRef<"ProductCoupon", 'String'>
     readonly code: FieldRef<"ProductCoupon", 'String'>
     readonly discount: FieldRef<"ProductCoupon", 'Int'>
-    readonly expired_at: FieldRef<"ProductCoupon", 'BigInt'>
+    readonly expired_at: FieldRef<"ProductCoupon", 'Int'>
   }
     
 
@@ -22063,20 +22063,20 @@ export namespace Prisma {
 
   export type TermsOfServiceSumAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type TermsOfServiceMinAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type TermsOfServiceMaxAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type TermsOfServiceCountAggregateOutputType = {
@@ -22206,8 +22206,8 @@ export namespace Prisma {
 
   export type TermsOfServiceGroupByOutputType = {
     id: number
-    created_at: bigint
-    updated_at: bigint
+    created_at: number
+    updated_at: number
     _count: TermsOfServiceCountAggregateOutputType | null
     _avg: TermsOfServiceAvgAggregateOutputType | null
     _sum: TermsOfServiceSumAggregateOutputType | null
@@ -22270,8 +22270,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      created_at: bigint
-      updated_at: bigint
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["termsOfService"]>
     composites: {}
   }
@@ -22697,8 +22697,8 @@ export namespace Prisma {
    */
   interface TermsOfServiceFieldRefs {
     readonly id: FieldRef<"TermsOfService", 'Int'>
-    readonly created_at: FieldRef<"TermsOfService", 'BigInt'>
-    readonly updated_at: FieldRef<"TermsOfService", 'BigInt'>
+    readonly created_at: FieldRef<"TermsOfService", 'Int'>
+    readonly updated_at: FieldRef<"TermsOfService", 'Int'>
   }
     
 
@@ -24232,20 +24232,20 @@ export namespace Prisma {
 
   export type PrivacyPolicySumAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type PrivacyPolicyMinAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type PrivacyPolicyMaxAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type PrivacyPolicyCountAggregateOutputType = {
@@ -24375,8 +24375,8 @@ export namespace Prisma {
 
   export type PrivacyPolicyGroupByOutputType = {
     id: number
-    created_at: bigint
-    updated_at: bigint
+    created_at: number
+    updated_at: number
     _count: PrivacyPolicyCountAggregateOutputType | null
     _avg: PrivacyPolicyAvgAggregateOutputType | null
     _sum: PrivacyPolicySumAggregateOutputType | null
@@ -24439,8 +24439,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      created_at: bigint
-      updated_at: bigint
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["privacyPolicy"]>
     composites: {}
   }
@@ -24866,8 +24866,8 @@ export namespace Prisma {
    */
   interface PrivacyPolicyFieldRefs {
     readonly id: FieldRef<"PrivacyPolicy", 'Int'>
-    readonly created_at: FieldRef<"PrivacyPolicy", 'BigInt'>
-    readonly updated_at: FieldRef<"PrivacyPolicy", 'BigInt'>
+    readonly created_at: FieldRef<"PrivacyPolicy", 'Int'>
+    readonly updated_at: FieldRef<"PrivacyPolicy", 'Int'>
   }
     
 
@@ -28536,20 +28536,20 @@ export namespace Prisma {
 
   export type FaqSumAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type FaqMinAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type FaqMaxAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type FaqCountAggregateOutputType = {
@@ -28679,8 +28679,8 @@ export namespace Prisma {
 
   export type FaqGroupByOutputType = {
     id: number
-    created_at: bigint
-    updated_at: bigint
+    created_at: number
+    updated_at: number
     _count: FaqCountAggregateOutputType | null
     _avg: FaqAvgAggregateOutputType | null
     _sum: FaqSumAggregateOutputType | null
@@ -28743,8 +28743,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      created_at: bigint
-      updated_at: bigint
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["faq"]>
     composites: {}
   }
@@ -29170,8 +29170,8 @@ export namespace Prisma {
    */
   interface FaqFieldRefs {
     readonly id: FieldRef<"Faq", 'Int'>
-    readonly created_at: FieldRef<"Faq", 'BigInt'>
-    readonly updated_at: FieldRef<"Faq", 'BigInt'>
+    readonly created_at: FieldRef<"Faq", 'Int'>
+    readonly updated_at: FieldRef<"Faq", 'Int'>
   }
     
 
@@ -30717,8 +30717,8 @@ export namespace Prisma {
   }
 
   export type TransactionSumAggregateOutputType = {
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
     total_amount: Decimal | null
   }
 
@@ -30729,8 +30729,8 @@ export namespace Prisma {
     admin_id: string | null
     admin_email: string | null
     status: $Enums.TransactionStatus | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
     currency_code: $Enums.CurrencyCode | null
     total_amount: Decimal | null
     customer_name: string | null
@@ -30745,8 +30745,8 @@ export namespace Prisma {
     admin_id: string | null
     admin_email: string | null
     status: $Enums.TransactionStatus | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
     currency_code: $Enums.CurrencyCode | null
     total_amount: Decimal | null
     customer_name: string | null
@@ -30926,8 +30926,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint
-    updated_at: bigint
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal
     customer_name: string
@@ -31052,8 +31052,8 @@ export namespace Prisma {
       admin_id: string
       admin_email: string
       status: $Enums.TransactionStatus
-      created_at: bigint
-      updated_at: bigint
+      created_at: number
+      updated_at: number
       currency_code: $Enums.CurrencyCode
       total_amount: Prisma.Decimal
       customer_name: string
@@ -31491,8 +31491,8 @@ export namespace Prisma {
     readonly admin_id: FieldRef<"Transaction", 'String'>
     readonly admin_email: FieldRef<"Transaction", 'String'>
     readonly status: FieldRef<"Transaction", 'TransactionStatus'>
-    readonly created_at: FieldRef<"Transaction", 'BigInt'>
-    readonly updated_at: FieldRef<"Transaction", 'BigInt'>
+    readonly created_at: FieldRef<"Transaction", 'Int'>
+    readonly updated_at: FieldRef<"Transaction", 'Int'>
     readonly currency_code: FieldRef<"Transaction", 'CurrencyCode'>
     readonly total_amount: FieldRef<"Transaction", 'Decimal'>
     readonly customer_name: FieldRef<"Transaction", 'String'>
@@ -31997,8 +31997,8 @@ export namespace Prisma {
   }
 
   export type InvoiceSumAggregateOutputType = {
-    issued_at: bigint | null
-    voided_at: bigint | null
+    issued_at: number | null
+    voided_at: number | null
   }
 
   export type InvoiceMinAggregateOutputType = {
@@ -32006,8 +32006,8 @@ export namespace Prisma {
     transaction_id: string | null
     invoice_number: string | null
     status: $Enums.InvoiceStatus | null
-    issued_at: bigint | null
-    voided_at: bigint | null
+    issued_at: number | null
+    voided_at: number | null
   }
 
   export type InvoiceMaxAggregateOutputType = {
@@ -32015,8 +32015,8 @@ export namespace Prisma {
     transaction_id: string | null
     invoice_number: string | null
     status: $Enums.InvoiceStatus | null
-    issued_at: bigint | null
-    voided_at: bigint | null
+    issued_at: number | null
+    voided_at: number | null
   }
 
   export type InvoiceCountAggregateOutputType = {
@@ -32159,8 +32159,8 @@ export namespace Prisma {
     transaction_id: string
     invoice_number: string
     status: $Enums.InvoiceStatus
-    issued_at: bigint
-    voided_at: bigint | null
+    issued_at: number
+    voided_at: number | null
     _count: InvoiceCountAggregateOutputType | null
     _avg: InvoiceAvgAggregateOutputType | null
     _sum: InvoiceSumAggregateOutputType | null
@@ -32242,8 +32242,8 @@ export namespace Prisma {
       transaction_id: string
       invoice_number: string
       status: $Enums.InvoiceStatus
-      issued_at: bigint
-      voided_at: bigint | null
+      issued_at: number
+      voided_at: number | null
     }, ExtArgs["result"]["invoice"]>
     composites: {}
   }
@@ -32672,8 +32672,8 @@ export namespace Prisma {
     readonly transaction_id: FieldRef<"Invoice", 'String'>
     readonly invoice_number: FieldRef<"Invoice", 'String'>
     readonly status: FieldRef<"Invoice", 'InvoiceStatus'>
-    readonly issued_at: FieldRef<"Invoice", 'BigInt'>
-    readonly voided_at: FieldRef<"Invoice", 'BigInt'>
+    readonly issued_at: FieldRef<"Invoice", 'Int'>
+    readonly voided_at: FieldRef<"Invoice", 'Int'>
   }
     
 
@@ -33113,7 +33113,7 @@ export namespace Prisma {
     product_price: Decimal | null
     product_discount: number | null
     product_coupon_discount: number | null
-    shared_at: bigint | null
+    shared_at: number | null
   }
 
   export type TransactionDetailMinAggregateOutputType = {
@@ -33137,7 +33137,7 @@ export namespace Prisma {
     product_coupon_discount: number | null
     drive_permission_id: string | null
     share_method: $Enums.ShareMethod | null
-    shared_at: bigint | null
+    shared_at: number | null
   }
 
   export type TransactionDetailMaxAggregateOutputType = {
@@ -33161,7 +33161,7 @@ export namespace Prisma {
     product_coupon_discount: number | null
     drive_permission_id: string | null
     share_method: $Enums.ShareMethod | null
-    shared_at: bigint | null
+    shared_at: number | null
   }
 
   export type TransactionDetailCountAggregateOutputType = {
@@ -33386,7 +33386,7 @@ export namespace Prisma {
     product_coupon_discount: number | null
     drive_permission_id: string | null
     share_method: $Enums.ShareMethod | null
-    shared_at: bigint | null
+    shared_at: number | null
     _count: TransactionDetailCountAggregateOutputType | null
     _avg: TransactionDetailAvgAggregateOutputType | null
     _sum: TransactionDetailSumAggregateOutputType | null
@@ -33551,7 +33551,7 @@ export namespace Prisma {
       product_coupon_discount: number | null
       drive_permission_id: string | null
       share_method: $Enums.ShareMethod | null
-      shared_at: bigint | null
+      shared_at: number | null
     }, ExtArgs["result"]["transactionDetail"]>
     composites: {}
   }
@@ -33997,7 +33997,7 @@ export namespace Prisma {
     readonly product_coupon_discount: FieldRef<"TransactionDetail", 'Int'>
     readonly drive_permission_id: FieldRef<"TransactionDetail", 'String'>
     readonly share_method: FieldRef<"TransactionDetail", 'ShareMethod'>
-    readonly shared_at: FieldRef<"TransactionDetail", 'BigInt'>
+    readonly shared_at: FieldRef<"TransactionDetail", 'Int'>
   }
     
 
@@ -34448,7 +34448,7 @@ export namespace Prisma {
   }
 
   export type FeedbackSumAggregateOutputType = {
-    created_at: bigint | null
+    created_at: number | null
   }
 
   export type FeedbackMinAggregateOutputType = {
@@ -34457,7 +34457,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     message: string | null
-    created_at: bigint | null
+    created_at: number | null
   }
 
   export type FeedbackMaxAggregateOutputType = {
@@ -34466,7 +34466,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     message: string | null
-    created_at: bigint | null
+    created_at: number | null
   }
 
   export type FeedbackCountAggregateOutputType = {
@@ -34608,7 +34608,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     message: string
-    created_at: bigint
+    created_at: number
     _count: FeedbackCountAggregateOutputType | null
     _avg: FeedbackAvgAggregateOutputType | null
     _sum: FeedbackSumAggregateOutputType | null
@@ -34677,7 +34677,7 @@ export namespace Prisma {
       name: string | null
       email: string | null
       message: string
-      created_at: bigint
+      created_at: number
     }, ExtArgs["result"]["feedback"]>
     composites: {}
   }
@@ -35106,7 +35106,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Feedback", 'String'>
     readonly email: FieldRef<"Feedback", 'String'>
     readonly message: FieldRef<"Feedback", 'String'>
-    readonly created_at: FieldRef<"Feedback", 'BigInt'>
+    readonly created_at: FieldRef<"Feedback", 'Int'>
   }
     
 
@@ -35493,8 +35493,8 @@ export namespace Prisma {
 
   export type TestimonialSumAggregateOutputType = {
     id: number | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type TestimonialMinAggregateOutputType = {
@@ -35502,8 +35502,8 @@ export namespace Prisma {
     picture: string | null
     name: string | null
     sm_username: string | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type TestimonialMaxAggregateOutputType = {
@@ -35511,8 +35511,8 @@ export namespace Prisma {
     picture: string | null
     name: string | null
     sm_username: string | null
-    created_at: bigint | null
-    updated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type TestimonialCountAggregateOutputType = {
@@ -35657,8 +35657,8 @@ export namespace Prisma {
     picture: string
     name: string
     sm_username: string
-    created_at: bigint
-    updated_at: bigint
+    created_at: number
+    updated_at: number
     _count: TestimonialCountAggregateOutputType | null
     _avg: TestimonialAvgAggregateOutputType | null
     _sum: TestimonialSumAggregateOutputType | null
@@ -35736,8 +35736,8 @@ export namespace Prisma {
       picture: string
       name: string
       sm_username: string
-      created_at: bigint
-      updated_at: bigint
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["testimonial"]>
     composites: {}
   }
@@ -36166,8 +36166,8 @@ export namespace Prisma {
     readonly picture: FieldRef<"Testimonial", 'String'>
     readonly name: FieldRef<"Testimonial", 'String'>
     readonly sm_username: FieldRef<"Testimonial", 'String'>
-    readonly created_at: FieldRef<"Testimonial", 'BigInt'>
-    readonly updated_at: FieldRef<"Testimonial", 'BigInt'>
+    readonly created_at: FieldRef<"Testimonial", 'Int'>
+    readonly updated_at: FieldRef<"Testimonial", 'Int'>
   }
     
 
@@ -38121,20 +38121,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'BigInt'
-   */
-  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
-    
-
-
-  /**
-   * Reference to a field of type 'BigInt[]'
-   */
-  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -38366,8 +38352,8 @@ export namespace Prisma {
     last_name?: StringFilter<"Owner"> | string
     sm_username?: StringFilter<"Owner"> | string
     picture?: StringFilter<"Owner"> | string
-    created_at?: BigIntFilter<"Owner"> | bigint | number
-    updated_at?: BigIntFilter<"Owner"> | bigint | number
+    created_at?: IntFilter<"Owner"> | number
+    updated_at?: IntFilter<"Owner"> | number
     products?: ProductListRelationFilter
   }
 
@@ -38391,8 +38377,8 @@ export namespace Prisma {
     last_name?: StringFilter<"Owner"> | string
     sm_username?: StringFilter<"Owner"> | string
     picture?: StringFilter<"Owner"> | string
-    created_at?: BigIntFilter<"Owner"> | bigint | number
-    updated_at?: BigIntFilter<"Owner"> | bigint | number
+    created_at?: IntFilter<"Owner"> | number
+    updated_at?: IntFilter<"Owner"> | number
     products?: ProductListRelationFilter
   }, "id">
 
@@ -38420,8 +38406,8 @@ export namespace Prisma {
     last_name?: StringWithAggregatesFilter<"Owner"> | string
     sm_username?: StringWithAggregatesFilter<"Owner"> | string
     picture?: StringWithAggregatesFilter<"Owner"> | string
-    created_at?: BigIntWithAggregatesFilter<"Owner"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"Owner"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"Owner"> | number
+    updated_at?: IntWithAggregatesFilter<"Owner"> | number
   }
 
   export type CustomerWhereInput = {
@@ -38436,9 +38422,9 @@ export namespace Prisma {
     email?: StringFilter<"Customer"> | string
     phone_number?: StringNullableFilter<"Customer"> | string | null
     picture?: StringNullableFilter<"Customer"> | string | null
-    last_active?: BigIntNullableFilter<"Customer"> | bigint | number | null
-    created_at?: BigIntFilter<"Customer"> | bigint | number
-    updated_at?: BigIntFilter<"Customer"> | bigint | number
+    last_active?: IntNullableFilter<"Customer"> | number | null
+    created_at?: IntFilter<"Customer"> | number
+    updated_at?: IntFilter<"Customer"> | number
     transactions?: TransactionListRelationFilter
   }
 
@@ -38469,9 +38455,9 @@ export namespace Prisma {
     last_name?: StringFilter<"Customer"> | string
     phone_number?: StringNullableFilter<"Customer"> | string | null
     picture?: StringNullableFilter<"Customer"> | string | null
-    last_active?: BigIntNullableFilter<"Customer"> | bigint | number | null
-    created_at?: BigIntFilter<"Customer"> | bigint | number
-    updated_at?: BigIntFilter<"Customer"> | bigint | number
+    last_active?: IntNullableFilter<"Customer"> | number | null
+    created_at?: IntFilter<"Customer"> | number
+    updated_at?: IntFilter<"Customer"> | number
     transactions?: TransactionListRelationFilter
   }, "id" | "oauth_id" | "email">
 
@@ -38506,9 +38492,9 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"Customer"> | string
     phone_number?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     picture?: StringNullableWithAggregatesFilter<"Customer"> | string | null
-    last_active?: BigIntNullableWithAggregatesFilter<"Customer"> | bigint | number | null
-    created_at?: BigIntWithAggregatesFilter<"Customer"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"Customer"> | bigint | number
+    last_active?: IntNullableWithAggregatesFilter<"Customer"> | number | null
+    created_at?: IntWithAggregatesFilter<"Customer"> | number
+    updated_at?: IntWithAggregatesFilter<"Customer"> | number
   }
 
   export type LicenseWhereInput = {
@@ -38516,8 +38502,8 @@ export namespace Prisma {
     OR?: LicenseWhereInput[]
     NOT?: LicenseWhereInput | LicenseWhereInput[]
     id?: IntFilter<"License"> | number
-    created_at?: BigIntFilter<"License"> | bigint | number
-    updated_at?: BigIntFilter<"License"> | bigint | number
+    created_at?: IntFilter<"License"> | number
+    updated_at?: IntFilter<"License"> | number
     products?: ProductListRelationFilter
     translations?: LicenseTranslationListRelationFilter
   }
@@ -38535,8 +38521,8 @@ export namespace Prisma {
     AND?: LicenseWhereInput | LicenseWhereInput[]
     OR?: LicenseWhereInput[]
     NOT?: LicenseWhereInput | LicenseWhereInput[]
-    created_at?: BigIntFilter<"License"> | bigint | number
-    updated_at?: BigIntFilter<"License"> | bigint | number
+    created_at?: IntFilter<"License"> | number
+    updated_at?: IntFilter<"License"> | number
     products?: ProductListRelationFilter
     translations?: LicenseTranslationListRelationFilter
   }, "id">
@@ -38557,8 +38543,8 @@ export namespace Prisma {
     OR?: LicenseScalarWhereWithAggregatesInput[]
     NOT?: LicenseScalarWhereWithAggregatesInput | LicenseScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"License"> | number
-    created_at?: BigIntWithAggregatesFilter<"License"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"License"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"License"> | number
+    updated_at?: IntWithAggregatesFilter<"License"> | number
   }
 
   export type LicenseTranslationWhereInput = {
@@ -38625,8 +38611,8 @@ export namespace Prisma {
     id?: IntFilter<"Category"> | number
     name?: StringFilter<"Category"> | string
     slug?: StringFilter<"Category"> | string
-    created_at?: BigIntFilter<"Category"> | bigint | number
-    updated_at?: BigIntFilter<"Category"> | bigint | number
+    created_at?: IntFilter<"Category"> | number
+    updated_at?: IntFilter<"Category"> | number
     products?: ProductListRelationFilter
   }
 
@@ -38646,8 +38632,8 @@ export namespace Prisma {
     OR?: CategoryWhereInput[]
     NOT?: CategoryWhereInput | CategoryWhereInput[]
     name?: StringFilter<"Category"> | string
-    created_at?: BigIntFilter<"Category"> | bigint | number
-    updated_at?: BigIntFilter<"Category"> | bigint | number
+    created_at?: IntFilter<"Category"> | number
+    updated_at?: IntFilter<"Category"> | number
     products?: ProductListRelationFilter
   }, "id" | "slug">
 
@@ -38671,8 +38657,8 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Category"> | number
     name?: StringWithAggregatesFilter<"Category"> | string
     slug?: StringWithAggregatesFilter<"Category"> | string
-    created_at?: BigIntWithAggregatesFilter<"Category"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"Category"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"Category"> | number
+    updated_at?: IntWithAggregatesFilter<"Category"> | number
   }
 
   export type ProductWhereInput = {
@@ -38691,8 +38677,8 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
-    created_at?: BigIntFilter<"Product"> | bigint | number
-    updated_at?: BigIntFilter<"Product"> | bigint | number
+    created_at?: IntFilter<"Product"> | number
+    updated_at?: IntFilter<"Product"> | number
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     owner?: XOR<OwnerScalarRelationFilter, OwnerWhereInput>
@@ -38748,8 +38734,8 @@ export namespace Prisma {
     is_pinned?: BoolFilter<"Product"> | boolean
     name?: StringFilter<"Product"> | string
     price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
-    created_at?: BigIntFilter<"Product"> | bigint | number
-    updated_at?: BigIntFilter<"Product"> | bigint | number
+    created_at?: IntFilter<"Product"> | number
+    updated_at?: IntFilter<"Product"> | number
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     owner?: XOR<OwnerScalarRelationFilter, OwnerWhereInput>
@@ -38800,8 +38786,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Product"> | string
     slug?: StringWithAggregatesFilter<"Product"> | string
     price_type?: EnumPriceTypeWithAggregatesFilter<"Product"> | $Enums.PriceType
-    created_at?: BigIntWithAggregatesFilter<"Product"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"Product"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"Product"> | number
+    updated_at?: IntWithAggregatesFilter<"Product"> | number
   }
 
   export type ProductTranslationWhereInput = {
@@ -38861,7 +38847,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductVersion"> | string
     product_id?: UuidFilter<"ProductVersion"> | string
     version?: StringFilter<"ProductVersion"> | string
-    released_at?: BigIntFilter<"ProductVersion"> | bigint | number
+    released_at?: IntFilter<"ProductVersion"> | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     translations?: ProductVersionTranslationListRelationFilter
   }
@@ -38883,7 +38869,7 @@ export namespace Prisma {
     NOT?: ProductVersionWhereInput | ProductVersionWhereInput[]
     product_id?: UuidFilter<"ProductVersion"> | string
     version?: StringFilter<"ProductVersion"> | string
-    released_at?: BigIntFilter<"ProductVersion"> | bigint | number
+    released_at?: IntFilter<"ProductVersion"> | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     translations?: ProductVersionTranslationListRelationFilter
   }, "id" | "product_id_version">
@@ -38907,7 +38893,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"ProductVersion"> | string
     product_id?: UuidWithAggregatesFilter<"ProductVersion"> | string
     version?: StringWithAggregatesFilter<"ProductVersion"> | string
-    released_at?: BigIntWithAggregatesFilter<"ProductVersion"> | bigint | number
+    released_at?: IntWithAggregatesFilter<"ProductVersion"> | number
   }
 
   export type ProductVersionTranslationWhereInput = {
@@ -38967,7 +38953,7 @@ export namespace Prisma {
     id?: IntFilter<"ProductDiscount"> | number
     product_id?: UuidFilter<"ProductDiscount"> | string
     discount?: IntFilter<"ProductDiscount"> | number
-    expired_at?: BigIntFilter<"ProductDiscount"> | bigint | number
+    expired_at?: IntFilter<"ProductDiscount"> | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
 
@@ -38986,7 +38972,7 @@ export namespace Prisma {
     OR?: ProductDiscountWhereInput[]
     NOT?: ProductDiscountWhereInput | ProductDiscountWhereInput[]
     discount?: IntFilter<"ProductDiscount"> | number
-    expired_at?: BigIntFilter<"ProductDiscount"> | bigint | number
+    expired_at?: IntFilter<"ProductDiscount"> | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "id" | "product_id">
 
@@ -39009,7 +38995,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"ProductDiscount"> | number
     product_id?: UuidWithAggregatesFilter<"ProductDiscount"> | string
     discount?: IntWithAggregatesFilter<"ProductDiscount"> | number
-    expired_at?: BigIntWithAggregatesFilter<"ProductDiscount"> | bigint | number
+    expired_at?: IntWithAggregatesFilter<"ProductDiscount"> | number
   }
 
   export type ProductCouponWhereInput = {
@@ -39020,7 +39006,7 @@ export namespace Prisma {
     product_id?: UuidFilter<"ProductCoupon"> | string
     code?: StringFilter<"ProductCoupon"> | string
     discount?: IntFilter<"ProductCoupon"> | number
-    expired_at?: BigIntFilter<"ProductCoupon"> | bigint | number
+    expired_at?: IntFilter<"ProductCoupon"> | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }
 
@@ -39041,7 +39027,7 @@ export namespace Prisma {
     NOT?: ProductCouponWhereInput | ProductCouponWhereInput[]
     code?: StringFilter<"ProductCoupon"> | string
     discount?: IntFilter<"ProductCoupon"> | number
-    expired_at?: BigIntFilter<"ProductCoupon"> | bigint | number
+    expired_at?: IntFilter<"ProductCoupon"> | number
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
   }, "id" | "product_id">
 
@@ -39066,7 +39052,7 @@ export namespace Prisma {
     product_id?: UuidWithAggregatesFilter<"ProductCoupon"> | string
     code?: StringWithAggregatesFilter<"ProductCoupon"> | string
     discount?: IntWithAggregatesFilter<"ProductCoupon"> | number
-    expired_at?: BigIntWithAggregatesFilter<"ProductCoupon"> | bigint | number
+    expired_at?: IntWithAggregatesFilter<"ProductCoupon"> | number
   }
 
   export type ProductImageWhereInput = {
@@ -39249,8 +39235,8 @@ export namespace Prisma {
     OR?: TermsOfServiceWhereInput[]
     NOT?: TermsOfServiceWhereInput | TermsOfServiceWhereInput[]
     id?: IntFilter<"TermsOfService"> | number
-    created_at?: BigIntFilter<"TermsOfService"> | bigint | number
-    updated_at?: BigIntFilter<"TermsOfService"> | bigint | number
+    created_at?: IntFilter<"TermsOfService"> | number
+    updated_at?: IntFilter<"TermsOfService"> | number
     translations?: TermsOfServiceTranslationListRelationFilter
   }
 
@@ -39266,8 +39252,8 @@ export namespace Prisma {
     AND?: TermsOfServiceWhereInput | TermsOfServiceWhereInput[]
     OR?: TermsOfServiceWhereInput[]
     NOT?: TermsOfServiceWhereInput | TermsOfServiceWhereInput[]
-    created_at?: BigIntFilter<"TermsOfService"> | bigint | number
-    updated_at?: BigIntFilter<"TermsOfService"> | bigint | number
+    created_at?: IntFilter<"TermsOfService"> | number
+    updated_at?: IntFilter<"TermsOfService"> | number
     translations?: TermsOfServiceTranslationListRelationFilter
   }, "id">
 
@@ -39287,8 +39273,8 @@ export namespace Prisma {
     OR?: TermsOfServiceScalarWhereWithAggregatesInput[]
     NOT?: TermsOfServiceScalarWhereWithAggregatesInput | TermsOfServiceScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"TermsOfService"> | number
-    created_at?: BigIntWithAggregatesFilter<"TermsOfService"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"TermsOfService"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"TermsOfService"> | number
+    updated_at?: IntWithAggregatesFilter<"TermsOfService"> | number
   }
 
   export type TermsOfServiceTranslationWhereInput = {
@@ -39348,8 +39334,8 @@ export namespace Prisma {
     OR?: PrivacyPolicyWhereInput[]
     NOT?: PrivacyPolicyWhereInput | PrivacyPolicyWhereInput[]
     id?: IntFilter<"PrivacyPolicy"> | number
-    created_at?: BigIntFilter<"PrivacyPolicy"> | bigint | number
-    updated_at?: BigIntFilter<"PrivacyPolicy"> | bigint | number
+    created_at?: IntFilter<"PrivacyPolicy"> | number
+    updated_at?: IntFilter<"PrivacyPolicy"> | number
     translations?: PrivacyPolicyTranslationListRelationFilter
   }
 
@@ -39365,8 +39351,8 @@ export namespace Prisma {
     AND?: PrivacyPolicyWhereInput | PrivacyPolicyWhereInput[]
     OR?: PrivacyPolicyWhereInput[]
     NOT?: PrivacyPolicyWhereInput | PrivacyPolicyWhereInput[]
-    created_at?: BigIntFilter<"PrivacyPolicy"> | bigint | number
-    updated_at?: BigIntFilter<"PrivacyPolicy"> | bigint | number
+    created_at?: IntFilter<"PrivacyPolicy"> | number
+    updated_at?: IntFilter<"PrivacyPolicy"> | number
     translations?: PrivacyPolicyTranslationListRelationFilter
   }, "id">
 
@@ -39386,8 +39372,8 @@ export namespace Prisma {
     OR?: PrivacyPolicyScalarWhereWithAggregatesInput[]
     NOT?: PrivacyPolicyScalarWhereWithAggregatesInput | PrivacyPolicyScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"PrivacyPolicy"> | number
-    created_at?: BigIntWithAggregatesFilter<"PrivacyPolicy"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"PrivacyPolicy"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"PrivacyPolicy"> | number
+    updated_at?: IntWithAggregatesFilter<"PrivacyPolicy"> | number
   }
 
   export type PrivacyPolicyTranslationWhereInput = {
@@ -39536,8 +39522,8 @@ export namespace Prisma {
     OR?: FaqWhereInput[]
     NOT?: FaqWhereInput | FaqWhereInput[]
     id?: IntFilter<"Faq"> | number
-    created_at?: BigIntFilter<"Faq"> | bigint | number
-    updated_at?: BigIntFilter<"Faq"> | bigint | number
+    created_at?: IntFilter<"Faq"> | number
+    updated_at?: IntFilter<"Faq"> | number
     translations?: FaqTranslationListRelationFilter
   }
 
@@ -39553,8 +39539,8 @@ export namespace Prisma {
     AND?: FaqWhereInput | FaqWhereInput[]
     OR?: FaqWhereInput[]
     NOT?: FaqWhereInput | FaqWhereInput[]
-    created_at?: BigIntFilter<"Faq"> | bigint | number
-    updated_at?: BigIntFilter<"Faq"> | bigint | number
+    created_at?: IntFilter<"Faq"> | number
+    updated_at?: IntFilter<"Faq"> | number
     translations?: FaqTranslationListRelationFilter
   }, "id">
 
@@ -39574,8 +39560,8 @@ export namespace Prisma {
     OR?: FaqScalarWhereWithAggregatesInput[]
     NOT?: FaqScalarWhereWithAggregatesInput | FaqScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Faq"> | number
-    created_at?: BigIntWithAggregatesFilter<"Faq"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"Faq"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"Faq"> | number
+    updated_at?: IntWithAggregatesFilter<"Faq"> | number
   }
 
   export type FaqTranslationWhereInput = {
@@ -39645,8 +39631,8 @@ export namespace Prisma {
     admin_id?: StringFilter<"Transaction"> | string
     admin_email?: StringFilter<"Transaction"> | string
     status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
-    created_at?: BigIntFilter<"Transaction"> | bigint | number
-    updated_at?: BigIntFilter<"Transaction"> | bigint | number
+    created_at?: IntFilter<"Transaction"> | number
+    updated_at?: IntFilter<"Transaction"> | number
     currency_code?: EnumCurrencyCodeFilter<"Transaction"> | $Enums.CurrencyCode
     total_amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customer_name?: StringFilter<"Transaction"> | string
@@ -39686,8 +39672,8 @@ export namespace Prisma {
     admin_id?: StringFilter<"Transaction"> | string
     admin_email?: StringFilter<"Transaction"> | string
     status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
-    created_at?: BigIntFilter<"Transaction"> | bigint | number
-    updated_at?: BigIntFilter<"Transaction"> | bigint | number
+    created_at?: IntFilter<"Transaction"> | number
+    updated_at?: IntFilter<"Transaction"> | number
     currency_code?: EnumCurrencyCodeFilter<"Transaction"> | $Enums.CurrencyCode
     total_amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customer_name?: StringFilter<"Transaction"> | string
@@ -39729,8 +39715,8 @@ export namespace Prisma {
     admin_id?: StringWithAggregatesFilter<"Transaction"> | string
     admin_email?: StringWithAggregatesFilter<"Transaction"> | string
     status?: EnumTransactionStatusWithAggregatesFilter<"Transaction"> | $Enums.TransactionStatus
-    created_at?: BigIntWithAggregatesFilter<"Transaction"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"Transaction"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"Transaction"> | number
+    updated_at?: IntWithAggregatesFilter<"Transaction"> | number
     currency_code?: EnumCurrencyCodeWithAggregatesFilter<"Transaction"> | $Enums.CurrencyCode
     total_amount?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customer_name?: StringWithAggregatesFilter<"Transaction"> | string
@@ -39746,8 +39732,8 @@ export namespace Prisma {
     transaction_id?: UuidFilter<"Invoice"> | string
     invoice_number?: StringFilter<"Invoice"> | string
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
-    issued_at?: BigIntFilter<"Invoice"> | bigint | number
-    voided_at?: BigIntNullableFilter<"Invoice"> | bigint | number | null
+    issued_at?: IntFilter<"Invoice"> | number
+    voided_at?: IntNullableFilter<"Invoice"> | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
   }
 
@@ -39769,8 +39755,8 @@ export namespace Prisma {
     NOT?: InvoiceWhereInput | InvoiceWhereInput[]
     transaction_id?: UuidFilter<"Invoice"> | string
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
-    issued_at?: BigIntFilter<"Invoice"> | bigint | number
-    voided_at?: BigIntNullableFilter<"Invoice"> | bigint | number | null
+    issued_at?: IntFilter<"Invoice"> | number
+    voided_at?: IntNullableFilter<"Invoice"> | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
   }, "id" | "invoice_number">
 
@@ -39796,8 +39782,8 @@ export namespace Prisma {
     transaction_id?: UuidWithAggregatesFilter<"Invoice"> | string
     invoice_number?: StringWithAggregatesFilter<"Invoice"> | string
     status?: EnumInvoiceStatusWithAggregatesFilter<"Invoice"> | $Enums.InvoiceStatus
-    issued_at?: BigIntWithAggregatesFilter<"Invoice"> | bigint | number
-    voided_at?: BigIntNullableWithAggregatesFilter<"Invoice"> | bigint | number | null
+    issued_at?: IntWithAggregatesFilter<"Invoice"> | number
+    voided_at?: IntNullableWithAggregatesFilter<"Invoice"> | number | null
   }
 
   export type TransactionDetailWhereInput = {
@@ -39824,7 +39810,7 @@ export namespace Prisma {
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     drive_permission_id?: StringNullableFilter<"TransactionDetail"> | string | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
-    shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
+    shared_at?: IntNullableFilter<"TransactionDetail"> | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
     price?: XOR<ProductPriceNullableScalarRelationFilter, ProductPriceWhereInput> | null
   }
@@ -39879,7 +39865,7 @@ export namespace Prisma {
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     drive_permission_id?: StringNullableFilter<"TransactionDetail"> | string | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
-    shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
+    shared_at?: IntNullableFilter<"TransactionDetail"> | number | null
     transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
     price?: XOR<ProductPriceNullableScalarRelationFilter, ProductPriceWhereInput> | null
   }, "id">
@@ -39937,7 +39923,7 @@ export namespace Prisma {
     product_coupon_discount?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
     drive_permission_id?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     share_method?: EnumShareMethodNullableWithAggregatesFilter<"TransactionDetail"> | $Enums.ShareMethod | null
-    shared_at?: BigIntNullableWithAggregatesFilter<"TransactionDetail"> | bigint | number | null
+    shared_at?: IntNullableWithAggregatesFilter<"TransactionDetail"> | number | null
   }
 
   export type FeedbackWhereInput = {
@@ -39949,7 +39935,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"Feedback"> | string | null
     email?: StringNullableFilter<"Feedback"> | string | null
     message?: StringFilter<"Feedback"> | string
-    created_at?: BigIntFilter<"Feedback"> | bigint | number
+    created_at?: IntFilter<"Feedback"> | number
   }
 
   export type FeedbackOrderByWithRelationInput = {
@@ -39963,7 +39949,7 @@ export namespace Prisma {
 
   export type FeedbackWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    created_at?: bigint | number
+    created_at?: number
     AND?: FeedbackWhereInput | FeedbackWhereInput[]
     OR?: FeedbackWhereInput[]
     NOT?: FeedbackWhereInput | FeedbackWhereInput[]
@@ -39996,7 +39982,7 @@ export namespace Prisma {
     name?: StringNullableWithAggregatesFilter<"Feedback"> | string | null
     email?: StringNullableWithAggregatesFilter<"Feedback"> | string | null
     message?: StringWithAggregatesFilter<"Feedback"> | string
-    created_at?: BigIntWithAggregatesFilter<"Feedback"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"Feedback"> | number
   }
 
   export type TestimonialWhereInput = {
@@ -40007,8 +39993,8 @@ export namespace Prisma {
     picture?: StringFilter<"Testimonial"> | string
     name?: StringFilter<"Testimonial"> | string
     sm_username?: StringFilter<"Testimonial"> | string
-    created_at?: BigIntFilter<"Testimonial"> | bigint | number
-    updated_at?: BigIntFilter<"Testimonial"> | bigint | number
+    created_at?: IntFilter<"Testimonial"> | number
+    updated_at?: IntFilter<"Testimonial"> | number
     translations?: TestimonialTranslationListRelationFilter
   }
 
@@ -40030,8 +40016,8 @@ export namespace Prisma {
     picture?: StringFilter<"Testimonial"> | string
     name?: StringFilter<"Testimonial"> | string
     sm_username?: StringFilter<"Testimonial"> | string
-    created_at?: BigIntFilter<"Testimonial"> | bigint | number
-    updated_at?: BigIntFilter<"Testimonial"> | bigint | number
+    created_at?: IntFilter<"Testimonial"> | number
+    updated_at?: IntFilter<"Testimonial"> | number
     translations?: TestimonialTranslationListRelationFilter
   }, "id">
 
@@ -40057,8 +40043,8 @@ export namespace Prisma {
     picture?: StringWithAggregatesFilter<"Testimonial"> | string
     name?: StringWithAggregatesFilter<"Testimonial"> | string
     sm_username?: StringWithAggregatesFilter<"Testimonial"> | string
-    created_at?: BigIntWithAggregatesFilter<"Testimonial"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"Testimonial"> | bigint | number
+    created_at?: IntWithAggregatesFilter<"Testimonial"> | number
+    updated_at?: IntWithAggregatesFilter<"Testimonial"> | number
   }
 
   export type TestimonialTranslationWhereInput = {
@@ -40234,8 +40220,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     products?: ProductCreateNestedManyWithoutOwnerInput
   }
 
@@ -40245,8 +40231,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     products?: ProductUncheckedCreateNestedManyWithoutOwnerInput
   }
 
@@ -40255,8 +40241,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUpdateManyWithoutOwnerNestedInput
   }
 
@@ -40266,8 +40252,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
@@ -40277,8 +40263,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type OwnerUpdateManyMutationInput = {
@@ -40286,8 +40272,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type OwnerUncheckedUpdateManyInput = {
@@ -40296,8 +40282,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type CustomerCreateInput = {
@@ -40309,9 +40295,9 @@ export namespace Prisma {
     email: string
     phone_number?: string | null
     picture?: string | null
-    last_active?: bigint | number | null
-    created_at: bigint | number
-    updated_at: bigint | number
+    last_active?: number | null
+    created_at: number
+    updated_at: number
     transactions?: TransactionCreateNestedManyWithoutCustomerInput
   }
 
@@ -40324,9 +40310,9 @@ export namespace Prisma {
     email: string
     phone_number?: string | null
     picture?: string | null
-    last_active?: bigint | number | null
-    created_at: bigint | number
-    updated_at: bigint | number
+    last_active?: number | null
+    created_at: number
+    updated_at: number
     transactions?: TransactionUncheckedCreateNestedManyWithoutCustomerInput
   }
 
@@ -40339,9 +40325,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     transactions?: TransactionUpdateManyWithoutCustomerNestedInput
   }
 
@@ -40354,9 +40340,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     transactions?: TransactionUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
@@ -40369,9 +40355,9 @@ export namespace Prisma {
     email: string
     phone_number?: string | null
     picture?: string | null
-    last_active?: bigint | number | null
-    created_at: bigint | number
-    updated_at: bigint | number
+    last_active?: number | null
+    created_at: number
+    updated_at: number
   }
 
   export type CustomerUpdateManyMutationInput = {
@@ -40383,9 +40369,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type CustomerUncheckedUpdateManyInput = {
@@ -40397,56 +40383,56 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type LicenseCreateInput = {
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     products?: ProductCreateNestedManyWithoutLicenseInput
     translations?: LicenseTranslationCreateNestedManyWithoutLicenseInput
   }
 
   export type LicenseUncheckedCreateInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     products?: ProductUncheckedCreateNestedManyWithoutLicenseInput
     translations?: LicenseTranslationUncheckedCreateNestedManyWithoutLicenseInput
   }
 
   export type LicenseUpdateInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUpdateManyWithoutLicenseNestedInput
     translations?: LicenseTranslationUpdateManyWithoutLicenseNestedInput
   }
 
   export type LicenseUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUncheckedUpdateManyWithoutLicenseNestedInput
     translations?: LicenseTranslationUncheckedUpdateManyWithoutLicenseNestedInput
   }
 
   export type LicenseCreateManyInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type LicenseUpdateManyMutationInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type LicenseUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type LicenseTranslationCreateInput = {
@@ -40504,8 +40490,8 @@ export namespace Prisma {
   export type CategoryCreateInput = {
     name: string
     slug: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     products?: ProductCreateNestedManyWithoutCategoryInput
   }
 
@@ -40513,16 +40499,16 @@ export namespace Prisma {
     id?: number
     name: string
     slug: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     products?: ProductUncheckedCreateNestedManyWithoutCategoryInput
   }
 
   export type CategoryUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUpdateManyWithoutCategoryNestedInput
   }
 
@@ -40530,8 +40516,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
@@ -40539,23 +40525,23 @@ export namespace Prisma {
     id?: number
     name: string
     slug: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type CategoryUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type CategoryUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductCreateInput = {
@@ -40567,8 +40553,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
@@ -40594,8 +40580,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
@@ -40613,8 +40599,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
@@ -40640,8 +40626,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
@@ -40663,8 +40649,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type ProductUpdateManyMutationInput = {
@@ -40676,8 +40662,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductUncheckedUpdateManyInput = {
@@ -40693,8 +40679,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductTranslationCreateInput = {
@@ -40748,7 +40734,7 @@ export namespace Prisma {
   export type ProductVersionCreateInput = {
     id?: string
     version: string
-    released_at: bigint | number
+    released_at: number
     product: ProductCreateNestedOneWithoutVersionsInput
     translations?: ProductVersionTranslationCreateNestedManyWithoutProductVersionInput
   }
@@ -40757,14 +40743,14 @@ export namespace Prisma {
     id?: string
     product_id: string
     version: string
-    released_at: bigint | number
+    released_at: number
     translations?: ProductVersionTranslationUncheckedCreateNestedManyWithoutProductVersionInput
   }
 
   export type ProductVersionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     version?: StringFieldUpdateOperationsInput | string
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: IntFieldUpdateOperationsInput | number
     product?: ProductUpdateOneRequiredWithoutVersionsNestedInput
     translations?: ProductVersionTranslationUpdateManyWithoutProductVersionNestedInput
   }
@@ -40773,7 +40759,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
     version?: StringFieldUpdateOperationsInput | string
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductVersionTranslationUncheckedUpdateManyWithoutProductVersionNestedInput
   }
 
@@ -40781,20 +40767,20 @@ export namespace Prisma {
     id?: string
     product_id: string
     version: string
-    released_at: bigint | number
+    released_at: number
   }
 
   export type ProductVersionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     version?: StringFieldUpdateOperationsInput | string
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductVersionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
     version?: StringFieldUpdateOperationsInput | string
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductVersionTranslationCreateInput = {
@@ -40847,7 +40833,7 @@ export namespace Prisma {
 
   export type ProductDiscountCreateInput = {
     discount: number
-    expired_at: bigint | number
+    expired_at: number
     product: ProductCreateNestedOneWithoutDiscountInput
   }
 
@@ -40855,12 +40841,12 @@ export namespace Prisma {
     id?: number
     product_id: string
     discount: number
-    expired_at: bigint | number
+    expired_at: number
   }
 
   export type ProductDiscountUpdateInput = {
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
     product?: ProductUpdateOneRequiredWithoutDiscountNestedInput
   }
 
@@ -40868,33 +40854,33 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     product_id?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductDiscountCreateManyInput = {
     id?: number
     product_id: string
     discount: number
-    expired_at: bigint | number
+    expired_at: number
   }
 
   export type ProductDiscountUpdateManyMutationInput = {
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductDiscountUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     product_id?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductCouponCreateInput = {
     id?: string
     code: string
     discount: number
-    expired_at: bigint | number
+    expired_at: number
     product: ProductCreateNestedOneWithoutCouponInput
   }
 
@@ -40903,14 +40889,14 @@ export namespace Prisma {
     product_id: string
     code: string
     discount: number
-    expired_at: bigint | number
+    expired_at: number
   }
 
   export type ProductCouponUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
     product?: ProductUpdateOneRequiredWithoutCouponNestedInput
   }
 
@@ -40919,7 +40905,7 @@ export namespace Prisma {
     product_id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductCouponCreateManyInput = {
@@ -40927,14 +40913,14 @@ export namespace Prisma {
     product_id: string
     code: string
     discount: number
-    expired_at: bigint | number
+    expired_at: number
   }
 
   export type ProductCouponUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductCouponUncheckedUpdateManyInput = {
@@ -40942,7 +40928,7 @@ export namespace Prisma {
     product_id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductImageCreateInput = {
@@ -41119,46 +41105,46 @@ export namespace Prisma {
   }
 
   export type TermsOfServiceCreateInput = {
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: TermsOfServiceTranslationCreateNestedManyWithoutTerms_of_serviceInput
   }
 
   export type TermsOfServiceUncheckedCreateInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: TermsOfServiceTranslationUncheckedCreateNestedManyWithoutTerms_of_serviceInput
   }
 
   export type TermsOfServiceUpdateInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: TermsOfServiceTranslationUpdateManyWithoutTerms_of_serviceNestedInput
   }
 
   export type TermsOfServiceUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: TermsOfServiceTranslationUncheckedUpdateManyWithoutTerms_of_serviceNestedInput
   }
 
   export type TermsOfServiceCreateManyInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type TermsOfServiceUpdateManyMutationInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TermsOfServiceUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TermsOfServiceTranslationCreateInput = {
@@ -41207,46 +41193,46 @@ export namespace Prisma {
   }
 
   export type PrivacyPolicyCreateInput = {
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: PrivacyPolicyTranslationCreateNestedManyWithoutPrivacy_policyInput
   }
 
   export type PrivacyPolicyUncheckedCreateInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: PrivacyPolicyTranslationUncheckedCreateNestedManyWithoutPrivacy_policyInput
   }
 
   export type PrivacyPolicyUpdateInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: PrivacyPolicyTranslationUpdateManyWithoutPrivacy_policyNestedInput
   }
 
   export type PrivacyPolicyUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: PrivacyPolicyTranslationUncheckedUpdateManyWithoutPrivacy_policyNestedInput
   }
 
   export type PrivacyPolicyCreateManyInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type PrivacyPolicyUpdateManyMutationInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type PrivacyPolicyUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type PrivacyPolicyTranslationCreateInput = {
@@ -41370,46 +41356,46 @@ export namespace Prisma {
   }
 
   export type FaqCreateInput = {
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: FaqTranslationCreateNestedManyWithoutFaqInput
   }
 
   export type FaqUncheckedCreateInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: FaqTranslationUncheckedCreateNestedManyWithoutFaqInput
   }
 
   export type FaqUpdateInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: FaqTranslationUpdateManyWithoutFaqNestedInput
   }
 
   export type FaqUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: FaqTranslationUncheckedUpdateManyWithoutFaqNestedInput
   }
 
   export type FaqCreateManyInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type FaqUpdateManyMutationInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type FaqUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type FaqTranslationCreateInput = {
@@ -41470,8 +41456,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -41489,8 +41475,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -41506,8 +41492,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -41525,8 +41511,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -41543,8 +41529,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -41558,8 +41544,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -41574,8 +41560,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -41587,8 +41573,8 @@ export namespace Prisma {
     id?: string
     invoice_number: string
     status: $Enums.InvoiceStatus
-    issued_at: bigint | number
-    voided_at?: bigint | number | null
+    issued_at: number
+    voided_at?: number | null
     transaction: TransactionCreateNestedOneWithoutInvoicesInput
   }
 
@@ -41597,16 +41583,16 @@ export namespace Prisma {
     transaction_id: string
     invoice_number: string
     status: $Enums.InvoiceStatus
-    issued_at: bigint | number
-    voided_at?: bigint | number | null
+    issued_at: number
+    voided_at?: number | null
   }
 
   export type InvoiceUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    issued_at?: IntFieldUpdateOperationsInput | number
+    voided_at?: NullableIntFieldUpdateOperationsInput | number | null
     transaction?: TransactionUpdateOneRequiredWithoutInvoicesNestedInput
   }
 
@@ -41615,8 +41601,8 @@ export namespace Prisma {
     transaction_id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    issued_at?: IntFieldUpdateOperationsInput | number
+    voided_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type InvoiceCreateManyInput = {
@@ -41624,16 +41610,16 @@ export namespace Prisma {
     transaction_id: string
     invoice_number: string
     status: $Enums.InvoiceStatus
-    issued_at: bigint | number
-    voided_at?: bigint | number | null
+    issued_at: number
+    voided_at?: number | null
   }
 
   export type InvoiceUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    issued_at?: IntFieldUpdateOperationsInput | number
+    voided_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type InvoiceUncheckedUpdateManyInput = {
@@ -41641,8 +41627,8 @@ export namespace Prisma {
     transaction_id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    issued_at?: IntFieldUpdateOperationsInput | number
+    voided_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TransactionDetailCreateInput = {
@@ -41664,7 +41650,7 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
-    shared_at?: bigint | number | null
+    shared_at?: number | null
     transaction: TransactionCreateNestedOneWithoutDetailsInput
     price?: ProductPriceCreateNestedOneWithoutTranscationDetailsInput
   }
@@ -41690,7 +41676,7 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
-    shared_at?: bigint | number | null
+    shared_at?: number | null
   }
 
   export type TransactionDetailUpdateInput = {
@@ -41712,7 +41698,7 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
     transaction?: TransactionUpdateOneRequiredWithoutDetailsNestedInput
     price?: ProductPriceUpdateOneWithoutTranscationDetailsNestedInput
   }
@@ -41738,7 +41724,7 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TransactionDetailCreateManyInput = {
@@ -41762,7 +41748,7 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
-    shared_at?: bigint | number | null
+    shared_at?: number | null
   }
 
   export type TransactionDetailUpdateManyMutationInput = {
@@ -41784,7 +41770,7 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TransactionDetailUncheckedUpdateManyInput = {
@@ -41808,7 +41794,7 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type FeedbackCreateInput = {
@@ -41817,7 +41803,7 @@ export namespace Prisma {
     name?: string | null
     email?: string | null
     message: string
-    created_at: bigint | number
+    created_at: number
   }
 
   export type FeedbackUncheckedCreateInput = {
@@ -41826,7 +41812,7 @@ export namespace Prisma {
     name?: string | null
     email?: string | null
     message: string
-    created_at: bigint | number
+    created_at: number
   }
 
   export type FeedbackUpdateInput = {
@@ -41835,7 +41821,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type FeedbackUncheckedUpdateInput = {
@@ -41844,7 +41830,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type FeedbackCreateManyInput = {
@@ -41853,7 +41839,7 @@ export namespace Prisma {
     name?: string | null
     email?: string | null
     message: string
-    created_at: bigint | number
+    created_at: number
   }
 
   export type FeedbackUpdateManyMutationInput = {
@@ -41862,7 +41848,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type FeedbackUncheckedUpdateManyInput = {
@@ -41871,15 +41857,15 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TestimonialCreateInput = {
     picture: string
     name: string
     sm_username: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: TestimonialTranslationCreateNestedManyWithoutTestimonialInput
   }
 
@@ -41888,8 +41874,8 @@ export namespace Prisma {
     picture: string
     name: string
     sm_username: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: TestimonialTranslationUncheckedCreateNestedManyWithoutTestimonialInput
   }
 
@@ -41897,8 +41883,8 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: TestimonialTranslationUpdateManyWithoutTestimonialNestedInput
   }
 
@@ -41907,8 +41893,8 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: TestimonialTranslationUncheckedUpdateManyWithoutTestimonialNestedInput
   }
 
@@ -41917,16 +41903,16 @@ export namespace Prisma {
     picture: string
     name: string
     sm_username: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type TestimonialUpdateManyMutationInput = {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TestimonialUncheckedUpdateManyInput = {
@@ -41934,8 +41920,8 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TestimonialTranslationCreateInput = {
@@ -42141,17 +42127,6 @@ export namespace Prisma {
     _max?: NestedEnumCurrencyCodeFilter<$PrismaModel>
   }
 
-  export type BigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
-  }
-
   export type OwnerCountOrderByAggregateInput = {
     id?: SortOrder
     first_name?: SortOrder
@@ -42194,22 +42169,6 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
-  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
-  }
-
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -42242,15 +42201,15 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type BigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type TransactionListRelationFilter = {
@@ -42363,20 +42322,20 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedBigIntNullableFilter<$PrismaModel>
-    _min?: NestedBigIntNullableFilter<$PrismaModel>
-    _max?: NestedBigIntNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type LicenseTranslationListRelationFilter = {
@@ -43435,17 +43394,6 @@ export namespace Prisma {
     _max?: NestedEnumInvoiceStatusFilter<$PrismaModel>
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type EnumShareMethodNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.ShareMethod | EnumShareMethodFieldRefInput<$PrismaModel> | null
     in?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
@@ -43544,22 +43492,6 @@ export namespace Prisma {
     product_discount?: SortOrder
     product_coupon_discount?: SortOrder
     shared_at?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumShareMethodNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -43820,14 +43752,6 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
-  export type BigIntFieldUpdateOperationsInput = {
-    set?: bigint | number
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
-  }
-
   export type ProductUpdateManyWithoutOwnerNestedInput = {
     create?: XOR<ProductCreateWithoutOwnerInput, ProductUncheckedCreateWithoutOwnerInput> | ProductCreateWithoutOwnerInput[] | ProductUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutOwnerInput | ProductCreateOrConnectWithoutOwnerInput[]
@@ -43878,12 +43802,12 @@ export namespace Prisma {
     set?: boolean
   }
 
-  export type NullableBigIntFieldUpdateOperationsInput = {
-    set?: bigint | number | null
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type TransactionUpdateManyWithoutCustomerNestedInput = {
@@ -44954,14 +44878,6 @@ export namespace Prisma {
     connect?: ProductPriceWhereUniqueInput
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type NullableEnumShareMethodFieldUpdateOperationsInput = {
     set?: $Enums.ShareMethod | null
   }
@@ -45126,33 +45042,6 @@ export namespace Prisma {
     _max?: NestedEnumCurrencyCodeFilter<$PrismaModel>
   }
 
-  export type NestedBigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
-  }
-
-  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
-  }
-
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -45183,15 +45072,15 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedBigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -45225,17 +45114,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -45244,20 +45122,20 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedBigIntNullableFilter<$PrismaModel>
-    _min?: NestedBigIntNullableFilter<$PrismaModel>
-    _max?: NestedBigIntNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -45398,22 +45276,6 @@ export namespace Prisma {
     not?: NestedEnumShareMethodNullableFilter<$PrismaModel> | $Enums.ShareMethod | null
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
   export type NestedEnumShareMethodNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ShareMethod | EnumShareMethodFieldRefInput<$PrismaModel> | null
     in?: $Enums.ShareMethod[] | ListEnumShareMethodFieldRefInput<$PrismaModel> | null
@@ -45454,8 +45316,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
@@ -45479,8 +45341,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
@@ -45557,8 +45419,8 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     slug?: StringFilter<"Product"> | string
     price_type?: EnumPriceTypeFilter<"Product"> | $Enums.PriceType
-    created_at?: BigIntFilter<"Product"> | bigint | number
-    updated_at?: BigIntFilter<"Product"> | bigint | number
+    created_at?: IntFilter<"Product"> | number
+    updated_at?: IntFilter<"Product"> | number
   }
 
   export type AdminCreateWithoutDonation_linksInput = {
@@ -45626,8 +45488,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
@@ -45651,8 +45513,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
@@ -45693,8 +45555,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -45710,8 +45572,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -45757,8 +45619,8 @@ export namespace Prisma {
     admin_id?: StringFilter<"Transaction"> | string
     admin_email?: StringFilter<"Transaction"> | string
     status?: EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
-    created_at?: BigIntFilter<"Transaction"> | bigint | number
-    updated_at?: BigIntFilter<"Transaction"> | bigint | number
+    created_at?: IntFilter<"Transaction"> | number
+    updated_at?: IntFilter<"Transaction"> | number
     currency_code?: EnumCurrencyCodeFilter<"Transaction"> | $Enums.CurrencyCode
     total_amount?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     customer_name?: StringFilter<"Transaction"> | string
@@ -45775,8 +45637,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
@@ -45800,8 +45662,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
@@ -45887,15 +45749,15 @@ export namespace Prisma {
   }
 
   export type LicenseCreateWithoutTranslationsInput = {
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     products?: ProductCreateNestedManyWithoutLicenseInput
   }
 
   export type LicenseUncheckedCreateWithoutTranslationsInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     products?: ProductUncheckedCreateNestedManyWithoutLicenseInput
   }
 
@@ -45916,15 +45778,15 @@ export namespace Prisma {
   }
 
   export type LicenseUpdateWithoutTranslationsInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUpdateManyWithoutLicenseNestedInput
   }
 
   export type LicenseUncheckedUpdateWithoutTranslationsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUncheckedUpdateManyWithoutLicenseNestedInput
   }
 
@@ -45937,8 +45799,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
     license: LicenseCreateNestedOneWithoutProductsInput
@@ -45962,8 +45824,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
@@ -46026,16 +45888,16 @@ export namespace Prisma {
   export type CategoryCreateWithoutProductsInput = {
     name: string
     slug: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type CategoryUncheckedCreateWithoutProductsInput = {
     id?: number
     name: string
     slug: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type CategoryCreateOrConnectWithoutProductsInput = {
@@ -46048,8 +45910,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type OwnerUncheckedCreateWithoutProductsInput = {
@@ -46058,8 +45920,8 @@ export namespace Prisma {
     last_name: string
     sm_username: string
     picture: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type OwnerCreateOrConnectWithoutProductsInput = {
@@ -46068,15 +45930,15 @@ export namespace Prisma {
   }
 
   export type LicenseCreateWithoutProductsInput = {
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: LicenseTranslationCreateNestedManyWithoutLicenseInput
   }
 
   export type LicenseUncheckedCreateWithoutProductsInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: LicenseTranslationUncheckedCreateNestedManyWithoutLicenseInput
   }
 
@@ -46110,14 +45972,14 @@ export namespace Prisma {
   export type ProductVersionCreateWithoutProductInput = {
     id?: string
     version: string
-    released_at: bigint | number
+    released_at: number
     translations?: ProductVersionTranslationCreateNestedManyWithoutProductVersionInput
   }
 
   export type ProductVersionUncheckedCreateWithoutProductInput = {
     id?: string
     version: string
-    released_at: bigint | number
+    released_at: number
     translations?: ProductVersionTranslationUncheckedCreateNestedManyWithoutProductVersionInput
   }
 
@@ -46133,13 +45995,13 @@ export namespace Prisma {
 
   export type ProductDiscountCreateWithoutProductInput = {
     discount: number
-    expired_at: bigint | number
+    expired_at: number
   }
 
   export type ProductDiscountUncheckedCreateWithoutProductInput = {
     id?: number
     discount: number
-    expired_at: bigint | number
+    expired_at: number
   }
 
   export type ProductDiscountCreateOrConnectWithoutProductInput = {
@@ -46151,14 +46013,14 @@ export namespace Prisma {
     id?: string
     code: string
     discount: number
-    expired_at: bigint | number
+    expired_at: number
   }
 
   export type ProductCouponUncheckedCreateWithoutProductInput = {
     id?: string
     code: string
     discount: number
-    expired_at: bigint | number
+    expired_at: number
   }
 
   export type ProductCouponCreateOrConnectWithoutProductInput = {
@@ -46263,16 +46125,16 @@ export namespace Prisma {
   export type CategoryUpdateWithoutProductsInput = {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type CategoryUncheckedUpdateWithoutProductsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type OwnerUpsertWithoutProductsInput = {
@@ -46291,8 +46153,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type OwnerUncheckedUpdateWithoutProductsInput = {
@@ -46301,8 +46163,8 @@ export namespace Prisma {
     last_name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type LicenseUpsertWithoutProductsInput = {
@@ -46317,15 +46179,15 @@ export namespace Prisma {
   }
 
   export type LicenseUpdateWithoutProductsInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: LicenseTranslationUpdateManyWithoutLicenseNestedInput
   }
 
   export type LicenseUncheckedUpdateWithoutProductsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: LicenseTranslationUncheckedUpdateManyWithoutLicenseNestedInput
   }
 
@@ -46378,7 +46240,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductVersion"> | string
     product_id?: UuidFilter<"ProductVersion"> | string
     version?: StringFilter<"ProductVersion"> | string
-    released_at?: BigIntFilter<"ProductVersion"> | bigint | number
+    released_at?: IntFilter<"ProductVersion"> | number
   }
 
   export type ProductDiscountUpsertWithoutProductInput = {
@@ -46394,13 +46256,13 @@ export namespace Prisma {
 
   export type ProductDiscountUpdateWithoutProductInput = {
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductDiscountUncheckedUpdateWithoutProductInput = {
     id?: IntFieldUpdateOperationsInput | number
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductCouponUpsertWithoutProductInput = {
@@ -46418,14 +46280,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductCouponUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     discount?: IntFieldUpdateOperationsInput | number
-    expired_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    expired_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductImageUpsertWithWhereUniqueWithoutProductInput = {
@@ -46492,8 +46354,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
@@ -46518,8 +46380,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
@@ -46552,8 +46414,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
@@ -46578,8 +46440,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
@@ -46596,8 +46458,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
@@ -46622,8 +46484,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
@@ -46678,8 +46540,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
@@ -46704,8 +46566,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
@@ -46742,7 +46604,7 @@ export namespace Prisma {
   export type ProductVersionCreateWithoutTranslationsInput = {
     id?: string
     version: string
-    released_at: bigint | number
+    released_at: number
     product: ProductCreateNestedOneWithoutVersionsInput
   }
 
@@ -46750,7 +46612,7 @@ export namespace Prisma {
     id?: string
     product_id: string
     version: string
-    released_at: bigint | number
+    released_at: number
   }
 
   export type ProductVersionCreateOrConnectWithoutTranslationsInput = {
@@ -46772,7 +46634,7 @@ export namespace Prisma {
   export type ProductVersionUpdateWithoutTranslationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     version?: StringFieldUpdateOperationsInput | string
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: IntFieldUpdateOperationsInput | number
     product?: ProductUpdateOneRequiredWithoutVersionsNestedInput
   }
 
@@ -46780,7 +46642,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
     version?: StringFieldUpdateOperationsInput | string
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductCreateWithoutDiscountInput = {
@@ -46792,8 +46654,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
@@ -46818,8 +46680,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     coupon?: ProductCouponUncheckedCreateNestedOneWithoutProductInput
@@ -46852,8 +46714,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
@@ -46878,8 +46740,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     coupon?: ProductCouponUncheckedUpdateOneWithoutProductNestedInput
@@ -46896,8 +46758,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
@@ -46922,8 +46784,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
@@ -46956,8 +46818,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
@@ -46982,8 +46844,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
@@ -47000,8 +46862,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
@@ -47026,8 +46888,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
@@ -47060,8 +46922,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
@@ -47086,8 +46948,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
@@ -47104,8 +46966,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     admin: AdminCreateNestedOneWithoutProductsInput
     category: CategoryCreateNestedOneWithoutProductsInput
     owner: OwnerCreateNestedOneWithoutProductsInput
@@ -47130,8 +46992,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     translations?: ProductTranslationUncheckedCreateNestedManyWithoutProductInput
     versions?: ProductVersionUncheckedCreateNestedManyWithoutProductInput
     discount?: ProductDiscountUncheckedCreateNestedOneWithoutProductInput
@@ -47188,8 +47050,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
@@ -47214,8 +47076,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
@@ -47289,7 +47151,7 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
-    shared_at?: bigint | number | null
+    shared_at?: number | null
     transaction: TransactionCreateNestedOneWithoutDetailsInput
   }
 
@@ -47313,7 +47175,7 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
-    shared_at?: bigint | number | null
+    shared_at?: number | null
   }
 
   export type TransactionDetailCreateOrConnectWithoutPriceInput = {
@@ -47393,7 +47255,7 @@ export namespace Prisma {
     product_coupon_discount?: IntNullableFilter<"TransactionDetail"> | number | null
     drive_permission_id?: StringNullableFilter<"TransactionDetail"> | string | null
     share_method?: EnumShareMethodNullableFilter<"TransactionDetail"> | $Enums.ShareMethod | null
-    shared_at?: BigIntNullableFilter<"TransactionDetail"> | bigint | number | null
+    shared_at?: IntNullableFilter<"TransactionDetail"> | number | null
   }
 
   export type TermsOfServiceTranslationCreateWithoutTerms_of_serviceInput = {
@@ -47444,14 +47306,14 @@ export namespace Prisma {
   }
 
   export type TermsOfServiceCreateWithoutTranslationsInput = {
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type TermsOfServiceUncheckedCreateWithoutTranslationsInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type TermsOfServiceCreateOrConnectWithoutTranslationsInput = {
@@ -47471,14 +47333,14 @@ export namespace Prisma {
   }
 
   export type TermsOfServiceUpdateWithoutTranslationsInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TermsOfServiceUncheckedUpdateWithoutTranslationsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type PrivacyPolicyTranslationCreateWithoutPrivacy_policyInput = {
@@ -47529,14 +47391,14 @@ export namespace Prisma {
   }
 
   export type PrivacyPolicyCreateWithoutTranslationsInput = {
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type PrivacyPolicyUncheckedCreateWithoutTranslationsInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type PrivacyPolicyCreateOrConnectWithoutTranslationsInput = {
@@ -47556,14 +47418,14 @@ export namespace Prisma {
   }
 
   export type PrivacyPolicyUpdateWithoutTranslationsInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type PrivacyPolicyUncheckedUpdateWithoutTranslationsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type AboutUsTranslationCreateWithoutAbout_usInput = {
@@ -47696,14 +47558,14 @@ export namespace Prisma {
   }
 
   export type FaqCreateWithoutTranslationsInput = {
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type FaqUncheckedCreateWithoutTranslationsInput = {
     id?: number
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type FaqCreateOrConnectWithoutTranslationsInput = {
@@ -47723,14 +47585,14 @@ export namespace Prisma {
   }
 
   export type FaqUpdateWithoutTranslationsInput = {
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type FaqUncheckedUpdateWithoutTranslationsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TransactionDetailCreateWithoutTransactionInput = {
@@ -47752,7 +47614,7 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
-    shared_at?: bigint | number | null
+    shared_at?: number | null
     price?: ProductPriceCreateNestedOneWithoutTranscationDetailsInput
   }
 
@@ -47776,7 +47638,7 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
-    shared_at?: bigint | number | null
+    shared_at?: number | null
   }
 
   export type TransactionDetailCreateOrConnectWithoutTransactionInput = {
@@ -47793,16 +47655,16 @@ export namespace Prisma {
     id?: string
     invoice_number: string
     status: $Enums.InvoiceStatus
-    issued_at: bigint | number
-    voided_at?: bigint | number | null
+    issued_at: number
+    voided_at?: number | null
   }
 
   export type InvoiceUncheckedCreateWithoutTransactionInput = {
     id?: string
     invoice_number: string
     status: $Enums.InvoiceStatus
-    issued_at: bigint | number
-    voided_at?: bigint | number | null
+    issued_at: number
+    voided_at?: number | null
   }
 
   export type InvoiceCreateOrConnectWithoutTransactionInput = {
@@ -47824,9 +47686,9 @@ export namespace Prisma {
     email: string
     phone_number?: string | null
     picture?: string | null
-    last_active?: bigint | number | null
-    created_at: bigint | number
-    updated_at: bigint | number
+    last_active?: number | null
+    created_at: number
+    updated_at: number
   }
 
   export type CustomerUncheckedCreateWithoutTransactionsInput = {
@@ -47838,9 +47700,9 @@ export namespace Prisma {
     email: string
     phone_number?: string | null
     picture?: string | null
-    last_active?: bigint | number | null
-    created_at: bigint | number
-    updated_at: bigint | number
+    last_active?: number | null
+    created_at: number
+    updated_at: number
   }
 
   export type CustomerCreateOrConnectWithoutTransactionsInput = {
@@ -47888,8 +47750,8 @@ export namespace Prisma {
     transaction_id?: UuidFilter<"Invoice"> | string
     invoice_number?: StringFilter<"Invoice"> | string
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
-    issued_at?: BigIntFilter<"Invoice"> | bigint | number
-    voided_at?: BigIntNullableFilter<"Invoice"> | bigint | number | null
+    issued_at?: IntFilter<"Invoice"> | number
+    voided_at?: IntNullableFilter<"Invoice"> | number | null
   }
 
   export type CustomerUpsertWithoutTransactionsInput = {
@@ -47912,9 +47774,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type CustomerUncheckedUpdateWithoutTransactionsInput = {
@@ -47926,9 +47788,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone_number?: NullableStringFieldUpdateOperationsInput | string | null
     picture?: NullableStringFieldUpdateOperationsInput | string | null
-    last_active?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    last_active?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TransactionCreateWithoutInvoicesInput = {
@@ -47937,8 +47799,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -47955,8 +47817,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -47987,8 +47849,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -48005,8 +47867,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -48021,8 +47883,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -48039,8 +47901,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -48090,8 +47952,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -48108,8 +47970,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -48194,8 +48056,8 @@ export namespace Prisma {
     picture: string
     name: string
     sm_username: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type TestimonialUncheckedCreateWithoutTranslationsInput = {
@@ -48203,8 +48065,8 @@ export namespace Prisma {
     picture: string
     name: string
     sm_username: string
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type TestimonialCreateOrConnectWithoutTranslationsInput = {
@@ -48227,8 +48089,8 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TestimonialUncheckedUpdateWithoutTranslationsInput = {
@@ -48236,8 +48098,8 @@ export namespace Prisma {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     sm_username?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type DonationLinkCreateManyAdminInput = {
@@ -48258,8 +48120,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type DonationLinkUpdateWithoutAdminInput = {
@@ -48288,8 +48150,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
@@ -48313,8 +48175,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
@@ -48335,8 +48197,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductCreateManyOwnerInput = {
@@ -48351,8 +48213,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type ProductUpdateWithoutOwnerInput = {
@@ -48364,8 +48226,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
@@ -48389,8 +48251,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
@@ -48411,8 +48273,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type TransactionCreateManyCustomerInput = {
@@ -48421,8 +48283,8 @@ export namespace Prisma {
     admin_id: string
     admin_email: string
     status: $Enums.TransactionStatus
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
     currency_code: $Enums.CurrencyCode
     total_amount: Decimal | DecimalJsLike | number | string
     customer_name: string
@@ -48436,8 +48298,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -48453,8 +48315,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -48470,8 +48332,8 @@ export namespace Prisma {
     admin_id?: StringFieldUpdateOperationsInput | string
     admin_email?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customer_name?: StringFieldUpdateOperationsInput | string
@@ -48491,8 +48353,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type LicenseTranslationCreateManyLicenseInput = {
@@ -48511,8 +48373,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
@@ -48536,8 +48398,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
@@ -48558,8 +48420,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type LicenseTranslationUpdateWithoutLicenseInput = {
@@ -48594,8 +48456,8 @@ export namespace Prisma {
     name: string
     slug: string
     price_type: $Enums.PriceType
-    created_at: bigint | number
-    updated_at: bigint | number
+    created_at: number
+    updated_at: number
   }
 
   export type ProductUpdateWithoutCategoryInput = {
@@ -48607,8 +48469,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     admin?: AdminUpdateOneRequiredWithoutProductsNestedInput
     owner?: OwnerUpdateOneRequiredWithoutProductsNestedInput
     license?: LicenseUpdateOneRequiredWithoutProductsNestedInput
@@ -48632,8 +48494,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductTranslationUncheckedUpdateManyWithoutProductNestedInput
     versions?: ProductVersionUncheckedUpdateManyWithoutProductNestedInput
     discount?: ProductDiscountUncheckedUpdateOneWithoutProductNestedInput
@@ -48654,8 +48516,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     price_type?: EnumPriceTypeFieldUpdateOperationsInput | $Enums.PriceType
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductTranslationCreateManyProductInput = {
@@ -48667,7 +48529,7 @@ export namespace Prisma {
   export type ProductVersionCreateManyProductInput = {
     id?: string
     version: string
-    released_at: bigint | number
+    released_at: number
   }
 
   export type ProductImageCreateManyProductInput = {
@@ -48706,21 +48568,21 @@ export namespace Prisma {
   export type ProductVersionUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     version?: StringFieldUpdateOperationsInput | string
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductVersionTranslationUpdateManyWithoutProductVersionNestedInput
   }
 
   export type ProductVersionUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     version?: StringFieldUpdateOperationsInput | string
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: IntFieldUpdateOperationsInput | number
     translations?: ProductVersionTranslationUncheckedUpdateManyWithoutProductVersionNestedInput
   }
 
   export type ProductVersionUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     version?: StringFieldUpdateOperationsInput | string
-    released_at?: BigIntFieldUpdateOperationsInput | bigint | number
+    released_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductImageUpdateWithoutProductInput = {
@@ -48840,7 +48702,7 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
-    shared_at?: bigint | number | null
+    shared_at?: number | null
   }
 
   export type TransactionDetailUpdateWithoutPriceInput = {
@@ -48862,7 +48724,7 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
     transaction?: TransactionUpdateOneRequiredWithoutDetailsNestedInput
   }
 
@@ -48886,7 +48748,7 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TransactionDetailUncheckedUpdateManyWithoutPriceInput = {
@@ -48909,7 +48771,7 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TermsOfServiceTranslationCreateManyTerms_of_serviceInput = {
@@ -49028,15 +48890,15 @@ export namespace Prisma {
     product_coupon_discount?: number | null
     drive_permission_id?: string | null
     share_method?: $Enums.ShareMethod | null
-    shared_at?: bigint | number | null
+    shared_at?: number | null
   }
 
   export type InvoiceCreateManyTransactionInput = {
     id?: string
     invoice_number: string
     status: $Enums.InvoiceStatus
-    issued_at: bigint | number
-    voided_at?: bigint | number | null
+    issued_at: number
+    voided_at?: number | null
   }
 
   export type TransactionDetailUpdateWithoutTransactionInput = {
@@ -49058,7 +48920,7 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
     price?: ProductPriceUpdateOneWithoutTranscationDetailsNestedInput
   }
 
@@ -49082,7 +48944,7 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TransactionDetailUncheckedUpdateManyWithoutTransactionInput = {
@@ -49105,31 +48967,31 @@ export namespace Prisma {
     product_coupon_discount?: NullableIntFieldUpdateOperationsInput | number | null
     drive_permission_id?: NullableStringFieldUpdateOperationsInput | string | null
     share_method?: NullableEnumShareMethodFieldUpdateOperationsInput | $Enums.ShareMethod | null
-    shared_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    shared_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type InvoiceUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    issued_at?: IntFieldUpdateOperationsInput | number
+    voided_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type InvoiceUncheckedUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    issued_at?: IntFieldUpdateOperationsInput | number
+    voided_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type InvoiceUncheckedUpdateManyWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    issued_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    voided_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    issued_at?: IntFieldUpdateOperationsInput | number
+    voided_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TestimonialTranslationCreateManyTestimonialInput = {

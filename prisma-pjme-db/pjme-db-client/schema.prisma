@@ -56,8 +56,8 @@ model Owner {
   last_name   String @db.VarChar(100)
   sm_username String @db.VarChar(100)
   picture     String @db.VarChar(255)
-  created_at  BigInt
-  updated_at  BigInt
+  created_at  Int
+  updated_at  Int
 
   products Product[]
 
@@ -73,9 +73,9 @@ model Customer {
   email        String  @unique @db.VarChar(254)
   phone_number String? @db.VarChar(20)
   picture      String? @db.VarChar(255)
-  last_active  BigInt?
-  created_at   BigInt
-  updated_at   BigInt
+  last_active  Int?
+  created_at   Int
+  updated_at   Int
 
   transactions Transaction[]
 
@@ -83,9 +83,9 @@ model Customer {
 }
 
 model License {
-  id         Int    @id @default(autoincrement())
-  created_at BigInt
-  updated_at BigInt
+  id         Int @id @default(autoincrement())
+  created_at Int
+  updated_at Int
 
   products     Product[]
   translations LicenseTranslation[]
@@ -109,8 +109,8 @@ model Category {
   id         Int    @id @default(autoincrement())
   name       String @db.VarChar(100)
   slug       String @unique @db.VarChar(100)
-  created_at BigInt
-  updated_at BigInt
+  created_at Int
+  updated_at Int
 
   products Product[]
 
@@ -139,8 +139,8 @@ model Product {
   name         String    @db.VarChar(150)
   slug         String    @unique @db.VarChar(150)
   price_type   PriceType
-  created_at   BigInt
-  updated_at   BigInt
+  created_at   Int
+  updated_at   Int
 
   admin    Admin    @relation(fields: [admin_id], references: [id])
   category Category @relation(fields: [category_id], references: [id])
@@ -172,7 +172,7 @@ model ProductVersion {
   id          String @id @default(uuid(7)) @db.Uuid
   product_id  String @db.Uuid
   version     String @db.VarChar(50)
-  released_at BigInt
+  released_at Int
 
   product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
@@ -197,7 +197,7 @@ model ProductDiscount {
   id         Int    @id @default(autoincrement()) @db.SmallInt
   product_id String @unique @db.Uuid
   discount   Int    @db.SmallInt
-  expired_at BigInt
+  expired_at Int
 
   product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
@@ -209,7 +209,7 @@ model ProductCoupon {
   product_id String @unique @db.Uuid
   code       String @db.VarChar(150)
   discount   Int    @db.SmallInt
-  expired_at BigInt
+  expired_at Int
 
   product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
@@ -262,9 +262,9 @@ enum Language {
 }
 
 model TermsOfService {
-  id         Int    @id @default(autoincrement()) @db.SmallInt
-  created_at BigInt
-  updated_at BigInt
+  id         Int @id @default(autoincrement()) @db.SmallInt
+  created_at Int
+  updated_at Int
 
   translations TermsOfServiceTranslation[]
 
@@ -283,9 +283,9 @@ model TermsOfServiceTranslation {
 }
 
 model PrivacyPolicy {
-  id         Int    @id @default(autoincrement()) @db.SmallInt
-  created_at BigInt
-  updated_at BigInt
+  id         Int @id @default(autoincrement()) @db.SmallInt
+  created_at Int
+  updated_at Int
 
   translations PrivacyPolicyTranslation[]
 
@@ -323,9 +323,9 @@ model AboutUsTranslation {
 }
 
 model Faq {
-  id         Int    @id @default(autoincrement())
-  created_at BigInt
-  updated_at BigInt
+  id         Int @id @default(autoincrement())
+  created_at Int
+  updated_at Int
 
   translations FaqTranslation[]
 
@@ -370,8 +370,8 @@ model Transaction {
   admin_email String @db.VarChar(254)
 
   status        TransactionStatus
-  created_at    BigInt
-  updated_at    BigInt
+  created_at    Int
+  updated_at    Int
   currency_code CurrencyCode
   total_amount  Decimal           @db.Decimal(10, 2)
 
@@ -398,8 +398,8 @@ model Invoice {
   transaction_id String        @db.Uuid
   invoice_number String        @unique @db.VarChar(32)
   status         InvoiceStatus
-  issued_at      BigInt
-  voided_at      BigInt?
+  issued_at      Int
+  voided_at      Int?
 
   transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
 
@@ -431,7 +431,7 @@ model TransactionDetail {
 
   drive_permission_id String?      @db.VarChar(100)
   share_method        ShareMethod?
-  shared_at           BigInt?
+  shared_at           Int?
 
   transaction Transaction   @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
   price       ProductPrice? @relation(fields: [product_price_id], references: [id], onDelete: SetNull)
@@ -445,7 +445,7 @@ model Feedback {
   name       String? @db.VarChar(100)
   email      String? @db.VarChar(254)
   message    String
-  created_at BigInt  @unique
+  created_at Int     @unique
 
   @@map("feedbacks")
 }
@@ -455,8 +455,8 @@ model Testimonial {
   picture     String @db.VarChar(255)
   name        String @db.VarChar(100)
   sm_username String @db.VarChar(100)
-  created_at  BigInt
-  updated_at  BigInt
+  created_at  Int
+  updated_at  Int
 
   translations TestimonialTranslation[]
 
