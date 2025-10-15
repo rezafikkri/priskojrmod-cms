@@ -32,7 +32,7 @@ async function seedCustomersAndLicenseKeys() {
   const customers = [];
   const customerIds = [];
   for (let i = 0; i < 0; i++) {
-    const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
+    const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
     const customerId = uuidv7();
     customerIds.push(customerId);
 
@@ -69,7 +69,7 @@ async function seedCustomersAndLicenseKeys() {
 
   for (let i = 0; i < 0; i++) {
     const email = faker.internet.email().toLowerCase();
-    const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
+    const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
     const secret = await pjmaDBPrismaClient.secretKeyLicense.findFirst({
       select: { id: true, key: true },
     });
@@ -160,7 +160,7 @@ export default async function seedDevData() {
     // }
 
     const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];
-    const currentTime = BigInt(Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i)));
+    const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
     transactions.push({
       admin_id: process.env.ADMIN_ID,
       admin_email: 'fikkri.reza@gmail.com',

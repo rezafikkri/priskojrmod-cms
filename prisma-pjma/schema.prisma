@@ -19,12 +19,12 @@ datasource db {
 }
 
 model SecretKeyLicense {
-  id             BigInt  @id @default(autoincrement())
+  id             Int  @id @default(autoincrement())
   product_id     String  @unique @db.Uuid
   key            String  @db.VarChar(100)
   app_name       String  @db.VarChar(50)
-  created_at     BigInt
-  regenerated_at BigInt?
+  created_at     Int
+  regenerated_at Int?
 
   license_key LicenseKey[]
 
@@ -34,15 +34,15 @@ model SecretKeyLicense {
 model LicenseKey {
   id             String           @id @default(uuid(7)) @db.Uuid
   secret_key     SecretKeyLicense @relation(fields: [secret_key_id], references: [id])
-  secret_key_id  BigInt
+  secret_key_id  Int
   customer_id    String           @db.Uuid
   email          String           @db.VarChar(254)
   code           String
   can_regenerate Boolean          @default(false)
   is_revoked     Boolean          @default(false)
-  created_at     BigInt
-  updated_at     BigInt
-  regenerated_at BigInt?
+  created_at     Int
+  updated_at     Int
+  regenerated_at Int?
 
   device_id         String? @db.VarChar(100)
   last_reset_period String? @db.VarChar(10)

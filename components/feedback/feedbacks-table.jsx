@@ -188,12 +188,12 @@ export default function FeedbacksTable() {
     const loadRes = await loadFeedbacks();
 
     if (loadRes.status === 'success') {
-      // set or update last pull time
-      const currentLastPullTime = new Date().toISOString();
-      localStorage.setItem('lastPullTime', currentLastPullTime);
-      setLastPullTime(currentLastPullTime);
-
       if (loadRes.data.count > 0) {
+        // set or update last pull time
+        const currentLastPullTime = new Date().toISOString();
+        localStorage.setItem('lastPullTime', currentLastPullTime);
+        setLastPullTime(currentLastPullTime);
+
         // note the toast id, for updated in queryFn useQuery
         pullFeedbacksToastIdRef.current = toastId;
 
@@ -205,8 +205,7 @@ export default function FeedbacksTable() {
         toast.success(`New feedback pulled successfully for ${loadRes.data.count} entries.`);
       } else {
         // hide loading, in success not need to hide, because already hide when refetch in queryFn useQuery
-        toast.dismiss(toastId);
-        toast.info('No new feedback was pulled. They may have already been retrieved.');
+        toast.info('No new feedback was pulled. They may have already been retrieved.', { id: toastId });
       }
     } else {
       toast.dismiss(toastId);

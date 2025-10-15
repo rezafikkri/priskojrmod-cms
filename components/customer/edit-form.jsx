@@ -6,8 +6,10 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { editCustomerSchema } from '@/lib/validators/customer-validator';
 import { editCustomer } from '@/actions/customer-actions';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function EditForm({ customer }) {
+  const queryClient = useQueryClient();
   const form = useForm({
     resolver: zodResolver(editCustomerSchema),
     defaultValues: {

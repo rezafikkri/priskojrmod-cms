@@ -152,8 +152,8 @@ export default function LicenseKeysTable() {
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 5,
+    staleTime: 1000 * 20,
+    gcTime: 1000 * 60 * 3,
     enabled: !searchedLicenseKey,
   });
 
@@ -194,8 +194,8 @@ export default function LicenseKeysTable() {
             errorMessage: 'Something went wrong while searching. Please try again.',
           });
         },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 5,
+        staleTime: 10_000,
+        gcTime: 10_000,
       });
 
       setSearchedLicenseKey(result.data);

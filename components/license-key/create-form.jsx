@@ -76,7 +76,7 @@ export default function CreateForm({ secretKeys }) {
                     {secretKeys.map(secretKey => (
                       <SelectItem
                         key={secretKey.id}
-                        value={secretKey.id}
+                        value={secretKey.id.toString()}
                         className="text-base"
                       >
                         {secretKey.app_name}
