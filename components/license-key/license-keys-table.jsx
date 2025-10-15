@@ -380,7 +380,7 @@ export default function LicenseKeysTable() {
     syncIsFilterActive(newFilters);
 
     // if canRegenerate = 'yes'
-    if (newFilters?.canRegenerate === 'yes') {
+    if (newFilters?.canRegenerate === 'yes' || newFilters.showRevoked) {
       if (columnVisibility.select) {
         setColumnVisibility(prev => ({
           ...prev,
@@ -741,7 +741,7 @@ export default function LicenseKeysTable() {
               disabled={isFetchingLK || isSearching}
             />
 
-            {filters?.canRegenerate !== 'yes' && (
+            {(filters?.canRegenerate !== 'yes' && !filters.showRevoked) && (
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto"
