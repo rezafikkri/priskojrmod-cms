@@ -129,9 +129,9 @@ export default function LicenseKeysTable() {
     queryKey: ['licenseKeys', pagination.pageIndex, filters],
     queryFn: async () => {
       let toastId;
-      if (!shouldShowSkeletonLoading.current) {
-        const activeToastId = grantRegenerateToastIdRef.current;
+      const activeToastId = grantRegenerateToastIdRef.current;
 
+      if (!shouldShowSkeletonLoading.current) {
         if (activeToastId) {
           toastId = toast.loading('Loading license keys...', { id: activeToastId });
 
@@ -144,7 +144,7 @@ export default function LicenseKeysTable() {
       const results = await safeFetch({
         url: addFiltersToURL(`/api/license-keys?pi=${pagination.pageIndex}`, filters),
         onFinally: () => {
-          if (toastId) {
+          if (toastId && !activeToastId) {
             toast.dismiss(toastId);
           }
         },
@@ -170,9 +170,9 @@ export default function LicenseKeysTable() {
           // if previoesly searchedLicenseKey is null, then show skeleton loading
           // for all table, besides that, then show toast loading only
           let toastId;
-          if (searchedLicenseKey) {
-            const activeToastId = grantRegenerateToastIdRef.current;
+          const activeToastId = grantRegenerateToastIdRef.current;
 
+          if (searchedLicenseKey) {
             if (activeToastId) {
               toastId = toast.loading('Searching license keys...', { id: activeToastId });
 
@@ -185,7 +185,7 @@ export default function LicenseKeysTable() {
           return await safeFetch({
             url: addFiltersToURL(`/api/license-keys?sk=${parsedKey}`, appliedFilters),
             onFinally: () => {
-              if (toastId) {
+              if (toastId && !activeToastId) {
                 toast.dismiss(toastId);
               }
 
@@ -421,7 +421,7 @@ export default function LicenseKeysTable() {
 
     setIsRegenerating(true);
     // show loading
-    const toastId = toast.loading('Enabling Regeneration...');
+    const toastId = toast.loading('Enabling regeneration...');
 
     // not use try/catch because in actions already using try/catch
     const setCanRegenerateRes = await setCanRegenerateKeys(rowSelections);
@@ -456,9 +456,12 @@ export default function LicenseKeysTable() {
       setRowSelection({});
 
       if (setCanRegenerateRes.data.count > 0) {
-        toast.success(`Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys.`);
+        toast.success(
+          `Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys.`,
+          { id: toastId },
+        );
       } else {
-        toast.info('No license keys were updated. They may have already been deleted.');
+        toast.info('No license keys were updated. They may have already been deleted.', { id: toastId });
       }
     } else {
       toast.error(setCanRegenerateRes.message, { id: toastId });
