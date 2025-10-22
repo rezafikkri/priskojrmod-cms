@@ -16,6 +16,7 @@ import {
   AlertTitle,
 } from '@/components/ui/alert';
 import Error404 from '../icon/error-404';
+import { InvoiceStatus } from '@/constants/enums';
 
 export default function InvoicesSection({ invoices }) {
   if (invoices.length <= 0) {
@@ -25,6 +26,11 @@ export default function InvoicesSection({ invoices }) {
         <AlertTitle>Invoice not found.</AlertTitle>
       </Alert>
     );
+  }
+
+  function getTextStatusColor(status) {
+    if (status === InvoiceStatus.ACTIVE) return 'text-green-700 dark:text-green-600';
+    return 'text-red-700 dark:text-red-600';
   }
 
   return invoices.map((invoice, index) => (
@@ -46,7 +52,7 @@ export default function InvoicesSection({ invoices }) {
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Status</TableHead>
-              <TableCell className="capitalize">{invoice.status}</TableCell>
+              <TableCell className={`capitalize ${getTextStatusColor(invoice.status)}`}>{invoice.status}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Issued At</TableHead>
