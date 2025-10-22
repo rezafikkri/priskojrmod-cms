@@ -46,17 +46,17 @@ export default function DataTable({
     columnVisibility,
     pagination,
     updatingTransactionStatusIds,
+    correctingTransactionStatusIds
   } = tableState;
   const {
     onPaginationChange,
     onColumnVisibilityChange,
     onEditTransactionStatus,
     onCopyableMessage,
+    onCorrectTransactionStatus,
   } = tableHandler;
 
-  const [correctData, setCorrectData] = useState({
-    transactionCode: 'PJM-20250814-ABC123',
-  });
+  const [correctData, setCorrectData] = useState(null);
   const [isOpenCorrectStatusDialog, setIsOpenCorrectStatusDialog] = useState(false);
 
   const [seeDetailsId, setSeeDetailsId] = useState(null);
@@ -151,7 +151,8 @@ export default function DataTable({
               variant="ghost"
               className="h-8 w-8 p-0 focus-visible:ring-ring"
               disabled={
-                updatingTransactionStatusIds.includes(row.original.id)
+                updatingTransactionStatusIds.includes(row.original.id) ||
+                correctingTransactionStatusIds.includes(row.original.id)
               }
             >
               <MoreHorizontal />
@@ -184,16 +185,26 @@ export default function DataTable({
             )}
             <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other Action</DropdownMenuLabel>
 
-            <DropdownMenuItem
-              className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
-              asChild
-            >
-              <button
-                onClick={() => setIsOpenCorrectStatusDialog(true)}
+            {row.getValue('status') !== TransactionStatus.PENDING && (
+              <DropdownMenuItem
+                className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+                asChild
               >
-                Correct Status
-              </button>
-            </DropdownMenuItem>
+                <button
+                  onClick={() => {
+                    setIsOpenCorrectStatusDialog(true);
+                    setCorrectData({
+                      id: row.original.id,
+                      transactionCode: row.getValue('code'),
+                      currentStatus: row.getValue('status'),
+                    });
+                  }}
+                >
+                  Correct Status
+                </button>
+              </DropdownMenuItem>
+            )}
+            
             <DropdownMenuItem
               className="w-full text-base"
               asChild
@@ -225,7 +236,7 @@ export default function DataTable({
         </DropdownMenu>
       ),
     },
-  ], [updatingTransactionStatusIds]);
+  ], [updatingTransactionStatusIds, correctingTransactionStatusIds]);
   const table = useReactTable({
     data: transactions,
     rowCount,
@@ -271,7 +282,8 @@ export default function DataTable({
                   data-state={row.getIsSelected() && 'selected'}
                   className={
                     (
-                      updatingTransactionStatusIds.includes(row.original.id)
+                      updatingTransactionStatusIds.includes(row.original.id) ||
+                      correctingTransactionStatusIds.includes(row.original.id)
                     )
                       ? 'opacity-50'
                       : ''
@@ -327,7 +339,7 @@ export default function DataTable({
       ) : null}
 
       <CorrectStatusDialog
-        onCorrect={() => {}}
+        onCorrect={onCorrectTransactionStatus}
         isOpen={isOpenCorrectStatusDialog}
         onIsOpenChange={setIsOpenCorrectStatusDialog}
         onCorrectDataChange={setCorrectData}

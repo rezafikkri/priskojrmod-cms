@@ -14,9 +14,6 @@
     "studio": "pnpm exec prisma studio --schema ./prisma-pjma/schema.prisma --port 5555 & pnpm exec prisma studio --schema ./prisma-pjme/schema.prisma --port 5556",
     "test": "vitest"
   },
-  "prisma": {
-    "seed": "node prisma/seed.mjs"
-  },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
     "@hookform/resolvers": "^4.1.3",
