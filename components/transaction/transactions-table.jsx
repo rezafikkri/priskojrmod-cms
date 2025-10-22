@@ -247,7 +247,7 @@ export default function TransactionsTable() {
         setSearchedTransaction(prevTransaction => {
           let newTransactions;
 
-          if (!filtersRef.current?.status) {
+          if (!filtersRef.current?.status || filtersRef.current?.status === 'all') {
             newTransactions = prevTransaction.transactions.map(transaction => {
               if (transaction.id === id) {
                 const result = {
@@ -274,7 +274,7 @@ export default function TransactionsTable() {
         });
 
         queryClient.invalidateQueries({ queryKey: ['transactions'] });
-      } else if (!filtersRef.current?.status) {
+      } else if (!filtersRef.current?.status || filtersRef.current?.status === 'all') {
         if (paginationRef.current.pageIndex === 0) {
           queryClient.setQueryData(
             ['transactions', paginationRef.current.pageIndex, filtersRef.current],

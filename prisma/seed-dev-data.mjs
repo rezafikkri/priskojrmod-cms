@@ -149,7 +149,7 @@ export default async function seedDevData() {
   });
 
   const transactions = [];
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 3; i++) {
     let transactionDetails = [];
     // if (i % 2 === 0) {
       transactionDetails = getTransactionDetails({ max: 3, products });
