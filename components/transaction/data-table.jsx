@@ -216,7 +216,7 @@ export default function DataTable({
             {row.original.invoices.length > 0 && (
               <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
                 <Link
-                  href={`/invoices/${row.original.invoices[0].invoice_number}/pdf`}
+                  href={`/invoice/${row.original.invoices[0].invoice_number}/pdf`}
                   target='_blank'
                 >View Invoice</Link>
               </DropdownMenuItem>
