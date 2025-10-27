@@ -27,7 +27,7 @@ import { MoreHorizontal, Minus } from 'lucide-react';
 import { toast } from 'sonner';
 import { removeSecretKey } from '@/actions/secret-key-actions';
 import DeleteDialog from './delete-dialog';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -68,14 +68,14 @@ export default function DataTable({ secretKeys: data }) {
     {
       accessorKey: 'created_at',
       header: () => 'Created At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
     },
     {
       accessorKey: 'regenerated_at',
       header: () => 'Regenerated At',
       cell: ({ row }) => 
         row.getValue('regenerated_at')
-          ? formatDateTimeWIB(row.getValue('regenerated_at'))
+          ? formatDateTime(row.getValue('regenerated_at'))
           : <Minus className="size-4 text-zinc-300" />,
     },
     {
@@ -99,7 +99,10 @@ export default function DataTable({ secretKeys: data }) {
                 className="w-full text-base"
                 asChild
               >
-                <button onClick={() => navigator.clipboard.writeText(row.original.key)}>
+                <button onClick={() => {
+                  navigator.clipboard.writeText(row.original.key);
+                  toast.success('Secret key copied to clipboard.');
+                }}>
                   Copy Secret Key
                 </button>
               </DropdownMenuItem>

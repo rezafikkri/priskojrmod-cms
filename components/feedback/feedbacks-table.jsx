@@ -109,9 +109,9 @@ export default function FeedbacksTable() {
     queryKey: ['feedbacks', filters],
     queryFn: async () => {
       let toastId;
-      if (!shouldShowSkeletonLoading.current) {
-        const activeToastId = deletionToastIdRef.current ?? pullFeedbacksToastIdRef.current;
+      const activeToastId = deletionToastIdRef.current ?? pullFeedbacksToastIdRef.current;
 
+      if (!shouldShowSkeletonLoading.current) {
         if (activeToastId) {
           toastId = toast.loading('Refreshing feedback...', { id: activeToastId });
 
@@ -128,7 +128,7 @@ export default function FeedbacksTable() {
       const results = await safeFetch({
         url: addFiltersToURL(`/api/feedbacks`, filters),
         onFinally: () => {
-          if (toastId) {
+          if (toastId && !activeToastId) {
             toast.dismiss(toastId);
           }
         },
@@ -188,12 +188,12 @@ export default function FeedbacksTable() {
     const loadRes = await loadFeedbacks();
 
     if (loadRes.status === 'success') {
-      // set or update last pull time
-      const currentLastPullTime = new Date().toISOString();
-      localStorage.setItem('lastPullTime', currentLastPullTime);
-      setLastPullTime(currentLastPullTime);
-
       if (loadRes.data.count > 0) {
+        // set or update last pull time
+        const currentLastPullTime = new Date().toISOString();
+        localStorage.setItem('lastPullTime', currentLastPullTime);
+        setLastPullTime(currentLastPullTime);
+
         // note the toast id, for updated in queryFn useQuery
         pullFeedbacksToastIdRef.current = toastId;
 
@@ -202,15 +202,16 @@ export default function FeedbacksTable() {
         // reset row selection
         setRowSelection({});
 
-        toast.success(`New feedback pulled successfully for ${loadRes.data.count} entries.`);
+        toast.success(
+          `New feedback pulled successfully for ${loadRes.data.count} entries.`,
+          { id: toastId },
+        );
       } else {
         // hide loading, in success not need to hide, because already hide when refetch in queryFn useQuery
-        toast.dismiss(toastId);
-        toast.info('No new feedback was pulled. They may have already been retrieved.');
+        toast.info('No new feedback was pulled. They may have already been retrieved.', { id: toastId });
       }
     } else {
-      toast.dismiss(toastId);
-      toast.error(loadRes.message);
+      toast.error(loadRes.message, { id: toastId });
     }
 
     // enabled button
@@ -242,15 +243,17 @@ export default function FeedbacksTable() {
 
       if (removeRes.data.count > 0) {
         toast.success(
-          `Successfully deleted ${removeRes.data.count} feedback entr${removeRes.data.count > 1 ? 'ies' : 'y'}.`
+          `Successfully deleted ${removeRes.data.count} feedback entr${removeRes.data.count > 1 ? 'ies' : 'y'}.`,
+          { id: toastId },
         );
       } else {
-        toast.info('No feedback entries were deleted. They may have already been removed.');
+        toast.info('No feedback entries were deleted. They may have already been removed.', {
+          id: toastId,
+        });
       }
     } else {
       // hide loading, in success not need to hide, because already hide when refetch in queryFn useQuery
-      toast.dismiss(toastId);
-      toast.error(removeRes.message);
+      toast.error(removeRes.message, { id: toastId });
     }
 
     // enabled button

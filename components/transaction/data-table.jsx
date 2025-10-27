@@ -24,11 +24,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
-import { formatDateTimeWIB } from '@/lib/format-date';
-import { getTableHeaderWidth } from '@/lib/utils';
+import { formatDateTime } from '@/lib/format-date';
+import { formatCurrency, getStatusClasses, getTableHeaderWidth } from '@/lib/utils';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import InfoCircle from '../icon/info-circle';
-import OverrideStatusDialog from './override-dialog';
+import CorrectStatusDialog from './correct-status-dialog';
+import DetailsSheet from './details-sheet';
+import { TransactionStatus } from '@/constants/enums';
+import Link from 'next/link';
 
 export default function DataTable({
   transaction,
@@ -40,18 +43,45 @@ export default function DataTable({
 }) {
   const {transactions, rowCount} = transaction;
   const {
-    onPaginationChange,
-    onColumnVisibilityChange,
-  } = tableHandler;
-  const {
     columnVisibility,
     pagination,
+    updatingTransactionStatusIds,
+    correctingTransactionStatusIds
   } = tableState;
+  const {
+    onPaginationChange,
+    onColumnVisibilityChange,
+    onEditTransactionStatus,
+    onCopyableMessage,
+    onCorrectTransactionStatus,
+  } = tableHandler;
 
-  const [overrideData, setOverrideData] = useState({
-    transactionCode: 'PJM-20250814-ABC123',
-  });
-  const [isOpenOverrideStatusDialog, setIsOpenOverrideStatusDialog] = useState(false);
+  const [correctData, setCorrectData] = useState(null);
+  const [isOpenCorrectStatusDialog, setIsOpenCorrectStatusDialog] = useState(false);
+
+  const [seeDetailsId, setSeeDetailsId] = useState(null);
+
+  function getChangeStatusMenu(currentStatus) {
+    if (
+      currentStatus === TransactionStatus.CANCELLED ||
+      currentStatus === TransactionStatus.REFUND
+    ) return null;
+
+    let excludedStatuses = [
+      TransactionStatus.PENDING,
+      TransactionStatus.REFUND,
+    ];
+
+    if (currentStatus === TransactionStatus.PAID) {
+      excludedStatuses = [
+        TransactionStatus.PENDING,
+        TransactionStatus.CANCELLED,
+        TransactionStatus.PAID,
+      ];
+    }
+
+    return Object.values(TransactionStatus).filter(ts => !excludedStatuses.includes(ts));
+  }
 
   // table definition
   const columns = useMemo(() => [
@@ -68,7 +98,7 @@ export default function DataTable({
       enableHiding: false,
     },
     {
-      accessorKey: 'email',
+      accessorKey: 'customer_email',
       header: 'Email',
       enableHiding: false,
     },
@@ -78,7 +108,7 @@ export default function DataTable({
       enableHiding: false,
       cell: ({ row }) => (
         <span
-          className="px-2 py-1 rounded-lg bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300 capitalize font-medium"
+          className={`px-2 py-1 rounded-lg capitalize font-medium ${getStatusClasses(row.getValue('status'))}`}
         >
           {row.getValue('status')}
         </span>
@@ -96,18 +126,20 @@ export default function DataTable({
         </>
       ),
       cell: ({ row }) => (
-        <div className="text-right">Rp{Number(row.getValue('total_amount')).toLocaleString('id-ID')}</div>
+        <div className="text-right">
+          {formatCurrency(row.getValue('total_amount'), row.original.currency_code)}
+        </div>
       ),
     },
     {
       accessorKey: 'created_at',
       header: () => 'Created At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
     },
     {
       accessorKey: 'updated_at',
       header: () => 'Updated At',
-      cell: ({ row }) => formatDateTimeWIB(row.getValue('updated_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
     },
     {
       id: 'actions',
@@ -118,56 +150,93 @@ export default function DataTable({
             <Button
               variant="ghost"
               className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={
+                updatingTransactionStatusIds.includes(row.original.id) ||
+                correctingTransactionStatusIds.includes(row.original.id)
+              }
             >
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-50">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Change Status</DropdownMenuLabel>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button>Paid</button>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button>Cancelled</button>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button>Refund</button>
-            </DropdownMenuItem>
+            {getChangeStatusMenu(row.getValue('status')) && (
+              <>
+                <DropdownMenuLabel
+                  className="text-muted-foreground text-[15px]"
+                >
+                  Change Status To
+                </DropdownMenuLabel>
+                {getChangeStatusMenu(row.getValue('status')).map(cs => (
+                  <DropdownMenuItem
+                    key={cs}
+                    className="w-full text-base capitalize"
+                    asChild
+                  >
+                    <button
+                      onClick={() => {
+                        onEditTransactionStatus(row.original.id, cs);
+                      }}
+                    >{cs}</button>
+                  </DropdownMenuItem>
+                ))}
 
-            <DropdownMenuItem
-              className="w-full text-base mt-2 focus:bg-orange-100 dark:focus:bg-orange-300/10"
-              asChild
-            >
-              <button
-                onClick={() => setIsOpenOverrideStatusDialog(true)}
-              >
-                Override Status
-              </button>
-            </DropdownMenuItem>
-
-            <DropdownMenuSeparator />
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other Action</DropdownMenuLabel>
 
+            {row.getValue('status') !== TransactionStatus.PENDING && (
+              <DropdownMenuItem
+                className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+                asChild
+              >
+                <button
+                  onClick={() => {
+                    setIsOpenCorrectStatusDialog(true);
+                    setCorrectData({
+                      id: row.original.id,
+                      transactionCode: row.getValue('code'),
+                      currentStatus: row.getValue('status'),
+                    });
+                  }}
+                >
+                  Correct Status
+                </button>
+              </DropdownMenuItem>
+            )}
+            
+            <DropdownMenuItem
+              className="w-full text-base"
+              asChild
+              onClick={() => setSeeDetailsId(row.original.id)}
+            >
+              <button>See Details</button>
+            </DropdownMenuItem>
+            
+            {row.original.invoices.length > 0 && (
+              <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+                <Link
+                  href={`/invoice/${row.original.invoices[0].invoice_number}/pdf`}
+                  target='_blank'
+                >View Invoice</Link>
+              </DropdownMenuItem>
+            )}
+
+            {row.getValue('status') === TransactionStatus.PAID && (
             <DropdownMenuItem
               className="w-full text-base"
               asChild
             >
-              <button>See Detail</button>
+              <button onClick={() => onCopyableMessage(row.original.id)}>
+                Copy Confirmation Message
+              </button>
             </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       ),
     },
-  ], []);
+  ], [updatingTransactionStatusIds, correctingTransactionStatusIds]);
   const table = useReactTable({
     data: transactions,
     rowCount,
@@ -211,6 +280,14 @@ export default function DataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className={
+                    (
+                      updatingTransactionStatusIds.includes(row.original.id) ||
+                      correctingTransactionStatusIds.includes(row.original.id)
+                    )
+                      ? 'opacity-50'
+                      : ''
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -261,13 +338,15 @@ export default function DataTable({
         </div>
       ) : null}
 
-      <OverrideStatusDialog
-        onOverride={() => {}}
-        isOpen={isOpenOverrideStatusDialog}
-        onIsOpenChange={setIsOpenOverrideStatusDialog}
-        onOverrideDataChange={setOverrideData}
-        overrideData={overrideData}
+      <CorrectStatusDialog
+        onCorrect={onCorrectTransactionStatus}
+        isOpen={isOpenCorrectStatusDialog}
+        onIsOpenChange={setIsOpenCorrectStatusDialog}
+        onCorrectDataChange={setCorrectData}
+        correctData={correctData}
       />
+
+      <DetailsSheet detailsId={seeDetailsId} onDetailsIdChange={setSeeDetailsId} />
     </>
   );
 }

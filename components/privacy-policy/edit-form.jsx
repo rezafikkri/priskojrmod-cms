@@ -15,7 +15,7 @@ import FormLanguageToggle from '../ui/form-language-toggle';
 import ContentInput from '../ui/content-input';
 import { privacyPolicySchema } from '@/lib/validators/privacy-policy-validator';
 import { addPrivacyPolicy, editPrivacyPolicy } from '@/actions/privacy-policy-actions';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 
 export default function EditForm({ privacyPolicy }) {
   const [createdAt, setCreatedAt] = useState(privacyPolicy?.created_at);
@@ -119,8 +119,8 @@ export default function EditForm({ privacyPolicy }) {
 
           {hasPrivacyPolicy && (
             <p className="text-sm text-zinc-600 [&_span]:block space-y-2.5">
-              <span>Created on: {formatDateTimeWIB(createdAt)}</span>
-              <span>Last updated: {formatDateTimeWIB(updatedAt)}</span>
+              <span>Created on: {formatDateTime(createdAt)}</span>
+              <span>Last updated: {formatDateTime(updatedAt)}</span>
             </p>
           )}
 

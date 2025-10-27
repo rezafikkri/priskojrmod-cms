@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.8.2
- * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
+ * Prisma Client JS version: 6.17.1
+ * Query Engine version: 272a37d34178c2894197e17273bf937f25acdeac
  */
 Prisma.prismaVersion = {
-  client: "6.8.2",
-  engine: "2060c79ba17c6bb9f5823312b6f6b7f4a845738e"
+  client: "6.17.1",
+  engine: "272a37d34178c2894197e17273bf937f25acdeac"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -314,6 +314,8 @@ exports.Prisma.TransactionScalarFieldEnum = {
   id: 'id',
   code: 'code',
   customer_id: 'customer_id',
+  admin_id: 'admin_id',
+  admin_email: 'admin_email',
   status: 'status',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -324,6 +326,15 @@ exports.Prisma.TransactionScalarFieldEnum = {
   customer_phone_number: 'customer_phone_number'
 };
 
+exports.Prisma.InvoiceScalarFieldEnum = {
+  id: 'id',
+  transaction_id: 'transaction_id',
+  invoice_number: 'invoice_number',
+  status: 'status',
+  issued_at: 'issued_at',
+  voided_at: 'voided_at'
+};
+
 exports.Prisma.TransactionDetailScalarFieldEnum = {
   id: 'id',
   transaction_id: 'transaction_id',
@@ -332,13 +343,18 @@ exports.Prisma.TransactionDetailScalarFieldEnum = {
   product_coupon_id: 'product_coupon_id',
   quantity: 'quantity',
   product_name: 'product_name',
+  product_version: 'product_version',
+  product_drive_file_id: 'product_drive_file_id',
+  product_download_link: 'product_download_link',
   product_variant: 'product_variant',
   variant_download_link: 'variant_download_link',
   variant_file_access_password: 'variant_file_access_password',
   product_currency_code: 'product_currency_code',
   product_price: 'product_price',
   product_discount: 'product_discount',
+  product_coupon_code: 'product_coupon_code',
   product_coupon_discount: 'product_coupon_discount',
+  drive_permission_id: 'drive_permission_id',
   share_method: 'share_method',
   shared_at: 'shared_at'
 };
@@ -404,6 +420,11 @@ exports.TransactionStatus = exports.$Enums.TransactionStatus = {
   refund: 'refund'
 };
 
+exports.InvoiceStatus = exports.$Enums.InvoiceStatus = {
+  active: 'active',
+  void: 'void'
+};
+
 exports.ShareMethod = exports.$Enums.ShareMethod = {
   download_link: 'download_link',
   drive_share: 'drive_share',
@@ -436,6 +457,7 @@ exports.Prisma.ModelName = {
   Faq: 'Faq',
   FaqTranslation: 'FaqTranslation',
   Transaction: 'Transaction',
+  Invoice: 'Invoice',
   TransactionDetail: 'TransactionDetail',
   Feedback: 'Feedback',
   Testimonial: 'Testimonial',

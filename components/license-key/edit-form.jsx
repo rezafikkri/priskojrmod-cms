@@ -19,13 +19,13 @@ import { editLicenseKey } from '@/actions/license-key-actions';
 import { useQueryClient } from '@tanstack/react-query'
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
-import { formatDateTimeWIB } from '@/lib/format-date';
+import { formatDateTime } from '@/lib/format-date';
 
 export default function EditForm({ licenseKey }) {
   // Get QueryClient from the context
   const queryClient = useQueryClient();
   const [licenseKeyExpire, setLicenseKeyExpire] = useState(() => {
-    return formatDateTimeWIB(licenseKey.parsedKey.exp);
+    return formatDateTime(licenseKey.parsedKey.exp);
   });
 
   const form = useForm({
@@ -47,7 +47,7 @@ export default function EditForm({ licenseKey }) {
       form.setValue('change_expiration_date', false);
 
       if (editRes.data.exp) {
-        setLicenseKeyExpire(formatDateTimeWIB(editRes.data.exp));
+        setLicenseKeyExpire(formatDateTime(editRes.data.exp));
       }
 
       toast.success('License key updated successfully.');

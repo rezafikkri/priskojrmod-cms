@@ -40,7 +40,7 @@ export type LicenseKey = $Result.DefaultSelection<Prisma.$LicenseKeyPayload>
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -72,13 +72,6 @@ export class PrismaClient<
    * Disconnect from the database
    */
   $disconnect(): $Utils.JsPromise<void>;
-
-  /**
-   * Add a middleware
-   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
-   * @see https://pris.ly/d/extensions
-   */
-  $use(cb: Prisma.Middleware): void
 
 /**
    * Executes a prepared raw query and returns the number of affected rows.
@@ -226,8 +219,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.8.2
-   * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
+   * Prisma Client JS version: 6.17.1
+   * Query Engine version: 272a37d34178c2894197e17273bf937f25acdeac
    */
   export type PrismaVersion = {
     client: string
@@ -823,16 +816,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     * 
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -847,6 +848,10 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
+    /**
+     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
+     */
+    adapter?: runtime.SqlDriverAdapterFactory | null
     /**
      * Global configuration for omitting model fields by default.
      * 
@@ -875,10 +880,15 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
-  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
-    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-    : never
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T['level'] : T
+  >;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
+    ? GetLogType<T[number]>
+    : never;
 
   export type QueryEvent = {
     timestamp: Date
@@ -918,25 +928,6 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
-
-  /**
-   * These options are being passed into the middleware as "params"
-   */
-  export type MiddlewareParams = {
-    model?: ModelName
-    action: PrismaAction
-    args: any
-    dataPath: string[]
-    runInTransaction: boolean
-  }
-
-  /**
-   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
-   */
-  export type Middleware<T = any> = (
-    params: MiddlewareParams,
-    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
-  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -1009,27 +1000,27 @@ export namespace Prisma {
   }
 
   export type SecretKeyLicenseSumAggregateOutputType = {
-    id: bigint | null
-    created_at: bigint | null
-    regenerated_at: bigint | null
+    id: number | null
+    created_at: number | null
+    regenerated_at: number | null
   }
 
   export type SecretKeyLicenseMinAggregateOutputType = {
-    id: bigint | null
+    id: number | null
     product_id: string | null
     key: string | null
     app_name: string | null
-    created_at: bigint | null
-    regenerated_at: bigint | null
+    created_at: number | null
+    regenerated_at: number | null
   }
 
   export type SecretKeyLicenseMaxAggregateOutputType = {
-    id: bigint | null
+    id: number | null
     product_id: string | null
     key: string | null
     app_name: string | null
-    created_at: bigint | null
-    regenerated_at: bigint | null
+    created_at: number | null
+    regenerated_at: number | null
   }
 
   export type SecretKeyLicenseCountAggregateOutputType = {
@@ -1170,12 +1161,12 @@ export namespace Prisma {
   }
 
   export type SecretKeyLicenseGroupByOutputType = {
-    id: bigint
+    id: number
     product_id: string
     key: string
     app_name: string
-    created_at: bigint
-    regenerated_at: bigint | null
+    created_at: number
+    regenerated_at: number | null
     _count: SecretKeyLicenseCountAggregateOutputType | null
     _avg: SecretKeyLicenseAvgAggregateOutputType | null
     _sum: SecretKeyLicenseSumAggregateOutputType | null
@@ -1249,12 +1240,12 @@ export namespace Prisma {
       license_key: Prisma.$LicenseKeyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: bigint
+      id: number
       product_id: string
       key: string
       app_name: string
-      created_at: bigint
-      regenerated_at: bigint | null
+      created_at: number
+      regenerated_at: number | null
     }, ExtArgs["result"]["secretKeyLicense"]>
     composites: {}
   }
@@ -1679,12 +1670,12 @@ export namespace Prisma {
    * Fields of the SecretKeyLicense model
    */
   interface SecretKeyLicenseFieldRefs {
-    readonly id: FieldRef<"SecretKeyLicense", 'BigInt'>
+    readonly id: FieldRef<"SecretKeyLicense", 'Int'>
     readonly product_id: FieldRef<"SecretKeyLicense", 'String'>
     readonly key: FieldRef<"SecretKeyLicense", 'String'>
     readonly app_name: FieldRef<"SecretKeyLicense", 'String'>
-    readonly created_at: FieldRef<"SecretKeyLicense", 'BigInt'>
-    readonly regenerated_at: FieldRef<"SecretKeyLicense", 'BigInt'>
+    readonly created_at: FieldRef<"SecretKeyLicense", 'Int'>
+    readonly regenerated_at: FieldRef<"SecretKeyLicense", 'Int'>
   }
     
 
@@ -2136,24 +2127,24 @@ export namespace Prisma {
   }
 
   export type LicenseKeySumAggregateOutputType = {
-    secret_key_id: bigint | null
-    created_at: bigint | null
-    updated_at: bigint | null
-    regenerated_at: bigint | null
+    secret_key_id: number | null
+    created_at: number | null
+    updated_at: number | null
+    regenerated_at: number | null
     reset_count: number | null
   }
 
   export type LicenseKeyMinAggregateOutputType = {
     id: string | null
-    secret_key_id: bigint | null
+    secret_key_id: number | null
     customer_id: string | null
     email: string | null
     code: string | null
     can_regenerate: boolean | null
     is_revoked: boolean | null
-    created_at: bigint | null
-    updated_at: bigint | null
-    regenerated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
+    regenerated_at: number | null
     device_id: string | null
     last_reset_period: string | null
     reset_count: number | null
@@ -2161,15 +2152,15 @@ export namespace Prisma {
 
   export type LicenseKeyMaxAggregateOutputType = {
     id: string | null
-    secret_key_id: bigint | null
+    secret_key_id: number | null
     customer_id: string | null
     email: string | null
     code: string | null
     can_regenerate: boolean | null
     is_revoked: boolean | null
-    created_at: bigint | null
-    updated_at: bigint | null
-    regenerated_at: bigint | null
+    created_at: number | null
+    updated_at: number | null
+    regenerated_at: number | null
     device_id: string | null
     last_reset_period: string | null
     reset_count: number | null
@@ -2346,15 +2337,15 @@ export namespace Prisma {
 
   export type LicenseKeyGroupByOutputType = {
     id: string
-    secret_key_id: bigint
+    secret_key_id: number
     customer_id: string
     email: string
     code: string
     can_regenerate: boolean
     is_revoked: boolean
-    created_at: bigint
-    updated_at: bigint
-    regenerated_at: bigint | null
+    created_at: number
+    updated_at: number
+    regenerated_at: number | null
     device_id: string | null
     last_reset_period: string | null
     reset_count: number
@@ -2464,15 +2455,15 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      secret_key_id: bigint
+      secret_key_id: number
       customer_id: string
       email: string
       code: string
       can_regenerate: boolean
       is_revoked: boolean
-      created_at: bigint
-      updated_at: bigint
-      regenerated_at: bigint | null
+      created_at: number
+      updated_at: number
+      regenerated_at: number | null
       device_id: string | null
       last_reset_period: string | null
       reset_count: number
@@ -2901,15 +2892,15 @@ export namespace Prisma {
    */
   interface LicenseKeyFieldRefs {
     readonly id: FieldRef<"LicenseKey", 'String'>
-    readonly secret_key_id: FieldRef<"LicenseKey", 'BigInt'>
+    readonly secret_key_id: FieldRef<"LicenseKey", 'Int'>
     readonly customer_id: FieldRef<"LicenseKey", 'String'>
     readonly email: FieldRef<"LicenseKey", 'String'>
     readonly code: FieldRef<"LicenseKey", 'String'>
     readonly can_regenerate: FieldRef<"LicenseKey", 'Boolean'>
     readonly is_revoked: FieldRef<"LicenseKey", 'Boolean'>
-    readonly created_at: FieldRef<"LicenseKey", 'BigInt'>
-    readonly updated_at: FieldRef<"LicenseKey", 'BigInt'>
-    readonly regenerated_at: FieldRef<"LicenseKey", 'BigInt'>
+    readonly created_at: FieldRef<"LicenseKey", 'Int'>
+    readonly updated_at: FieldRef<"LicenseKey", 'Int'>
+    readonly regenerated_at: FieldRef<"LicenseKey", 'Int'>
     readonly device_id: FieldRef<"LicenseKey", 'String'>
     readonly last_reset_period: FieldRef<"LicenseKey", 'String'>
     readonly reset_count: FieldRef<"LicenseKey", 'Int'>
@@ -3402,16 +3393,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'BigInt'
+   * Reference to a field of type 'Int'
    */
-  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
   /**
-   * Reference to a field of type 'BigInt[]'
+   * Reference to a field of type 'Int[]'
    */
-  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -3437,20 +3428,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -3471,12 +3448,12 @@ export namespace Prisma {
     AND?: SecretKeyLicenseWhereInput | SecretKeyLicenseWhereInput[]
     OR?: SecretKeyLicenseWhereInput[]
     NOT?: SecretKeyLicenseWhereInput | SecretKeyLicenseWhereInput[]
-    id?: BigIntFilter<"SecretKeyLicense"> | bigint | number
+    id?: IntFilter<"SecretKeyLicense"> | number
     product_id?: UuidFilter<"SecretKeyLicense"> | string
     key?: StringFilter<"SecretKeyLicense"> | string
     app_name?: StringFilter<"SecretKeyLicense"> | string
-    created_at?: BigIntFilter<"SecretKeyLicense"> | bigint | number
-    regenerated_at?: BigIntNullableFilter<"SecretKeyLicense"> | bigint | number | null
+    created_at?: IntFilter<"SecretKeyLicense"> | number
+    regenerated_at?: IntNullableFilter<"SecretKeyLicense"> | number | null
     license_key?: LicenseKeyListRelationFilter
   }
 
@@ -3491,15 +3468,15 @@ export namespace Prisma {
   }
 
   export type SecretKeyLicenseWhereUniqueInput = Prisma.AtLeast<{
-    id?: bigint | number
+    id?: number
     product_id?: string
     AND?: SecretKeyLicenseWhereInput | SecretKeyLicenseWhereInput[]
     OR?: SecretKeyLicenseWhereInput[]
     NOT?: SecretKeyLicenseWhereInput | SecretKeyLicenseWhereInput[]
     key?: StringFilter<"SecretKeyLicense"> | string
     app_name?: StringFilter<"SecretKeyLicense"> | string
-    created_at?: BigIntFilter<"SecretKeyLicense"> | bigint | number
-    regenerated_at?: BigIntNullableFilter<"SecretKeyLicense"> | bigint | number | null
+    created_at?: IntFilter<"SecretKeyLicense"> | number
+    regenerated_at?: IntNullableFilter<"SecretKeyLicense"> | number | null
     license_key?: LicenseKeyListRelationFilter
   }, "id" | "product_id">
 
@@ -3521,12 +3498,12 @@ export namespace Prisma {
     AND?: SecretKeyLicenseScalarWhereWithAggregatesInput | SecretKeyLicenseScalarWhereWithAggregatesInput[]
     OR?: SecretKeyLicenseScalarWhereWithAggregatesInput[]
     NOT?: SecretKeyLicenseScalarWhereWithAggregatesInput | SecretKeyLicenseScalarWhereWithAggregatesInput[]
-    id?: BigIntWithAggregatesFilter<"SecretKeyLicense"> | bigint | number
+    id?: IntWithAggregatesFilter<"SecretKeyLicense"> | number
     product_id?: UuidWithAggregatesFilter<"SecretKeyLicense"> | string
     key?: StringWithAggregatesFilter<"SecretKeyLicense"> | string
     app_name?: StringWithAggregatesFilter<"SecretKeyLicense"> | string
-    created_at?: BigIntWithAggregatesFilter<"SecretKeyLicense"> | bigint | number
-    regenerated_at?: BigIntNullableWithAggregatesFilter<"SecretKeyLicense"> | bigint | number | null
+    created_at?: IntWithAggregatesFilter<"SecretKeyLicense"> | number
+    regenerated_at?: IntNullableWithAggregatesFilter<"SecretKeyLicense"> | number | null
   }
 
   export type LicenseKeyWhereInput = {
@@ -3534,15 +3511,15 @@ export namespace Prisma {
     OR?: LicenseKeyWhereInput[]
     NOT?: LicenseKeyWhereInput | LicenseKeyWhereInput[]
     id?: UuidFilter<"LicenseKey"> | string
-    secret_key_id?: BigIntFilter<"LicenseKey"> | bigint | number
+    secret_key_id?: IntFilter<"LicenseKey"> | number
     customer_id?: UuidFilter<"LicenseKey"> | string
     email?: StringFilter<"LicenseKey"> | string
     code?: StringFilter<"LicenseKey"> | string
     can_regenerate?: BoolFilter<"LicenseKey"> | boolean
     is_revoked?: BoolFilter<"LicenseKey"> | boolean
-    created_at?: BigIntFilter<"LicenseKey"> | bigint | number
-    updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
-    regenerated_at?: BigIntNullableFilter<"LicenseKey"> | bigint | number | null
+    created_at?: IntFilter<"LicenseKey"> | number
+    updated_at?: IntFilter<"LicenseKey"> | number
+    regenerated_at?: IntNullableFilter<"LicenseKey"> | number | null
     device_id?: StringNullableFilter<"LicenseKey"> | string | null
     last_reset_period?: StringNullableFilter<"LicenseKey"> | string | null
     reset_count?: IntFilter<"LicenseKey"> | number
@@ -3572,15 +3549,15 @@ export namespace Prisma {
     AND?: LicenseKeyWhereInput | LicenseKeyWhereInput[]
     OR?: LicenseKeyWhereInput[]
     NOT?: LicenseKeyWhereInput | LicenseKeyWhereInput[]
-    secret_key_id?: BigIntFilter<"LicenseKey"> | bigint | number
+    secret_key_id?: IntFilter<"LicenseKey"> | number
     customer_id?: UuidFilter<"LicenseKey"> | string
     email?: StringFilter<"LicenseKey"> | string
     code?: StringFilter<"LicenseKey"> | string
     can_regenerate?: BoolFilter<"LicenseKey"> | boolean
     is_revoked?: BoolFilter<"LicenseKey"> | boolean
-    created_at?: BigIntFilter<"LicenseKey"> | bigint | number
-    updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
-    regenerated_at?: BigIntNullableFilter<"LicenseKey"> | bigint | number | null
+    created_at?: IntFilter<"LicenseKey"> | number
+    updated_at?: IntFilter<"LicenseKey"> | number
+    regenerated_at?: IntNullableFilter<"LicenseKey"> | number | null
     device_id?: StringNullableFilter<"LicenseKey"> | string | null
     last_reset_period?: StringNullableFilter<"LicenseKey"> | string | null
     reset_count?: IntFilter<"LicenseKey"> | number
@@ -3613,85 +3590,82 @@ export namespace Prisma {
     OR?: LicenseKeyScalarWhereWithAggregatesInput[]
     NOT?: LicenseKeyScalarWhereWithAggregatesInput | LicenseKeyScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"LicenseKey"> | string
-    secret_key_id?: BigIntWithAggregatesFilter<"LicenseKey"> | bigint | number
+    secret_key_id?: IntWithAggregatesFilter<"LicenseKey"> | number
     customer_id?: UuidWithAggregatesFilter<"LicenseKey"> | string
     email?: StringWithAggregatesFilter<"LicenseKey"> | string
     code?: StringWithAggregatesFilter<"LicenseKey"> | string
     can_regenerate?: BoolWithAggregatesFilter<"LicenseKey"> | boolean
     is_revoked?: BoolWithAggregatesFilter<"LicenseKey"> | boolean
-    created_at?: BigIntWithAggregatesFilter<"LicenseKey"> | bigint | number
-    updated_at?: BigIntWithAggregatesFilter<"LicenseKey"> | bigint | number
-    regenerated_at?: BigIntNullableWithAggregatesFilter<"LicenseKey"> | bigint | number | null
+    created_at?: IntWithAggregatesFilter<"LicenseKey"> | number
+    updated_at?: IntWithAggregatesFilter<"LicenseKey"> | number
+    regenerated_at?: IntNullableWithAggregatesFilter<"LicenseKey"> | number | null
     device_id?: StringNullableWithAggregatesFilter<"LicenseKey"> | string | null
     last_reset_period?: StringNullableWithAggregatesFilter<"LicenseKey"> | string | null
     reset_count?: IntWithAggregatesFilter<"LicenseKey"> | number
   }
 
   export type SecretKeyLicenseCreateInput = {
-    id?: bigint | number
     product_id: string
     key: string
     app_name: string
-    created_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    regenerated_at?: number | null
     license_key?: LicenseKeyCreateNestedManyWithoutSecret_keyInput
   }
 
   export type SecretKeyLicenseUncheckedCreateInput = {
-    id?: bigint | number
+    id?: number
     product_id: string
     key: string
     app_name: string
-    created_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    regenerated_at?: number | null
     license_key?: LicenseKeyUncheckedCreateNestedManyWithoutSecret_keyInput
   }
 
   export type SecretKeyLicenseUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
     product_id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     app_name?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
     license_key?: LicenseKeyUpdateManyWithoutSecret_keyNestedInput
   }
 
   export type SecretKeyLicenseUncheckedUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: IntFieldUpdateOperationsInput | number
     product_id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     app_name?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
     license_key?: LicenseKeyUncheckedUpdateManyWithoutSecret_keyNestedInput
   }
 
   export type SecretKeyLicenseCreateManyInput = {
-    id?: bigint | number
+    id?: number
     product_id: string
     key: string
     app_name: string
-    created_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    regenerated_at?: number | null
   }
 
   export type SecretKeyLicenseUpdateManyMutationInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
     product_id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     app_name?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type SecretKeyLicenseUncheckedUpdateManyInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: IntFieldUpdateOperationsInput | number
     product_id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     app_name?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type LicenseKeyCreateInput = {
@@ -3701,9 +3675,9 @@ export namespace Prisma {
     code: string
     can_regenerate?: boolean
     is_revoked?: boolean
-    created_at: bigint | number
-    updated_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    updated_at: number
+    regenerated_at?: number | null
     device_id?: string | null
     last_reset_period?: string | null
     reset_count?: number
@@ -3712,15 +3686,15 @@ export namespace Prisma {
 
   export type LicenseKeyUncheckedCreateInput = {
     id?: string
-    secret_key_id: bigint | number
+    secret_key_id: number
     customer_id: string
     email: string
     code: string
     can_regenerate?: boolean
     is_revoked?: boolean
-    created_at: bigint | number
-    updated_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    updated_at: number
+    regenerated_at?: number | null
     device_id?: string | null
     last_reset_period?: string | null
     reset_count?: number
@@ -3733,9 +3707,9 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     is_revoked?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
     device_id?: NullableStringFieldUpdateOperationsInput | string | null
     last_reset_period?: NullableStringFieldUpdateOperationsInput | string | null
     reset_count?: IntFieldUpdateOperationsInput | number
@@ -3744,15 +3718,15 @@ export namespace Prisma {
 
   export type LicenseKeyUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    secret_key_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    secret_key_id?: IntFieldUpdateOperationsInput | number
     customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     is_revoked?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
     device_id?: NullableStringFieldUpdateOperationsInput | string | null
     last_reset_period?: NullableStringFieldUpdateOperationsInput | string | null
     reset_count?: IntFieldUpdateOperationsInput | number
@@ -3760,15 +3734,15 @@ export namespace Prisma {
 
   export type LicenseKeyCreateManyInput = {
     id?: string
-    secret_key_id: bigint | number
+    secret_key_id: number
     customer_id: string
     email: string
     code: string
     can_regenerate?: boolean
     is_revoked?: boolean
-    created_at: bigint | number
-    updated_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    updated_at: number
+    regenerated_at?: number | null
     device_id?: string | null
     last_reset_period?: string | null
     reset_count?: number
@@ -3781,9 +3755,9 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     is_revoked?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
     device_id?: NullableStringFieldUpdateOperationsInput | string | null
     last_reset_period?: NullableStringFieldUpdateOperationsInput | string | null
     reset_count?: IntFieldUpdateOperationsInput | number
@@ -3791,29 +3765,29 @@ export namespace Prisma {
 
   export type LicenseKeyUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    secret_key_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    secret_key_id?: IntFieldUpdateOperationsInput | number
     customer_id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     is_revoked?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
     device_id?: NullableStringFieldUpdateOperationsInput | string | null
     last_reset_period?: NullableStringFieldUpdateOperationsInput | string | null
     reset_count?: IntFieldUpdateOperationsInput | number
   }
 
-  export type BigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type UuidFilter<$PrismaModel = never> = {
@@ -3843,15 +3817,15 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type BigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type LicenseKeyListRelationFilter = {
@@ -3908,20 +3882,20 @@ export namespace Prisma {
     regenerated_at?: SortOrder
   }
 
-  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
     _count?: NestedIntFilter<$PrismaModel>
     _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type UuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -3957,20 +3931,20 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedBigIntNullableFilter<$PrismaModel>
-    _min?: NestedBigIntNullableFilter<$PrismaModel>
-    _max?: NestedBigIntNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -3993,17 +3967,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type SecretKeyLicenseScalarRelationFilter = {
     is?: SecretKeyLicenseWhereInput
     isNot?: SecretKeyLicenseWhereInput
@@ -4011,7 +3974,7 @@ export namespace Prisma {
 
   export type LicenseKeyCustomer_idSecret_key_idCompoundUniqueInput = {
     customer_id: string
-    secret_key_id: bigint | number
+    secret_key_id: number
   }
 
   export type LicenseKeyCountOrderByAggregateInput = {
@@ -4104,22 +4067,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
   export type LicenseKeyCreateNestedManyWithoutSecret_keyInput = {
     create?: XOR<LicenseKeyCreateWithoutSecret_keyInput, LicenseKeyUncheckedCreateWithoutSecret_keyInput> | LicenseKeyCreateWithoutSecret_keyInput[] | LicenseKeyUncheckedCreateWithoutSecret_keyInput[]
     connectOrCreate?: LicenseKeyCreateOrConnectWithoutSecret_keyInput | LicenseKeyCreateOrConnectWithoutSecret_keyInput[]
@@ -4134,24 +4081,24 @@ export namespace Prisma {
     connect?: LicenseKeyWhereUniqueInput | LicenseKeyWhereUniqueInput[]
   }
 
-  export type BigIntFieldUpdateOperationsInput = {
-    set?: bigint | number
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
-  }
-
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
-  export type NullableBigIntFieldUpdateOperationsInput = {
-    set?: bigint | number | null
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type LicenseKeyUpdateManyWithoutSecret_keyNestedInput = {
@@ -4196,14 +4143,6 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type SecretKeyLicenseUpdateOneRequiredWithoutLicense_keyNestedInput = {
     create?: XOR<SecretKeyLicenseCreateWithoutLicense_keyInput, SecretKeyLicenseUncheckedCreateWithoutLicense_keyInput>
     connectOrCreate?: SecretKeyLicenseCreateOrConnectWithoutLicense_keyInput
@@ -4212,15 +4151,15 @@ export namespace Prisma {
     update?: XOR<XOR<SecretKeyLicenseUpdateToOneWithWhereWithoutLicense_keyInput, SecretKeyLicenseUpdateWithoutLicense_keyInput>, SecretKeyLicenseUncheckedUpdateWithoutLicense_keyInput>
   }
 
-  export type NestedBigIntFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -4248,34 +4187,18 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedBigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedBigIntFilter<$PrismaModel>
-    _min?: NestedBigIntFilter<$PrismaModel>
-    _max?: NestedBigIntFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -4283,7 +4206,12 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type NestedFloatFilter<$PrismaModel = never> = {
@@ -4328,23 +4256,7 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedBigIntNullableFilter<$PrismaModel>
-    _min?: NestedBigIntNullableFilter<$PrismaModel>
-    _max?: NestedBigIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -4352,7 +4264,12 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -4410,22 +4327,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
   export type LicenseKeyCreateWithoutSecret_keyInput = {
     id?: string
     customer_id: string
@@ -4433,9 +4334,9 @@ export namespace Prisma {
     code: string
     can_regenerate?: boolean
     is_revoked?: boolean
-    created_at: bigint | number
-    updated_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    updated_at: number
+    regenerated_at?: number | null
     device_id?: string | null
     last_reset_period?: string | null
     reset_count?: number
@@ -4448,9 +4349,9 @@ export namespace Prisma {
     code: string
     can_regenerate?: boolean
     is_revoked?: boolean
-    created_at: bigint | number
-    updated_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    updated_at: number
+    regenerated_at?: number | null
     device_id?: string | null
     last_reset_period?: string | null
     reset_count?: number
@@ -4487,36 +4388,35 @@ export namespace Prisma {
     OR?: LicenseKeyScalarWhereInput[]
     NOT?: LicenseKeyScalarWhereInput | LicenseKeyScalarWhereInput[]
     id?: UuidFilter<"LicenseKey"> | string
-    secret_key_id?: BigIntFilter<"LicenseKey"> | bigint | number
+    secret_key_id?: IntFilter<"LicenseKey"> | number
     customer_id?: UuidFilter<"LicenseKey"> | string
     email?: StringFilter<"LicenseKey"> | string
     code?: StringFilter<"LicenseKey"> | string
     can_regenerate?: BoolFilter<"LicenseKey"> | boolean
     is_revoked?: BoolFilter<"LicenseKey"> | boolean
-    created_at?: BigIntFilter<"LicenseKey"> | bigint | number
-    updated_at?: BigIntFilter<"LicenseKey"> | bigint | number
-    regenerated_at?: BigIntNullableFilter<"LicenseKey"> | bigint | number | null
+    created_at?: IntFilter<"LicenseKey"> | number
+    updated_at?: IntFilter<"LicenseKey"> | number
+    regenerated_at?: IntNullableFilter<"LicenseKey"> | number | null
     device_id?: StringNullableFilter<"LicenseKey"> | string | null
     last_reset_period?: StringNullableFilter<"LicenseKey"> | string | null
     reset_count?: IntFilter<"LicenseKey"> | number
   }
 
   export type SecretKeyLicenseCreateWithoutLicense_keyInput = {
-    id?: bigint | number
     product_id: string
     key: string
     app_name: string
-    created_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    regenerated_at?: number | null
   }
 
   export type SecretKeyLicenseUncheckedCreateWithoutLicense_keyInput = {
-    id?: bigint | number
+    id?: number
     product_id: string
     key: string
     app_name: string
-    created_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    regenerated_at?: number | null
   }
 
   export type SecretKeyLicenseCreateOrConnectWithoutLicense_keyInput = {
@@ -4536,21 +4436,20 @@ export namespace Prisma {
   }
 
   export type SecretKeyLicenseUpdateWithoutLicense_keyInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
     product_id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     app_name?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type SecretKeyLicenseUncheckedUpdateWithoutLicense_keyInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: IntFieldUpdateOperationsInput | number
     product_id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     app_name?: StringFieldUpdateOperationsInput | string
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type LicenseKeyCreateManySecret_keyInput = {
@@ -4560,9 +4459,9 @@ export namespace Prisma {
     code: string
     can_regenerate?: boolean
     is_revoked?: boolean
-    created_at: bigint | number
-    updated_at: bigint | number
-    regenerated_at?: bigint | number | null
+    created_at: number
+    updated_at: number
+    regenerated_at?: number | null
     device_id?: string | null
     last_reset_period?: string | null
     reset_count?: number
@@ -4575,9 +4474,9 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     is_revoked?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
     device_id?: NullableStringFieldUpdateOperationsInput | string | null
     last_reset_period?: NullableStringFieldUpdateOperationsInput | string | null
     reset_count?: IntFieldUpdateOperationsInput | number
@@ -4590,9 +4489,9 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     is_revoked?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
     device_id?: NullableStringFieldUpdateOperationsInput | string | null
     last_reset_period?: NullableStringFieldUpdateOperationsInput | string | null
     reset_count?: IntFieldUpdateOperationsInput | number
@@ -4605,9 +4504,9 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     can_regenerate?: BoolFieldUpdateOperationsInput | boolean
     is_revoked?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    updated_at?: BigIntFieldUpdateOperationsInput | bigint | number
-    regenerated_at?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
+    regenerated_at?: NullableIntFieldUpdateOperationsInput | number | null
     device_id?: NullableStringFieldUpdateOperationsInput | string | null
     last_reset_period?: NullableStringFieldUpdateOperationsInput | string | null
     reset_count?: IntFieldUpdateOperationsInput | number

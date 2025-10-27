@@ -6,7 +6,7 @@ export default async function seedCategory() {
   // check if category Application exist or not
   const name = 'Application';
   const slug = 'application';
-  const currentTime = BigInt(Math.floor(new Date().getTime() / 1000));
+  const currentTime = Math.floor(new Date().getTime() / 1000);
 
   await pjmeDBPrismaClient.category.upsert({
     where: { slug },

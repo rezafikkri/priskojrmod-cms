@@ -25,11 +25,14 @@ import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
+import { editTransactionStatus, fixTransactionStatus, prepareConfirmationMessage } from '@/actions/transaction-actions';
+import { TransactionStatus } from '@/constants/enums';
+import ExportCSV from './export-csv';
 
 export default function TransactionsTable() {
   const queryClient = useQueryClient();
   const [isSearching, setIsSearching] = useState(false);
-  const [searchedTranscation, setSearchedTransaction] = useState(null);
+  const [searchedTransaction, setSearchedTransaction] = useState(null);
   const searchRef = useRef(null);
 
   // filters state
@@ -54,18 +57,41 @@ export default function TransactionsTable() {
     updated_at: false,
   });
 
-  // This `useRef` is here to **always keep the newest `searchedTranscation and more state` value**.
+  // updating ids state
+  const [updatingTransactionStatusIds, setUpdatingTransactionStatusIds] = useState([]);
+  const [correctingTransactionStatusIds, setCorrectingTransactionStatusIds] = useState([]);
+
+  // Ensures that in normal mode and not on the last page,
+  // invalidateQueries is still triggered even if not all updating or correcting succeed.
+  const hasSuccessfulUpdateStatusRef = useRef(false);
+  const hasSuccessfulCorrectStatusRef = useRef(false);
+
+  // This `useRef` is here to **always keep the newest `searchedTransaction and more state` value**.
   // We need it because our async function (sent to the child) might "remember"
-  // an old `searchedTranscation and more state` value, which is called a "stale closure" problem.
-  const searchedTranscationRef = useRef(searchedTranscation);
+  // an old `searchedTransaction and more state` value, which is called a "stale closure" problem.
+  const searchedTransactionRef = useRef(searchedTransaction);
   const filtersRef = useRef(filters);
   const paginationRef = useRef(pagination);
+  const updatingTransactionStatusIdsRef = useRef(updatingTransactionStatusIds);
+  const correctingTransactionStatusIdsRef = useRef(correctingTransactionStatusIds);
 
   useEffect(() => {
-    searchedTranscationRef.current = searchedTranscation;
+    searchedTransactionRef.current = searchedTransaction;
     filtersRef.current = filters;
     paginationRef.current = pagination;
-  }, [searchedTranscation, filters, pagination]);
+  }, [searchedTransaction, filters, pagination]);
+
+  // add status filters
+  function addFiltersToURL(url, appliedFilters) {
+    if (!appliedFilters) return url;
+
+    let newUrl = url;
+    if (appliedFilters.status && appliedFilters.status !== 'all') {
+      newUrl += `&ts=${appliedFilters.status}`;
+    }
+
+    return newUrl;
+  }
 
   const {
     data: dataT,
@@ -82,7 +108,7 @@ export default function TransactionsTable() {
       }
 
       const results = await safeFetch({
-        url: `/api/transactions?pi=${pagination.pageIndex}`,
+        url: addFiltersToURL(`/api/transactions?pi=${pagination.pageIndex}`, filters),
         onFinally: () => {
           if (toastId) {
             toast.dismiss(toastId);
@@ -94,7 +120,7 @@ export default function TransactionsTable() {
     placeholderData: keepPreviousData,
     staleTime: 1000 * 20,
     gcTime: 1000 * 60 * 3,
-    enabled: false, //!searchedTranscation,
+    enabled: !searchedTransaction,
   });
 
   async function handleSearch(appliedFilters) {
@@ -107,15 +133,15 @@ export default function TransactionsTable() {
         queryKey: ['transactionsSearch', parsedKey, appliedFilters],
         queryFn: async () => {
           setIsSearching(true);
-          // if previoesly searchedTranscation is null, then show skeleton loading
+          // if previoesly searchedTransaction is null, then show skeleton loading
           // for all table, besides that, then show toast loading only
           let toastId;
-          if (searchedTranscation) {
+          if (searchedTransaction) {
             toastId = toast.loading('Searching transactions...');
           }
 
           return await safeFetch({
-            url: `/api/transactions?sk=${parsedKey}&ib=${appliedFilters.showBanned}`,
+            url: addFiltersToURL(`/api/transactions?sk=${parsedKey}`, appliedFilters),
             onFinally: () => {
               if (toastId) {
                 toast.dismiss(toastId);
@@ -160,7 +186,7 @@ export default function TransactionsTable() {
   }
 
   function handleFilter(newFilters) {
-    if (searchedTranscation) {
+    if (searchedTransaction) {
       handleSearch(newFilters);
     } else {
       handlePaginationChange({
@@ -176,32 +202,396 @@ export default function TransactionsTable() {
 
   function handleRefresh() {
     // not show table skeleton loading
-    if (!searchedTranscation) {
+    if (!searchedTransaction) {
       shouldShowSkeletonLoading.current = false;
     }
     
     queryClient.invalidateQueries({ queryKey: ['transactions'] });
     queryClient.invalidateQueries({ queryKey: ['transactionsSearch'] });
+    queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
 
-    if (searchedTranscation) {
+    if (searchedTransaction) {
       handleSearch(filters);
     }
   }
 
-  let transaction = {
-    transactions: [{
-      code: "PJM-20250814-A1B2C3",
-      email: "david.santoso@gmail.com",
-      status: "paid",
-      total_amount: 150000,
-      created_at: "1755143700",
-      updated_at: "1755144000"
-    }],
-    rowCount: 1,
-  };
+  const handleEditTransactionStatus = useCallback(async (id, status) => {
+    // not show table skeleton loading
+    if (!searchedTransaction) {
+      shouldShowSkeletonLoading.current = false;
+    }
 
-  if (searchedTranscation) {
-    transaction = searchedTranscation;
+    // This is for add opacity-50 style to updated row
+    setUpdatingTransactionStatusIds((prev) => {
+      const newIds = [...prev, id];
+      updatingTransactionStatusIdsRef.current = newIds;
+      return newIds;
+    });
+    const toastId = toast.loading(`Changing status to ${status}...`);
+
+    const editRes = await editTransactionStatus({ id, status });
+
+    setUpdatingTransactionStatusIds((prev) => {
+      const newIds = prev.filter(prevId => prevId !== id);
+      updatingTransactionStatusIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const transaction = queryClient.getQueryData([
+      'transactions',
+      paginationRef.current.pageIndex,
+      filtersRef.current,
+    ]);
+
+    if (editRes.status === 'success') {
+      if (searchedTransactionRef.current) {
+        setSearchedTransaction(prevTransaction => {
+          let newTransactions;
+
+          if (!filtersRef.current?.status || filtersRef.current?.status === 'all') {
+            newTransactions = prevTransaction.transactions.map(transaction => {
+              if (transaction.id === id) {
+                const result = {
+                  ...transaction,
+                  status,
+                  updated_at: editRes.data.updated_at,
+                };
+                if (status === TransactionStatus.PAID) {
+                  result.invoices = editRes.data.invoices;
+                }
+
+                return result;
+              }
+              return transaction;
+            });
+          } else {
+            newTransactions = prevTransaction.transactions.filter(t => t.id !== id);
+          }
+
+          return {
+            ...prevTransaction,
+            transactions: newTransactions,
+          };
+        });
+
+        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      } else if (!filtersRef.current?.status || filtersRef.current?.status === 'all') {
+        if (paginationRef.current.pageIndex === 0) {
+          queryClient.setQueryData(
+            ['transactions', paginationRef.current.pageIndex, filtersRef.current],
+            (oldData) => {
+              if (!oldData) return oldData;
+              
+              const targetTransaction = oldData.transactions.find(t => t.id === id);
+
+              if (targetTransaction) {
+                const newTargetTransaction = {
+                  ...targetTransaction,
+                  status,
+                  updated_at: editRes.data.updated_at,
+                };
+                if (status === TransactionStatus.PAID) {
+                  newTargetTransaction.invoices = editRes.data.invoices;
+                }
+
+                return {
+                  ...oldData,
+                  transactions: [
+                    newTargetTransaction,
+                    ...oldData.transactions.filter(t => t.id !== id),
+                  ],
+                };
+              }
+              return oldData;
+            },
+          );
+
+          queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
+        } else {
+          queryClient.setQueryData(
+            ['transactions', paginationRef.current.pageIndex, filtersRef.current],
+            (oldData) => {
+              if (!oldData) return oldData;
+
+              return {
+                ...oldData,
+                transactions: oldData.transactions.filter(t => t.id !== id),
+              };
+            },
+          );
+          
+          hasSuccessfulUpdateStatusRef.current = true;
+        }
+      } else {
+        const newTransactions = transaction.transactions.filter(t => t.id !== id);
+        const newRowCount = transaction.rowCount - 1;
+
+        if (!isLastPage({
+          pageIndex: paginationRef.current.pageIndex,
+          pageSize: paginationRef.current.pageSize,
+          rowCount: transaction.rowCount,
+        })) {
+          queryClient.setQueryData(
+            ['transactions', paginationRef.current.pageIndex, filtersRef.current],
+            { transactions: newTransactions, rowCount: newRowCount },
+          );
+
+          hasSuccessfulUpdateStatusRef.current = true;
+        } else {
+          if (newTransactions.length === 0 && newRowCount > 0) {
+            queryClient.removeQueries({
+              queryKey: ['transactions', paginationRef.current.pageIndex, filtersRef.current],
+              exact: true,
+            });
+
+            queryClient.setQueryData(
+              ['transactions', paginationRef.current.pageIndex - 1, filtersRef.current],
+              (oldData) => {
+                if (!oldData) return oldData;
+                return { ...oldData, rowCount: newRowCount };
+              },
+            );
+
+            setPagination((pagination) => ({
+              ...pagination,
+              pageIndex: pagination.pageIndex - 1,
+            }));
+          } else {
+            queryClient.setQueryData(
+              ['transactions', paginationRef.current.pageIndex, filtersRef.current ],
+              { transactions: newTransactions, rowCount: newRowCount },
+            );
+          }
+
+          queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
+        }
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['transactionsSearch'] });
+      queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
+      toast.success(editRes.message, { id: toastId });
+    } else {
+      toast.error(editRes.message, { id: toastId });
+    }
+
+    // For still invalidateQueries transactions, when not in last page, last update item fails, and 
+    // at least one update succeeded.
+    if (
+      !searchedTransactionRef.current &&
+      updatingTransactionStatusIdsRef.current.length === 0 &&
+      hasSuccessfulUpdateStatusRef.current
+    ) {
+      const isStatusFilterEmpty = !filtersRef.current?.status;
+      const isFilterMatched = isStatusFilterEmpty
+        ? paginationRef.current.pageIndex !== 0
+        : !isLastPage({
+          pageIndex: paginationRef.current.pageIndex,
+          pageSize: paginationRef.current.pageSize,
+          rowCount: transaction.rowCount,
+        });
+
+      if (isFilterMatched) {
+        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      }
+
+      hasSuccessfulUpdateStatusRef.current = false;
+    }
+  }, []);
+
+  const handleCopyableMessage = useCallback(async (id) => {
+    const toastId = toast.loading('Preparing the message...');
+
+    const prepareRes = await prepareConfirmationMessage(id);
+    navigator.clipboard.writeText(prepareRes.data.message);
+
+    toast.success('Message copied to clipboard!', { id: toastId });
+  }, []);
+
+  async function handleCorrectTransactionStatus({ correctData, toastId }) {
+    // not show table skeleton loading
+    if (!searchedTransaction) {
+      shouldShowSkeletonLoading.current = false;
+    }
+
+    // This is for add opacity-50 style to updated row
+    setCorrectingTransactionStatusIds((prev) => {
+      const newIds = [...prev, correctData.id];
+      correctingTransactionStatusIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const editRes = await fixTransactionStatus({ id: correctData.id, status: correctData.newStatus });
+
+    setCorrectingTransactionStatusIds((prev) => {
+      const newIds = prev.filter(prevId => prevId !== correctData.id);
+      correctingTransactionStatusIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const transaction = queryClient.getQueryData([
+      'transactions',
+      paginationRef.current.pageIndex,
+      filtersRef.current,
+    ]);
+
+    if (editRes.status === 'success') {
+      if (searchedTransactionRef.current) {
+        setSearchedTransaction(prevTransaction => {
+          let newTransactions;
+
+          if (!filtersRef.current?.status || filtersRef.current?.status === 'all') {
+            newTransactions = prevTransaction.transactions.map(transaction => {
+              if (transaction.id === correctData.id) {
+                const result = {
+                  ...transaction,
+                  status: correctData.newStatus,
+                  updated_at: editRes.data.updated_at,
+                };
+                if (correctData.newStatus === TransactionStatus.PAID) {
+                  result.invoices = editRes.data.invoices;
+                }
+
+                return result;
+              }
+              return transaction;
+            });
+          } else {
+            newTransactions = prevTransaction.transactions.filter(t => t.id !== correctData.id);
+          }
+
+          return {
+            ...prevTransaction,
+            transactions: newTransactions,
+          };
+        });
+
+        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      } else if (!filtersRef.current?.status || filtersRef.current?.status === 'all') {
+        if (paginationRef.current.pageIndex === 0) {
+          queryClient.setQueryData(
+            ['transactions', paginationRef.current.pageIndex, filtersRef.current],
+            (oldData) => {
+              if (!oldData) return oldData;
+              
+              const targetTransaction = oldData.transactions.find(t => t.id === correctData.id);
+
+              if (targetTransaction) {
+                const newTargetTransaction = {
+                  ...targetTransaction,
+                  status: correctData.newStatus,
+                  updated_at: editRes.data.updated_at,
+                };
+                if (correctData.newStatus === TransactionStatus.PAID) {
+                  newTargetTransaction.invoices = editRes.data.invoices;
+                }
+
+                return {
+                  ...oldData,
+                  transactions: [
+                    newTargetTransaction,
+                    ...oldData.transactions.filter(t => t.id !== correctData.id),
+                  ],
+                };
+              }
+              return oldData;
+            },
+          );
+
+          queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
+        } else {
+          queryClient.setQueryData(
+            ['transactions', paginationRef.current.pageIndex, filtersRef.current],
+            (oldData) => {
+              if (!oldData) return oldData;
+
+              return {
+                ...oldData,
+                transactions: oldData.transactions.filter(t => t.id !== correctData.id),
+              };
+            },
+          );
+          
+          hasSuccessfulCorrectStatusRef.current = true;
+        }
+      } else {
+        const newTransactions = transaction.transactions.filter(t => t.id !== correctData.id);
+        const newRowCount = transaction.rowCount - 1;
+
+        if (!isLastPage({
+          pageIndex: paginationRef.current.pageIndex,
+          pageSize: paginationRef.current.pageSize,
+          rowCount: transaction.rowCount,
+        })) {
+          queryClient.setQueryData(
+            ['transactions', paginationRef.current.pageIndex, filtersRef.current],
+            { transactions: newTransactions, rowCount: newRowCount },
+          );
+
+          hasSuccessfulCorrectStatusRef.current = true;
+        } else {
+          if (newTransactions.length === 0 && newRowCount > 0) {
+            queryClient.removeQueries({
+              queryKey: ['transactions', paginationRef.current.pageIndex, filtersRef.current],
+              exact: true,
+            });
+
+            queryClient.setQueryData(
+              ['transactions', paginationRef.current.pageIndex - 1, filtersRef.current],
+              (oldData) => {
+                if (!oldData) return oldData;
+                return { ...oldData, rowCount: newRowCount };
+              },
+            );
+
+            setPagination((pagination) => ({
+              ...pagination,
+              pageIndex: pagination.pageIndex - 1,
+            }));
+          } else {
+            queryClient.setQueryData(
+              ['transactions', paginationRef.current.pageIndex, filtersRef.current ],
+              { transactions: newTransactions, rowCount: newRowCount },
+            );
+          }
+
+          queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
+        }
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['transactionsSearch'] });
+      queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
+      toast.success(editRes.message, { id: toastId });
+    } else {
+      toast.error(editRes.message, { id: toastId });
+    }
+
+    // For still invalidateQueries transactions, when not in last page, last correct item fails, and 
+    // at least one correct succeeded.
+    if (
+      !searchedTransactionRef.current &&
+      correctingTransactionStatusIdsRef.current.length === 0 &&
+      hasSuccessfulCorrectStatusRef.current
+    ) {
+      const isStatusFilterEmpty = !filtersRef.current?.status;
+      const isFilterMatched = isStatusFilterEmpty
+        ? paginationRef.current.pageIndex !== 0
+        : !isLastPage({
+          pageIndex: paginationRef.current.pageIndex,
+          pageSize: paginationRef.current.pageSize,
+          rowCount: transaction.rowCount,
+        });
+
+      if (isFilterMatched) {
+        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      }
+
+      hasSuccessfulCorrectStatusRef.current = false;
+    }
+  }
+
+  let transaction;
+  if (searchedTransaction) {
+    transaction = searchedTransaction;
   } else if (dataT) {
     transaction = dataT;
   }
@@ -235,6 +625,9 @@ export default function TransactionsTable() {
             isFilterActive={isFilterActive}
             disabled={isFetchingT || isSearching}
           />
+          {filters?.status !== TransactionStatus.PENDING && (
+            <ExportCSV filters={filters} />
+          )}
         </div>
         <div className="flex space-x-3 max-lg:w-full w-2/5">
           <div className="flex shadow-xs rounded-md flex-1">
@@ -247,7 +640,7 @@ export default function TransactionsTable() {
                 onKeyUp={handleEnterSearch}
                 disabled={isFetchingT || isSearching}
               />
-              {searchedTranscation ? (
+              {searchedTransaction ? (
                 <TooltipWrapper text="Clear search input">
                   <Button
                     className="absolute right-2 w-4 h-5 p-0 z-1"
@@ -299,7 +692,7 @@ export default function TransactionsTable() {
         </div>
       </div>
 
-      {(shouldShowSkeletonLoading.current && isFetchingT) || (isSearching && !searchedTranscation) ? (
+      {(shouldShowSkeletonLoading.current && isFetchingT) || (isSearching && !searchedTransaction) ? (
         <TablePaginationSekeleton pagination={!isSearching} />
       ) : isErrorT ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
@@ -313,13 +706,18 @@ export default function TransactionsTable() {
           tableState={{
             columnVisibility,
             pagination,
+            updatingTransactionStatusIds,
+            correctingTransactionStatusIds,
           }}
           tableHandler={{
             onPaginationChange: handlePaginationChange,
             onColumnVisibilityChange: setColumnVisibility,
+            onEditTransactionStatus: handleEditTransactionStatus,
+            onCopyableMessage: handleCopyableMessage,
+            onCorrectTransactionStatus: handleCorrectTransactionStatus,
           }}
           isPlaceholderData={isPlaceholderDataC}
-          hasSearched={!!searchedTranscation}
+          hasSearched={!!searchedTransaction}
         />
       )}
     </>

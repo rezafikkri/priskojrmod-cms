@@ -558,8 +558,11 @@ export default function CustomersTable() {
         />
       )}
 
-      <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: <i>Last Active</i> indicates the most recent recorded activity and is updated every 24 hours. This may not reflect real-time status.</small>
-      <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: Only customers who have never signed in, have been inactive for more than 30 days, do not have any license keys associated with their account, or have been banned can be deleted directly.</small>
+      <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Notes</b>:</p>
+      <ul className="text-muted-foreground text-sm list-disc list-inside">
+        <li><i>Last Active</i> indicates the most recent recorded activity and is updated every 24 hours. This may not reflect real-time status.</li>
+        <li>Only customers who have never signed in, have been inactive for more than 30 days, do not have any license keys associated with their account, or have been banned can be deleted directly.</li>
+      </ul>
     </>
   );
 }
