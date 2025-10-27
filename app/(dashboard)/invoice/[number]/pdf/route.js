@@ -1,6 +1,6 @@
 import { generateInvoicePdf } from '@/lib/services/invoice-service';
 
-export async function GET(req, { params }) {
+export async function GET(_, { params }) {
   const { number } = await params;
 
   const pdfBuffer = await generateInvoicePdf(number);

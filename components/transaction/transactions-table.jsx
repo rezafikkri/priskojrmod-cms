@@ -27,6 +27,7 @@ import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
 import { editTransactionStatus, fixTransactionStatus, prepareConfirmationMessage } from '@/actions/transaction-actions';
 import { TransactionStatus } from '@/constants/enums';
+import ExportCSV from './export-csv';
 
 export default function TransactionsTable() {
   const queryClient = useQueryClient();
@@ -624,6 +625,9 @@ export default function TransactionsTable() {
             isFilterActive={isFilterActive}
             disabled={isFetchingT || isSearching}
           />
+          {filters?.status !== TransactionStatus.PENDING && (
+            <ExportCSV filters={filters} />
+          )}
         </div>
         <div className="flex space-x-3 max-lg:w-full w-2/5">
           <div className="flex shadow-xs rounded-md flex-1">
