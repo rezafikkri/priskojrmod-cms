@@ -29,5 +29,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run Migrations
-        run: pnpm run deploy
+      - name: Run Migration Reset
+        run: pnpm exec prisma migrate reset --force --schema ./prisma-pjme/schema.prisma
