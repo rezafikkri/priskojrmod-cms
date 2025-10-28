@@ -10,7 +10,7 @@ export default async function FaqForm({ id }) {
   const faq = await getFaq(id);
 
   if (!faq) return (
-    <Alert className="lg:max-w-2/3">
+    <Alert className="text-base lg:max-w-2/3">
       <Error404 />
       <AlertTitle>FAQ not found.</AlertTitle>
     </Alert>

@@ -9,7 +9,7 @@ import EditForm from './edit-form';
 export default async function OwnerForm({ id }) {
   const owner = await getOwner(id);
   if (!owner) return (
-    <Alert className="lg:max-w-2/3">
+    <Alert className="lg:max-w-2/3 text-base">
       <Error404 />
       <AlertTitle>Owner not found.</AlertTitle>
     </Alert>

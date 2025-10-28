@@ -10,7 +10,7 @@ export default async function LicenseForm({ id }) {
   const license = await getLicense(id);
 
   if (!license) return (
-    <Alert className="lg:max-w-2/3">
+    <Alert className="text-base lg:max-w-2/3">
       <Error404 />
       <AlertTitle>License not found.</AlertTitle>
     </Alert>

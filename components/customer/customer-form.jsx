@@ -10,9 +10,9 @@ export default async function CustomerForm({ id }) {
   const customer = await getCustomer({ id });
   if (!customer) {
     return (
-      <Alert>
+      <Alert className="text-base">
         <Error404 />
-        <AlertTitle>License Key not found.</AlertTitle>
+        <AlertTitle>Customer not found.</AlertTitle>
       </Alert>
     );
   }

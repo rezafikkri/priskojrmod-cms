@@ -10,7 +10,7 @@ export default async function TestimonialForm({ id }) {
   const testimonial = await getTestimonial(id);
 
   if (!testimonial) return (
-    <Alert className="lg:max-w-2/3">
+    <Alert className="text-base lg:max-w-2/3">
       <Error404 />
       <AlertTitle>Testimonial not found.</AlertTitle>
     </Alert>

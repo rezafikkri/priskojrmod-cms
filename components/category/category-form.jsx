@@ -10,7 +10,7 @@ export default async function CategoryForm({ id }) {
   const category = await getCategory(id);
 
   if (!category) return (
-    <Alert className="lg:max-w-2/3">
+    <Alert className="text-base lg:max-w-2/3">
       <Error404 />
       <AlertTitle>Category not found.</AlertTitle>
     </Alert>
