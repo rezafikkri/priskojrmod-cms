@@ -13,6 +13,7 @@ jobs:
       DATABASE_URL_PJME: ${{ secrets.DATABASE_URL_PJME }}
       DIRECT_URL_PJMA: ${{ secrets.DIRECT_URL_PJMA }}
       DIRECT_URL_PJME: ${{ secrets.DIRECT_URL_PJME }}
+      ADMIN_ID: ${{ secrets.ADMIN_ID }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
