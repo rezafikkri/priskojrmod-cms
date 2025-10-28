@@ -2,17 +2,20 @@
   "name": "priskojrmod-cms",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
+    "scripts": {
     "dev": "next dev --turbopack -p 4000",
-    "build": "dotenv -e .env -- pnpm exec prisma db seed && next build",
     "start": "next start -p 4000",
     "lint": "next lint",
-    "generate": "dotenv -e .env -- pnpm exec prisma generate --schema ./prisma-pjma/schema.prisma && dotenv -e .env -- pnpm exec prisma generate --schema ./prisma-pjme/schema.prisma",
-    "migrate": "dotenv -e .env -- pnpm exec prisma migrate dev --schema ./prisma-pjma/schema.prisma && dotenv -e .env -- pnpm exec prisma migrate dev --schema ./prisma-pjme/schema.prisma",
-    "deploy": "dotenv -e .env -- pnpm exec prisma migrate deploy --schema ./prisma-pjma/schema.prisma && dotenv -e .env -- pnpm exec prisma migrate deploy --schema ./prisma-pjme/schema.prisma",
-    "prisma-format": "dotenv -e .env -- pnpm exec prisma format --schema ./prisma-pjma/schema.prisma && dotenv -e .env -- pnpm exec prisma format --schema ./prisma-pjme/schema.prisma",
-    "studio": "dotenv -e .env -- pnpm exec prisma studio --schema ./prisma-pjma/schema.prisma --port 5555 & dotenv -e .env -- pnpm exec prisma studio --schema ./prisma-pjme/schema.prisma --port 5556",
-    "test": "vitest"
+    "test": "vitest",
+
+    "build": "pnpm exec prisma db seed && next build",
+    "build:local": "dotenv -e .env -- pnpm exec prisma db seed && next build",
+    
+    "generate:local": "dotenv -e .env -- pnpm exec prisma generate --schema ./prisma-pjma/schema.prisma && dotenv -e .env -- pnpm exec prisma generate --schema ./prisma-pjme/schema.prisma",
+    "migrate:local": "dotenv -e .env -- pnpm exec prisma migrate dev --schema ./prisma-pjma/schema.prisma && dotenv -e .env -- pnpm exec prisma migrate dev --schema ./prisma-pjme/schema.prisma",
+    "deploy": "pnpm exec prisma migrate deploy --schema ./prisma-pjma/schema.prisma && pnpm exec prisma migrate deploy --schema ./prisma-pjme/schema.prisma",
+    "format:local": "pnpm exec prisma format --schema ./prisma-pjma/schema.prisma && pnpm exec prisma format --schema ./prisma-pjme/schema.prisma",
+    "studio:local": "dotenv -e .env -- pnpm exec prisma studio --schema ./prisma-pjma/schema.prisma --port 5555 & dotenv -e .env -- pnpm exec prisma studio --schema ./prisma-pjme/schema.prisma --port 5556"
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
