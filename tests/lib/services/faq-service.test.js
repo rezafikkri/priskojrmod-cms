@@ -81,8 +81,8 @@ describe('createFaq function', () => {
 
     expect(pjmeDBPrismaClient.Faq.create).toHaveBeenCalledWith({
       data: {
-        created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        created_at: Math.floor(new Date().getTime() / 1000),
+        updated_at: Math.floor(new Date().getTime() / 1000),
         translations: {
           create: [
             { language: Language.ID, title: 'Judul ID', content: 'Konten ID' },
@@ -166,7 +166,7 @@ describe('updateFaq function', () => {
     expect(pjmeDBPrismaClient.Faq.update).toHaveBeenCalledWith({
       where: { id: 123 },
       data: {
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {

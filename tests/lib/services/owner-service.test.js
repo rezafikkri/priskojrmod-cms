@@ -76,8 +76,8 @@ describe('createOwner function', () => {
         last_name: 'Smith',
         sm_username: 'janesmith',
         picture: 'https://example.com/image.jpg',
-        created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        created_at: Math.floor(new Date().getTime() / 1000),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -155,7 +155,7 @@ describe('updateOwner function', () => {
         last_name: 'Santoso',
         sm_username: 'budisantoso',
         picture: 'https://example.com/budi.jpg',
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });

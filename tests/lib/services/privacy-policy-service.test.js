@@ -83,8 +83,8 @@ describe('createPrivacyPolicy function', () => {
 
     expect(pjmeDBPrismaClient.PrivacyPolicy.create).toHaveBeenCalledWith({
       data: {
-        created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        created_at: Math.floor(new Date().getTime() / 1000),
+        updated_at: Math.floor(new Date().getTime() / 1000),
         translations: {
           create: [
             { language: Language.ID, content: inputContent.id },
@@ -158,7 +158,7 @@ describe('updatePrivacyPolicy function', () => {
     expect(pjmeDBPrismaClient.PrivacyPolicy.update).toHaveBeenCalledWith({
       where: { id: input.id },
       data: {
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {

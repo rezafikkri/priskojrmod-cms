@@ -83,8 +83,8 @@ describe('createTermsOfService function', () => {
 
     expect(pjmeDBPrismaClient.TermsOfService.create).toHaveBeenCalledWith({
       data: {
-        created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        created_at: Math.floor(new Date().getTime() / 1000),
+        updated_at: Math.floor(new Date().getTime() / 1000),
         translations: {
           create: [
             { language: Language.ID, content: inputContent.id },
@@ -147,7 +147,7 @@ describe('updateTermsOfService function', () => {
     expect(pjmeDBPrismaClient.TermsOfService.update).toHaveBeenCalledWith({
       where: { id: input.id },
       data: {
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {

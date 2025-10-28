@@ -77,7 +77,7 @@ describe('createTestimonial function', () => {
       },
     });
 
-    const currentTime = BigInt(Math.floor(new Date().getTime() / 1000));
+    const currentTime = Math.floor(new Date().getTime() / 1000);
     expect(pjmeDBPrismaClient.Testimonial.create).toHaveBeenCalledWith({
       data: {
         name: 'Reza',
@@ -159,7 +159,7 @@ describe('updateTestimonial function', () => {
         name: 'Reza',
         sm_username: 'reza_id',
         picture: 'https://translat/img.jpg',
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {

@@ -66,8 +66,8 @@ describe('createCategory function', () => {
       data: {
         name: 'Programming Tips',
         slug: 'programming-tips',
-        created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        created_at: Math.floor(new Date().getTime() / 1000),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -137,7 +137,7 @@ describe('updateCategory function', () => {
       data: {
         name: 'Advanced Dev',
         slug: 'advanced-dev',
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });

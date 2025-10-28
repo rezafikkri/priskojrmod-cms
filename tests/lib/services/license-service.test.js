@@ -75,7 +75,7 @@ describe('createLicense function', () => {
       },
     });
 
-    const expectedTimestamp = BigInt(Math.floor(new Date().getTime() / 1000));
+    const expectedTimestamp = Math.floor(new Date().getTime() / 1000);
 
     expect(pjmeDBPrismaClient.License.create).toHaveBeenCalledWith({
       data: {
@@ -158,7 +158,7 @@ describe('updateLicense function', () => {
     expect(pjmeDBPrismaClient.License.update).toHaveBeenCalledWith({
       where: { id: 1 },
       data: {
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {

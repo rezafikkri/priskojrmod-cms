@@ -77,7 +77,7 @@ describe('createSecretKey function', () => {
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
-    pjmaDBPrismaClient.SecretKeyLicense.create.mockResolvedValue({ id: 1n });
+    pjmaDBPrismaClient.SecretKeyLicense.create.mockResolvedValue({ id: 1 });
     pjmeDBPrismaClient.Product.findUnique.mockResolvedValue({ name: 'Product Name' });
 
     await createSecretKey({
@@ -90,7 +90,7 @@ describe('createSecretKey function', () => {
         key: '8f23fcc4c918eb26c991b3950c79a243a6b0d683c2e58e0d31fc367b652e2b05',
         app_name: 'Product Name',
         product_id: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
-        created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        created_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -152,13 +152,13 @@ describe('deleteSecretKey function', () => {
 
     verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
     pjmaDBPrismaClient.SecretKeyLicense.delete.mockResolvedValue({
-      id: 2n,
+      id: 2,
     });
 
     await deleteSecretKey('1');
 
     expect(pjmaDBPrismaClient.SecretKeyLicense.delete).toHaveBeenCalledWith({
-      where: { id: BigInt(1) },
+      where: { id: 1 },
       select: {
         id: true,
       },
@@ -188,7 +188,7 @@ describe('getSecretKeys function', () => {
 
     verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
     pjmaDBPrismaClient.SecretKeyLicense.findMany.mockResolvedValue([{
-      id: 2n,
+      id: 2,
       app_name: '12345',
     }]);
 
@@ -233,12 +233,12 @@ describe('getSpecificSecretKey function', () => {
     });
 
     await getSpecificSecretKey(
-      '2',
+      2,
       { key: true },
     );
 
     expect(pjmaDBPrismaClient.SecretKeyLicense.findUnique).toHaveBeenCalledWith({
-      where: { id: 2n },
+      where: { id: 2 },
       select: { key: true },
     });
   });
@@ -264,7 +264,7 @@ describe('getSecretKey function', () => {
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
     pjmaDBPrismaClient.SecretKeyLicense.findUnique.mockResolvedValue({
-      id: BigInt(123),
+      id: 123,
       app_name: 'Test App',
       key: 'secret-key-value',
     });
@@ -273,7 +273,7 @@ describe('getSecretKey function', () => {
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.SecretKeyLicense.findUnique).toHaveBeenCalledWith({
-      where: { id: BigInt(123) },
+      where: { id: 123 },
       select: {
         id: true,
         app_name: true,
@@ -321,10 +321,10 @@ describe('saveRegeneratedSecretKey function', () => {
 
     expect(verifySession).toHaveBeenCalled();
     expect(pjmaDBPrismaClient.SecretKeyLicense.update).toHaveBeenCalledWith({
-      where: { id: BigInt(123) },
+      where: { id: 123 },
       data: {
         key: regeneratedKey,
-        regenerated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        regenerated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { key: true },
     });

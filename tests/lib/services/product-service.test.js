@@ -111,7 +111,7 @@ describe('createProduct function', () => {
 
     await createProduct(input);
 
-    const currentTime = BigInt(Math.floor(new Date().getTime() / 1000));
+    const currentTime = Math.floor(new Date().getTime() / 1000);
 
     expect(pjmeDBPrismaClient.Product.create).toHaveBeenCalledWith({
       data: {
@@ -134,7 +134,7 @@ describe('createProduct function', () => {
         },
         versions: {
           create: {
-            released_at: 1744853503n,
+            released_at: 1744853503,
             version: '1.0.0',
           },
         },
@@ -175,7 +175,7 @@ describe('updateProductPinnedStatus function', () => {
     pjmeDBPrismaClient.Product.count.mockResolvedValue(2);
     pjmeDBPrismaClient.Product.update.mockResolvedValue({
       id: '999c549f-33d7-461e-9f0e-928b17097e42',
-      updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+      updated_at: Math.floor(new Date().getTime() / 1000),
     });
 
     await updateProductPinnedStatus('999c549f-33d7-461e-9f0e-928b17097e42', true);
@@ -185,7 +185,7 @@ describe('updateProductPinnedStatus function', () => {
       where: { id: '999c549f-33d7-461e-9f0e-928b17097e42' },
       data: {
         is_pinned: true,
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true, updated_at: true },
     });
@@ -216,7 +216,7 @@ describe('updateProductPublishedStatus function', () => {
 
     pjmeDBPrismaClient.Product.update.mockResolvedValue({
       id: 'fd209fe2-3f60-42b2-9985-99b3fc4f8600',
-      updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+      updated_at: Math.floor(new Date().getTime() / 1000),
     });
 
     await updateProductPublishedStatus('fd209fe2-3f60-42b2-9985-99b3fc4f8600', false);
@@ -225,7 +225,7 @@ describe('updateProductPublishedStatus function', () => {
       where: { id: 'fd209fe2-3f60-42b2-9985-99b3fc4f8600' },
       data: {
         is_published: false,
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true, updated_at: true },
     });
@@ -285,7 +285,7 @@ describe('deleteProductVariant function', () => {
   it('Should call pjmeDBPrismaClient.$transaction function and call pjmeDBPrismaClient.ProductVariant.delete and pjmeDBPrismaClient.Product.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853603149);
-    const currentTime = BigInt(Math.floor(new Date().getTime() / 1000));
+    const currentTime = Math.floor(new Date().getTime() / 1000);
 
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
@@ -328,7 +328,7 @@ describe('deleteProductImage function', () => {
   it('Should call pjmeDBPrismaClient.$transaction function and call pjmeDBPrismaClient.ProductImage.delete and pjmeDBPrismaClient.Product.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853603149);
-    const currentTime = BigInt(Math.floor(new Date().getTime() / 1000));
+    const currentTime = Math.floor(new Date().getTime() / 1000);
 
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
@@ -369,7 +369,7 @@ describe('deleteProductDiscount function', () => {
   it('Should call pjmeDBPrismaClient.$transaction function and call pjmeDBPrismaClient.ProductDiscount.delete and pjmeDBPrismaClient.Product.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853603149);
-    const currentTime = BigInt(Math.floor(new Date().getTime() / 1000));
+    const currentTime = Math.floor(new Date().getTime() / 1000);
 
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
@@ -413,7 +413,7 @@ describe('deleteProductCoupon function', () => {
   it('Should call pjmeDBPrismaClient.$transaction function and call pjmeDBPrismaClient.ProductCoupon.delete and pjmeDBPrismaClient.Product.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853603149);
-    const currentTime = BigInt(Math.floor(new Date().getTime() / 1000));
+    const currentTime = Math.floor(new Date().getTime() / 1000);
 
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
@@ -454,7 +454,7 @@ describe('updateProduct function', () => {
   it('Should call pjmeDBPrismaClient.$transaction function and pjmeDBPrismaClient.Product.update function twice correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853603149);
-    const currentTime = BigInt(Math.floor(new Date().getTime() / 1000));
+    const currentTime = Math.floor(new Date().getTime() / 1000);
 
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;

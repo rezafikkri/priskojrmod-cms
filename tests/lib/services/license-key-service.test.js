@@ -98,7 +98,7 @@ describe('createLicenseKey function', () => {
 
     verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
     getSpecificSecretKey.mockResolvedValue({ key: '123' });
-    pjmaDBPrismaClient.LicenseKey.create.mockResolvedValue({ secret_key_id: 1n });
+    pjmaDBPrismaClient.LicenseKey.create.mockResolvedValue({ secret_key_id: 1 });
 
     await createLicenseKey({
       secret_key_id: '2',
@@ -109,12 +109,12 @@ describe('createLicenseKey function', () => {
     expect(pjmaDBPrismaClient.LicenseKey.create).toHaveBeenCalledWith({
       data: {
         id: expect.any(String),
-        secret_key_id: BigInt(2),
+        secret_key_id: 2,
         customer_id: 'b86eb08d-02d8-44a2-a3fe-1c18cf35ce3c',
         email: 'adel@gmail.com',
         code: 'jsonwebtoken',
-        created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        created_at: Math.floor(new Date().getTime() / 1000),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -143,8 +143,8 @@ describe('getLicenseKeys function', () => {
     const filters = { secret_key_id: 1, is_revoked: false };
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
     const mockLicenseKeys = [
-      { id: '1', created_at: BigInt(123), updated_at: BigInt(3498), key: 'key1' },
-      { id: '2', created_at: BigInt(456), updated_at: BigInt(567), key: 'key2' },
+      { id: '1', created_at: 123, updated_at: 3498, key: 'key1' },
+      { id: '2', created_at: 456, updated_at: 567, key: 'key2' },
     ];
     pjmaDBPrismaClient.LicenseKey.findMany.mockResolvedValue(mockLicenseKeys);
     jwt.decode.mockReturnValue({ exp: 6789 });
@@ -165,7 +165,7 @@ describe('getLicenseKeys function', () => {
       take: 2,
       skip: 2,
       where: {
-        secret_key_id: 1n,
+        secret_key_id: 1,
         is_revoked: false,
       },
     });
@@ -197,8 +197,8 @@ describe('searchLicenseKeys function', () => {
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
     const mockLicenseKeys = [
-      { id: '1', created_at: BigInt(123), updated_at: BigInt(3498), regenerated_at: BigInt(512), key: 'key1' },
-      { id: '2', created_at: BigInt(456), updated_at: BigInt(567), key: 'key2' },
+      { id: '1', created_at: 123, updated_at: 3498, regenerated_at: 512, key: 'key1' },
+      { id: '2', created_at: 456, updated_at: 567, key: 'key2' },
     ];
     pjmaDBPrismaClient.LicenseKey.findMany.mockResolvedValue(mockLicenseKeys);
     jwt.decode.mockReturnValue({ exp: 1234 });
@@ -217,7 +217,7 @@ describe('searchLicenseKeys function', () => {
           startsWith: 'test',
           mode: 'insensitive',
         },
-        secret_key_id: 4n,
+        secret_key_id: 4,
         is_revoked: true,
       },
       take: 6,
@@ -293,8 +293,10 @@ describe('getLicenseKey function', () => {
       select: {
         id: true,
         customer_id: true,
-        code: true,
         email: true,
+        code: true,
+        reset_count: true,
+        last_reset_period: true,
         secret_key: {
           select: {
             app_name: true,
@@ -347,7 +349,7 @@ describe('updateLicenseKey function', () => {
         id: true,
       },
       data: {
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
     });
   });
@@ -389,7 +391,7 @@ describe('setCanRegenerateLicenseKeys function', () => {
       },
       data: {
         can_regenerate: true,
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
     });
   });

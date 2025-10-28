@@ -31,6 +31,7 @@ beforeAll(() => {
         create: vi.fn(),
         findMany: vi.fn(),
         findUnique: vi.fn(),
+        findFirst: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       },
@@ -97,8 +98,8 @@ describe('createCustomer function', () => {
         last_name: 'Putra',
         email: 'adel@gmail.com',
         picture: 'https://example.com/avatar.png',
-        created_at: BigInt(Math.floor(new Date().getTime() / 1000)),
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        created_at: Math.floor(new Date().getTime() / 1000),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -136,9 +137,9 @@ describe('getCustomers function', () => {
         id: '344fa7a4-fe6f-4632-97b5-1fe9b9d9a424',
         first_name: 'Reza',
         last_name: 'Setiawan',
-        created_at: 1744853503n,
-        updated_at: 1744853599n,
-        last_active: 1744853699n,
+        created_at: 1744853503,
+        updated_at: 1744853599,
+        last_active: 1744853699,
       },
     ]);
 
@@ -206,9 +207,9 @@ describe('searchCustomers function', () => {
         first_name: 'Reza',
         last_name: 'Setiawan',
         is_banned: false,
-        created_at: 1744853503n,
-        updated_at: 1744853599n,
-        last_active: 1744853699n,
+        created_at: 1744853503,
+        updated_at: 1744853599,
+        last_active: 1744853699,
       },
     ]);
 
@@ -252,7 +253,7 @@ describe('searchCustomers function', () => {
 });
 
 describe('getCustomer function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Customer.findUnique function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call pjmeDBPrismaClient.Customer.findFirst function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
@@ -263,20 +264,20 @@ describe('getCustomer function', () => {
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Customer.findUnique).not.toHaveBeenCalled();
+    expect(pjmeDBPrismaClient.Customer.findFirst).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Customer.findUnique function correctly', async () => {
+  it('Should call pjmeDBPrismaClient.Customer.findFirst function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
-    pjmeDBPrismaClient.Customer.findUnique.mockResolvedValue({ id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' });
+    pjmeDBPrismaClient.Customer.findFirst.mockResolvedValue({ id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' });
 
     await getCustomer({ id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' });
 
-    expect(pjmeDBPrismaClient.Customer.findUnique).toHaveBeenCalledWith({
+    expect(pjmeDBPrismaClient.Customer.findFirst).toHaveBeenCalledWith({
       where: { id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' },
       select: {
         id: true,
@@ -336,7 +337,7 @@ describe('updateCustomer function', () => {
       picture: 'https://image.com/avatar.png',
     });
 
-    const currentTime = BigInt(Math.floor(new Date().getTime() / 1000));
+    const currentTime = Math.floor(new Date().getTime() / 1000);
 
     expect(pjmeDBPrismaClient.Customer.update).toHaveBeenCalledWith({
       where: { id: 'fa156c2c-e2c3-412f-93f5-5f8bf9ce2b7e' },
@@ -384,7 +385,7 @@ describe('updateCustomerBanStatus function', () => {
       where: { id: 'c705f67d-4f2b-45f7-99fd-2fc193f5e000' },
       data: {
         is_banned: true,
-        updated_at: BigInt(Math.floor(new Date().getTime() / 1000)),
+        updated_at: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -458,10 +459,10 @@ describe('deleteCustomer function', () => {
 
     verifySession.mockResolvedValue({ isAuth: true });
 
-    pjmeDBPrismaClient.Customer.findUnique.mockResolvedValue({
+    pjmeDBPrismaClient.Customer.findFirst.mockResolvedValue({
       is_banned: true,
       oauth_id: null,
-      last_active: BigInt(Math.floor(Date.now() / 1000)) - BigInt(999999),
+      last_active: Math.floor(Date.now() / 1000) - 999999,
     });
 
     pjmeDBPrismaClient.Customer.delete.mockResolvedValue({ id: fakeId });
