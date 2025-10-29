@@ -44,11 +44,11 @@ beforeAll(() => {
   }));
 
   vi.mock('@/lib/services/license-key-service', () => ({
-    createLicenseKeys: vi.fn(),
-    updateLicenseKeys: vi.fn(),
-    deleteLicenseKeys: vi.fn(),
-    generateLicenseKeyCode: vi.fn(() => 'LICENSE_CODE'),
-    updateLicenseKeysRevokeStatus: vi.fn(),
+    createLicenseKeys: () => {},
+    updateLicenseKeys: () => {},
+    deleteLicenseKeys: () => {},
+    generateLicenseKeyCode: () => 'LICENSE_CODE',
+    updateLicenseKeysRevokeStatus: () => {},
   }));
 
   vi.mock('@/lib/services/product-service', () => ({
