@@ -13,7 +13,7 @@ import { Button } from '../ui/button';
 import { Loader2 } from 'lucide-react';
 import { fetchDriveFileInfo } from '@/actions/product-actions';
 import { useState } from 'react';
-import { formatFileSize } from '@/lib/utils';
+import { formatFileSize } from '@/lib/format-file-size';
 import { toast } from 'sonner';
 import { useWatch } from 'react-hook-form';
 import { PriceType } from '@/constants/enums';
