@@ -148,4 +148,8 @@
     display: inline-block;
     vertical-align: -.125em;
   }
+
+  .recharts-wrapper {
+    font-size: 13.5px;
+  }
 }

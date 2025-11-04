@@ -1,7 +1,8 @@
 'use client';
 
 import { formatDateTime } from '@/lib/format-date';
-import { formatCurrency, getStatusClasses } from '@/lib/utils';
+import { getStatusClasses } from '@/lib/utils';
+import { formatCurrency } from '@/lib/format-currency';
 import { Separator } from '@/components/ui/separator';
 import { Banknote, Minus } from 'lucide-react';
 import {
@@ -24,7 +25,10 @@ export default function InfoSection({ info }) {
           <span
             className="text-lg font-semibold tabular-nums"
           >
-            {formatCurrency(info.total_amount, info.currency_code)}
+            {formatCurrency({
+              value: info.total_amount,
+              currencyCode: info.currency_code,
+            })}
           </span>
           <span
             className={`px-2 py-1 rounded-lg capitalize font-medium ${getStatusClasses(info.status)}`}

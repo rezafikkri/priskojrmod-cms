@@ -1,6 +1,7 @@
 import { formatDateTime } from '@/lib/format-date';
 import { getTransactionDetails } from '@/lib/services/transaction-service';
-import { formatCurrency, getStatusClasses } from '@/lib/utils';
+import { getStatusClasses } from '@/lib/utils';
+import { formatCurrency } from '@/lib/format-currency';
 import { Separator } from '@/components/ui/separator';
 import { Banknote } from 'lucide-react';
 import { Minus } from 'lucide-react';
@@ -35,7 +36,10 @@ export default async function TransactionDetailsPage({ params }) {
               <span
                 className="text-[1.4rem] font-semibold"
               >
-                {formatCurrency(transaction.total_amount, transaction.currency_code)}
+                {formatCurrency({
+                  value: transaction.total_amount,
+                  currencyCode: transaction.currency_code,
+                })}
               </span>
               <span
                 className={`px-2 py-1 rounded-lg capitalize font-medium ${getStatusClasses(transaction.status)}`}

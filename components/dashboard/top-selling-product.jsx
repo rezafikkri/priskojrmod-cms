@@ -1,57 +1,117 @@
+'use client';
+
+import { Pie, PieChart } from 'recharts';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 
 const topSellingProducts = [
-  { name: 'Sony WH-1000XM4', price: 'IDR 1.013.115', quantity: '116', amount: 'IDR 117.521.340' },
-  { name: 'Asus ROG Phone 5', price: 'IDR 153.457', quantity: '389', amount: 'IDR 59.694.773' },
-  { name: 'Xiaomi Redmi Note 10', price: 'IDR 582.751', quantity: '73', amount: 'IDR 42.540.823' },
-  { name: 'Apple MacBook Pro', price: 'IDR 634.316', quantity: '359', amount: 'IDR 227.719.444' },
-  { name: 'Logitech MX Master 3', price: 'IDR 299.170', quantity: '423', amount: 'IDR 126.548.910' },
-  { name: 'Canon EOS R5', price: 'IDR 418.235', quantity: '400', amount: 'IDR 167.294.000' },
-  { name: 'Samsung Galaxy S10 Ultra', price: 'IDR 517.351', quantity: '259', amount: 'IDR 133.993.909' },
-  { name: 'Apple iPhone 14', price: 'IDR 1.501.556', quantity: '169', amount: 'IDR 253.762.964' },
+  { name: 'Sony WH-1000XM4', quantity: '116' },
+  { name: 'Asus ROG Phone 5', quantity: '389' },
+  { name: 'Xiaomi Redmi Note 10', quantity: '73' },
+  { name: 'Apple MacBook Pro', quantity: '359' },
+  { name: 'Logitech MX Master 3', quantity: '423' },
 ];
 
 export default function TopSellingProduct() {
   return (
-    <Card className="mt-4 shadow-none">
+    <Card className="shadow-none">
       <CardHeader>
-        <CardTitle>Top Selling Products</CardTitle>
+        <CardTitle className="text-xl">Top Selling Products</CardTitle>
+        <CardDescription>Based on units sold.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="px-3">Name</TableHead>
-              <TableHead className="px-3">Price</TableHead>
-              <TableHead className="px-3">Quantity</TableHead>
-              <TableHead className="px-3">Amount</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {topSellingProducts.map((product) => (
-              <TableRow key={product.name}>
-                <TableCell className="p-3">{product.name}</TableCell>
-                <TableCell className="p-3">{product.price}</TableCell>
-                <TableCell className="p-3">{product.quantity}</TableCell>
-                <TableCell className="p-3">{product.amount}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+
       </CardContent>
     </Card>
   );
+}
+
+"use client"
+
+import { TrendingUp } from "lucide-react"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+export const description = "A pie chart with a label"
+
+const chartData = [
+  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
+  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
+  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
+  { browser: "other", visitors: 90, fill: "var(--color-other)" },
+]
+
+const chartConfig = {
+  visitors: {
+    label: "Visitors",
+  },
+  chrome: {
+    label: "Chrome",
+    color: "var(--chart-1)",
+  },
+  safari: {
+    label: "Safari",
+    color: "var(--chart-2)",
+  },
+  firefox: {
+    label: "Firefox",
+    color: "var(--chart-3)",
+  },
+  edge: {
+    label: "Edge",
+    color: "var(--chart-4)",
+  },
+  other: {
+    label: "Other",
+    color: "var(--chart-5)",
+  },
+} satisfies ChartConfig
+
+export function ChartPieLabel() {
+  return (
+    <Card className="flex flex-col">
+      <CardHeader className="items-center pb-0">
+        <CardTitle>Pie Chart - Label</CardTitle>
+        <CardDescription>January - June 2024</CardDescription>
+      </CardHeader>
+      <CardContent className="flex-1 pb-0">
+        <ChartContainer
+          config={chartConfig}
+          className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square max-h-[250px] pb-0"
+        >
+          <PieChart>
+            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            <Pie data={chartData} dataKey="visitors" label nameKey="browser" />
+          </PieChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col gap-2 text-sm">
+        <div className="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+        </div>
+        <div className="text-muted-foreground leading-none">
+          Showing total visitors for the last 6 months
+        </div>
+      </CardFooter>
+    </Card>
+  )
 }

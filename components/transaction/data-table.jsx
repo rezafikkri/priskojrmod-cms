@@ -25,7 +25,8 @@ import {
 import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { formatDateTime } from '@/lib/format-date';
-import { formatCurrency, getStatusClasses, getTableHeaderWidth } from '@/lib/utils';
+import { getStatusClasses, getTableHeaderWidth } from '@/lib/utils';
+import { formatCurrency } from '@/lib/format-currency';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import InfoCircle from '../icon/info-circle';
 import CorrectStatusDialog from './correct-status-dialog';
@@ -127,7 +128,10 @@ export default function DataTable({
       ),
       cell: ({ row }) => (
         <div className="text-right">
-          {formatCurrency(row.getValue('total_amount'), row.original.currency_code)}
+          {formatCurrency({
+            value: row.getValue('total_amount'),
+            currencyCode: row.original.currency_code,
+          })}
         </div>
       ),
     },

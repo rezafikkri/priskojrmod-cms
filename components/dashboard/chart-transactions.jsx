@@ -19,21 +19,26 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '../ui/chart';
-import { Button } from '../ui/button';
+import { Info } from 'lucide-react';
+import TooltipWrapper from '../ui/tooltip-wrapper';
+import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { useState } from 'react';
+import { CurrencyCode } from '@/constants/enums';
 
 const chartData = [
-  { date: '2024-04-30', sales: 48 },
-  { date: '2024-05-31', sales: 64 },
-  { date: '2024-06-30', sales: 36 },
-  { date: '2024-07-31', sales: 22 },
-  { date: '2024-08-31', sales: 29 },
-  { date: '2024-09-30', sales: 80 },
-  { date: '2024-10-31', sales: 84 },
-  { date: '2024-11-30', sales: 92 },
-  { date: '2024-12-31', sales: 46 },
-  { date: '2025-01-31', sales: 6 },
-  { date: '2025-02-28', sales: 26 },
-  { date: '2025-03-16', sales: 75 },
+  { date: '2024-01-31', IDR: 520_000, USD: 35 },
+  { date: '2024-02-29', IDR: 640_000, USD: 43 },
+  { date: '2024-03-31', IDR: 780_000, USD: 52 },
+  { date: '2024-04-30', IDR: 720_000, USD: 48 },
+  { date: '2024-05-31', IDR: 960_000, USD: 64 },
+  { date: '2024-06-30', IDR: 1_120_000, USD: 75 },
+  { date: '2024-07-31', IDR: 1_280_000, USD: 85 },
+  { date: '2024-08-31', IDR: 1_460_000, USD: 97 },
+  { date: '2024-09-30', IDR: 1_360_000, USD: 91 },
+  { date: '2024-10-31', IDR: 1_620_000, USD: 108 },
+  { date: '2024-11-30', IDR: 1_780_000, USD: 119 },
+  { date: '2024-12-31', IDR: 1_950_000, USD: 130 },
 ];
 const chartConfig = {
   sales: {
@@ -43,15 +48,39 @@ const chartConfig = {
 };
 
 export default function ChartTransactions() {
+  const [activeChart, setActiveChart] = useState(CurrencyCode.IDR);
+
   return (
-    <Card className="flex-1 shadow-none">
+    <Card className="shadow-none">
       <CardHeader>
-        <div className="flex justify-between">
-          <div>
-            <CardTitle className="mb-2">Transactions</CardTitle>
-            <CardDescription>Last 12 months</CardDescription>
+        <div className="flex">
+          <div className="flex-1">
+            <CardTitle className="text-lg">
+              <span className="me-2">Monthly Sales</span>
+              <TooltipWrapper text="Sales figures exclude tax">
+                <Info className="icon text-zinc-500" size={14} />
+              </TooltipWrapper>
+            </CardTitle>
+            <CardDescription className="text-base">Sales from the past 12 months.</CardDescription>
           </div>
-          <Button variant="outline">See details</Button>
+          <ButtonGroup>
+            <Button
+              variant="outline"
+              className="shadow-none"
+              size="sm"
+              onClick={() => setActiveChart(CurrencyCode.IDR)}
+            >
+              {CurrencyCode.IDR}
+            </Button>
+            <Button
+              variant="outline"
+              className="shadow-none"
+              size="sm"
+              onClick={() => setActiveChart(CurrencyCode.USD)}
+            >
+              {CurrencyCode.USD}
+            </Button>
+          </ButtonGroup>
         </div>
       </CardHeader>
       <CardContent>
@@ -59,17 +88,22 @@ export default function ChartTransactions() {
           <AreaChart
             data={chartData}
             margin={{
-              left: -20,
+              left: -22,
               right: 0,
             }}
           >
             <CartesianGrid vertical={false} />
-            <YAxis axisLine={false} tickLine={false} tickMargin={8} tickCount={3}/>
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tickMargin={8}
+              tickCount={3}
+            />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={10}
               tickFormatter={(value) => {
                 return new Date(value).toLocaleDateString("en-US", {
                   year: '2-digit',
@@ -78,9 +112,10 @@ export default function ChartTransactions() {
               }}
             />
             <ChartTooltip
-              cursor={false}
+              cursor={{ stroke: 'rgba(0,0,0,0.1)', strokeWidth: 1 }}
               content={
                 <ChartTooltipContent
+                  className="text-sm"
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       year: 'numeric',
@@ -106,7 +141,7 @@ export default function ChartTransactions() {
               </linearGradient>
             </defs>
             <Area
-              dataKey="sales"
+              dataKey={activeChart}
               type="monotone"
               fill="url(#fillSales)"
               fillOpacity={0.4}

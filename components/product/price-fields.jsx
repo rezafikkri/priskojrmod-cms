@@ -10,8 +10,8 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { formatCurrency } from '@/lib/utils';
 import { useFieldArray } from 'react-hook-form';
+import { formatCurrency } from '@/lib/format-currency';
 
 export default function PriceFields({
   price,
@@ -41,7 +41,10 @@ export default function PriceFields({
               <FormItem className="flex-1">
                 <FormLabel className="text-base">{currency.currency_code} Price</FormLabel>
                 <p className="text-sm text-zinc-500">
-                  Preview: {formatCurrency(Number(field.value), currency.currency_code)}
+                  Preview: {formatCurrency({
+                    value: Number(field.value),
+                    currencyCode: currency.currency_code,
+                  })}
                 </p>
                 <FormControl>
                   <Input

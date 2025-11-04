@@ -10,7 +10,7 @@ import {
 import { Minus } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Fragment } from 'react';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency } from '@/lib/format-currency';
 import { formatDateTime } from '@/lib/format-date';
 
 export default function DetailsSection({ details }) {
@@ -51,7 +51,10 @@ export default function DetailsSection({ details }) {
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Price</TableHead>
               <TableCell className="tabular-nums">
-                {formatCurrency(detail.product_price, detail.product_currency_code)}
+                {formatCurrency({
+                  value: detail.product_price,
+                  currencyCode: detail.product_currency_code,
+                })}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -79,7 +82,10 @@ export default function DetailsSection({ details }) {
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Subtotal</TableHead>
               <TableCell className="tabular-nums">
-                {formatCurrency(detail.subtotal, detail.product_currency_code)}
+                {formatCurrency({
+                  value: detail.subtotal,
+                  currencyCode: detail.product_currency_code,
+                })}
               </TableCell>
             </TableRow>
           </TableBody>

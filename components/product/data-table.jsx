@@ -27,7 +27,8 @@ import { MoreHorizontal, Check, Minus } from 'lucide-react';
 import Dot from '../icon/Dot';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
-import { formatCurrency, getTableHeaderWidth } from '@/lib/utils';
+import { getTableHeaderWidth } from '@/lib/utils';
+import { formatCurrency } from '@/lib/format-currency';
 import { CurrencyCode, PriceType } from '@/constants/enums';
 import { Badge } from '../ui/badge';
 import DeleteDialog from './delete-dialog';
@@ -100,8 +101,14 @@ export default function DataTable({
       cell: ({ row }) => {
         if (row.original.price_type === PriceType.PAID) {
           const prices = row.getValue('prices')[priceCurrency];
-          const min = formatCurrency(prices.min, priceCurrency);
-          const max = formatCurrency(prices.max, priceCurrency);
+          const min = formatCurrency({
+            value: prices.min,
+            currencyCode: priceCurrency,
+          });
+          const max = formatCurrency({
+            value: prices.max,
+            currencyCode: priceCurrency,
+          });
 
           if (!prices) return <Minus className="size-4 text-zinc-300" />;
           if (prices.min === prices.max) {

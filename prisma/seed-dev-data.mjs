@@ -96,13 +96,43 @@ async function seedCustomersAndLicenseKeys() {
   console.log(`✅ Seeded ${licenseKeys.length} license keys`);
 }
 
+function roundToTwoDecimals(value) {
+  return Math.round(value * 100) / 100;
+}
+
+function getSubtotal({ qty, price, currencyCode, discount, couponDiscount }) {
+  let subtotal = price * qty;
+
+  if (discount) {
+    let discountPrice = subtotal * (discount / 100);
+    if (currencyCode === 'IDR') discountPrice = Math.round(discountPrice);
+    if (currencyCode === 'USD') discountPrice = roundToTwoDecimals(discountPrice);
+
+    subtotal -= discountPrice;
+  }
+
+  if (couponDiscount) {
+    let couponPrice = subtotal * (couponDiscount / 100);
+    if (currencyCode === 'IDR') couponPrice = Math.round(couponPrice);
+    if (currencyCode === 'USD') couponPrice = roundToTwoDecimals(couponPrice);
+
+    subtotal -= couponPrice;
+  }
+
+  if (currencyCode === 'USD') {
+    subtotal = roundToTwoDecimals(subtotal);
+  }
+
+  return subtotal;
+}
+
 function getTransactionDetails({
   max,
   products,
 }) {
   const transactionDetails = [];
   for (const product of products) {
-    transactionDetails.push({
+    const detail = {
       product_id: product.id,
       product_price_id: product.variants[0].prices[0].id,
       quantity: generateRandomInt(2, 5),
@@ -113,9 +143,20 @@ function getTransactionDetails({
       product_download_link: product.download_link,
 
       product_variant: product.variants[0].name,
-      product_currency_code: product.variants[0].prices[1].currency_code,
-      product_price: product.variants[0].prices[1].price.toNumber(),
-    });
+      product_currency_code: product.variants[0].prices[0].currency_code,
+      product_price: product.variants[0].prices[0].price.toNumber(),
+    };
+
+    if (product.discount) {
+      detail.product_discount = product.discount.discount;
+    }
+
+    if (product.coupon) {
+      detail.product_coupon_code = product.coupon.code;
+      detail.product_coupon_discount = product.coupon.discount;
+    }
+
+    transactionDetails.push(detail);
     if (transactionDetails.length === max) break;
   }
   return transactionDetails;
@@ -142,6 +183,8 @@ export default async function seedDevData() {
           prices: true,
         },
       },
+      discount: true,
+      coupon: true,
     },
   });
   const customers = await pjmeDBPrismaClient.customer.findMany({
@@ -149,10 +192,10 @@ export default async function seedDevData() {
   });
 
   const transactions = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 1; i++) {
     let transactionDetails = [];
     // if (i % 2 === 0) {
-      transactionDetails = getTransactionDetails({ max: 3, products });
+      transactionDetails = getTransactionDetails({ max: 2, products });
     // } else if (i % 3 === 0) {
       // transactionDetails = getTransactionDetails({ max: 2, products });
     // } else {
@@ -169,7 +212,23 @@ export default async function seedDevData() {
       code: generateDocumentCode('TRX'),
       currency_code: transactionDetails[0].product_currency_code,
       total_amount: transactionDetails
-        .reduce((total, { quantity, product_price }) => total + (product_price * quantity), 0),
+        .reduce((total, detail) => {
+          const {
+            quantity: qty,
+            product_price: price,
+            product_discount: discount = 0,
+            product_coupon_discount: couponDiscount = 0,
+            product_currency_code: currencyCode,
+          } = detail;
+          const subtotal = getSubtotal({
+            qty,
+            price,
+            currencyCode,
+            discount,
+            couponDiscount,
+          });
+          return total + subtotal;
+        }, 0),
       customer_name: selectedCustomer.first_name,
       customer_email: selectedCustomer.email,
       customer_phone_number: selectedCustomer.phone_number,

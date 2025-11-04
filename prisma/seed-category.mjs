@@ -8,16 +8,18 @@ export default async function seedCategory() {
   const slug = 'application';
   const currentTime = Math.floor(new Date().getTime() / 1000);
 
-  await pjmeDBPrismaClient.category.upsert({
-    where: { slug },
-    update: {},
-    create: {
-      name,
-      slug,
-      created_at: currentTime,
-      updated_at: currentTime,
-    },
-  });
+  try {
+    await pjmeDBPrismaClient.category.upsert({
+      where: { slug },
+      update: {},
+      create: {
+        name,
+        slug,
+        created_at: currentTime,
+        updated_at: currentTime,
+      },
+    });
 
-  console.log(`✅ Seeded "Application" category successfully.`);
+    console.log(`✅ Seeded "Application" category successfully.`);
+  } catch (err) {}
 }
