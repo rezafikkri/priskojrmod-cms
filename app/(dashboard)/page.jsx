@@ -2,6 +2,7 @@ import { CardTotal } from '@/components/dashboard/card-total';
 import ChartTransactions from '@/components/dashboard/chart-transactions';
 import DashHeader from '@/components/dashboard/dash-header';
 import ShopBag from '@/components/icon/shop-bag';
+import { CurrencyCode } from '@/constants/enums';
 import {
   Package,
   Hourglass,
@@ -24,8 +25,8 @@ export default function Dashboard() {
             }}
             tooltip="Total revenue per currency (excluding tax)"
             total={{
-              first: 'Rp2.5M',
-              second: '$450',
+              first: { value: 99_599_900, currencyCode: CurrencyCode.IDR },
+              second: { value: 450, currencyCode: CurrencyCode.USD },
             }}
             quickLink={{
               tooltip: 'View all paid transactions.',

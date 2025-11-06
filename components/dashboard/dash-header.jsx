@@ -36,7 +36,7 @@ export default function DashHeader() {
           <div className="rounded-md bg-zinc-100/90 dark:bg-zinc-800/70 px-1 py-0.5">
             <Clock4 size={16} className="icon" />
           </div>
-          <span>CMS interface defaults to UTC+07:00; customer view uses local time unless a UI note specifies otherwise.</span>
+          <span>CMS interface: UTC+07:00 • Customer view: local time (unless noted otherwise).</span>
         </div>
       </div>
       <div className="flex max-lg:flex-row-reverse gap-3 max-lg:justify-end items-center text-zinc-700 dark:text-zinc-300/80">

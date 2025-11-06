@@ -8,6 +8,7 @@ import Link from 'next/link';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import { ArrowRight, CircleQuestionMark } from 'lucide-react';
 import Dot from '../icon/Dot';
+import { formatCurrency } from '@/lib/format-currency';
 
 export function CardTotal({
   title,
@@ -19,6 +20,25 @@ export function CardTotal({
 }) {
   const { Icon, textColor } = icon;
   const { tooltip: tooltipLink, href } = quickLink ?? {};
+  let totalIDRLong;
+  let totalIDRShort;
+  let totalUSDLong;
+  let totalUSDShort;
+
+  if (displayMode === 'dual') {
+    totalIDRShort = formatCurrency({
+      value: total.first.value,
+      currencyCode: total.first.currencyCode,
+      notation: 'compact',
+    });
+    totalUSDShort = formatCurrency({
+      value: total.second.value,
+      currencyCode: total.second.currencyCode,
+      notation: 'compact',
+    });
+    totalIDRLong = formatCurrency({ value: total.first.value, currencyCode: total.first.currencyCode });
+    totalUSDLong = formatCurrency({ value: total.second.value, currencyCode: total.second.currencyCode });
+  }
 
   return (
     <Card className="shadow-none flex-1 min-w-40 gap-3">
@@ -41,9 +61,13 @@ export function CardTotal({
         <div className="flex justify-between items-end">
           {displayMode === 'dual' ? (
             <div className="flex gap-4 items-center">
-              <h4 className="text-2xl font-semibold tabular-nums">{total.first}</h4>
+              <TooltipWrapper text={totalIDRLong}>
+                <h4 className="text-2xl font-semibold tabular-nums">{totalIDRShort}</h4>
+              </TooltipWrapper>
               <Dot className="size-3 text-zinc-300 dark:text-zinc-700 icon" />
-              <h4 className="text-2xl font-semibold tabular-nums">{total.second}</h4>
+              <TooltipWrapper text={totalUSDLong}>
+                <h4 className="text-2xl font-semibold tabular-nums">{totalUSDShort}</h4>
+              </TooltipWrapper>
             </div>
           ) : (
             <h4 className="text-2xl font-semibold tabular-nums">{total}</h4>

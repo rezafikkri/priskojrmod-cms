@@ -17,7 +17,6 @@ import {
 import {
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
 } from '../ui/chart';
 import { Info } from 'lucide-react';
 import TooltipWrapper from '../ui/tooltip-wrapper';
@@ -25,30 +24,38 @@ import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { useState } from 'react';
 import { CurrencyCode } from '@/constants/enums';
+import { formatCurrency } from '@/lib/format-currency';
+import { shortNumber } from '@/lib/short-number';
+import { formatMonthYear } from '@/lib/format-date';
 
 const chartData = [
-  { date: '2024-01-31', IDR: 520_000, USD: 35 },
-  { date: '2024-02-29', IDR: 640_000, USD: 43 },
-  { date: '2024-03-31', IDR: 780_000, USD: 52 },
-  { date: '2024-04-30', IDR: 720_000, USD: 48 },
-  { date: '2024-05-31', IDR: 960_000, USD: 64 },
-  { date: '2024-06-30', IDR: 1_120_000, USD: 75 },
-  { date: '2024-07-31', IDR: 1_280_000, USD: 85 },
-  { date: '2024-08-31', IDR: 1_460_000, USD: 97 },
-  { date: '2024-09-30', IDR: 1_360_000, USD: 91 },
-  { date: '2024-10-31', IDR: 1_620_000, USD: 108 },
-  { date: '2024-11-30', IDR: 1_780_000, USD: 119 },
-  { date: '2024-12-31', IDR: 1_950_000, USD: 130 },
+  { timestamp: 1706634000, IDR: 920_000, USD: 45 },
+  { timestamp: 1709223780, IDR: 1_030_000, USD: 72.55 },
+  { timestamp: 1711902180, IDR: 950_000, USD: 38 },
+  { timestamp: 1714494180, IDR: 420_500, USD: 68.6 },
+  { timestamp: 1717172580, IDR: 2_150_000, USD: 52 },
+  { timestamp: 1719764580, IDR: 3_900_000, USD: 58 },
+  { timestamp: 1722442980, IDR: 1_280_000, USD: 28 },
+  { timestamp: 1725121380, IDR: 490_000, USD: 75 },
+  { timestamp: 1727713380, IDR: 3_599_900, USD: 100 },
+  { timestamp: 1730391780, IDR: 2_000_000, USD: 70 },
+  { timestamp: 1732983780, IDR: 3_300_000, USD: 30 },
+  { timestamp: 1735662180, IDR: 580_000, USD: 65 },
 ];
+
 const chartConfig = {
-  sales: {
-    label: 'Sales',
+  IDR: {
+    label: 'Sales (IDR)',
+    color: 'var(--chart-1)',
+  },
+  USD: {
+    label: 'Sales (USD)',
     color: 'var(--chart-1)',
   },
 };
 
 export default function ChartTransactions() {
-  const [activeChart, setActiveChart] = useState(CurrencyCode.IDR);
+  const [activeCurrency, setActiveCurrency] = useState(CurrencyCode.IDR);
 
   return (
     <Card className="shadow-none">
@@ -66,17 +73,17 @@ export default function ChartTransactions() {
           <ButtonGroup>
             <Button
               variant="outline"
-              className="shadow-none"
+              className={`shadow-none ${activeCurrency === CurrencyCode.IDR ? 'bg-accent' : ''}`}
               size="sm"
-              onClick={() => setActiveChart(CurrencyCode.IDR)}
+              onClick={() => setActiveCurrency(CurrencyCode.IDR)}
             >
               {CurrencyCode.IDR}
             </Button>
             <Button
               variant="outline"
-              className="shadow-none"
+              className={`shadow-none ${activeCurrency === CurrencyCode.USD ? 'bg-accent' : ''}`}
               size="sm"
-              onClick={() => setActiveChart(CurrencyCode.USD)}
+              onClick={() => setActiveCurrency(CurrencyCode.USD)}
             >
               {CurrencyCode.USD}
             </Button>
@@ -84,12 +91,12 @@ export default function ChartTransactions() {
         </div>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="aspect-auto h-60 w-full">
+        <ChartContainer config={chartConfig} className="aspect-auto h-65 w-full">
           <AreaChart
             data={chartData}
             margin={{
-              left: -22,
-              right: 0,
+              left: -12,
+              right: 12,
             }}
           >
             <CartesianGrid vertical={false} />
@@ -97,55 +104,59 @@ export default function ChartTransactions() {
               axisLine={false}
               tickLine={false}
               tickMargin={8}
-              tickCount={3}
+              tickCount={4}
+              tickFormatter={(value) => shortNumber(value)}
             />
             <XAxis
-              dataKey="date"
+              dataKey="timestamp"
               tickLine={false}
               axisLine={false}
               tickMargin={10}
-              tickFormatter={(value) => {
-                return new Date(value).toLocaleDateString("en-US", {
-                  year: '2-digit',
-                  month: 'short',
-                });
-              }}
+              tickFormatter={(value) => formatMonthYear(value, true)}
             />
             <ChartTooltip
               cursor={{ stroke: 'rgba(0,0,0,0.1)', strokeWidth: 1 }}
-              content={
-                <ChartTooltipContent
-                  className="text-sm"
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      year: 'numeric',
-                      month: 'short',
-                    });
-                  }}
-                  indicator="dot"
-                />
-              }
+              content={({ active, payload, label }) => {
+                if (!active || !payload?.length) return null;
+
+                return (
+                  <div className="bg-white p-2 border rounded shadow">
+                    <div className="font-semibold mb-1">
+                      {formatMonthYear(label)}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`size-3 rounded-sm`} style={{ backgroundColor: payload[0].color }} />
+                      <span className="flex-1">
+                        {formatCurrency({
+                          value: payload[0].payload[activeCurrency],
+                          currencyCode: activeCurrency,
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                );
+              }}
             />
             <defs>
-              <linearGradient id="fillSales" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id={`fill${activeCurrency}`} x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-sales)"
+                  stopColor={`var(--color-${activeCurrency})`}
                   stopOpacity={0.5}
                 />
                 <stop
                   offset="100%"
-                  stopColor="var(--color-sales)"
+                  stopColor={`var(--color-${activeCurrency})`}
                   stopOpacity={0}
                 />
               </linearGradient>
             </defs>
             <Area
-              dataKey={activeChart}
+              dataKey={activeCurrency}
               type="monotone"
-              fill="url(#fillSales)"
+              fill={`url(#fill${activeCurrency})`}
               fillOpacity={0.4}
-              stroke="var(--color-sales)"
+              stroke={`var(--color-${activeCurrency})`}
             />
           </AreaChart>
         </ChartContainer>
