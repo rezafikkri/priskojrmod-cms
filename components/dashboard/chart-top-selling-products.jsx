@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { useTheme } from 'next-themes';
 
 const topSellingProducts = [
   { name: 'E-Book Marketing Digital 2024: Strategi Lengkap dari Nol sampai Mahir', quantity: 1247 },
@@ -52,13 +53,15 @@ const chartConfig = Object.fromEntries(
 );
 
 export default function ChartTopSellingProducts() {
+  const { theme } = useTheme();
+
   return (
     <Card className="shadow-none">
       <CardHeader>
         <div className="flex justify-between items-center">
           <div className="flex-1">
             <CardTitle className="text-lg">Top Selling Products</CardTitle>
-            <CardDescription className="text-base text-zinc-600">Based on units sold.</CardDescription>
+            <CardDescription className="text-base text-zinc-600 dark:text-zinc-400">Based on units sold.</CardDescription>
           </div>
 
           <Select value="last_month"> 
@@ -103,7 +106,7 @@ export default function ChartTopSellingProducts() {
                   y={y + 4}
                   textAnchor="start"
                   style={{
-                    fill: '#3f3f46',
+                    fill: theme === 'light' ? '#52525b' : '#a1a1aa',
                     fontSize: 15,
                     whiteSpace: 'normal',
                   }}
@@ -122,7 +125,7 @@ export default function ChartTopSellingProducts() {
                 const product = payload[0].payload;
 
                 return (
-                  <div className="bg-white p-2 border rounded shadow text-sm max-w-60">
+                  <div className="bg-white dark:bg-popover p-2 border rounded shadow text-sm max-w-60">
                     <p className="mb-1.5 leading-snug">
                       {product.name}
                     </p>
@@ -133,7 +136,7 @@ export default function ChartTopSellingProducts() {
                           {product.quantity}
                         </span>
                         {' '}
-                        <span className="text-zinc-800">sold</span>
+                        <span className="text-zinc-800 dark:text-zinc-300">sold</span>
                       </div>
                     </div>
                   </div>
@@ -149,15 +152,15 @@ export default function ChartTopSellingProducts() {
                 dataKey="quantity"
                 position="right"
                 offset={8}
-                className="fill-foreground"
                 fontSize={13.5}
+                fill={theme === 'light' ? '#3f3f46' : '#d4d4d8'}
               />
             </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter>
-        <small className="text-sm text-zinc-500">Showing top 10 of 25 products</small>
+        <small className="text-sm text-zinc-500 dark:text-zinc-400/70">Showing top 10 of 25 products</small>
       </CardFooter>
     </Card>
   );

@@ -63,13 +63,14 @@ export default function ChartTransactions() {
         <div className="flex">
           <div className="flex-1">
             <CardTitle className="text-lg">
-              <span className="me-2">Monthly Sales</span>
+              <span>Monthly Sales</span>
+              {' '}
               <TooltipWrapper text="Sales figures exclude tax">
-                <Info className="icon text-zinc-500" size={14} />
+                <Info className="icon text-zinc-400 dark:text-zinc-600" size={14} />
               </TooltipWrapper>
             </CardTitle>
             <CardDescription
-              className="text-base text-zinc-600"
+              className="text-base text-zinc-600 dark:text-zinc-400"
             >
               Sales from the past 12 months.
             </CardDescription>
@@ -77,7 +78,7 @@ export default function ChartTransactions() {
           <ButtonGroup>
             <Button
               variant="outline"
-              className={`shadow-none ${activeCurrency === CurrencyCode.IDR ? 'bg-accent' : ''}`}
+              className={`shadow-none ${activeCurrency === CurrencyCode.IDR ? 'bg-accent dark:bg-input/60' : ''}`}
               size="sm"
               onClick={() => setActiveCurrency(CurrencyCode.IDR)}
             >
@@ -85,7 +86,7 @@ export default function ChartTransactions() {
             </Button>
             <Button
               variant="outline"
-              className={`shadow-none ${activeCurrency === CurrencyCode.USD ? 'bg-accent' : ''}`}
+              className={`shadow-none ${activeCurrency === CurrencyCode.USD ? 'bg-accent dark:bg-input/60' : ''}`}
               size="sm"
               onClick={() => setActiveCurrency(CurrencyCode.USD)}
             >
@@ -124,13 +125,13 @@ export default function ChartTransactions() {
                 if (!active || !payload?.length) return null;
 
                 return (
-                  <div className="bg-white p-2 border rounded shadow text-sm">
-                    <p className="font-semibold mb-1.5">
+                  <div className="bg-white dark:bg-popover p-2 border rounded shadow text-sm">
+                    <p className="mb-1.5">
                       {formatMonthYear(label)}
                     </p>
                     <div className="flex items-center gap-2">
                       <span className={`size-3 rounded-sm`} style={{ backgroundColor: payload[0].color }} />
-                      <span>
+                      <span className="font-semibold">
                         {formatCurrency({
                           value: payload[0].payload[activeCurrency],
                           currencyCode: activeCurrency,

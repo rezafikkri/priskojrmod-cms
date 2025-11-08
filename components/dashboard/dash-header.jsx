@@ -32,7 +32,7 @@ export default function DashHeader() {
           }
         </h1>
         <h2 className="text-zinc-700 dark:text-zinc-300/80">Here’s what’s going on at your business right now.</h2>
-        <div className="text-zinc-600 dark:text-zinc-300/80 text-sm flex items-center gap-1 mt-1.5">
+        <div className="text-zinc-600 dark:text-zinc-400 text-sm flex items-center gap-1.5 mt-1.5">
           <div className="rounded-md bg-zinc-100/90 dark:bg-zinc-800/70 px-1 py-0.5">
             <Clock4 size={16} className="icon" />
           </div>

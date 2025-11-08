@@ -50,7 +50,7 @@ export default function Dashboard() {
             tooltip="Total amount of transactions pending payment"
             icon={{
               Icon: Hourglass,
-              textColor: 'text-gray-600/80',
+              textColor: 'text-gray-600/80 dark:text-gray-500',
             }}
             quickLink={{
               tooltip: 'View all pending transactions.',
