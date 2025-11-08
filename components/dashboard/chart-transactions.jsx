@@ -68,7 +68,11 @@ export default function ChartTransactions() {
                 <Info className="icon text-zinc-500" size={14} />
               </TooltipWrapper>
             </CardTitle>
-            <CardDescription className="text-base">Sales from the past 12 months.</CardDescription>
+            <CardDescription
+              className="text-base text-zinc-600"
+            >
+              Sales from the past 12 months.
+            </CardDescription>
           </div>
           <ButtonGroup>
             <Button
@@ -120,13 +124,13 @@ export default function ChartTransactions() {
                 if (!active || !payload?.length) return null;
 
                 return (
-                  <div className="bg-white p-2 border rounded shadow">
-                    <div className="font-semibold mb-1">
+                  <div className="bg-white p-2 border rounded shadow text-sm">
+                    <p className="font-semibold mb-1.5">
                       {formatMonthYear(label)}
-                    </div>
+                    </p>
                     <div className="flex items-center gap-2">
                       <span className={`size-3 rounded-sm`} style={{ backgroundColor: payload[0].color }} />
-                      <span className="flex-1">
+                      <span>
                         {formatCurrency({
                           value: payload[0].payload[activeCurrency],
                           currencyCode: activeCurrency,

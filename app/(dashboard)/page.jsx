@@ -7,14 +7,15 @@ import {
   Package,
   Hourglass,
 } from 'lucide-react';
+import ChartTopSellingProducts from '@/components/dashboard/chart-top-selling-products';
 
 export default function Dashboard() {
   return (
-    <>
+    <div className="space-y-4">
       <div className="flex max-lg:flex-col mb-7 lg:items-center max-lg:gap-5 lg:gap-10">
         <DashHeader />
       </div>
-      <div className="flex gap-4 mb-4 flex-wrap">
+      <div className="flex gap-4 flex-wrap">
         <div className="lg:flex-1 w-full">
           <CardTotal
             title="Total Sales"
@@ -59,7 +60,7 @@ export default function Dashboard() {
         </div>
       </div>
       <ChartTransactions />
-      {/* <TopSellingProduct /> */}
-    </>
+      <ChartTopSellingProducts />
+    </div>
   );
 }
