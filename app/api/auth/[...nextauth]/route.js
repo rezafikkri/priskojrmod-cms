@@ -40,7 +40,7 @@ export const authOptions = {
       if (profile) {
         const user = await pjmeDBPrismaClient.admin.findUnique({
           where: {
-            id: profile.sub,
+            auth_id: profile.sub,
           },
           select: { id: true },
         });
@@ -52,12 +52,12 @@ export const authOptions = {
       if (account && profile) {
         const user = await pjmeDBPrismaClient.admin.findUnique({
           where: {
-            id: profile.sub,
+            auth_id: profile.sub,
           },
-          select: { picture: true },
+          select: { id: true, picture: true },
         });
 
-        token.userId = profile.sub;
+        token.userId = user.id;
         token.picture = user.picture;
         token.first_name = profile.given_name;
         token.accessToken = account.access_token;

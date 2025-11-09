@@ -38346,19 +38346,19 @@ export namespace Prisma {
 
   export type AdminWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    auth_id?: string
     email?: string
     AND?: AdminWhereInput | AdminWhereInput[]
     OR?: AdminWhereInput[]
     NOT?: AdminWhereInput | AdminWhereInput[]
     role?: EnumAdminRoleFilter<"Admin"> | $Enums.AdminRole
-    auth_id?: StringFilter<"Admin"> | string
     first_name?: StringFilter<"Admin"> | string
     last_name?: StringFilter<"Admin"> | string
     whatsapp_phone_number?: StringFilter<"Admin"> | string
     picture?: StringFilter<"Admin"> | string
     donation_links?: DonationLinkListRelationFilter
     products?: ProductListRelationFilter
-  }, "id" | "email">
+  }, "id" | "auth_id" | "email">
 
   export type AdminOrderByWithAggregationInput = {
     id?: SortOrder

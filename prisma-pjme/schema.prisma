@@ -29,7 +29,7 @@ model Admin {
   id Int @id @default(autoincrement()) @db.SmallInt
 
   role    AdminRole
-  auth_id String    @db.VarChar(255)
+  auth_id String    @db.VarChar(255) @unique
 
   first_name            String @db.VarChar(100)
   last_name             String @db.VarChar(100)
