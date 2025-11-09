@@ -13,7 +13,7 @@
     
     "generate": "dotenv -e .env -- pnpm exec prisma generate --schema ./prisma-pjma/schema.prisma && dotenv -e .env -- pnpm exec prisma generate --schema ./prisma-pjme/schema.prisma",
     "migrate": "dotenv -e .env -- pnpm exec prisma migrate dev --schema ./prisma-pjma/schema.prisma && dotenv -e .env -- pnpm exec prisma migrate dev --schema ./prisma-pjme/schema.prisma",
-    "format": "pnpm exec prisma format --schema ./prisma-pjma/schema.prisma && pnpm exec prisma format --schema ./prisma-pjme/schema.prisma",
+    "format-prisma": "pnpm exec prisma format --schema ./prisma-pjma/schema.prisma && pnpm exec prisma format --schema ./prisma-pjme/schema.prisma",
     "studio": "dotenv -e .env -- pnpm exec prisma studio --schema ./prisma-pjma/schema.prisma --port 5555 & dotenv -e .env -- pnpm exec prisma studio --schema ./prisma-pjme/schema.prisma --port 5556",
 
     "seed": "dotenv -e .env -- pnpm exec prisma db seed"

@@ -168,7 +168,15 @@ export type TestimonialTranslation = $Result.DefaultSelection<Prisma.$Testimonia
  * Enums
  */
 export namespace $Enums {
-  export const CurrencyCode: {
+  export const AdminRole: {
+  owner: 'owner',
+  staff: 'staff'
+};
+
+export type AdminRole = (typeof AdminRole)[keyof typeof AdminRole]
+
+
+export const CurrencyCode: {
   IDR: 'IDR',
   USD: 'USD'
 };
@@ -219,6 +227,10 @@ export const InvoiceStatus: {
 export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
 
 }
+
+export type AdminRole = $Enums.AdminRole
+
+export const AdminRole: typeof $Enums.AdminRole
 
 export type CurrencyCode = $Enums.CurrencyCode
 
@@ -4103,12 +4115,24 @@ export namespace Prisma {
 
   export type AggregateAdmin = {
     _count: AdminCountAggregateOutputType | null
+    _avg: AdminAvgAggregateOutputType | null
+    _sum: AdminSumAggregateOutputType | null
     _min: AdminMinAggregateOutputType | null
     _max: AdminMaxAggregateOutputType | null
   }
 
+  export type AdminAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AdminSumAggregateOutputType = {
+    id: number | null
+  }
+
   export type AdminMinAggregateOutputType = {
-    id: string | null
+    id: number | null
+    role: $Enums.AdminRole | null
+    auth_id: string | null
     first_name: string | null
     last_name: string | null
     email: string | null
@@ -4117,7 +4141,9 @@ export namespace Prisma {
   }
 
   export type AdminMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
+    role: $Enums.AdminRole | null
+    auth_id: string | null
     first_name: string | null
     last_name: string | null
     email: string | null
@@ -4127,6 +4153,8 @@ export namespace Prisma {
 
   export type AdminCountAggregateOutputType = {
     id: number
+    role: number
+    auth_id: number
     first_name: number
     last_name: number
     email: number
@@ -4136,8 +4164,18 @@ export namespace Prisma {
   }
 
 
+  export type AdminAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type AdminSumAggregateInputType = {
+    id?: true
+  }
+
   export type AdminMinAggregateInputType = {
     id?: true
+    role?: true
+    auth_id?: true
     first_name?: true
     last_name?: true
     email?: true
@@ -4147,6 +4185,8 @@ export namespace Prisma {
 
   export type AdminMaxAggregateInputType = {
     id?: true
+    role?: true
+    auth_id?: true
     first_name?: true
     last_name?: true
     email?: true
@@ -4156,6 +4196,8 @@ export namespace Prisma {
 
   export type AdminCountAggregateInputType = {
     id?: true
+    role?: true
+    auth_id?: true
     first_name?: true
     last_name?: true
     email?: true
@@ -4202,6 +4244,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: AdminAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: AdminMinAggregateInputType
@@ -4232,18 +4286,24 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: AdminCountAggregateInputType | true
+    _avg?: AdminAvgAggregateInputType
+    _sum?: AdminSumAggregateInputType
     _min?: AdminMinAggregateInputType
     _max?: AdminMaxAggregateInputType
   }
 
   export type AdminGroupByOutputType = {
-    id: string
+    id: number
+    role: $Enums.AdminRole
+    auth_id: string
     first_name: string
     last_name: string
     email: string
     whatsapp_phone_number: string
     picture: string
     _count: AdminCountAggregateOutputType | null
+    _avg: AdminAvgAggregateOutputType | null
+    _sum: AdminSumAggregateOutputType | null
     _min: AdminMinAggregateOutputType | null
     _max: AdminMaxAggregateOutputType | null
   }
@@ -4264,6 +4324,8 @@ export namespace Prisma {
 
   export type AdminSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    role?: boolean
+    auth_id?: boolean
     first_name?: boolean
     last_name?: boolean
     email?: boolean
@@ -4276,6 +4338,8 @@ export namespace Prisma {
 
   export type AdminSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    role?: boolean
+    auth_id?: boolean
     first_name?: boolean
     last_name?: boolean
     email?: boolean
@@ -4285,6 +4349,8 @@ export namespace Prisma {
 
   export type AdminSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    role?: boolean
+    auth_id?: boolean
     first_name?: boolean
     last_name?: boolean
     email?: boolean
@@ -4294,6 +4360,8 @@ export namespace Prisma {
 
   export type AdminSelectScalar = {
     id?: boolean
+    role?: boolean
+    auth_id?: boolean
     first_name?: boolean
     last_name?: boolean
     email?: boolean
@@ -4301,7 +4369,7 @@ export namespace Prisma {
     picture?: boolean
   }
 
-  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "email" | "whatsapp_phone_number" | "picture", ExtArgs["result"]["admin"]>
+  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "role" | "auth_id" | "first_name" | "last_name" | "email" | "whatsapp_phone_number" | "picture", ExtArgs["result"]["admin"]>
   export type AdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     donation_links?: boolean | Admin$donation_linksArgs<ExtArgs>
     products?: boolean | Admin$productsArgs<ExtArgs>
@@ -4317,7 +4385,9 @@ export namespace Prisma {
       products: Prisma.$ProductPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
+      role: $Enums.AdminRole
+      auth_id: string
       first_name: string
       last_name: string
       email: string
@@ -4748,7 +4818,9 @@ export namespace Prisma {
    * Fields of the Admin model
    */
   interface AdminFieldRefs {
-    readonly id: FieldRef<"Admin", 'String'>
+    readonly id: FieldRef<"Admin", 'Int'>
+    readonly role: FieldRef<"Admin", 'AdminRole'>
+    readonly auth_id: FieldRef<"Admin", 'String'>
     readonly first_name: FieldRef<"Admin", 'String'>
     readonly last_name: FieldRef<"Admin", 'String'>
     readonly email: FieldRef<"Admin", 'String'>
@@ -5222,22 +5294,24 @@ export namespace Prisma {
 
   export type DonationLinkAvgAggregateOutputType = {
     id: number | null
+    admin_id: number | null
   }
 
   export type DonationLinkSumAggregateOutputType = {
     id: number | null
+    admin_id: number | null
   }
 
   export type DonationLinkMinAggregateOutputType = {
     id: number | null
-    admin_id: string | null
+    admin_id: number | null
     currency_code: $Enums.CurrencyCode | null
     link: string | null
   }
 
   export type DonationLinkMaxAggregateOutputType = {
     id: number | null
-    admin_id: string | null
+    admin_id: number | null
     currency_code: $Enums.CurrencyCode | null
     link: string | null
   }
@@ -5253,10 +5327,12 @@ export namespace Prisma {
 
   export type DonationLinkAvgAggregateInputType = {
     id?: true
+    admin_id?: true
   }
 
   export type DonationLinkSumAggregateInputType = {
     id?: true
+    admin_id?: true
   }
 
   export type DonationLinkMinAggregateInputType = {
@@ -5369,7 +5445,7 @@ export namespace Prisma {
 
   export type DonationLinkGroupByOutputType = {
     id: number
-    admin_id: string
+    admin_id: number
     currency_code: $Enums.CurrencyCode
     link: string
     _count: DonationLinkCountAggregateOutputType | null
@@ -5442,7 +5518,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      admin_id: string
+      admin_id: number
       currency_code: $Enums.CurrencyCode
       link: string
     }, ExtArgs["result"]["donationLink"]>
@@ -5870,7 +5946,7 @@ export namespace Prisma {
    */
   interface DonationLinkFieldRefs {
     readonly id: FieldRef<"DonationLink", 'Int'>
-    readonly admin_id: FieldRef<"DonationLink", 'String'>
+    readonly admin_id: FieldRef<"DonationLink", 'Int'>
     readonly currency_code: FieldRef<"DonationLink", 'CurrencyCode'>
     readonly link: FieldRef<"DonationLink", 'String'>
   }
@@ -11951,6 +12027,7 @@ export namespace Prisma {
 
   export type ProductAvgAggregateOutputType = {
     category_id: number | null
+    admin_id: number | null
     owner_id: number | null
     license_id: number | null
     created_at: number | null
@@ -11959,6 +12036,7 @@ export namespace Prisma {
 
   export type ProductSumAggregateOutputType = {
     category_id: number | null
+    admin_id: number | null
     owner_id: number | null
     license_id: number | null
     created_at: number | null
@@ -11968,7 +12046,7 @@ export namespace Prisma {
   export type ProductMinAggregateOutputType = {
     id: string | null
     category_id: number | null
-    admin_id: string | null
+    admin_id: number | null
     owner_id: number | null
     license_id: number | null
     drive_file_id: string | null
@@ -11985,7 +12063,7 @@ export namespace Prisma {
   export type ProductMaxAggregateOutputType = {
     id: string | null
     category_id: number | null
-    admin_id: string | null
+    admin_id: number | null
     owner_id: number | null
     license_id: number | null
     drive_file_id: string | null
@@ -12020,6 +12098,7 @@ export namespace Prisma {
 
   export type ProductAvgAggregateInputType = {
     category_id?: true
+    admin_id?: true
     owner_id?: true
     license_id?: true
     created_at?: true
@@ -12028,6 +12107,7 @@ export namespace Prisma {
 
   export type ProductSumAggregateInputType = {
     category_id?: true
+    admin_id?: true
     owner_id?: true
     license_id?: true
     created_at?: true
@@ -12175,7 +12255,7 @@ export namespace Prisma {
   export type ProductGroupByOutputType = {
     id: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id: string | null
@@ -12339,7 +12419,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       category_id: number
-      admin_id: string
+      admin_id: number
       owner_id: number
       license_id: number
       drive_file_id: string | null
@@ -12786,7 +12866,7 @@ export namespace Prisma {
   interface ProductFieldRefs {
     readonly id: FieldRef<"Product", 'String'>
     readonly category_id: FieldRef<"Product", 'Int'>
-    readonly admin_id: FieldRef<"Product", 'String'>
+    readonly admin_id: FieldRef<"Product", 'Int'>
     readonly owner_id: FieldRef<"Product", 'Int'>
     readonly license_id: FieldRef<"Product", 'Int'>
     readonly drive_file_id: FieldRef<"Product", 'String'>
@@ -37688,6 +37768,8 @@ export namespace Prisma {
 
   export const AdminScalarFieldEnum: {
     id: 'id',
+    role: 'role',
+    auth_id: 'auth_id',
     first_name: 'first_name',
     last_name: 'last_name',
     email: 'email',
@@ -38070,20 +38152,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'String'
-   */
-  export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
-    
-
-
-  /**
-   * Reference to a field of type 'String[]'
-   */
-  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -38094,6 +38162,34 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'AdminRole'
+   */
+  export type EnumAdminRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdminRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'AdminRole[]'
+   */
+  export type ListEnumAdminRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdminRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'String'
+   */
+  export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+  /**
+   * Reference to a field of type 'String[]'
+   */
+  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
     
 
 
@@ -38223,7 +38319,9 @@ export namespace Prisma {
     AND?: AdminWhereInput | AdminWhereInput[]
     OR?: AdminWhereInput[]
     NOT?: AdminWhereInput | AdminWhereInput[]
-    id?: StringFilter<"Admin"> | string
+    id?: IntFilter<"Admin"> | number
+    role?: EnumAdminRoleFilter<"Admin"> | $Enums.AdminRole
+    auth_id?: StringFilter<"Admin"> | string
     first_name?: StringFilter<"Admin"> | string
     last_name?: StringFilter<"Admin"> | string
     email?: StringFilter<"Admin"> | string
@@ -38235,6 +38333,8 @@ export namespace Prisma {
 
   export type AdminOrderByWithRelationInput = {
     id?: SortOrder
+    role?: SortOrder
+    auth_id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
@@ -38245,11 +38345,13 @@ export namespace Prisma {
   }
 
   export type AdminWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     email?: string
     AND?: AdminWhereInput | AdminWhereInput[]
     OR?: AdminWhereInput[]
     NOT?: AdminWhereInput | AdminWhereInput[]
+    role?: EnumAdminRoleFilter<"Admin"> | $Enums.AdminRole
+    auth_id?: StringFilter<"Admin"> | string
     first_name?: StringFilter<"Admin"> | string
     last_name?: StringFilter<"Admin"> | string
     whatsapp_phone_number?: StringFilter<"Admin"> | string
@@ -38260,21 +38362,27 @@ export namespace Prisma {
 
   export type AdminOrderByWithAggregationInput = {
     id?: SortOrder
+    role?: SortOrder
+    auth_id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
     whatsapp_phone_number?: SortOrder
     picture?: SortOrder
     _count?: AdminCountOrderByAggregateInput
+    _avg?: AdminAvgOrderByAggregateInput
     _max?: AdminMaxOrderByAggregateInput
     _min?: AdminMinOrderByAggregateInput
+    _sum?: AdminSumOrderByAggregateInput
   }
 
   export type AdminScalarWhereWithAggregatesInput = {
     AND?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
     OR?: AdminScalarWhereWithAggregatesInput[]
     NOT?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Admin"> | string
+    id?: IntWithAggregatesFilter<"Admin"> | number
+    role?: EnumAdminRoleWithAggregatesFilter<"Admin"> | $Enums.AdminRole
+    auth_id?: StringWithAggregatesFilter<"Admin"> | string
     first_name?: StringWithAggregatesFilter<"Admin"> | string
     last_name?: StringWithAggregatesFilter<"Admin"> | string
     email?: StringWithAggregatesFilter<"Admin"> | string
@@ -38287,7 +38395,7 @@ export namespace Prisma {
     OR?: DonationLinkWhereInput[]
     NOT?: DonationLinkWhereInput | DonationLinkWhereInput[]
     id?: IntFilter<"DonationLink"> | number
-    admin_id?: StringFilter<"DonationLink"> | string
+    admin_id?: IntFilter<"DonationLink"> | number
     currency_code?: EnumCurrencyCodeFilter<"DonationLink"> | $Enums.CurrencyCode
     link?: StringFilter<"DonationLink"> | string
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
@@ -38306,7 +38414,7 @@ export namespace Prisma {
     AND?: DonationLinkWhereInput | DonationLinkWhereInput[]
     OR?: DonationLinkWhereInput[]
     NOT?: DonationLinkWhereInput | DonationLinkWhereInput[]
-    admin_id?: StringFilter<"DonationLink"> | string
+    admin_id?: IntFilter<"DonationLink"> | number
     currency_code?: EnumCurrencyCodeFilter<"DonationLink"> | $Enums.CurrencyCode
     link?: StringFilter<"DonationLink"> | string
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
@@ -38329,7 +38437,7 @@ export namespace Prisma {
     OR?: DonationLinkScalarWhereWithAggregatesInput[]
     NOT?: DonationLinkScalarWhereWithAggregatesInput | DonationLinkScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"DonationLink"> | number
-    admin_id?: StringWithAggregatesFilter<"DonationLink"> | string
+    admin_id?: IntWithAggregatesFilter<"DonationLink"> | number
     currency_code?: EnumCurrencyCodeWithAggregatesFilter<"DonationLink"> | $Enums.CurrencyCode
     link?: StringWithAggregatesFilter<"DonationLink"> | string
   }
@@ -38658,7 +38766,7 @@ export namespace Prisma {
     NOT?: ProductWhereInput | ProductWhereInput[]
     id?: UuidFilter<"Product"> | string
     category_id?: IntFilter<"Product"> | number
-    admin_id?: StringFilter<"Product"> | string
+    admin_id?: IntFilter<"Product"> | number
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
     drive_file_id?: StringNullableFilter<"Product"> | string | null
@@ -38716,7 +38824,7 @@ export namespace Prisma {
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
     category_id?: IntFilter<"Product"> | number
-    admin_id?: StringFilter<"Product"> | string
+    admin_id?: IntFilter<"Product"> | number
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
     drive_file_id?: StringNullableFilter<"Product"> | string | null
@@ -38767,7 +38875,7 @@ export namespace Prisma {
     NOT?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Product"> | string
     category_id?: IntWithAggregatesFilter<"Product"> | number
-    admin_id?: StringWithAggregatesFilter<"Product"> | string
+    admin_id?: IntWithAggregatesFilter<"Product"> | number
     owner_id?: IntWithAggregatesFilter<"Product"> | number
     license_id?: IntWithAggregatesFilter<"Product"> | number
     drive_file_id?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -40091,7 +40199,8 @@ export namespace Prisma {
   }
 
   export type AdminCreateInput = {
-    id: string
+    role: $Enums.AdminRole
+    auth_id: string
     first_name: string
     last_name: string
     email: string
@@ -40102,7 +40211,9 @@ export namespace Prisma {
   }
 
   export type AdminUncheckedCreateInput = {
-    id: string
+    id?: number
+    role: $Enums.AdminRole
+    auth_id: string
     first_name: string
     last_name: string
     email: string
@@ -40113,7 +40224,8 @@ export namespace Prisma {
   }
 
   export type AdminUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    auth_id?: StringFieldUpdateOperationsInput | string
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -40124,7 +40236,9 @@ export namespace Prisma {
   }
 
   export type AdminUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    auth_id?: StringFieldUpdateOperationsInput | string
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -40135,7 +40249,9 @@ export namespace Prisma {
   }
 
   export type AdminCreateManyInput = {
-    id: string
+    id?: number
+    role: $Enums.AdminRole
+    auth_id: string
     first_name: string
     last_name: string
     email: string
@@ -40144,7 +40260,8 @@ export namespace Prisma {
   }
 
   export type AdminUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    auth_id?: StringFieldUpdateOperationsInput | string
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -40153,7 +40270,9 @@ export namespace Prisma {
   }
 
   export type AdminUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    auth_id?: StringFieldUpdateOperationsInput | string
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -40169,7 +40288,7 @@ export namespace Prisma {
 
   export type DonationLinkUncheckedCreateInput = {
     id?: number
-    admin_id: string
+    admin_id: number
     currency_code: $Enums.CurrencyCode
     link: string
   }
@@ -40182,14 +40301,14 @@ export namespace Prisma {
 
   export type DonationLinkUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     link?: StringFieldUpdateOperationsInput | string
   }
 
   export type DonationLinkCreateManyInput = {
     id?: number
-    admin_id: string
+    admin_id: number
     currency_code: $Enums.CurrencyCode
     link: string
   }
@@ -40201,7 +40320,7 @@ export namespace Prisma {
 
   export type DonationLinkUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     link?: StringFieldUpdateOperationsInput | string
   }
@@ -40561,7 +40680,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -40607,7 +40726,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40630,7 +40749,7 @@ export namespace Prisma {
   export type ProductCreateManyInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -40660,7 +40779,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41960,6 +42079,24 @@ export namespace Prisma {
     message?: StringFieldUpdateOperationsInput | string
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type EnumAdminRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.AdminRole | EnumAdminRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAdminRoleFilter<$PrismaModel> | $Enums.AdminRole
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -41997,6 +42134,8 @@ export namespace Prisma {
 
   export type AdminCountOrderByAggregateInput = {
     id?: SortOrder
+    role?: SortOrder
+    auth_id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
@@ -42004,8 +42143,14 @@ export namespace Prisma {
     picture?: SortOrder
   }
 
+  export type AdminAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type AdminMaxOrderByAggregateInput = {
     id?: SortOrder
+    role?: SortOrder
+    auth_id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
@@ -42015,11 +42160,43 @@ export namespace Prisma {
 
   export type AdminMinOrderByAggregateInput = {
     id?: SortOrder
+    role?: SortOrder
+    auth_id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
     whatsapp_phone_number?: SortOrder
     picture?: SortOrder
+  }
+
+  export type AdminSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumAdminRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AdminRole | EnumAdminRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAdminRoleWithAggregatesFilter<$PrismaModel> | $Enums.AdminRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAdminRoleFilter<$PrismaModel>
+    _max?: NestedEnumAdminRoleFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -42038,17 +42215,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type EnumCurrencyCodeFilter<$PrismaModel = never> = {
@@ -42072,6 +42238,7 @@ export namespace Prisma {
 
   export type DonationLinkAvgOrderByAggregateInput = {
     id?: SortOrder
+    admin_id?: SortOrder
   }
 
   export type DonationLinkMaxOrderByAggregateInput = {
@@ -42090,22 +42257,7 @@ export namespace Prisma {
 
   export type DonationLinkSumOrderByAggregateInput = {
     id?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
+    admin_id?: SortOrder
   }
 
   export type EnumCurrencyCodeWithAggregatesFilter<$PrismaModel = never> = {
@@ -42547,6 +42699,7 @@ export namespace Prisma {
 
   export type ProductAvgOrderByAggregateInput = {
     category_id?: SortOrder
+    admin_id?: SortOrder
     owner_id?: SortOrder
     license_id?: SortOrder
     created_at?: SortOrder
@@ -42589,6 +42742,7 @@ export namespace Prisma {
 
   export type ProductSumOrderByAggregateInput = {
     category_id?: SortOrder
+    admin_id?: SortOrder
     owner_id?: SortOrder
     license_id?: SortOrder
     created_at?: SortOrder
@@ -43643,6 +43797,10 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
+  export type EnumAdminRoleFieldUpdateOperationsInput = {
+    set?: $Enums.AdminRole
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -43673,6 +43831,14 @@ export namespace Prisma {
     update?: ProductUpdateWithWhereUniqueWithoutAdminInput | ProductUpdateWithWhereUniqueWithoutAdminInput[]
     updateMany?: ProductUpdateManyWithWhereWithoutAdminInput | ProductUpdateManyWithWhereWithoutAdminInput[]
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type DonationLinkUncheckedUpdateManyWithoutAdminNestedInput = {
@@ -43719,14 +43885,6 @@ export namespace Prisma {
     upsert?: AdminUpsertWithoutDonation_linksInput
     connect?: AdminWhereUniqueInput
     update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutDonation_linksInput, AdminUpdateWithoutDonation_linksInput>, AdminUncheckedUpdateWithoutDonation_linksInput>
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type ProductCreateNestedManyWithoutOwnerInput = {
@@ -44947,6 +45105,24 @@ export namespace Prisma {
     update?: XOR<XOR<TestimonialUpdateToOneWithWhereWithoutTranslationsInput, TestimonialUpdateWithoutTranslationsInput>, TestimonialUncheckedUpdateWithoutTranslationsInput>
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumAdminRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.AdminRole | EnumAdminRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAdminRoleFilter<$PrismaModel> | $Enums.AdminRole
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -44959,41 +45135,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
-  }
-
-  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type NestedEnumCurrencyCodeFilter<$PrismaModel = never> = {
-    equals?: $Enums.CurrencyCode | EnumCurrencyCodeFieldRefInput<$PrismaModel>
-    in?: $Enums.CurrencyCode[] | ListEnumCurrencyCodeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CurrencyCode[] | ListEnumCurrencyCodeFieldRefInput<$PrismaModel>
-    not?: NestedEnumCurrencyCodeFilter<$PrismaModel> | $Enums.CurrencyCode
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -45021,6 +45162,40 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumAdminRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AdminRole | EnumAdminRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAdminRoleWithAggregatesFilter<$PrismaModel> | $Enums.AdminRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAdminRoleFilter<$PrismaModel>
+    _max?: NestedEnumAdminRoleFilter<$PrismaModel>
+  }
+
+  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCurrencyCodeFilter<$PrismaModel = never> = {
+    equals?: $Enums.CurrencyCode | EnumCurrencyCodeFieldRefInput<$PrismaModel>
+    in?: $Enums.CurrencyCode[] | ListEnumCurrencyCodeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CurrencyCode[] | ListEnumCurrencyCodeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCurrencyCodeFilter<$PrismaModel> | $Enums.CurrencyCode
   }
 
   export type NestedEnumCurrencyCodeWithAggregatesFilter<$PrismaModel = never> = {
@@ -45373,7 +45548,7 @@ export namespace Prisma {
     OR?: DonationLinkScalarWhereInput[]
     NOT?: DonationLinkScalarWhereInput | DonationLinkScalarWhereInput[]
     id?: IntFilter<"DonationLink"> | number
-    admin_id?: StringFilter<"DonationLink"> | string
+    admin_id?: IntFilter<"DonationLink"> | number
     currency_code?: EnumCurrencyCodeFilter<"DonationLink"> | $Enums.CurrencyCode
     link?: StringFilter<"DonationLink"> | string
   }
@@ -45400,7 +45575,7 @@ export namespace Prisma {
     NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
     id?: UuidFilter<"Product"> | string
     category_id?: IntFilter<"Product"> | number
-    admin_id?: StringFilter<"Product"> | string
+    admin_id?: IntFilter<"Product"> | number
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
     drive_file_id?: StringNullableFilter<"Product"> | string | null
@@ -45415,7 +45590,8 @@ export namespace Prisma {
   }
 
   export type AdminCreateWithoutDonation_linksInput = {
-    id: string
+    role: $Enums.AdminRole
+    auth_id: string
     first_name: string
     last_name: string
     email: string
@@ -45425,7 +45601,9 @@ export namespace Prisma {
   }
 
   export type AdminUncheckedCreateWithoutDonation_linksInput = {
-    id: string
+    id?: number
+    role: $Enums.AdminRole
+    auth_id: string
     first_name: string
     last_name: string
     email: string
@@ -45451,7 +45629,8 @@ export namespace Prisma {
   }
 
   export type AdminUpdateWithoutDonation_linksInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    auth_id?: StringFieldUpdateOperationsInput | string
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -45461,7 +45640,9 @@ export namespace Prisma {
   }
 
   export type AdminUncheckedUpdateWithoutDonation_linksInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    auth_id?: StringFieldUpdateOperationsInput | string
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -45495,7 +45676,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutOwnerInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     license_id: number
     drive_file_id?: string | null
     download_link?: string | null
@@ -45644,7 +45825,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutLicenseInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     drive_file_id?: string | null
     download_link?: string | null
@@ -45805,7 +45986,7 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateWithoutCategoryInput = {
     id?: string
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -45852,7 +46033,8 @@ export namespace Prisma {
   }
 
   export type AdminCreateWithoutProductsInput = {
-    id: string
+    role: $Enums.AdminRole
+    auth_id: string
     first_name: string
     last_name: string
     email: string
@@ -45862,7 +46044,9 @@ export namespace Prisma {
   }
 
   export type AdminUncheckedCreateWithoutProductsInput = {
-    id: string
+    id?: number
+    role: $Enums.AdminRole
+    auth_id: string
     first_name: string
     last_name: string
     email: string
@@ -46083,7 +46267,8 @@ export namespace Prisma {
   }
 
   export type AdminUpdateWithoutProductsInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    auth_id?: StringFieldUpdateOperationsInput | string
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -46093,7 +46278,9 @@ export namespace Prisma {
   }
 
   export type AdminUncheckedUpdateWithoutProductsInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    auth_id?: StringFieldUpdateOperationsInput | string
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -46361,7 +46548,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutTranslationsInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -46421,7 +46608,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutTranslationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46465,7 +46652,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutVersionsInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -46547,7 +46734,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutVersionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46661,7 +46848,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutDiscountInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -46721,7 +46908,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutDiscountInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46765,7 +46952,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutCouponInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -46825,7 +47012,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutCouponInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46869,7 +47056,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutImagesInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -46929,7 +47116,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutImagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46973,7 +47160,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutVariantsInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -47057,7 +47244,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutVariantsInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48195,7 +48382,7 @@ export namespace Prisma {
   export type ProductCreateManyOwnerInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     license_id: number
     drive_file_id?: string | null
     download_link?: string | null
@@ -48233,7 +48420,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48255,7 +48442,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateManyWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48335,7 +48522,7 @@ export namespace Prisma {
   export type ProductCreateManyLicenseInput = {
     id?: string
     category_id: number
-    admin_id: string
+    admin_id: number
     owner_id: number
     drive_file_id?: string | null
     download_link?: string | null
@@ -48380,7 +48567,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutLicenseInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48402,7 +48589,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateManyWithoutLicenseInput = {
     id?: StringFieldUpdateOperationsInput | string
     category_id?: IntFieldUpdateOperationsInput | number
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
     download_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48437,7 +48624,7 @@ export namespace Prisma {
 
   export type ProductCreateManyCategoryInput = {
     id?: string
-    admin_id: string
+    admin_id: number
     owner_id: number
     license_id: number
     drive_file_id?: string | null
@@ -48475,7 +48662,7 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48497,7 +48684,7 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateManyWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    admin_id?: StringFieldUpdateOperationsInput | string
+    admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null

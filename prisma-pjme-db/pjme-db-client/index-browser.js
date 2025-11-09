@@ -122,6 +122,8 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.AdminScalarFieldEnum = {
   id: 'id',
+  role: 'role',
+  auth_id: 'auth_id',
   first_name: 'first_name',
   last_name: 'last_name',
   email: 'email',
@@ -398,6 +400,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.AdminRole = exports.$Enums.AdminRole = {
+  owner: 'owner',
+  staff: 'staff'
+};
+
 exports.CurrencyCode = exports.$Enums.CurrencyCode = {
   IDR: 'IDR',
   USD: 'USD'

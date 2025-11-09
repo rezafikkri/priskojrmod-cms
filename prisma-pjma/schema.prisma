@@ -19,10 +19,10 @@ datasource db {
 }
 
 model SecretKeyLicense {
-  id             Int  @id @default(autoincrement())
-  product_id     String  @unique @db.Uuid
-  key            String  @db.VarChar(100)
-  app_name       String  @db.VarChar(50)
+  id             Int    @id @default(autoincrement())
+  product_id     String @unique @db.Uuid
+  key            String @db.VarChar(100)
+  app_name       String @db.VarChar(50)
   created_at     Int
   regenerated_at Int?
 

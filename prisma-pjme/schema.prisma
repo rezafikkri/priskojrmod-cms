@@ -18,8 +18,19 @@ datasource db {
   directUrl = env("DIRECT_URL_PJME")
 }
 
+enum AdminRole {
+  owner
+  staff
+
+  @@map("admin_role")
+}
+
 model Admin {
-  id                    String @id @db.VarChar(255)
+  id Int @id @default(autoincrement()) @db.SmallInt
+
+  role    AdminRole
+  auth_id String    @db.VarChar(255)
+
   first_name            String @db.VarChar(100)
   last_name             String @db.VarChar(100)
   email                 String @unique @db.VarChar(254)
@@ -41,7 +52,7 @@ enum CurrencyCode {
 
 model DonationLink {
   id            Int          @id @default(autoincrement())
-  admin_id      String       @db.VarChar(255)
+  admin_id      Int          @db.SmallInt
   currency_code CurrencyCode
   link          String       @db.VarChar(100)
 
@@ -83,7 +94,7 @@ model Customer {
 }
 
 model License {
-  id         Int    @id @default(autoincrement())
+  id         Int @id @default(autoincrement())
   created_at Int
   updated_at Int
 
@@ -127,7 +138,7 @@ enum PriceType {
 model Product {
   id          String @id @default(uuid(7)) @db.Uuid
   category_id Int
-  admin_id    String @db.VarChar(255)
+  admin_id    Int    @db.SmallInt
   owner_id    Int
   license_id  Int
 
@@ -262,7 +273,7 @@ enum Language {
 }
 
 model TermsOfService {
-  id         Int    @id @default(autoincrement()) @db.SmallInt
+  id         Int @id @default(autoincrement()) @db.SmallInt
   created_at Int
   updated_at Int
 
@@ -283,7 +294,7 @@ model TermsOfServiceTranslation {
 }
 
 model PrivacyPolicy {
-  id         Int    @id @default(autoincrement()) @db.SmallInt
+  id         Int @id @default(autoincrement()) @db.SmallInt
   created_at Int
   updated_at Int
 
@@ -323,7 +334,7 @@ model AboutUsTranslation {
 }
 
 model Faq {
-  id         Int    @id @default(autoincrement())
+  id         Int @id @default(autoincrement())
   created_at Int
   updated_at Int
 
@@ -445,7 +456,7 @@ model Feedback {
   name       String? @db.VarChar(100)
   email      String? @db.VarChar(254)
   message    String
-  created_at Int  @unique
+  created_at Int     @unique
 
   @@map("feedbacks")
 }

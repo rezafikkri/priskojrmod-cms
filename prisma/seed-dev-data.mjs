@@ -191,6 +191,8 @@ export default async function seedDevData() {
     where: { is_banned: false },
   });
 
+  if (products.length < 1 || customers.length < 0) return;
+
   const transactions = [];
   for (let i = 0; i < 1; i++) {
     let transactionDetails = [];
