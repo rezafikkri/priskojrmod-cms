@@ -25,7 +25,7 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { useState } from 'react';
 import { CurrencyCode } from '@/constants/enums';
 import { formatCurrency } from '@/lib/format-currency';
-import { shortNumber } from '@/lib/short-number';
+import { formatNumber } from '@/lib/format-number';
 import { formatMonthYear } from '@/lib/format-date';
 
 const chartData = [
@@ -110,7 +110,7 @@ export default function ChartTransactions() {
               tickLine={false}
               tickMargin={8}
               tickCount={4}
-              tickFormatter={(value) => shortNumber(value)}
+              tickFormatter={(value) => formatNumber({ value, notation: 'compact' })}
             />
             <XAxis
               dataKey="timestamp"
@@ -162,6 +162,7 @@ export default function ChartTransactions() {
               fill={`url(#fill${activeCurrency})`}
               fillOpacity={0.4}
               stroke={`var(--color-${activeCurrency})`}
+              strokeWidth={2}
             />
           </AreaChart>
         </ChartContainer>

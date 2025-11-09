@@ -29,18 +29,19 @@ import {
   SelectValue,
 } from '../ui/select';
 import { useTheme } from 'next-themes';
+import { formatNumber } from '@/lib/format-number';
 
 const topSellingProducts = [
-  { name: 'E-Book Marketing Digital 2024: Strategi Lengkap dari Nol sampai Mahir', quantity: 1247 },
-  { name: 'Course SEO Mastery Pro', quantity: 892 },
-  { name: 'Template Canva Premium Pack - 500+ Design Siap Pakai', quantity: 634 },
-  { name: 'Notion Productivity System', quantity: 570 },
-  { name: 'Instagram Preset Lightroom', quantity: 321 },
-  { name: 'Video Tutorial After Effects untuk Pemula hingga Advanced', quantity: 215 },
-  { name: 'E-Book Copywriting Formula', quantity: 143 },
-  { name: 'Figma UI Kit Dashboard', quantity: 89 },
-  { name: 'Social Media Content Calendar - Planning Template 12 Bulan', quantity: 52 },
-  { name: 'Email Marketing Templates', quantity: 50 },
+  { name: 'SEO Master Course', quantity: 2847 },
+  { name: 'Canva Template Pack', quantity: 2134 },
+  { name: 'Digital Marketing E-Book', quantity: 1992 },
+  { name: 'Notion Productivity Kit', quantity: 1428 },
+  { name: 'Lightroom Presets Bundle', quantity: 1056 },
+  { name: 'After Effects Tutorial', quantity: 823 },
+  { name: 'Copywriting Guide', quantity: 697 },
+  { name: 'Figma UI Kit', quantity: 671 },
+  { name: 'Content Calendar Template', quantity: 489 },
+  { name: 'Email Template Pack', quantity: 412 },
 ];
 
 const chartConfig = Object.fromEntries(
@@ -133,7 +134,7 @@ export default function ChartTopSellingProducts() {
                       <span className={`size-3 rounded-sm`} style={{ backgroundColor: payload[0].color }} />
                       <div>
                         <span className="font-semibold">
-                          {product.quantity}
+                          {formatNumber({ value: product.quantity})}
                         </span>
                         {' '}
                         <span className="text-zinc-800 dark:text-zinc-300">sold</span>
@@ -153,7 +154,18 @@ export default function ChartTopSellingProducts() {
                 position="right"
                 offset={8}
                 fontSize={13.5}
-                fill={theme === 'light' ? '#3f3f46' : '#d4d4d8'}
+                content={({ x, y, width, height, value }) => (
+                  <text
+                    x={x + width + 8}
+                    y={y + height / 2}
+                    dy={4}
+                    textAnchor="start"
+                    fill={theme === 'light' ? '#3f3f46' : '#d4d4d8'}
+                    fontSize={12}
+                  >
+                    {formatNumber({ value, notation: 'compact' })}
+                  </text>
+                )}
               />
             </Bar>
           </BarChart>
