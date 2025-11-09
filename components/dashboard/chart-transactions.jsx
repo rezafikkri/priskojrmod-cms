@@ -162,7 +162,7 @@ export default function ChartTransactions() {
               fill={`url(#fill${activeCurrency})`}
               fillOpacity={0.4}
               stroke={`var(--color-${activeCurrency})`}
-              strokeWidth={2}
+              strokeWidth={1.5}
             />
           </AreaChart>
         </ChartContainer>
