@@ -3,7 +3,6 @@ import {
   Users,
   Package,
   Activity,
-  DatabaseBackup,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -19,19 +18,21 @@ import Category from '../icon/category';
 import Key from '../icon/key';
 import LockPassword from '../icon/lock-password';
 import NavSidebarGroup from './nav-sidebar-group';
-import NavSidebar from './nav-sidebar';
 import UserDollar from '../icon/user-dollar';
 import Script from '../icon/script';
 import { NavUser } from './nav-user';
+import { UserCog } from 'lucide-react';
+import NavSidebarItem from './nav-sidebar-item';
+import NavSidebarItemCollapsible from './nav-sidebar-item-collapsible';
 
 // Menu items.
 const items = {
-  nav: [
+  sales: [
     { title: 'Transactions', url: '/transaction', icon: Activity },
   ],
-  customers: {
+  customer: {
     title: 'Customers',
-    icon: <UserDollar />,
+    icon: UserDollar,
     subItems: [
       { title: 'List', url: '/customer' },
       { title: 'Feedback', url: '/feedback' },
@@ -40,7 +41,7 @@ const items = {
   },
   document: {
     title: 'Document',
-    icon: <Script />,
+    icon: Script,
     subItems: [
       { title: 'Terms of Service', url: '/terms-of-service', },
       { title: 'Privacy Policy', url: '/privacy-policy' },
@@ -57,6 +58,9 @@ const items = {
   application: [
     { title: 'License Key', url: '/license-key', icon: Key },
     { title: 'Secret Key', url: '/secret-key', icon: LockPassword },
+  ],
+  system: [
+    { title: 'Admins', url: '/admin', icon: UserCog },
   ],
 };
 
@@ -76,9 +80,16 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavSidebar items={items.nav} collapsibleItems={[items.customers, items.document]} />
+        <SidebarMenu className="p-2">
+          <NavSidebarItem items={items.sales} />
+          <NavSidebarItemCollapsible item={items.customer} />
+          <NavSidebarItemCollapsible item={items.document} />
+        </SidebarMenu>
         <NavSidebarGroup label="Product" items={items.product} />
         <NavSidebarGroup label="Application" items={items.application} />
+        <SidebarMenu className="p-2">
+          <NavSidebarItem items={items.system} />
+        </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
