@@ -56,8 +56,8 @@ const items = {
     { title: 'Products', url: '/product', icon: Package },
   ],
   application: [
-    { title: 'License Key', url: '/license-key', icon: Key },
-    { title: 'Secret Key', url: '/secret-key', icon: LockPassword },
+    { title: 'License Keys', url: '/license-key', icon: Key },
+    { title: 'Secret Keys', url: '/secret-key', icon: LockPassword },
   ],
   system: [
     { title: 'Admins', url: '/admin', icon: UserCog },
