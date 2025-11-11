@@ -128,7 +128,9 @@ exports.Prisma.AdminScalarFieldEnum = {
   last_name: 'last_name',
   email: 'email',
   whatsapp_phone_number: 'whatsapp_phone_number',
-  picture: 'picture'
+  picture: 'picture',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.DonationLinkScalarFieldEnum = {

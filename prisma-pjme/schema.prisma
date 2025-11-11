@@ -29,13 +29,15 @@ model Admin {
   id Int @id @default(autoincrement()) @db.SmallInt
 
   role    AdminRole
-  auth_id String    @db.VarChar(255) @unique
+  auth_id String?    @db.VarChar(255) @unique
 
   first_name            String @db.VarChar(100)
   last_name             String @db.VarChar(100)
   email                 String @unique @db.VarChar(254)
   whatsapp_phone_number String @db.VarChar(20)
   picture               String @db.VarChar(255)
+  created_at            Int
+  updated_at            Int
 
   donation_links DonationLink[]
   products       Product[]

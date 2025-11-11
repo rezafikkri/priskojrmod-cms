@@ -4123,10 +4123,14 @@ export namespace Prisma {
 
   export type AdminAvgAggregateOutputType = {
     id: number | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type AdminSumAggregateOutputType = {
     id: number | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type AdminMinAggregateOutputType = {
@@ -4138,6 +4142,8 @@ export namespace Prisma {
     email: string | null
     whatsapp_phone_number: string | null
     picture: string | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type AdminMaxAggregateOutputType = {
@@ -4149,6 +4155,8 @@ export namespace Prisma {
     email: string | null
     whatsapp_phone_number: string | null
     picture: string | null
+    created_at: number | null
+    updated_at: number | null
   }
 
   export type AdminCountAggregateOutputType = {
@@ -4160,16 +4168,22 @@ export namespace Prisma {
     email: number
     whatsapp_phone_number: number
     picture: number
+    created_at: number
+    updated_at: number
     _all: number
   }
 
 
   export type AdminAvgAggregateInputType = {
     id?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type AdminSumAggregateInputType = {
     id?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type AdminMinAggregateInputType = {
@@ -4181,6 +4195,8 @@ export namespace Prisma {
     email?: true
     whatsapp_phone_number?: true
     picture?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type AdminMaxAggregateInputType = {
@@ -4192,6 +4208,8 @@ export namespace Prisma {
     email?: true
     whatsapp_phone_number?: true
     picture?: true
+    created_at?: true
+    updated_at?: true
   }
 
   export type AdminCountAggregateInputType = {
@@ -4203,6 +4221,8 @@ export namespace Prisma {
     email?: true
     whatsapp_phone_number?: true
     picture?: true
+    created_at?: true
+    updated_at?: true
     _all?: true
   }
 
@@ -4295,12 +4315,14 @@ export namespace Prisma {
   export type AdminGroupByOutputType = {
     id: number
     role: $Enums.AdminRole
-    auth_id: string
+    auth_id: string | null
     first_name: string
     last_name: string
     email: string
     whatsapp_phone_number: string
     picture: string
+    created_at: number
+    updated_at: number
     _count: AdminCountAggregateOutputType | null
     _avg: AdminAvgAggregateOutputType | null
     _sum: AdminSumAggregateOutputType | null
@@ -4331,6 +4353,8 @@ export namespace Prisma {
     email?: boolean
     whatsapp_phone_number?: boolean
     picture?: boolean
+    created_at?: boolean
+    updated_at?: boolean
     donation_links?: boolean | Admin$donation_linksArgs<ExtArgs>
     products?: boolean | Admin$productsArgs<ExtArgs>
     _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
@@ -4345,6 +4369,8 @@ export namespace Prisma {
     email?: boolean
     whatsapp_phone_number?: boolean
     picture?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["admin"]>
 
   export type AdminSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4356,6 +4382,8 @@ export namespace Prisma {
     email?: boolean
     whatsapp_phone_number?: boolean
     picture?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }, ExtArgs["result"]["admin"]>
 
   export type AdminSelectScalar = {
@@ -4367,9 +4395,11 @@ export namespace Prisma {
     email?: boolean
     whatsapp_phone_number?: boolean
     picture?: boolean
+    created_at?: boolean
+    updated_at?: boolean
   }
 
-  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "role" | "auth_id" | "first_name" | "last_name" | "email" | "whatsapp_phone_number" | "picture", ExtArgs["result"]["admin"]>
+  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "role" | "auth_id" | "first_name" | "last_name" | "email" | "whatsapp_phone_number" | "picture" | "created_at" | "updated_at", ExtArgs["result"]["admin"]>
   export type AdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     donation_links?: boolean | Admin$donation_linksArgs<ExtArgs>
     products?: boolean | Admin$productsArgs<ExtArgs>
@@ -4387,12 +4417,14 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       role: $Enums.AdminRole
-      auth_id: string
+      auth_id: string | null
       first_name: string
       last_name: string
       email: string
       whatsapp_phone_number: string
       picture: string
+      created_at: number
+      updated_at: number
     }, ExtArgs["result"]["admin"]>
     composites: {}
   }
@@ -4826,6 +4858,8 @@ export namespace Prisma {
     readonly email: FieldRef<"Admin", 'String'>
     readonly whatsapp_phone_number: FieldRef<"Admin", 'String'>
     readonly picture: FieldRef<"Admin", 'String'>
+    readonly created_at: FieldRef<"Admin", 'Int'>
+    readonly updated_at: FieldRef<"Admin", 'Int'>
   }
     
 
@@ -37774,7 +37808,9 @@ export namespace Prisma {
     last_name: 'last_name',
     email: 'email',
     whatsapp_phone_number: 'whatsapp_phone_number',
-    picture: 'picture'
+    picture: 'picture',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
   };
 
   export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
@@ -38321,12 +38357,14 @@ export namespace Prisma {
     NOT?: AdminWhereInput | AdminWhereInput[]
     id?: IntFilter<"Admin"> | number
     role?: EnumAdminRoleFilter<"Admin"> | $Enums.AdminRole
-    auth_id?: StringFilter<"Admin"> | string
+    auth_id?: StringNullableFilter<"Admin"> | string | null
     first_name?: StringFilter<"Admin"> | string
     last_name?: StringFilter<"Admin"> | string
     email?: StringFilter<"Admin"> | string
     whatsapp_phone_number?: StringFilter<"Admin"> | string
     picture?: StringFilter<"Admin"> | string
+    created_at?: IntFilter<"Admin"> | number
+    updated_at?: IntFilter<"Admin"> | number
     donation_links?: DonationLinkListRelationFilter
     products?: ProductListRelationFilter
   }
@@ -38334,12 +38372,14 @@ export namespace Prisma {
   export type AdminOrderByWithRelationInput = {
     id?: SortOrder
     role?: SortOrder
-    auth_id?: SortOrder
+    auth_id?: SortOrderInput | SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
     whatsapp_phone_number?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     donation_links?: DonationLinkOrderByRelationAggregateInput
     products?: ProductOrderByRelationAggregateInput
   }
@@ -38356,6 +38396,8 @@ export namespace Prisma {
     last_name?: StringFilter<"Admin"> | string
     whatsapp_phone_number?: StringFilter<"Admin"> | string
     picture?: StringFilter<"Admin"> | string
+    created_at?: IntFilter<"Admin"> | number
+    updated_at?: IntFilter<"Admin"> | number
     donation_links?: DonationLinkListRelationFilter
     products?: ProductListRelationFilter
   }, "id" | "auth_id" | "email">
@@ -38363,12 +38405,14 @@ export namespace Prisma {
   export type AdminOrderByWithAggregationInput = {
     id?: SortOrder
     role?: SortOrder
-    auth_id?: SortOrder
+    auth_id?: SortOrderInput | SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
     email?: SortOrder
     whatsapp_phone_number?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     _count?: AdminCountOrderByAggregateInput
     _avg?: AdminAvgOrderByAggregateInput
     _max?: AdminMaxOrderByAggregateInput
@@ -38382,12 +38426,14 @@ export namespace Prisma {
     NOT?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Admin"> | number
     role?: EnumAdminRoleWithAggregatesFilter<"Admin"> | $Enums.AdminRole
-    auth_id?: StringWithAggregatesFilter<"Admin"> | string
+    auth_id?: StringNullableWithAggregatesFilter<"Admin"> | string | null
     first_name?: StringWithAggregatesFilter<"Admin"> | string
     last_name?: StringWithAggregatesFilter<"Admin"> | string
     email?: StringWithAggregatesFilter<"Admin"> | string
     whatsapp_phone_number?: StringWithAggregatesFilter<"Admin"> | string
     picture?: StringWithAggregatesFilter<"Admin"> | string
+    created_at?: IntWithAggregatesFilter<"Admin"> | number
+    updated_at?: IntWithAggregatesFilter<"Admin"> | number
   }
 
   export type DonationLinkWhereInput = {
@@ -40200,12 +40246,14 @@ export namespace Prisma {
 
   export type AdminCreateInput = {
     role: $Enums.AdminRole
-    auth_id: string
+    auth_id?: string | null
     first_name: string
     last_name: string
     email: string
     whatsapp_phone_number: string
     picture: string
+    created_at: number
+    updated_at: number
     donation_links?: DonationLinkCreateNestedManyWithoutAdminInput
     products?: ProductCreateNestedManyWithoutAdminInput
   }
@@ -40213,24 +40261,28 @@ export namespace Prisma {
   export type AdminUncheckedCreateInput = {
     id?: number
     role: $Enums.AdminRole
-    auth_id: string
+    auth_id?: string | null
     first_name: string
     last_name: string
     email: string
     whatsapp_phone_number: string
     picture: string
+    created_at: number
+    updated_at: number
     donation_links?: DonationLinkUncheckedCreateNestedManyWithoutAdminInput
     products?: ProductUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUpdateInput = {
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
-    auth_id?: StringFieldUpdateOperationsInput | string
+    auth_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     whatsapp_phone_number?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     donation_links?: DonationLinkUpdateManyWithoutAdminNestedInput
     products?: ProductUpdateManyWithoutAdminNestedInput
   }
@@ -40238,12 +40290,14 @@ export namespace Prisma {
   export type AdminUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
-    auth_id?: StringFieldUpdateOperationsInput | string
+    auth_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     whatsapp_phone_number?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     donation_links?: DonationLinkUncheckedUpdateManyWithoutAdminNestedInput
     products?: ProductUncheckedUpdateManyWithoutAdminNestedInput
   }
@@ -40251,33 +40305,39 @@ export namespace Prisma {
   export type AdminCreateManyInput = {
     id?: number
     role: $Enums.AdminRole
-    auth_id: string
+    auth_id?: string | null
     first_name: string
     last_name: string
     email: string
     whatsapp_phone_number: string
     picture: string
+    created_at: number
+    updated_at: number
   }
 
   export type AdminUpdateManyMutationInput = {
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
-    auth_id?: StringFieldUpdateOperationsInput | string
+    auth_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     whatsapp_phone_number?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type AdminUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
-    auth_id?: StringFieldUpdateOperationsInput | string
+    auth_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     whatsapp_phone_number?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
   }
 
   export type DonationLinkCreateInput = {
@@ -42097,6 +42157,21 @@ export namespace Prisma {
     not?: NestedEnumAdminRoleFilter<$PrismaModel> | $Enums.AdminRole
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -42124,6 +42199,11 @@ export namespace Prisma {
     none?: ProductWhereInput
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type DonationLinkOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -42141,10 +42221,14 @@ export namespace Prisma {
     email?: SortOrder
     whatsapp_phone_number?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type AdminAvgOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type AdminMaxOrderByAggregateInput = {
@@ -42156,6 +42240,8 @@ export namespace Prisma {
     email?: SortOrder
     whatsapp_phone_number?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type AdminMinOrderByAggregateInput = {
@@ -42167,10 +42253,14 @@ export namespace Prisma {
     email?: SortOrder
     whatsapp_phone_number?: SortOrder
     picture?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type AdminSumOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -42197,6 +42287,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAdminRoleFilter<$PrismaModel>
     _max?: NestedEnumAdminRoleFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -42324,21 +42432,6 @@ export namespace Prisma {
     not?: NestedUuidFilter<$PrismaModel> | string
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -42359,11 +42452,6 @@ export namespace Prisma {
     every?: TransactionWhereInput
     some?: TransactionWhereInput
     none?: TransactionWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type TransactionOrderByRelationAggregateInput = {
@@ -42437,24 +42525,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -43801,8 +43871,20 @@ export namespace Prisma {
     set?: $Enums.AdminRole
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type DonationLinkUpdateManyWithoutAdminNestedInput = {
@@ -43831,14 +43913,6 @@ export namespace Prisma {
     update?: ProductUpdateWithWhereUniqueWithoutAdminInput | ProductUpdateWithWhereUniqueWithoutAdminInput[]
     updateMany?: ProductUpdateManyWithWhereWithoutAdminInput | ProductUpdateManyWithWhereWithoutAdminInput[]
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type DonationLinkUncheckedUpdateManyWithoutAdminNestedInput = {
@@ -43941,10 +44015,6 @@ export namespace Prisma {
     connectOrCreate?: TransactionCreateOrConnectWithoutCustomerInput | TransactionCreateOrConnectWithoutCustomerInput[]
     createMany?: TransactionCreateManyCustomerInputEnvelope
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -45123,6 +45193,20 @@ export namespace Prisma {
     not?: NestedEnumAdminRoleFilter<$PrismaModel> | $Enums.AdminRole
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -45174,6 +45258,34 @@ export namespace Prisma {
     _max?: NestedEnumAdminRoleFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -45219,34 +45331,9 @@ export namespace Prisma {
     not?: NestedUuidFilter<$PrismaModel> | string
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -45261,23 +45348,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -45591,24 +45661,28 @@ export namespace Prisma {
 
   export type AdminCreateWithoutDonation_linksInput = {
     role: $Enums.AdminRole
-    auth_id: string
+    auth_id?: string | null
     first_name: string
     last_name: string
     email: string
     whatsapp_phone_number: string
     picture: string
+    created_at: number
+    updated_at: number
     products?: ProductCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUncheckedCreateWithoutDonation_linksInput = {
     id?: number
     role: $Enums.AdminRole
-    auth_id: string
+    auth_id?: string | null
     first_name: string
     last_name: string
     email: string
     whatsapp_phone_number: string
     picture: string
+    created_at: number
+    updated_at: number
     products?: ProductUncheckedCreateNestedManyWithoutAdminInput
   }
 
@@ -45630,24 +45704,28 @@ export namespace Prisma {
 
   export type AdminUpdateWithoutDonation_linksInput = {
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
-    auth_id?: StringFieldUpdateOperationsInput | string
+    auth_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     whatsapp_phone_number?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUpdateManyWithoutAdminNestedInput
   }
 
   export type AdminUncheckedUpdateWithoutDonation_linksInput = {
     id?: IntFieldUpdateOperationsInput | number
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
-    auth_id?: StringFieldUpdateOperationsInput | string
+    auth_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     whatsapp_phone_number?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     products?: ProductUncheckedUpdateManyWithoutAdminNestedInput
   }
 
@@ -46034,24 +46112,28 @@ export namespace Prisma {
 
   export type AdminCreateWithoutProductsInput = {
     role: $Enums.AdminRole
-    auth_id: string
+    auth_id?: string | null
     first_name: string
     last_name: string
     email: string
     whatsapp_phone_number: string
     picture: string
+    created_at: number
+    updated_at: number
     donation_links?: DonationLinkCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUncheckedCreateWithoutProductsInput = {
     id?: number
     role: $Enums.AdminRole
-    auth_id: string
+    auth_id?: string | null
     first_name: string
     last_name: string
     email: string
     whatsapp_phone_number: string
     picture: string
+    created_at: number
+    updated_at: number
     donation_links?: DonationLinkUncheckedCreateNestedManyWithoutAdminInput
   }
 
@@ -46268,24 +46350,28 @@ export namespace Prisma {
 
   export type AdminUpdateWithoutProductsInput = {
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
-    auth_id?: StringFieldUpdateOperationsInput | string
+    auth_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     whatsapp_phone_number?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     donation_links?: DonationLinkUpdateManyWithoutAdminNestedInput
   }
 
   export type AdminUncheckedUpdateWithoutProductsInput = {
     id?: IntFieldUpdateOperationsInput | number
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
-    auth_id?: StringFieldUpdateOperationsInput | string
+    auth_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     whatsapp_phone_number?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
+    created_at?: IntFieldUpdateOperationsInput | number
+    updated_at?: IntFieldUpdateOperationsInput | number
     donation_links?: DonationLinkUncheckedUpdateManyWithoutAdminNestedInput
   }
 

@@ -27,41 +27,55 @@ import { MoreHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
-import { removeCategory } from '@/actions/category-actions';
+// import { removeAdmin } from '@/actions/admin-actions';
 import { getTableHeaderWidth } from '@/lib/utils';
+import ProfileBadge from '../ui/profile-badge';
 
-export default function DataTable({ categories: data }) {
-  const [categories, setCategories] = useState(data);
+export default function DataTable({ admins: data }) {
+  const [admins, setAdmins] = useState(data);
   const [deletingIds, setDeletingIds] = useState([]);
 
   async function handleDelete(id) {
-    // This is for add opacity-50 style to deleted row
-    setDeletingIds((prevDeletingIds) => [...prevDeletingIds, id]);
-    // show loading
-    const toastId = toast.loading('Deleting category...');
-    
-    const removeRes = await removeCategory(id);
-
-    setDeletingIds((prevDeletingIds) =>
-      prevDeletingIds.filter((deletingId) => deletingId !== id)
-    );
-
-    if (removeRes.status === 'success') {
-      setCategories((prevCategories) => prevCategories.filter(category => category.id !== id));
-      toast.success('Category deleted successfully.', {
-        id: toastId,
-      });
-    } else {
-      toast.error(removeRes.message, {
-        id: toastId,
-      });
-    }
+    // // This is for add opacity-50 style to deleted row
+    // setDeletingIds((prevDeletingIds) => [...prevDeletingIds, id]);
+    // // show loading
+    // const toastId = toast.loading('Deleting admin...');
+    //
+    // const removeRes = await removeAdmin(id);
+    //
+    // setDeletingIds((prevDeletingIds) =>
+    //   prevDeletingIds.filter((deletingId) => deletingId !== id)
+    // );
+    //
+    // if (removeRes.status === 'success') {
+    //   setAdmins((prevAdmins) => prevAdmins.filter(admin => admin.id !== id));
+    //   toast.success('Admin deleted successfully.', {
+    //     id: toastId,
+    //   });
+    // } else {
+    //   toast.error(removeRes.message, {
+    //     id: toastId,
+    //   });
+    // }
   }
 
   const columns = useMemo(() => [
     {
       accessorKey: 'name',
       header: 'Name',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <ProfileBadge
+            src={row.original.picture}
+            fallbackText={row.getValue('name')}
+          />
+          <span className="text-wrap">{row.getValue('name')}</span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'email',
+      header: 'Email',
     },
     {
       accessorKey: 'created_at',
@@ -93,7 +107,7 @@ export default function DataTable({ categories: data }) {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
               <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
-                <Link href={`/category/${row.original.id}/edit`}>Edit</Link>
+                <Link href={`/admin/${row.original.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="-mx-1.5" />
               <DropdownMenuItem
@@ -111,7 +125,7 @@ export default function DataTable({ categories: data }) {
     }
   ], [deletingIds]);
   const table = useReactTable({
-    data: categories,
+    data: admins,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -167,9 +181,9 @@ export default function DataTable({ categories: data }) {
         </Table>
       </div>
 
-      {categories.length > 0 && (
+      {admins.length > 0 && (
         <p className="text-muted-foreground mt-4">
-          {categories.length} {categories.length === 1 ? 'result' : 'results'}
+          {admins.length} {admins.length === 1 ? 'result' : 'results'}
         </p>
       )}
     </>

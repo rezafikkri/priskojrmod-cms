@@ -11,6 +11,7 @@ export async function seedAdmin() {
     select: { id: true },
   });
   if (!admin) {
+    const currentTime = Math.floor(new Date().getTime() / 1000);
     await pjmeDBPrismaClient.admin.create({
       data: {
         role: 'owner',
@@ -20,6 +21,8 @@ export async function seedAdmin() {
         first_name: 'Reza',
         last_name: 'Sariful Fikri',
         whatsapp_phone_number: '+6285758438583',
+        created_at: currentTime,
+        updated_at: currentTime,
       },
       select: { id: true },
     });
