@@ -54,10 +54,11 @@ export const authOptions = {
           where: {
             auth_id: profile.sub,
           },
-          select: { id: true, picture: true },
+          select: { id: true, picture: true, role: true },
         });
 
         token.userId = user.id;
+        token.role = user.role;
         token.picture = user.picture;
         token.first_name = profile.given_name;
         token.accessToken = account.access_token;
@@ -70,6 +71,7 @@ export const authOptions = {
     },
     async session({ session, token }) {
       session.user.id = token.userId;
+      session.user.role = token.role;
       session.user.image = token.picture;
       session.user.name = token.first_name;
       session.accessToken = token.accessToken;

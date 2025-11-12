@@ -1,13 +1,17 @@
 import { getToken } from 'next-auth/jwt';
 import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
+import { isOwnerAdmin } from './lib/utils';
 
 export default withAuth(
   async function middleware(req) {
     const { pathname } = req.nextUrl;
     const token = await getToken({ req });
 
-    if (pathname === '/signin' && token) {
+    if (
+      (pathname === '/signin' && token) ||
+      (pathname.startsWith('/admin') && !isOwnerAdmin(token?.role))
+    ) {
       return NextResponse.redirect(new URL('/', req.url));
     }
 

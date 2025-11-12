@@ -24,9 +24,12 @@ import { NavUser } from './nav-user';
 import { UserCog } from 'lucide-react';
 import NavSidebarItem from './nav-sidebar-item';
 import NavSidebarItemCollapsible from './nav-sidebar-item-collapsible';
+import { isOwnerAdmin } from '@/lib/utils';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth';
 
-// Menu items.
-const items = {
+// Menu items
+const menu = {
   sales: [
     { title: 'Transactions', url: '/transaction', icon: Activity },
   ],
@@ -64,7 +67,11 @@ const items = {
   ],
 };
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  const session = await getServerSession(authOptions);
+  let systemMenu = menu.system;
+  if (!isOwnerAdmin(session.user.role)) systemMenu = systemMenu.filter(m => m.title !== 'Admins');
+
   return (
     <Sidebar variant="inset" className="h-full">
       <SidebarHeader>
@@ -81,15 +88,17 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="p-2">
-          <NavSidebarItem items={items.sales} />
-          <NavSidebarItemCollapsible item={items.customer} />
-          <NavSidebarItemCollapsible item={items.document} />
+          <NavSidebarItem items={menu.sales} />
+          <NavSidebarItemCollapsible item={menu.customer} />
+          <NavSidebarItemCollapsible item={menu.document} />
         </SidebarMenu>
-        <NavSidebarGroup label="Product" items={items.product} />
-        <NavSidebarGroup label="Application" items={items.application} />
-        <SidebarMenu className="p-2">
-          <NavSidebarItem items={items.system} />
-        </SidebarMenu>
+        <NavSidebarGroup label="Product" items={menu.product} />
+        <NavSidebarGroup label="Application" items={menu.application} />
+        {systemMenu.length > 0 && (
+          <SidebarMenu className="p-2">
+            <NavSidebarItem items={systemMenu} />
+          </SidebarMenu>
+        )}
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
