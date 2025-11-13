@@ -18,18 +18,18 @@ const dayJsLocale = process.env.NEXT_PUBLIC_LOCALE.split('-')[0];
 dayjs.locale(dayJsLocale);
 
 export default function DashHeader() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   return (
     <>
       <div className="flex-1">
         <h1 className="text-2xl mb-1 font-bold flex items-center">
           <span className="me-1.5">Hello,</span>
-          {session ? 
-            <span>{session.user.name}</span>
-          :
+          {status === 'loading' ? (
             <Skeleton className="h-[27px] w-25 inline-block" />
-          }
+          ) : (
+            <span>{session.user.name}</span>
+          )}
         </h1>
         <h2 className="text-zinc-700 dark:text-zinc-300/80">Here’s what’s going on at your business right now.</h2>
         <div className="text-zinc-600 dark:text-zinc-400 text-sm flex items-center gap-1.5 mt-1.5">

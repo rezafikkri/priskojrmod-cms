@@ -27,12 +27,14 @@ import NavUserSkeleton from '../loadings/nav-user-skeleton';
 
 export function NavUser() {
   const { isMobile } = useSidebar()
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        {session ? (
+        {status === 'loading' ? (
+          <NavUserSkeleton />
+        ) : (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
@@ -94,8 +96,6 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        ) : (
-          <NavUserSkeleton />
         )}
       </SidebarMenuItem>
     </SidebarMenu>
