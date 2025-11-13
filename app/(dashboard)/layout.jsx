@@ -5,10 +5,10 @@ import Footer from '@/components/layout/footer';
 import { ThemeProvider } from '@/components/theme-provider';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
-import SessionProvider from '@/components/session-provider';
 import ReactQueryProvider from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/sonner';
 import NavProgressProvider from '@/components/nav-progress-provider';
+import SessionProviderWrapper from '@/components/session-provider';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
         className={`${montserrat.variable}`}
       >
         <NavProgressProvider>
-        <SessionProvider>
+        <SessionProviderWrapper>
           <SidebarProvider>
             <ThemeProvider
               attribute="class"
@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
               />
             </ThemeProvider>
           </SidebarProvider>
-        </SessionProvider>
+        </SessionProviderWrapper>
         </NavProgressProvider>
       </body>
     </html>

@@ -1,10 +1,4 @@
 import {
-  Copyright,
-  Users,
-  Package,
-  Activity,
-} from 'lucide-react';
-import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
@@ -14,28 +8,19 @@ import {
   SidebarFooter,
 } from '../ui/sidebar';
 import Link from 'next/link';
-import Category from '../icon/category';
-import Key from '../icon/key';
-import LockPassword from '../icon/lock-password';
 import NavSidebarGroup from './nav-sidebar-group';
-import UserDollar from '../icon/user-dollar';
-import Script from '../icon/script';
 import { NavUser } from './nav-user';
-import { UserCog } from 'lucide-react';
 import NavSidebarItem from './nav-sidebar-item';
 import NavSidebarItemCollapsible from './nav-sidebar-item-collapsible';
-import { isOwnerAdmin } from '@/lib/utils';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { getServerSession } from 'next-auth';
+import { AdminRole } from '@/constants/enums';
 
 // Menu items
 const menu = {
   sales: [
-    { title: 'Transactions', url: '/transaction', icon: Activity },
+    { title: 'Transactions', url: '/transaction' },
   ],
   customer: {
     title: 'Customers',
-    icon: UserDollar,
     subItems: [
       { title: 'List', url: '/customer' },
       { title: 'Feedback', url: '/feedback' },
@@ -44,7 +29,6 @@ const menu = {
   },
   document: {
     title: 'Document',
-    icon: Script,
     subItems: [
       { title: 'Terms of Service', url: '/terms-of-service', },
       { title: 'Privacy Policy', url: '/privacy-policy' },
@@ -53,25 +37,21 @@ const menu = {
     ],
   },
   product: [
-    { title: 'Categories', url: '/category', icon: Category },
-    { title: 'Licenses', url: '/license', icon: Copyright },
-    { title: 'Owners', url: '/owner', icon: Users },
-    { title: 'Products', url: '/product', icon: Package },
+    { title: 'Categories', url: '/category' },
+    { title: 'Licenses', url: '/license' },
+    { title: 'Owners', url: '/owner' },
+    { title: 'Products', url: '/product' },
   ],
   application: [
-    { title: 'License Keys', url: '/license-key', icon: Key },
-    { title: 'Secret Keys', url: '/secret-key', icon: LockPassword },
+    { title: 'License Keys', url: '/license-key' },
+    { title: 'Secret Keys', url: '/secret-key' },
   ],
   system: [
-    { title: 'Admins', url: '/admin', icon: UserCog },
+    { title: 'Admins', url: '/admin', role: AdminRole.OWNER },
   ],
 };
 
 export async function AppSidebar() {
-  const session = await getServerSession(authOptions);
-  let systemMenu = menu.system;
-  if (!isOwnerAdmin(session.user.role)) systemMenu = systemMenu.filter(m => m.title !== 'Admins');
-
   return (
     <Sidebar variant="inset" className="h-full">
       <SidebarHeader>
@@ -94,11 +74,9 @@ export async function AppSidebar() {
         </SidebarMenu>
         <NavSidebarGroup label="Product" items={menu.product} />
         <NavSidebarGroup label="Application" items={menu.application} />
-        {systemMenu.length > 0 && (
-          <SidebarMenu className="p-2">
-            <NavSidebarItem items={systemMenu} />
-          </SidebarMenu>
-        )}
+        <SidebarMenu className="p-2">
+          <NavSidebarItem items={menu.system} />
+        </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
