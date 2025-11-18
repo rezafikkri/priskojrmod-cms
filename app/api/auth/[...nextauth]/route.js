@@ -54,13 +54,18 @@ export const authOptions = {
           where: {
             auth_id: profile.sub,
           },
-          select: { id: true, picture: true, role: true },
+          select: {
+            id: true,
+            picture: true,
+            role: true,
+            first_name: true,
+          },
         });
 
         token.userId = user.id;
         token.role = user.role;
         token.picture = user.picture;
-        token.first_name = profile.given_name;
+        token.first_name = user.first_name;
         token.accessToken = account.access_token;
       }
       if (trigger === 'update' && session?.first_name && session?.picture) {

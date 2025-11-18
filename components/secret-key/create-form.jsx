@@ -156,7 +156,7 @@ export default function CreateForm({ products }) {
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      className="md:text-base h-auto px-3 py-1.5 -me-[1px] shadow-none rounded-e-none z-3 relativ"
+                      className="md:text-base h-auto px-3 py-1.5 -me-[1px] shadow-none rounded-e-none z-1 relativ"
                       {...field}
                     />
                   </FormControl>
