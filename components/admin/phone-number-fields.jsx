@@ -81,12 +81,14 @@ export default function PhoneNumberFields({
 }) {
   const isSubmitting = form.formState.isSubmitting;
   const phoneNumberErrors = form.formState.errors.whatsapp_phone_number;
-  // clear errors if phoneNumberErrors doesn't exist
-  console.dir(phoneNumberErrors);
 
   const countryIso = useWatch({ control: form.control, name: 'whatsapp_phone_number.country_iso' });
   const number = useWatch({ control: form.control, name: 'whatsapp_phone_number.number' });
-  const parsedNumber = parsePhoneNumber(number, countryIso, { extract: false });
+  const parsedNumber = parsePhoneNumber(
+    number,
+    countryIso === 'OTHER' ? undefined : countryIso,
+    { extract: false },
+  );
   
   let numberInputPlaceholder = '';
   if (countryIso === 'OTHER') {

@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { CurrencyCode } from '@/constants/enums';
 import { createAdminSchema } from '@/lib/validators/admin-validator';
 import FormFields from './form-fields';
+import { addAdmin } from '@/actions/admin-actions';
 
 export default function CreateForm() {
   const form = useForm({
@@ -32,13 +33,13 @@ export default function CreateForm() {
   });
 
   async function handleSubmit(data) {
-    // const editRes = await editAccount(data);
-    // if (editRes.status === 'success') {
-    //   form.reset();
-    //   toast.success('Account Settings updated successfully.');
-    // } else {
-    //   toast.error(editRes.message);
-    // }
+    const addRes = await addAdmin(data);
+    if (addRes.status === 'success') {
+      form.reset();
+      toast.success('Admin created successfully.');
+    } else {
+      toast.error(addRes.message);
+    }
   }
 
   return (
