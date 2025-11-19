@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, Trash } from 'lucide-react';
 import Link from 'next/link';
 import PhoneNumberFields from './phone-number-fields';
 
@@ -53,7 +53,7 @@ export default function FormFields({
 
         <FormItem>
           <FormLabel className="text-base">Role</FormLabel>
-          <p>Staff</p>
+          <p className="capitalize">{form.getValues('role')}</p>
           {mode === 'create' && (
             <FormDescription>A new admin will automatically be assigned the staff role.</FormDescription>
           )}
@@ -98,7 +98,7 @@ export default function FormFields({
                 <img
                   src={field.value === '' ? '/not-found-image.svg' : field.value}
                   alt="Picture"
-                  className={`w-full h-full rounded-md ${field.value === '' ? 'opacity-30 dark:opacity-100' : ''}`}
+                  className={`w-full h-full rounded-md ${field.value === '' ? 'opacity-30 dark:opacity-100' : 'object-cover'}`}
                   loading="lazy"
                   decoding="async"
                 />
@@ -120,12 +120,12 @@ export default function FormFields({
 
           {donationLinks.map((dl, index) => (
             <FormField
-              key={dl.rhfId}
+              key={dl.id}
               control={form.control}
               name={`donation_links.${index}.link`}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel className="text-base">{dl.currency_code} Donation Link.</FormLabel>
+                  <FormLabel className="text-base">{dl.currency_code} Donation Link</FormLabel>
                   <div className="flex gap-2">
                     <FormControl>
                       <Input
@@ -134,20 +134,20 @@ export default function FormFields({
                         className="shadow-none md:text-base h-auto px-3 py-1.5"
                       />
                     </FormControl>
-                    {(mode !== 'create' && dl.id) && (
+                    {(mode !== 'create' && dl.dbId) && (
                       <div className="relative inline-block">
                         <Button
                           type="button"
                           variant="secondary"
                           className={`hover:text-destructive dark:hover:text-red-500/90 ${isSubmitting ? '' : 'disabled:opacity-100'}`}
-                          onClick={() => onDeleteDonationLink(dl.id)}
+                          onClick={() => onDeleteDonationLink(dl.dbId)}
                           disabled={isSubmitting || deleteDonationLinkState?.isLoading}
                         >
                           <Trash
-                            className={(deleteDonationLinkState?.isLoading && deleteDonationLinkState.id === dl.id) ? 'opacity-0' : ''}
+                            className={(deleteDonationLinkState?.isLoading && deleteDonationLinkState.id === dl.dbId) ? 'opacity-0' : ''}
                           />
                         </Button>
-                        {(deleteDonationLinkState?.isLoading && deleteDonationLinkState.id === dl.id) &&
+                        {(deleteDonationLinkState?.isLoading && deleteDonationLinkState.id === dl.dbId) &&
                           <div
                             className="absolute h-full top-0 left-0 right-0 flex justify-center items-center"
                           >
