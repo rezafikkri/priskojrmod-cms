@@ -22,9 +22,10 @@ export default function FormFields({
   const {
     donationLinks,
     onDeleteDonationLink,
-    deleteDonationLinkState,
+    deletingDonationLinkIds,
   } = donations ?? {};
   const isSubmitting = form.formState.isSubmitting;
+  const hasDeletingDonationLinks = deletingDonationLinkIds.length > 0;
 
   return (
     <Form {...form}>
@@ -118,51 +119,54 @@ export default function FormFields({
           <h3 className="text-lg font-bold mb-0">Donation Links</h3>
           <h2 className="text-zinc-700 dark:text-zinc-300/80">Donation Links are used for free products and replace the Buy button on the product details page.</h2>
 
-          {donationLinks.map((dl, index) => (
-            <FormField
-              key={dl.id}
-              control={form.control}
-              name={`donation_links.${index}.link`}
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel className="text-base">{dl.currency_code} Donation Link</FormLabel>
-                  <div className="flex gap-2">
-                    <FormControl>
-                      <Input
-                        disabled={isSubmitting}
-                        {...field}
-                        className="shadow-none md:text-base h-auto px-3 py-1.5"
-                      />
-                    </FormControl>
-                    {(mode !== 'create' && dl.dbId) && (
-                      <div className="relative inline-block">
-                        <Button
-                          type="button"
-                          variant="secondary"
-                          className={`hover:text-destructive dark:hover:text-red-500/90 ${isSubmitting ? '' : 'disabled:opacity-100'}`}
-                          onClick={() => onDeleteDonationLink(dl.dbId)}
-                          disabled={isSubmitting || deleteDonationLinkState?.isLoading}
-                        >
-                          <Trash
-                            className={(deleteDonationLinkState?.isLoading && deleteDonationLinkState.id === dl.dbId) ? 'opacity-0' : ''}
-                          />
-                        </Button>
-                        {(deleteDonationLinkState?.isLoading && deleteDonationLinkState.id === dl.dbId) &&
-                          <div
-                            className="absolute h-full top-0 left-0 right-0 flex justify-center items-center"
+          {donationLinks.map((dl, index) => {
+            const isDeleting = deletingDonationLinkIds.includes(dl.dbId);
+            return (
+              <FormField
+                key={dl.id}
+                control={form.control}
+                name={`donation_links.${index}.link`}
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel className="text-base">{dl.currency_code} Donation Link</FormLabel>
+                    <div className="flex gap-2">
+                      <FormControl>
+                        <Input
+                          disabled={isSubmitting}
+                          {...field}
+                          className="shadow-none md:text-base h-auto px-3 py-1.5"
+                        />
+                      </FormControl>
+                      {(mode !== 'create' && dl.dbId) && (
+                        <div className="relative inline-block">
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            className={`hover:text-destructive dark:hover:text-red-500/90 ${isSubmitting ? '' : 'disabled:opacity-100'}`}
+                            onClick={() => onDeleteDonationLink(dl.dbId)}
+                            disabled={isSubmitting || isDeleting}
                           >
-                            <Loader2 className="animate-spin" size={16} />
-                          </div>
-                        }
-                      </div>
-                    )}
-                  </div>
-                  <FormDescription>Enter the donation link for {dl.currency_code}.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />           
-          ))}
+                            <Trash
+                              className={isDeleting ? 'opacity-0' : ''}
+                            />
+                          </Button>
+                          {isDeleting &&
+                            <div
+                              className="absolute h-full top-0 left-0 right-0 flex justify-center items-center"
+                            >
+                              <Loader2 className="animate-spin" size={16} />
+                            </div>
+                          }
+                        </div>
+                      )}
+                    </div>
+                    <FormDescription>Enter the donation link for {dl.currency_code}.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />           
+            );
+          })}
         </div>
 
         {mode !== 'profile' && (
@@ -173,8 +177,8 @@ export default function FormFields({
         <div className="relative inline-block">
           <Button
             type="submit"
-            className={`${deleteDonationLinkState?.isLoading ? '' : 'disabled:opacity-100'} ${isSubmitting ? 'transition-none' : ''} h-auto text-base px-3 py-1.5 border border-primary`}
-            disabled={isSubmitting || deleteDonationLinkState?.isLoading}
+            className={`${hasDeletingDonationLinks ? '' : 'disabled:opacity-100'} ${isSubmitting ? 'transition-none' : ''} h-auto text-base px-3 py-1.5 border border-primary`}
+            disabled={isSubmitting || hasDeletingDonationLinks}
           >
             <span className={isSubmitting ? 'opacity-0' : ''}>
               {mode === 'create' ? 'Create' : 'Update'}

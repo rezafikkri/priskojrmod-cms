@@ -4,11 +4,11 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
 export default function ProfileBadge({ src, className, fallbackText }) {
-  const [isError, setIsError] = useState(false);
+  const [isError, setIsError] = useState(false); 
 
   return (
     <div className={cn('rounded-full bg-zinc-200/80 dark:bg-zinc-800/80 overflow-hidden size-7.5 flex items-center justify-center', className)}>
-      {!isError ? (
+      {(!isError || !src) ? (
         <img
           src={src}
           alt={fallbackText}

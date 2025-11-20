@@ -6,7 +6,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'sonner';
 import { editAdminSchema } from '@/lib/validators/admin-validator';
 import FormFields from './form-fields';
-import { editAdmin } from '@/actions/admin-actions';
+import { editAdmin, removeDonationLink } from '@/actions/admin-actions';
 import { generateDonationLinksValues } from '@/lib/utils';
 
 export default function EditForm({ admin }) {
@@ -29,10 +29,28 @@ export default function EditForm({ admin }) {
     name: 'donation_links',
   });
 
-  const [deleteDonationLinkState, setDeleteDonationLinkState] = useState({});
+  const [deletingDonationLinkIds, setDeletingDonationLinkIds] = useState([]);
 
-  function handleDeleteDonationLink(id) {
-    // placeholder logic, nanti bisa diisi sesuai kebutuhan
+  async function handleDeleteDonationLink(id) {
+    setDeletingDonationLinkIds(prevIds => [...prevIds, id]);
+
+    const removeRes = await removeDonationLink(id);
+
+    setDeletingDonationLinkIds(prevIds => prevIds.filter(prevId => prevId !== id));
+
+    if (removeRes.status === 'success') {
+      const prevDonationLinks = form.getValues('donation_links'); 
+      form.setValue(
+        'donation_links',
+        prevDonationLinks.map(dl => {
+          if (dl.dbId === id) return { link: '', currency_code: dl.currency_code };
+          return dl;
+        }),
+      );
+      toast.success('Donation link deleted successfully.');
+    } else {
+      toast.error(removeRes.message);
+    }
   }
 
   async function handleSubmit(data) {
@@ -57,8 +75,8 @@ export default function EditForm({ admin }) {
       onSubmit={handleSubmit}
       donations={{
         donationLinks,
-        handleDeleteDonationLink,
-        deleteDonationLinkState,
+        onDeleteDonationLink: handleDeleteDonationLink,
+        deletingDonationLinkIds,
       }}
     />
   );
