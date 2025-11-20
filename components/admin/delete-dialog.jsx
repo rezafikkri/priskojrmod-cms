@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -17,28 +15,19 @@ export default function DeleteDialog({
   onDelete,
   isOpen,
   onIsOpenChange,
-  onDeleteDataChange,
   deleteData,
+  onDeleteDataChange,
 }) {
-  const [email, setEmail] = useState('');
-
   function handleDelete() {
-    if (email !== deleteData.email) return false;
-
     onIsOpenChange(false);
     onDeleteDataChange(null);
-    setEmail('');
-    const toastId = toast.loading('Deleting customer...');
+    const toastId = toast.loading('Deleting admin...');
     onDelete({ deleteData, toastId });
   }
-
-  const checkEmail = email === deleteData?.email;
-  const emailToDelete = deleteData?.email || email;
 
   function handleOpenChange() {
     onIsOpenChange(false);
     onDeleteDataChange(null);
-    setEmail('');
   }
 
   function handleClickOutside(e) {
@@ -55,24 +44,17 @@ export default function DeleteDialog({
       >
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
+
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            The customer with email <b>{emailToDelete}</b> will be permanently deleted.
-            To confirm, type the email "<b>{emailToDelete}</b>" in the box below.
+            The admin (role: Staff) with email <b>{deleteData?.email}</b> will be permanently deleted.
           </DialogDescription>
         </DialogHeader>
-        <Input
-          placeholder="Email..."
-          className="mt-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
-          aria-invalid={true}
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
+
         <DialogFooter className="relative">
           <Button
             variant="destructive"
             className="w-full h-auto text-base px-3 py-1.5 dark:bg-destructive dark:hover:bg-destructive/90 text-primary-foreground"
             onClick={handleDelete}
-            disabled={!checkEmail}
           >
             Yes, delete
           </Button>
@@ -81,3 +63,4 @@ export default function DeleteDialog({
     </Dialog>
   );
 }
+

@@ -27,36 +27,38 @@ import { MoreHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
-// import { removeAdmin } from '@/actions/admin-actions';
+import { removeAdmin } from '@/actions/admin-actions';
 import { getTableHeaderWidth } from '@/lib/utils';
 import ProfileBadge from '../ui/profile-badge';
+import DeleteDialog from './delete-dialog';
 
 export default function DataTable({ admins: data }) {
   const [admins, setAdmins] = useState(data);
   const [deletingIds, setDeletingIds] = useState([]);
+  // for handle delete dialog
+  const [deleteData, setDeleteData] = useState(null);
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
-  async function handleDelete(id) {
-    // // This is for add opacity-50 style to deleted row
-    // setDeletingIds((prevDeletingIds) => [...prevDeletingIds, id]);
-    // // show loading
-    // const toastId = toast.loading('Deleting admin...');
-    //
-    // const removeRes = await removeAdmin(id);
-    //
-    // setDeletingIds((prevDeletingIds) =>
-    //   prevDeletingIds.filter((deletingId) => deletingId !== id)
-    // );
-    //
-    // if (removeRes.status === 'success') {
-    //   setAdmins((prevAdmins) => prevAdmins.filter(admin => admin.id !== id));
-    //   toast.success('Admin deleted successfully.', {
-    //     id: toastId,
-    //   });
-    // } else {
-    //   toast.error(removeRes.message, {
-    //     id: toastId,
-    //   });
-    // }
+  async function handleDelete({ deleteData, toastId }) {
+    // This is for add opacity-50 style to deleted row
+    setDeletingIds((prevIds) => [...prevIds, deleteData.id]);
+    
+    const removeRes = await removeAdmin(deleteData.id);
+
+    setDeletingIds((prevIds) =>
+      prevIds.filter((prevId) => prevId !== deleteData.id)
+    );
+
+    if (removeRes.status === 'success') {
+      setAdmins((prevAdmins) => prevAdmins.filter(admin => admin.id !== deleteData.id));
+      toast.success('Admin deleted successfully.', {
+        id: toastId,
+      });
+    } else {
+      toast.error(removeRes.message, {
+        id: toastId,
+      });
+    }
   }
 
   const columns = useMemo(() => [
@@ -114,7 +116,12 @@ export default function DataTable({ admins: data }) {
                 className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
                 asChild
               >
-                <button onClick={() => handleDelete(row.original.id)}>
+                <button
+                  onClick={() => {
+                    setDeleteData({ id: row.original.id, email: row.getValue('email') });
+                    setIsOpenDeleteDialog(true);
+                  }}
+                >
                   Delete
                 </button>
               </DropdownMenuItem>
@@ -186,6 +193,14 @@ export default function DataTable({ admins: data }) {
           {admins.length} {admins.length === 1 ? 'result' : 'results'}
         </p>
       )}
+
+      <DeleteDialog
+        onDelete={handleDelete}
+        isOpen={isOpenDeleteDialog}
+        onIsOpenChange={setIsOpenDeleteDialog}
+        onDeleteDataChange={setDeleteData}
+        deleteData={deleteData}
+      />
     </>
   );
 }
