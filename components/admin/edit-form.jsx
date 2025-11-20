@@ -34,7 +34,7 @@ export default function EditForm({ admin }) {
   async function handleDeleteDonationLink(id) {
     setDeletingDonationLinkIds(prevIds => [...prevIds, id]);
 
-    const removeRes = await removeDonationLink(id);
+    const removeRes = await removeDonationLink(id, admin.id);
 
     setDeletingDonationLinkIds(prevIds => prevIds.filter(prevId => prevId !== id));
 

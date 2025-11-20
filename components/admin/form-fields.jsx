@@ -25,7 +25,7 @@ export default function FormFields({
     deletingDonationLinkIds,
   } = donations ?? {};
   const isSubmitting = form.formState.isSubmitting;
-  const hasDeletingDonationLinks = deletingDonationLinkIds.length > 0;
+  const hasDeletingDonationLinks = deletingDonationLinkIds?.length > 0;
 
   return (
     <Form {...form}>
@@ -120,7 +120,7 @@ export default function FormFields({
           <h2 className="text-zinc-700 dark:text-zinc-300/80">Donation Links are used for free products and replace the Buy button on the product details page.</h2>
 
           {donationLinks.map((dl, index) => {
-            const isDeleting = deletingDonationLinkIds.includes(dl.dbId);
+            const isDeleting = deletingDonationLinkIds?.includes(dl.dbId);
             return (
               <FormField
                 key={dl.id}

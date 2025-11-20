@@ -34,9 +34,9 @@ export async function removeAdmin(id) {
   }
 }
 
-export async function removeDonationLink(id) {
+export async function removeDonationLink(id, adminId) {
   try {
-    await deleteDonationLink(id);
+    await deleteDonationLink(id, adminId);
     return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };

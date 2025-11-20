@@ -138,6 +138,7 @@ export default function PhoneNumberFields({
               <Select
                 onValueChange={(value) => handleCountryIsoChange(value, field.onChange)}
                 value={field.value}
+                disabled={isSubmitting}
               >
                 <FormControl>
                   <SelectTrigger
