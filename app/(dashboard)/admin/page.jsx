@@ -6,8 +6,6 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
   title: 'Admins',
 };
