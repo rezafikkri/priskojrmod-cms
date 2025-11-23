@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { editAdminSchema } from '@/lib/validators/admin-validator';
 import FormFields from './form-fields';
 import { editAdmin, removeDonationLink } from '@/actions/admin-actions';
-import { generateDonationLinksValues } from '@/lib/utils';
+import { generateDonationLinkValues } from '@/lib/utils';
 
 export default function EditForm({ admin }) {
   const form = useForm({
@@ -20,7 +20,7 @@ export default function EditForm({ admin }) {
       whatsapp_phone_number: admin.whatsapp_phone_number,
       picture: admin.picture,
       role: admin.role,
-      donation_links: generateDonationLinksValues(admin.donation_links),
+      donation_links: generateDonationLinkValues(admin.donation_links),
     },
   });
 
@@ -60,7 +60,7 @@ export default function EditForm({ admin }) {
         editRes.data.donation_links ||
         form.getValues('donation_links').some(dl => 'dbId' in dl)
       ) {
-        form.setValue('donation_links', generateDonationLinksValues(editRes.data.donation_links ?? []));
+        form.setValue('donation_links', generateDonationLinkValues(editRes.data.donation_links ?? []));
       }
       toast.success('Admin updated successfully.');
     } else {

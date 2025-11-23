@@ -6,7 +6,7 @@ import { editAccount, removeDonationLink } from '@/actions/account-settings-acti
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { generateDonationLinksValues } from '@/lib/utils';
+import { generateDonationLinkValues } from '@/lib/utils';
 import FormFields from '../admin/form-fields';
 import { accountSettingsSchema } from '@/lib/validators/account-settings-validator';
 
@@ -23,7 +23,7 @@ export function EditForm({
       last_name: account.last_name,
       whatsapp_phone_number: account.whatsapp_phone_number,
       picture: account.picture,
-      donation_links: generateDonationLinksValues(account.donation_links),
+      donation_links: generateDonationLinkValues(account.donation_links),
     },
   });
   const { fields: donationLinks } = useFieldArray({
@@ -68,7 +68,7 @@ export function EditForm({
         editRes.data.donation_links ||
         form.getValues('donation_links').some(dl => 'dbId' in dl)
       ) {
-        form.setValue('donation_links', generateDonationLinksValues(editRes.data.donation_links ?? []));
+        form.setValue('donation_links', generateDonationLinkValues(editRes.data.donation_links ?? []));
       }
 
       toast.success('Account settings updated successfully.');
