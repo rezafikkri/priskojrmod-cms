@@ -59,7 +59,7 @@ export async function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/" className="flex items-center gap-2">
-                <img src="https://ik.imagekit.io/amruk/PJM/PriskoJrMod.png" alt="Prisko Jr Mod Logo" width={32} height={32} />
+                <img src="https://res.cloudinary.com/priskojrmod/image/upload/v1740827617/PriskoJrMod.png" alt="Prisko Jr Mod Logo" width={32} height={32} />
                 <span className="font-semibold">Prisko Jr Mod</span>
               </Link>
             </SidebarMenuButton>

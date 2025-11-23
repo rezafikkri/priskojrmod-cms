@@ -13,8 +13,8 @@ export async function editAccount(data) {
 
 export async function removeDonationLink(id) {
   try {
-    const deleteData = await deleteDonationLink(id);
-    return { status: 'success', data: deleteData };
+    await deleteDonationLink(id);
+    return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };
   }
