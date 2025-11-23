@@ -451,7 +451,7 @@ describe('updateProduct function', () => {
     expect(pjmeDBPrismaClient.Product.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.$transaction function and pjmeDBPrismaClient.Product.update function twice correctly', async () => {
+  it('Should call pjmeDBPrismaClient.$transaction function and pjmeDBPrismaClient.Product.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853603149);
     const currentTime = Math.floor(new Date().getTime() / 1000);

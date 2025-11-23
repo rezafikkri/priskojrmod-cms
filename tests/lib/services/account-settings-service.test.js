@@ -129,8 +129,8 @@ describe('updateAccount function', () => {
       whatsapp_phone_number: '+6285758438583',
       picture: 'https://test.co/pic.jpg',
       donation_links: [
-        { id: 1, currency_code: 'IDR', link: 'https://donate1.com' },
-        { id: 2, currency_code: 'USD', link: 'https://donate2.com' },
+        { dbId: 1, currency_code: 'IDR', link: 'https://donate1.com' },
+        { dbId: 2, currency_code: 'USD', link: 'https://donate2.com' },
       ],
     });
 
