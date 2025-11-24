@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { Loader2, Trash, Image } from 'lucide-react';
 import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
+import FormImagePreview from '../ui/form-image-preview';
 
 export default function ImageGrid({
   form,
@@ -63,9 +64,7 @@ export default function ImageGrid({
   return (
     <div className="grid grid-cols-3 gap-2 items-start">
       {images.length <= 0 ? (
-        <div className="rounded-md border bg-gray-100 dark:bg-zinc-900/50 overflow-hidden relative">
-          <img src="/not-found-image.svg" alt="Not found" className="opacity-30 dark:opacity-100" />
-        </div>
+        <FormImagePreview alt='Not found' orientation='landscape' className="size-auto" />
       ) : images.map((image, index) => (
         <div className="relative" key={image.id}>
           {isDeleting(image.dbId) && (

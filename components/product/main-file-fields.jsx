@@ -72,8 +72,8 @@ export default function MainFileFields({ form, applicationCategoryId }) {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-base">Drive File ID</FormLabel>
-              <p className="text-sm text-zinc-700">Name: {fileName ?? '-'}</p>
-              <p className="text-sm text-zinc-700 mb-1">Size: {fileSize ?? '-'}</p>
+              <p className="text-sm text-zinc-500">Name: {fileName ?? '-'}</p>
+              <p className="text-sm text-zinc-500 mb-1">Size: {fileSize ?? '-'}</p>
               <div className="flex w-full items-center">
                 <FormControl>
                   <Input

@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import FormImagePreview from '../ui/form-image-preview';
 
 export default function FormFields({
   mode,
@@ -72,15 +73,7 @@ export default function FormFields({
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormLabel className="text-base">Profile Picture</FormLabel>
-              <div className="rounded-md border size-40 bg-zinc-100 dark:bg-zinc-900/50">
-                <img
-                  src={field.value === '' ? '/not-found-image.svg' : field.value}
-                  alt="Picture"
-                  className={`w-full h-full rounded-md ${field.value === '' ? 'opacity-30 dark:opacity-100' : ''}`}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
+              <FormImagePreview src={field.value} />
               <FormControl>
                 <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
               </FormControl>
