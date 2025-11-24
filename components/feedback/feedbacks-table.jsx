@@ -12,7 +12,7 @@ import {
   AlertTitle,
 } from '@/components/ui/alert';
 import { safeFetch } from '@/lib/safe-fetch';
-import TableSekeleton from '../loadings/table-skeleton';
+import TableSkeleton from '../loadings/table-skeleton';
 import { ArrowDownToLine, AlertCircle, Columns } from 'lucide-react';
 import { Trash } from 'lucide-react';
 import { editFeedbackReadStatus, loadFeedbacks, removeFeedbacks } from '@/actions/feedback-actions';
@@ -511,7 +511,7 @@ export default function FeedbacksTable() {
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingF) ? (
-        <TableSekeleton />
+        <TableSkeleton />
       ) : isErrorF ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />

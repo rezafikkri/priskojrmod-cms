@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import SecretKeysTable from '@/components/secret-key/secret-keys-table';
 import { Suspense } from 'react';
-import TableSekeleton from '@/components/loadings/table-skeleton';
+import TableSkeleton from '@/components/loadings/table-skeleton';
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import { Plus } from 'lucide-react';
 
@@ -22,7 +22,7 @@ export default async function SecretKeyListPage() {
         </Button>
       </TooltipWrapper>
       
-      <Suspense fallback={<TableSekeleton />}>
+      <Suspense fallback={<TableSkeleton />}>
         <SecretKeysTable />
       </Suspense>
     </>

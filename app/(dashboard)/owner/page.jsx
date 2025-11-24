@@ -1,7 +1,7 @@
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import { Plus } from 'lucide-react';
 import { Suspense } from 'react';
-import TableSekeleton from '@/components/loadings/table-skeleton';
+import TableSkeleton from '@/components/loadings/table-skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import OwnersTable from '@/components/owner/owners-table';
@@ -24,7 +24,7 @@ export default function OwnerListPage() {
         </Button>
       </TooltipWrapper>
 
-      <Suspense fallback={<TableSekeleton />}>
+      <Suspense fallback={<TableSkeleton />}>
         <OwnersTable />
       </Suspense>
     </>

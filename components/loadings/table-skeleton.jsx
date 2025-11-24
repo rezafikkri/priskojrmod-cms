@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function TableSekeleton() {
+export default function TableSkeleton() {
   return (
     <div className="rounded-md border relative p-3">
       <div className="flex space-x-3">

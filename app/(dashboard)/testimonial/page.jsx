@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import TableSekeleton from '@/components/loadings/table-skeleton';
+import TableSkeleton from '@/components/loadings/table-skeleton';
 import TestimonialsTable from '@/components/testimonial/testimonials-table';
 
 export const dynamic = 'force-dynamic';
@@ -17,7 +17,7 @@ export default async function TestimonialListPage() {
         Only up to 6 testimonials are allowed, which is ideal for maintaining focus and clarity.
       </h2>
 
-      <Suspense fallback={<TableSekeleton />}>
+      <Suspense fallback={<TableSkeleton />}>
         <TestimonialsTable />
       </Suspense>
     </>

@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import TableSekeleton from '../loadings/table-skeleton';
+import TableSkeleton from '../loadings/table-skeleton';
 import {
   Alert,
   AlertTitle,
@@ -222,7 +222,7 @@ export default function ProductsTable() {
       </div>
 
       {isFetchingP ? (
-        <TableSekeleton />
+        <TableSkeleton />
       ) : isErrorP ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />

@@ -1,5 +1,5 @@
 import FaqsTable from '@/components/faq/faqs-table';
-import TableSekeleton from '@/components/loadings/table-skeleton';
+import TableSkeleton from '@/components/loadings/table-skeleton';
 import { Button } from '@/components/ui/button';
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import { Plus } from 'lucide-react';
@@ -24,7 +24,7 @@ export default function FaqListPage() {
         </Button>
       </TooltipWrapper>
 
-      <Suspense fallback={<TableSekeleton />}>
+      <Suspense fallback={<TableSkeleton />}>
         <FaqsTable />
       </Suspense>
     </>

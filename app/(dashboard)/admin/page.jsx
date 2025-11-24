@@ -1,5 +1,5 @@
 import AdminsTable from '@/components/admin/admins-table';
-import TableSekeleton from '@/components/loadings/table-skeleton';
+import TableSkeleton from '@/components/loadings/table-skeleton';
 import { Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -22,7 +22,7 @@ export default function AdminListPage() {
         </Button>
       </TooltipWrapper>
 
-      <Suspense fallback={<TableSekeleton />}>
+      <Suspense fallback={<TableSkeleton />}>
         <AdminsTable />
       </Suspense>
     </>
