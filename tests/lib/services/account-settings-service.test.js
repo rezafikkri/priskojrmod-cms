@@ -29,12 +29,22 @@ beforeAll(() => {
       DonationLink: {
         delete: vi.fn(),
       },
+      $transaction: vi.fn(),
     },
+  }));
+
+  vi.mock('libphonenumber-js', () => ({
+    default: () => ({
+      country: 'ID',
+      number: '+6285758438583',
+      isValid: () => true,
+    }),
   }));
 });
 
 afterEach(() => {
   vi.clearAllMocks();
+  vi.useRealTimers();
 });
 
 describe('getAccount function', () => {
@@ -64,7 +74,7 @@ describe('getAccount function', () => {
 
     pjmeDBPrismaClient.Admin.findUnique.mockResolvedValue({
       last_name: 'Doe',
-      whatsapp_phone_number: '1234567890',
+      whatsapp_phone_number: '+6285758438583',
       donation_links: [],
     });
 
@@ -73,6 +83,7 @@ describe('getAccount function', () => {
     expect(pjmeDBPrismaClient.Admin.findUnique).toHaveBeenCalledWith({
       where: { id: 'admin-id' },
       select: {
+        role: true,
         last_name: true,
         whatsapp_phone_number: true,
         donation_links: {
@@ -100,7 +111,7 @@ describe('updateAccount function', () => {
       whatsapp_phone_number: '+6285758438583',
       picture: 'https://test.co/pic.jpg',
       donation_links: [
-        { id: 1, currency_code: 'IDR', link: 'https://donate1.com' },
+        { dbId: 1, currency_code: 'IDR', link: 'https://donate1.com' },
         { currency_code: 'USD', link: 'https://donate2.com' },
       ],
     })).rejects.toThrow(UnauthenticatedError);
@@ -110,13 +121,27 @@ describe('updateAccount function', () => {
   });
 
   it('should call pjmeDBPrismaClient.Admin.update function correctly', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(1744853703149);
+    const currentTime = Math.floor(new Date().getTime() / 1000);
+
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id' });
+    verifySession.mockResolvedValue({ isAuth: true, userId: 12 });
+
+    pjmeDBPrismaClient.$transaction.mockResolvedValue([
+      {
+        id: 12,
+        donation_links: [
+          { id: 1, currency_code: 'IDR', link: 'https://donate1.com' },
+          { id: 2, currency_code: 'USD', link: 'https://donate2.com' },
+        ],
+      },
+    ]);
 
     pjmeDBPrismaClient.Admin.update.mockResolvedValue({
-      id: 'admin-id',
+      id: 12,
       donation_links: [
         { id: 1, currency_code: 'IDR', link: 'https://donate1.com' },
         { id: 2, currency_code: 'USD', link: 'https://donate2.com' },
@@ -126,7 +151,10 @@ describe('updateAccount function', () => {
     await updateAccount({
       first_name: 'John',
       last_name: 'Doe',
-      whatsapp_phone_number: '+6285758438583',
+      whatsapp_phone_number: {
+        country_iso: 'ID',
+        number: '+6285758438583',
+      },
       picture: 'https://test.co/pic.jpg',
       donation_links: [
         { dbId: 1, currency_code: 'IDR', link: 'https://donate1.com' },
@@ -135,26 +163,25 @@ describe('updateAccount function', () => {
     });
 
     expect(pjmeDBPrismaClient.Admin.update).toHaveBeenCalledWith({
-      where: { id: 'admin-id' },
+      where: { id: 12 },
       data: {
         first_name: 'John',
         last_name: 'Doe',
         whatsapp_phone_number: '+6285758438583',
         picture: 'https://test.co/pic.jpg',
         donation_links: {
-          upsert: [
+          update: [
             {
-              create: { currency_code: 'IDR', link: 'https://donate1.com' },
-              update: { currency_code: 'IDR', link: 'https://donate1.com' },
+              data: { currency_code: 'IDR', link: 'https://donate1.com' },
               where: { id: 1 },
             },
             {
-              create: { currency_code: 'USD', link: 'https://donate2.com' },
-              update: { currency_code: 'USD', link: 'https://donate2.com' },
+              data: { currency_code: 'USD', link: 'https://donate2.com' },
               where: { id: 2 },
             },
           ],
         },
+        updated_at: currentTime,
       },
       select: {
         id: true,
@@ -187,14 +214,18 @@ describe('deleteDonationLink function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id' });
+    verifySession.mockResolvedValue({ isAuth: true, userId: 12 });
 
+    pjmeDBPrismaClient.$transaction.mockResolvedValue([
+      { id: 1 },
+      { id: 12 },
+    ]);
     pjmeDBPrismaClient.DonationLink.delete.mockResolvedValue({ id: 1 });
 
     await deleteDonationLink(1);
 
     expect(pjmeDBPrismaClient.DonationLink.delete).toHaveBeenCalledWith({
-      where: { id: 1, admin_id: 'admin-id' },
+      where: { id: 1 },
       select: { id: true },
     });
   });
