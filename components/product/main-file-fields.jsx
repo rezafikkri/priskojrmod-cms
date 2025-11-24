@@ -87,7 +87,7 @@ export default function MainFileFields({ form, applicationCategoryId }) {
                     type="button"
                     onClick={handleGetFileInfo}
                     className={`h-auto text-base px-3 py-1.5 border rounded-s-none ${isLoading ? 'disabled:opacity-100 transition-none' : ''}`}
-                    disabled={isLoading}
+                    disabled={isLoading || field.value.trim() === ''}
                   >
                     <span className={isLoading ? 'opacity-0' : ''}>Get Info</span>
                   </Button>
