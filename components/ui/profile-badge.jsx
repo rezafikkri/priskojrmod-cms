@@ -8,7 +8,7 @@ export default function ProfileBadge({ src, className, fallbackText }) {
 
   return (
     <div className={cn('rounded-full bg-zinc-200/80 dark:bg-zinc-800/80 overflow-hidden size-7.5 flex items-center justify-center', className)}>
-      {(!isError || !src) ? (
+      {(src && !isError) ? (
         <img
           src={src}
           alt={fallbackText}

@@ -26,6 +26,7 @@ import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
+import ProfileBadge from '../ui/profile-badge';
 
 export default function DataTable({ testimonials: data }) {
   const [testimonials] = useState(data);
@@ -34,6 +35,15 @@ export default function DataTable({ testimonials: data }) {
     {
       accessorKey: 'name',
       header: 'Name',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <ProfileBadge
+            src={row.original.picture}
+            fallbackText={row.getValue('name')}
+          />
+          <span className="text-wrap">{row.getValue('name')}</span>
+        </div>
+      ),
     },
     {
       accessorKey: 'sm_username',

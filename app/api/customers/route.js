@@ -12,6 +12,7 @@ export async function GET(req) {
     is_banned: true,
     first_name: true,
     last_name: true,
+    picture: true,
     email: true,
     last_active: true,
     created_at: true,

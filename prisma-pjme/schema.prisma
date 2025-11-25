@@ -155,10 +155,10 @@ model Product {
   created_at   Int
   updated_at   Int
 
-  admin    Admin    @relation(fields: [admin_id], references: [id])
-  category Category @relation(fields: [category_id], references: [id])
-  owner    Owner    @relation(fields: [owner_id], references: [id])
-  license  License  @relation(fields: [license_id], references: [id])
+  admin    Admin    @relation(fields: [admin_id], references: [id], onDelete: NoAction)
+  category Category @relation(fields: [category_id], references: [id], onDelete: NoAction)
+  owner    Owner    @relation(fields: [owner_id], references: [id], onDelete: NoAction)
+  license  License  @relation(fields: [license_id], references: [id], onDelete: NoAction)
 
   translations ProductTranslation[]
   versions     ProductVersion[]

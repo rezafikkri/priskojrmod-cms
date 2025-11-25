@@ -29,6 +29,7 @@ import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { Minus } from 'lucide-react';
 import DeleteDialog from './delete-dialog';
+import ProfileBadge from '../ui/profile-badge';
 
 export default function DataTable({
   customer,
@@ -71,6 +72,15 @@ export default function DataTable({
       accessorKey: 'name',
       header: 'Name',
       enableHiding: false,
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <ProfileBadge
+            src={row.original.picture}
+            fallbackText={row.getValue('name')}
+          />
+          <span className="text-wrap">{row.getValue('name')}</span>
+        </div>
+      ),
     },
     {
       accessorKey: 'email',
