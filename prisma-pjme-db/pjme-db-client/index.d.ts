@@ -6425,7 +6425,7 @@ export namespace Prisma {
     id: number | null
     first_name: string | null
     last_name: string | null
-    sm_username: string | null
+    sm_profile_link: string | null
     picture: string | null
     created_at: number | null
     updated_at: number | null
@@ -6435,7 +6435,7 @@ export namespace Prisma {
     id: number | null
     first_name: string | null
     last_name: string | null
-    sm_username: string | null
+    sm_profile_link: string | null
     picture: string | null
     created_at: number | null
     updated_at: number | null
@@ -6445,7 +6445,7 @@ export namespace Prisma {
     id: number
     first_name: number
     last_name: number
-    sm_username: number
+    sm_profile_link: number
     picture: number
     created_at: number
     updated_at: number
@@ -6469,7 +6469,7 @@ export namespace Prisma {
     id?: true
     first_name?: true
     last_name?: true
-    sm_username?: true
+    sm_profile_link?: true
     picture?: true
     created_at?: true
     updated_at?: true
@@ -6479,7 +6479,7 @@ export namespace Prisma {
     id?: true
     first_name?: true
     last_name?: true
-    sm_username?: true
+    sm_profile_link?: true
     picture?: true
     created_at?: true
     updated_at?: true
@@ -6489,7 +6489,7 @@ export namespace Prisma {
     id?: true
     first_name?: true
     last_name?: true
-    sm_username?: true
+    sm_profile_link?: true
     picture?: true
     created_at?: true
     updated_at?: true
@@ -6586,7 +6586,7 @@ export namespace Prisma {
     id: number
     first_name: string
     last_name: string
-    sm_username: string
+    sm_profile_link: string
     picture: string
     created_at: number
     updated_at: number
@@ -6615,7 +6615,7 @@ export namespace Prisma {
     id?: boolean
     first_name?: boolean
     last_name?: boolean
-    sm_username?: boolean
+    sm_profile_link?: boolean
     picture?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -6627,7 +6627,7 @@ export namespace Prisma {
     id?: boolean
     first_name?: boolean
     last_name?: boolean
-    sm_username?: boolean
+    sm_profile_link?: boolean
     picture?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -6637,7 +6637,7 @@ export namespace Prisma {
     id?: boolean
     first_name?: boolean
     last_name?: boolean
-    sm_username?: boolean
+    sm_profile_link?: boolean
     picture?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -6647,13 +6647,13 @@ export namespace Prisma {
     id?: boolean
     first_name?: boolean
     last_name?: boolean
-    sm_username?: boolean
+    sm_profile_link?: boolean
     picture?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type OwnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "sm_username" | "picture" | "created_at" | "updated_at", ExtArgs["result"]["owner"]>
+  export type OwnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "first_name" | "last_name" | "sm_profile_link" | "picture" | "created_at" | "updated_at", ExtArgs["result"]["owner"]>
   export type OwnerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | Owner$productsArgs<ExtArgs>
     _count?: boolean | OwnerCountOutputTypeDefaultArgs<ExtArgs>
@@ -6670,7 +6670,7 @@ export namespace Prisma {
       id: number
       first_name: string
       last_name: string
-      sm_username: string
+      sm_profile_link: string
       picture: string
       created_at: number
       updated_at: number
@@ -7101,7 +7101,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Owner", 'Int'>
     readonly first_name: FieldRef<"Owner", 'String'>
     readonly last_name: FieldRef<"Owner", 'String'>
-    readonly sm_username: FieldRef<"Owner", 'String'>
+    readonly sm_profile_link: FieldRef<"Owner", 'String'>
     readonly picture: FieldRef<"Owner", 'String'>
     readonly created_at: FieldRef<"Owner", 'Int'>
     readonly updated_at: FieldRef<"Owner", 'Int'>
@@ -37830,7 +37830,7 @@ export namespace Prisma {
     id: 'id',
     first_name: 'first_name',
     last_name: 'last_name',
-    sm_username: 'sm_username',
+    sm_profile_link: 'sm_profile_link',
     picture: 'picture',
     created_at: 'created_at',
     updated_at: 'updated_at'
@@ -38495,7 +38495,7 @@ export namespace Prisma {
     id?: IntFilter<"Owner"> | number
     first_name?: StringFilter<"Owner"> | string
     last_name?: StringFilter<"Owner"> | string
-    sm_username?: StringFilter<"Owner"> | string
+    sm_profile_link?: StringFilter<"Owner"> | string
     picture?: StringFilter<"Owner"> | string
     created_at?: IntFilter<"Owner"> | number
     updated_at?: IntFilter<"Owner"> | number
@@ -38506,7 +38506,7 @@ export namespace Prisma {
     id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_link?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -38520,7 +38520,7 @@ export namespace Prisma {
     NOT?: OwnerWhereInput | OwnerWhereInput[]
     first_name?: StringFilter<"Owner"> | string
     last_name?: StringFilter<"Owner"> | string
-    sm_username?: StringFilter<"Owner"> | string
+    sm_profile_link?: StringFilter<"Owner"> | string
     picture?: StringFilter<"Owner"> | string
     created_at?: IntFilter<"Owner"> | number
     updated_at?: IntFilter<"Owner"> | number
@@ -38531,7 +38531,7 @@ export namespace Prisma {
     id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_link?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -38549,7 +38549,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Owner"> | number
     first_name?: StringWithAggregatesFilter<"Owner"> | string
     last_name?: StringWithAggregatesFilter<"Owner"> | string
-    sm_username?: StringWithAggregatesFilter<"Owner"> | string
+    sm_profile_link?: StringWithAggregatesFilter<"Owner"> | string
     picture?: StringWithAggregatesFilter<"Owner"> | string
     created_at?: IntWithAggregatesFilter<"Owner"> | number
     updated_at?: IntWithAggregatesFilter<"Owner"> | number
@@ -40388,7 +40388,7 @@ export namespace Prisma {
   export type OwnerCreateInput = {
     first_name: string
     last_name: string
-    sm_username: string
+    sm_profile_link: string
     picture: string
     created_at: number
     updated_at: number
@@ -40399,7 +40399,7 @@ export namespace Prisma {
     id?: number
     first_name: string
     last_name: string
-    sm_username: string
+    sm_profile_link: string
     picture: string
     created_at: number
     updated_at: number
@@ -40409,7 +40409,7 @@ export namespace Prisma {
   export type OwnerUpdateInput = {
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_link?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
@@ -40420,7 +40420,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_link?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
@@ -40431,7 +40431,7 @@ export namespace Prisma {
     id?: number
     first_name: string
     last_name: string
-    sm_username: string
+    sm_profile_link: string
     picture: string
     created_at: number
     updated_at: number
@@ -40440,7 +40440,7 @@ export namespace Prisma {
   export type OwnerUpdateManyMutationInput = {
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_link?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
@@ -40450,7 +40450,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_link?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
@@ -42382,7 +42382,7 @@ export namespace Prisma {
     id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_link?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -42398,7 +42398,7 @@ export namespace Prisma {
     id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_link?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -42408,7 +42408,7 @@ export namespace Prisma {
     id?: SortOrder
     first_name?: SortOrder
     last_name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_link?: SortOrder
     picture?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -46165,7 +46165,7 @@ export namespace Prisma {
   export type OwnerCreateWithoutProductsInput = {
     first_name: string
     last_name: string
-    sm_username: string
+    sm_profile_link: string
     picture: string
     created_at: number
     updated_at: number
@@ -46175,7 +46175,7 @@ export namespace Prisma {
     id?: number
     first_name: string
     last_name: string
-    sm_username: string
+    sm_profile_link: string
     picture: string
     created_at: number
     updated_at: number
@@ -46415,7 +46415,7 @@ export namespace Prisma {
   export type OwnerUpdateWithoutProductsInput = {
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_link?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
@@ -46425,7 +46425,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     first_name?: StringFieldUpdateOperationsInput | string
     last_name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_link?: StringFieldUpdateOperationsInput | string
     picture?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
