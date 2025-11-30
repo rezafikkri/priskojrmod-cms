@@ -33,7 +33,6 @@ model SecretKeyLicense {
 
 model LicenseKey {
   id             String           @id @default(uuid(7)) @db.Uuid
-  secret_key     SecretKeyLicense @relation(fields: [secret_key_id], references: [id])
   secret_key_id  Int
   customer_id    String           @db.Uuid
   email          String           @db.VarChar(254)
@@ -47,6 +46,8 @@ model LicenseKey {
   device_id         String? @db.VarChar(100)
   last_reset_period String? @db.VarChar(10)
   reset_count       Int     @default(0) @db.SmallInt
+
+  secret_key     SecretKeyLicense @relation(fields: [secret_key_id], references: [id], onDelete: NoAction)
 
   @@unique([customer_id, secret_key_id])
   @@map("license_keys")
