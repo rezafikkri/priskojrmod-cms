@@ -17,7 +17,7 @@ export default function CreateForm() {
     defaultValues: {
       first_name: '',
       last_name: '',
-      sm_username: '',
+      sm_profile_url: '',
       picture: '',
     },
   });

@@ -14,7 +14,7 @@ export default function EditForm({ owner }) {
       id: owner.id,
       first_name: owner.first_name,
       last_name: owner.last_name,
-      sm_username: owner.sm_username,
+      sm_profile_url: owner.sm_profile_url,
       picture: owner.picture,
     },
   });

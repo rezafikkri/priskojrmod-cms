@@ -27,7 +27,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
-import { getTableHeaderWidth } from '@/lib/utils';
+import { extractSMIdentifier, getTableHeaderWidth } from '@/lib/utils';
 import { removeOwner } from '@/actions/owner-actions';
 import ProfileBadge from '../ui/profile-badge';
 
@@ -76,8 +76,17 @@ export default function DataTable({ owners: data }) {
       ),
     },
     {
-      accessorKey: 'sm_username',
-      header: 'Social Media Username',
+      accessorKey: 'sm_profile_url',
+      header: 'Social Media',
+      cell: ({ row }) => (
+        <a
+          href={row.getValue('sm_profile_url')}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {extractSMIdentifier(row.getValue('sm_profile_url'))}
+        </a>
+      ),
     },
     {
       accessorKey: 'created_at',
