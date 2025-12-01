@@ -35606,7 +35606,7 @@ export namespace Prisma {
     id: number | null
     picture: string | null
     name: string | null
-    sm_username: string | null
+    sm_profile_url: string | null
     created_at: number | null
     updated_at: number | null
   }
@@ -35615,7 +35615,7 @@ export namespace Prisma {
     id: number | null
     picture: string | null
     name: string | null
-    sm_username: string | null
+    sm_profile_url: string | null
     created_at: number | null
     updated_at: number | null
   }
@@ -35624,7 +35624,7 @@ export namespace Prisma {
     id: number
     picture: number
     name: number
-    sm_username: number
+    sm_profile_url: number
     created_at: number
     updated_at: number
     _all: number
@@ -35647,7 +35647,7 @@ export namespace Prisma {
     id?: true
     picture?: true
     name?: true
-    sm_username?: true
+    sm_profile_url?: true
     created_at?: true
     updated_at?: true
   }
@@ -35656,7 +35656,7 @@ export namespace Prisma {
     id?: true
     picture?: true
     name?: true
-    sm_username?: true
+    sm_profile_url?: true
     created_at?: true
     updated_at?: true
   }
@@ -35665,7 +35665,7 @@ export namespace Prisma {
     id?: true
     picture?: true
     name?: true
-    sm_username?: true
+    sm_profile_url?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -35761,7 +35761,7 @@ export namespace Prisma {
     id: number
     picture: string
     name: string
-    sm_username: string
+    sm_profile_url: string
     created_at: number
     updated_at: number
     _count: TestimonialCountAggregateOutputType | null
@@ -35789,7 +35789,7 @@ export namespace Prisma {
     id?: boolean
     picture?: boolean
     name?: boolean
-    sm_username?: boolean
+    sm_profile_url?: boolean
     created_at?: boolean
     updated_at?: boolean
     translations?: boolean | Testimonial$translationsArgs<ExtArgs>
@@ -35800,7 +35800,7 @@ export namespace Prisma {
     id?: boolean
     picture?: boolean
     name?: boolean
-    sm_username?: boolean
+    sm_profile_url?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["testimonial"]>
@@ -35809,7 +35809,7 @@ export namespace Prisma {
     id?: boolean
     picture?: boolean
     name?: boolean
-    sm_username?: boolean
+    sm_profile_url?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["testimonial"]>
@@ -35818,12 +35818,12 @@ export namespace Prisma {
     id?: boolean
     picture?: boolean
     name?: boolean
-    sm_username?: boolean
+    sm_profile_url?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type TestimonialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "picture" | "name" | "sm_username" | "created_at" | "updated_at", ExtArgs["result"]["testimonial"]>
+  export type TestimonialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "picture" | "name" | "sm_profile_url" | "created_at" | "updated_at", ExtArgs["result"]["testimonial"]>
   export type TestimonialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     translations?: boolean | Testimonial$translationsArgs<ExtArgs>
     _count?: boolean | TestimonialCountOutputTypeDefaultArgs<ExtArgs>
@@ -35840,7 +35840,7 @@ export namespace Prisma {
       id: number
       picture: string
       name: string
-      sm_username: string
+      sm_profile_url: string
       created_at: number
       updated_at: number
     }, ExtArgs["result"]["testimonial"]>
@@ -36270,7 +36270,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Testimonial", 'Int'>
     readonly picture: FieldRef<"Testimonial", 'String'>
     readonly name: FieldRef<"Testimonial", 'String'>
-    readonly sm_username: FieldRef<"Testimonial", 'String'>
+    readonly sm_profile_url: FieldRef<"Testimonial", 'String'>
     readonly created_at: FieldRef<"Testimonial", 'Int'>
     readonly updated_at: FieldRef<"Testimonial", 'Int'>
   }
@@ -38140,7 +38140,7 @@ export namespace Prisma {
     id: 'id',
     picture: 'picture',
     name: 'name',
-    sm_username: 'sm_username',
+    sm_profile_url: 'sm_profile_url',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -40137,7 +40137,7 @@ export namespace Prisma {
     id?: IntFilter<"Testimonial"> | number
     picture?: StringFilter<"Testimonial"> | string
     name?: StringFilter<"Testimonial"> | string
-    sm_username?: StringFilter<"Testimonial"> | string
+    sm_profile_url?: StringFilter<"Testimonial"> | string
     created_at?: IntFilter<"Testimonial"> | number
     updated_at?: IntFilter<"Testimonial"> | number
     translations?: TestimonialTranslationListRelationFilter
@@ -40147,7 +40147,7 @@ export namespace Prisma {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     translations?: TestimonialTranslationOrderByRelationAggregateInput
@@ -40160,7 +40160,7 @@ export namespace Prisma {
     NOT?: TestimonialWhereInput | TestimonialWhereInput[]
     picture?: StringFilter<"Testimonial"> | string
     name?: StringFilter<"Testimonial"> | string
-    sm_username?: StringFilter<"Testimonial"> | string
+    sm_profile_url?: StringFilter<"Testimonial"> | string
     created_at?: IntFilter<"Testimonial"> | number
     updated_at?: IntFilter<"Testimonial"> | number
     translations?: TestimonialTranslationListRelationFilter
@@ -40170,7 +40170,7 @@ export namespace Prisma {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: TestimonialCountOrderByAggregateInput
@@ -40187,7 +40187,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Testimonial"> | number
     picture?: StringWithAggregatesFilter<"Testimonial"> | string
     name?: StringWithAggregatesFilter<"Testimonial"> | string
-    sm_username?: StringWithAggregatesFilter<"Testimonial"> | string
+    sm_profile_url?: StringWithAggregatesFilter<"Testimonial"> | string
     created_at?: IntWithAggregatesFilter<"Testimonial"> | number
     updated_at?: IntWithAggregatesFilter<"Testimonial"> | number
   }
@@ -42033,7 +42033,7 @@ export namespace Prisma {
   export type TestimonialCreateInput = {
     picture: string
     name: string
-    sm_username: string
+    sm_profile_url: string
     created_at: number
     updated_at: number
     translations?: TestimonialTranslationCreateNestedManyWithoutTestimonialInput
@@ -42043,7 +42043,7 @@ export namespace Prisma {
     id?: number
     picture: string
     name: string
-    sm_username: string
+    sm_profile_url: string
     created_at: number
     updated_at: number
     translations?: TestimonialTranslationUncheckedCreateNestedManyWithoutTestimonialInput
@@ -42052,7 +42052,7 @@ export namespace Prisma {
   export type TestimonialUpdateInput = {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_url?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
     translations?: TestimonialTranslationUpdateManyWithoutTestimonialNestedInput
@@ -42062,7 +42062,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_url?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
     translations?: TestimonialTranslationUncheckedUpdateManyWithoutTestimonialNestedInput
@@ -42072,7 +42072,7 @@ export namespace Prisma {
     id?: number
     picture: string
     name: string
-    sm_username: string
+    sm_profile_url: string
     created_at: number
     updated_at: number
   }
@@ -42080,7 +42080,7 @@ export namespace Prisma {
   export type TestimonialUpdateManyMutationInput = {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_url?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
   }
@@ -42089,7 +42089,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_url?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
   }
@@ -43768,7 +43768,7 @@ export namespace Prisma {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -43783,7 +43783,7 @@ export namespace Prisma {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -43792,7 +43792,7 @@ export namespace Prisma {
     id?: SortOrder
     picture?: SortOrder
     name?: SortOrder
-    sm_username?: SortOrder
+    sm_profile_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -48319,7 +48319,7 @@ export namespace Prisma {
   export type TestimonialCreateWithoutTranslationsInput = {
     picture: string
     name: string
-    sm_username: string
+    sm_profile_url: string
     created_at: number
     updated_at: number
   }
@@ -48328,7 +48328,7 @@ export namespace Prisma {
     id?: number
     picture: string
     name: string
-    sm_username: string
+    sm_profile_url: string
     created_at: number
     updated_at: number
   }
@@ -48352,7 +48352,7 @@ export namespace Prisma {
   export type TestimonialUpdateWithoutTranslationsInput = {
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_url?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
   }
@@ -48361,7 +48361,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     picture?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    sm_username?: StringFieldUpdateOperationsInput | string
+    sm_profile_url?: StringFieldUpdateOperationsInput | string
     created_at?: IntFieldUpdateOperationsInput | number
     updated_at?: IntFieldUpdateOperationsInput | number
   }

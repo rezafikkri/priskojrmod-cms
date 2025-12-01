@@ -376,7 +376,7 @@ exports.Prisma.TestimonialScalarFieldEnum = {
   id: 'id',
   picture: 'picture',
   name: 'name',
-  sm_username: 'sm_username',
+  sm_profile_url: 'sm_profile_url',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
