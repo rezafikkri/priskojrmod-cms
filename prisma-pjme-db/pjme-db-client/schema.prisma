@@ -64,13 +64,13 @@ model DonationLink {
 }
 
 model Owner {
-  id              Int    @id @default(autoincrement())
-  first_name      String @db.VarChar(100)
-  last_name       String @db.VarChar(100)
-  sm_profile_link String @db.VarChar(255)
-  picture         String @db.VarChar(255)
-  created_at      Int
-  updated_at      Int
+  id             Int    @id @default(autoincrement())
+  first_name     String @db.VarChar(100)
+  last_name      String @db.VarChar(100)
+  sm_profile_url String @db.VarChar(255)
+  picture        String @db.VarChar(255)
+  created_at     Int
+  updated_at     Int
 
   products Product[]
 
