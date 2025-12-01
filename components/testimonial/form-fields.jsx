@@ -56,14 +56,14 @@ export default function FormFields({
 
           <FormField
             control={form.control}
-            name="sm_username"
+            name="sm_profile_url"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Social Media Username</FormLabel>
+                <FormLabel className="text-base">Social Media Profile URL</FormLabel>
                 <FormControl>
                   <Input disabled={isSubmitting} {...field} className="md:text-base h-auto px-3 py-1.5 shadow-none" />
                 </FormControl>
-                <FormDescription>Enter the customer's social media username (Facebook, Instagram, or Twitter only).</FormDescription>
+                <FormDescription>Enter the URL of your primary social media profile (X, Instagram, YouTube, Facebook, LinkedIn or GitHub only).</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

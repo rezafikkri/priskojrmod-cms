@@ -25,7 +25,7 @@ import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
-import { getTableHeaderWidth } from '@/lib/utils';
+import { getTableHeaderWidth, extractSMIdentifier } from '@/lib/utils';
 import ProfileBadge from '../ui/profile-badge';
 
 export default function DataTable({ testimonials: data }) {
@@ -46,8 +46,18 @@ export default function DataTable({ testimonials: data }) {
       ),
     },
     {
-      accessorKey: 'sm_username',
-      header: 'Social Media Username',
+      accessorKey: 'sm_profile_url',
+      header: 'Social Media',
+      cell: ({ row }) => (
+        <a
+          href={row.getValue('sm_profile_url')}
+          rel="noopener noreferrer"
+          target="_blank"
+          className="underline hover:no-underline"
+        >
+          {extractSMIdentifier(row.getValue('sm_profile_url'))}
+        </a>
+      ),
     },
     {
       accessorKey: 'created_at',

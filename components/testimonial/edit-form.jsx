@@ -17,7 +17,7 @@ export default function EditForm({ testimonial }) {
         en: testimonial.translations.id.en,
       },
       name: testimonial.name,
-      sm_username: testimonial.sm_username,
+      sm_profile_url: testimonial.sm_profile_url,
       picture: testimonial.picture,
       message: {
         id: testimonial.translations.message.id,
