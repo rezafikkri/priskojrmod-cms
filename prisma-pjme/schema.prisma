@@ -464,12 +464,12 @@ model Feedback {
 }
 
 model Testimonial {
-  id          Int    @id @default(autoincrement()) @db.SmallInt
-  picture     String @db.VarChar(255)
-  name        String @db.VarChar(100)
-  sm_username String @db.VarChar(100)
-  created_at  Int
-  updated_at  Int
+  id              Int    @id @default(autoincrement()) @db.SmallInt
+  picture         String @db.VarChar(255)
+  name            String @db.VarChar(100)
+  sm_profile_url  String @db.VarChar(100)
+  created_at      Int
+  updated_at      Int
 
   translations TestimonialTranslation[]
 
