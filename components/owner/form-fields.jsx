@@ -61,7 +61,7 @@ export default function FormFields({
               <FormControl>
                 <Input disabled={isSubmitting} {...field} className="md:text-base h-auto px-3 py-1.5 shadow-none" />
               </FormControl>
-              <FormDescription>Enter the URL of your primary social media profile (X, Instagram, YouTube, Facebook, LinkedIn or GitHub only)</FormDescription>
+              <FormDescription>Enter the URL of your primary social media profile (X, Instagram, YouTube, Facebook, LinkedIn or GitHub only).</FormDescription>
               <FormMessage />
             </FormItem>
           )}

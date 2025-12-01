@@ -83,6 +83,7 @@ export default function DataTable({ owners: data }) {
           href={row.getValue('sm_profile_url')}
           rel="noopener noreferrer"
           target="_blank"
+          className="underline hover:no-underline"
         >
           {extractSMIdentifier(row.getValue('sm_profile_url'))}
         </a>

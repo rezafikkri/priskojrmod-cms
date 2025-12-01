@@ -47,7 +47,7 @@ export default function CreateForm() {
       form.setValue('last_name', admin.data.last_name);
       form.setValue('picture', admin.data.picture);
 
-      toast.success('Got your admin info! Now just add your social media username.');
+      toast.success('Got your admin info! Now just add your social media profile url.');
     } catch (err) {
       toast.error(err.message);
     } finally {
