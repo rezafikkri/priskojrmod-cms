@@ -56,7 +56,7 @@ model DonationLink {
   id            Int          @id @default(autoincrement())
   admin_id      Int          @db.SmallInt
   currency_code CurrencyCode
-  link          String       @db.VarChar(100)
+  url           String       @db.VarChar(100)
 
   admin Admin @relation(fields: [admin_id], references: [id], onDelete: Cascade)
 

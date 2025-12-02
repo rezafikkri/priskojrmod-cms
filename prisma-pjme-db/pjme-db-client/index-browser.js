@@ -137,7 +137,7 @@ exports.Prisma.DonationLinkScalarFieldEnum = {
   id: 'id',
   admin_id: 'admin_id',
   currency_code: 'currency_code',
-  link: 'link'
+  url: 'url'
 };
 
 exports.Prisma.OwnerScalarFieldEnum = {

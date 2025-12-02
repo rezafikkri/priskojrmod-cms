@@ -118,7 +118,7 @@ export default function FormFields({
               <FormField
                 key={dl.id}
                 control={form.control}
-                name={`donation_links.${index}.link`}
+                name={`donation_links.${index}.url`}
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-base">{dl.currency_code} Donation Link</FormLabel>
@@ -153,7 +153,7 @@ export default function FormFields({
                         </div>
                       )}
                     </div>
-                    <FormDescription>Enter the donation link for {dl.currency_code}.</FormDescription>
+                    <FormDescription>Enter the donation URL for {dl.currency_code}.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

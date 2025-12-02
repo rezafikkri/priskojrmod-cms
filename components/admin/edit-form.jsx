@@ -43,7 +43,7 @@ export default function EditForm({ admin }) {
       form.setValue(
         'donation_links',
         prevDonationLinks.map(dl => {
-          if (dl.dbId === id) return { link: '', currency_code: dl.currency_code };
+          if (dl.dbId === id) return { url: '', currency_code: dl.currency_code };
           return dl;
         }),
       );

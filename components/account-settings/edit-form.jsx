@@ -45,11 +45,11 @@ export function EditForm({
       form.setValue(
         'donation_links',
         prevDonationLinks.map(dl => {
-          if (dl.dbId === id) return { link: '', currency_code: dl.currency_code };
+          if (dl.dbId === id) return { url: '', currency_code: dl.currency_code };
           return dl;
         }),
       );
-      toast.success('Donation Link deleted successfully.');
+      toast.success('Donation link deleted successfully.');
     } else {
       toast.error(removeRes.message);
     }

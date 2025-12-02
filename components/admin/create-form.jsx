@@ -22,8 +22,8 @@ export default function CreateForm() {
       },
       picture: '',
       donation_links: [
-        { link: '', currency_code: CurrencyCode.IDR },
-        { link: '', currency_code: CurrencyCode.USD },
+        { url: '', currency_code: CurrencyCode.IDR },
+        { url: '', currency_code: CurrencyCode.USD },
       ],
     },
   });

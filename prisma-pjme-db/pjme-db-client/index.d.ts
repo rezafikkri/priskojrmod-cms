@@ -5340,21 +5340,21 @@ export namespace Prisma {
     id: number | null
     admin_id: number | null
     currency_code: $Enums.CurrencyCode | null
-    link: string | null
+    url: string | null
   }
 
   export type DonationLinkMaxAggregateOutputType = {
     id: number | null
     admin_id: number | null
     currency_code: $Enums.CurrencyCode | null
-    link: string | null
+    url: string | null
   }
 
   export type DonationLinkCountAggregateOutputType = {
     id: number
     admin_id: number
     currency_code: number
-    link: number
+    url: number
     _all: number
   }
 
@@ -5373,21 +5373,21 @@ export namespace Prisma {
     id?: true
     admin_id?: true
     currency_code?: true
-    link?: true
+    url?: true
   }
 
   export type DonationLinkMaxAggregateInputType = {
     id?: true
     admin_id?: true
     currency_code?: true
-    link?: true
+    url?: true
   }
 
   export type DonationLinkCountAggregateInputType = {
     id?: true
     admin_id?: true
     currency_code?: true
-    link?: true
+    url?: true
     _all?: true
   }
 
@@ -5481,7 +5481,7 @@ export namespace Prisma {
     id: number
     admin_id: number
     currency_code: $Enums.CurrencyCode
-    link: string
+    url: string
     _count: DonationLinkCountAggregateOutputType | null
     _avg: DonationLinkAvgAggregateOutputType | null
     _sum: DonationLinkSumAggregateOutputType | null
@@ -5507,7 +5507,7 @@ export namespace Prisma {
     id?: boolean
     admin_id?: boolean
     currency_code?: boolean
-    link?: boolean
+    url?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["donationLink"]>
 
@@ -5515,7 +5515,7 @@ export namespace Prisma {
     id?: boolean
     admin_id?: boolean
     currency_code?: boolean
-    link?: boolean
+    url?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["donationLink"]>
 
@@ -5523,7 +5523,7 @@ export namespace Prisma {
     id?: boolean
     admin_id?: boolean
     currency_code?: boolean
-    link?: boolean
+    url?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["donationLink"]>
 
@@ -5531,10 +5531,10 @@ export namespace Prisma {
     id?: boolean
     admin_id?: boolean
     currency_code?: boolean
-    link?: boolean
+    url?: boolean
   }
 
-  export type DonationLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "admin_id" | "currency_code" | "link", ExtArgs["result"]["donationLink"]>
+  export type DonationLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "admin_id" | "currency_code" | "url", ExtArgs["result"]["donationLink"]>
   export type DonationLinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }
@@ -5554,7 +5554,7 @@ export namespace Prisma {
       id: number
       admin_id: number
       currency_code: $Enums.CurrencyCode
-      link: string
+      url: string
     }, ExtArgs["result"]["donationLink"]>
     composites: {}
   }
@@ -5982,7 +5982,7 @@ export namespace Prisma {
     readonly id: FieldRef<"DonationLink", 'Int'>
     readonly admin_id: FieldRef<"DonationLink", 'Int'>
     readonly currency_code: FieldRef<"DonationLink", 'CurrencyCode'>
-    readonly link: FieldRef<"DonationLink", 'String'>
+    readonly url: FieldRef<"DonationLink", 'String'>
   }
     
 
@@ -37820,7 +37820,7 @@ export namespace Prisma {
     id: 'id',
     admin_id: 'admin_id',
     currency_code: 'currency_code',
-    link: 'link'
+    url: 'url'
   };
 
   export type DonationLinkScalarFieldEnum = (typeof DonationLinkScalarFieldEnum)[keyof typeof DonationLinkScalarFieldEnum]
@@ -38443,7 +38443,7 @@ export namespace Prisma {
     id?: IntFilter<"DonationLink"> | number
     admin_id?: IntFilter<"DonationLink"> | number
     currency_code?: EnumCurrencyCodeFilter<"DonationLink"> | $Enums.CurrencyCode
-    link?: StringFilter<"DonationLink"> | string
+    url?: StringFilter<"DonationLink"> | string
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
   }
 
@@ -38451,7 +38451,7 @@ export namespace Prisma {
     id?: SortOrder
     admin_id?: SortOrder
     currency_code?: SortOrder
-    link?: SortOrder
+    url?: SortOrder
     admin?: AdminOrderByWithRelationInput
   }
 
@@ -38462,7 +38462,7 @@ export namespace Prisma {
     NOT?: DonationLinkWhereInput | DonationLinkWhereInput[]
     admin_id?: IntFilter<"DonationLink"> | number
     currency_code?: EnumCurrencyCodeFilter<"DonationLink"> | $Enums.CurrencyCode
-    link?: StringFilter<"DonationLink"> | string
+    url?: StringFilter<"DonationLink"> | string
     admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
   }, "id">
 
@@ -38470,7 +38470,7 @@ export namespace Prisma {
     id?: SortOrder
     admin_id?: SortOrder
     currency_code?: SortOrder
-    link?: SortOrder
+    url?: SortOrder
     _count?: DonationLinkCountOrderByAggregateInput
     _avg?: DonationLinkAvgOrderByAggregateInput
     _max?: DonationLinkMaxOrderByAggregateInput
@@ -38485,7 +38485,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"DonationLink"> | number
     admin_id?: IntWithAggregatesFilter<"DonationLink"> | number
     currency_code?: EnumCurrencyCodeWithAggregatesFilter<"DonationLink"> | $Enums.CurrencyCode
-    link?: StringWithAggregatesFilter<"DonationLink"> | string
+    url?: StringWithAggregatesFilter<"DonationLink"> | string
   }
 
   export type OwnerWhereInput = {
@@ -40342,7 +40342,7 @@ export namespace Prisma {
 
   export type DonationLinkCreateInput = {
     currency_code: $Enums.CurrencyCode
-    link: string
+    url: string
     admin: AdminCreateNestedOneWithoutDonation_linksInput
   }
 
@@ -40350,12 +40350,12 @@ export namespace Prisma {
     id?: number
     admin_id: number
     currency_code: $Enums.CurrencyCode
-    link: string
+    url: string
   }
 
   export type DonationLinkUpdateInput = {
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    link?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
     admin?: AdminUpdateOneRequiredWithoutDonation_linksNestedInput
   }
 
@@ -40363,26 +40363,26 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     admin_id?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    link?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
   }
 
   export type DonationLinkCreateManyInput = {
     id?: number
     admin_id: number
     currency_code: $Enums.CurrencyCode
-    link: string
+    url: string
   }
 
   export type DonationLinkUpdateManyMutationInput = {
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    link?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
   }
 
   export type DonationLinkUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     admin_id?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    link?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
   }
 
   export type OwnerCreateInput = {
@@ -42341,7 +42341,7 @@ export namespace Prisma {
     id?: SortOrder
     admin_id?: SortOrder
     currency_code?: SortOrder
-    link?: SortOrder
+    url?: SortOrder
   }
 
   export type DonationLinkAvgOrderByAggregateInput = {
@@ -42353,14 +42353,14 @@ export namespace Prisma {
     id?: SortOrder
     admin_id?: SortOrder
     currency_code?: SortOrder
-    link?: SortOrder
+    url?: SortOrder
   }
 
   export type DonationLinkMinOrderByAggregateInput = {
     id?: SortOrder
     admin_id?: SortOrder
     currency_code?: SortOrder
-    link?: SortOrder
+    url?: SortOrder
   }
 
   export type DonationLinkSumOrderByAggregateInput = {
@@ -45524,13 +45524,13 @@ export namespace Prisma {
 
   export type DonationLinkCreateWithoutAdminInput = {
     currency_code: $Enums.CurrencyCode
-    link: string
+    url: string
   }
 
   export type DonationLinkUncheckedCreateWithoutAdminInput = {
     id?: number
     currency_code: $Enums.CurrencyCode
-    link: string
+    url: string
   }
 
   export type DonationLinkCreateOrConnectWithoutAdminInput = {
@@ -45620,7 +45620,7 @@ export namespace Prisma {
     id?: IntFilter<"DonationLink"> | number
     admin_id?: IntFilter<"DonationLink"> | number
     currency_code?: EnumCurrencyCodeFilter<"DonationLink"> | $Enums.CurrencyCode
-    link?: StringFilter<"DonationLink"> | string
+    url?: StringFilter<"DonationLink"> | string
   }
 
   export type ProductUpsertWithWhereUniqueWithoutAdminInput = {
@@ -48369,7 +48369,7 @@ export namespace Prisma {
   export type DonationLinkCreateManyAdminInput = {
     id?: number
     currency_code: $Enums.CurrencyCode
-    link: string
+    url: string
   }
 
   export type ProductCreateManyAdminInput = {
@@ -48390,19 +48390,19 @@ export namespace Prisma {
 
   export type DonationLinkUpdateWithoutAdminInput = {
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    link?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
   }
 
   export type DonationLinkUncheckedUpdateWithoutAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    link?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
   }
 
   export type DonationLinkUncheckedUpdateManyWithoutAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
     currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
-    link?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProductUpdateWithoutAdminInput = {
