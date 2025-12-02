@@ -18,8 +18,13 @@ export default async function ProductForm({ mode = 'create', id = null }) {
     slug: true,
   });
   const owners = await getOwners({
-    id: true,
-    first_name: true,
+    select: {
+      id: true,
+      first_name: true,
+      last_name: true,
+      sm_profile_url: true,
+    },
+    withDisplayLabel: true,
   });
   const licenses = await getLicensesWithTranslation();
 

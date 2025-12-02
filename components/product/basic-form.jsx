@@ -203,7 +203,7 @@ export default function BasicForm({
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5">
-                    <SelectValue placeholder="Select an owner" suppressHydrationWarning />
+                    <SelectValue placeholder="Select an owner" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -213,7 +213,7 @@ export default function BasicForm({
                       className="text-base"
                       value={owner.id.toString()}
                     >
-                      {owner.first_name}
+                      {owner.displayLabel}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -232,7 +232,7 @@ export default function BasicForm({
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5">
-                    <SelectValue placeholder="Select a license" suppressHydrationWarning />
+                    <SelectValue placeholder="Select a license" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

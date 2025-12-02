@@ -31,7 +31,7 @@ async function seedCustomersAndLicenseKeys() {
   // seed customers
   const customers = [];
   const customerIds = [];
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 50; i++) {
     const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
     const customerId = uuidv7();
     customerIds.push(customerId);
