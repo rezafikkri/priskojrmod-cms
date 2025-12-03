@@ -33,7 +33,7 @@ import { removeLicense } from '@/actions/license-actions';
 
 export default function DataTable({ licenses: data }) {
   const [licenses, setLicenses] = useState(data);
-  const [nameLang, setNameLang] = useState(Language.EN);
+  const [nameLang, setNameLang] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_LANG);
   const [deletingIds, setDeletingIds] = useState([]);
 
   async function handleDelete(id) {
@@ -68,20 +68,20 @@ export default function DataTable({ licenses: data }) {
       header: () => (
         <>
           <span>Name</span>
-          <div className="ms-4 inline-block space-x-1">
-            <Button
-              variant="outline"
-              className={`px-2 py-0.5 text-xs h-auto shadow-none ${nameLang === Language.EN ? 'text-accent-foreground bg-accent' : ''}`}
-              onClick={() => setNameLang(Language.EN)}
-            >
-              EN
-            </Button>
+          <div className="ms-4 inline-block space-x-1"> 
             <Button
               variant="outline"
               className={`px-2 py-0.5 text-xs h-auto shadow-none ${nameLang === Language.ID ? 'text-accent-foreground bg-accent' : ''}`}
               onClick={() => setNameLang(Language.ID)}
             >
               ID
+            </Button>
+            <Button
+              variant="outline"
+              className={`px-2 py-0.5 text-xs h-auto shadow-none ${nameLang === Language.EN ? 'text-accent-foreground bg-accent' : ''}`}
+              onClick={() => setNameLang(Language.EN)}
+            >
+              EN
             </Button>
           </div>
         </>

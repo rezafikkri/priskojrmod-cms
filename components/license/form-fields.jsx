@@ -19,7 +19,7 @@ export default function FormFields({
   onSubmit,
   isResetEditor,
 }) {
-  const [activeLang, setActiveLang] = useState(Language.ID);
+  const [activeLang, setActiveLang] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_LANG);
   const { isSubmitting, errors } = form.formState;
   
   return (

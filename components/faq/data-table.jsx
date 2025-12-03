@@ -33,7 +33,7 @@ import { getTableHeaderWidth } from '@/lib/utils';
 
 export default function DataTable({ faqs: data }) {
   const [faqs, setFaqs] = useState(data);
-  const [titleLang, setTitleLang] = useState(Language.EN);
+  const [titleLang, setTitleLang] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_LANG);
   const [deletingIds, setDeletingIds] = useState([]);
 
   async function handleDelete(id) {
@@ -66,20 +66,20 @@ export default function DataTable({ faqs: data }) {
       header: () => (
         <>
           <span>Title</span>
-          <div className="ms-4 inline-block space-x-1">
-            <Button
-              variant="outline"
-              className={`px-2 py-0.5 text-xs h-auto shadow-none ${titleLang === Language.EN ? 'text-accent-foreground bg-accent' : ''}`}
-              onClick={() => setTitleLang(Language.EN)}
-            >
-              EN
-            </Button>
+          <div className="ms-4 inline-block space-x-1"> 
             <Button
               variant="outline"
               className={`px-2 py-0.5 text-xs h-auto shadow-none ${titleLang === Language.ID ? 'text-accent-foreground bg-accent' : ''}`}
               onClick={() => setTitleLang(Language.ID)}
             >
               ID
+            </Button>
+            <Button
+              variant="outline"
+              className={`px-2 py-0.5 text-xs h-auto shadow-none ${titleLang === Language.EN ? 'text-accent-foreground bg-accent' : ''}`}
+              onClick={() => setTitleLang(Language.EN)}
+            >
+              EN
             </Button>
           </div>
         </>

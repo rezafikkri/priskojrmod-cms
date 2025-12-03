@@ -19,7 +19,7 @@ export default function ContentForm({
   onPrevStep,
   mode = 'create'
 }) {
-  const [activeLang, setActiveLang] = useState(Language.ID);
+  const [activeLang, setActiveLang] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_LANG);
   const basic = useProductFormStore(state => state.form.basic);
   const content = useProductFormStore(state => state.form.content);
   const setContent = useProductFormStore(state => state.setContent);

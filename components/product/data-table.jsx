@@ -52,7 +52,7 @@ export default function DataTable({
   } = tableState;
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
-  const [priceCurrency, setPriceCurrency] = useState(CurrencyCode.IDR);
+  const [priceCurrency, setPriceCurrency] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_CURR);
 
   const columns = useMemo(() => [
     {

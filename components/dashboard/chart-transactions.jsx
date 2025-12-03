@@ -55,7 +55,7 @@ const chartConfig = {
 };
 
 export default function ChartTransactions() {
-  const [activeCurrency, setActiveCurrency] = useState(CurrencyCode.IDR);
+  const [activeCurrency, setActiveCurrency] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_CURR);
 
   return (
     <Card className="shadow-none">
