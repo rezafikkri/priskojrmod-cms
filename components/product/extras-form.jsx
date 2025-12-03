@@ -142,26 +142,22 @@ export default function ExtrasForm({
 
   async function handleProceed(data) {
     let isError = false;
-    let fieldNameToFocus = null;
+    const variants = data.variants;
+    const variantCount = variants.length;
 
-    data.variants.forEach((variant, index) => {
-      if (variant.download_url && !variant.file_access_password) {
-        if (!fieldNameToFocus) fieldNameToFocus = `variants.${index}.file_access_password`;
-        
-        form.setError(`variants.${index}.file_access_password`, { message: 'Can\'t be empty' });
+    // do reverse loop for when error is many, then focus is for first input from top, not last input.
+    for (let i = variantCount; i--; i > 0) {
+      if (variants[i].download_url && !variants[i].file_access_password) {
+        form.setError(
+          `variants.${i}.file_access_password`,
+          { message: 'Can\'t be empty' },
+          { shouldFocus: true },
+        );
         isError = true;
       }
-    });
-
-    if (isError) {
-      // Use requestAnimationFrame to ensure focus happens 
-      // right after the DOM update but before the next paint.
-      // This avoids timing issues where the input ref is not yet ready.
-      requestAnimationFrame(() => {
-        form.setFocus(fieldNameToFocus);
-      });
-      return;
     }
+
+    if (isError) return;
 
     if (mode == 'edit' && basic.price_type === PriceType.FREE) {
       await handleSubmit(data);

@@ -74,17 +74,25 @@ export default function BasicForm({
   function handleNext(data) {
     let isError = false;
 
-    // validate drive_file_id, download_url, and version
-    if (data.category_id === applicationCategoryId || data.price_type === PriceType.FREE) {
-      if (data.download_url === '') {
-        form.setError('download_url', { message: 'Can\'t be empty' });
+    if (data.category_id === applicationCategoryId) {
+      if (!isSemverFormat(data.version)) {
+        form.setError(
+          'version',
+          { message: 'Must follow simplified semantic versioning' },
+          { shouldFocus: true },
+        );
         isError = true;
       }
     }
-    
-    if (data.category_id === applicationCategoryId) {
-      if (!isSemverFormat(data.version)) {
-        form.setError('version', { message: 'Must follow simplified semantic versioning' });
+
+    // validate drive_file_id, download_url, and version
+    if (data.category_id === applicationCategoryId || data.price_type === PriceType.FREE) {
+      if (data.download_url === '') {
+        form.setError(
+          'download_url',
+          { message: 'Can\'t be empty' },
+          { shouldFocus: true },
+        );
         isError = true;
       }
     }
