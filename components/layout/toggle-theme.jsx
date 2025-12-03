@@ -32,7 +32,7 @@ export default function ToggleTheme({
     >
       <Sun className="hidden dark:inline-block" />
       <Moon className="inline-block dark:hidden" />
-      <span>Toggle Theme</span>
+      <span> Toggle Theme</span>
     </button>
   );
 }

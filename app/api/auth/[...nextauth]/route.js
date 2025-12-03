@@ -16,7 +16,6 @@ export const authOptions = {
   session: {
     strategy: 'jwt',
   },
-  theme: { colorScheme: 'light' },
   callbacks: {
     async redirect({ url, baseUrl }) {
       // If redirect URL is specified with relative path
