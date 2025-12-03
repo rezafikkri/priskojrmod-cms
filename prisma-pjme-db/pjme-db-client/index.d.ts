@@ -12084,7 +12084,7 @@ export namespace Prisma {
     owner_id: number | null
     license_id: number | null
     drive_file_id: string | null
-    download_link: string | null
+    download_url: string | null
     is_published: boolean | null
     is_pinned: boolean | null
     name: string | null
@@ -12101,7 +12101,7 @@ export namespace Prisma {
     owner_id: number | null
     license_id: number | null
     drive_file_id: string | null
-    download_link: string | null
+    download_url: string | null
     is_published: boolean | null
     is_pinned: boolean | null
     name: string | null
@@ -12118,7 +12118,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id: number
-    download_link: number
+    download_url: number
     is_published: number
     is_pinned: number
     name: number
@@ -12155,7 +12155,7 @@ export namespace Prisma {
     owner_id?: true
     license_id?: true
     drive_file_id?: true
-    download_link?: true
+    download_url?: true
     is_published?: true
     is_pinned?: true
     name?: true
@@ -12172,7 +12172,7 @@ export namespace Prisma {
     owner_id?: true
     license_id?: true
     drive_file_id?: true
-    download_link?: true
+    download_url?: true
     is_published?: true
     is_pinned?: true
     name?: true
@@ -12189,7 +12189,7 @@ export namespace Prisma {
     owner_id?: true
     license_id?: true
     drive_file_id?: true
-    download_link?: true
+    download_url?: true
     is_published?: true
     is_pinned?: true
     name?: true
@@ -12293,7 +12293,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id: string | null
-    download_link: string | null
+    download_url: string | null
     is_published: boolean
     is_pinned: boolean
     name: string
@@ -12329,7 +12329,7 @@ export namespace Prisma {
     owner_id?: boolean
     license_id?: boolean
     drive_file_id?: boolean
-    download_link?: boolean
+    download_url?: boolean
     is_published?: boolean
     is_pinned?: boolean
     name?: boolean
@@ -12357,7 +12357,7 @@ export namespace Prisma {
     owner_id?: boolean
     license_id?: boolean
     drive_file_id?: boolean
-    download_link?: boolean
+    download_url?: boolean
     is_published?: boolean
     is_pinned?: boolean
     name?: boolean
@@ -12378,7 +12378,7 @@ export namespace Prisma {
     owner_id?: boolean
     license_id?: boolean
     drive_file_id?: boolean
-    download_link?: boolean
+    download_url?: boolean
     is_published?: boolean
     is_pinned?: boolean
     name?: boolean
@@ -12399,7 +12399,7 @@ export namespace Prisma {
     owner_id?: boolean
     license_id?: boolean
     drive_file_id?: boolean
-    download_link?: boolean
+    download_url?: boolean
     is_published?: boolean
     is_pinned?: boolean
     name?: boolean
@@ -12409,7 +12409,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category_id" | "admin_id" | "owner_id" | "license_id" | "drive_file_id" | "download_link" | "is_published" | "is_pinned" | "name" | "slug" | "price_type" | "created_at" | "updated_at", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category_id" | "admin_id" | "owner_id" | "license_id" | "drive_file_id" | "download_url" | "is_published" | "is_pinned" | "name" | "slug" | "price_type" | "created_at" | "updated_at", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -12457,7 +12457,7 @@ export namespace Prisma {
       owner_id: number
       license_id: number
       drive_file_id: string | null
-      download_link: string | null
+      download_url: string | null
       is_published: boolean
       is_pinned: boolean
       name: string
@@ -12904,7 +12904,7 @@ export namespace Prisma {
     readonly owner_id: FieldRef<"Product", 'Int'>
     readonly license_id: FieldRef<"Product", 'Int'>
     readonly drive_file_id: FieldRef<"Product", 'String'>
-    readonly download_link: FieldRef<"Product", 'String'>
+    readonly download_url: FieldRef<"Product", 'String'>
     readonly is_published: FieldRef<"Product", 'Boolean'>
     readonly is_pinned: FieldRef<"Product", 'Boolean'>
     readonly name: FieldRef<"Product", 'String'>
@@ -19965,7 +19965,7 @@ export namespace Prisma {
     id: string | null
     product_id: string | null
     name: string | null
-    download_link: string | null
+    download_url: string | null
     file_access_password: string | null
   }
 
@@ -19973,7 +19973,7 @@ export namespace Prisma {
     id: string | null
     product_id: string | null
     name: string | null
-    download_link: string | null
+    download_url: string | null
     file_access_password: string | null
   }
 
@@ -19981,7 +19981,7 @@ export namespace Prisma {
     id: number
     product_id: number
     name: number
-    download_link: number
+    download_url: number
     file_access_password: number
     _all: number
   }
@@ -19991,7 +19991,7 @@ export namespace Prisma {
     id?: true
     product_id?: true
     name?: true
-    download_link?: true
+    download_url?: true
     file_access_password?: true
   }
 
@@ -19999,7 +19999,7 @@ export namespace Prisma {
     id?: true
     product_id?: true
     name?: true
-    download_link?: true
+    download_url?: true
     file_access_password?: true
   }
 
@@ -20007,7 +20007,7 @@ export namespace Prisma {
     id?: true
     product_id?: true
     name?: true
-    download_link?: true
+    download_url?: true
     file_access_password?: true
     _all?: true
   }
@@ -20088,7 +20088,7 @@ export namespace Prisma {
     id: string
     product_id: string
     name: string
-    download_link: string | null
+    download_url: string | null
     file_access_password: string | null
     _count: ProductVariantCountAggregateOutputType | null
     _min: ProductVariantMinAggregateOutputType | null
@@ -20113,7 +20113,7 @@ export namespace Prisma {
     id?: boolean
     product_id?: boolean
     name?: boolean
-    download_link?: boolean
+    download_url?: boolean
     file_access_password?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
     prices?: boolean | ProductVariant$pricesArgs<ExtArgs>
@@ -20124,7 +20124,7 @@ export namespace Prisma {
     id?: boolean
     product_id?: boolean
     name?: boolean
-    download_link?: boolean
+    download_url?: boolean
     file_access_password?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productVariant"]>
@@ -20133,7 +20133,7 @@ export namespace Prisma {
     id?: boolean
     product_id?: boolean
     name?: boolean
-    download_link?: boolean
+    download_url?: boolean
     file_access_password?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productVariant"]>
@@ -20142,11 +20142,11 @@ export namespace Prisma {
     id?: boolean
     product_id?: boolean
     name?: boolean
-    download_link?: boolean
+    download_url?: boolean
     file_access_password?: boolean
   }
 
-  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_id" | "name" | "download_link" | "file_access_password", ExtArgs["result"]["productVariant"]>
+  export type ProductVariantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "product_id" | "name" | "download_url" | "file_access_password", ExtArgs["result"]["productVariant"]>
   export type ProductVariantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     prices?: boolean | ProductVariant$pricesArgs<ExtArgs>
@@ -20169,7 +20169,7 @@ export namespace Prisma {
       id: string
       product_id: string
       name: string
-      download_link: string | null
+      download_url: string | null
       file_access_password: string | null
     }, ExtArgs["result"]["productVariant"]>
     composites: {}
@@ -20599,7 +20599,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductVariant", 'String'>
     readonly product_id: FieldRef<"ProductVariant", 'String'>
     readonly name: FieldRef<"ProductVariant", 'String'>
-    readonly download_link: FieldRef<"ProductVariant", 'String'>
+    readonly download_url: FieldRef<"ProductVariant", 'String'>
     readonly file_access_password: FieldRef<"ProductVariant", 'String'>
   }
     
@@ -33231,9 +33231,9 @@ export namespace Prisma {
     product_name: string | null
     product_version: string | null
     product_drive_file_id: string | null
-    product_download_link: string | null
+    product_download_url: string | null
     product_variant: string | null
-    variant_download_link: string | null
+    variant_download_url: string | null
     variant_file_access_password: string | null
     product_currency_code: $Enums.CurrencyCode | null
     product_price: Decimal | null
@@ -33255,9 +33255,9 @@ export namespace Prisma {
     product_name: string | null
     product_version: string | null
     product_drive_file_id: string | null
-    product_download_link: string | null
+    product_download_url: string | null
     product_variant: string | null
-    variant_download_link: string | null
+    variant_download_url: string | null
     variant_file_access_password: string | null
     product_currency_code: $Enums.CurrencyCode | null
     product_price: Decimal | null
@@ -33279,9 +33279,9 @@ export namespace Prisma {
     product_name: number
     product_version: number
     product_drive_file_id: number
-    product_download_link: number
+    product_download_url: number
     product_variant: number
-    variant_download_link: number
+    variant_download_url: number
     variant_file_access_password: number
     product_currency_code: number
     product_price: number
@@ -33321,9 +33321,9 @@ export namespace Prisma {
     product_name?: true
     product_version?: true
     product_drive_file_id?: true
-    product_download_link?: true
+    product_download_url?: true
     product_variant?: true
-    variant_download_link?: true
+    variant_download_url?: true
     variant_file_access_password?: true
     product_currency_code?: true
     product_price?: true
@@ -33345,9 +33345,9 @@ export namespace Prisma {
     product_name?: true
     product_version?: true
     product_drive_file_id?: true
-    product_download_link?: true
+    product_download_url?: true
     product_variant?: true
-    variant_download_link?: true
+    variant_download_url?: true
     variant_file_access_password?: true
     product_currency_code?: true
     product_price?: true
@@ -33369,9 +33369,9 @@ export namespace Prisma {
     product_name?: true
     product_version?: true
     product_drive_file_id?: true
-    product_download_link?: true
+    product_download_url?: true
     product_variant?: true
-    variant_download_link?: true
+    variant_download_url?: true
     variant_file_access_password?: true
     product_currency_code?: true
     product_price?: true
@@ -33480,9 +33480,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id: string | null
-    product_download_link: string | null
+    product_download_url: string | null
     product_variant: string
-    variant_download_link: string | null
+    variant_download_url: string | null
     variant_file_access_password: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal
@@ -33523,9 +33523,9 @@ export namespace Prisma {
     product_name?: boolean
     product_version?: boolean
     product_drive_file_id?: boolean
-    product_download_link?: boolean
+    product_download_url?: boolean
     product_variant?: boolean
-    variant_download_link?: boolean
+    variant_download_url?: boolean
     variant_file_access_password?: boolean
     product_currency_code?: boolean
     product_price?: boolean
@@ -33549,9 +33549,9 @@ export namespace Prisma {
     product_name?: boolean
     product_version?: boolean
     product_drive_file_id?: boolean
-    product_download_link?: boolean
+    product_download_url?: boolean
     product_variant?: boolean
-    variant_download_link?: boolean
+    variant_download_url?: boolean
     variant_file_access_password?: boolean
     product_currency_code?: boolean
     product_price?: boolean
@@ -33575,9 +33575,9 @@ export namespace Prisma {
     product_name?: boolean
     product_version?: boolean
     product_drive_file_id?: boolean
-    product_download_link?: boolean
+    product_download_url?: boolean
     product_variant?: boolean
-    variant_download_link?: boolean
+    variant_download_url?: boolean
     variant_file_access_password?: boolean
     product_currency_code?: boolean
     product_price?: boolean
@@ -33601,9 +33601,9 @@ export namespace Prisma {
     product_name?: boolean
     product_version?: boolean
     product_drive_file_id?: boolean
-    product_download_link?: boolean
+    product_download_url?: boolean
     product_variant?: boolean
-    variant_download_link?: boolean
+    variant_download_url?: boolean
     variant_file_access_password?: boolean
     product_currency_code?: boolean
     product_price?: boolean
@@ -33615,7 +33615,7 @@ export namespace Prisma {
     shared_at?: boolean
   }
 
-  export type TransactionDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "product_id" | "product_price_id" | "product_coupon_id" | "quantity" | "product_name" | "product_version" | "product_drive_file_id" | "product_download_link" | "product_variant" | "variant_download_link" | "variant_file_access_password" | "product_currency_code" | "product_price" | "product_discount" | "product_coupon_code" | "product_coupon_discount" | "drive_permission_id" | "share_method" | "shared_at", ExtArgs["result"]["transactionDetail"]>
+  export type TransactionDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transaction_id" | "product_id" | "product_price_id" | "product_coupon_id" | "quantity" | "product_name" | "product_version" | "product_drive_file_id" | "product_download_url" | "product_variant" | "variant_download_url" | "variant_file_access_password" | "product_currency_code" | "product_price" | "product_discount" | "product_coupon_code" | "product_coupon_discount" | "drive_permission_id" | "share_method" | "shared_at", ExtArgs["result"]["transactionDetail"]>
   export type TransactionDetailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
     price?: boolean | TransactionDetail$priceArgs<ExtArgs>
@@ -33645,9 +33645,9 @@ export namespace Prisma {
       product_name: string
       product_version: string
       product_drive_file_id: string | null
-      product_download_link: string | null
+      product_download_url: string | null
       product_variant: string
-      variant_download_link: string | null
+      variant_download_url: string | null
       variant_file_access_password: string | null
       product_currency_code: $Enums.CurrencyCode
       product_price: Prisma.Decimal
@@ -34091,9 +34091,9 @@ export namespace Prisma {
     readonly product_name: FieldRef<"TransactionDetail", 'String'>
     readonly product_version: FieldRef<"TransactionDetail", 'String'>
     readonly product_drive_file_id: FieldRef<"TransactionDetail", 'String'>
-    readonly product_download_link: FieldRef<"TransactionDetail", 'String'>
+    readonly product_download_url: FieldRef<"TransactionDetail", 'String'>
     readonly product_variant: FieldRef<"TransactionDetail", 'String'>
-    readonly variant_download_link: FieldRef<"TransactionDetail", 'String'>
+    readonly variant_download_url: FieldRef<"TransactionDetail", 'String'>
     readonly variant_file_access_password: FieldRef<"TransactionDetail", 'String'>
     readonly product_currency_code: FieldRef<"TransactionDetail", 'CurrencyCode'>
     readonly product_price: FieldRef<"TransactionDetail", 'Decimal'>
@@ -37894,7 +37894,7 @@ export namespace Prisma {
     owner_id: 'owner_id',
     license_id: 'license_id',
     drive_file_id: 'drive_file_id',
-    download_link: 'download_link',
+    download_url: 'download_url',
     is_published: 'is_published',
     is_pinned: 'is_pinned',
     name: 'name',
@@ -37974,7 +37974,7 @@ export namespace Prisma {
     id: 'id',
     product_id: 'product_id',
     name: 'name',
-    download_link: 'download_link',
+    download_url: 'download_url',
     file_access_password: 'file_access_password'
   };
 
@@ -38107,9 +38107,9 @@ export namespace Prisma {
     product_name: 'product_name',
     product_version: 'product_version',
     product_drive_file_id: 'product_drive_file_id',
-    product_download_link: 'product_download_link',
+    product_download_url: 'product_download_url',
     product_variant: 'product_variant',
-    variant_download_link: 'variant_download_link',
+    variant_download_url: 'variant_download_url',
     variant_file_access_password: 'variant_file_access_password',
     product_currency_code: 'product_currency_code',
     product_price: 'product_price',
@@ -38816,7 +38816,7 @@ export namespace Prisma {
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
     drive_file_id?: StringNullableFilter<"Product"> | string | null
-    download_link?: StringNullableFilter<"Product"> | string | null
+    download_url?: StringNullableFilter<"Product"> | string | null
     is_published?: BoolFilter<"Product"> | boolean
     is_pinned?: BoolFilter<"Product"> | boolean
     name?: StringFilter<"Product"> | string
@@ -38843,7 +38843,7 @@ export namespace Prisma {
     owner_id?: SortOrder
     license_id?: SortOrder
     drive_file_id?: SortOrderInput | SortOrder
-    download_link?: SortOrderInput | SortOrder
+    download_url?: SortOrderInput | SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
     name?: SortOrder
@@ -38874,7 +38874,7 @@ export namespace Prisma {
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
     drive_file_id?: StringNullableFilter<"Product"> | string | null
-    download_link?: StringNullableFilter<"Product"> | string | null
+    download_url?: StringNullableFilter<"Product"> | string | null
     is_published?: BoolFilter<"Product"> | boolean
     is_pinned?: BoolFilter<"Product"> | boolean
     name?: StringFilter<"Product"> | string
@@ -38900,7 +38900,7 @@ export namespace Prisma {
     owner_id?: SortOrder
     license_id?: SortOrder
     drive_file_id?: SortOrderInput | SortOrder
-    download_link?: SortOrderInput | SortOrder
+    download_url?: SortOrderInput | SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
     name?: SortOrder
@@ -38925,7 +38925,7 @@ export namespace Prisma {
     owner_id?: IntWithAggregatesFilter<"Product"> | number
     license_id?: IntWithAggregatesFilter<"Product"> | number
     drive_file_id?: StringNullableWithAggregatesFilter<"Product"> | string | null
-    download_link?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    download_url?: StringNullableWithAggregatesFilter<"Product"> | string | null
     is_published?: BoolWithAggregatesFilter<"Product"> | boolean
     is_pinned?: BoolWithAggregatesFilter<"Product"> | boolean
     name?: StringWithAggregatesFilter<"Product"> | string
@@ -39269,7 +39269,7 @@ export namespace Prisma {
     id?: UuidFilter<"ProductVariant"> | string
     product_id?: UuidFilter<"ProductVariant"> | string
     name?: StringFilter<"ProductVariant"> | string
-    download_link?: StringNullableFilter<"ProductVariant"> | string | null
+    download_url?: StringNullableFilter<"ProductVariant"> | string | null
     file_access_password?: StringNullableFilter<"ProductVariant"> | string | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     prices?: ProductPriceListRelationFilter
@@ -39279,7 +39279,7 @@ export namespace Prisma {
     id?: SortOrder
     product_id?: SortOrder
     name?: SortOrder
-    download_link?: SortOrderInput | SortOrder
+    download_url?: SortOrderInput | SortOrder
     file_access_password?: SortOrderInput | SortOrder
     product?: ProductOrderByWithRelationInput
     prices?: ProductPriceOrderByRelationAggregateInput
@@ -39292,7 +39292,7 @@ export namespace Prisma {
     NOT?: ProductVariantWhereInput | ProductVariantWhereInput[]
     product_id?: UuidFilter<"ProductVariant"> | string
     name?: StringFilter<"ProductVariant"> | string
-    download_link?: StringNullableFilter<"ProductVariant"> | string | null
+    download_url?: StringNullableFilter<"ProductVariant"> | string | null
     file_access_password?: StringNullableFilter<"ProductVariant"> | string | null
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     prices?: ProductPriceListRelationFilter
@@ -39302,7 +39302,7 @@ export namespace Prisma {
     id?: SortOrder
     product_id?: SortOrder
     name?: SortOrder
-    download_link?: SortOrderInput | SortOrder
+    download_url?: SortOrderInput | SortOrder
     file_access_password?: SortOrderInput | SortOrder
     _count?: ProductVariantCountOrderByAggregateInput
     _max?: ProductVariantMaxOrderByAggregateInput
@@ -39316,7 +39316,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"ProductVariant"> | string
     product_id?: UuidWithAggregatesFilter<"ProductVariant"> | string
     name?: StringWithAggregatesFilter<"ProductVariant"> | string
-    download_link?: StringNullableWithAggregatesFilter<"ProductVariant"> | string | null
+    download_url?: StringNullableWithAggregatesFilter<"ProductVariant"> | string | null
     file_access_password?: StringNullableWithAggregatesFilter<"ProductVariant"> | string | null
   }
 
@@ -39944,9 +39944,9 @@ export namespace Prisma {
     product_name?: StringFilter<"TransactionDetail"> | string
     product_version?: StringFilter<"TransactionDetail"> | string
     product_drive_file_id?: StringNullableFilter<"TransactionDetail"> | string | null
-    product_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_download_url?: StringNullableFilter<"TransactionDetail"> | string | null
     product_variant?: StringFilter<"TransactionDetail"> | string
-    variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    variant_download_url?: StringNullableFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
     product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
@@ -39970,9 +39970,9 @@ export namespace Prisma {
     product_name?: SortOrder
     product_version?: SortOrder
     product_drive_file_id?: SortOrderInput | SortOrder
-    product_download_link?: SortOrderInput | SortOrder
+    product_download_url?: SortOrderInput | SortOrder
     product_variant?: SortOrder
-    variant_download_link?: SortOrderInput | SortOrder
+    variant_download_url?: SortOrderInput | SortOrder
     variant_file_access_password?: SortOrderInput | SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
@@ -39999,9 +39999,9 @@ export namespace Prisma {
     product_name?: StringFilter<"TransactionDetail"> | string
     product_version?: StringFilter<"TransactionDetail"> | string
     product_drive_file_id?: StringNullableFilter<"TransactionDetail"> | string | null
-    product_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_download_url?: StringNullableFilter<"TransactionDetail"> | string | null
     product_variant?: StringFilter<"TransactionDetail"> | string
-    variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    variant_download_url?: StringNullableFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
     product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
@@ -40025,9 +40025,9 @@ export namespace Prisma {
     product_name?: SortOrder
     product_version?: SortOrder
     product_drive_file_id?: SortOrderInput | SortOrder
-    product_download_link?: SortOrderInput | SortOrder
+    product_download_url?: SortOrderInput | SortOrder
     product_variant?: SortOrder
-    variant_download_link?: SortOrderInput | SortOrder
+    variant_download_url?: SortOrderInput | SortOrder
     variant_file_access_password?: SortOrderInput | SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
@@ -40057,9 +40057,9 @@ export namespace Prisma {
     product_name?: StringWithAggregatesFilter<"TransactionDetail"> | string
     product_version?: StringWithAggregatesFilter<"TransactionDetail"> | string
     product_drive_file_id?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
-    product_download_link?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
+    product_download_url?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     product_variant?: StringWithAggregatesFilter<"TransactionDetail"> | string
-    variant_download_link?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
+    variant_download_url?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableWithAggregatesFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeWithAggregatesFilter<"TransactionDetail"> | $Enums.CurrencyCode
     product_price?: DecimalWithAggregatesFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
@@ -40717,7 +40717,7 @@ export namespace Prisma {
   export type ProductCreateInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -40744,7 +40744,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -40763,7 +40763,7 @@ export namespace Prisma {
   export type ProductUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -40790,7 +40790,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -40813,7 +40813,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -40826,7 +40826,7 @@ export namespace Prisma {
   export type ProductUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -40843,7 +40843,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -41166,7 +41166,7 @@ export namespace Prisma {
   export type ProductVariantCreateInput = {
     id?: string
     name: string
-    download_link?: string | null
+    download_url?: string | null
     file_access_password?: string | null
     product: ProductCreateNestedOneWithoutVariantsInput
     prices?: ProductPriceCreateNestedManyWithoutVariantInput
@@ -41176,7 +41176,7 @@ export namespace Prisma {
     id?: string
     product_id: string
     name: string
-    download_link?: string | null
+    download_url?: string | null
     file_access_password?: string | null
     prices?: ProductPriceUncheckedCreateNestedManyWithoutVariantInput
   }
@@ -41184,7 +41184,7 @@ export namespace Prisma {
   export type ProductVariantUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product?: ProductUpdateOneRequiredWithoutVariantsNestedInput
     prices?: ProductPriceUpdateManyWithoutVariantNestedInput
@@ -41194,7 +41194,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     prices?: ProductPriceUncheckedUpdateManyWithoutVariantNestedInput
   }
@@ -41203,14 +41203,14 @@ export namespace Prisma {
     id?: string
     product_id: string
     name: string
-    download_link?: string | null
+    download_url?: string | null
     file_access_password?: string | null
   }
 
   export type ProductVariantUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -41218,7 +41218,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -41809,9 +41809,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id?: string | null
-    product_download_link?: string | null
+    product_download_url?: string | null
     product_variant: string
-    variant_download_link?: string | null
+    variant_download_url?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
@@ -41835,9 +41835,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id?: string | null
-    product_download_link?: string | null
+    product_download_url?: string | null
     product_variant: string
-    variant_download_link?: string | null
+    variant_download_url?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
@@ -41857,9 +41857,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -41883,9 +41883,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -41907,9 +41907,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id?: string | null
-    product_download_link?: string | null
+    product_download_url?: string | null
     product_variant: string
-    variant_download_link?: string | null
+    variant_download_url?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
@@ -41929,9 +41929,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -41953,9 +41953,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -42757,7 +42757,7 @@ export namespace Prisma {
     owner_id?: SortOrder
     license_id?: SortOrder
     drive_file_id?: SortOrder
-    download_link?: SortOrder
+    download_url?: SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
     name?: SortOrder
@@ -42783,7 +42783,7 @@ export namespace Prisma {
     owner_id?: SortOrder
     license_id?: SortOrder
     drive_file_id?: SortOrder
-    download_link?: SortOrder
+    download_url?: SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
     name?: SortOrder
@@ -42800,7 +42800,7 @@ export namespace Prisma {
     owner_id?: SortOrder
     license_id?: SortOrder
     drive_file_id?: SortOrder
-    download_link?: SortOrder
+    download_url?: SortOrder
     is_published?: SortOrder
     is_pinned?: SortOrder
     name?: SortOrder
@@ -43043,7 +43043,7 @@ export namespace Prisma {
     id?: SortOrder
     product_id?: SortOrder
     name?: SortOrder
-    download_link?: SortOrder
+    download_url?: SortOrder
     file_access_password?: SortOrder
   }
 
@@ -43051,7 +43051,7 @@ export namespace Prisma {
     id?: SortOrder
     product_id?: SortOrder
     name?: SortOrder
-    download_link?: SortOrder
+    download_url?: SortOrder
     file_access_password?: SortOrder
   }
 
@@ -43059,7 +43059,7 @@ export namespace Prisma {
     id?: SortOrder
     product_id?: SortOrder
     name?: SortOrder
-    download_link?: SortOrder
+    download_url?: SortOrder
     file_access_password?: SortOrder
   }
 
@@ -43631,9 +43631,9 @@ export namespace Prisma {
     product_name?: SortOrder
     product_version?: SortOrder
     product_drive_file_id?: SortOrder
-    product_download_link?: SortOrder
+    product_download_url?: SortOrder
     product_variant?: SortOrder
-    variant_download_link?: SortOrder
+    variant_download_url?: SortOrder
     variant_file_access_password?: SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
@@ -43663,9 +43663,9 @@ export namespace Prisma {
     product_name?: SortOrder
     product_version?: SortOrder
     product_drive_file_id?: SortOrder
-    product_download_link?: SortOrder
+    product_download_url?: SortOrder
     product_variant?: SortOrder
-    variant_download_link?: SortOrder
+    variant_download_url?: SortOrder
     variant_file_access_password?: SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
@@ -43687,9 +43687,9 @@ export namespace Prisma {
     product_name?: SortOrder
     product_version?: SortOrder
     product_drive_file_id?: SortOrder
-    product_download_link?: SortOrder
+    product_download_url?: SortOrder
     product_variant?: SortOrder
-    variant_download_link?: SortOrder
+    variant_download_url?: SortOrder
     variant_file_access_password?: SortOrder
     product_currency_code?: SortOrder
     product_price?: SortOrder
@@ -45546,7 +45546,7 @@ export namespace Prisma {
   export type ProductCreateWithoutAdminInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -45571,7 +45571,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -45649,7 +45649,7 @@ export namespace Prisma {
     owner_id?: IntFilter<"Product"> | number
     license_id?: IntFilter<"Product"> | number
     drive_file_id?: StringNullableFilter<"Product"> | string | null
-    download_link?: StringNullableFilter<"Product"> | string | null
+    download_url?: StringNullableFilter<"Product"> | string | null
     is_published?: BoolFilter<"Product"> | boolean
     is_pinned?: BoolFilter<"Product"> | boolean
     name?: StringFilter<"Product"> | string
@@ -45732,7 +45732,7 @@ export namespace Prisma {
   export type ProductCreateWithoutOwnerInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -45757,7 +45757,7 @@ export namespace Prisma {
     admin_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -45881,7 +45881,7 @@ export namespace Prisma {
   export type ProductCreateWithoutLicenseInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -45906,7 +45906,7 @@ export namespace Prisma {
     admin_id: number
     owner_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -46043,7 +46043,7 @@ export namespace Prisma {
   export type ProductCreateWithoutCategoryInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -46068,7 +46068,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -46314,7 +46314,7 @@ export namespace Prisma {
   export type ProductVariantCreateWithoutProductInput = {
     id?: string
     name: string
-    download_link?: string | null
+    download_url?: string | null
     file_access_password?: string | null
     prices?: ProductPriceCreateNestedManyWithoutVariantInput
   }
@@ -46322,7 +46322,7 @@ export namespace Prisma {
   export type ProductVariantUncheckedCreateWithoutProductInput = {
     id?: string
     name: string
-    download_link?: string | null
+    download_url?: string | null
     file_access_password?: string | null
     prices?: ProductPriceUncheckedCreateNestedManyWithoutVariantInput
   }
@@ -46605,14 +46605,14 @@ export namespace Prisma {
     id?: UuidFilter<"ProductVariant"> | string
     product_id?: UuidFilter<"ProductVariant"> | string
     name?: StringFilter<"ProductVariant"> | string
-    download_link?: StringNullableFilter<"ProductVariant"> | string | null
+    download_url?: StringNullableFilter<"ProductVariant"> | string | null
     file_access_password?: StringNullableFilter<"ProductVariant"> | string | null
   }
 
   export type ProductCreateWithoutTranslationsInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -46638,7 +46638,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -46672,7 +46672,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutTranslationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -46698,7 +46698,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -46716,7 +46716,7 @@ export namespace Prisma {
   export type ProductCreateWithoutVersionsInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -46742,7 +46742,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -46798,7 +46798,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutVersionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -46824,7 +46824,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -46912,7 +46912,7 @@ export namespace Prisma {
   export type ProductCreateWithoutDiscountInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -46938,7 +46938,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -46972,7 +46972,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutDiscountInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -46998,7 +46998,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -47016,7 +47016,7 @@ export namespace Prisma {
   export type ProductCreateWithoutCouponInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -47042,7 +47042,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -47076,7 +47076,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutCouponInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -47102,7 +47102,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -47120,7 +47120,7 @@ export namespace Prisma {
   export type ProductCreateWithoutImagesInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -47146,7 +47146,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -47180,7 +47180,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutImagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -47206,7 +47206,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -47224,7 +47224,7 @@ export namespace Prisma {
   export type ProductCreateWithoutVariantsInput = {
     id?: string
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -47250,7 +47250,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -47308,7 +47308,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutVariantsInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -47334,7 +47334,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -47378,7 +47378,7 @@ export namespace Prisma {
   export type ProductVariantCreateWithoutPricesInput = {
     id?: string
     name: string
-    download_link?: string | null
+    download_url?: string | null
     file_access_password?: string | null
     product: ProductCreateNestedOneWithoutVariantsInput
   }
@@ -47387,7 +47387,7 @@ export namespace Prisma {
     id?: string
     product_id: string
     name: string
-    download_link?: string | null
+    download_url?: string | null
     file_access_password?: string | null
   }
 
@@ -47404,9 +47404,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id?: string | null
-    product_download_link?: string | null
+    product_download_url?: string | null
     product_variant: string
-    variant_download_link?: string | null
+    variant_download_url?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
@@ -47428,9 +47428,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id?: string | null
-    product_download_link?: string | null
+    product_download_url?: string | null
     product_variant: string
-    variant_download_link?: string | null
+    variant_download_url?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
@@ -47466,7 +47466,7 @@ export namespace Prisma {
   export type ProductVariantUpdateWithoutPricesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product?: ProductUpdateOneRequiredWithoutVariantsNestedInput
   }
@@ -47475,7 +47475,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     product_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -47508,9 +47508,9 @@ export namespace Prisma {
     product_name?: StringFilter<"TransactionDetail"> | string
     product_version?: StringFilter<"TransactionDetail"> | string
     product_drive_file_id?: StringNullableFilter<"TransactionDetail"> | string | null
-    product_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    product_download_url?: StringNullableFilter<"TransactionDetail"> | string | null
     product_variant?: StringFilter<"TransactionDetail"> | string
-    variant_download_link?: StringNullableFilter<"TransactionDetail"> | string | null
+    variant_download_url?: StringNullableFilter<"TransactionDetail"> | string | null
     variant_file_access_password?: StringNullableFilter<"TransactionDetail"> | string | null
     product_currency_code?: EnumCurrencyCodeFilter<"TransactionDetail"> | $Enums.CurrencyCode
     product_price?: DecimalFilter<"TransactionDetail"> | Decimal | DecimalJsLike | number | string
@@ -47867,9 +47867,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id?: string | null
-    product_download_link?: string | null
+    product_download_url?: string | null
     product_variant: string
-    variant_download_link?: string | null
+    variant_download_url?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
@@ -47891,9 +47891,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id?: string | null
-    product_download_link?: string | null
+    product_download_url?: string | null
     product_variant: string
-    variant_download_link?: string | null
+    variant_download_url?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
@@ -48378,7 +48378,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -48408,7 +48408,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48433,7 +48433,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48455,7 +48455,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48471,7 +48471,7 @@ export namespace Prisma {
     admin_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -48484,7 +48484,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48509,7 +48509,7 @@ export namespace Prisma {
     admin_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48531,7 +48531,7 @@ export namespace Prisma {
     admin_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48611,7 +48611,7 @@ export namespace Prisma {
     admin_id: number
     owner_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -48631,7 +48631,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutLicenseInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48656,7 +48656,7 @@ export namespace Prisma {
     admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48678,7 +48678,7 @@ export namespace Prisma {
     admin_id?: IntFieldUpdateOperationsInput | number
     owner_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48714,7 +48714,7 @@ export namespace Prisma {
     owner_id: number
     license_id: number
     drive_file_id?: string | null
-    download_link?: string | null
+    download_url?: string | null
     is_published?: boolean
     is_pinned?: boolean
     name: string
@@ -48727,7 +48727,7 @@ export namespace Prisma {
   export type ProductUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48752,7 +48752,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48774,7 +48774,7 @@ export namespace Prisma {
     owner_id?: IntFieldUpdateOperationsInput | number
     license_id?: IntFieldUpdateOperationsInput | number
     drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_published?: BoolFieldUpdateOperationsInput | boolean
     is_pinned?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
@@ -48807,7 +48807,7 @@ export namespace Prisma {
   export type ProductVariantCreateManyProductInput = {
     id?: string
     name: string
-    download_link?: string | null
+    download_url?: string | null
     file_access_password?: string | null
   }
 
@@ -48876,7 +48876,7 @@ export namespace Prisma {
   export type ProductVariantUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     prices?: ProductPriceUpdateManyWithoutVariantNestedInput
   }
@@ -48884,7 +48884,7 @@ export namespace Prisma {
   export type ProductVariantUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     prices?: ProductPriceUncheckedUpdateManyWithoutVariantNestedInput
   }
@@ -48892,7 +48892,7 @@ export namespace Prisma {
   export type ProductVariantUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
     file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -48955,9 +48955,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id?: string | null
-    product_download_link?: string | null
+    product_download_url?: string | null
     product_variant: string
-    variant_download_link?: string | null
+    variant_download_url?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
@@ -48977,9 +48977,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -49001,9 +49001,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -49024,9 +49024,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -49143,9 +49143,9 @@ export namespace Prisma {
     product_name: string
     product_version: string
     product_drive_file_id?: string | null
-    product_download_link?: string | null
+    product_download_url?: string | null
     product_variant: string
-    variant_download_link?: string | null
+    variant_download_url?: string | null
     variant_file_access_password?: string | null
     product_currency_code: $Enums.CurrencyCode
     product_price: Decimal | DecimalJsLike | number | string
@@ -49173,9 +49173,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -49197,9 +49197,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -49220,9 +49220,9 @@ export namespace Prisma {
     product_name?: StringFieldUpdateOperationsInput | string
     product_version?: StringFieldUpdateOperationsInput | string
     product_drive_file_id?: NullableStringFieldUpdateOperationsInput | string | null
-    product_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    product_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     product_variant?: StringFieldUpdateOperationsInput | string
-    variant_download_link?: NullableStringFieldUpdateOperationsInput | string | null
+    variant_download_url?: NullableStringFieldUpdateOperationsInput | string | null
     variant_file_access_password?: NullableStringFieldUpdateOperationsInput | string | null
     product_currency_code?: EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
     product_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string

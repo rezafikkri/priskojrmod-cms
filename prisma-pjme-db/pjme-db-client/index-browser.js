@@ -193,7 +193,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   owner_id: 'owner_id',
   license_id: 'license_id',
   drive_file_id: 'drive_file_id',
-  download_link: 'download_link',
+  download_url: 'download_url',
   is_published: 'is_published',
   is_pinned: 'is_pinned',
   name: 'name',
@@ -252,7 +252,7 @@ exports.Prisma.ProductVariantScalarFieldEnum = {
   id: 'id',
   product_id: 'product_id',
   name: 'name',
-  download_link: 'download_link',
+  download_url: 'download_url',
   file_access_password: 'file_access_password'
 };
 
@@ -349,9 +349,9 @@ exports.Prisma.TransactionDetailScalarFieldEnum = {
   product_name: 'product_name',
   product_version: 'product_version',
   product_drive_file_id: 'product_drive_file_id',
-  product_download_link: 'product_download_link',
+  product_download_url: 'product_download_url',
   product_variant: 'product_variant',
-  variant_download_link: 'variant_download_link',
+  variant_download_url: 'variant_download_url',
   variant_file_access_password: 'variant_file_access_password',
   product_currency_code: 'product_currency_code',
   product_price: 'product_price',

@@ -129,7 +129,7 @@ export default function DetailsSection({ details }) {
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Download Link</TableHead>
               <TableCell>
-                {detail.product_download_link ?? <Minus className="icon text-zinc-300" />}
+                {detail.product_download_url ?? <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
           </TableBody>
@@ -143,7 +143,7 @@ export default function DetailsSection({ details }) {
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-50">Download Link</TableHead>
               <TableCell>
-                {detail.variant_download_link ?? <Minus className="icon text-zinc-300" />}
+                {detail.variant_download_url ?? <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
             <TableRow>

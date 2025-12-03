@@ -47,9 +47,9 @@ export default function MainFileFields({ form, applicationCategoryId }) {
     <>
       {(priceType === PriceType.FREE || categoryId === applicationCategoryId.toString()) ? (
         <FormField
-          key="download_link"
+          key="download_url"
           control={form.control}
-          name="download_link"
+          name="download_url"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-base">Download Link</FormLabel>
@@ -59,7 +59,7 @@ export default function MainFileFields({ form, applicationCategoryId }) {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>Enter a direct download link for the product's main file. Make sure the link always points to the latest version.</FormDescription>
+              <FormDescription>Enter the direct download URL for the product’s main file. Ensure it points to the latest version.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

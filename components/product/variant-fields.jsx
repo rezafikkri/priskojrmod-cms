@@ -43,7 +43,7 @@ export default function VariantFields({
     onAppend({
       id: v4(),
       name: '',
-      download_link: '',
+      download_url: '',
       file_access_password: '',
     });
   }
@@ -104,7 +104,7 @@ export default function VariantFields({
             />
             <FormField
               control={form.control}
-              name={`variants.${index}.download_link`}
+              name={`variants.${index}.download_url`}
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel className="text-base">Download Link</FormLabel>
@@ -115,7 +115,7 @@ export default function VariantFields({
                       className="shadow-none md:text-base h-auto px-3 py-1.5"
                     />
                   </FormControl>
-                  <FormDescription>Optional. Add a download link if this variant includes an extra file.</FormDescription>
+                  <FormDescription>Optional. Add a download URL if this variant includes an extra file.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

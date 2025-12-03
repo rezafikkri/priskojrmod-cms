@@ -145,7 +145,7 @@ model Product {
   license_id  Int
 
   drive_file_id String?
-  download_link String?
+  download_url String?
 
   is_published Boolean   @default(false)
   is_pinned    Boolean   @default(false)
@@ -246,7 +246,7 @@ model ProductVariant {
   id                   String  @id @default(uuid(7)) @db.Uuid
   product_id           String  @db.Uuid
   name                 String  @db.VarChar(100)
-  download_link        String?
+  download_url        String?
   file_access_password String? @db.VarChar(100)
 
   product Product        @relation(fields: [product_id], references: [id], onDelete: Cascade)
@@ -430,10 +430,10 @@ model TransactionDetail {
   product_name          String  @db.VarChar(150)
   product_version       String  @db.VarChar(50)
   product_drive_file_id String?
-  product_download_link String?
+  product_download_url String?
 
   product_variant              String  @db.VarChar(100)
-  variant_download_link        String?
+  variant_download_url        String?
   variant_file_access_password String? @db.VarChar(100)
 
   product_currency_code   CurrencyCode

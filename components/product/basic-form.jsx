@@ -74,10 +74,10 @@ export default function BasicForm({
   function handleNext(data) {
     let isError = false;
 
-    // validate drive_file_id, download_link, and version
+    // validate drive_file_id, download_url, and version
     if (data.category_id === applicationCategoryId || data.price_type === PriceType.FREE) {
-      if (data.download_link === '') {
-        form.setError('download_link', { message: 'Can\'t be empty' });
+      if (data.download_url === '') {
+        form.setError('download_url', { message: 'Can\'t be empty' });
         isError = true;
       }
     }
@@ -103,7 +103,7 @@ export default function BasicForm({
     ) {
       form.setValue('drive_file_id', '');
     } else {
-      form.setValue('download_link', '');
+      form.setValue('download_url', '');
     }
 
     form.handleSubmit(handleNext)(e);
