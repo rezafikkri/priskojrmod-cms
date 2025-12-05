@@ -2,6 +2,7 @@ import { Montserrat } from 'next/font/google';
 import '../globals.css';
 import SessionProvider from '@/components/session-provider';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -30,6 +31,20 @@ export default function RootLayout({ children }) {
             disableTransitionOnChange
           >
             {children}
+
+            <Toaster
+              richColors
+              expand
+              visibleToasts={3}
+              position="bottom-center"
+              toastOptions={{
+                classNames: {
+                  toast: 'group-[.toaster]:pointer-events-auto',
+                  title: 'text-[15px]',
+                  description: 'text-[15px]',
+                },
+              }}
+            />
           </ThemeProvider>
         </SessionProvider>
       </body>

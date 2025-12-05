@@ -35,50 +35,95 @@ export const authOptions = {
 
       return baseUrl;
     },
-    async signIn({ profile }) {
-      if (profile) {
-        const user = await pjmeDBPrismaClient.admin.findUnique({
-          where: {
-            auth_id: profile.sub,
-          },
-          select: { id: true },
-        });
-        if (!user) return '/signin';
-      }
-      return true;
-    },
-    async jwt({ token, account, profile, trigger, session }) {
-      if (account && profile) {
-        const user = await pjmeDBPrismaClient.admin.findUnique({
-          where: {
-            auth_id: profile.sub,
-          },
-          select: {
+    async signIn({ profile, user }) {
+      try {
+        if (profile) {
+          const select = {
             id: true,
             picture: true,
             role: true,
             first_name: true,
-          },
-        });
+          };
+          let admin = await pjmeDBPrismaClient.admin.findUnique({
+            where: {
+              auth_id: profile.sub,
+            },
+            select,
+          });
 
+          if (!admin) {
+            admin = await pjmeDBPrismaClient.admin.findFirst({
+              where: {
+                email: profile.email,
+                auth_id: null,
+              },
+              select: {
+                ...select,
+                updated_at: true,
+              },
+            });
+
+            if (admin) {
+              // claim this account
+              const currentTime = Math.floor(new Date().getTime() / 1000);
+              const result = await pjmeDBPrismaClient.admin.updateMany({
+                data: {
+                  auth_id: profile.sub,
+                  updated_at: currentTime,
+                },
+                where: {
+                  email: profile.email,
+                  auth_id: null,
+                },
+              });
+
+              if (result.count === 0) {
+                console.error(
+                  `SignIn failed: admin ID ${admin.id} - auth_id already set, cannot claim account`,
+                );
+                return '/signin?error=UnableToSignIn';
+              }
+            }
+          }
+
+          if (!admin) return '/signin?error=AccountNotFound';
+          
+          user.id = admin.id;
+          user.role = admin.role;
+          user.picture = admin.picture;
+          user.first_name = admin.first_name;
+        }
+
+        return true;       
+      } catch (err) {
+        console.error(err);
+        return '/signin?error=UnknownError';
+      }
+    },
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
         token.userId = user.id;
         token.role = user.role;
         token.picture = user.picture;
         token.first_name = user.first_name;
-        token.accessToken = account.access_token;
       }
-      if (trigger === 'update' && session?.first_name && session?.picture) {
-        token.first_name = session.first_name;
-        token.picture = session.picture;
+
+      if (trigger === 'update') {
+        if (session?.first_name) {
+          token.first_name = session.first_name;
+        }
+
+        if (session?.picture) {
+          token.picture = session.picture;
+        }
       }
+      
       return token;
     },
     async session({ session, token }) {
       session.user.id = token.userId;
       session.user.role = token.role;
-      session.user.image = token.picture;
       session.user.name = token.first_name;
-      session.accessToken = token.accessToken;
       return session;
     },
   },

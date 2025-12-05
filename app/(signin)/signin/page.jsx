@@ -1,6 +1,8 @@
 import ToggleTheme from '@/components/layout/toggle-theme';
 import { SignInForm } from '@/components/signin/signin-form';
+import SignInFormSkeleton from '@/components/signin/signin-form-skeleton';
 import { Button } from '@/components/ui/button';
+import { Suspense } from 'react';
 
 export default function LoginPage() {
   return (
@@ -18,7 +20,9 @@ export default function LoginPage() {
           </div>
           <span>Prisko Jr Mod</span>
         </div>
-        <SignInForm />
+        <Suspense fallback={<SignInFormSkeleton />}>
+          <SignInForm />
+        </Suspense>
       </div>
 
       <div className="fixed right-10 bottom-10">
