@@ -23,15 +23,22 @@ import { PriceType } from '@/constants/enums';
 import { editProductPinnedStatus, editProductPublishedStatus, removeProduct } from '@/actions/product-actions';
 import { toast } from 'sonner';
 import { safeFetch } from '@/lib/safe-fetch';
+import { useSession } from 'next-auth/react';
+import { Skeleton } from '../ui/skeleton';
+import { isOwnerAdmin } from '@/lib/utils';
 
 export default function ProductsTable() {
   const queryClient = useQueryClient();
+  const { data: session, status: sessionStatus } = useSession();
   const [columnVisibility, setColumnVisibility] = useState({
+    category: false,
     is_published: true,
     released_at: true,
+    admin: false,
     created_at: false,
     updated_at: false,
   });
+
   const [updatingPinnedStatusIds, setUpdatingPinnedStatusIds] = useState([]);
   const [updatingPublishedIds, setUpdatingPublishedIds] = useState([]);
   const [deletingIds, setDeletingIds] = useState([]);
@@ -203,20 +210,29 @@ export default function ProductsTable() {
           </TooltipWrapper>
           <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
             <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
-            {Object.entries(columnVisibility).map((column) => (
-              <DropdownMenuCheckboxItem
-                key={column[0]}
-                className="capitalize text-base hover:cursor-pointer"
-                checked={column[1]}
-                onCheckedChange={(value) =>
-                  setColumnVisibility({
-                    ...columnVisibility,
-                    [column[0]]: value,
-                  })}
-              >
-                {column[0].replace('_', ' ').replace('is','')}
-              </DropdownMenuCheckboxItem>
-            ))}
+            {Object.entries(columnVisibility)
+              .filter(column =>
+                column[0] === 'admin'
+                  ? isOwnerAdmin(session?.user?.role)
+                  : column[0] === 'select'
+                  ? false
+                  : true
+              )
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column[0]}
+                  className="capitalize text-base hover:cursor-pointer"
+                  checked={column[1]}
+                  onSelect={(e) => e.preventDefault()}
+                  onCheckedChange={(value) =>
+                    setColumnVisibility({
+                      ...columnVisibility,
+                      [column[0]]: value,
+                    })}
+                >
+                  {column[0].replace('_', ' ').replace('is','')}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -250,6 +266,11 @@ export default function ProductsTable() {
       <ul className="text-muted-foreground text-sm list-disc list-inside">
         <li>Pinned products will have higher display priority on the Products page and the homepage. A maximum of 4 products can be pinned.</li>
         <li>Prices are displayed using each currency’s standard number format.</li>
+        {sessionStatus === 'loading' ? (
+          <Skeleton className="h-4 w-1/3 inline-block rounded-sm mt-1" />
+        ) : (
+          <li>The products displayed are under your responsibility.</li>
+        )}
       </ul>
     </>
   );

@@ -89,7 +89,7 @@ export default function DiscountFields({
           render={({ field }) =>
             <ExpiredAtInput
               field={field}
-              description="Enter the expiration time of the discount."
+              description="Select the expiration date and time of the discount."
               disabled={isDeleting || disabled}
             />
           }

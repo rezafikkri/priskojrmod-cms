@@ -111,7 +111,7 @@ export default function CouponFields({
             render={({ field }) =>
               <ExpiredAtInput
                 field={field}
-                description="Enter the expiration time of the coupon."
+                description="Select the expiration date and time of the coupon."
                 disabled={isDeleting || disabled}
               />
             }

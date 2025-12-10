@@ -34,9 +34,10 @@ export default function BasicForm({
   categories,
   owners,
   licenses,
+  admins,
   mode = 'create',
 }) {
-  const basic = useProductFormStore(state => state.form.basic);
+  const { admin_id, ...basic } = useProductFormStore(state => state.form.basic);
   const setBasic = useProductFormStore(state => state.setBasic);
   const clearDraft = useProductFormStore(state => state.clearDraft);
   const defaultValues = {
@@ -45,6 +46,11 @@ export default function BasicForm({
     owner_id: basic.owner_id.toString(),
     license_id: basic.license_id.toString(),
   };
+
+  if (admins) {
+    defaultValues.admin_id = admin_id.toString();
+  }
+
   let basicSchema;
 
   // edit mode only
@@ -202,6 +208,44 @@ export default function BasicForm({
           />
         )}
 
+        {admins ? (
+          <FormField
+            control={form.control}
+            name="admin_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base">Admin</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5 min-h-9.5">
+                      <SelectValue placeholder="Select an admin" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {admins.map(admin => (
+                      <SelectItem
+                        key={admin.id}
+                        className="text-base"
+                        value={admin.id.toString()}
+                      >
+                        {admin.displayLabel}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select the admin to assign to this product.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : (
+          <FormItem>
+            <FormLabel className="text-base">Admin</FormLabel>
+            <p className="capitalize">Myself</p>
+            <FormDescription>Assigned admin for this product.</FormDescription>
+          </FormItem>
+        )}
+
         <FormField
           control={form.control}
           name="owner_id"
@@ -231,6 +275,7 @@ export default function BasicForm({
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="license_id"

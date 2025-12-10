@@ -10,8 +10,61 @@ import {
 } from '../ui/alert';
 import Error404 from '../icon/error-404';
 import { ProductFormStoreProvider } from '@/lib/providers/product-form-store-provider';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { isOwnerAdmin } from '@/lib/utils';
+import { getAdmins } from '@/lib/services/admin-service';
+import { v4 } from 'uuid';
+
+export const defaultFormStoreInitState = {
+  form: {
+    basic: {
+      name: '',
+      category_id: '',
+      owner_id: '',
+      license_id: '',
+      price_type: '',
+      drive_file_id: '',
+      download_url: '',
+      version: '',
+    },
+    content: {
+      description: {
+        id: '',
+        en: '',
+      },
+    },
+    extras: {
+      variants: [
+        {
+          id: v4(),
+          name: '',
+          download_url: '',
+          file_access_password: '',
+        },
+      ],
+      images: [],
+    },
+    pricing: {
+      prices: [],
+      discount: {
+        value: '',
+        expired_at: '',
+      },
+      coupon: {
+        code: '',
+        discount: '',
+        expired_at: '',
+      },
+      is_published: false,
+    },
+  },
+  reference: {},
+  meta: {},
+};
 
 export default async function ProductForm({ mode = 'create', id = null }) {
+  const session = await getServerSession(authOptions);
   const categories = await getCategories({
     id: true,
     name: true,
@@ -27,11 +80,36 @@ export default async function ProductForm({ mode = 'create', id = null }) {
     withDisplayLabel: true,
   });
   const licenses = await getLicensesWithTranslation();
+  let admins;
+  if (isOwnerAdmin(session.user.role)) {
+    admins = await getAdmins({
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        email: true,
+      },
+      withDisplayLabel: true,
+    });
+    admins.unshift({
+      id: session.user.id,
+      displayLabel: 'Myself',
+    });
+  }
 
   if (mode === 'create') {
+    if (isOwnerAdmin(session.user.role)) {
+      defaultFormStoreInitState.form.basic.admin_id = '';
+    }
+
     return (
-      <ProductFormStoreProvider>
-        <CreateForm categories={categories} owners={owners} licenses={licenses} />
+      <ProductFormStoreProvider initState={defaultFormStoreInitState}>
+        <CreateForm
+          categories={categories}
+          owners={owners}
+          licenses={licenses}
+          admins={admins}
+        />
       </ProductFormStoreProvider>
     );
   }
@@ -48,7 +126,12 @@ export default async function ProductForm({ mode = 'create', id = null }) {
 
   return (
     <ProductFormStoreProvider initState={product}>
-      <EditForm categories={categories} owners={owners} licenses={licenses} />
+      <EditForm
+        categories={categories}
+        owners={owners}
+        licenses={licenses}
+        admins={admins}
+      />
     </ProductFormStoreProvider>
   );
 }

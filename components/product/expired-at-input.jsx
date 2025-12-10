@@ -47,6 +47,8 @@ export default function ExpiredAtInput({
 
       if (!isNaN(oldDate)) {
         newDate.setHours(oldDate.getHours(), oldDate.getMinutes());
+      } else {
+        newDate.setHours(23, 59);
       }
       field.onChange(newDate);
     } else {
@@ -163,7 +165,7 @@ export default function ExpiredAtInput({
           <SelectContent>
             <SelectGroup>
               <SelectLabel className="text-[15px]">Minute</SelectLabel>
-              {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(m => (
+              {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 59].map(m => (
                 <SelectItem key={m} className="text-base" value={m}>{m.toString().padStart(2, 0)}</SelectItem>
               ))}
             </SelectGroup>

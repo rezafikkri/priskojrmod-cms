@@ -11,9 +11,10 @@ export default function CreateForm({
   categories,
   owners,
   licenses,
+  admins,
 }) {
   const stepDefinitions = [
-    { label: 'Basic', component: BasicForm, extraProps: { categories, owners, licenses } },
+    { label: 'Basic', component: BasicForm, extraProps: { categories, owners, licenses, admins } },
     { label: 'Content', component: ContentForm, extraProps: {} },
     { label: 'Extras', component: ExtrasForm, extraProps: {} },
     { label: 'Pricing', component: PricingForm, extraProps: {} },

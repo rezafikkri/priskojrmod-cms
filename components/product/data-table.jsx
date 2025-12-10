@@ -76,6 +76,11 @@ export default function DataTable({
       },
     },
     {
+      id: 'category',
+      accessorKey: 'category.name',
+      header: 'Category',
+    },
+    {
       accessorKey: 'prices',
       header: () => (
         <>
@@ -136,6 +141,22 @@ export default function DataTable({
       accessorKey: 'released_at',
       header: 'Released At',
       cell: ({ row }) => formatDateTime(row.getValue('released_at')),
+    },
+    {
+      id: 'admin',
+      header: 'Admin',
+      cell: ({ row }) => (
+        <div>
+          {row.original.admin.isCurrentUser ? (
+            <p>Myself</p>
+          ) : (
+            <>
+              <p>{row.original.admin.first_name} {row.original.admin.last_name}</p>
+              <p className="text-sm text-zinc-600">{row.original.admin.email}</p>
+            </>
+          )}
+        </div>
+      ),
     },
     {
       accessorKey: 'created_at',
