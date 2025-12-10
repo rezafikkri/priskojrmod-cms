@@ -28,6 +28,9 @@ import NavUserSkeleton from '../loadings/nav-user-skeleton';
 export function NavUser() {
   const { isMobile } = useSidebar()
   const { data: session, status } = useSession();
+  const name = `${session?.user?.first_name} ${session?.user?.last_name}`;
+  const email = session?.user?.email;
+  const image = session?.user?.image;
 
   return (
     <SidebarMenu>
@@ -42,15 +45,15 @@ export function NavUser() {
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <img
-                  src={session.user.image}
-                  alt={session.user.name}
+                  src={image}
+                  alt={name}
                   loading="lazy"
                   decoding="async"
                   className="size-8 rounded-full"
                 />
-                <div className="flex flex-col flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{session.user.name}</span>
-                  <span className="truncate text-xs">{session.user.email}</span>
+                <div className="min-w-0 flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold block">{name}</span>
+                  <span className="truncate text-xs block">{email}</span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
@@ -64,15 +67,15 @@ export function NavUser() {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <img
-                    src={session.user.image}
-                    alt={session.user.name}
+                    src={image}
+                    alt={name}
                     loading="lazy"
                     decoding="async"
                     className="size-8 rounded-full object-cover"
                   />
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">{session.user.name}</span>
-                    <span className="truncate text-xs">{session.user.email}</span>
+                    <span className="truncate font-semibold">{name}</span>
+                    <span className="truncate text-xs">{email}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>

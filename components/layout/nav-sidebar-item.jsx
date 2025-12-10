@@ -14,7 +14,7 @@ export default function NavSidebarItem({ items }) {
   let filteredItems = items;
 
   if (status !== 'loading') {
-    filteredItems = items.filter(item => !item.role || session.user.role === item.role);
+    filteredItems = items.filter(item => !item.role || session?.user?.role === item.role);
   }
 
   return filteredItems.map(item => {

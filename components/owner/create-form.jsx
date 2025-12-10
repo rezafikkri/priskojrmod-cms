@@ -7,11 +7,10 @@ import FormFields from './form-fields';
 import { createOwnerSchema } from '@/lib/validators/owner-validator';
 import { addOwner } from '@/actions/owner-actions';
 import { Button } from '../ui/button';
-import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 export default function CreateForm() {
-  const [isLoadingAdminInfo, setIsLoadingAdminInfo] = useState(false);
+  const { data: session } = useSession();
   const form = useForm({
     resolver: zodResolver(createOwnerSchema),
     defaultValues: {
@@ -34,25 +33,11 @@ export default function CreateForm() {
   }
 
   async function handleFillWithAdminInfo() {
-    setIsLoadingAdminInfo(true);
-
-    try {
-      const res = await fetch('/api/admins/me');
-      if (!res.ok) {
-        throw new Error('Failed to load admin info.');
-      }
-
-      const admin = await res.json();
-      form.setValue('first_name', admin.data.first_name);
-      form.setValue('last_name', admin.data.last_name);
-      form.setValue('picture', admin.data.picture);
-
-      toast.success('Got your admin info! Now just add your social media profile url.');
-    } catch (err) {
-      toast.error(err.message);
-    } finally {
-      setIsLoadingAdminInfo(false);
-    } 
+    if (session) {
+      form.setValue('first_name', session?.user?.first_name);
+      form.setValue('last_name', session?.user?.last_name);
+      form.setValue('picture', session?.user?.image);
+    }
   }
 
   return (
@@ -60,17 +45,12 @@ export default function CreateForm() {
       <div className="relative inline-block mb-2">
         <Button
           variant="outline"
-          className={`h-auto text-base px-3 py-1.5 ${isLoadingAdminInfo ? 'disabled:opacity-100 transition-none' : ''}`}
+          className="h-auto text-base px-3 py-1.5"
           onClick={handleFillWithAdminInfo}
-          disabled={isLoadingAdminInfo || isSubmitting}
+          disabled={isSubmitting}
         >
-          <span className={isLoadingAdminInfo ? 'opacity-0' : ''}>Use My Admin Info</span>
+          Use My Admin Info
         </Button>
-        {isLoadingAdminInfo && (
-          <div className="absolute h-full top-0 left-0 right-0 flex justify-center items-center">
-            <Loader2 className="animate-spin" size={16} />
-          </div>
-        )}
       </div>
       <p className="mb-6 text-sm text-muted-foreground">Click to use your admin profile (name and picture) as the owner data.</p>
 

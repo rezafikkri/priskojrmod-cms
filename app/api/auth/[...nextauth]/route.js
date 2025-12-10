@@ -43,6 +43,7 @@ export const authOptions = {
             picture: true,
             role: true,
             first_name: true,
+            last_name: true,
           };
           let admin = await pjmeDBPrismaClient.admin.findUnique({
             where: {
@@ -92,6 +93,7 @@ export const authOptions = {
           user.role = admin.role;
           user.picture = admin.picture;
           user.first_name = admin.first_name;
+          user.last_name = admin.last_name;
         }
 
         return true;       
@@ -106,16 +108,15 @@ export const authOptions = {
         token.role = user.role;
         token.picture = user.picture;
         token.first_name = user.first_name;
+        token.last_name = user.last_name;
       }
 
       if (trigger === 'update') {
-        if (session?.first_name) {
-          token.first_name = session.first_name;
-        }
-
-        if (session?.picture) {
-          token.picture = session.picture;
-        }
+        // updateSession can called in any place, so we cannot ensure each property exists,
+        // cause it, we need check every property that really need to updated
+        if (session?.first_name) token.first_name = session.first_name;
+        if (session?.last_name) token.last_name = session.last_name;
+        if (session?.picture) token.picture = session.picture;
       }
       
       return token;
@@ -123,7 +124,8 @@ export const authOptions = {
     async session({ session, token }) {
       session.user.id = token.userId;
       session.user.role = token.role;
-      session.user.name = token.first_name;
+      session.user.first_name = token.first_name;
+      session.user.last_name = token.last_name;
       return session;
     },
   },

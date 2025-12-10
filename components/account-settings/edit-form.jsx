@@ -59,8 +59,16 @@ export function EditForm({
     const editRes = await editAccount(data);
     if (editRes.status === 'success') {
       // update several session data
-      if (session.user.name !== data.first_name || session.user.image !== data.picture) {
-        await updateSession({ first_name: data.first_name, picture: data.picture });
+      if (
+        session?.user?.first_name !== data.first_name ||
+        session?.user?.last_name !== data.last_name ||
+        session?.user?.image !== data.picture
+      ) {
+        await updateSession({
+          first_name: data.first_name,
+          last_name: data.last_name,
+          picture: data.picture,
+        });
       }
 
       // update donation link data in form

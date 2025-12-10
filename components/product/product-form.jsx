@@ -80,8 +80,9 @@ export default async function ProductForm({ mode = 'create', id = null }) {
     withDisplayLabel: true,
   });
   const licenses = await getLicensesWithTranslation();
+  const isOwner = isOwnerAdmin(session?.user?.role);
   let admins;
-  if (isOwnerAdmin(session.user.role)) {
+  if (isOwner) {
     admins = await getAdmins({
       select: {
         id: true,
@@ -98,7 +99,7 @@ export default async function ProductForm({ mode = 'create', id = null }) {
   }
 
   if (mode === 'create') {
-    if (isOwnerAdmin(session.user.role)) {
+    if (isOwner) {
       defaultFormStoreInitState.form.basic.admin_id = '';
     }
 

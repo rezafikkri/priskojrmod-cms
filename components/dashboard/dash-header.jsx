@@ -28,7 +28,7 @@ export default function DashHeader() {
           {status === 'loading' ? (
             <Skeleton className="h-[27px] w-25 inline-block" />
           ) : (
-            <span>{session.user.name}</span>
+            <span>{session?.user?.first_name}</span>
           )}
         </h1>
         <h2 className="text-zinc-700 dark:text-zinc-300/80">Here’s what’s going on at your business right now.</h2>
