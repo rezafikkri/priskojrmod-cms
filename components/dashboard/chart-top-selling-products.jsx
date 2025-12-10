@@ -59,23 +59,37 @@ export default function ChartTopSellingProducts() {
   return (
     <Card className="shadow-none">
       <CardHeader>
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center">
           <div className="flex-1">
             <CardTitle className="text-lg">Top Selling Products</CardTitle>
             <CardDescription className="text-base text-zinc-600 dark:text-zinc-400">Based on units sold.</CardDescription>
           </div>
 
-          <Select value="last_month"> 
-            <SelectTrigger className="shadow-none text-sm h-auto! px-3 py-1.5"> 
-              <SelectValue /> 
-            </SelectTrigger> 
-            <SelectContent> 
-              <SelectGroup> 
-                <SelectItem className="text-sm" value="last_month">Last Month</SelectItem> 
-                <SelectItem className="text-sm" value="last_year">Last Year</SelectItem> 
-              </SelectGroup> 
-            </SelectContent> 
-          </Select>
+          <div className="flex gap-2">
+            <Select defaultValue="all"> 
+              <SelectTrigger className="shadow-none text-sm h-auto! px-3 py-1.5"> 
+                <SelectValue /> 
+              </SelectTrigger> 
+              <SelectContent> 
+                <SelectGroup> 
+                  <SelectItem className="text-sm" value="all">All</SelectItem> 
+                  <SelectItem className="text-sm" value="assigned_to_me">Assigned to Me</SelectItem> 
+                </SelectGroup> 
+              </SelectContent> 
+            </Select>
+
+            <Select defaultValue="last_month"> 
+              <SelectTrigger className="shadow-none text-sm h-auto! px-3 py-1.5"> 
+                <SelectValue /> 
+              </SelectTrigger> 
+              <SelectContent> 
+                <SelectGroup> 
+                  <SelectItem className="text-sm" value="last_month">Last Month</SelectItem> 
+                  <SelectItem className="text-sm" value="last_year">Last Year</SelectItem> 
+                </SelectGroup> 
+              </SelectContent> 
+            </Select>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -86,6 +100,7 @@ export default function ChartTopSellingProducts() {
             layout="vertical"
             margin={{
               top: 0,
+              right: 20,
             }}
           >
             <CartesianGrid vertical={false} />
@@ -97,13 +112,13 @@ export default function ChartTopSellingProducts() {
             <YAxis
               dataKey="name"
               type="category"
-              width={250}
+              width={240}
               tickLine={false}
               tickMargin={10}
               axisLine={false}
               tick={({ y, payload }) => (
                 <text
-                  x={0}
+                  x={5}
                   y={y + 4}
                   textAnchor="start"
                   style={{
@@ -156,12 +171,12 @@ export default function ChartTopSellingProducts() {
                 fontSize={13.5}
                 content={({ x, y, width, height, value }) => (
                   <text
-                    x={x + width + 8}
+                    x={x + width + 6}
                     y={y + height / 2}
                     dy={4}
                     textAnchor="start"
                     fill={theme === 'light' ? '#3f3f46' : '#d4d4d8'}
-                    fontSize={12}
+                    fontSize={13}
                   >
                     {formatNumber({ value, notation: 'compact' })}
                   </text>
