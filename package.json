@@ -71,6 +71,7 @@
     "dayjs": "^1.11.18",
     "dotenv": "^17.2.3",
     "embla-carousel-react": "^8.6.0",
+    "fast-equals": "^5.3.3",
     "google-auth-library": "^10.2.0",
     "google-spreadsheet": "^4.1.5",
     "input-otp": "^1.4.2",

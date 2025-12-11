@@ -3,7 +3,14 @@
 import DataTable from './data-table';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Plus, Columns, AlertCircle } from 'lucide-react';
+import {
+  Plus,
+  Columns,
+  AlertCircle,
+  MoreHorizontal,
+  Check,
+  Minus,
+} from 'lucide-react';
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import {
   DropdownMenu,
@@ -11,33 +18,79 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TableSkeleton from '../loadings/table-skeleton';
 import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import { PriceType } from '@/constants/enums';
+import { PriceType, CurrencyCode } from '@/constants/enums';
 import { editProductPinnedStatus, editProductPublishedStatus, removeProduct } from '@/actions/product-actions';
 import { toast } from 'sonner';
 import { safeFetch } from '@/lib/safe-fetch';
 import { useSession } from 'next-auth/react';
 import { Skeleton } from '../ui/skeleton';
 import { isOwnerAdmin } from '@/lib/utils';
+import Dot from '../icon/Dot';
+import { formatDateTime } from '@/lib/format-date';
+import { formatCurrency } from '@/lib/format-currency';
+import { Badge } from '../ui/badge';
+import {
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { deepEqual } from 'fast-equals';
+import { localStorageGet, localStorageRemove, localStorageSet } from '@/lib/local-storage';
+
+const defaultColumnVisibility = {
+  category: false,
+  is_published: true,
+  released_at: true,
+  admin: false,
+  created_at: false,
+  updated_at: false,
+};
 
 export default function ProductsTable() {
   const queryClient = useQueryClient();
   const { data: session, status: sessionStatus } = useSession();
-  const [columnVisibility, setColumnVisibility] = useState({
-    category: false,
-    is_published: true,
-    released_at: true,
-    admin: false,
-    created_at: false,
-    updated_at: false,
-  });
+  const [columnVisibility, setColumnVisibility] = useState(() => 
+    localStorageGet('products:column-visibility') ?? defaultColumnVisibility
+  );
+
+  useEffect(() => {
+    const savedColumnVisibility = localStorageGet('products:column-visibility');
+    if (savedColumnVisibility && !deepEqual(defaultColumnVisibility, savedColumnVisibility)) {
+      setColumnVisibility(savedColumnVisibility);
+    }
+  }, []);
+
+  function handleResetColumnVisibility() {
+    setColumnVisibility(defaultColumnVisibility);
+    localStorageRemove('products:column-visibility');
+  }
+
+  function formatColumnLabel(columnId) {
+    const words = columnId.replace('_', ' ').replace('is','').trim();
+    return words.charAt(0).toUpperCase() + words.slice(1);
+  }
+
+  function handleColumnVisibilityChange(column, value) {
+    column.toggleVisibility(!!value);
+    localStorageSet('products:column-visibility', {
+      ...columnVisibility,
+      [column.id]: !!value,
+    });
+  }
+
+  const [priceCurrency, setPriceCurrency] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_CURR);
+
+  const [deleteData, setDeleteData] = useState(null);
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
   const [updatingPinnedStatusIds, setUpdatingPinnedStatusIds] = useState([]);
   const [updatingPublishedIds, setUpdatingPublishedIds] = useState([]);
@@ -191,6 +244,207 @@ export default function ProductsTable() {
     }
   }
 
+  // TABLE definition
+  const columns = useMemo(() => [
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      enableHiding: false,
+      cell: ({ row }) => {
+        if (row.original.is_pinned) {
+          return (
+            <>
+              <span>{row.getValue('name')}</span>
+              <Badge
+                variant="secondary"
+                className="bg-green-50 dark:bg-green-900 ms-3 text-xs text-green-700 dark:text-green-300"
+              >
+                Pinned
+              </Badge>
+            </>
+          );
+        }
+        return row.getValue('name');
+      },
+    },
+    {
+      id: 'category',
+      accessorKey: 'category.name',
+      header: 'Category',
+    },
+    {
+      accessorKey: 'prices',
+      enableHiding: false,
+      header: () => (
+        <>
+          <span>Price</span>
+          <div className="ms-4 inline-block space-x-1">
+            <Button
+              variant="outline"
+              className={`px-2 py-0.5 text-xs h-auto shadow-none ${priceCurrency === CurrencyCode.IDR ? 'text-accent-foreground bg-accent' : ''}`}
+              onClick={() => setPriceCurrency(CurrencyCode.IDR)}
+            >
+              IDR
+            </Button>
+            <Button
+              variant="outline"
+              className={`px-2 py-0.5 text-xs h-auto shadow-none ${priceCurrency === CurrencyCode.USD ? 'text-accent-foreground bg-accent' : ''}`}
+              onClick={() => setPriceCurrency(CurrencyCode.USD)}
+            >
+              USD
+            </Button>
+          </div>
+        </>
+      ),
+      cell: ({ row }) => {
+        if (row.original.price_type === PriceType.PAID) {
+          const prices = row.getValue('prices')[priceCurrency];
+          const min = formatCurrency({
+            value: prices.min,
+            currencyCode: priceCurrency,
+          });
+          const max = formatCurrency({
+            value: prices.max,
+            currencyCode: priceCurrency,
+          });
+
+          if (!prices) return <Minus className="size-4 text-zinc-300" />;
+          if (prices.min === prices.max) {
+            return <span className="tabular-nums">{min}</span>;
+          }
+          
+          return <span className="tabular-nums">{min}&ndash;{max}</span>;
+        }
+        
+        return PriceType.FREE[0].toUpperCase() + PriceType.FREE.substring(1);
+      },
+    },
+    {
+      accessorKey: 'is_published',
+      header: <div className="text-center">Published</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{
+          row.getValue('is_published')
+            ? <Check className="size-4 inline-block" />
+            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
+        }</div>
+      ),
+    },
+    {
+      accessorKey: 'released_at',
+      header: 'Released At',
+      cell: ({ row }) => formatDateTime(row.getValue('released_at')),
+    },
+    {
+      id: 'admin',
+      header: 'Admin',
+      cell: ({ row }) => (
+        <div>
+          {row.original.admin.isCurrentUser ? (
+            <p>Myself</p>
+          ) : (
+            <>
+              <p>{row.original.admin.first_name} {row.original.admin.last_name}</p>
+              <p className="text-sm text-zinc-600">{row.original.admin.email}</p>
+            </>
+          )}
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'created_at',
+      header: 'Created At',
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+    },
+    {
+      accessorKey: 'updated_at',
+      header: 'Updated At',
+      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
+    },
+    {
+      id: 'actions',
+      enableHiding: false,
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 focus-visible:ring-ring"
+                disabled={
+                  updatingPinnedStatusIds.includes(row.original.id) ||
+                  updatingPublishedIds.includes(row.original.id) ||
+                  deletingIds.includes(row.original.id)
+                }
+              >
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-50">
+              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+              <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+                <Link href={`/product/${row.original.id}/edit`}>Edit</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="w-full text-base"
+                asChild
+              >
+                <button
+                  onClick={() => handleEditPinnedStatus(
+                    row.original.id,
+                    row.original.is_pinned,
+                  )}
+                >
+                  {row.original.is_pinned ? 'Unpin' : 'Pin'}
+                </button>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="w-full text-base"
+                asChild
+              >
+                <button
+                  onClick={() => handleEditPublishedStatus(
+                    row.original.id,
+                    row.original.is_published,
+                  )}
+                >
+                  {row.getValue('is_published') ? 'Unpublish' : 'Publish'}
+                </button>
+              </DropdownMenuItem>
+              {!row.original.is_pinned && !row.getValue('is_published') && (
+                <>
+                  <DropdownMenuSeparator className="-mx-1.5" />
+                  <DropdownMenuItem
+                    className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
+                    asChild
+                  >
+                    <button
+                      onClick={() => {
+                        setDeleteData({ id: row.original.id, name: row.getValue('name') });
+                        setIsOpenDeleteDialog(true);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    }
+  ], [priceCurrency, updatingPinnedStatusIds, updatingPublishedIds, deletingIds]);
+  const table = useReactTable({
+    data: dataP,
+    columns,
+    state: {
+      columnVisibility,
+    },
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-3 mb-4">
@@ -210,29 +464,34 @@ export default function ProductsTable() {
           </TooltipWrapper>
           <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
             <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
-            {Object.entries(columnVisibility)
-              .filter(column =>
-                column[0] === 'admin'
+            {table
+              .getAllColumns()
+              .filter((column) =>
+                column.id === 'admin'
                   ? isOwnerAdmin(session?.user?.role)
-                  : column[0] === 'select'
+                  : column.id === 'select'
                   ? false
-                  : true
+                  : column.getCanHide()
               )
               .map((column) => (
                 <DropdownMenuCheckboxItem
-                  key={column[0]}
-                  className="capitalize text-base hover:cursor-pointer"
-                  checked={column[1]}
+                  key={column.id}
+                  className="text-base hover:cursor-pointer"
+                  checked={column.getIsVisible()}
                   onSelect={(e) => e.preventDefault()}
-                  onCheckedChange={(value) =>
-                    setColumnVisibility({
-                      ...columnVisibility,
-                      [column[0]]: value,
-                    })}
+                  onCheckedChange={(value) => handleColumnVisibilityChange(column, value)}
                 >
-                  {column[0].replace('_', ' ').replace('is','')}
+                  {formatColumnLabel(column.id)}
                 </DropdownMenuCheckboxItem>
               ))}
+            {!deepEqual(defaultColumnVisibility, columnVisibility) && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild className="text-base w-full">
+                  <button onClick={handleResetColumnVisibility}>Reset to default</button>
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -247,16 +506,17 @@ export default function ProductsTable() {
       ) : (
         <DataTable
           products={dataP}
+          table={table}
           tableState={{
-            columnVisibility,
             updatingPinnedStatusIds,
             updatingPublishedIds,
             deletingIds,
+            deleteData,
+            isOpenDeleteDialog,
           }}
           tableHandler={{
-            onColumnVisibilityChange: setColumnVisibility,
-            onEditPinnedStatus: handleEditPinnedStatus,
-            onEditPublishedStatus: handleEditPublishedStatus,
+            onIsOpenDeleteDialogChange: setIsOpenDeleteDialog, 
+            onDeleteDataChange: setDeleteData,
             onDelete: handleDelete,
           }}
         />

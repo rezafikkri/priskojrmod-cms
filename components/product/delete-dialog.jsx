@@ -16,17 +16,17 @@ import { toast } from 'sonner';
 export default function DeleteDialog({
   onDelete,
   isOpenDeleteDialog,
-  setIsOpenDeleteDialog,
+  onIsOpenDeleteDialogChange,
   deleteData,
-  setDeleteData,
+  onDeleteDataChange,
 }) {
   const [name, setName] = useState('');
 
   function handleDelete() {
     if (name !== deleteData.name) return false;
 
-    setIsOpenDeleteDialog(false);
-    setDeleteData(null);
+    onIsOpenDeleteDialogChange(false);
+    onDeleteDataChange(null);
     setName('');
     const toastId = toast.loading('Deleting product...');
     onDelete({ deleteData, toastId });
@@ -37,8 +37,8 @@ export default function DeleteDialog({
   const deleteTarget = deleteData?.name ? deleteData?.name : name;
 
   function handleOpenChange() {
-    setIsOpenDeleteDialog(false);
-    setDeleteData(null);
+    onIsOpenDeleteDialogChange(false);
+    onDeleteDataChange(null);
     setName('');
   }
 
