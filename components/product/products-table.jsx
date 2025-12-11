@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import {
   Plus,
-  Columns,
   AlertCircle,
   MoreHorizontal,
   Check,
@@ -17,11 +16,10 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TableSkeleton from '../loadings/table-skeleton';
 import {
@@ -43,8 +41,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { deepEqual } from 'fast-equals';
-import { localStorageGet, localStorageRemove, localStorageSet } from '@/lib/local-storage';
+import useColumnVisibility from '@/hooks/use-column-visibility';
+import ColumnVisibilityMenu from '../ui/column-visibility-menu';
 
 const defaultColumnVisibility = {
   category: false,
@@ -58,34 +56,7 @@ const defaultColumnVisibility = {
 export default function ProductsTable() {
   const queryClient = useQueryClient();
   const { data: session, status: sessionStatus } = useSession();
-  const [columnVisibility, setColumnVisibility] = useState(() => 
-    localStorageGet('products:column-visibility') ?? defaultColumnVisibility
-  );
-
-  useEffect(() => {
-    const savedColumnVisibility = localStorageGet('products:column-visibility');
-    if (savedColumnVisibility && !deepEqual(defaultColumnVisibility, savedColumnVisibility)) {
-      setColumnVisibility(savedColumnVisibility);
-    }
-  }, []);
-
-  function handleResetColumnVisibility() {
-    setColumnVisibility(defaultColumnVisibility);
-    localStorageRemove('products:column-visibility');
-  }
-
-  function formatColumnLabel(columnId) {
-    const words = columnId.replace('_', ' ').replace('is','').trim();
-    return words.charAt(0).toUpperCase() + words.slice(1);
-  }
-
-  function handleColumnVisibilityChange(column, value) {
-    column.toggleVisibility(!!value);
-    localStorageSet('products:column-visibility', {
-      ...columnVisibility,
-      [column.id]: !!value,
-    });
-  }
+  const { columnVisibility, setColumnVisibility } = useColumnVisibility(defaultColumnVisibility);
 
   const [priceCurrency, setPriceCurrency] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_CURR);
 
@@ -454,46 +425,19 @@ export default function ProductsTable() {
           </Button>
         </TooltipWrapper>
 
-        <DropdownMenu>
-          <TooltipWrapper text="Manage columns">
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="px-3 py-1.5 h-auto">
-                <Columns />
-              </Button>
-            </DropdownMenuTrigger>
-          </TooltipWrapper>
-          <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
-            {table
-              .getAllColumns()
-              .filter((column) =>
-                column.id === 'admin'
-                  ? isOwnerAdmin(session?.user?.role)
-                  : column.id === 'select'
-                  ? false
-                  : column.getCanHide()
-              )
-              .map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="text-base hover:cursor-pointer"
-                  checked={column.getIsVisible()}
-                  onSelect={(e) => e.preventDefault()}
-                  onCheckedChange={(value) => handleColumnVisibilityChange(column, value)}
-                >
-                  {formatColumnLabel(column.id)}
-                </DropdownMenuCheckboxItem>
-              ))}
-            {!deepEqual(defaultColumnVisibility, columnVisibility) && (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild className="text-base w-full">
-                  <button onClick={handleResetColumnVisibility}>Reset to default</button>
-                </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <ColumnVisibilityMenu
+          table={table}
+          defaultColumnVisibility={defaultColumnVisibility}
+          columnVisibility={columnVisibility}
+          onColumnVisibilityChange={setColumnVisibility}
+          filterFn={(column) =>
+            column.id === 'admin'
+              ? isOwnerAdmin(session?.user?.role)
+              : column.id === 'select'
+              ? false
+              : true
+          }
+        />
       </div>
 
       {isFetchingP ? (
