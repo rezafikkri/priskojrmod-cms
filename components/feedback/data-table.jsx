@@ -2,8 +2,6 @@
 
 import {
   flexRender,
-  getCoreRowModel,
-  useReactTable,
 } from '@tanstack/react-table';
 import {
   Table,
@@ -13,131 +11,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useMemo, useState } from 'react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
-import { MoreHorizontal } from 'lucide-react';
-import { formatDateTime } from '@/lib/format-date';
+import { useState } from 'react';
 import { cn, getTableHeaderWidth } from '@/lib/utils';
-import { Checkbox } from '../ui/checkbox';
 import SelectionAlert from '../ui/selection-alert';
-import { Minus } from 'lucide-react';
 import DetailDialog from './detail-dialog';
 
 export default function DataTable({
   feedbacks,
-  tableState,
-  tableHandler,
+  table,
+  markingAsReadIds,
+  onEditReadStatus,
 }) {
-  const {
-    onRowSelectionChange,
-    onColumnVisibilityChange,
-    onEditReadStatus,
-    onMarkAsRead,
-  } = tableHandler;
-  const {rowSelection, columnVisibility, markingAsReadIds} = tableState;
   const [detailData, setDetailData] = useState(null);
   const [isOpenDetailDialog, setIsOpenDetailDialog] = useState(false);
-
-  // table definition
-  const columns = useMemo(() => [
-    {
-      id: 'select',
-      enableSorting: false,
-      header: ({ table }) => (
-        <div className="flex items-center">
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && 'indeterminate')
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-            className="shadow-none bg-background"
-          />
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center">
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-            className="shadow-none bg-background"
-          />
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'user_info',
-      header: 'User Info',
-      cell: ({ row }) => 
-        row.getValue('user_info') ?? <Minus className="size-4 text-zinc-300" />,
-    },
-    {
-      accessorKey: 'message',
-      header: 'Message',
-      enableHiding: false,
-      cell: ({ row }) => 
-        row.getValue('message').length > 50
-          ? `${row.getValue('message').substring(0, 50).trimEnd()}...`
-          : row.getValue('message')
-    },
-    {
-      accessorKey: 'created_at',
-      header: () => 'Created At',
-      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
-    },
-    {
-      id: 'actions',
-      enableHiding: false,
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 focus-visible:ring-ring"
-              disabled={
-                row.original.is_read ||
-                markingAsReadIds.includes(row.original.id)
-              }
-            >
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-50">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button onClick={() => onMarkAsRead(row.original.id)}>
-                Mark as Read
-              </button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
-  ], [markingAsReadIds]);
-  const table = useReactTable({
-    data: feedbacks,
-    columns,
-    state: {
-      rowSelection,
-      columnVisibility,
-    },
-    getCoreRowModel: getCoreRowModel(),
-    getRowId: row => row.id,
-    onRowSelectionChange,
-    onColumnVisibilityChange,
-  });
 
   function getTableCellClassNames(columnId, isRead) {
     switch (columnId) {
@@ -217,7 +103,7 @@ export default function DataTable({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
                   No results
                 </TableCell>
               </TableRow>

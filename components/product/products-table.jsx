@@ -41,8 +41,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import useColumnVisibility from '@/hooks/use-column-visibility';
 import ColumnVisibilityMenu from '../ui/column-visibility-menu';
+import { localStorageGet } from '@/lib/local-storage';
 
 const defaultColumnVisibility = {
   category: false,
@@ -56,7 +56,9 @@ const defaultColumnVisibility = {
 export default function ProductsTable() {
   const queryClient = useQueryClient();
   const { data: session, status: sessionStatus } = useSession();
-  const { columnVisibility, setColumnVisibility } = useColumnVisibility(defaultColumnVisibility);
+  const [columnVisibility, setColumnVisibility] = useState(() => 
+    localStorageGet('products:column-visibility') ?? defaultColumnVisibility
+  );
 
   const [priceCurrency, setPriceCurrency] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_CURR);
 
@@ -430,11 +432,10 @@ export default function ProductsTable() {
           defaultColumnVisibility={defaultColumnVisibility}
           columnVisibility={columnVisibility}
           onColumnVisibilityChange={setColumnVisibility}
+          storageKey="products:column-visibility"
           filterFn={(column) =>
             column.id === 'admin'
               ? isOwnerAdmin(session?.user?.role)
-              : column.id === 'select'
-              ? false
               : true
           }
         />

@@ -20,9 +20,14 @@ export default function ColumnVisibilityMenu({
   defaultColumnVisibility,
   columnVisibility,
   onColumnVisibilityChange,
+  storageKey,
   filterFn,
 }) {
-  let columns = table.getAllColumns().filter((column) => column.getCanHide());
+  let columns = table.getAllColumns().filter((column) => 
+    column.id === 'select'
+      ? false
+      : column.getCanHide(),
+  );
 
   if (filterFn) {
     columns = columns.filter(filterFn);
@@ -30,7 +35,7 @@ export default function ColumnVisibilityMenu({
 
   function handleResetColumnVisibility() {
     onColumnVisibilityChange(defaultColumnVisibility);
-    localStorageRemove('products:column-visibility');
+    localStorageRemove(storageKey);
   }
 
   function formatColumnLabel(columnId) {
@@ -40,7 +45,7 @@ export default function ColumnVisibilityMenu({
 
   function handleColumnVisibilityChange(column, value) {
     column.toggleVisibility(!!value);
-    localStorageSet('products:column-visibility', {
+    localStorageSet(storageKey, {
       ...columnVisibility,
       [column.id]: !!value,
     });
@@ -50,8 +55,8 @@ export default function ColumnVisibilityMenu({
     <DropdownMenu>
       <TooltipWrapper text="Manage columns">
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="px-3 py-1.5 h-auto">
-            <Columns />
+          <Button variant="outline" className="text-base px-3 py-1.5 h-auto inline-block">
+            <Columns className="icon" />
           </Button>
         </DropdownMenuTrigger>
       </TooltipWrapper>

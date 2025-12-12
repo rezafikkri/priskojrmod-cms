@@ -1,7 +1,7 @@
 'use client';
 
 import DataTable from './data-table';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
@@ -13,7 +13,12 @@ import {
 } from '@/components/ui/alert';
 import { safeFetch } from '@/lib/safe-fetch';
 import TableSkeleton from '../loadings/table-skeleton';
-import { ArrowDownToLine, AlertCircle, Columns } from 'lucide-react';
+import {
+  ArrowDownToLine,
+  AlertCircle,
+  MoreHorizontal,
+  Minus,
+} from 'lucide-react';
 import { Trash } from 'lucide-react';
 import { editFeedbackReadStatus, loadFeedbacks, removeFeedbacks } from '@/actions/feedback-actions';
 import {
@@ -21,8 +26,20 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
+  DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
+import { localStorageGet, localStorageSet } from '@/lib/local-storage';
+import { Checkbox } from '../ui/checkbox';
+import { formatDateTime } from '@/lib/format-date';
+import ColumnVisibilityMenu from '../ui/column-visibility-menu';
+import {
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+
+const defaultColumnVisibility = {
+  created_at: true,
+};
 
 export default function FeedbacksTable() {
   const queryClient = useQueryClient();
@@ -32,19 +49,15 @@ export default function FeedbacksTable() {
 
   // pull new data state
   const [isPulling, setIsPulling] = useState(false);
-  const [lastPullTime, setLastPullTime] = useState(null);
-  useEffect(() => {
-    const prevLastPullTime = localStorage.getItem('lastPullTime');
-    if (prevLastPullTime) {
-      setLastPullTime(prevLastPullTime);
-    }
-  }, []);
+  const [lastPullTime, setLastPullTime] = useState(() =>
+    localStorageGet('lastPullTime', true) ?? null
+  );
 
   // table state
   const [rowSelection, setRowSelection] = useState({});
-  const [columnVisibility, setColumnVisibility] = useState({
-    created_at: true,
-  });
+  const [columnVisibility, setColumnVisibility] = useState(() => 
+    localStorageGet('feedbacks:column-visibility') ?? defaultColumnVisibility
+  );
 
   // filters state
   const [filters, setFilters] = useState(null);
@@ -136,8 +149,8 @@ export default function FeedbacksTable() {
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 5,
+    staleTime: 1000 * 20,
+    gcTime: 1000 * 60 * 3,
   });
 
   // set isFilterActive when apply and clear
@@ -191,7 +204,7 @@ export default function FeedbacksTable() {
       if (loadRes.data.count > 0) {
         // set or update last pull time
         const currentLastPullTime = new Date().toISOString();
-        localStorage.setItem('lastPullTime', currentLastPullTime);
+        localStorageSet('lastPullTime', currentLastPullTime, true);
         setLastPullTime(currentLastPullTime);
 
         // note the toast id, for updated in queryFn useQuery
@@ -444,6 +457,98 @@ export default function FeedbacksTable() {
     }
   }, []);
 
+  // TABLE definition
+  const columns = useMemo(() => [
+    {
+      id: 'select',
+      enableSorting: false,
+      header: ({ table }) => (
+        <div className="flex items-center">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+            className="shadow-none bg-background"
+          />
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center">
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+            className="shadow-none bg-background"
+          />
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'user_info',
+      header: 'User Info',
+      enableHiding: false,
+      cell: ({ row }) => 
+        row.getValue('user_info') ?? <Minus className="size-4 text-zinc-300" />,
+    },
+    {
+      accessorKey: 'message',
+      header: 'Message',
+      enableHiding: false,
+      cell: ({ row }) => 
+        row.getValue('message').length > 50
+          ? `${row.getValue('message').substring(0, 50).trimEnd()}...`
+          : row.getValue('message')
+    },
+    {
+      accessorKey: 'created_at',
+      header: () => 'Created At',
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+    },
+    {
+      id: 'actions',
+      enableHiding: false,
+      cell: ({ row }) => row.original.is_read ? null : (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={markingAsReadIds.includes(row.original.id)}
+            >
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-50">
+            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              className="w-full text-base"
+              asChild
+            >
+              <button onClick={() => handleMarkAsRead(row.original.id)}>
+                Mark as read
+              </button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ], [markingAsReadIds]);
+  const table = useReactTable({
+    data: dataF,
+    columns,
+    state: {
+      rowSelection,
+      columnVisibility,
+    },
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: row => row.id,
+    onRowSelectionChange: setRowSelection,
+    onColumnVisibilityChange: setColumnVisibility,
+  });
+
   return (
     <>
       <div className="flex gap-6 items-start mb-4 flex-wrap">
@@ -481,32 +586,13 @@ export default function FeedbacksTable() {
             </TooltipWrapper>
           </div>
 
-          <DropdownMenu>
-            <TooltipWrapper text="Manage columns">
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="text-base px-3 py-1.5 h-auto inline-block">
-                  <Columns className="icon" />
-                </Button>
-              </DropdownMenuTrigger>
-            </TooltipWrapper>
-            <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
-              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
-              {Object.entries(columnVisibility).map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column[0]}
-                  className="capitalize text-base hover:cursor-pointer"
-                  checked={column[1]}
-                  onCheckedChange={(value) =>
-                    setColumnVisibility({
-                      ...columnVisibility,
-                      [column[0]]: value,
-                    })}
-                >
-                  {column[0].replace('_', ' ')}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ColumnVisibilityMenu
+            table={table}
+            defaultColumnVisibility={defaultColumnVisibility}
+            columnVisibility={columnVisibility}
+            onColumnVisibilityChange={setColumnVisibility}
+            storageKey="feedbacks:column-visibility"
+          />
         </div>
       </div>
 
@@ -520,18 +606,9 @@ export default function FeedbacksTable() {
       ) : (
         <DataTable
           feedbacks={dataF}
-          tableState={{
-            rowSelection,
-            columnVisibility,
-            filters,
-            markingAsReadIds,
-          }}
-          tableHandler={{
-            onRowSelectionChange: setRowSelection,
-            onColumnVisibilityChange: setColumnVisibility,
-            onEditReadStatus: handleEditReadStatus,
-            onMarkAsRead: handleMarkAsRead,
-          }}
+          table={table}
+          markingAsReadIds={markingAsReadIds}
+          onEditReadStatus={handleEditReadStatus}
         />
       )}
     </>
