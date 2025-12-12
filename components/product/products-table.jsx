@@ -57,11 +57,12 @@ export default function ProductsTable() {
   const queryClient = useQueryClient();
   const { data: session, status: sessionStatus } = useSession();
   const [columnVisibility, setColumnVisibility] = useState(() => 
-    localStorageGet('products:column-visibility') ?? defaultColumnVisibility
+    localStorageGet('products:column-visibility') ?? defaultColumnVisibility,
   );
 
   const [priceCurrency, setPriceCurrency] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_CURR);
 
+  // delete dialog state
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 

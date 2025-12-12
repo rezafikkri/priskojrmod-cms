@@ -56,7 +56,7 @@ export default function FeedbacksTable() {
   // table state
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState(() => 
-    localStorageGet('feedbacks:column-visibility') ?? defaultColumnVisibility
+    localStorageGet('feedbacks:column-visibility') ?? defaultColumnVisibility,
   );
 
   // filters state

@@ -7,9 +7,10 @@ import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import TooltipWrapper from '../ui/tooltip-wrapper';
@@ -21,12 +22,26 @@ import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import { AlertCircle, Search, X, Plus, Columns } from 'lucide-react';
+import { AlertCircle, Search, X, Plus, MoreHorizontal, Minus } from 'lucide-react';
 import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
 import { editCustomerBanStatus, removeCustomer } from '@/actions/customer-actions';
+import { localStorageGet } from '@/lib/local-storage';
+import { formatDateTime } from '@/lib/format-date';
+import ProfileBadge from '../ui/profile-badge';
+import ColumnVisibilityMenu from '../ui/column-visibility-menu';
+import {
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+
+const defaultColumnVisibility = {
+  last_active: true,
+  created_at: false,
+  updated_at: false,
+};
 
 export default function CustomersTable() {
   const queryClient = useQueryClient();
@@ -51,11 +66,13 @@ export default function CustomersTable() {
     shouldShowSkeletonLoading.current = false;
     setPagination(pagination);
   }
-  const [columnVisibility, setColumnVisibility] = useState({
-    last_active: true,
-    created_at: false,
-    updated_at: false,
-  });
+  const [columnVisibility, setColumnVisibility] = useState(() =>
+    localStorageGet('customers:column-visibility') ?? defaultColumnVisibility,
+  );
+
+  // delete dialog state
+  const [deleteData, setDeleteData] = useState(null);
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
   // deleting ids and ban/unban state
   const [deletingIds, setDeletingIds] = useState([]);
@@ -433,11 +450,135 @@ export default function CustomersTable() {
   const pageInfo = useMemo(() => {
     return generatePageInfo({
       pageIndex: pagination.pageIndex,
-      totalData: customer?.rowCount,
-      totalDataPerPage: customer?.customers?.length,
+      totalData: customer?.rowCount ?? 0,
+      totalDataPerPage: customer?.customers?.length ?? 0,
       searchKey: searchRef?.current?.value,
     });
   }, [customer]);
+
+  // TABLE definition
+  const shouldShowDeleteButton = useCallback(({ oauthId, lastActive, isBanned }) => {
+    const now = Math.floor(new Date().getTime() / 1000);
+    return (
+      !oauthId ||
+      !lastActive ||
+      (now - lastActive > (60 * 60 * 24 * 30)) ||
+      isBanned
+    );
+  }, []);
+
+  const columns = useMemo(() => [
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      enableHiding: false,
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <ProfileBadge
+            src={row.original.picture}
+            fallbackText={row.getValue('name')}
+          />
+          <span className="text-wrap">{row.getValue('name')}</span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'email',
+      header: 'Email',
+      enableHiding: false,
+    },
+    {
+      accessorKey: 'last_active',
+      header: () => 'Last Active',
+      cell: ({ row }) => 
+        row.getValue('last_active')
+          ? formatDateTime(row.getValue('last_active'))
+          : <Minus className="size-4 text-zinc-300" />,
+    },
+    {
+      accessorKey: 'created_at',
+      header: () => 'Created At',
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+    },
+    {
+      accessorKey: 'updated_at',
+      header: () => 'Updated At',
+      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
+    },
+    {
+      id: 'actions',
+      enableHiding: false,
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={
+                deletingIds.includes(row.original.id) ||
+                updatingBanStatusIds.includes(row.original.id)
+              }
+            >
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-50">
+            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+            <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
+              <Link href={`/customer/${row.original.id}/edit`}>Edit</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="w-full text-base"
+              onClick={() => handleEditBanStatus({
+                id: row.original.id,
+                isBanned: !row.original.is_banned,
+              })}
+              asChild
+            >
+              <button>
+                {row.original.is_banned === false ? 'Ban' : 'Unban'}
+              </button>
+            </DropdownMenuItem>
+            {shouldShowDeleteButton({
+              oauthId: row.original.oauth_id,
+              lastActive: row.getValue('last_active'),
+              isBanned: row.original.is_banned,
+            }) && (
+              <>
+                <DropdownMenuSeparator className="-mx-1.5" />
+                <DropdownMenuItem
+                  className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
+                  asChild
+                >
+                  <button
+                    onClick={() => {
+                      setDeleteData({ id: row.original.id, email: row.getValue('email') });
+                      setIsOpenDeleteDialog(true);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ], [deletingIds, updatingBanStatusIds]);
+  const table = useReactTable({
+    data: customer?.customers,
+    rowCount: customer?.rowCount ?? 0,
+    columns,
+    state: {
+      columnVisibility,
+      pagination,
+    },
+    getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: handlePaginationChange,
+  });
 
   return (
     <>
@@ -473,7 +614,6 @@ export default function CustomersTable() {
               <Input
                 placeholder="Search with email..."
                 className="rounded-e-none shadow-none md:text-base h-auto px-3 py-1.5 pe-9"
-                autoComplete="off"
                 ref={searchRef}
                 onKeyUp={handleEnterSearch}
                 disabled={isFetchingC || isSearching}
@@ -481,12 +621,12 @@ export default function CustomersTable() {
               {searchedCustomer ? (
                 <TooltipWrapper text="Clear search input">
                   <Button
-                    className="absolute right-2 w-4 h-5 p-0 z-1"
+                    className="absolute right-2 size-6 z-1"
                     variant="ghost"
                     onClick={handleClearSearchInput}
                     disabled={isFetchingC || isSearching}
                   >
-                    <X className="icon" />
+                    <X />
                   </Button>
                 </TooltipWrapper>
               ) : null}
@@ -501,32 +641,13 @@ export default function CustomersTable() {
             </Button>
           </div>
 
-          <DropdownMenu>
-            <TooltipWrapper text="Manage columns">
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="px-3 py-1.5 h-auto">
-                  <Columns />
-                </Button>
-              </DropdownMenuTrigger>
-            </TooltipWrapper>
-            <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
-              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
-              {Object.entries(columnVisibility).map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column[0]}
-                  className="capitalize text-base hover:cursor-pointer"
-                  checked={column[1]}
-                  onCheckedChange={(value) =>
-                    setColumnVisibility({
-                      ...columnVisibility,
-                      [column[0]]: value,
-                    })}
-                >
-                  {column[0].replace('_', ' ')}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ColumnVisibilityMenu
+            table={table}
+            defaultColumnVisibility={defaultColumnVisibility}
+            columnVisibility={columnVisibility}
+            onColumnVisibilityChange={setColumnVisibility}
+            storageKey="customers:column-visibility"
+          />
         </div>
       </div>
 
@@ -541,16 +662,16 @@ export default function CustomersTable() {
         <DataTable
           customer={customer}
           pageInfo={pageInfo}
+          table={table}
           tableState={{
-            columnVisibility,
-            pagination,
+            deleteData,
+            isOpenDeleteDialog,
             deletingIds,
             updatingBanStatusIds,
           }}
           tableHandler={{
-            onPaginationChange: handlePaginationChange,
-            onColumnVisibilityChange: setColumnVisibility,
-            onEditBanStatus: handleEditBanStatus,
+            onIsOpenDeleteDialogChange: setIsOpenDeleteDialog, 
+            onDeleteDataChange: setDeleteData,
             onDelete: handleDelete,
           }}
           isPlaceholderData={isPlaceholderDataC}

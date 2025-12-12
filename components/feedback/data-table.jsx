@@ -1,8 +1,6 @@
 'use client';
 
-import {
-  flexRender,
-} from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
 import {
   Table,
   TableBody,

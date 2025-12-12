@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
 import {
   Table,
   TableBody,
@@ -13,172 +9,31 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useMemo, useState } from 'react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
-import { MoreHorizontal } from 'lucide-react';
-import Link from 'next/link';
-import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
-import { Minus } from 'lucide-react';
 import DeleteDialog from './delete-dialog';
-import ProfileBadge from '../ui/profile-badge';
+import { Button } from '../ui/button';
 
 export default function DataTable({
   customer,
   pageInfo,
+  table,
   tableState,
   tableHandler,
   isPlaceholderData,
   hasSearched,
 }) {
-  const {customers, rowCount, isTooMany} = customer;
+  const {customers, isTooMany} = customer;
   const {
-    onPaginationChange,
-    onColumnVisibilityChange,
-    onEditBanStatus,
-    onDelete,
-  } = tableHandler;
-  const {
-    columnVisibility,
-    pagination,
+    deleteData,
+    isOpenDeleteDialog,
     deletingIds,
     updatingBanStatusIds,
   } = tableState;
-
-  const [deleteData, setDeleteData] = useState(null);
-  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
-
-  function shouldShowDeleteButton({ oauthId, lastActive, isBanned }) {
-    const now = Math.floor(new Date().getTime() / 1000);
-    return (
-      !oauthId ||
-      !lastActive ||
-      (now - lastActive > (60 * 60 * 24 * 30)) ||
-      isBanned
-    );
-  }
-
-  // table definition
-  const columns = useMemo(() => [
-    {
-      accessorKey: 'name',
-      header: 'Name',
-      enableHiding: false,
-      cell: ({ row }) => (
-        <div className="flex items-center gap-2">
-          <ProfileBadge
-            src={row.original.picture}
-            fallbackText={row.getValue('name')}
-          />
-          <span className="text-wrap">{row.getValue('name')}</span>
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'email',
-      header: 'Email',
-      enableHiding: false,
-    },
-    {
-      accessorKey: 'last_active',
-      header: () => 'Last Active',
-      cell: ({ row }) => 
-        row.getValue('last_active')
-          ? formatDateTime(row.getValue('last_active'))
-          : <Minus className="size-4 text-zinc-300" />,
-    },
-    {
-      accessorKey: 'created_at',
-      header: () => 'Created At',
-      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
-    },
-    {
-      accessorKey: 'updated_at',
-      header: () => 'Updated At',
-      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
-    },
-    {
-      id: 'actions',
-      enableHiding: false,
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 focus-visible:ring-ring"
-              disabled={
-                deletingIds.includes(row.original.id) ||
-                updatingBanStatusIds.includes(row.original.id)
-              }
-            >
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-50">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-            <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
-              <Link href={`/customer/${row.original.id}/edit`}>Edit</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="w-full text-base"
-              onClick={() => onEditBanStatus({
-                id: row.original.id,
-                isBanned: !row.original.is_banned,
-              })}
-              asChild
-            >
-              <button>
-                {row.original.is_banned === false ? 'Ban' : 'Unban'}
-              </button>
-            </DropdownMenuItem>
-            {shouldShowDeleteButton({
-              oauthId: row.original.oauth_id,
-              lastActive: row.getValue('last_active'),
-              isBanned: row.original.is_banned,
-            }) && (
-              <>
-                <DropdownMenuSeparator className="-mx-1.5" />
-                <DropdownMenuItem
-                  className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                  asChild
-                >
-                  <button
-                    onClick={() => {
-                      setDeleteData({ id: row.original.id, email: row.getValue('email') });
-                      setIsOpenDeleteDialog(true);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
-  ], [deletingIds, updatingBanStatusIds]);
-  const table = useReactTable({
-    data: customers,
-    rowCount,
-    columns,
-    state: {
-      columnVisibility,
-      pagination,
-    },
-    getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
-    onColumnVisibilityChange,
-    onPaginationChange,
-  });
+  const {
+    onIsOpenDeleteDialogChange, 
+    onDeleteDataChange,
+    onDelete,
+  } = tableHandler;
 
   return (
     <>
@@ -230,7 +85,7 @@ export default function DataTable({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
                   No results
                 </TableCell>
               </TableRow>
@@ -274,8 +129,8 @@ export default function DataTable({
       <DeleteDialog
         onDelete={onDelete}
         isOpen={isOpenDeleteDialog}
-        onIsOpenChange={setIsOpenDeleteDialog}
-        onDeleteDataChange={setDeleteData}
+        onIsOpenChange={onIsOpenDeleteDialogChange}
+        onDeleteDataChange={onDeleteDataChange}
         deleteData={deleteData}
       />
     </>
