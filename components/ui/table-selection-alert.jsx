@@ -4,7 +4,7 @@ import {
 } from '@/components/ui/alert';
 import { Button } from '../ui/button';
 
-export default function SelectionAlert({
+export default function TableSelectionAlert({
   table,
 }) {
   const totalSelectedCount = Object.keys(table.getState().rowSelection).length;

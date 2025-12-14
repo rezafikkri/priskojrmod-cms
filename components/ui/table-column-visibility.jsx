@@ -1,7 +1,7 @@
 'use client';
 
 import { deepEqual } from 'fast-equals';
-import { localStorageRemove, localStorageSet } from '@/lib/local-storage';
+import { localStorageGet, localStorageRemove, localStorageSet } from '@/lib/local-storage';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +15,7 @@ import { Columns } from 'lucide-react';
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import { Button } from '@/components/ui/button';
 
-export default function ColumnVisibilityMenu({
+export default function TableColumnVisibility({
   table,
   defaultColumnVisibility,
   columnVisibility,
@@ -34,7 +34,11 @@ export default function ColumnVisibilityMenu({
   }
 
   function handleResetColumnVisibility() {
-    onColumnVisibilityChange(defaultColumnVisibility);
+    const resetState = { ...defaultColumnVisibility };
+    if ('select' in columnVisibility) {
+      resetState.select = columnVisibility.select;
+    }
+    onColumnVisibilityChange(resetState);
     localStorageRemove(storageKey);
   }
 
@@ -45,11 +49,25 @@ export default function ColumnVisibilityMenu({
 
   function handleColumnVisibilityChange(column, value) {
     column.toggleVisibility(!!value);
-    localStorageSet(storageKey, {
-      ...columnVisibility,
-      [column.id]: !!value,
-    });
+
+    const savedColumnVisibility = localStorageGet(storageKey);
+    let newColumnVisibility;
+    if (savedColumnVisibility) {
+      newColumnVisibility = {
+        ...savedColumnVisibility,
+        [column.id]: !!value,
+      };
+    } else {
+      newColumnVisibility = {
+        ...defaultColumnVisibility,
+        [column.id]: !!value,
+      };
+    }
+    localStorageSet(storageKey, newColumnVisibility);
   }
+
+  const { select, ...comparableVisibility } = columnVisibility;
+  const hasUserCustomization = !deepEqual(defaultColumnVisibility, comparableVisibility);
 
   return (
     <DropdownMenu>
@@ -73,7 +91,7 @@ export default function ColumnVisibilityMenu({
             {formatColumnLabel(column.id)}
           </DropdownMenuCheckboxItem>
         ))}
-        {!deepEqual(defaultColumnVisibility, columnVisibility) && (
+        {hasUserCustomization && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild className="text-base w-full">

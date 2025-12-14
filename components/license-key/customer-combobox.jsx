@@ -86,7 +86,7 @@ export default function CustomerCombobox({
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="p-0 w-auto" align="start">
+            <PopoverContent className="p-0 sm:w-100 lg:w-120" align="start">
               <Command>
                 <div className="relative">
                   <CommandInput

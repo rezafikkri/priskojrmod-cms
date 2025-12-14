@@ -112,6 +112,26 @@ export default function FiltersPopover({
         </div> 
         <div className="space-y-2 flex items-start gap-4"> 
           <div className="flex-1"> 
+            <Label className="text-base mb-1.5">Revoked</Label> 
+            <p className="text-muted-foreground text-sm">Filter by revoked condition.</p> 
+          </div> 
+          <Select
+            value={showRevoked}
+            onValueChange={(value) => setShowRevoked(value)}
+          > 
+            <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-30"> 
+              <SelectValue /> 
+            </SelectTrigger> 
+            <SelectContent> 
+              <SelectGroup> 
+                <SelectItem className="text-base" value={false}>No</SelectItem> 
+                <SelectItem className="text-base" value={true}>Yes</SelectItem> 
+              </SelectGroup> 
+            </SelectContent> 
+          </Select> 
+        </div> 
+        <div className="space-y-2 flex items-start gap-4"> 
+          <div className="flex-1"> 
             <Label className="text-base mb-1.5">Can Regenerate</Label> 
             <p className="text-muted-foreground text-sm">Filter by can regenerate condition.</p> 
           </div> 
@@ -127,26 +147,6 @@ export default function FiltersPopover({
                 <SelectItem className="text-base" value="all">All</SelectItem> 
                 <SelectItem className="text-base" value="yes">Yes</SelectItem> 
                 <SelectItem className="text-base" value="no">No</SelectItem> 
-              </SelectGroup> 
-            </SelectContent> 
-          </Select> 
-        </div> 
-        <div className="space-y-2 flex items-start gap-4"> 
-          <div className="flex-1"> 
-            <Label className="text-base mb-1.5">Revoked</Label> 
-            <p className="text-muted-foreground text-sm">Filter by revoked condition.</p> 
-          </div> 
-          <Select
-            value={showRevoked}
-            onValueChange={(value) => setShowRevoked(value)}
-          > 
-            <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-30"> 
-              <SelectValue /> 
-            </SelectTrigger> 
-            <SelectContent> 
-              <SelectGroup> 
-                <SelectItem className="text-base" value={false}>No</SelectItem> 
-                <SelectItem className="text-base" value={true}>Yes</SelectItem> 
               </SelectGroup> 
             </SelectContent> 
           </Select> 

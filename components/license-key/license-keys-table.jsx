@@ -5,9 +5,8 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { generatePageInfo, isLastPage } from '@/lib/utils';
+import { isLastPage } from '@/lib/utils';
 import { AlertCircle, Search, X, RotateCw } from 'lucide-react';
-import DataTable from './data-table';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
 import {
@@ -25,18 +24,39 @@ import { searchKeySchema } from '@/lib/validators/base-validator';
 import { Input } from '../ui/input';
 import FiltersPopover from './filters-popover';
 import { Button } from '../ui/button';
-import { Columns } from 'lucide-react';
+import { MoreHorizontal, Minus, Plus } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import { safeFetch } from '@/lib/safe-fetch';
+import { localStorageGet } from '@/lib/local-storage';
+import DeleteDialog from './delete-dialog';
+import EditRevokeStatusDialog from './edit-revoke-status-dialog';
+import ResetDeviceDialog from './reset-device-dialog';
+import { formatDateTime } from '@/lib/format-date';
+import { Checkbox } from '../ui/checkbox';
+import {
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import DataTable from '../ui/data-table';
+import TableColumnVisibility from '../ui/table-column-visibility';
+import TablePagination from '../ui/table-pagination';
+import TableSelectionAlert from '../ui/table-selection-alert';
+
+const defaultColumnVisibility = {
+  app_name: true,
+  regenerated_at: false,
+  created_at: false,
+  updated_at: false,
+};
 
 export default function LicenseKeysTable() {
   const queryClient = useQueryClient();
@@ -64,13 +84,18 @@ export default function LicenseKeysTable() {
     setPagination(pagination);
   }
   const [rowSelection, setRowSelection] = useState({});
-  const [columnVisibility, setColumnVisibility] = useState({
-    select: true,
-    app_name: true,
-    regenerated_at: false,
-    created_at: false,
-    updated_at: false,
-  });
+  const columnVisibilityStorageKey = 'license-keys:column-visibility';
+  const [columnVisibility, setColumnVisibility] = useState(
+    localStorageGet(columnVisibilityStorageKey) ?? defaultColumnVisibility,
+  );
+
+  // delete, revoke/unrevoke and reset device dialog state
+  const [deleteData, setDeleteData] = useState(null);
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const [editRevokeStatusData, setEditRevokeStatusData] = useState(null);
+  const [isOpenEditRevokeStatusDialog, setIsOpenEditRevokeStatusDialog] = useState(false);
+  const [resetDeviceData, setResetDeviceData] = useState(null);
+  const [isOpenResetDeviceDialog, setIsOpenResetDeviceDialog] = useState(false);
 
   // deleting ids and revoke/unrevoke state
   const [deletingIds, setDeletingIds] = useState([]);
@@ -381,13 +406,13 @@ export default function LicenseKeysTable() {
 
     // if canRegenerate = 'yes'
     if (newFilters?.canRegenerate === 'yes' || newFilters.showRevoked) {
-      if (columnVisibility.select) {
+      if (columnVisibility.select === undefined || columnVisibility.select === true) {
         setColumnVisibility(prev => ({
           ...prev,
           select: false,
         }));
       }
-    } else if (!columnVisibility.select) {
+    } else if (columnVisibility.select === false) {
       setColumnVisibility(prev => ({
         ...prev,
         select: true,
@@ -696,6 +721,7 @@ export default function LicenseKeysTable() {
     }
   }
 
+  const hasSearched = !!searchedLicenseKey;
   let licenseKey;
   if (searchedLicenseKey) {
     licenseKey = searchedLicenseKey;
@@ -703,15 +729,180 @@ export default function LicenseKeysTable() {
     licenseKey = dataLK;
   }
 
-  // generate pageInfo like this: 1-10 of 20
-  const pageInfo = useMemo(() => {
-    return generatePageInfo({
-      pageIndex: pagination.pageIndex,
-      totalData: licenseKey?.rowCount,
-      totalDataPerPage: licenseKey?.licenseKeys?.length,
-      searchKey: searchRef?.current?.value,
-    });
-  }, [licenseKey]);
+  // TABLE definition
+  const columns = useMemo(() => [
+    {
+      id: 'select',
+      enableSorting: false,
+      header: ({ table }) => (
+        <div className="flex items-center">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+            className="shadow-none bg-background"
+          />
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center">
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+            className="shadow-none bg-background"
+          />
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'email',
+      header: 'Email',
+      enableHiding: false,
+    },
+    {
+      accessorKey: 'app_name',
+      header: 'App Name',
+    },
+    {
+      accessorKey: 'expired_at',
+      enableHiding: false,
+      header: () => 'Expired At',
+      cell: ({ row }) => formatDateTime(row.getValue('expired_at')),
+    },
+    {
+      accessorKey: 'regenerated_at',
+      header: () => 'Regenerated At',
+      cell: ({ row }) => 
+        row.getValue('regenerated_at')
+          ? formatDateTime(row.getValue('regenerated_at'))
+          : <Minus className="size-4 text-zinc-300" />,
+    },
+    {
+      accessorKey: 'created_at',
+      header: () => 'Created At',
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+    },
+    {
+      accessorKey: 'updated_at',
+      header: () => 'Updated At',
+      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
+    },
+    {
+      id: 'actions',
+      enableHiding: false,
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={
+                deletingIds.includes(row.original.id) ||
+                updatingRevokeStatusIds.includes(row.original.id) ||
+                resetDeviceIds.includes(row.original.id)
+              }
+            >
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-50">
+            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+            <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
+              <Link href={`/license-key/${row.original.id}/edit`}>Edit</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="w-full text-base"
+              asChild
+            >
+              <button onClick={() => {
+                navigator.clipboard.writeText(row.original.code);
+                toast.success('License key code copied to clipboard');
+              }}>
+                Copy Code
+              </button>
+            </DropdownMenuItem>
+
+            {row.original.device_id && (
+              <DropdownMenuItem
+                className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+                asChild
+              >
+                <button
+                  onClick={() => {
+                    setResetDeviceData({
+                      id: row.original.id,
+                      email: row.getValue('email'),
+                      appName: row.getValue('app_name'),
+                    });
+                    setIsOpenResetDeviceDialog(true);
+                  }}
+                >
+                  Reset Device
+                </button>
+              </DropdownMenuItem>
+            )}
+
+            <DropdownMenuItem
+              className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+              asChild
+            >
+              <button
+                onClick={() => {
+                  setEditRevokeStatusData({
+                    id: row.original.id,
+                    email: row.getValue('email'),
+                    appName: row.getValue('app_name'),
+                    isRevoked: row.original.is_revoked,
+                  });
+                  setIsOpenEditRevokeStatusDialog(true);
+                }}
+              >
+                {row.original.is_revoked ? 'Unrevoke' : 'Revoke'}
+              </button>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="-mx-1.5" />
+            <DropdownMenuItem
+              className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
+              asChild
+            >
+              <button
+                onClick={() => {
+                  setDeleteData({
+                    id: row.original.id,
+                    email: row.getValue('email'),
+                    appName: row.getValue('app_name'),
+                  });
+                  setIsOpenDeleteDialog(true);
+                }}
+              >
+                Delete
+              </button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ], [deletingIds, updatingRevokeStatusIds, resetDeviceIds]);
+  const table = useReactTable({
+    data: licenseKey?.licenseKeys,
+    columns,
+    rowCount: licenseKey?.rowCount,
+    state: {
+      columnVisibility,
+      pagination,
+      rowSelection,
+    },
+    onPaginationChange: handlePaginationChange,
+    getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    getRowId: row => row.id,
+    onRowSelectionChange: setRowSelection,
+    onColumnVisibilityChange: setColumnVisibility,
+  });
 
   return (
     <>
@@ -788,35 +979,13 @@ export default function LicenseKeysTable() {
             </Button>
           </div>
 
-          <DropdownMenu>
-            <TooltipWrapper text="Manage columns">
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="px-3 py-1.5 h-auto">
-                  <Columns />
-                </Button>
-              </DropdownMenuTrigger>
-            </TooltipWrapper>
-            <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
-              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
-              {Object.entries(columnVisibility)
-                .filter(column => column[0] !== 'select')
-                .map((column) => (
-                  <DropdownMenuCheckboxItem
-                    key={column[0]}
-                    className="capitalize text-base hover:cursor-pointer"
-                    checked={column[1]}
-                    onCheckedChange={(value) =>
-                      setColumnVisibility({
-                        ...columnVisibility,
-                        [column[0]]: value,
-                      })}
-                  >
-                    {column[0].replace('_', ' ')}
-                  </DropdownMenuCheckboxItem>
-                ))
-              }
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <TableColumnVisibility
+            table={table}
+            defaultColumnVisibility={defaultColumnVisibility}
+            columnVisibility={columnVisibility}
+            onColumnVisibilityChange={setColumnVisibility}
+            storageKey={columnVisibilityStorageKey}
+          />
         </div>
       </div>
 
@@ -828,31 +997,52 @@ export default function LicenseKeysTable() {
           <AlertTitle>{errorLK.message}</AlertTitle>
         </Alert>
       ) : (
-        <DataTable
-          licenseKey={licenseKey}
-          pageInfo={pageInfo}
-          tableState={{
-            pagination,
-            rowSelection,
-            columnVisibility,
-            deletingIds,
-            updatingRevokeStatusIds,
-            resetDeviceIds,
-          }}
-          tableHandler={{ 
-            onPaginationChange: handlePaginationChange,
-            onRowSelectionChange: setRowSelection,
-            onColumnVisibilityChange: setColumnVisibility,
-            onDelete: handleDelete,
-            onEditRevokeStatus: handleEditRevokeStatus,
-            onResetDevice: handleResetDevice,
-          }}
-          isPlaceholderData={isPlaceholderDataLK}
-          hasSearched={!!searchedLicenseKey}
-        />
+        <>
+          <TableSelectionAlert table={table} />
+          <DataTable
+            table={table}
+            processingIds={[
+              ...deletingIds,
+              ...updatingRevokeStatusIds,
+              ...resetDeviceIds,
+            ]}
+          />
+          <TablePagination
+            licenseKey={licenseKey}
+            table={table}
+            pagination={pagination}
+            isPlaceholderData={isPlaceholderDataLK}
+            hasSearched={hasSearched}
+          />
+        </>
       )}
 
+      {(hasSearched && licenseKey?.isTooMany) ? (
+        <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Info</b>: If you haven't found the license key you're looking for, please use a more specific email!</small>
+      ) : null}
       <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: <i>Activate</i> indicates that the license key has been used to activate the application</small>
+
+      <DeleteDialog
+        onDelete={handleDelete}
+        isOpen={isOpenDeleteDialog}
+        onIsOpenChange={setIsOpenDeleteDialog}
+        onDeleteDataChange={setDeleteData}
+        deleteData={deleteData}
+      />
+      <EditRevokeStatusDialog
+        onEditRevokeStatus={handleEditRevokeStatus}
+        isOpen={isOpenEditRevokeStatusDialog}
+        onIsOpenChange={setIsOpenEditRevokeStatusDialog}
+        onEditRevokeStatusDataChange={setEditRevokeStatusData}
+        editRevokeStatusData={editRevokeStatusData}
+      />
+      <ResetDeviceDialog
+        onReset={handleResetDevice}
+        isOpen={isOpenResetDeviceDialog}
+        onIsOpenChange={setIsOpenResetDeviceDialog}
+        onResetDataChange={setResetDeviceData}
+        resetData={resetDeviceData}
+      />
     </>
   );
 }
