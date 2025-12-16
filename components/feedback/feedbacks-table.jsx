@@ -12,7 +12,6 @@ import {
   AlertTitle,
 } from '@/components/ui/alert';
 import { safeFetch } from '@/lib/safe-fetch';
-import TableSkeleton from '../loadings/table-skeleton';
 import {
   ArrowDownToLine,
   AlertCircle,
@@ -31,11 +30,15 @@ import {
 import { localStorageGet, localStorageSet } from '@/lib/local-storage';
 import { Checkbox } from '../ui/checkbox';
 import { formatDateTime } from '@/lib/format-date';
-import ColumnVisibilityMenu from '../ui/column-visibility-menu';
 import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import TableColumnVisibility from '../ui/table-column-visibility';
+import TableSelectionAlert from '../ui/table-selection-alert';
+import TablePagination from '../ui/table-pagination';
+import DetailDialog from './detail-dialog';
+import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
 
 const defaultColumnVisibility = {
   created_at: true,
@@ -58,6 +61,10 @@ export default function FeedbacksTable() {
   const [columnVisibility, setColumnVisibility] = useState(() => 
     localStorageGet('feedbacks:column-visibility') ?? defaultColumnVisibility,
   );
+
+  // detail dialog state
+  const [detailData, setDetailData] = useState(null);
+  const [isOpenDetailDialog, setIsOpenDetailDialog] = useState(false);
 
   // filters state
   const [filters, setFilters] = useState(null);
@@ -283,6 +290,10 @@ export default function FeedbacksTable() {
     // Note the id to state to prevent double process
     updatingReadStatusIdsRef.current = [ ...updatingReadStatusIdsRef.current, id ];
 
+    // Per-invocation snapshot object for this edit action.
+    // Captures the current `filters` state (intentional stale closure)
+    // and any optimistic-removed item data for safe concurrent rollback
+    // and conditional query invalidation.
     let removedSnaphost = { filters };
 
     // optimistic update feedback
@@ -293,23 +304,26 @@ export default function FeedbacksTable() {
         (oldData) => {
           if (!oldData) return oldData;
 
-          return oldData.filter((feedback, index) => {
-            if (feedback.id == id) {
-              removedSnaphost = {
-                ...removedSnaphost,
-                item: feedback,
-                index,
-              };
-              return false;
-            }
-            return true;
-          });
+          return {
+            ...oldData,
+            items: oldData.items.filter((feedback, index) => {
+              if (feedback.id == id) {
+                removedSnaphost = {
+                  ...removedSnaphost,
+                  item: feedback,
+                  index,
+                };
+                return false;
+              }
+              return true;
+            }),
+          };
         },
       );
 
       // if id exist in rowSelection then remove
       setRowSelection(prev => {
-        if (!id in prev) return prev;
+        if (!(id in prev)) return prev;
         const { [id]:_, ...next } = prev;
         return next;
       });
@@ -320,10 +334,13 @@ export default function FeedbacksTable() {
         (oldData) => {
           if (!oldData) return oldData;
 
-          return oldData.map((feedback) => ({
-            ...feedback,
-            is_read: feedback.id === id ? true : feedback.is_read,
-          }));
+          return {
+            ...oldData,
+            items: oldData.items.map((feedback) => ({
+              ...feedback,
+              is_read: feedback.id === id ? true : feedback.is_read,
+            })),
+          };
         },
       );
     }
@@ -341,11 +358,14 @@ export default function FeedbacksTable() {
           (oldData) => {
             if (!oldData) return oldData;
 
-            return [
-              ...oldData.slice(0, removedSnaphost.index),
-              removedSnaphost.item,
-              ...oldData.slice(removedSnaphost.index),
-            ];
+            return {
+              ...oldData,
+              items: [
+                ...oldData.items.slice(0, removedSnaphost.index),
+                removedSnaphost.item,
+                ...oldData.items.slice(removedSnaphost.index),
+              ],
+            };
           },
         );
       } else {
@@ -355,10 +375,13 @@ export default function FeedbacksTable() {
           (oldData) => {
             if (!oldData) return oldData;
 
-            return oldData.map((feedback) => ({
-              ...feedback,
-              is_read: feedback.id === id ? false : feedback.is_read,
-            }));
+            return {
+              ...oldData,
+              items: oldData.items.map((feedback) => ({
+                ...feedback,
+                is_read: feedback.id === id ? false : feedback.is_read,
+              })),
+            };
           },
         );
       }
@@ -413,7 +436,10 @@ export default function FeedbacksTable() {
           (oldData) => {
             if (!oldData) return oldData;
 
-            return oldData.filter((feedback) => feedback.id !== id);
+            return {
+              ...oldData,
+              items: oldData.items.filter((feedback) => feedback.id !== id),
+            };
           },
         );
 
@@ -431,10 +457,13 @@ export default function FeedbacksTable() {
           (oldData) => {
             if (!oldData) return oldData;
 
-            return oldData.map((feedback) => ({
-              ...feedback,
-              is_read: feedback.id === id ? true : feedback.is_read,
-            }));
+            return {
+              ...oldData,
+              items: oldData.items.map((feedback) => ({
+                ...feedback,
+                is_read: feedback.id === id ? true : feedback.is_read,
+              })),
+            };
           },
         );
       }
@@ -515,7 +544,7 @@ export default function FeedbacksTable() {
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="h-8 w-8 p-0 focus-visible:ring-ring"
+              className="size-8 p-0 focus-visible:ring-ring"
               disabled={markingAsReadIds.includes(row.original.id)}
             >
               <MoreHorizontal />
@@ -537,7 +566,7 @@ export default function FeedbacksTable() {
     },
   ], [markingAsReadIds]);
   const table = useReactTable({
-    data: dataF,
+    data: dataF?.items,
     columns,
     state: {
       rowSelection,
@@ -586,7 +615,7 @@ export default function FeedbacksTable() {
             </TooltipWrapper>
           </div>
 
-          <ColumnVisibilityMenu
+          <TableColumnVisibility
             table={table}
             defaultColumnVisibility={defaultColumnVisibility}
             columnVisibility={columnVisibility}
@@ -597,20 +626,35 @@ export default function FeedbacksTable() {
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingF) ? (
-        <TableSkeleton />
+        <TablePaginationSekeleton pagination={false} />
       ) : isErrorF ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>{errorF.message}</AlertTitle>
         </Alert>
       ) : (
-        <DataTable
-          feedbacks={dataF}
-          table={table}
-          markingAsReadIds={markingAsReadIds}
-          onEditReadStatus={handleEditReadStatus}
-        />
+        <>
+          <TableSelectionAlert table={table} />
+          <DataTable
+            table={table}
+            onDetailDataChange={setDetailData}
+            onIsOpenDetailDialogChange={setIsOpenDetailDialog}
+            processingIds={markingAsReadIds} 
+            onEditReadStatus={handleEditReadStatus}
+          />
+          <TablePagination
+            data={dataF}
+            showNavigation={false}
+          />
+        </>
       )}
+
+      <DetailDialog
+        isOpen={isOpenDetailDialog}
+        onIsOpenChange={setIsOpenDetailDialog}
+        detailData={detailData}
+        onDetailDataChange={setDetailData}
+      />
     </>
   );
 }

@@ -4,25 +4,25 @@ import { generatePageInfo } from '@/lib/utils';
 import { Button } from '../ui/button';
 
 export default function TablePagination({
-  licenseKey,
+  data,
   table,
   pagination,
   isPlaceholderData,
-  hasSearched,
+  showNavigation,
 }) {
   // generate pageInfo like this: 1-10 of 20
-  const currentCount = licenseKey?.licenseKeys?.length ?? 0;
+  const currentCount = data?.items?.length ?? 0;
   const pageInfo = generatePageInfo({
-    pageIndex: pagination.pageIndex,
-    hasSearched,
-    totalCount: licenseKey?.rowCount ?? 0,
+    pageIndex: pagination?.pageIndex,
+    isPaginated: showNavigation,
+    totalCount: data?.rowCount ?? 0,
     currentCount,
   });
 
   return currentCount > 0 ? (
     <div className="flex max-md:flex-col max-md:items-start gap-3 md:gap-5 md:justify-between mt-4 items-center">
       <span className="text-muted-foreground">{pageInfo}</span>
-      {!hasSearched ? (
+      {showNavigation ? (
         <div className="space-x-2">
           <Button
             variant="outline"

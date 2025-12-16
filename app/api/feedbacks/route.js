@@ -10,10 +10,18 @@ export async function GET(req) {
     filters = { is_read: readStatus === 'unread' ? false : true }
   }
 
-  const dataResponse = await getFeedbacks(filters);
-
-  return Response.json({
-    message: 'success',
-    data: dataResponse,
-  });
+  try {
+    const feedbacks = await getFeedbacks(filters);
+    return Response.json({
+      status: 'success',
+      data: {
+        items: feedbacks,
+      },
+    });
+  } catch (err) {
+    return Response.json({
+      status: 'error',
+      message: err.message,
+    }, 500);
+  }
 }
