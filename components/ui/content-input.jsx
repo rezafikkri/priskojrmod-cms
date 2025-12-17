@@ -17,7 +17,7 @@ export default function ContentInput({
 }) {
   const { errors, isSubmitting } = formState;
   const inputName = field.name.split('.')[0];
-  const isContentError = Boolean(errors[inputName] && errors[inputName][activeLang]);
+  const isContentError = !!(errors[inputName] && errors[inputName][activeLang]);
 
   return (
     <FormItem>

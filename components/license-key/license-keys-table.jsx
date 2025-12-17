@@ -295,12 +295,12 @@ export default function LicenseKeysTable() {
       if (searchedLicenseKeyRef.current) {
         setSearchedLicenseKey((prevLicenseKey) => ({
           ...prevLicenseKey,
-          licenseKeys: prevLicenseKey.licenseKeys.filter(slk => slk.id !== deleteData.id),
+          items: prevLicenseKey.items.filter(slk => slk.id !== deleteData.id),
         }));
 
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       } else {
-        const newLicenseKeys = licenseKey.licenseKeys.filter(lk => lk.id !== deleteData.id);
+        const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== deleteData.id);
         const newRowCount = licenseKey.rowCount - 1;
 
         if (!isLastPage({
@@ -310,7 +310,7 @@ export default function LicenseKeysTable() {
         })) {
           queryClient.setQueryData(
             ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
-            { licenseKeys: newLicenseKeys, rowCount: newRowCount },
+            { items: newLicenseKeys, rowCount: newRowCount },
           );
 
           if (!hasSuccessfulDeleteRef.current) {
@@ -339,7 +339,7 @@ export default function LicenseKeysTable() {
           } else {
             queryClient.setQueryData(
               ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
-              { licenseKeys: newLicenseKeys, rowCount: newRowCount },
+              { items: newLicenseKeys, rowCount: newRowCount },
             );
           }
 
@@ -349,7 +349,7 @@ export default function LicenseKeysTable() {
       
       // if id exist in rowSelection then remove
       setRowSelection(prev => {
-        if (!deleteData.id in prev) return prev;
+        if (!(deleteData.id in prev)) return prev;
         const { [deleteData.id]:_, ...next } = prev;
         return next;
       });
@@ -526,12 +526,12 @@ export default function LicenseKeysTable() {
       if (searchedLicenseKeyRef.current) {
         setSearchedLicenseKey((prevLicenseKey) => ({
           ...prevLicenseKey,
-          licenseKeys: prevLicenseKey.licenseKeys.filter(slk => slk.id !== editRevokeStatusData.id),
+          items: prevLicenseKey.items.filter(slk => slk.id !== editRevokeStatusData.id),
         }));
 
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       } else {
-        const newLicenseKeys = licenseKey.licenseKeys.filter(lk => lk.id !== editRevokeStatusData.id);
+        const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== editRevokeStatusData.id);
         const newRowCount = licenseKey.rowCount - 1;
 
         if (!isLastPage({
@@ -541,7 +541,7 @@ export default function LicenseKeysTable() {
         })) {
           queryClient.setQueryData(
             ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
-            { licenseKeys: newLicenseKeys, rowCount: newRowCount },
+            { items: newLicenseKeys, rowCount: newRowCount },
           );
 
           hasSuccessfulRevokeRef.current = true;
@@ -568,7 +568,7 @@ export default function LicenseKeysTable() {
           } else {
             queryClient.setQueryData(
               ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
-              { licenseKeys: newLicenseKeys, rowCount: newRowCount },
+              { items: newLicenseKeys, rowCount: newRowCount },
             );
           }
 
@@ -578,7 +578,7 @@ export default function LicenseKeysTable() {
 
       // if id exist in rowSelection then remove
       setRowSelection(prev => {
-        if (!editRevokeStatusData.id in prev) return prev;
+        if (!(editRevokeStatusData.id in prev)) return prev;
         const { [editRevokeStatusData.id]:_, ...next } = prev;
         return next;
       });
@@ -637,7 +637,7 @@ export default function LicenseKeysTable() {
       if (searchedLicenseKeyRef.current) {
         setSearchedLicenseKey((prevLicenseKey) => ({
           ...prevLicenseKey,
-          licenseKeys: prevLicenseKey.licenseKeys.map(slk => {
+          items: prevLicenseKey.items.map(slk => {
             if (slk.id === resetData.id) {
               return {
                 ...slk,
@@ -657,18 +657,18 @@ export default function LicenseKeysTable() {
             (oldData) => {
               if (!oldData) return oldData;
               
-              const targetLicenseKey = oldData.licenseKeys.find(lk => lk.id === resetData.id);
+              const targetLicenseKey = oldData.items.find(lk => lk.id === resetData.id);
 
               if (targetLicenseKey) {
                 return {
                   ...oldData,
-                  licenseKeys: [
+                  items: [
                     {
                       ...targetLicenseKey,
                       device_id: null,
                       updated_at: releaseRes.data.updated_at,
                     },
-                    ...oldData.licenseKeys.filter(lk => lk.id !== resetData.id),
+                    ...oldData.items.filter(lk => lk.id !== resetData.id),
                   ],
                 };
               }
@@ -685,7 +685,7 @@ export default function LicenseKeysTable() {
 
               return {
                 ...oldData,
-                licenseKeys: oldData.licenseKeys.filter(lk => lk.id !== resetData.id),
+                items: oldData.items.filter(lk => lk.id !== resetData.id),
               };
             },
           );
@@ -696,7 +696,7 @@ export default function LicenseKeysTable() {
 
       // if id exist in rowSelection then remove
       setRowSelection(prev => {
-        if (!resetData.id in prev) return prev;
+        if (!(resetData.id in prev)) return prev;
         const { [resetData.id]:_, ...next } = prev;
         return next;
       });
@@ -888,7 +888,7 @@ export default function LicenseKeysTable() {
     },
   ], [deletingIds, updatingRevokeStatusIds, resetDeviceIds]);
   const table = useReactTable({
-    data: licenseKey?.licenseKeys,
+    data: licenseKey?.items,
     columns,
     rowCount: licenseKey?.rowCount,
     state: {
@@ -1008,11 +1008,11 @@ export default function LicenseKeysTable() {
             ]}
           />
           <TablePagination
-            licenseKey={licenseKey}
+            data={licenseKey}
             table={table}
             pagination={pagination}
             isPlaceholderData={isPlaceholderDataLK}
-            hasSearched={hasSearched}
+            showNavigation={!hasSearched}
           />
         </>
       )}

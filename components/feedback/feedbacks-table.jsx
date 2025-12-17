@@ -305,7 +305,6 @@ export default function FeedbacksTable() {
           if (!oldData) return oldData;
 
           return {
-            ...oldData,
             items: oldData.items.filter((feedback, index) => {
               if (feedback.id == id) {
                 removedSnaphost = {
@@ -335,7 +334,6 @@ export default function FeedbacksTable() {
           if (!oldData) return oldData;
 
           return {
-            ...oldData,
             items: oldData.items.map((feedback) => ({
               ...feedback,
               is_read: feedback.id === id ? true : feedback.is_read,
@@ -359,7 +357,6 @@ export default function FeedbacksTable() {
             if (!oldData) return oldData;
 
             return {
-              ...oldData,
               items: [
                 ...oldData.items.slice(0, removedSnaphost.index),
                 removedSnaphost.item,
@@ -376,7 +373,6 @@ export default function FeedbacksTable() {
             if (!oldData) return oldData;
 
             return {
-              ...oldData,
               items: oldData.items.map((feedback) => ({
                 ...feedback,
                 is_read: feedback.id === id ? false : feedback.is_read,
@@ -437,7 +433,6 @@ export default function FeedbacksTable() {
             if (!oldData) return oldData;
 
             return {
-              ...oldData,
               items: oldData.items.filter((feedback) => feedback.id !== id),
             };
           },
@@ -445,7 +440,7 @@ export default function FeedbacksTable() {
 
         // if id exist in rowSelection then remove
         setRowSelection(prev => {
-          if (!id in prev) return prev;
+          if (!(id in prev)) return prev;
           const { [id]:_, ...next } = prev;
           return next;
         });
@@ -458,7 +453,6 @@ export default function FeedbacksTable() {
             if (!oldData) return oldData;
 
             return {
-              ...oldData,
               items: oldData.items.map((feedback) => ({
                 ...feedback,
                 is_read: feedback.id === id ? true : feedback.is_read,

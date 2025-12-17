@@ -42,7 +42,7 @@ export async function GET(req) {
       filters,
     });
     dataResponse = {
-      licenseKeys,
+      items: licenseKeys,
     };
 
     if (licenseKeys.length > process.env.SEARCH_LIMIT) {
@@ -60,7 +60,7 @@ export async function GET(req) {
     });
     const numberLicenseKeys = await countLicenseKeys(filters);
     dataResponse = {
-      licenseKeys,
+      items: licenseKeys,
       rowCount: numberLicenseKeys,
     };
   }
@@ -69,7 +69,7 @@ export async function GET(req) {
     message: 'success',
     data: {
       ...dataResponse,
-      licenseKeys: dataResponse.licenseKeys.map(({ secret_key, ...rest }) => ({
+      items: dataResponse.items.map(({ secret_key, ...rest }) => ({
         ...rest,
         app_name: secret_key.app_name,
       })),

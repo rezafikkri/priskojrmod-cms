@@ -10,7 +10,6 @@ function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        refetchOnReconnect: false,
         refetchOnWindowFocus: false,
         retry: false,
       },
