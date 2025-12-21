@@ -1,9 +1,11 @@
-import { getProducts } from "@/lib/services/product-service";
+import { getProducts } from '@/lib/services/product-service';
 
 export async function GET() {
   const products = await getProducts();
   return Response.json({
     status: 'success',
-    data: products,
+    data: {
+      items: products,
+    },
   });
 }

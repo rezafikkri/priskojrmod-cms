@@ -1,6 +1,5 @@
 'use client';
 
-import DataTable from './data-table';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import {
@@ -21,7 +20,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import TableSkeleton from '../loadings/table-skeleton';
 import {
   Alert,
   AlertTitle,
@@ -30,9 +28,6 @@ import { PriceType, CurrencyCode } from '@/constants/enums';
 import { editProductPinnedStatus, editProductPublishedStatus, removeProduct } from '@/actions/product-actions';
 import { toast } from 'sonner';
 import { safeFetch } from '@/lib/safe-fetch';
-import { useSession } from 'next-auth/react';
-import { Skeleton } from '../ui/skeleton';
-import { isOwnerAdmin } from '@/lib/utils';
 import Dot from '../icon/Dot';
 import { formatDateTime } from '@/lib/format-date';
 import { formatCurrency } from '@/lib/format-currency';
@@ -41,8 +36,12 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import ColumnVisibilityMenu from '../ui/column-visibility-menu';
 import { localStorageGet } from '@/lib/local-storage';
+import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
+import TableColumnVisibility from '../ui/table-column-visibility';
+import DataTable from '../ui/data-table';
+import TablePagination from '../ui/table-pagination';
+import DeleteDialog from './delete-dialog';
 
 const defaultColumnVisibility = {
   category: false,
@@ -53,12 +52,25 @@ const defaultColumnVisibility = {
   updated_at: false,
 };
 
-export default function ProductsTable() {
+export default function ProductsTable({
+  isOwner,
+}) {
   const queryClient = useQueryClient();
-  const { data: session, status: sessionStatus } = useSession();
-  const [columnVisibility, setColumnVisibility] = useState(() => 
-    localStorageGet('products:column-visibility') ?? defaultColumnVisibility,
-  );
+
+  // table state
+  const columnVisibilityStorageKey = 'products:column-visibility';
+  const [columnVisibility, setColumnVisibility] = useState(() => {
+    const saved = localStorageGet(columnVisibilityStorageKey);
+    if (saved) {
+      if (!isOwner && saved.admin) {
+        saved.admin = false;
+      }
+
+      return saved;
+    }
+
+    return defaultColumnVisibility;
+  });
 
   const [priceCurrency, setPriceCurrency] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_CURR);
 
@@ -78,8 +90,8 @@ export default function ProductsTable() {
   } = useQuery({
     queryKey: ['products'],
     queryFn: async () => (await safeFetch({ url: '/api/products' })).data,
-    select: (products) => {
-      return products.map(product => {
+    select: (product) => ({
+      items: product.items.map(product => {
         let newProduct = { ...product };
 
         // mapping prices
@@ -102,8 +114,8 @@ export default function ProductsTable() {
         delete newProduct.versions;
 
         return newProduct;
-      });
-    },
+      }),
+    }),
     staleTime: 1000 * 20,
     gcTime: 1000 * 60,
   });
@@ -124,18 +136,18 @@ export default function ProductsTable() {
       queryClient.setQueryData(['products'], (oldData) => {
         if (!oldData) return oldData;
 
-        let updatedProduct = { ...oldData.find(data => data.id === editRes.data.id) };
+        let updatedProduct = { ...oldData.items.find(data => data.id === editRes.data.id) };
         updatedProduct.updated_at = editRes.data.updated_at;
         updatedProduct.is_pinned = !isPinned;
 
-        const targetIndex = oldData.findLastIndex(data => data.is_pinned);
-        const filteredProducts = oldData.filter(data => data.id !== editRes.data.id);
+        const targetIndex = oldData.items.findLastIndex(data => data.is_pinned);
+        const filteredProducts = oldData.items.filter(data => data.id !== editRes.data.id);
 
         if (!isPinned) {
-          return [updatedProduct, ...filteredProducts];
+          return { items: [updatedProduct, ...filteredProducts] };
         } else {
           filteredProducts.splice(targetIndex, 0, updatedProduct);
-          return filteredProducts;
+          return { items: filteredProducts };
         }
       });
 
@@ -167,18 +179,18 @@ export default function ProductsTable() {
       queryClient.setQueryData(['products'], (oldData) => {
         if (!oldData) return oldData;
 
-        let updatedProduct = { ...oldData.find(data => data.id === editRes.data.id) };
+        let updatedProduct = { ...oldData.items.find(data => data.id === editRes.data.id) };
         updatedProduct.updated_at = editRes.data.updated_at;
         updatedProduct.is_published = !isPublished;
 
-        let targetIndex = oldData.findIndex(data => !data.is_pinned);
-        const filteredProducts = oldData.filter(data => data.id !== editRes.data.id);
+        let targetIndex = oldData.items.findIndex(data => !data.is_pinned);
+        const filteredProducts = oldData.items.filter(data => data.id !== editRes.data.id);
 
         if (updatedProduct.is_pinned) {
-          return [updatedProduct, ...filteredProducts];
+          return { items: [updatedProduct, ...filteredProducts] };
         } else {
           filteredProducts.splice(targetIndex, 0, updatedProduct);
-          return filteredProducts;
+          return { items: filteredProducts };
         }
       });
 
@@ -207,7 +219,9 @@ export default function ProductsTable() {
       queryClient.setQueryData(['products'], (oldData) => {
         if (!oldData) return oldData;
 
-        return [...oldData.filter((data) => data.id !== deleteData.id)];
+        return {
+          items: oldData.items.filter((data) => data.id !== deleteData.id),
+        };
       });
 
       toast.success('Product deleted successfully.', {
@@ -314,12 +328,12 @@ export default function ProductsTable() {
       header: 'Admin',
       cell: ({ row }) => (
         <div>
-          {row.original.admin.isCurrentUser ? (
+          {row.original.admin?.isCurrentUser ? (
             <p>Myself</p>
           ) : (
             <>
-              <p>{row.original.admin.first_name} {row.original.admin.last_name}</p>
-              <p className="text-sm text-zinc-600">{row.original.admin.email}</p>
+              <p>{row.original.admin?.first_name} {row.original.admin?.last_name}</p>
+              <p className="text-sm text-zinc-600">{row.original.admin?.email}</p>
             </>
           )}
         </div>
@@ -410,7 +424,7 @@ export default function ProductsTable() {
     }
   ], [priceCurrency, updatingPinnedStatusIds, updatingPublishedIds, deletingIds]);
   const table = useReactTable({
-    data: dataP,
+    data: dataP?.items,
     columns,
     state: {
       columnVisibility,
@@ -428,56 +442,57 @@ export default function ProductsTable() {
           </Button>
         </TooltipWrapper>
 
-        <ColumnVisibilityMenu
+        <TableColumnVisibility
           table={table}
           defaultColumnVisibility={defaultColumnVisibility}
           columnVisibility={columnVisibility}
           onColumnVisibilityChange={setColumnVisibility}
-          storageKey="products:column-visibility"
+          storageKey={columnVisibilityStorageKey}
           filterFn={(column) =>
             column.id === 'admin'
-              ? isOwnerAdmin(session?.user?.role)
+              ? isOwner
               : true
           }
         />
       </div>
 
       {isFetchingP ? (
-        <TableSkeleton />
+        <TablePaginationSekeleton showPagination={false} />
       ) : isErrorP ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>{errorP.message}</AlertTitle>
         </Alert>
       ) : (
-        <DataTable
-          products={dataP}
-          table={table}
-          tableState={{
-            updatingPinnedStatusIds,
-            updatingPublishedIds,
-            deletingIds,
-            deleteData,
-            isOpenDeleteDialog,
-          }}
-          tableHandler={{
-            onIsOpenDeleteDialogChange: setIsOpenDeleteDialog, 
-            onDeleteDataChange: setDeleteData,
-            onDelete: handleDelete,
-          }}
-        />
+        <>
+          <DataTable
+            table={table}
+            processingIds={[
+              ...updatingPinnedStatusIds,
+              ...updatingPublishedIds,
+              ...deletingIds,
+            ]}
+          />
+          <TablePagination
+            data={dataP}
+            showNavigation={false}
+          />
+        </>
       )}
 
       <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Notes</b>:</p>
       <ul className="text-muted-foreground text-sm list-disc list-inside">
         <li>Pinned products will have higher display priority on the Products page and the homepage. A maximum of 4 products can be pinned.</li>
         <li>Prices are displayed using each currency’s standard number format.</li>
-        {sessionStatus === 'loading' ? (
-          <Skeleton className="h-4 w-1/3 inline-block rounded-sm mt-1" />
-        ) : (
-          <li>The products displayed are under your responsibility.</li>
-        )}
       </ul>
+
+      <DeleteDialog
+        onDelete={handleDelete}
+        isOpenDeleteDialog={isOpenDeleteDialog}
+        onIsOpenDeleteDialogChange={setIsOpenDeleteDialog}
+        deleteData={deleteData}
+        onDeleteDataChange={setDeleteData}
+      />
     </>
   );
 }

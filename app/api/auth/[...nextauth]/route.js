@@ -109,6 +109,8 @@ export const authOptions = {
         token.picture = user.picture;
         token.first_name = user.first_name;
         token.last_name = user.last_name;
+
+        delete token.name;
       }
 
       if (trigger === 'update') {
@@ -122,10 +124,15 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.userId;
-      session.user.role = token.role;
-      session.user.first_name = token.first_name;
-      session.user.last_name = token.last_name;
+      session.user = {
+        id: token.userId,
+        role: token.role,
+        first_name: token.first_name,
+        last_name: token.last_name,
+        email: token.email,
+        image: token.picture,
+      };
+
       return session;
     },
   },

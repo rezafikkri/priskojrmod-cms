@@ -58,8 +58,9 @@ export default function FeedbacksTable() {
 
   // table state
   const [rowSelection, setRowSelection] = useState({});
+  const columnVisibilityStorageKey = 'feedbacks:column-visibility';
   const [columnVisibility, setColumnVisibility] = useState(() => 
-    localStorageGet('feedbacks:column-visibility') ?? defaultColumnVisibility,
+    localStorageGet(columnVisibilityStorageKey) ?? defaultColumnVisibility,
   );
 
   // detail dialog state
@@ -614,13 +615,13 @@ export default function FeedbacksTable() {
             defaultColumnVisibility={defaultColumnVisibility}
             columnVisibility={columnVisibility}
             onColumnVisibilityChange={setColumnVisibility}
-            storageKey="feedbacks:column-visibility"
+            storageKey={columnVisibilityStorageKey}
           />
         </div>
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingF) ? (
-        <TablePaginationSekeleton pagination={false} />
+        <TablePaginationSekeleton showPagination={false} />
       ) : isErrorF ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />

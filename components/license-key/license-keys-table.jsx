@@ -990,7 +990,7 @@ export default function LicenseKeysTable() {
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingLK) || (isSearching && !searchedLicenseKey) ? (
-        <TablePaginationSekeleton pagination={!isSearching} />
+        <TablePaginationSekeleton showPagination={!isSearching} />
       ) : isErrorLK ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
