@@ -1,6 +1,5 @@
 'use client';
 
-import DataTable from './data-table';
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -17,7 +16,7 @@ import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { generatePageInfo, isLastPage } from '@/lib/utils';
+import { isLastPage } from '@/lib/utils';
 import {
   Alert,
   AlertTitle,
@@ -31,11 +30,14 @@ import { editCustomerBanStatus, removeCustomer } from '@/actions/customer-action
 import { localStorageGet } from '@/lib/local-storage';
 import { formatDateTime } from '@/lib/format-date';
 import ProfileBadge from '../ui/profile-badge';
-import ColumnVisibilityMenu from '../ui/column-visibility-menu';
 import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import TableColumnVisibility from '../ui/table-column-visibility';
+import DataTable from '../ui/data-table';
+import TablePagination from '../ui/table-pagination';
+import DeleteDialog from './delete-dialog';
 
 const defaultColumnVisibility = {
   last_active: true,
@@ -66,8 +68,9 @@ export default function CustomersTable() {
     shouldShowSkeletonLoading.current = false;
     setPagination(pagination);
   }
+  const columnVisibilityStorageKey = 'customers:column-visibility';
   const [columnVisibility, setColumnVisibility] = useState(() =>
-    localStorageGet('customers:column-visibility') ?? defaultColumnVisibility,
+    localStorageGet(columnVisibilityStorageKey) ?? defaultColumnVisibility,
   );
 
   // delete dialog state
@@ -251,12 +254,12 @@ export default function CustomersTable() {
       if (searchedCustomerRef.current) {
         setSearchedCustomer(prevCustomer => ({
           ...prevCustomer,
-          customers: prevCustomer.customers.filter(customer => customer.id !== id),
+          items: prevCustomer.items.filter(customer => customer.id !== id),
         }));
 
         queryClient.invalidateQueries({ queryKey: ['customers'] });
       } else {
-        const newCustomers = customer.customers.filter(customer => customer.id !== id);
+        const newCustomers = customer.items.filter(customer => customer.id !== id);
         const newRowCount = customer.rowCount - 1;
 
         if (!isLastPage({
@@ -266,7 +269,7 @@ export default function CustomersTable() {
         })) {
           queryClient.setQueryData(
             ['customers', paginationRef.current.pageIndex, filtersRef.current],
-            { customers: newCustomers, rowCount: newRowCount },
+            { items: newCustomers, rowCount: newRowCount },
           );
 
           if (!hasSuccessfulBanRef.current) {
@@ -293,8 +296,8 @@ export default function CustomersTable() {
             }));
           } else {
             queryClient.setQueryData(
-              ['customers', paginationRef.current.pageIndex, filtersRef.current ],
-              { customers: newCustomers, rowCount: newRowCount },
+              ['customers', paginationRef.current.pageIndex, filtersRef.current],
+              { items: newCustomers, rowCount: newRowCount },
             );
           }
 
@@ -363,12 +366,12 @@ export default function CustomersTable() {
       if (searchedCustomerRef.current) {
         setSearchedCustomer((prevCustomer) => ({
           ...prevCustomer,
-          customers: prevCustomer.customers.filter(customer => customer.id !== deleteData.id),
+          items: prevCustomer.items.filter(customer => customer.id !== deleteData.id),
         }));
 
         queryClient.invalidateQueries({ queryKey: ['customers'] });
       } else {
-        const newCustomers = customer.customers.filter(customer => customer.id !== deleteData.id);
+        const newCustomers = customer.items.filter(customer => customer.id !== deleteData.id);
         const newRowCount = customer.rowCount - 1;
 
         if (!isLastPage({
@@ -378,7 +381,7 @@ export default function CustomersTable() {
         })) {
           queryClient.setQueryData(
             ['customers', paginationRef.current.pageIndex, filtersRef.current],
-            { customers: newCustomers, rowCount: newRowCount },
+            { items: newCustomers, rowCount: newRowCount },
           );
 
           if (!hasSuccessfulDeleteRef.current) {
@@ -405,8 +408,8 @@ export default function CustomersTable() {
             }));
           } else {
             queryClient.setQueryData(
-              [ 'customers', paginationRef.current.pageIndex, filtersRef.current ],
-              { customers: newCustomers, rowCount: newRowCount },
+              ['customers', paginationRef.current.pageIndex, filtersRef.current],
+              { items: newCustomers, rowCount: newRowCount },
             );
           }
 
@@ -439,22 +442,13 @@ export default function CustomersTable() {
     }
   }
 
+  const hasSearched = !!searchedCustomer;
   let customer;
   if (searchedCustomer) {
     customer = searchedCustomer;
   } else if (dataC) {
     customer = dataC;
   }
-
-  // generate pageInfo like this: 1-10 of 20
-  const pageInfo = useMemo(() => {
-    return generatePageInfo({
-      pageIndex: pagination.pageIndex,
-      totalData: customer?.rowCount ?? 0,
-      totalDataPerPage: customer?.customers?.length ?? 0,
-      searchKey: searchRef?.current?.value,
-    });
-  }, [customer]);
 
   // TABLE definition
   const shouldShowDeleteButton = useCallback(({ oauthId, lastActive, isBanned }) => {
@@ -567,7 +561,7 @@ export default function CustomersTable() {
     },
   ], [deletingIds, updatingBanStatusIds]);
   const table = useReactTable({
-    data: customer?.customers,
+    data: customer?.items,
     rowCount: customer?.rowCount ?? 0,
     columns,
     state: {
@@ -641,49 +635,58 @@ export default function CustomersTable() {
             </Button>
           </div>
 
-          <ColumnVisibilityMenu
+          <TableColumnVisibility
             table={table}
             defaultColumnVisibility={defaultColumnVisibility}
             columnVisibility={columnVisibility}
             onColumnVisibilityChange={setColumnVisibility}
-            storageKey="customers:column-visibility"
+            storageKey={columnVisibilityStorageKey}
           />
         </div>
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingC) || (isSearching && !searchedCustomer) ? (
-        <TablePaginationSekeleton pagination={!isSearching} />
+        <TablePaginationSekeleton showPagination={!isSearching} />
       ) : isErrorC ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>{errorC.message}</AlertTitle>
         </Alert>
       ) : (
-        <DataTable
-          customer={customer}
-          pageInfo={pageInfo}
-          table={table}
-          tableState={{
-            deleteData,
-            isOpenDeleteDialog,
-            deletingIds,
-            updatingBanStatusIds,
-          }}
-          tableHandler={{
-            onIsOpenDeleteDialogChange: setIsOpenDeleteDialog, 
-            onDeleteDataChange: setDeleteData,
-            onDelete: handleDelete,
-          }}
-          isPlaceholderData={isPlaceholderDataC}
-          hasSearched={!!searchedCustomer}
-        />
+        <>
+          <DataTable
+            table={table}
+            processingIds={[
+              ...deletingIds,
+              ...updatingBanStatusIds,
+            ]}
+          />
+          <TablePagination
+            data={customer}
+            table={table}
+            pagination={pagination}
+            isPlaceholderData={isPlaceholderDataC}
+            showNavigation={!hasSearched}
+          />
+        </>
       )}
-
-      <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Notes</b>:</p>
+      
+      {(hasSearched && customer?.isTooMany) ? (
+        <p className="mt-5 text-muted-foreground text-sm"><b>Info</b>: If you haven't found the customer you're looking for, please use a more specific email!</p>
+      ) : null}
+      <p className="mt-5 text-muted-foreground text-sm"><b>Notes</b>:</p>
       <ul className="text-muted-foreground text-sm list-disc list-inside">
         <li><i>Last Active</i> indicates the most recent recorded activity and is updated every 24 hours. This may not reflect real-time status.</li>
         <li>Only customers who have never signed in, have been inactive for more than 30 days, do not have any license keys associated with their account, or have been banned can be deleted directly.</li>
       </ul>
+
+      <DeleteDialog
+        onDelete={handleDelete}
+        isOpen={isOpenDeleteDialog}
+        onIsOpenChange={setIsOpenDeleteDialog}
+        onDeleteDataChange={setDeleteData}
+        deleteData={deleteData}
+      />
     </>
   );
 }

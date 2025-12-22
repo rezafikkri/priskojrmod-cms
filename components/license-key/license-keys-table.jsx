@@ -1018,9 +1018,9 @@ export default function LicenseKeysTable() {
       )}
 
       {(hasSearched && licenseKey?.isTooMany) ? (
-        <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Info</b>: If you haven't found the license key you're looking for, please use a more specific email!</small>
+        <p className="mt-5 text-muted-foreground text-sm"><b>Info</b>: If you haven't found the license key you're looking for, please use a more specific email!</p>
       ) : null}
-      <small className="mt-5 inline-block text-muted-foreground text-sm"><b>Note</b>: <i>Activate</i> indicates that the license key has been used to activate the application</small>
+      <p className="mt-5 text-muted-foreground text-sm"><b>Note</b>: <i>Activate</i> indicates that the license key has been used to activate the application</p>
 
       <DeleteDialog
         onDelete={handleDelete}

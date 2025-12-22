@@ -18,41 +18,49 @@ export async function GET(req) {
     created_at: true,
     updated_at: true,
   };
-  let dataResponse;
 
-  if (searchKey) {
-    const customers = await searchCustomers({
-      select,
-      key: searchKey,
-      limit: parseInt(process.env.SEARCH_LIMIT),
-      filters,
-    });
-    dataResponse = {
-      customers,
-    };
+  try {
+    let dataResponse;
 
-    if (customers.length > process.env.SEARCH_LIMIT) {
-      customers.pop();
-      dataResponse.isTooMany = true;
+    if (searchKey) {
+      const customers = await searchCustomers({
+        select,
+        key: searchKey,
+        limit: parseInt(process.env.SEARCH_LIMIT),
+        filters,
+      });
+      dataResponse = {
+        items: customers,
+      };
+
+      if (customers.length > process.env.SEARCH_LIMIT) {
+        customers.pop();
+        dataResponse.isTooMany = true;
+      } else {
+        dataResponse.isTooMany = false;
+      }
     } else {
-      dataResponse.isTooMany = false;
+      const customers = await getCustomers({
+        select,
+        pageIndex,
+        pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
+        filters,
+      });
+      const numberCustomers = await countCustomers(filters);
+      dataResponse = {
+        items: customers,
+        rowCount: numberCustomers,
+      };
     }
-  } else {
-    const customers = await getCustomers({
-      select,
-      pageIndex,
-      pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
-      filters,
-    });
-    const numberCustomers = await countCustomers(filters);
-    dataResponse = {
-      customers,
-      rowCount: numberCustomers,
-    };
-  }
 
-  return Response.json({
-    message: 'success',
-    data: dataResponse,
-  });
+    return Response.json({
+      message: 'success',
+      data: dataResponse,
+    });
+  } catch (err) {
+    return Response.json({
+      status: 'error',
+      message: err.message,
+    }, 500);
+  }
 }

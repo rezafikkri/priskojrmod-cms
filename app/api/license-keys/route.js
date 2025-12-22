@@ -32,47 +32,54 @@ export async function GET(req) {
     },
   };
 
-  let dataResponse;
+  try {
+    let dataResponse;
 
-  if (searchKey) {
-    const licenseKeys = await searchLicenseKeys({
-      select,
-      key: searchKey,
-      limit: parseInt(process.env.SEARCH_LIMIT),
-      filters,
-    });
-    dataResponse = {
-      items: licenseKeys,
-    };
+    if (searchKey) {
+      const licenseKeys = await searchLicenseKeys({
+        select,
+        key: searchKey,
+        limit: parseInt(process.env.SEARCH_LIMIT),
+        filters,
+      });
+      dataResponse = {
+        items: licenseKeys,
+      };
 
-    if (licenseKeys.length > process.env.SEARCH_LIMIT) {
-      licenseKeys.pop();
-      dataResponse.isTooMany = true;
+      if (licenseKeys.length > process.env.SEARCH_LIMIT) {
+        licenseKeys.pop();
+        dataResponse.isTooMany = true;
+      } else {
+        dataResponse.isTooMany = false;
+      }
     } else {
-      dataResponse.isTooMany = false;
+      const licenseKeys = await getLicenseKeys({
+        select,
+        pageIndex,
+        pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
+        filters,
+      });
+      const numberLicenseKeys = await countLicenseKeys(filters);
+      dataResponse = {
+        items: licenseKeys,
+        rowCount: numberLicenseKeys,
+      };
     }
-  } else {
-    const licenseKeys = await getLicenseKeys({
-      select,
-      pageIndex,
-      pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
-      filters,
-    });
-    const numberLicenseKeys = await countLicenseKeys(filters);
-    dataResponse = {
-      items: licenseKeys,
-      rowCount: numberLicenseKeys,
-    };
-  }
 
-  return Response.json({
-    message: 'success',
-    data: {
-      ...dataResponse,
-      items: dataResponse.items.map(({ secret_key, ...rest }) => ({
-        ...rest,
-        app_name: secret_key.app_name,
-      })),
-    },
-  });
+    return Response.json({
+      message: 'success',
+      data: {
+        ...dataResponse,
+        items: dataResponse.items.map(({ secret_key, ...rest }) => ({
+          ...rest,
+          app_name: secret_key.app_name,
+        })),
+      },
+    });   
+  } catch (err) {
+    return Response.json({
+      status: 'error',
+      message: err.message,
+    }, 500);   
+  }
 }
