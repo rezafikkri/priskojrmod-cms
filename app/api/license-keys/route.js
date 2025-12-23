@@ -80,6 +80,6 @@ export async function GET(req) {
     return Response.json({
       status: 'error',
       message: err.message,
-    }, 500);   
+    }, 500);
   }
 }
