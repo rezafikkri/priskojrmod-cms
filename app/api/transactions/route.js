@@ -30,41 +30,48 @@ export async function GET(req) {
     },
   };
 
-  let dataResponse;
+  try {
+    let dataResponse;
 
-  if (searchKey) {
-    const transactions = await searchTransactions({
-      select,
-      key: searchKey,
-      limit: parseInt(process.env.SEARCH_LIMIT),
-      filters,
-    });
-    dataResponse = {
-      transactions,
-    };
+    if (searchKey) {
+      const transactions = await searchTransactions({
+        select,
+        key: searchKey,
+        limit: parseInt(process.env.SEARCH_LIMIT),
+        filters,
+      });
+      dataResponse = {
+        items: transactions,
+      };
 
-    if (transactions.length > process.env.SEARCH_LIMIT) {
-      transactions.pop();
-      dataResponse.isTooMany = true;
+      if (transactions.length > process.env.SEARCH_LIMIT) {
+        transactions.pop();
+        dataResponse.isTooMany = true;
+      } else {
+        dataResponse.isTooMany = false;
+      }
     } else {
-      dataResponse.isTooMany = false;
+      const transactions = await getTransactions({
+        select,
+        pageIndex,
+        pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
+        filters,
+      });
+      const numberTransactions = await countTransactions(filters);
+      dataResponse = {
+        items: transactions,
+        rowCount: numberTransactions,
+      };
     }
-  } else {
-    const transactions = await getTransactions({
-      select,
-      pageIndex,
-      pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
-      filters,
-    });
-    const numberTransactions = await countTransactions(filters);
-    dataResponse = {
-      transactions,
-      rowCount: numberTransactions,
-    };
-  }
 
-  return Response.json({
-    message: 'success',
-    data: dataResponse,
-  });
+    return Response.json({
+      message: 'success',
+      data: dataResponse,
+    });   
+  } catch (err) {
+    return Response.json({
+      status: 'error',
+      message: err.message,
+    }, 500);
+  }
 }

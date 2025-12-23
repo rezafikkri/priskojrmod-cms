@@ -31,7 +31,7 @@ async function seedCustomersAndLicenseKeys() {
   // seed customers
   const customers = [];
   const customerIds = [];
-  for (let i = 0; i < 65; i++) {
+  for (let i = 0; i < 0; i++) {
     const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
     const customerId = uuidv7();
     customerIds.push(customerId);
@@ -67,7 +67,7 @@ async function seedCustomersAndLicenseKeys() {
   // seed license keys
   const licenseKeys = [];
 
-  for (let i = 0; i < 65; i++) {
+  for (let i = 0; i < 0; i++) {
     const email = faker.internet.email().toLowerCase();
     const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
     const secret = await pjmaDBPrismaClient.secretKeyLicense.findFirst({
@@ -194,7 +194,7 @@ export default async function seedDevData() {
   if (products.length < 1 || customers.length < 0) return;
 
   const transactions = [];
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 75; i++) {
     let transactionDetails = [];
     // if (i % 2 === 0) {
       transactionDetails = getTransactionDetails({ max: 2, products });

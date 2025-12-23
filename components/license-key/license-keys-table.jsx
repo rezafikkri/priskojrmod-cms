@@ -85,7 +85,7 @@ export default function LicenseKeysTable() {
   }
   const [rowSelection, setRowSelection] = useState({});
   const columnVisibilityStorageKey = 'license-keys:column-visibility';
-  const [columnVisibility, setColumnVisibility] = useState(
+  const [columnVisibility, setColumnVisibility] = useState(() =>
     localStorageGet(columnVisibilityStorageKey) ?? defaultColumnVisibility,
   );
 

@@ -1,6 +1,5 @@
 'use client';
 
-import DataTable from './data-table';
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -9,25 +8,48 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { generatePageInfo, isLastPage } from '@/lib/utils';
+import { isLastPage, getStatusClasses } from '@/lib/utils';
 import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import { AlertCircle, Search, X, Columns } from 'lucide-react';
+import { AlertCircle, Search, X, RotateCw, MoreHorizontal } from 'lucide-react';
+import InfoCircle from '../icon/info-circle';
 import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
-import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
-import { editTransactionStatus, fixTransactionStatus, prepareConfirmationMessage } from '@/actions/transaction-actions';
+import {
+  editTransactionStatus,
+  fixTransactionStatus,
+  prepareConfirmationMessage,
+} from '@/actions/transaction-actions';
 import { TransactionStatus } from '@/constants/enums';
 import ExportCSV from './export-csv';
+import TablePagination from '../ui/table-pagination';
+import DataTable from '../ui/data-table';
+import { localStorageGet } from '@/lib/local-storage';
+import TableColumnVisibility from '../ui/table-column-visibility';
+import CorrectStatusDialog from './correct-status-dialog';
+import DetailsSheet from './details-sheet';
+import {
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { formatCurrency } from '@/lib/format-currency';
+import { formatDateTime } from '@/lib/format-date';
+import Link from 'next/link';
+
+const defaultColumnVisibility = {
+  created_at: true,
+  updated_at: false,
+};
 
 export default function TransactionsTable() {
   const queryClient = useQueryClient();
@@ -52,10 +74,15 @@ export default function TransactionsTable() {
     shouldShowSkeletonLoading.current = false;
     setPagination(pagination);
   }
-  const [columnVisibility, setColumnVisibility] = useState({
-    created_at: true,
-    updated_at: false,
-  });
+  const columnVisibilityStorageKey = 'transactions:column-visibility';
+  const [columnVisibility, setColumnVisibility] = useState(() =>
+    localStorageGet(columnVisibilityStorageKey) ?? defaultColumnVisibility
+  );
+
+  // correct status and see details dialog state
+  const [correctData, setCorrectData] = useState(null);
+  const [isOpenCorrectStatusDialog, setIsOpenCorrectStatusDialog] = useState(false);
+  const [seeDetailsId, setSeeDetailsId] = useState(null);
 
   // updating ids state
   const [updatingTransactionStatusIds, setUpdatingTransactionStatusIds] = useState([]);
@@ -98,7 +125,7 @@ export default function TransactionsTable() {
     isFetching: isFetchingT,
     isError: isErrorT,
     error: errorT,
-    isPlaceholderData: isPlaceholderDataC,
+    isPlaceholderData: isPlaceholderDataT,
   } = useQuery({
     queryKey: ['transactions', pagination.pageIndex, filters],
     queryFn: async () => {
@@ -249,7 +276,7 @@ export default function TransactionsTable() {
           let newTransactions;
 
           if (!filtersRef.current?.status || filtersRef.current?.status === 'all') {
-            newTransactions = prevTransaction.transactions.map(transaction => {
+            newTransactions = prevTransaction.items.map(transaction => {
               if (transaction.id === id) {
                 const result = {
                   ...transaction,
@@ -265,12 +292,12 @@ export default function TransactionsTable() {
               return transaction;
             });
           } else {
-            newTransactions = prevTransaction.transactions.filter(t => t.id !== id);
+            newTransactions = prevTransaction.items.filter(t => t.id !== id);
           }
 
           return {
             ...prevTransaction,
-            transactions: newTransactions,
+            items: newTransactions,
           };
         });
 
@@ -282,7 +309,7 @@ export default function TransactionsTable() {
             (oldData) => {
               if (!oldData) return oldData;
               
-              const targetTransaction = oldData.transactions.find(t => t.id === id);
+              const targetTransaction = oldData.items.find(t => t.id === id);
 
               if (targetTransaction) {
                 const newTargetTransaction = {
@@ -296,9 +323,9 @@ export default function TransactionsTable() {
 
                 return {
                   ...oldData,
-                  transactions: [
+                  items: [
                     newTargetTransaction,
-                    ...oldData.transactions.filter(t => t.id !== id),
+                    ...oldData.items.filter(t => t.id !== id),
                   ],
                 };
               }
@@ -315,7 +342,7 @@ export default function TransactionsTable() {
 
               return {
                 ...oldData,
-                transactions: oldData.transactions.filter(t => t.id !== id),
+                items: oldData.items.filter(t => t.id !== id),
               };
             },
           );
@@ -323,7 +350,7 @@ export default function TransactionsTable() {
           hasSuccessfulUpdateStatusRef.current = true;
         }
       } else {
-        const newTransactions = transaction.transactions.filter(t => t.id !== id);
+        const newTransactions = transaction.items.filter(t => t.id !== id);
         const newRowCount = transaction.rowCount - 1;
 
         if (!isLastPage({
@@ -333,7 +360,7 @@ export default function TransactionsTable() {
         })) {
           queryClient.setQueryData(
             ['transactions', paginationRef.current.pageIndex, filtersRef.current],
-            { transactions: newTransactions, rowCount: newRowCount },
+            { items: newTransactions, rowCount: newRowCount },
           );
 
           hasSuccessfulUpdateStatusRef.current = true;
@@ -359,7 +386,7 @@ export default function TransactionsTable() {
           } else {
             queryClient.setQueryData(
               ['transactions', paginationRef.current.pageIndex, filtersRef.current ],
-              { transactions: newTransactions, rowCount: newRowCount },
+              { items: newTransactions, rowCount: newRowCount },
             );
           }
 
@@ -440,7 +467,7 @@ export default function TransactionsTable() {
           let newTransactions;
 
           if (!filtersRef.current?.status || filtersRef.current?.status === 'all') {
-            newTransactions = prevTransaction.transactions.map(transaction => {
+            newTransactions = prevTransaction.items.map(transaction => {
               if (transaction.id === correctData.id) {
                 const result = {
                   ...transaction,
@@ -456,12 +483,12 @@ export default function TransactionsTable() {
               return transaction;
             });
           } else {
-            newTransactions = prevTransaction.transactions.filter(t => t.id !== correctData.id);
+            newTransactions = prevTransaction.items.filter(t => t.id !== correctData.id);
           }
 
           return {
             ...prevTransaction,
-            transactions: newTransactions,
+            items: newTransactions,
           };
         });
 
@@ -473,7 +500,7 @@ export default function TransactionsTable() {
             (oldData) => {
               if (!oldData) return oldData;
               
-              const targetTransaction = oldData.transactions.find(t => t.id === correctData.id);
+              const targetTransaction = oldData.items.find(t => t.id === correctData.id);
 
               if (targetTransaction) {
                 const newTargetTransaction = {
@@ -487,9 +514,9 @@ export default function TransactionsTable() {
 
                 return {
                   ...oldData,
-                  transactions: [
+                  items: [
                     newTargetTransaction,
-                    ...oldData.transactions.filter(t => t.id !== correctData.id),
+                    ...oldData.items.filter(t => t.id !== correctData.id),
                   ],
                 };
               }
@@ -506,7 +533,7 @@ export default function TransactionsTable() {
 
               return {
                 ...oldData,
-                transactions: oldData.transactions.filter(t => t.id !== correctData.id),
+                items: oldData.items.filter(t => t.id !== correctData.id),
               };
             },
           );
@@ -514,7 +541,7 @@ export default function TransactionsTable() {
           hasSuccessfulCorrectStatusRef.current = true;
         }
       } else {
-        const newTransactions = transaction.transactions.filter(t => t.id !== correctData.id);
+        const newTransactions = transaction.items.filter(t => t.id !== correctData.id);
         const newRowCount = transaction.rowCount - 1;
 
         if (!isLastPage({
@@ -524,7 +551,7 @@ export default function TransactionsTable() {
         })) {
           queryClient.setQueryData(
             ['transactions', paginationRef.current.pageIndex, filtersRef.current],
-            { transactions: newTransactions, rowCount: newRowCount },
+            { items: newTransactions, rowCount: newRowCount },
           );
 
           hasSuccessfulCorrectStatusRef.current = true;
@@ -550,7 +577,7 @@ export default function TransactionsTable() {
           } else {
             queryClient.setQueryData(
               ['transactions', paginationRef.current.pageIndex, filtersRef.current ],
-              { transactions: newTransactions, rowCount: newRowCount },
+              { items: newTransactions, rowCount: newRowCount },
             );
           }
 
@@ -589,6 +616,7 @@ export default function TransactionsTable() {
     }
   }
 
+  const hasSearched = !!searchedTransaction;
   let transaction;
   if (searchedTransaction) {
     transaction = searchedTransaction;
@@ -596,16 +624,201 @@ export default function TransactionsTable() {
     transaction = dataT;
   }
 
-  // generate pageInfo like this: 1-10 of 20
-  const pageInfo = useMemo(() => {
-    return generatePageInfo({
-      pageIndex: pagination.pageIndex,
-      totalData: transaction?.rowCount,
-      totalDataPerPage: transaction?.transactions?.length,
-      searchKey: searchRef?.current?.value,
-    });
-  }, [transaction]);
+  // TABLE definition
+  const getChangeStatusMenu = useCallback((currentStatus) => {
+    if (
+      currentStatus === TransactionStatus.CANCELLED ||
+      currentStatus === TransactionStatus.REFUND
+    ) return [];
 
+    let excludedStatuses = [
+      TransactionStatus.PENDING,
+      TransactionStatus.REFUND,
+    ];
+
+    if (currentStatus === TransactionStatus.PAID) {
+      excludedStatuses = [
+        TransactionStatus.PENDING,
+        TransactionStatus.CANCELLED,
+        TransactionStatus.PAID,
+      ];
+    }
+
+    return Object.values(TransactionStatus).filter(ts => !excludedStatuses.includes(ts));
+  }, []);
+
+  const columns = useMemo(() => [
+    {
+      accessorKey: 'code',
+      header: () => (
+        <>
+          <span className="me-1">Code</span>
+          <TooltipWrapper text="Transaction code">
+            <span className="cursor-help"><InfoCircle /></span>
+          </TooltipWrapper>
+        </>
+      ),
+      enableHiding: false,
+    },
+    {
+      accessorKey: 'customer_email',
+      header: 'Email',
+      enableHiding: false,
+    },
+    {
+      accessorKey: 'status',
+      header: 'Status',
+      enableHiding: false,
+      cell: ({ row }) => (
+        <span
+          className={`px-2 py-1 rounded-lg capitalize font-medium ${getStatusClasses(row.getValue('status'))}`}
+        >
+          {row.getValue('status')}
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'total_amount',
+      enableHiding: false,
+      header: () => (
+        <>
+          <span className="me-1">Total</span>
+          <TooltipWrapper text="Total amount paid by customer">
+            <span className="cursor-help"><InfoCircle /></span>
+          </TooltipWrapper>
+        </>
+      ),
+      cell: ({ row }) => (
+        <div className="text-right">
+          {formatCurrency({
+            value: row.getValue('total_amount'),
+            currencyCode: row.original.currency_code,
+          })}
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'created_at',
+      header: () => 'Created At',
+      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+    },
+    {
+      accessorKey: 'updated_at',
+      header: () => 'Updated At',
+      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
+    },
+    {
+      id: 'actions',
+      enableHiding: false,
+      cell: ({ row }) => {
+        const changeStatusMenus = getChangeStatusMenu(row.getValue('status'));
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 focus-visible:ring-ring"
+                disabled={
+                  updatingTransactionStatusIds.includes(row.original.id) ||
+                  correctingTransactionStatusIds.includes(row.original.id)
+                }
+              >
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-50">
+              {changeStatusMenus.length > 0 && (
+                <>
+                  <DropdownMenuLabel
+                    className="text-muted-foreground text-[15px]"
+                  >
+                    Change Status To
+                  </DropdownMenuLabel>
+                  {changeStatusMenus.map(cs => (
+                    <DropdownMenuItem
+                      key={cs}
+                      className="w-full text-base capitalize"
+                      asChild
+                    >
+                      <button
+                        onClick={() => {
+                          handleEditTransactionStatus(row.original.id, cs);
+                        }}
+                      >{cs}</button>
+                    </DropdownMenuItem>
+                  ))}
+
+                  <DropdownMenuSeparator />
+                </>
+              )}
+              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other Action</DropdownMenuLabel>
+
+              {row.getValue('status') !== TransactionStatus.PENDING && (
+                <DropdownMenuItem
+                  className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+                  asChild
+                >
+                  <button
+                    onClick={() => {
+                      setIsOpenCorrectStatusDialog(true);
+                      setCorrectData({
+                        id: row.original.id,
+                        transactionCode: row.getValue('code'),
+                        currentStatus: row.getValue('status'),
+                      });
+                    }}
+                  >
+                    Correct Status
+                  </button>
+                </DropdownMenuItem>
+              )}
+
+              <DropdownMenuItem
+                className="w-full text-base"
+                asChild
+                onClick={() => setSeeDetailsId(row.original.id)}
+              >
+                <button>See Details</button>
+              </DropdownMenuItem>
+
+              {row.original.invoices.length > 0 && (
+                <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+                  <Link
+                    href={`/invoice/${row.original.invoices[0].invoice_number}/pdf`}
+                    target='_blank'
+                  >View Invoice</Link>
+                </DropdownMenuItem>
+              )}
+
+              {row.getValue('status') === TransactionStatus.PAID && (
+                <DropdownMenuItem
+                  className="w-full text-base"
+                  asChild
+                >
+                  <button onClick={() => handleCopyableMessage(row.original.id)}>
+                    Copy Confirmation Message
+                  </button>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ], [updatingTransactionStatusIds, correctingTransactionStatusIds]);
+  const table = useReactTable({
+    data: transaction?.items,
+    rowCount: transaction?.rowCount,
+    columns,
+    state: {
+      columnVisibility,
+      pagination,
+    },
+    getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: handlePaginationChange,
+  });
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-3 items-start mb-4">
@@ -663,63 +876,51 @@ export default function TransactionsTable() {
             </Button>
           </div>
 
-          <DropdownMenu>
-            <TooltipWrapper text="Manage columns">
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="px-3 py-1.5 h-auto">
-                  <Columns />
-                </Button>
-              </DropdownMenuTrigger>
-            </TooltipWrapper>
-            <DropdownMenuContent align="end" className="min-w-50" onCloseAutoFocus={(e) => e.preventDefault()}>
-              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Columns</DropdownMenuLabel>
-              {Object.entries(columnVisibility).map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column[0]}
-                  className="capitalize text-base hover:cursor-pointer"
-                  checked={column[1]}
-                  onCheckedChange={(value) =>
-                    setColumnVisibility({
-                      ...columnVisibility,
-                      [column[0]]: value,
-                    })}
-                >
-                  {column[0].replace('_', ' ')}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <TableColumnVisibility
+            table={table}
+            defaultColumnVisibility={defaultColumnVisibility}
+            columnVisibility={columnVisibility}
+            onColumnVisibilityChange={setColumnVisibility}
+            storageKey={columnVisibilityStorageKey}
+          />
         </div>
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingT) || (isSearching && !searchedTransaction) ? (
-        <TablePaginationSekeleton pagination={!isSearching} />
+        <TablePaginationSekeleton showPagination={!isSearching} />
       ) : isErrorT ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>{errorT.message}</AlertTitle>
         </Alert>
       ) : (
-        <DataTable
-          transaction={transaction}
-          pageInfo={pageInfo}
-          tableState={{
-            columnVisibility,
-            pagination,
-            updatingTransactionStatusIds,
-            correctingTransactionStatusIds,
-          }}
-          tableHandler={{
-            onPaginationChange: handlePaginationChange,
-            onColumnVisibilityChange: setColumnVisibility,
-            onEditTransactionStatus: handleEditTransactionStatus,
-            onCopyableMessage: handleCopyableMessage,
-            onCorrectTransactionStatus: handleCorrectTransactionStatus,
-          }}
-          isPlaceholderData={isPlaceholderDataC}
-          hasSearched={!!searchedTransaction}
-        />
+        <>
+          <DataTable
+            table={table}
+            processingIds={[
+              ...updatingTransactionStatusIds,
+              ...correctingTransactionStatusIds,
+            ]}
+          />
+          <TablePagination
+            data={transaction}
+            table={table}
+            pagination={pagination}
+            isPlaceholderData={isPlaceholderDataT}
+            showNavigation={!hasSearched}
+          />
+        </>
       )}
+
+      <CorrectStatusDialog
+        onCorrect={handleCorrectTransactionStatus}
+        isOpen={isOpenCorrectStatusDialog}
+        onIsOpenChange={setIsOpenCorrectStatusDialog}
+        onCorrectDataChange={setCorrectData}
+        correctData={correctData}
+      />
+
+      <DetailsSheet detailsId={seeDetailsId} onDetailsIdChange={setSeeDetailsId} />
     </>
   );
 }
