@@ -39,6 +39,7 @@ import TableSelectionAlert from '../ui/table-selection-alert';
 import TablePagination from '../ui/table-pagination';
 import DetailDialog from './detail-dialog';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
+import { deepEqual } from 'fast-equals';
 
 const defaultColumnVisibility = {
   created_at: true,
@@ -395,7 +396,7 @@ export default function FeedbacksTable() {
       hasSuccessfulEditReadStatusRef.current
     ) {
       // Only directly trigger refetch when the filters changed while process is still pending
-      if (JSON.stringify(removedSnaphost.filters) !== JSON.stringify(filtersRef.current)) {
+      if (!deepEqual(removedSnaphost.filters, filtersRef.current)) {
         queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
       } else {
         // invalidate all queryKey, but not trigger refetch for current active queryKey
