@@ -22,10 +22,10 @@ const sidebarIcons = {
   Testimonials: UserDollar,
 
   // Document
-  Document: Script,
-  'Terms of Service': Script,
-  'Privacy Policy': Script,
-  'About Us': Script,
+  Documents: Script,
+  'Terms of service': Script,
+  'Privacy policy': Script,
+  'About us': Script,
   FAQs: Script,
 
   // Product
@@ -35,8 +35,8 @@ const sidebarIcons = {
   Products: Package,
 
   // Application
-  'License Keys': Key,
-  'Secret Keys': LockPassword,
+  'License keys': Key,
+  'Secret keys': LockPassword,
 
   // System
   Admins: UserCog,

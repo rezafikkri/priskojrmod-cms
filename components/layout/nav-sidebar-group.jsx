@@ -16,13 +16,14 @@ export default function NavSidebarGroup({ label, items }) {
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => {
-            const Icon = sidebarIcons[item.title];
+            const Icon = sidebarIcons[item.text];
+
             return (
-              <SidebarMenuItem key={item.title}>
+              <SidebarMenuItem key={item.text}>
                 <SidebarMenuButton asChild>
                   <Link href={item.url}>
                     <Icon />
-                    <span>{item.title}</span>
+                    <span>{item.text}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

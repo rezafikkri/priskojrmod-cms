@@ -17,37 +17,37 @@ import { AdminRole } from '@/constants/enums';
 // Menu items
 const menu = {
   sales: [
-    { title: 'Transactions', url: '/transaction' },
+    { text: 'Transactions', url: '/transaction' },
   ],
   customer: {
-    title: 'Customers',
+    text: 'Customers',
     subItems: [
-      { title: 'List', url: '/customer' },
-      { title: 'Feedback', url: '/feedback' },
-      { title: 'Testimonials', url: '/testimonial' },
+      { text: 'List', url: '/customer' },
+      { text: 'Feedback', url: '/feedback' },
+      { text: 'Testimonials', url: '/testimonial' },
     ],
   },
   document: {
-    title: 'Document',
+    text: 'Documents',
     subItems: [
-      { title: 'Terms of Service', url: '/terms-of-service', },
-      { title: 'Privacy Policy', url: '/privacy-policy' },
-      { title: 'About Us', url: '/about-us' },
-      { title: 'FAQs', url: '/faq' },
+      { text: 'Terms of service', url: '/terms-of-service' },
+      { text: 'Privacy policy', url: '/privacy-policy' },
+      { text: 'About us', url: '/about-us' },
+      { text: 'FAQs', url: '/faq' },
     ],
   },
   product: [
-    { title: 'Categories', url: '/category' },
-    { title: 'Licenses', url: '/license' },
-    { title: 'Owners', url: '/owner' },
-    { title: 'Products', url: '/product' },
+    { text: 'Categories', url: '/category' },
+    { text: 'Licenses', url: '/license' },
+    { text: 'Owners', url: '/owner' },
+    { text: 'Products', url: '/product' },
   ],
   application: [
-    { title: 'License Keys', url: '/license-key' },
-    { title: 'Secret Keys', url: '/secret-key' },
+    { text: 'License keys', url: '/license-key' },
+    { text: 'Secret keys', url: '/secret-key' },
   ],
   system: [
-    { title: 'Admins', url: '/admin', role: AdminRole.OWNER },
+    { text: 'Admins', url: '/admin', role: AdminRole.OWNER },
   ],
 };
 

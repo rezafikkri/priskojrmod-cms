@@ -18,16 +18,17 @@ export default function NavSidebarItem({ items }) {
   }
 
   return filteredItems.map(item => {
-    const Icon = sidebarIcons[item.title];
+    const Icon = sidebarIcons[item.text];
+
     return (
-      <SidebarMenuItem key={item.title}>
+      <SidebarMenuItem key={item.text}>
         {(status === 'loading' && item.role) ? (
           <Skeleton className="w-full h-8 bg-[#EBEBED] dark:bg-accent" />
         ) : (
           <SidebarMenuButton asChild>
             <Link href={item.url}>
               <Icon />
-              <span>{item.title}</span>
+              <span>{item.text}</span>
             </Link>
           </SidebarMenuButton>
         )}
