@@ -8,7 +8,7 @@ import {
 import { isLastPage } from '@/lib/utils';
 import { AlertCircle, Search, X, RotateCw } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
+import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import {
   Alert,
   AlertTitle,
@@ -990,7 +990,7 @@ export default function LicenseKeysTable() {
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingLK) || (isSearching && !searchedLicenseKey) ? (
-        <TablePaginationSekeleton showPagination={!isSearching} />
+        <TablePaginationSkeleton showPagination={!isSearching} />
       ) : isErrorLK ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />

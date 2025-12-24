@@ -1,10 +1,10 @@
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import { Plus } from 'lucide-react';
 import { Suspense } from 'react';
-import TableSkeleton from '@/components/loadings/table-skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import OwnersTable from '@/components/owner/owners-table';
+import TablePaginationSkeleton from '@/components/loadings/table-pagination-skeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +24,7 @@ export default function OwnerListPage() {
         </Button>
       </TooltipWrapper>
 
-      <Suspense fallback={<TableSkeleton />}>
+      <Suspense fallback={<TablePaginationSkeleton showPagination={false} />}>
         <OwnersTable />
       </Suspense>
     </>

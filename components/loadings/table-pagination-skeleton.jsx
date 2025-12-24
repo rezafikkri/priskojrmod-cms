@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function TablePaginationSekeleton({
+export default function TablePaginationSkeleton({
   showPagination = true,
 }) {
   return (

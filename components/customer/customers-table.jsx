@@ -22,7 +22,7 @@ import {
   AlertTitle,
 } from '@/components/ui/alert';
 import { AlertCircle, Search, X, Plus, MoreHorizontal, Minus } from 'lucide-react';
-import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
+import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
@@ -646,7 +646,7 @@ export default function CustomersTable() {
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingC) || (isSearching && !searchedCustomer) ? (
-        <TablePaginationSekeleton showPagination={!isSearching} />
+        <TablePaginationSkeleton showPagination={!isSearching} />
       ) : isErrorC ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />

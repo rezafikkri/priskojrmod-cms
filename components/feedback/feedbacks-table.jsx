@@ -38,7 +38,7 @@ import TableColumnVisibility from '../ui/table-column-visibility';
 import TableSelectionAlert from '../ui/table-selection-alert';
 import TablePagination from '../ui/table-pagination';
 import DetailDialog from './detail-dialog';
-import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
+import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 
 const defaultColumnVisibility = {
   created_at: true,
@@ -621,7 +621,7 @@ export default function FeedbacksTable() {
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingF) ? (
-        <TablePaginationSekeleton showPagination={false} />
+        <TablePaginationSkeleton showPagination={false} />
       ) : isErrorF ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />

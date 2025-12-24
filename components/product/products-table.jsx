@@ -37,7 +37,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { localStorageGet } from '@/lib/local-storage';
-import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
+import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import TableColumnVisibility from '../ui/table-column-visibility';
 import DataTable from '../ui/data-table';
 import TablePagination from '../ui/table-pagination';
@@ -457,7 +457,7 @@ export default function ProductsTable({
       </div>
 
       {isFetchingP ? (
-        <TablePaginationSekeleton showPagination={false} />
+        <TablePaginationSkeleton showPagination={false} />
       ) : isErrorP ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />

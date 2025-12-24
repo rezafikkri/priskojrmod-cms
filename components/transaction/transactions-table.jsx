@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/alert';
 import { AlertCircle, Search, X, RotateCw, MoreHorizontal } from 'lucide-react';
 import InfoCircle from '../icon/info-circle';
-import TablePaginationSekeleton from '../loadings/table-pagination-skeleton';
+import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
 import {
@@ -887,7 +887,7 @@ export default function TransactionsTable() {
       </div>
 
       {(shouldShowSkeletonLoading.current && isFetchingT) || (isSearching && !searchedTransaction) ? (
-        <TablePaginationSekeleton showPagination={!isSearching} />
+        <TablePaginationSkeleton showPagination={!isSearching} />
       ) : isErrorT ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />

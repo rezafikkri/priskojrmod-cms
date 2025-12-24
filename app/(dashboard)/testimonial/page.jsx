@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
-import TableSkeleton from '@/components/loadings/table-skeleton';
 import TestimonialsTable from '@/components/testimonial/testimonials-table';
+import TablePaginationSkeleton from '@/components/loadings/table-pagination-skeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,7 +17,7 @@ export default async function TestimonialListPage() {
         Only up to 6 testimonials are allowed, which is ideal for maintaining focus and clarity.
       </h2>
 
-      <Suspense fallback={<TableSkeleton />}>
+      <Suspense fallback={<TablePaginationSkeleton showPagination={false} />}>
         <TestimonialsTable />
       </Suspense>
     </>
