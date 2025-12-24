@@ -61,7 +61,7 @@ export default function EditForm({ licenseKey }) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
           <FormItem>
-            <FormLabel className="text-base">Secret Key</FormLabel>
+            <FormLabel className="text-base">Secret key</FormLabel>
             <p>{licenseKey.appName}</p>
             <FormDescription>What’s displayed here is the app name, which represents the secret key used by this license key. It cannot be changed after creation.</FormDescription>
           </FormItem>
@@ -73,7 +73,7 @@ export default function EditForm({ licenseKey }) {
           </FormItem>
 
           <FormItem>
-            <FormLabel className="text-base">Device Reset Status</FormLabel>
+            <FormLabel className="text-base">Device reset status</FormLabel>
             <p>{licenseKey.resetCount} / {process.env.NEXT_PUBLIC_MAX_DEVICE_RESETS_PER_PERIOD} resets used (Period: {licenseKey.resetPeriod})</p>
             <FormDescription>
               This status is managed automatically by the system based on <i>UTC (global) time</i>. It is updated only when the customer resets their device binding through the <strong>My Products</strong> page.
@@ -96,7 +96,7 @@ export default function EditForm({ licenseKey }) {
                   />
                 </FormControl>
                 <div className="space-y-2">
-                  <FormLabel className="text-base leading-none">Change Expiration Date</FormLabel>
+                  <FormLabel className="text-base leading-none">Change expiration date</FormLabel>
                   <FormDescription>Check this if you want to change the license key expiration date. The expiration date will then be extended by 1 year from the current date; ignore otherwise. For now, the License Key will expire on {licenseKeyExpire}.</FormDescription>
                 </div>
               </FormItem>

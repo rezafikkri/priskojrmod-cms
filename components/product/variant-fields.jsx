@@ -107,7 +107,7 @@ export default function VariantFields({
               name={`variants.${index}.download_url`}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel className="text-base">Download Link</FormLabel>
+                  <FormLabel className="text-base">Download link</FormLabel>
                   <FormControl>
                     <Input
                       {...field}

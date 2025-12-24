@@ -52,7 +52,7 @@ export default function MainFileFields({ form, applicationCategoryId }) {
           name="download_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-base">Download Link</FormLabel>
+              <FormLabel className="text-base">Download link</FormLabel>
               <FormControl>
                 <Input
                   className="md:text-base h-auto px-3 py-1.5 shadow-none"
@@ -71,7 +71,7 @@ export default function MainFileFields({ form, applicationCategoryId }) {
           name="drive_file_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-base">Drive File ID</FormLabel>
+              <FormLabel className="text-base">Drive file ID</FormLabel>
               <p className="text-sm text-zinc-500">Name: {fileName ?? '-'}</p>
               <p className="text-sm text-zinc-500 mb-1">Size: {fileSize ?? '-'}</p>
               <div className="flex w-full items-center">

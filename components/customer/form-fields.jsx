@@ -53,7 +53,7 @@ export default function FormFields({
             name="first_name"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel className="text-base">First Name</FormLabel>
+                <FormLabel className="text-base">First name</FormLabel>
                 <FormControl>
                   <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
@@ -66,7 +66,7 @@ export default function FormFields({
             name="last_name"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel className="text-base">Last Name</FormLabel>
+                <FormLabel className="text-base">Last name</FormLabel>
                 <FormControl>
                   <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
@@ -78,7 +78,7 @@ export default function FormFields({
 
         {mode === 'edit' ? (
           <FormItem>
-            <FormLabel className="text-base">Phone Number</FormLabel>
+            <FormLabel className="text-base">Phone number</FormLabel>
             <p className="tabular-nums">{form.getValues('phone_number') ?? <Minus className="icon text-zinc-300 dark:text-zinc-700" />}</p>
             {!form.getValues('phone_number') && (
               <FormDescription>This information can only be provided by the customer.</FormDescription>
@@ -91,7 +91,7 @@ export default function FormFields({
           name="picture"
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel className="text-base">Profile Picture</FormLabel>
+              <FormLabel className="text-base">Profile picture</FormLabel>
               <FormImagePreview src={field.value} />
               <FormControl>
                 <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />

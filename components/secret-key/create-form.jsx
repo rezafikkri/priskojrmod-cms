@@ -151,7 +151,7 @@ export default function CreateForm({ products }) {
             name="key"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Secret Key</FormLabel>
+                <FormLabel className="text-base">Secret key</FormLabel>
                 <div className="flex w-full items-center">
                   <FormControl>
                     <Input

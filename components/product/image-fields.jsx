@@ -181,7 +181,7 @@ export default function ImageFields({
           disabled={hasThumbnail}
         />
         <div className="space-y-2">
-          <Label htmlFor="is_thumbnail" className="text-base leading-none">Use as Thumbnail</Label>
+          <Label htmlFor="is_thumbnail" className="text-base leading-none">Use as thumbnail</Label>
           <p className="text-muted-foreground text-sm">
             Check if this image should be used as the main thumbnail on the product page.
           </p>

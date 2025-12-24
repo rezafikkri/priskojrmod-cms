@@ -54,7 +54,7 @@ export default function FiltersPopover({
       >
         <div className="space-y-2 flex items-start gap-4"> 
           <div className="flex-1"> 
-            <Label className="text-base mb-1.5">Read Status</Label> 
+            <Label className="text-base mb-1.5">Read status</Label> 
             <p className="text-muted-foreground text-sm">Filter by read/unread</p> 
           </div> 
           <Select

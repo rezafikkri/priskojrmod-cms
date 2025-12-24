@@ -86,7 +86,7 @@ export default function FiltersPopover({
       >
         <div className="space-y-2 flex items-start gap-4"> 
           <div className="flex-1"> 
-            <Label className="text-base mb-1.5">App Name</Label> 
+            <Label className="text-base mb-1.5">App name</Label> 
             <p className="text-muted-foreground text-sm">Filter by secret key app name.</p> 
           </div> 
           <Select
@@ -132,7 +132,7 @@ export default function FiltersPopover({
         </div> 
         <div className="space-y-2 flex items-start gap-4"> 
           <div className="flex-1"> 
-            <Label className="text-base mb-1.5">Can Regenerate</Label> 
+            <Label className="text-base mb-1.5">Can regenerate</Label> 
             <p className="text-muted-foreground text-sm">Filter by can regenerate condition.</p> 
           </div> 
           <Select

@@ -67,7 +67,7 @@ export default function FormFields({
             name="first_name"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel className="text-base">First Name</FormLabel>
+                <FormLabel className="text-base">First name</FormLabel>
                 <FormControl>
                   <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
@@ -80,7 +80,7 @@ export default function FormFields({
             name="last_name"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel className="text-base">Last Name</FormLabel>
+                <FormLabel className="text-base">Last name</FormLabel>
                 <FormControl>
                   <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
@@ -95,7 +95,7 @@ export default function FormFields({
           name="picture"
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel className="text-base">Profile Picture</FormLabel>
+              <FormLabel className="text-base">Profile picture</FormLabel>
               <FormImagePreview src={field.value} />
               <FormControl>
                 <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
@@ -121,7 +121,7 @@ export default function FormFields({
                 name={`donation_links.${index}.url`}
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel className="text-base">{dl.currency_code} Donation Link</FormLabel>
+                    <FormLabel className="text-base">{dl.currency_code} donation link</FormLabel>
                     <div className="flex gap-2">
                       <FormControl>
                         <Input

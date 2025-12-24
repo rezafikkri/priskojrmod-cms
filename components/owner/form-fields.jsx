@@ -29,7 +29,7 @@ export default function FormFields({
             name="first_name"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel className="text-base">First Name</FormLabel>
+                <FormLabel className="text-base">First name</FormLabel>
                 <FormControl>
                   <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
@@ -42,7 +42,7 @@ export default function FormFields({
             name="last_name"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel className="text-base">Last Name</FormLabel>
+                <FormLabel className="text-base">Last name</FormLabel>
                 <FormControl>
                   <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
@@ -57,7 +57,7 @@ export default function FormFields({
           name="sm_profile_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-base">Social Media Profile URL</FormLabel>
+              <FormLabel className="text-base">Social media profile URL</FormLabel>
               <FormControl>
                 <Input disabled={isSubmitting} {...field} className="md:text-base h-auto px-3 py-1.5 shadow-none" />
               </FormControl>
@@ -72,7 +72,7 @@ export default function FormFields({
           name="picture"
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel className="text-base">Profile Picture</FormLabel>
+              <FormLabel className="text-base">Profile picture</FormLabel>
               <FormImagePreview src={field.value} />
               <FormControl>
                 <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />

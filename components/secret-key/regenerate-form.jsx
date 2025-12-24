@@ -68,7 +68,7 @@ export default function RegenerateForm({ secretKey }) {
             name="key"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Secret Key</FormLabel>
+                <FormLabel className="text-base">Secret key</FormLabel>
                 <p className="text-sm text-muted-foreground">
                   Old key: <span className="font-mono">{oldKey}</span>
                 </p>

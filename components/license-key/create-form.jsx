@@ -62,7 +62,7 @@ export default function CreateForm({ secretKeys }) {
             name="secret_key_id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Secret Key</FormLabel>
+                <FormLabel className="text-base">Secret key</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value} disabled={isSubmitting}

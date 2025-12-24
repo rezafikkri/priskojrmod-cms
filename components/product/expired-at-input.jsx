@@ -99,7 +99,7 @@ export default function ExpiredAtInput({
 
   return (
     <FormItem className="flex-1">
-      <FormLabel className="text-base">Expired At</FormLabel>
+      <FormLabel className="text-base">Expired at</FormLabel>
       <div className="flex items-center">
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
           <PopoverTrigger asChild className="shadow-none text-base h-auto! px-3 py-1.5 flex-1">

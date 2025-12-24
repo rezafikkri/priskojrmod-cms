@@ -18,7 +18,7 @@ export default function PasswordInput({
 }) {
   return (
     <FormItem>
-      <FormLabel className="text-base">File Access Password</FormLabel>
+      <FormLabel className="text-base">File access password</FormLabel>
       <div className="flex w-full items-center">
         <FormControl>
           <Input

@@ -308,7 +308,7 @@ export default function BasicForm({
 
         {(mode === 'edit' && dbPriceType === PriceType.PAID) ? (
           <FormItem>
-            <FormLabel className="text-base">Price Type</FormLabel>
+            <FormLabel className="text-base">Price type</FormLabel>
             <p className="capitalize">{basic.price_type}</p>
             <FormDescription>This is a paid product. Price type cannot be changed.</FormDescription>
           </FormItem>
@@ -318,7 +318,7 @@ export default function BasicForm({
             name="price_type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Price Type</FormLabel>
+                <FormLabel className="text-base">Price type</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger
