@@ -822,7 +822,7 @@ export default function LicenseKeysTable() {
                 navigator.clipboard.writeText(row.original.code);
                 toast.success('License key code copied to clipboard');
               }}>
-                Copy Code
+                Copy code
               </button>
             </DropdownMenuItem>
 
@@ -841,7 +841,7 @@ export default function LicenseKeysTable() {
                     setIsOpenResetDeviceDialog(true);
                   }}
                 >
-                  Reset Device
+                  Reset device
                 </button>
               </DropdownMenuItem>
             )}

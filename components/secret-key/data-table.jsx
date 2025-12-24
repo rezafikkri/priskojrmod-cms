@@ -103,7 +103,7 @@ export default function DataTable({ secretKeys: data }) {
                   navigator.clipboard.writeText(row.original.key);
                   toast.success('Secret key copied to clipboard.');
                 }}>
-                  Copy Secret Key
+                  Copy secret key
                 </button>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="text-base hover:cursor-pointer">

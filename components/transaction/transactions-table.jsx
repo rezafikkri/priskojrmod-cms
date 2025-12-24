@@ -732,26 +732,26 @@ export default function TransactionsTable() {
                   <DropdownMenuLabel
                     className="text-muted-foreground text-[15px]"
                   >
-                    Change Status To
+                    Change status to
                   </DropdownMenuLabel>
                   {changeStatusMenus.map(cs => (
                     <DropdownMenuItem
                       key={cs}
-                      className="w-full text-base capitalize"
+                      className="w-full text-base"
                       asChild
                     >
                       <button
                         onClick={() => {
                           handleEditTransactionStatus(row.original.id, cs);
                         }}
-                      >{cs}</button>
+                      >{cs.charAt(0).toUpperCase()}{cs.slice(1)}</button>
                     </DropdownMenuItem>
                   ))}
 
                   <DropdownMenuSeparator />
                 </>
               )}
-              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other Action</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other action</DropdownMenuLabel>
 
               {row.getValue('status') !== TransactionStatus.PENDING && (
                 <DropdownMenuItem
@@ -768,7 +768,7 @@ export default function TransactionsTable() {
                       });
                     }}
                   >
-                    Correct Status
+                    Correct status
                   </button>
                 </DropdownMenuItem>
               )}
@@ -778,7 +778,7 @@ export default function TransactionsTable() {
                 asChild
                 onClick={() => setSeeDetailsId(row.original.id)}
               >
-                <button>See Details</button>
+                <button>See details</button>
               </DropdownMenuItem>
 
               {row.original.invoices.length > 0 && (
@@ -786,7 +786,7 @@ export default function TransactionsTable() {
                   <Link
                     href={`/invoice/${row.original.invoices[0].invoice_number}/pdf`}
                     target='_blank'
-                  >View Invoice</Link>
+                  >View invoice</Link>
                 </DropdownMenuItem>
               )}
 
@@ -796,7 +796,7 @@ export default function TransactionsTable() {
                   asChild
                 >
                   <button onClick={() => handleCopyableMessage(row.original.id)}>
-                    Copy Confirmation Message
+                    Copy confirmation message
                   </button>
                 </DropdownMenuItem>
               )}

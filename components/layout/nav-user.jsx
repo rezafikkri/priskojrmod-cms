@@ -82,7 +82,7 @@ export function NavUser() {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                  <Link href="/account-settings" className="cursor-pointer"><User /> Account Settings</Link>
+                  <Link href="/account-settings" className="cursor-pointer"><User /> Account settings</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <ToggleTheme />
@@ -94,7 +94,7 @@ export function NavUser() {
                 asChild
               >
                 <button onClick={() => signOut({ callbackUrl: '/signin' })}>
-                  <LogOut /> Sign Out
+                  <LogOut /> Sign out
                 </button>
               </DropdownMenuItem>
             </DropdownMenuContent>
