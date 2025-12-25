@@ -201,7 +201,7 @@ export default function BasicForm({
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Select the most relevant category for this product. {mode === 'edit' && 'Changing a category to \'Application\' is not allowed.'}</FormDescription>
+                <FormDescription>Select the most relevant category for this product. {mode === 'edit' && 'Changing a category to "Application" is not allowed.'}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

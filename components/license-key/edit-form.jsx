@@ -97,7 +97,7 @@ export default function EditForm({ licenseKey }) {
                 </FormControl>
                 <div className="space-y-2">
                   <FormLabel className="text-base leading-none">Change expiration date</FormLabel>
-                  <FormDescription>Check this if you want to change the license key expiration date. The expiration date will then be extended by 1 year from the current date; ignore otherwise. For now, the License Key will expire on {licenseKeyExpire}.</FormDescription>
+                  <FormDescription>Check this if you want to change the license key expiration date. The expiration date will then be extended by 1 year from the current date; ignore otherwise. For now, the license key will expire on {licenseKeyExpire}.</FormDescription>
                 </div>
               </FormItem>
             )}
