@@ -941,7 +941,7 @@ export default function LicenseKeysTable() {
                   || Object.keys(rowSelection).length <= 0
                   || isRegenerating}
                 onClick={handleSetCanRegenerate}
-              >Set Can Regenerate</Button>
+              >Set can regenerate</Button>
             )}
           </div>
         </div>

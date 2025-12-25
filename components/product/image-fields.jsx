@@ -194,7 +194,7 @@ export default function ImageFields({
         className="text-base px-3 py-1.5 h-auto! inline-block"
         onClick={handleAdd}
       >
-        <Plus className="icon" /> Add Image
+        <Plus className="icon" /> Add image
       </Button>
     </>
   );

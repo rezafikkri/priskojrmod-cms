@@ -41,7 +41,7 @@ export function SignInForm() {
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Welcome back</CardTitle>
         <CardDescription className="text-base">
-          Sign In with your Google account
+          Sign in with your Google account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -51,7 +51,7 @@ export function SignInForm() {
           onClick={() => signIn('google')}
         >
           <img src="https://res.cloudinary.com/priskojrmod/image/upload/q_auto/google-g.png" alt="Google logo" width={16} height={16} />
-          <span> Sign In with Google</span>
+          <span> Sign in with Google</span>
         </Button>
       </CardContent>
     </Card>

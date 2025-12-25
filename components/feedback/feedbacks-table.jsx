@@ -584,7 +584,7 @@ export default function FeedbacksTable() {
             onClick={handlePullFeedbacks}
             disabled={isFetchingF || isPulling}
           >
-            <ArrowDownToLine className="icon" /> Pull New Data
+            <ArrowDownToLine className="icon" /> Pull new data
           </Button>
         </TooltipWrapper>
 

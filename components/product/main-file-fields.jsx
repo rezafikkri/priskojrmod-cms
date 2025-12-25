@@ -89,7 +89,7 @@ export default function MainFileFields({ form, applicationCategoryId }) {
                     className={`h-auto text-base px-3 py-1.5 border rounded-s-none ${isLoading ? 'disabled:opacity-100 transition-none' : ''}`}
                     disabled={isLoading || field.value.trim() === ''}
                   >
-                    <span className={isLoading ? 'opacity-0' : ''}>Get Info</span>
+                    <span className={isLoading ? 'opacity-0' : ''}>Get info</span>
                   </Button>
                   {isLoading && (
                     <div className="absolute h-full top-0 left-0 right-0 flex justify-center items-center">

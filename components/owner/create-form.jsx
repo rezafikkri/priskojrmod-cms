@@ -49,7 +49,7 @@ export default function CreateForm() {
           onClick={handleFillWithAdminInfo}
           disabled={isSubmitting}
         >
-          Use My Admin Info
+          Use my admin info
         </Button>
       </div>
       <p className="mb-6 text-sm text-muted-foreground">Click to use your admin profile (name and picture) as the owner data.</p>
