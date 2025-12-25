@@ -120,7 +120,7 @@ export default async function ProductForm({ mode = 'create', id = null }) {
     return (
       <Alert className="text-base lg:max-w-2/3">
         <Error404 />
-        <AlertTitle>Product not found.</AlertTitle>
+        <AlertTitle>Product not found</AlertTitle>
       </Alert>
     );
   }

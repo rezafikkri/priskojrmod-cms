@@ -12,7 +12,7 @@ export default async function FaqForm({ id }) {
   if (!faq) return (
     <Alert className="text-base lg:max-w-2/3">
       <Error404 />
-      <AlertTitle>FAQ not found.</AlertTitle>
+      <AlertTitle>FAQ not found</AlertTitle>
     </Alert>
   );
 

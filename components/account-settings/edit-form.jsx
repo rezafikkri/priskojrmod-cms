@@ -49,7 +49,7 @@ export function EditForm({
           return dl;
         }),
       );
-      toast.success('Donation link deleted successfully.');
+      toast.success('Donation link deleted successfully');
     } else {
       toast.error(removeRes.message);
     }
@@ -79,7 +79,7 @@ export function EditForm({
         form.setValue('donation_links', generateDonationLinkValues(editRes.data.donation_links ?? []));
       }
 
-      toast.success('Account settings updated successfully.');
+      toast.success('Account settings updated successfully');
     } else {
       toast.error(editRes.message);
     }

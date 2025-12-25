@@ -9,7 +9,7 @@ export default async function AdminForm({ id }) {
   if (!admin) return (
     <Alert className="text-base lg:max-w-2/3">
       <Error404 />
-      <AlertTitle>Admin not found.</AlertTitle>
+      <AlertTitle>Admin not found</AlertTitle>
     </Alert>
   );
 

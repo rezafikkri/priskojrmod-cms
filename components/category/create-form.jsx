@@ -19,7 +19,7 @@ export default function CreateForm() {
     const addRes = await addCategory(data);
     if (addRes.status === 'success') {
       form.reset();
-      toast.success('Category created successfully.');
+      toast.success('Category created successfully');
     } else {
       toast.error(addRes.message);
     }

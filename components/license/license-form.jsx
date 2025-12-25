@@ -12,7 +12,7 @@ export default async function LicenseForm({ id }) {
   if (!license) return (
     <Alert className="text-base lg:max-w-2/3">
       <Error404 />
-      <AlertTitle>License not found.</AlertTitle>
+      <AlertTitle>License not found</AlertTitle>
     </Alert>
   );
 

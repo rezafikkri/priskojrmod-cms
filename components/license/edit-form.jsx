@@ -30,7 +30,7 @@ export default function EditForm({ license }) {
   async function handleSubmit(data) {
     const editRes = await editLicense(data);
     if (editRes.status === 'success') {
-      toast.success('License updated successfully.');
+      toast.success('License updated successfully');
     } else {
       toast.error(editRes.message);
     }

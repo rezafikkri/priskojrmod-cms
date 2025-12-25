@@ -11,7 +11,7 @@ export default async function OwnerForm({ id }) {
   if (!owner) return (
     <Alert className="lg:max-w-2/3 text-base">
       <Error404 />
-      <AlertTitle>Owner not found.</AlertTitle>
+      <AlertTitle>Owner not found</AlertTitle>
     </Alert>
   );
 

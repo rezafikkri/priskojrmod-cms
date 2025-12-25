@@ -354,7 +354,7 @@ export default function LicenseKeysTable() {
         return next;
       });
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
-      toast.success(`License key deleted successfully.`, { id: toastId });
+      toast.success(`License key deleted successfully`, { id: toastId });
     } else {
       toast.error(removeRes.message, { id: toastId });
     }
@@ -482,7 +482,7 @@ export default function LicenseKeysTable() {
 
       if (setCanRegenerateRes.data.count > 0) {
         toast.success(
-          `Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys.`,
+          `Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys`,
           { id: toastId },
         );
       } else {
@@ -585,8 +585,8 @@ export default function LicenseKeysTable() {
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       toast.success(
         editRevokeStatusData.isRevoked
-          ? 'License key unrevoked successfully.'
-          : 'License key revoked successfully.',
+          ? 'License key unrevoked successfully'
+          : 'License key revoked successfully',
         { id: toastId },
       );
     } else {
@@ -701,7 +701,7 @@ export default function LicenseKeysTable() {
         return next;
       });
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
-      toast.success('License key device reset successfully.', { id: toastId });
+      toast.success('License key device reset successfully', { id: toastId });
     } else {
       toast.error(releaseRes.message, { id: toastId });
     }

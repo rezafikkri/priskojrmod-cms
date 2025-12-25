@@ -23,7 +23,7 @@ export default function InvoicesSection({ invoices }) {
     return (
       <Alert className="text-base mt-2.5 mb-4">
         <Error404 />
-        <AlertTitle>Invoice not found.</AlertTitle>
+        <AlertTitle>Invoice not found</AlertTitle>
       </Alert>
     );
   }

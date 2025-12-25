@@ -51,7 +51,7 @@ export default function FormFields({
                     formState={formState}
                     activeLang={Language.ID}
                     {...(isResetEditor && { isResetEditor })}
-                    description="Enter license content."
+                    description="Enter license content"
                   />
                 )}
               />
@@ -75,7 +75,7 @@ export default function FormFields({
                     formState={formState}
                     activeLang={Language.EN}
                     {...(isResetEditor && { isResetEditor })}
-                    description="Enter license content."
+                    description="Enter license content"
                   />
                 )}
               />

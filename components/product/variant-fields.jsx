@@ -97,7 +97,7 @@ export default function VariantFields({
                       className="shadow-none md:text-base h-auto px-3 py-1.5"
                     />
                   </FormControl>
-                  <FormDescription>Enter the variant name.</FormDescription>
+                  <FormDescription>Enter the variant name</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

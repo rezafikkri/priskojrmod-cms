@@ -51,7 +51,7 @@ export default function DataTable({ owners: data }) {
       setOwners((prevOwners) =>
         prevOwners.filter((owner) => owner.id !== id)
       );
-      toast.success('Owner deleted successfully.', {
+      toast.success('Owner deleted successfully', {
         id: toastId,
       });
     } else {

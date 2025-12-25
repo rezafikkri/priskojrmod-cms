@@ -54,7 +54,7 @@ export default function PriceFields({
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>Enter the product price in {currency.currency_code}.</FormDescription>
+                <FormDescription>Enter the product price in {currency.currency_code}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

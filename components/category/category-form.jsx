@@ -12,7 +12,7 @@ export default async function CategoryForm({ id }) {
   if (!category) return (
     <Alert className="text-base lg:max-w-2/3">
       <Error404 />
-      <AlertTitle>Category not found.</AlertTitle>
+      <AlertTitle>Category not found</AlertTitle>
     </Alert>
   );
 

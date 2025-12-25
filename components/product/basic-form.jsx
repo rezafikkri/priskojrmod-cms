@@ -161,7 +161,7 @@ export default function BasicForm({
               <FormControl>
                 <Input {...field} className="md:text-base h-auto px-3 py-1.5 shadow-none" />
               </FormControl>
-              <FormDescription>Enter the product name.</FormDescription>
+              <FormDescription>Enter the product name</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -242,7 +242,7 @@ export default function BasicForm({
           <FormItem>
             <FormLabel className="text-base">Admin</FormLabel>
             <p className="capitalize">Myself</p>
-            <FormDescription>Assigned admin for this product.</FormDescription>
+            <FormDescription>Assigned admin for this product</FormDescription>
           </FormItem>
         )}
 
@@ -270,7 +270,7 @@ export default function BasicForm({
                   ))}
                 </SelectContent>
               </Select>
-              <FormDescription>Select the owner of this product.</FormDescription>
+              <FormDescription>Select the owner of this product</FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -12,7 +12,7 @@ export default async function CustomerForm({ id }) {
     return (
       <Alert className="text-base">
         <Error404 />
-        <AlertTitle>Customer not found.</AlertTitle>
+        <AlertTitle>Customer not found</AlertTitle>
       </Alert>
     );
   }

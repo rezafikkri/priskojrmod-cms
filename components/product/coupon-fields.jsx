@@ -72,7 +72,7 @@ export default function CouponFields({
                       className="md:text-base h-auto px-3 py-1.5 shadow-none"
                     />
                   </FormControl>
-                  <FormDescription>Enter the coupon code in UPPERCASE (e.g. SAVE-20-NOW).</FormDescription>
+                  <FormDescription>Enter the coupon code in UPPERCASE (e.g. SAVE-20-NOW)</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -98,7 +98,7 @@ export default function CouponFields({
                       <Percent className="icon size-4" />
                     </span>
                   </div>
-                  <FormDescription>Enter discount value in percent (e.g. 10 means 10%).</FormDescription>
+                  <FormDescription>Enter discount value in percent (e.g. 10 means 10%)</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

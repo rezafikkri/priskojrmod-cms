@@ -31,7 +31,7 @@ function DetailsContent({ isLoading, data, error }) {
         <div className="px-4">
           <Alert className="text-base">
             <Error404 />
-            <AlertTitle>Transaction not found.</AlertTitle>
+            <AlertTitle>Transaction not found</AlertTitle>
           </Alert>
         </div>
       );

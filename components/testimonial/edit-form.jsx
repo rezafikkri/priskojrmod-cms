@@ -29,7 +29,7 @@ export default function EditForm({ testimonial }) {
   async function handleSubmit(data) {
     const editRes = await editTestimonial(data);
     if (editRes.status === 'success') {
-      toast.success('Testimonial updated successfully.');
+      toast.success('Testimonial updated successfully');
     } else {
       toast.error(editRes.message);
     }

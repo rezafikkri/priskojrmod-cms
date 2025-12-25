@@ -56,7 +56,7 @@ export default function CreateForm({ products }) {
     const addRes = await addSecretKey(data);
     if (addRes.status === 'success') {
       form.reset();
-      toast.success('Secret key created successfully.');
+      toast.success('Secret key created successfully');
     } else {
       toast.error(addRes.message);
     }
@@ -139,7 +139,7 @@ export default function CreateForm({ products }) {
                   </PopoverContent>
                 </Popover>
                 <FormDescription>
-                  Search or select a digital product.
+                  Search or select a digital product
                 </FormDescription>
                 <FormMessage />
               </FormItem>

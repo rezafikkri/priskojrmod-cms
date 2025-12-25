@@ -52,7 +52,7 @@ export default function DataTable({ secretKeys: data }) {
         prevSecretKeys.filter((s) => s.id !== deleteData.id)
       );
 
-      toast.success('Secret key deleted successfully.', {
+      toast.success('Secret key deleted successfully', {
         id: toastId,
       });
     } else {
@@ -101,7 +101,7 @@ export default function DataTable({ secretKeys: data }) {
               >
                 <button onClick={() => {
                   navigator.clipboard.writeText(row.original.key);
-                  toast.success('Secret key copied to clipboard.');
+                  toast.success('Secret key copied to clipboard');
                 }}>
                   Copy secret key
                 </button>

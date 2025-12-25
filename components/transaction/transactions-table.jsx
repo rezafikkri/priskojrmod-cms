@@ -431,7 +431,7 @@ export default function TransactionsTable() {
     const prepareRes = await prepareConfirmationMessage(id);
     navigator.clipboard.writeText(prepareRes.data.message);
 
-    toast.success('Message copied to clipboard!', { id: toastId });
+    toast.success('Message copied to clipboard', { id: toastId });
   }, []);
 
   async function handleCorrectTransactionStatus({ correctData, toastId }) {

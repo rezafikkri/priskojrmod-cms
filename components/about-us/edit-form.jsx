@@ -55,9 +55,9 @@ export default function EditForm({ aboutUs }) {
     if (saveRes.status === 'success') {
       let successMessage;
       if (hasAboutUs) {
-        successMessage = 'About Us updated successfully.';
+        successMessage = 'About us updated successfully';
       } else {
-        successMessage = 'About Us created successfully.';
+        successMessage = 'About us created successfully';
 
         // set id to form
         form.register('id');

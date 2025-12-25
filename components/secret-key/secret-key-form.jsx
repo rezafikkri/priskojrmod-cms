@@ -27,7 +27,7 @@ export default async function SecretKeyForm({ mode = 'create', id }) {
     return (
       <Alert className="text-base lg:max-w-2/3">
         <Error404 />
-        <AlertTitle>Secret key not found.</AlertTitle>
+        <AlertTitle>Secret key not found</AlertTitle>
       </Alert>
     );
   }

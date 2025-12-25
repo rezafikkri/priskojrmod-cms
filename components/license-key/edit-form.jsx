@@ -50,7 +50,7 @@ export default function EditForm({ licenseKey }) {
         setLicenseKeyExpire(formatDateTime(editRes.data.exp));
       }
 
-      toast.success('License key updated successfully.');
+      toast.success('License key updated successfully');
     } else {
       toast.error(editRes.message);
     }

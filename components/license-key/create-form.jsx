@@ -47,7 +47,7 @@ export default function CreateForm({ secretKeys }) {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       form.reset();
-      toast.success('License key created successfully.');
+      toast.success('License key created successfully');
     } else {
       toast.error(addRes.message);
     }
@@ -84,7 +84,7 @@ export default function CreateForm({ secretKeys }) {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Select secret key based on application name.</FormDescription>
+                <FormDescription>Select secret key based on application name</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

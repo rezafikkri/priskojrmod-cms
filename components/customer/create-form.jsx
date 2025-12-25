@@ -26,7 +26,7 @@ export default function CreateForm() {
       queryClient.invalidateQueries({ queryKey: ['customers'] });
       queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
       form.reset();
-      toast.success('Customer created successfully.');
+      toast.success('Customer created successfully');
     } else {
       toast.error(addRes.message);
     }

@@ -29,7 +29,7 @@ export default function TitleInput({
           {...field}
         />
       </FormControl>
-      <FormDescription>Enter the title.</FormDescription>
+      <FormDescription>Enter the title</FormDescription>
       {(errors.title && errors.title[activeLang]) && (
         <p className="text-destructive text-sm">
           {errors.title[activeLang].message}

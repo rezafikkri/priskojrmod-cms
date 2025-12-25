@@ -29,7 +29,7 @@ export default function NameInput({
           {...field}
         />
       </FormControl>
-      <FormDescription>Enter the license name (e.g., Free License, Personal License, Pro App License).</FormDescription>
+      <FormDescription>Enter the license name (e.g., Free License, Personal License, Pro App License)</FormDescription>
       {(errors.name && errors.name[activeLang]) && (
         <p className="text-destructive text-sm">
           {errors.name[activeLang].message}

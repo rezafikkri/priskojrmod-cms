@@ -36,7 +36,7 @@ export default function CreateForm() {
     const addRes = await addAdmin(data);
     if (addRes.status === 'success') {
       form.reset();
-      toast.success('Admin created successfully.');
+      toast.success('Admin created successfully');
     } else {
       toast.error(addRes.message);
     }

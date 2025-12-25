@@ -22,7 +22,7 @@ export function SignInForm() {
     if (error) {
       let errorMessage = 'Something went wrong during sign in. Please try again later.';
       if (error === 'AccountNotFound') {
-        errorMessage = 'Your account is not registered.';
+        errorMessage = 'Your account is not registered';
       } else if (error === 'UnableToSignIn') {
         errorMessage = 'Sign in was unsuccessful. Please try again or use a different account.';
       }

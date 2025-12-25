@@ -26,7 +26,7 @@ export default function CreateForm() {
     const addRes = await addOwner(data);
     if (addRes.status === 'success') {
       form.reset();
-      toast.success('Owner created successfully.');
+      toast.success('Owner created successfully');
     } else {
       toast.error(addRes.message);
     }

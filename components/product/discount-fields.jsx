@@ -77,7 +77,7 @@ export default function DiscountFields({
                   <Percent className="icon size-4" />
                 </span>
               </div>
-              <FormDescription>Enter discount percentage (e.g. 10 for 10%).</FormDescription>
+              <FormDescription>Enter discount percentage (e.g. 10 for 10%)</FormDescription>
               <FormMessage />
             </FormItem>
           )}

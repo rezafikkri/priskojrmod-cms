@@ -38,7 +38,7 @@ export default function RegenerateForm({ secretKey }) {
     form.reset();
     if (applyRes.status === 'success') {
       setOldKey(applyRes.data.key);
-      toast.success('Secret key regenerated successfully.');
+      toast.success('Secret key regenerated successfully');
     } else {
       toast.error(applyRes.message);
     }

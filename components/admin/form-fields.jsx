@@ -41,7 +41,7 @@ export default function FormFields({
                 <FormControl>
                   <Input type="email" disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
                 </FormControl>
-                <FormDescription>Enter a valid email address.</FormDescription>
+                <FormDescription>Enter a valid email address</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -100,7 +100,7 @@ export default function FormFields({
               <FormControl>
                 <Input disabled={isSubmitting} {...field} className="shadow-none md:text-base h-auto px-3 py-1.5" />
               </FormControl>
-              <FormDescription>Enter the URL of the picture.</FormDescription>
+              <FormDescription>Enter the URL of the picture</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -153,7 +153,7 @@ export default function FormFields({
                         </div>
                       )}
                     </div>
-                    <FormDescription>Enter the donation URL for {dl.currency_code}.</FormDescription>
+                    <FormDescription>Enter the donation URL for {dl.currency_code}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

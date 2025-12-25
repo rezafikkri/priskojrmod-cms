@@ -30,7 +30,7 @@ export default function EditForm({ faq }) {
   async function handleSubmit(data) {
     const editRes = await editFaq(data);
     if (editRes.status === 'success') {
-      toast.success('FAQ updated successfully.');
+      toast.success('FAQ updated successfully');
     } else {
       toast.error(editRes.message);
     }

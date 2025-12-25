@@ -19,7 +19,7 @@ export default function EditForm({ category }) {
   async function handleSubmit(data) {
     const addRes = await editCategory(data);
     if (addRes.status === 'success') {
-      toast.success('Category updated successfully.');
+      toast.success('Category updated successfully');
     } else {
       toast.error(addRes.message);
     }

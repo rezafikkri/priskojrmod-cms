@@ -196,7 +196,7 @@ export default function FeedbacksTable() {
       const hour = nextPullTime.getHours().toString().padStart(2, '0');
       const minute = nextPullTime.getMinutes().toString().padStart(2, '0');
 
-      toast.info(`Please wait until ${hour}:${minute} to pull new feedback.`);
+      toast.info(`Please wait until ${hour}:${minute} to pull new feedback`);
       return;
     }
 
@@ -225,7 +225,7 @@ export default function FeedbacksTable() {
         setRowSelection({});
 
         toast.success(
-          `New feedback pulled successfully for ${loadRes.data.count} entries.`,
+          `New feedback pulled successfully for ${loadRes.data.count} entries`,
           { id: toastId },
         );
       } else {
@@ -265,7 +265,7 @@ export default function FeedbacksTable() {
 
       if (removeRes.data.count > 0) {
         toast.success(
-          `Successfully deleted ${removeRes.data.count} feedback entr${removeRes.data.count > 1 ? 'ies' : 'y'}.`,
+          `Successfully deleted ${removeRes.data.count} feedback entr${removeRes.data.count > 1 ? 'ies' : 'y'}`,
           { id: toastId },
         );
       } else {
@@ -468,7 +468,7 @@ export default function FeedbacksTable() {
         queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
       }
 
-      toast.success('Feedback marked as read successfully.', { id: toastId });
+      toast.success('Feedback marked as read successfully', { id: toastId });
     } else {
       toast.error(editRes.message, { id: toastId });
     }

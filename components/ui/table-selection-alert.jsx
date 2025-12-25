@@ -14,18 +14,21 @@ export default function TableSelectionAlert({
 
   return (
     <Alert className="mb-4 flex items-center justify-center -mx-4 w-auto border-x-0 rounded-none text-center h-[50px] p-0">
-      <AlertDescription className="text-base inline-block">
+      <AlertDescription className="text-base inline-block space-x-2">
         <span className="pe-1">
-          {totalSelectedCount} rows selected.
+          {totalSelectedCount} rows selected
         </span>
         {currentPageSelectedCount < totalSelectedCount && (
-          <Button
-            variant="ghost"
-            className="text-base h-auto py-0.5 px-1.5"
-            onClick={() => table.resetRowSelection(true)}
-          >
-            Clear Selection
-          </Button>
+          <>
+            <span>.</span>
+            <Button
+              variant="ghost"
+              className="text-base h-auto py-0.5 px-1.5"
+              onClick={() => table.resetRowSelection(true)}
+            >
+              Clear Selection
+            </Button>
+          </>
         )}
       </AlertDescription>
     </Alert>

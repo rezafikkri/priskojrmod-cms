@@ -182,7 +182,7 @@ export default function PhoneNumberFields({
         />
       </div>
 
-      <FormDescription>Enter a reachable WhatsApp phone number.</FormDescription>
+      <FormDescription>Enter a reachable WhatsApp phone number</FormDescription>
       {phoneNumberErrors?.country_iso && (
         <p className="dark:text-red-500/85 text-destructive text-sm">
           {phoneNumberErrors.country_iso.message}

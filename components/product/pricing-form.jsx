@@ -209,7 +209,7 @@ export default function PricingForm({
         // reset step and form
         clearDraft();
         onResetStep();
-        toast.success('Product created successfully.');
+        toast.success('Product created successfully');
       } else {
         // if success, set basic, content, extras and pricing data, like id, etc.
         setBasic({
@@ -244,7 +244,7 @@ export default function PricingForm({
           newPricing.discount = { value: '', expired_at: '' };
         }
 
-        let successMessage = 'Product updated successfully.';
+        let successMessage = 'Product updated successfully';
         if (!data.coupon.id && data.coupon.code) {
           newPricing.coupon = {
             id: saveRes.data.pricing.coupon.id,
@@ -252,7 +252,7 @@ export default function PricingForm({
           };
         } else if (data.coupon.id && (!data.coupon.code || dbVersion !== basic.version)) {
           newPricing.coupon = { code: '', discount: '', expired_at: '' };
-          successMessage += ' The old coupon has been removed because a new version was released.';
+          successMessage += ' The old coupon has been removed because a new version was released';
         }
 
         setPricing(newPricing);
@@ -368,7 +368,7 @@ export default function PricingForm({
                   <div className="space-y-2">
                     <FormLabel className="text-base leading-none">Publish</FormLabel>
                     <FormDescription>
-                      Make this product visible on the website.
+                      Make this product visible on the website
                     </FormDescription>
                   </div>
                 </FormItem>

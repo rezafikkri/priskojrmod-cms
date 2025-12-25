@@ -153,8 +153,8 @@ export default function ProductsTable({
 
       toast.success(
         !isPinned
-          ? 'Product pinned successfully.'
-          : 'Product unpinned successfully.',
+          ? 'Product pinned successfully'
+          : 'Product unpinned successfully',
         { id: toastId },
       );
     } else {
@@ -196,8 +196,8 @@ export default function ProductsTable({
 
       toast.success(
         !isPublished
-          ? 'Product published successfully.'
-          : 'Product unpublished successfully.',
+          ? 'Product published successfully'
+          : 'Product unpublished successfully',
         { id: toastId },
       );
     } else {
@@ -224,7 +224,7 @@ export default function ProductsTable({
         };
       });
 
-      toast.success('Product deleted successfully.', {
+      toast.success('Product deleted successfully', {
         id: toastId,
       });
     } else {
