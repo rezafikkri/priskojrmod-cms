@@ -25,6 +25,7 @@ import CouponFields from './coupon-fields';
 import useEditPendingTracker from '@/hooks/use-edit-pending-tracker';
 import { Separator } from '../ui/separator';
 import { useQueryClient } from '@tanstack/react-query';
+import { cmsConfig } from '@/config/cms';
 
 export default function PricingForm({
   onPrevStep,
@@ -271,7 +272,9 @@ export default function PricingForm({
 
       queryClient.invalidateQueries({ queryKey: ['products'] });
     } else {
-      toast.error(saveRes.message);
+      toast.error(saveRes.message, {
+        duration: cmsConfig.toast.duration.error
+      });
     }
   }
 

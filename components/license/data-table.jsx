@@ -30,6 +30,7 @@ import { Language } from '@/constants/enums';
 import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { removeLicense } from '@/actions/license-actions';
+import { cmsConfig } from '@/config/cms';
 
 export default function DataTable({ licenses: data }) {
   const [licenses, setLicenses] = useState(data);
@@ -58,6 +59,7 @@ export default function DataTable({ licenses: data }) {
     } else {
       toast.error(removeRes.message, {
         id: toastId,
+        duration: cmsConfig.toast.duration.error
       });
     }
   }

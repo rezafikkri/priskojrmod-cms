@@ -23,6 +23,7 @@ import TooltipWrapper from '../ui/tooltip-wrapper';
 import { Separator } from '../ui/separator';
 import { useQueryClient } from '@tanstack/react-query';
 import PasswordInput from './password-input';
+import { cmsConfig } from '@/config/cms';
 
 export default function VariantFields({
   form,
@@ -67,7 +68,9 @@ export default function VariantFields({
 
         queryClient.invalidateQueries({ queryKey: ['products'] });
       } else {
-        toast.error(removeRes.message);
+        toast.error(removeRes.message, {
+          duration: cmsConfig.toast.duration.error
+        });
         return;
       }
 

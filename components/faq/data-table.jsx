@@ -30,6 +30,7 @@ import Link from 'next/link';
 import { Language } from '@/constants/enums';
 import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
+import { cmsConfig } from '@/config/cms';
 
 export default function DataTable({ faqs: data }) {
   const [faqs, setFaqs] = useState(data);
@@ -56,6 +57,7 @@ export default function DataTable({ faqs: data }) {
     } else {
       toast.error(removeRes.message, {
         id: toastId,
+        duration: cmsConfig.toast.duration.error
       });
     }
   }

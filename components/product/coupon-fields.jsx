@@ -21,6 +21,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { removeProductCoupon } from '@/actions/product-actions';
+import { cmsConfig } from '@/config/cms';
 
 export default function CouponFields({
   form,
@@ -45,7 +46,9 @@ export default function CouponFields({
       if (removeRes.status === 'success') {
         form.setValue('coupon', { code: '', discount: '', expired_at: '' });
       } else {
-        toast.error(removeRes.message);
+        toast.error(removeRes.message, {
+          duration: cmsConfig.toast.duration.error
+        });
       }
 
       // set pending state for enabled prev next button and hide loading

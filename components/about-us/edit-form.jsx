@@ -15,6 +15,7 @@ import { aboutUsSchema } from '@/lib/validators/about-us-validator';
 import { addAboutUs, editAboutUs } from '@/actions/about-us-actions';
 import { toast } from 'sonner';
 import { Language } from '@/constants/enums';
+import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ aboutUs }) {
   const [hasAboutUs, setHasAboutUs] = useState(aboutUs !== null);
@@ -72,7 +73,9 @@ export default function EditForm({ aboutUs }) {
 
       toast.success(successMessage);
     } else {
-      toast.error(saveRes.message);
+      toast.error(saveRes.message, {
+        duration: cmsConfig.toast.duration.error
+      });
     }
   }
 

@@ -40,6 +40,7 @@ import TablePagination from '../ui/table-pagination';
 import DetailDialog from './detail-dialog';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { deepEqual } from 'fast-equals';
+import { cmsConfig } from '@/config/cms';
 
 const defaultColumnVisibility = {
   created_at: true,
@@ -233,7 +234,10 @@ export default function FeedbacksTable() {
         toast.info('No new feedback was pulled. They may have already been retrieved.', { id: toastId });
       }
     } else {
-      toast.error(loadRes.message, { id: toastId });
+      toast.error(loadRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     // enabled button
@@ -275,7 +279,10 @@ export default function FeedbacksTable() {
       }
     } else {
       // hide loading, in success not need to hide, because already hide when refetch in queryFn useQuery
-      toast.error(removeRes.message, { id: toastId });
+      toast.error(removeRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     // enabled button
@@ -470,7 +477,10 @@ export default function FeedbacksTable() {
 
       toast.success('Feedback marked as read successfully', { id: toastId });
     } else {
-      toast.error(editRes.message, { id: toastId });
+      toast.error(editRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     if (

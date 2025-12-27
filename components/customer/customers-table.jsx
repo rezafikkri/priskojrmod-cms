@@ -38,6 +38,7 @@ import TableColumnVisibility from '../ui/table-column-visibility';
 import DataTable from '../ui/data-table';
 import TablePagination from '../ui/table-pagination';
 import DeleteDialog from './delete-dialog';
+import { cmsConfig } from '@/config/cms';
 
 const defaultColumnVisibility = {
   last_active: true,
@@ -311,7 +312,7 @@ export default function CustomersTable() {
         { id: toastId },
       );
     } else {
-      toast.error(editRes.message, { id: toastId });
+      toast.error(editRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }
 
     // For still invalidateQueries customers, when not in last page, last ban item fails, and 
@@ -420,7 +421,7 @@ export default function CustomersTable() {
       queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
       toast.success('Customer deleted successfully', { id: toastId });
     } else {
-      toast.error(removeRes.message, { id: toastId });
+      toast.error(removeRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }
 
     // For still invalidateQueries customers, when not in last page, last delete item fails, and 

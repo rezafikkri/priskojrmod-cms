@@ -17,6 +17,7 @@ import { formatFileSize } from '@/lib/format-file-size';
 import { toast } from 'sonner';
 import { useWatch } from 'react-hook-form';
 import { PriceType } from '@/constants/enums';
+import { cmsConfig } from '@/config/cms';
 
 export default function MainFileFields({ form, applicationCategoryId }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +35,9 @@ export default function MainFileFields({ form, applicationCategoryId }) {
     } else {
       setFileName(null);
       setFileSize(null);
-      toast.error(fileInfo.message);
+      toast.error(fileInfo.message, {
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     setIsLoading(false);

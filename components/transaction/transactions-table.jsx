@@ -45,6 +45,7 @@ import {
 import { formatCurrency } from '@/lib/format-currency';
 import { formatDateTime } from '@/lib/format-date';
 import Link from 'next/link';
+import { cmsConfig } from '@/config/cms';
 
 const defaultColumnVisibility = {
   created_at: true,
@@ -398,7 +399,10 @@ export default function TransactionsTable() {
       queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
       toast.success(editRes.message, { id: toastId });
     } else {
-      toast.error(editRes.message, { id: toastId });
+      toast.error(editRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     // For still invalidateQueries transactions, when not in last page, last update item fails, and 
@@ -589,7 +593,10 @@ export default function TransactionsTable() {
       queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
       toast.success(editRes.message, { id: toastId });
     } else {
-      toast.error(editRes.message, { id: toastId });
+      toast.error(editRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     // For still invalidateQueries transactions, when not in last page, last correct item fails, and 

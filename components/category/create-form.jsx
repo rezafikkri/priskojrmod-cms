@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { categorySchema } from '@/lib/validators/category-validator';
 import { addCategory } from '@/actions/category-actions';
 import FormFields from './form-fields';
+import { cmsConfig } from '@/config/cms';
 
 export default function CreateForm() {
   const form = useForm({
@@ -21,7 +22,7 @@ export default function CreateForm() {
       form.reset();
       toast.success('Category created successfully');
     } else {
-      toast.error(addRes.message);
+      toast.error(addRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

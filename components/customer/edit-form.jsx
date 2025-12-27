@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { editCustomerSchema } from '@/lib/validators/customer-validator';
 import { editCustomer } from '@/actions/customer-actions';
 import { useQueryClient } from '@tanstack/react-query';
+import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ customer }) {
   const queryClient = useQueryClient();
@@ -40,7 +41,7 @@ export default function EditForm({ customer }) {
       queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
       toast.success('Customer updated successfully');
     } else {
-      toast.error(editRes.message);
+      toast.error(editRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

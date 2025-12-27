@@ -7,6 +7,7 @@ import { Loader2, Trash, Image } from 'lucide-react';
 import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FormImagePreview from '../ui/form-image-preview';
+import { cmsConfig } from '@/config/cms';
 
 export default function ImageGrid({
   form,
@@ -51,7 +52,7 @@ export default function ImageGrid({
         const currentImages = form.getValues('images');
         form.setValue('images', currentImages.filter(image => image.dbId !== dbId));
       } else {
-        toast.error(removeRes.message);
+        toast.error(removeRes.message, { duration: cmsConfig.toast.duration.error });
       }
       // set pending state for enabled prev next button and hide loading
       onDecrementPending();

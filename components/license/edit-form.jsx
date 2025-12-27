@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import FormFields from './form-fields';
 import { editLicenseSchema } from '@/lib/validators/license-validator';
 import { editLicense } from '@/actions/license-actions';
+import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ license }) {
   const form = useForm({
@@ -32,7 +33,7 @@ export default function EditForm({ license }) {
     if (editRes.status === 'success') {
       toast.success('License updated successfully');
     } else {
-      toast.error(editRes.message);
+      toast.error(editRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

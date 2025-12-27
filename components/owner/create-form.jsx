@@ -8,6 +8,7 @@ import { createOwnerSchema } from '@/lib/validators/owner-validator';
 import { addOwner } from '@/actions/owner-actions';
 import { Button } from '../ui/button';
 import { useSession } from 'next-auth/react';
+import { cmsConfig } from '@/config/cms';
 
 export default function CreateForm() {
   const { data: session } = useSession();
@@ -28,7 +29,7 @@ export default function CreateForm() {
       form.reset();
       toast.success('Owner created successfully');
     } else {
-      toast.error(addRes.message);
+      toast.error(addRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

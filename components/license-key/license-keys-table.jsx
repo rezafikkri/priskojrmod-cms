@@ -50,6 +50,7 @@ import DataTable from '../ui/data-table';
 import TableColumnVisibility from '../ui/table-column-visibility';
 import TablePagination from '../ui/table-pagination';
 import TableSelectionAlert from '../ui/table-selection-alert';
+import { cmsConfig } from '@/config/cms';
 
 const defaultColumnVisibility = {
   app_name: true,
@@ -356,7 +357,10 @@ export default function LicenseKeysTable() {
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       toast.success(`License key deleted successfully`, { id: toastId });
     } else {
-      toast.error(removeRes.message, { id: toastId });
+      toast.error(removeRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     // For still invalidateQueries licenseKeys, when not in last page, last delete item fails, and 
@@ -489,7 +493,10 @@ export default function LicenseKeysTable() {
         toast.info('No license keys were updated. They may have already been deleted.', { id: toastId });
       }
     } else {
-      toast.error(setCanRegenerateRes.message, { id: toastId });
+      toast.error(setCanRegenerateRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     setIsRegenerating(false);
@@ -590,7 +597,10 @@ export default function LicenseKeysTable() {
         { id: toastId },
       );
     } else {
-      toast.error(editRes.message, { id: toastId });
+      toast.error(editRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     // For still invalidateQueries licenseKeys, when not in last page, last revoke/unrevoke item fails, and 
@@ -703,7 +713,10 @@ export default function LicenseKeysTable() {
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       toast.success('License key device reset successfully', { id: toastId });
     } else {
-      toast.error(releaseRes.message, { id: toastId });
+      toast.error(releaseRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
     }
 
     // For still invalidateQueries licenseKeys, when not in first page, last reset device item fails, and 

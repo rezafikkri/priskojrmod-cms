@@ -29,6 +29,7 @@ import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
 import { removeCategory } from '@/actions/category-actions';
 import { getTableHeaderWidth } from '@/lib/utils';
+import { cmsConfig } from '@/config/cms';
 
 export default function DataTable({ categories: data }) {
   const [categories, setCategories] = useState(data);
@@ -54,6 +55,7 @@ export default function DataTable({ categories: data }) {
     } else {
       toast.error(removeRes.message, {
         id: toastId,
+        duration: cmsConfig.toast.duration.error,
       });
     }
   }

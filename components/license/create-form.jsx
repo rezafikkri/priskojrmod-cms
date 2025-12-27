@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import FormFields from './form-fields';
 import { createLicenseSchema } from '@/lib/validators/license-validator';
 import { addLicense } from '@/actions/license-actions';
+import { cmsConfig } from '@/config/cms';
 
 export default function CreateForm() {
   const form = useForm({
@@ -32,7 +33,9 @@ export default function CreateForm() {
       form.reset();
       toast.success('License created successfully');
     } else {
-      toast.error(addRes.message);
+      toast.error(addRes.message, {
+        duration: cmsConfig.toast.duration.error
+      });
     }
   }
 

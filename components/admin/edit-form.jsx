@@ -8,6 +8,7 @@ import { editAdminSchema } from '@/lib/validators/admin-validator';
 import FormFields from './form-fields';
 import { editAdmin, removeDonationLink } from '@/actions/admin-actions';
 import { generateDonationLinkValues } from '@/lib/utils';
+import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ admin }) {
   const form = useForm({
@@ -49,7 +50,7 @@ export default function EditForm({ admin }) {
       );
       toast.success('Donation link deleted successfully');
     } else {
-      toast.error(removeRes.message);
+      toast.error(removeRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 
@@ -64,7 +65,7 @@ export default function EditForm({ admin }) {
       }
       toast.success('Admin updated successfully');
     } else {
-      toast.error(res.message);
+      toast.error(res.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

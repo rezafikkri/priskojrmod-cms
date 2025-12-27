@@ -16,6 +16,7 @@ import ContentInput from '../ui/content-input';
 import { privacyPolicySchema } from '@/lib/validators/privacy-policy-validator';
 import { addPrivacyPolicy, editPrivacyPolicy } from '@/actions/privacy-policy-actions';
 import { formatDateTime } from '@/lib/format-date';
+import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ privacyPolicy }) {
   const [createdAt, setCreatedAt] = useState(privacyPolicy?.created_at);
@@ -78,7 +79,7 @@ export default function EditForm({ privacyPolicy }) {
 
       toast.success(successMessage);
     } else {
-      toast.error(saveRes.message);
+      toast.error(saveRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

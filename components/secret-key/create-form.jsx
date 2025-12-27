@@ -39,6 +39,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { cmsConfig } from '@/config/cms';
 
 export default function CreateForm({ products }) {
   const form = useForm({
@@ -58,7 +59,7 @@ export default function CreateForm({ products }) {
       form.reset();
       toast.success('Secret key created successfully');
     } else {
-      toast.error(addRes.message);
+      toast.error(addRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

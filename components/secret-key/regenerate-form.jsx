@@ -20,6 +20,7 @@ import random32Bytes from '@/actions/random-32-bytes-actions';
 import { regenerateSecretKeySchema } from '@/lib/validators/secret-key-validator';
 import { toast } from 'sonner';
 import { applyRegeneratedSecretKey } from '@/actions/secret-key-actions';
+import { cmsConfig } from '@/config/cms';
 
 export default function RegenerateForm({ secretKey }) {
   const [oldKey, setOldKey] = useState(secretKey.key);
@@ -40,7 +41,7 @@ export default function RegenerateForm({ secretKey }) {
       setOldKey(applyRes.data.key);
       toast.success('Secret key regenerated successfully');
     } else {
-      toast.error(applyRes.message);
+      toast.error(applyRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

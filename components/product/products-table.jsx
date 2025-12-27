@@ -42,6 +42,7 @@ import TableColumnVisibility from '../ui/table-column-visibility';
 import DataTable from '../ui/data-table';
 import TablePagination from '../ui/table-pagination';
 import DeleteDialog from './delete-dialog';
+import { cmsConfig } from '@/config/cms';
 
 const defaultColumnVisibility = {
   category: false,
@@ -158,7 +159,7 @@ export default function ProductsTable({
         { id: toastId },
       );
     } else {
-      toast.error(editRes.message, { id: toastId });
+      toast.error(editRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }
   }
 
@@ -201,7 +202,7 @@ export default function ProductsTable({
         { id: toastId },
       );
     } else {
-      toast.error(editRes.message, { id: toastId });
+      toast.error(editRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }
   }
 
@@ -228,7 +229,7 @@ export default function ProductsTable({
         id: toastId,
       });
     } else {
-      toast.error(removeRes.message, { id: toastId });
+      toast.error(removeRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }
   }
 

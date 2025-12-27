@@ -26,6 +26,7 @@ import { Loader2, ArrowLeft } from 'lucide-react';
 import { addLicenseKey } from '@/actions/license-key-actions';
 import { useQueryClient } from '@tanstack/react-query';
 import CustomerCombobox from './customer-combobox';
+import { cmsConfig } from '@/config/cms';
 
 export default function CreateForm({ secretKeys }) {
   // Get QueryClient from the context
@@ -49,7 +50,7 @@ export default function CreateForm({ secretKeys }) {
       form.reset();
       toast.success('License key created successfully');
     } else {
-      toast.error(addRes.message);
+      toast.error(addRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

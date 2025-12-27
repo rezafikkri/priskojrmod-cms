@@ -30,6 +30,7 @@ import DeleteDialog from './delete-dialog';
 import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import Link from 'next/link';
+import { cmsConfig } from '@/config/cms';
 
 export default function DataTable({ secretKeys: data }) {
   const [secretKeys, setSecretKeys] = useState(data);
@@ -56,7 +57,7 @@ export default function DataTable({ secretKeys: data }) {
         id: toastId,
       });
     } else {
-      toast.error(removeRes.message, { id: toastId });
+      toast.error(removeRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }
   }
 

@@ -20,6 +20,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 import { formatDateTime } from '@/lib/format-date';
+import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ licenseKey }) {
   // Get QueryClient from the context
@@ -52,7 +53,7 @@ export default function EditForm({ licenseKey }) {
 
       toast.success('License key updated successfully');
     } else {
-      toast.error(editRes.message);
+      toast.error(editRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

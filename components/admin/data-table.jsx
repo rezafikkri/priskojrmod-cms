@@ -31,6 +31,7 @@ import { removeAdmin } from '@/actions/admin-actions';
 import { getTableHeaderWidth } from '@/lib/utils';
 import ProfileBadge from '../ui/profile-badge';
 import DeleteDialog from './delete-dialog';
+import { cmsConfig } from '@/config/cms';
 
 export default function DataTable({ admins: data }) {
   const [admins, setAdmins] = useState(data);
@@ -56,6 +57,7 @@ export default function DataTable({ admins: data }) {
       });
     } else {
       toast.error(removeRes.message, {
+        duration: cmsConfig.toast.duration.error,
         id: toastId,
       });
     }

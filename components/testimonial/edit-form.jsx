@@ -6,6 +6,7 @@ import { editTestimonialSchema } from '@/lib/validators/testimonial-validator';
 import FormFields from './form-fields';
 import { editTestimonial } from '@/actions/testimonial-actions';
 import { toast } from 'sonner';
+import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ testimonial }) {
   const form = useForm({
@@ -31,7 +32,7 @@ export default function EditForm({ testimonial }) {
     if (editRes.status === 'success') {
       toast.success('Testimonial updated successfully');
     } else {
-      toast.error(editRes.message);
+      toast.error(editRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

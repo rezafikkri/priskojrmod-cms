@@ -16,6 +16,7 @@ import ContentInput from '../ui/content-input';
 import { formatDateTime } from '@/lib/format-date';
 import { addTermsOfService, editTermsOfService } from '@/actions/terms-of-service-actions';
 import { termsOfServiceSchema } from '@/lib/validators/terms-of-service-validator';
+import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ termsOfService }) {
   const [createdAt, setCreatedAt] = useState(termsOfService?.created_at);
@@ -78,7 +79,7 @@ export default function EditForm({ termsOfService }) {
 
       toast.success(successMessage);
     } else {
-      toast.error(saveRes.message);
+      toast.error(saveRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

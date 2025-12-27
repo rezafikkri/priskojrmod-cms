@@ -7,6 +7,7 @@ import { AdminRole, CurrencyCode } from '@/constants/enums';
 import { createAdminSchema } from '@/lib/validators/admin-validator';
 import FormFields from './form-fields';
 import { addAdmin } from '@/actions/admin-actions';
+import { cmsConfig } from '@/config/cms';
 
 export default function CreateForm() {
   const form = useForm({
@@ -38,7 +39,7 @@ export default function CreateForm() {
       form.reset();
       toast.success('Admin created successfully');
     } else {
-      toast.error(addRes.message);
+      toast.error(addRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import { generateDonationLinkValues } from '@/lib/utils';
 import FormFields from '../admin/form-fields';
 import { accountSettingsSchema } from '@/lib/validators/account-settings-validator';
+import { cmsConfig } from '@/config/cms';
 
 export function EditForm({
   account,
@@ -51,7 +52,7 @@ export function EditForm({
       );
       toast.success('Donation link deleted successfully');
     } else {
-      toast.error(removeRes.message);
+      toast.error(removeRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 
@@ -81,7 +82,7 @@ export function EditForm({
 
       toast.success('Account settings updated successfully');
     } else {
-      toast.error(editRes.message);
+      toast.error(editRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 

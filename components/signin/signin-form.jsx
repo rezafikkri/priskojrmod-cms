@@ -12,6 +12,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
+import { cmsConfig } from '@/config/cms';
 
 export function SignInForm() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export function SignInForm() {
 
       requestAnimationFrame(() => {
         toast.error(errorMessage, {
+          duration: cmsConfig.toast.duration.error,
           onDismiss: () => router.replace('/signin'),
           onAutoClose: () => router.replace('/signin'),
         });

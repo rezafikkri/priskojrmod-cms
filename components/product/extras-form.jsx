@@ -22,6 +22,7 @@ import { editProduct } from '@/actions/product-actions';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import { cmsConfig } from '@/config/cms';
 
 export default function ExtrasForm({
   onNextStep,
@@ -136,7 +137,9 @@ export default function ExtrasForm({
 
       queryClient.invalidateQueries({ queryKey: ['products'] });
     } else {
-      toast.error(saveRes.message);
+      toast.error(saveRes.message, {
+        duration: cmsConfig.toast.duration.error
+      });
     }
   }
 

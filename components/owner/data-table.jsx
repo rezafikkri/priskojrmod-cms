@@ -30,6 +30,7 @@ import { formatDateTime } from '@/lib/format-date';
 import { extractSMIdentifier, getTableHeaderWidth } from '@/lib/utils';
 import { removeOwner } from '@/actions/owner-actions';
 import ProfileBadge from '../ui/profile-badge';
+import { cmsConfig } from '@/config/cms';
 
 export default function DataTable({ owners: data }) {
   const [owners, setOwners] = useState(data)
@@ -57,6 +58,7 @@ export default function DataTable({ owners: data }) {
     } else {
       toast.error(removeRes.message, {
         id: toastId,
+        duration: cmsConfig.toast.duration.error,
       });
     }
   }

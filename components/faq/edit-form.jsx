@@ -6,6 +6,7 @@ import { editFaqSchema } from '@/lib/validators/faq-validator';
 import FormFields from './form-fields';
 import { editFaq } from '@/actions/faq-actions';
 import { toast } from 'sonner';
+import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ faq }) {
   const form = useForm({
@@ -32,7 +33,9 @@ export default function EditForm({ faq }) {
     if (editRes.status === 'success') {
       toast.success('FAQ updated successfully');
     } else {
-      toast.error(editRes.message);
+      toast.error(editRes.message, {
+        duration: cmsConfig.toast.duration.error
+      });
     }
   }
 

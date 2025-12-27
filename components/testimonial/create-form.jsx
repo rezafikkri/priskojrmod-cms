@@ -7,6 +7,7 @@ import { createTestimonialSchema } from '@/lib/validators/testimonial-validator'
 import { useRef } from 'react';
 import { addTestimonial } from '@/actions/testimonial-actions';
 import { toast } from 'sonner';
+import { cmsConfig } from '@/config/cms';
 
 export default function CreateForm() {
   const form = useForm({
@@ -31,7 +32,7 @@ export default function CreateForm() {
       form.reset();
       toast.success('Testimonial created successfully');
     } else {
-      toast.error(addRes.message);
+      toast.error(addRes.message, { duration: cmsConfig.toast.duration.error });
     }
   }
 
