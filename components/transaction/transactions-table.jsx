@@ -845,7 +845,7 @@ export default function TransactionsTable() {
             isFilterActive={isFilterActive}
             disabled={isFetchingT || isSearching}
           />
-          {filters?.status !== TransactionStatus.PENDING && (
+          {filters?.status !== TransactionStatus.PENDING && !hasSearched && (
             <ExportCSV filters={filters} />
           )}
         </div>
