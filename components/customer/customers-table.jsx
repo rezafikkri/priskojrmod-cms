@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
-import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -21,7 +20,7 @@ import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import { AlertCircle, Search, X, Plus, MoreHorizontal, Minus } from 'lucide-react';
+import { AlertCircle, Plus, MoreHorizontal, Minus } from 'lucide-react';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
@@ -39,6 +38,7 @@ import DataTable from '../ui/data-table';
 import TablePagination from '../ui/table-pagination';
 import DeleteDialog from './delete-dialog';
 import { cmsConfig } from '@/config/cms';
+import SearchInput from '../ui/search-input';
 
 const defaultColumnVisibility = {
   last_active: true,
@@ -604,37 +604,16 @@ export default function CustomersTable() {
            </div>
         </div>
         <div className="flex space-x-3 max-lg:w-full w-2/5">
-          <div className="flex shadow-xs rounded-md flex-1">
-            <div className="relative flex items-center -me-[1px] z-1 flex-1">
-              <Input
-                placeholder="Search with email..."
-                className="rounded-e-none shadow-none md:text-base h-auto px-3 py-1.5 pe-9"
-                ref={searchRef}
-                onKeyUp={handleEnterSearch}
-                disabled={isFetchingC || isSearching}
-              />
-              {searchedCustomer ? (
-                <TooltipWrapper text="Clear search input">
-                  <Button
-                    className="absolute right-2 size-6 z-1"
-                    variant="ghost"
-                    onClick={handleClearSearchInput}
-                    disabled={isFetchingC || isSearching}
-                  >
-                    <X />
-                  </Button>
-                </TooltipWrapper>
-              ) : null}
-            </div>
-            <Button
-              variant="secondary"
-              className="border shadow-none rounded-s-none h-auto text-base px-3 py-1.5 focus:z-2"
-              disabled={isFetchingC || isSearching}
-              onClick={() => handleSearch(filters)}
-            >
-              <Search />
-            </Button>
-          </div>
+          <SearchInput
+            className="flex-1"
+            placeholder="Search with email..."
+            isLoading={isFetchingC || isSearching}
+            ref={searchRef}
+            hasSearched={hasSearched}
+            onEnterSearch={handleEnterSearch}
+            onClearSearch={handleClearSearchInput}
+            onSearch={() => handleSearch(filters)}
+          />
 
           <TableColumnVisibility
             table={table}

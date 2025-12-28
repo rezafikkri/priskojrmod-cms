@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { isLastPage } from '@/lib/utils';
-import { AlertCircle, Search, X, RotateCw } from 'lucide-react';
+import { AlertCircle, RotateCw } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import {
@@ -21,7 +21,6 @@ import {
 } from '@/actions/license-key-actions';
 import { toast } from 'sonner';
 import { searchKeySchema } from '@/lib/validators/base-validator';
-import { Input } from '../ui/input';
 import FiltersPopover from './filters-popover';
 import { Button } from '../ui/button';
 import { MoreHorizontal, Minus, Plus } from 'lucide-react';
@@ -51,6 +50,7 @@ import TableColumnVisibility from '../ui/table-column-visibility';
 import TablePagination from '../ui/table-pagination';
 import TableSelectionAlert from '../ui/table-selection-alert';
 import { cmsConfig } from '@/config/cms';
+import SearchInput from '../ui/search-input';
 
 const defaultColumnVisibility = {
   app_name: true,
@@ -959,38 +959,16 @@ export default function LicenseKeysTable() {
           </div>
         </div>
         <div className="flex space-x-3 max-lg:w-full w-2/5">
-          <div className="flex shadow-xs rounded-md flex-1">
-            <div className="relative flex items-center -me-[1px] z-1 flex-1">
-              <Input
-                placeholder="Search with email..."
-                className="rounded-e-none shadow-none md:text-base h-auto px-3 py-1.5 pe-9"
-                disabled={isFetchingLK || isSearching}
-                ref={searchRef}
-                onKeyUp={handleEnterSearch}
-                autoComplete="off"
-              />
-              {searchedLicenseKey ? (
-                <TooltipWrapper text="Clear search input">
-                  <Button
-                    className="absolute right-2 w-4 h-5 p-0 z-1"
-                    variant="ghost"
-                    onClick={handleClearSearchInput}
-                    disabled={isFetchingLK || isSearching}
-                  >
-                    <X className="size-4" />
-                  </Button>
-                </TooltipWrapper>
-              ) : null}
-            </div>
-            <Button
-              variant="secondary"
-              className="border shadow-none rounded-s-none h-auto text-base px-3 py-1.5 focus:z-2"
-              disabled={isFetchingLK || isSearching}
-              onClick={() => handleSearch(filters)}
-            >
-              <Search />
-            </Button>
-          </div>
+          <SearchInput
+            className="flex-1"
+            placeholder="Search with email..."
+            isLoading={isFetchingLK || isSearching}
+            ref={searchRef}
+            hasSearched={hasSearched}
+            onEnterSearch={handleEnterSearch}
+            onClearSearch={handleClearSearchInput}
+            onSearch={() => handleSearch(filters)}
+          />
 
           <TableColumnVisibility
             table={table}
