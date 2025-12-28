@@ -73,7 +73,7 @@ export default function ProductsTable({
     return defaultColumnVisibility;
   });
 
-  const [priceCurrency, setPriceCurrency] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_CURR);
+  const [priceCurrency, setPriceCurrency] = useState(cmsConfig.defaults.currency);
 
   // delete dialog state
   const [deleteData, setDeleteData] = useState(null);

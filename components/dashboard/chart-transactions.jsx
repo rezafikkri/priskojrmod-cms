@@ -27,6 +27,7 @@ import { CurrencyCode } from '@/constants/enums';
 import { formatCurrency } from '@/lib/format-currency';
 import { formatNumber } from '@/lib/format-number';
 import { formatMonthYear } from '@/lib/format-date';
+import { cmsConfig } from '@/config/cms';
 
 const chartData = [
   { timestamp: 1706634000, IDR: 920_000, USD: 45 },
@@ -55,7 +56,7 @@ const chartConfig = {
 };
 
 export default function ChartTransactions() {
-  const [activeCurrency, setActiveCurrency] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_CURR);
+  const [activeCurrency, setActiveCurrency] = useState(cmsConfig.defaults.currency);
 
   return (
     <Card className="shadow-none">

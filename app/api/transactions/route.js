@@ -1,4 +1,5 @@
 import { countTransactions, getTransactions, searchTransactions } from "@/lib/services/transaction-service";
+import { cmsConfig } from '@/config/cms';
 
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
@@ -37,14 +38,14 @@ export async function GET(req) {
       const transactions = await searchTransactions({
         select,
         key: searchKey,
-        limit: parseInt(process.env.SEARCH_LIMIT),
+        limit: cmsConfig.search.limit,
         filters,
       });
       dataResponse = {
         items: transactions,
       };
 
-      if (transactions.length > process.env.SEARCH_LIMIT) {
+      if (transactions.length > cmsConfig.search.limit) {
         transactions.pop();
         dataResponse.isTooMany = true;
       } else {
@@ -54,7 +55,7 @@ export async function GET(req) {
       const transactions = await getTransactions({
         select,
         pageIndex,
-        pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
+        pageSize: cmsConfig.pagination.pageSize,
         filters,
       });
       const numberTransactions = await countTransactions(filters);

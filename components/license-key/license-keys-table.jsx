@@ -77,7 +77,7 @@ export default function LicenseKeysTable() {
   // table state
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: process.env.NEXT_PUBLIC_PAGE_SIZE,
+    pageSize: cmsConfig.pagination.pageSize,
   });
   function handlePaginationChange(pagination) {
     // not show table skeleton loading
@@ -468,7 +468,7 @@ export default function LicenseKeysTable() {
             paginationRef.current.pageIndex,
             filtersRef.current,
           ]);
-          const newLastPageIndex = Math.ceil(licenseKey.rowCount / process.env.NEXT_PUBLIC_PAGE_SIZE) - 1;
+          const newLastPageIndex = Math.ceil(licenseKey.rowCount / cmsConfig.pagination.pageSize) - 1;
 
           if (paginationRef.current.pageIndex > newLastPageIndex) {
             // change pagination to new last page index

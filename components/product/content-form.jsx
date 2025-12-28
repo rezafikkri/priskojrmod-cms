@@ -13,13 +13,14 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { createProductContentSchema, editProductContentSchema } from '@/lib/validators/product-validator';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
 import { contentCustomSchema } from '@/lib/validators/base-validator';
+import { cmsConfig } from '@/config/cms';
 
 export default function ContentForm({
   onNextStep,
   onPrevStep,
   mode = 'create'
 }) {
-  const [activeLang, setActiveLang] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_LANG);
+  const [activeLang, setActiveLang] = useState(cmsConfig.defaults.language);
   const basic = useProductFormStore(state => state.form.basic);
   const content = useProductFormStore(state => state.form.content);
   const setContent = useProductFormStore(state => state.setContent);

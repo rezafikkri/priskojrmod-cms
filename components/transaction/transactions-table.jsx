@@ -68,7 +68,7 @@ export default function TransactionsTable() {
   // table state
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: process.env.NEXT_PUBLIC_PAGE_SIZE,
+    pageSize: cmsConfig.pagination.pageSize,
   });
   function handlePaginationChange(pagination) {
     // not show table skeleton loading

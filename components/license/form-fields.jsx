@@ -12,6 +12,7 @@ import FormLanguageToggle from '../ui/form-language-toggle';
 import ContentInput from '../ui/content-input';
 import { Language } from '@/constants/enums';
 import NameInput from './name-input';
+import { cmsConfig } from '@/config/cms';
 
 export default function FormFields({
   mode,
@@ -19,7 +20,7 @@ export default function FormFields({
   onSubmit,
   isResetEditor,
 }) {
-  const [activeLang, setActiveLang] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_LANG);
+  const [activeLang, setActiveLang] = useState(cmsConfig.defaults.language);
   const { isSubmitting, errors } = form.formState;
   
   return (

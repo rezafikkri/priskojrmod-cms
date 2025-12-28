@@ -34,7 +34,7 @@ import { cmsConfig } from '@/config/cms';
 
 export default function DataTable({ licenses: data }) {
   const [licenses, setLicenses] = useState(data);
-  const [nameLang, setNameLang] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_LANG);
+  const [nameLang, setNameLang] = useState(cmsConfig.defaults.language);
   const [deletingIds, setDeletingIds] = useState([]);
 
   async function handleDelete(id) {

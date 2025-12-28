@@ -75,7 +75,7 @@ export default function EditForm({ licenseKey }) {
 
           <FormItem>
             <FormLabel className="text-base">Device reset status</FormLabel>
-            <p>{licenseKey.resetCount} / {process.env.NEXT_PUBLIC_MAX_DEVICE_RESETS_PER_PERIOD} resets used (Period: {licenseKey.resetPeriod})</p>
+            <p>{licenseKey.resetCount} / {cmsConfig.deviceReset.maxResetsPerPeriod} resets used (Period: {licenseKey.resetPeriod})</p>
             <FormDescription>
               This status is managed automatically by the system based on <i>UTC (global) time</i>. It is updated only when the customer resets their device binding through the <strong>My Products</strong> page.
             </FormDescription>

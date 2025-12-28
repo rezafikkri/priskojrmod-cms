@@ -1,4 +1,5 @@
 import { countCustomers, getCustomers, searchCustomers } from '@/lib/services/customer-service';
+import { cmsConfig } from '@/config/cms';
 
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
@@ -26,14 +27,14 @@ export async function GET(req) {
       const customers = await searchCustomers({
         select,
         key: searchKey,
-        limit: parseInt(process.env.SEARCH_LIMIT),
+        limit: cmsConfig.search.limit,
         filters,
       });
       dataResponse = {
         items: customers,
       };
 
-      if (customers.length > process.env.SEARCH_LIMIT) {
+      if (customers.length > cmsConfig.search.limit) {
         customers.pop();
         dataResponse.isTooMany = true;
       } else {
@@ -43,7 +44,7 @@ export async function GET(req) {
       const customers = await getCustomers({
         select,
         pageIndex,
-        pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
+        pageSize: cmsConfig.pagination.pageSize,
         filters,
       });
       const numberCustomers = await countCustomers(filters);

@@ -45,7 +45,7 @@ export default function EditForm({ aboutUs }) {
     defaultValues,
   });
 
-  const [activeLang, setActiveLang] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_LANG);
+  const [activeLang, setActiveLang] = useState(cmsConfig.defaults.language);
   const { isSubmitting, errors } = form.formState;
 
   async function handleSubmit(data) {

@@ -18,6 +18,7 @@ import FormLanguageToggle from '../ui/form-language-toggle';
 import { Language } from '@/constants/enums';
 import ContentInput from '../ui/content-input';
 import FormImagePreview from '../ui/form-image-preview';
+import { cmsConfig } from '@/config/cms';
 
 export default function FormFields({
   mode,
@@ -26,7 +27,7 @@ export default function FormFields({
   isResetEditor,
 }) {
   const { isSubmitting, errors } = form.formState;
-  const [activeLang, setActiveLang] = useState(process.env.NEXT_PUBLIC_DEFAULT_DATA_LANG);
+  const [activeLang, setActiveLang] = useState(cmsConfig.defaults.language);
 
   return (
     <>

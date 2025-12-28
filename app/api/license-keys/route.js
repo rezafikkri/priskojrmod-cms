@@ -1,4 +1,5 @@
 import { countLicenseKeys, getLicenseKeys, searchLicenseKeys } from '@/lib/services/license-key-service';
+import { cmsConfig } from '@/config/cms';
 
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
@@ -39,14 +40,14 @@ export async function GET(req) {
       const licenseKeys = await searchLicenseKeys({
         select,
         key: searchKey,
-        limit: parseInt(process.env.SEARCH_LIMIT),
+        limit: cmsConfig.search.limit,
         filters,
       });
       dataResponse = {
         items: licenseKeys,
       };
 
-      if (licenseKeys.length > process.env.SEARCH_LIMIT) {
+      if (licenseKeys.length > cmsConfig.search.limit) {
         licenseKeys.pop();
         dataResponse.isTooMany = true;
       } else {
@@ -56,7 +57,7 @@ export async function GET(req) {
       const licenseKeys = await getLicenseKeys({
         select,
         pageIndex,
-        pageSize: parseInt(process.env.NEXT_PUBLIC_PAGE_SIZE),
+        pageSize: cmsConfig.pagination.pageSize,
         filters,
       });
       const numberLicenseKeys = await countLicenseKeys(filters);
