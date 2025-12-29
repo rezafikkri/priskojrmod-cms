@@ -290,14 +290,17 @@ exports.Prisma.PrivacyPolicyTranslationScalarFieldEnum = {
 };
 
 exports.Prisma.AboutUsScalarFieldEnum = {
-  id: 'id'
+  id: 'id',
+  support_email: 'support_email',
+  support_whatsapp: 'support_whatsapp'
 };
 
 exports.Prisma.AboutUsTranslationScalarFieldEnum = {
   id: 'id',
   about_us_id: 'about_us_id',
   language: 'language',
-  content: 'content'
+  content: 'content',
+  office_hours: 'office_hours'
 };
 
 exports.Prisma.FaqScalarFieldEnum = {

@@ -29,7 +29,7 @@ model Admin {
   id Int @id @default(autoincrement()) @db.SmallInt
 
   role    AdminRole
-  auth_id String?    @db.VarChar(255) @unique
+  auth_id String?   @unique @db.VarChar(255)
 
   first_name            String @db.VarChar(100)
   last_name             String @db.VarChar(100)
@@ -64,13 +64,13 @@ model DonationLink {
 }
 
 model Owner {
-  id              Int    @id @default(autoincrement())
-  first_name      String @db.VarChar(100)
-  last_name       String @db.VarChar(100)
+  id             Int    @id @default(autoincrement())
+  first_name     String @db.VarChar(100)
+  last_name      String @db.VarChar(100)
   sm_profile_url String @db.VarChar(255)
-  picture         String @db.VarChar(255)
-  created_at      Int
-  updated_at      Int
+  picture        String @db.VarChar(255)
+  created_at     Int
+  updated_at     Int
 
   products Product[]
 
@@ -145,7 +145,7 @@ model Product {
   license_id  Int
 
   drive_file_id String?
-  download_url String?
+  download_url  String?
 
   is_published Boolean   @default(false)
   is_pinned    Boolean   @default(false)
@@ -246,7 +246,7 @@ model ProductVariant {
   id                   String  @id @default(uuid(7)) @db.Uuid
   product_id           String  @db.Uuid
   name                 String  @db.VarChar(100)
-  download_url        String?
+  download_url         String?
   file_access_password String? @db.VarChar(100)
 
   product Product        @relation(fields: [product_id], references: [id], onDelete: Cascade)
@@ -317,7 +317,9 @@ model PrivacyPolicyTranslation {
 }
 
 model AboutUs {
-  id Int @id @default(autoincrement()) @db.SmallInt
+  id               Int    @id @default(autoincrement()) @db.SmallInt
+  support_email    String @db.VarChar(254)
+  support_whatsapp String @db.VarChar(20)
 
   translations AboutUsTranslation[]
 
@@ -325,10 +327,11 @@ model AboutUs {
 }
 
 model AboutUsTranslation {
-  id          Int      @id @default(autoincrement()) @db.SmallInt
-  about_us_id Int      @db.SmallInt
-  language    Language
-  content     String
+  id           Int      @id @default(autoincrement()) @db.SmallInt
+  about_us_id  Int      @db.SmallInt
+  language     Language
+  content      String
+  office_hours String   @db.VarChar(255)
 
   about_us AboutUs @relation(fields: [about_us_id], references: [id], onDelete: Cascade)
 
@@ -430,10 +433,10 @@ model TransactionDetail {
   product_name          String  @db.VarChar(150)
   product_version       String  @db.VarChar(50)
   product_drive_file_id String?
-  product_download_url String?
+  product_download_url  String?
 
   product_variant              String  @db.VarChar(100)
-  variant_download_url        String?
+  variant_download_url         String?
   variant_file_access_password String? @db.VarChar(100)
 
   product_currency_code   CurrencyCode
@@ -464,12 +467,12 @@ model Feedback {
 }
 
 model Testimonial {
-  id              Int    @id @default(autoincrement()) @db.SmallInt
-  picture         String @db.VarChar(255)
-  name            String @db.VarChar(100)
-  sm_profile_url  String @db.VarChar(100)
-  created_at      Int
-  updated_at      Int
+  id             Int    @id @default(autoincrement()) @db.SmallInt
+  picture        String @db.VarChar(255)
+  name           String @db.VarChar(100)
+  sm_profile_url String @db.VarChar(100)
+  created_at     Int
+  updated_at     Int
 
   translations TestimonialTranslation[]
 

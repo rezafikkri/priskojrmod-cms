@@ -317,7 +317,9 @@ model PrivacyPolicyTranslation {
 }
 
 model AboutUs {
-  id Int @id @default(autoincrement()) @db.SmallInt
+  id               Int    @id @default(autoincrement()) @db.SmallInt
+  support_email    String @db.VarChar(254)
+  support_whatsapp String @db.VarChar(20)
 
   translations AboutUsTranslation[]
 
@@ -325,10 +327,11 @@ model AboutUs {
 }
 
 model AboutUsTranslation {
-  id          Int      @id @default(autoincrement()) @db.SmallInt
-  about_us_id Int      @db.SmallInt
-  language    Language
-  content     String
+  id           Int      @id @default(autoincrement()) @db.SmallInt
+  about_us_id  Int      @db.SmallInt
+  language     Language
+  content      String
+  office_hours String   @db.VarChar(255)
 
   about_us AboutUs @relation(fields: [about_us_id], references: [id], onDelete: Cascade)
 

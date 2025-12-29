@@ -26508,14 +26508,20 @@ export namespace Prisma {
 
   export type AboutUsMinAggregateOutputType = {
     id: number | null
+    support_email: string | null
+    support_whatsapp: string | null
   }
 
   export type AboutUsMaxAggregateOutputType = {
     id: number | null
+    support_email: string | null
+    support_whatsapp: string | null
   }
 
   export type AboutUsCountAggregateOutputType = {
     id: number
+    support_email: number
+    support_whatsapp: number
     _all: number
   }
 
@@ -26530,14 +26536,20 @@ export namespace Prisma {
 
   export type AboutUsMinAggregateInputType = {
     id?: true
+    support_email?: true
+    support_whatsapp?: true
   }
 
   export type AboutUsMaxAggregateInputType = {
     id?: true
+    support_email?: true
+    support_whatsapp?: true
   }
 
   export type AboutUsCountAggregateInputType = {
     id?: true
+    support_email?: true
+    support_whatsapp?: true
     _all?: true
   }
 
@@ -26629,6 +26641,8 @@ export namespace Prisma {
 
   export type AboutUsGroupByOutputType = {
     id: number
+    support_email: string
+    support_whatsapp: string
     _count: AboutUsCountAggregateOutputType | null
     _avg: AboutUsAvgAggregateOutputType | null
     _sum: AboutUsSumAggregateOutputType | null
@@ -26652,23 +26666,31 @@ export namespace Prisma {
 
   export type AboutUsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    support_email?: boolean
+    support_whatsapp?: boolean
     translations?: boolean | AboutUs$translationsArgs<ExtArgs>
     _count?: boolean | AboutUsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["aboutUs"]>
 
   export type AboutUsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    support_email?: boolean
+    support_whatsapp?: boolean
   }, ExtArgs["result"]["aboutUs"]>
 
   export type AboutUsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    support_email?: boolean
+    support_whatsapp?: boolean
   }, ExtArgs["result"]["aboutUs"]>
 
   export type AboutUsSelectScalar = {
     id?: boolean
+    support_email?: boolean
+    support_whatsapp?: boolean
   }
 
-  export type AboutUsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id", ExtArgs["result"]["aboutUs"]>
+  export type AboutUsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "support_email" | "support_whatsapp", ExtArgs["result"]["aboutUs"]>
   export type AboutUsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     translations?: boolean | AboutUs$translationsArgs<ExtArgs>
     _count?: boolean | AboutUsCountOutputTypeDefaultArgs<ExtArgs>
@@ -26683,6 +26705,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
+      support_email: string
+      support_whatsapp: string
     }, ExtArgs["result"]["aboutUs"]>
     composites: {}
   }
@@ -27108,6 +27132,8 @@ export namespace Prisma {
    */
   interface AboutUsFieldRefs {
     readonly id: FieldRef<"AboutUs", 'Int'>
+    readonly support_email: FieldRef<"AboutUs", 'String'>
+    readonly support_whatsapp: FieldRef<"AboutUs", 'String'>
   }
     
 
@@ -27326,7 +27352,7 @@ export namespace Prisma {
     /**
      * The data needed to create a AboutUs.
      */
-    data?: XOR<AboutUsCreateInput, AboutUsUncheckedCreateInput>
+    data: XOR<AboutUsCreateInput, AboutUsUncheckedCreateInput>
   }
 
   /**
@@ -27565,6 +27591,7 @@ export namespace Prisma {
     about_us_id: number | null
     language: $Enums.Language | null
     content: string | null
+    office_hours: string | null
   }
 
   export type AboutUsTranslationMaxAggregateOutputType = {
@@ -27572,6 +27599,7 @@ export namespace Prisma {
     about_us_id: number | null
     language: $Enums.Language | null
     content: string | null
+    office_hours: string | null
   }
 
   export type AboutUsTranslationCountAggregateOutputType = {
@@ -27579,6 +27607,7 @@ export namespace Prisma {
     about_us_id: number
     language: number
     content: number
+    office_hours: number
     _all: number
   }
 
@@ -27598,6 +27627,7 @@ export namespace Prisma {
     about_us_id?: true
     language?: true
     content?: true
+    office_hours?: true
   }
 
   export type AboutUsTranslationMaxAggregateInputType = {
@@ -27605,6 +27635,7 @@ export namespace Prisma {
     about_us_id?: true
     language?: true
     content?: true
+    office_hours?: true
   }
 
   export type AboutUsTranslationCountAggregateInputType = {
@@ -27612,6 +27643,7 @@ export namespace Prisma {
     about_us_id?: true
     language?: true
     content?: true
+    office_hours?: true
     _all?: true
   }
 
@@ -27706,6 +27738,7 @@ export namespace Prisma {
     about_us_id: number
     language: $Enums.Language
     content: string
+    office_hours: string
     _count: AboutUsTranslationCountAggregateOutputType | null
     _avg: AboutUsTranslationAvgAggregateOutputType | null
     _sum: AboutUsTranslationSumAggregateOutputType | null
@@ -27732,6 +27765,7 @@ export namespace Prisma {
     about_us_id?: boolean
     language?: boolean
     content?: boolean
+    office_hours?: boolean
     about_us?: boolean | AboutUsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["aboutUsTranslation"]>
 
@@ -27740,6 +27774,7 @@ export namespace Prisma {
     about_us_id?: boolean
     language?: boolean
     content?: boolean
+    office_hours?: boolean
     about_us?: boolean | AboutUsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["aboutUsTranslation"]>
 
@@ -27748,6 +27783,7 @@ export namespace Prisma {
     about_us_id?: boolean
     language?: boolean
     content?: boolean
+    office_hours?: boolean
     about_us?: boolean | AboutUsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["aboutUsTranslation"]>
 
@@ -27756,9 +27792,10 @@ export namespace Prisma {
     about_us_id?: boolean
     language?: boolean
     content?: boolean
+    office_hours?: boolean
   }
 
-  export type AboutUsTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "about_us_id" | "language" | "content", ExtArgs["result"]["aboutUsTranslation"]>
+  export type AboutUsTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "about_us_id" | "language" | "content" | "office_hours", ExtArgs["result"]["aboutUsTranslation"]>
   export type AboutUsTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     about_us?: boolean | AboutUsDefaultArgs<ExtArgs>
   }
@@ -27779,6 +27816,7 @@ export namespace Prisma {
       about_us_id: number
       language: $Enums.Language
       content: string
+      office_hours: string
     }, ExtArgs["result"]["aboutUsTranslation"]>
     composites: {}
   }
@@ -28207,6 +28245,7 @@ export namespace Prisma {
     readonly about_us_id: FieldRef<"AboutUsTranslation", 'Int'>
     readonly language: FieldRef<"AboutUsTranslation", 'Language'>
     readonly content: FieldRef<"AboutUsTranslation", 'String'>
+    readonly office_hours: FieldRef<"AboutUsTranslation", 'String'>
   }
     
 
@@ -38030,7 +38069,9 @@ export namespace Prisma {
 
 
   export const AboutUsScalarFieldEnum: {
-    id: 'id'
+    id: 'id',
+    support_email: 'support_email',
+    support_whatsapp: 'support_whatsapp'
   };
 
   export type AboutUsScalarFieldEnum = (typeof AboutUsScalarFieldEnum)[keyof typeof AboutUsScalarFieldEnum]
@@ -38040,7 +38081,8 @@ export namespace Prisma {
     id: 'id',
     about_us_id: 'about_us_id',
     language: 'language',
-    content: 'content'
+    content: 'content',
+    office_hours: 'office_hours'
   };
 
   export type AboutUsTranslationScalarFieldEnum = (typeof AboutUsTranslationScalarFieldEnum)[keyof typeof AboutUsTranslationScalarFieldEnum]
@@ -39578,11 +39620,15 @@ export namespace Prisma {
     OR?: AboutUsWhereInput[]
     NOT?: AboutUsWhereInput | AboutUsWhereInput[]
     id?: IntFilter<"AboutUs"> | number
+    support_email?: StringFilter<"AboutUs"> | string
+    support_whatsapp?: StringFilter<"AboutUs"> | string
     translations?: AboutUsTranslationListRelationFilter
   }
 
   export type AboutUsOrderByWithRelationInput = {
     id?: SortOrder
+    support_email?: SortOrder
+    support_whatsapp?: SortOrder
     translations?: AboutUsTranslationOrderByRelationAggregateInput
   }
 
@@ -39591,11 +39637,15 @@ export namespace Prisma {
     AND?: AboutUsWhereInput | AboutUsWhereInput[]
     OR?: AboutUsWhereInput[]
     NOT?: AboutUsWhereInput | AboutUsWhereInput[]
+    support_email?: StringFilter<"AboutUs"> | string
+    support_whatsapp?: StringFilter<"AboutUs"> | string
     translations?: AboutUsTranslationListRelationFilter
   }, "id">
 
   export type AboutUsOrderByWithAggregationInput = {
     id?: SortOrder
+    support_email?: SortOrder
+    support_whatsapp?: SortOrder
     _count?: AboutUsCountOrderByAggregateInput
     _avg?: AboutUsAvgOrderByAggregateInput
     _max?: AboutUsMaxOrderByAggregateInput
@@ -39608,6 +39658,8 @@ export namespace Prisma {
     OR?: AboutUsScalarWhereWithAggregatesInput[]
     NOT?: AboutUsScalarWhereWithAggregatesInput | AboutUsScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"AboutUs"> | number
+    support_email?: StringWithAggregatesFilter<"AboutUs"> | string
+    support_whatsapp?: StringWithAggregatesFilter<"AboutUs"> | string
   }
 
   export type AboutUsTranslationWhereInput = {
@@ -39618,6 +39670,7 @@ export namespace Prisma {
     about_us_id?: IntFilter<"AboutUsTranslation"> | number
     language?: EnumLanguageFilter<"AboutUsTranslation"> | $Enums.Language
     content?: StringFilter<"AboutUsTranslation"> | string
+    office_hours?: StringFilter<"AboutUsTranslation"> | string
     about_us?: XOR<AboutUsScalarRelationFilter, AboutUsWhereInput>
   }
 
@@ -39626,6 +39679,7 @@ export namespace Prisma {
     about_us_id?: SortOrder
     language?: SortOrder
     content?: SortOrder
+    office_hours?: SortOrder
     about_us?: AboutUsOrderByWithRelationInput
   }
 
@@ -39637,6 +39691,7 @@ export namespace Prisma {
     about_us_id?: IntFilter<"AboutUsTranslation"> | number
     language?: EnumLanguageFilter<"AboutUsTranslation"> | $Enums.Language
     content?: StringFilter<"AboutUsTranslation"> | string
+    office_hours?: StringFilter<"AboutUsTranslation"> | string
     about_us?: XOR<AboutUsScalarRelationFilter, AboutUsWhereInput>
   }, "id">
 
@@ -39645,6 +39700,7 @@ export namespace Prisma {
     about_us_id?: SortOrder
     language?: SortOrder
     content?: SortOrder
+    office_hours?: SortOrder
     _count?: AboutUsTranslationCountOrderByAggregateInput
     _avg?: AboutUsTranslationAvgOrderByAggregateInput
     _max?: AboutUsTranslationMaxOrderByAggregateInput
@@ -39660,6 +39716,7 @@ export namespace Prisma {
     about_us_id?: IntWithAggregatesFilter<"AboutUsTranslation"> | number
     language?: EnumLanguageWithAggregatesFilter<"AboutUsTranslation"> | $Enums.Language
     content?: StringWithAggregatesFilter<"AboutUsTranslation"> | string
+    office_hours?: StringWithAggregatesFilter<"AboutUsTranslation"> | string
   }
 
   export type FaqWhereInput = {
@@ -41451,38 +41508,52 @@ export namespace Prisma {
   }
 
   export type AboutUsCreateInput = {
+    support_email: string
+    support_whatsapp: string
     translations?: AboutUsTranslationCreateNestedManyWithoutAbout_usInput
   }
 
   export type AboutUsUncheckedCreateInput = {
     id?: number
+    support_email: string
+    support_whatsapp: string
     translations?: AboutUsTranslationUncheckedCreateNestedManyWithoutAbout_usInput
   }
 
   export type AboutUsUpdateInput = {
+    support_email?: StringFieldUpdateOperationsInput | string
+    support_whatsapp?: StringFieldUpdateOperationsInput | string
     translations?: AboutUsTranslationUpdateManyWithoutAbout_usNestedInput
   }
 
   export type AboutUsUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    support_email?: StringFieldUpdateOperationsInput | string
+    support_whatsapp?: StringFieldUpdateOperationsInput | string
     translations?: AboutUsTranslationUncheckedUpdateManyWithoutAbout_usNestedInput
   }
 
   export type AboutUsCreateManyInput = {
     id?: number
+    support_email: string
+    support_whatsapp: string
   }
 
   export type AboutUsUpdateManyMutationInput = {
-
+    support_email?: StringFieldUpdateOperationsInput | string
+    support_whatsapp?: StringFieldUpdateOperationsInput | string
   }
 
   export type AboutUsUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
+    support_email?: StringFieldUpdateOperationsInput | string
+    support_whatsapp?: StringFieldUpdateOperationsInput | string
   }
 
   export type AboutUsTranslationCreateInput = {
     language: $Enums.Language
     content: string
+    office_hours: string
     about_us: AboutUsCreateNestedOneWithoutTranslationsInput
   }
 
@@ -41491,11 +41562,13 @@ export namespace Prisma {
     about_us_id: number
     language: $Enums.Language
     content: string
+    office_hours: string
   }
 
   export type AboutUsTranslationUpdateInput = {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     content?: StringFieldUpdateOperationsInput | string
+    office_hours?: StringFieldUpdateOperationsInput | string
     about_us?: AboutUsUpdateOneRequiredWithoutTranslationsNestedInput
   }
 
@@ -41504,6 +41577,7 @@ export namespace Prisma {
     about_us_id?: IntFieldUpdateOperationsInput | number
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     content?: StringFieldUpdateOperationsInput | string
+    office_hours?: StringFieldUpdateOperationsInput | string
   }
 
   export type AboutUsTranslationCreateManyInput = {
@@ -41511,11 +41585,13 @@ export namespace Prisma {
     about_us_id: number
     language: $Enums.Language
     content: string
+    office_hours: string
   }
 
   export type AboutUsTranslationUpdateManyMutationInput = {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     content?: StringFieldUpdateOperationsInput | string
+    office_hours?: StringFieldUpdateOperationsInput | string
   }
 
   export type AboutUsTranslationUncheckedUpdateManyInput = {
@@ -41523,6 +41599,7 @@ export namespace Prisma {
     about_us_id?: IntFieldUpdateOperationsInput | number
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     content?: StringFieldUpdateOperationsInput | string
+    office_hours?: StringFieldUpdateOperationsInput | string
   }
 
   export type FaqCreateInput = {
@@ -43298,6 +43375,8 @@ export namespace Prisma {
 
   export type AboutUsCountOrderByAggregateInput = {
     id?: SortOrder
+    support_email?: SortOrder
+    support_whatsapp?: SortOrder
   }
 
   export type AboutUsAvgOrderByAggregateInput = {
@@ -43306,10 +43385,14 @@ export namespace Prisma {
 
   export type AboutUsMaxOrderByAggregateInput = {
     id?: SortOrder
+    support_email?: SortOrder
+    support_whatsapp?: SortOrder
   }
 
   export type AboutUsMinOrderByAggregateInput = {
     id?: SortOrder
+    support_email?: SortOrder
+    support_whatsapp?: SortOrder
   }
 
   export type AboutUsSumOrderByAggregateInput = {
@@ -43326,6 +43409,7 @@ export namespace Prisma {
     about_us_id?: SortOrder
     language?: SortOrder
     content?: SortOrder
+    office_hours?: SortOrder
   }
 
   export type AboutUsTranslationAvgOrderByAggregateInput = {
@@ -43338,6 +43422,7 @@ export namespace Prisma {
     about_us_id?: SortOrder
     language?: SortOrder
     content?: SortOrder
+    office_hours?: SortOrder
   }
 
   export type AboutUsTranslationMinOrderByAggregateInput = {
@@ -43345,6 +43430,7 @@ export namespace Prisma {
     about_us_id?: SortOrder
     language?: SortOrder
     content?: SortOrder
+    office_hours?: SortOrder
   }
 
   export type AboutUsTranslationSumOrderByAggregateInput = {
@@ -47695,12 +47781,14 @@ export namespace Prisma {
   export type AboutUsTranslationCreateWithoutAbout_usInput = {
     language: $Enums.Language
     content: string
+    office_hours: string
   }
 
   export type AboutUsTranslationUncheckedCreateWithoutAbout_usInput = {
     id?: number
     language: $Enums.Language
     content: string
+    office_hours: string
   }
 
   export type AboutUsTranslationCreateOrConnectWithoutAbout_usInput = {
@@ -47737,14 +47825,18 @@ export namespace Prisma {
     about_us_id?: IntFilter<"AboutUsTranslation"> | number
     language?: EnumLanguageFilter<"AboutUsTranslation"> | $Enums.Language
     content?: StringFilter<"AboutUsTranslation"> | string
+    office_hours?: StringFilter<"AboutUsTranslation"> | string
   }
 
   export type AboutUsCreateWithoutTranslationsInput = {
-
+    support_email: string
+    support_whatsapp: string
   }
 
   export type AboutUsUncheckedCreateWithoutTranslationsInput = {
     id?: number
+    support_email: string
+    support_whatsapp: string
   }
 
   export type AboutUsCreateOrConnectWithoutTranslationsInput = {
@@ -47764,11 +47856,14 @@ export namespace Prisma {
   }
 
   export type AboutUsUpdateWithoutTranslationsInput = {
-
+    support_email?: StringFieldUpdateOperationsInput | string
+    support_whatsapp?: StringFieldUpdateOperationsInput | string
   }
 
   export type AboutUsUncheckedUpdateWithoutTranslationsInput = {
     id?: IntFieldUpdateOperationsInput | number
+    support_email?: StringFieldUpdateOperationsInput | string
+    support_whatsapp?: StringFieldUpdateOperationsInput | string
   }
 
   export type FaqTranslationCreateWithoutFaqInput = {
@@ -49088,23 +49183,27 @@ export namespace Prisma {
     id?: number
     language: $Enums.Language
     content: string
+    office_hours: string
   }
 
   export type AboutUsTranslationUpdateWithoutAbout_usInput = {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     content?: StringFieldUpdateOperationsInput | string
+    office_hours?: StringFieldUpdateOperationsInput | string
   }
 
   export type AboutUsTranslationUncheckedUpdateWithoutAbout_usInput = {
     id?: IntFieldUpdateOperationsInput | number
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     content?: StringFieldUpdateOperationsInput | string
+    office_hours?: StringFieldUpdateOperationsInput | string
   }
 
   export type AboutUsTranslationUncheckedUpdateManyWithoutAbout_usInput = {
     id?: IntFieldUpdateOperationsInput | number
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     content?: StringFieldUpdateOperationsInput | string
+    office_hours?: StringFieldUpdateOperationsInput | string
   }
 
   export type FaqTranslationCreateManyFaqInput = {

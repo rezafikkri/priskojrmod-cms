@@ -32,13 +32,13 @@ model SecretKeyLicense {
 }
 
 model LicenseKey {
-  id             String           @id @default(uuid(7)) @db.Uuid
+  id             String  @id @default(uuid(7)) @db.Uuid
   secret_key_id  Int
-  customer_id    String           @db.Uuid
-  email          String           @db.VarChar(254)
+  customer_id    String  @db.Uuid
+  email          String  @db.VarChar(254)
   code           String
-  can_regenerate Boolean          @default(false)
-  is_revoked     Boolean          @default(false)
+  can_regenerate Boolean @default(false)
+  is_revoked     Boolean @default(false)
   created_at     Int
   updated_at     Int
   regenerated_at Int?
@@ -47,7 +47,7 @@ model LicenseKey {
   last_reset_period String? @db.VarChar(10)
   reset_count       Int     @default(0) @db.SmallInt
 
-  secret_key     SecretKeyLicense @relation(fields: [secret_key_id], references: [id], onDelete: NoAction)
+  secret_key SecretKeyLicense @relation(fields: [secret_key_id], references: [id], onDelete: NoAction)
 
   @@unique([customer_id, secret_key_id])
   @@map("license_keys")
