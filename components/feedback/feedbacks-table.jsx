@@ -545,12 +545,12 @@ export default function FeedbacksTable() {
     {
       id: 'actions',
       enableHiding: false,
-      cell: ({ row }) => row.original.is_read ? null : (
+      cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="size-8 p-0 focus-visible:ring-ring"
+              className={`size-8 p-0 focus-visible:ring-ring ${row.original.is_read ? 'invisible' : ''}`}
               disabled={markingAsReadIds.includes(row.original.id)}
             >
               <MoreHorizontal />
