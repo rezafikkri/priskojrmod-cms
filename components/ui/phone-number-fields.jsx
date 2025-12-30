@@ -77,13 +77,16 @@ const countryIsoOptions = [
 const countryIsoMap = new Map(countryIsoOptions.map(country => [country.value, country]));
 
 export default function PhoneNumberFields({
-  form
+  form,
+  name,
+  label,
+  description,
 }) {
   const isSubmitting = form.formState.isSubmitting;
-  const phoneNumberErrors = form.formState.errors.whatsapp_phone_number;
+  const phoneNumberErrors = form.formState.errors[name];
 
-  const countryIso = useWatch({ control: form.control, name: 'whatsapp_phone_number.country_iso' });
-  const number = useWatch({ control: form.control, name: 'whatsapp_phone_number.number' });
+  const countryIso = useWatch({ control: form.control, name: `${name}.country_iso` });
+  const number = useWatch({ control: form.control, name: `${name}.number` });
   const parsedNumber = parsePhoneNumber(
     number,
     countryIso === 'OTHER' ? undefined : countryIso,
@@ -105,7 +108,7 @@ export default function PhoneNumberFields({
 
       const newCountryIso = countryIsoMap.has(detectedCountry) ? detectedCountry : 'OTHER';
 
-      form.setValue('whatsapp_phone_number.country_iso', newCountryIso, {
+      form.setValue(`${name}.country_iso`, newCountryIso, {
         shouldValidate: true,
       });
     }, 100);
@@ -117,13 +120,13 @@ export default function PhoneNumberFields({
     fieldOnChange(countryIso);
 
     if (form.formState.isSubmitted) {
-      form.trigger('whatsapp_phone_number.number');
+      form.trigger(`${name}.number`);
     }
   }
 
   return (
     <div className="space-y-2">
-      <FormLabel className="text-base" data-error={!!phoneNumberErrors}>WhatsApp Phone Number</FormLabel>
+      <FormLabel className="text-base" data-error={!!phoneNumberErrors}>{label}</FormLabel>
 
       <p className="text-sm text-zinc-500">
         Preview: {parsedNumber ? parsedNumber.formatInternational() : '-'}
@@ -132,7 +135,7 @@ export default function PhoneNumberFields({
       <div className="flex">
         <FormField
           control={form.control}
-          name="whatsapp_phone_number.country_iso"
+          name={`${name}.country_iso`}
           render={({ field }) => (
             <FormItem>
               <Select
@@ -165,7 +168,7 @@ export default function PhoneNumberFields({
 
         <FormField
           control={form.control}
-          name="whatsapp_phone_number.number"
+          name={`${name}.number`}
           render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
@@ -182,7 +185,7 @@ export default function PhoneNumberFields({
         />
       </div>
 
-      <FormDescription>Enter a reachable WhatsApp phone number</FormDescription>
+      <FormDescription>{description}</FormDescription>
       {phoneNumberErrors?.country_iso && (
         <p className="dark:text-red-500/85 text-destructive text-sm">
           {phoneNumberErrors.country_iso.message}

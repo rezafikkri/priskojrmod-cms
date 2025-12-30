@@ -11,7 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Loader2, ArrowLeft, Trash } from 'lucide-react';
 import Link from 'next/link';
-import PhoneNumberFields from './phone-number-fields';
+import PhoneNumberFields from '../ui/phone-number-fields';
 import FormImagePreview from '../ui/form-image-preview';
 
 export default function FormFields({
@@ -106,7 +106,12 @@ export default function FormFields({
           )}
         />
 
-        <PhoneNumberFields form={form} />
+        <PhoneNumberFields
+          form={form}
+          name="whatsapp_phone_number"
+          label="WhatsApp Phone Number"
+          description="Enter a reachable WhatsApp phone number"
+        />
 
         <div className="space-y-5.5 my-8">
           <h3 className="text-lg font-bold mb-0">Donation Links</h3>
