@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 export default function SearchInput({
   className,
   placeholder,
-  isLoading,
+  disabled,
   ref,
   hasSearched,
   onEnterSearch,
@@ -21,7 +21,7 @@ export default function SearchInput({
         <Input
           placeholder={placeholder}
           className="rounded-e-none shadow-none md:text-base h-auto px-3 py-1.5 pe-9"
-          disabled={isLoading}
+          disabled={disabled}
           ref={ref}
           onKeyUp={onEnterSearch}
         />
@@ -31,7 +31,7 @@ export default function SearchInput({
               className="absolute right-2 w-4 h-5 p-0 z-1"
               variant="ghost"
               onClick={onClearSearch}
-              disabled={isLoading}
+              disabled={disabled}
             >
               <X className="size-4" />
             </Button>
@@ -41,7 +41,7 @@ export default function SearchInput({
       <Button
         variant="secondary"
         className="border shadow-none rounded-s-none h-auto text-base px-3 py-1.5 focus:z-2"
-        disabled={isLoading}
+        disabled={disabled}
         onClick={onSearch}
       >
         <Search />

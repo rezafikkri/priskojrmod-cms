@@ -962,7 +962,7 @@ export default function LicenseKeysTable() {
           <SearchInput
             className="flex-1"
             placeholder="Search with email..."
-            isLoading={isFetchingLK || isSearching}
+            disabled={isFetchingLK || isSearching}
             ref={searchRef}
             hasSearched={hasSearched}
             onEnterSearch={handleEnterSearch}

@@ -607,7 +607,7 @@ export default function CustomersTable() {
           <SearchInput
             className="flex-1"
             placeholder="Search with email..."
-            isLoading={isFetchingC || isSearching}
+            disabled={isFetchingC || isSearching}
             ref={searchRef}
             hasSearched={hasSearched}
             onEnterSearch={handleEnterSearch}

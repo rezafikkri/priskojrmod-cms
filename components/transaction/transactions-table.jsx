@@ -853,7 +853,7 @@ export default function TransactionsTable() {
           <SearchInput
             className="flex-1"
             placeholder="Search with transaction code..."
-            isLoading={isFetchingT || isSearching}
+            disabled={isFetchingT || isSearching}
             ref={searchRef}
             hasSearched={hasSearched}
             onEnterSearch={handleEnterSearch}
