@@ -3,16 +3,51 @@
 import {
   Form,
   FormField,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
 } from '../ui/form';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
-import TitleInput from './title-input';
 import FormLanguageToggle from '../ui/form-language-toggle';
 import ContentInput from '../ui/content-input';
 import { Language } from '@/constants/enums';
 import { cmsConfig } from '@/config/cms';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '../ui/input';
+
+function TitleInput({
+  field,
+  formState,
+  activeLang,
+}) {
+  const { errors, isSubmitting } = formState;
+
+  return (
+    <FormItem>
+      <FormLabel className="text-base">
+        Title
+        <Badge variant="secondary">{activeLang.toUpperCase()}</Badge>
+      </FormLabel> 
+      <FormControl>
+        <Input
+          disabled={isSubmitting}
+          className="shadow-none md:text-base h-auto px-3 py-1.5 dark:bg-transparent"
+          {...field}
+        />
+      </FormControl>
+      <FormDescription>Enter the title</FormDescription>
+      {(errors.title && errors.title[activeLang]) && (
+        <p className="text-destructive text-sm">
+          {errors.title[activeLang].message}
+        </p>
+      )}
+    </FormItem>
+  );
+}
 
 export default function FormFields({
   mode,
@@ -47,7 +82,7 @@ export default function FormFields({
                     formState={formState}
                     activeLang={Language.ID}
                     {...(isResetEditor && { isResetEditor })}
-                    description="Enter faq content."
+                    description="Enter faq content"
                   />
                 )}
               />
@@ -71,7 +106,7 @@ export default function FormFields({
                     formState={formState}
                     activeLang={Language.EN}
                     {...(isResetEditor && { isResetEditor })}
-                    description="Enter faq content."
+                    description="Enter faq content"
                   />
                 )}
               />

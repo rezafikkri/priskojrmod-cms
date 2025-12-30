@@ -98,7 +98,7 @@ export default function EditForm({ privacyPolicy }) {
                   field={field}
                   formState={formState}
                   activeLang={Language.ID}
-                  description="Enter privacy policy content."
+                  description="Enter privacy policy content"
                 />
               )}
             />
@@ -112,7 +112,7 @@ export default function EditForm({ privacyPolicy }) {
                   field={field}
                   formState={formState}
                   activeLang={Language.EN}
-                  description="Enter privacy policy content."
+                  description="Enter privacy policy content"
                 />
               )}
             />

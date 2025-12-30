@@ -22,8 +22,8 @@ import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import { Separator } from '../ui/separator';
 import { useQueryClient } from '@tanstack/react-query';
-import PasswordInput from './password-input';
 import { cmsConfig } from '@/config/cms';
+import { generatePassword } from '@/lib/utils';
 
 export default function VariantFields({
   form,
@@ -127,11 +127,29 @@ export default function VariantFields({
               control={form.control}
               name={`variants.${index}.file_access_password`}
               render={({ field }) => (
-                <PasswordInput
-                  field={field}
-                  description='Enter a strong password for the extra file in the download link. Click Generate to create one automatically or use an online password generator.'
-                  disabled={isDeleting(variant.dbId)}
-                />
+                <FormItem>
+                  <FormLabel className="text-base">File access password</FormLabel>
+                  <div className="flex w-full items-center">
+                    <FormControl>
+                      <Input
+                        disabled={isDeleting(variant.dbId)}
+                        className="md:text-base h-auto px-3 py-1.5 -me-[1px] shadow-none rounded-e-none z-3 relativ"
+                        {...field}
+                      />
+                    </FormControl>
+                    <Button
+                      variant="secondary"
+                      type="button"
+                      onClick={() => field.onChange(generatePassword())}
+                      className={'h-auto text-base px-3 py-1.5 border rounded-s-none'}
+                      disabled={isDeleting(variant.dbId)}
+                    >
+                      Generate
+                    </Button>
+                  </div>
+                  <FormDescription>Enter a strong password for the extra file in the download link. Click Generate to create one automatically or use an online password generator.</FormDescription>
+                  <FormMessage />
+                </FormItem>
               )}
             />
           </div>
