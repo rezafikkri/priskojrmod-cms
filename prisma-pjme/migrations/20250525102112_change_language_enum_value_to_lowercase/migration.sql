@@ -1,2 +1,0 @@
-ALTER TYPE "Language" RENAME VALUE 'ID' TO 'id';
-ALTER TYPE "Language" RENAME VALUE 'EN' TO 'en';

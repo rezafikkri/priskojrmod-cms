@@ -1,0 +1,519 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AdminRole {
+  owner
+  staff
+
+  @@map("admin_role")
+}
+
+model Admin {
+  id Int @id @default(autoincrement()) @db.SmallInt
+
+  role    AdminRole
+  auth_id String?   @unique @db.VarChar(255)
+
+  first_name            String @db.VarChar(100)
+  last_name             String @db.VarChar(100)
+  email                 String @unique @db.VarChar(254)
+  whatsapp_phone_number String @db.VarChar(20)
+  picture               String @db.VarChar(255)
+  created_at            Int
+  updated_at            Int
+
+  donation_links DonationLink[]
+  products       Product[]
+
+  @@map("admins")
+}
+
+enum CurrencyCode {
+  IDR
+  USD
+
+  @@map("currency_code")
+}
+
+model DonationLink {
+  id            Int          @id @default(autoincrement())
+  admin_id      Int          @db.SmallInt
+  currency_code CurrencyCode
+  url           String       @db.VarChar(100)
+
+  admin Admin @relation(fields: [admin_id], references: [id], onDelete: Cascade)
+
+  @@map("donation_links")
+}
+
+model Owner {
+  id             Int    @id @default(autoincrement())
+  first_name     String @db.VarChar(100)
+  last_name      String @db.VarChar(100)
+  sm_profile_url String @db.VarChar(255)
+  picture        String @db.VarChar(255)
+  created_at     Int
+  updated_at     Int
+
+  products Product[]
+
+  @@map("owners")
+}
+
+model License {
+  id         Int @id @default(autoincrement())
+  created_at Int
+  updated_at Int
+
+  products     Product[]
+  translations LicenseTranslation[]
+
+  @@map("licenses")
+}
+
+model LicenseTranslation {
+  id         Int      @id @default(autoincrement())
+  license_id Int
+  language   Language
+  name       String   @db.VarChar(100)
+  content    String
+
+  license License @relation(fields: [license_id], references: [id], onDelete: Cascade)
+
+  @@map("license_translations")
+}
+
+model Category {
+  id         Int    @id @default(autoincrement())
+  name       String @db.VarChar(100)
+  slug       String @unique @db.VarChar(100)
+  created_at Int
+  updated_at Int
+
+  products Product[]
+
+  @@map("categories")
+}
+
+enum PriceType {
+  paid
+  free
+
+  @@map("price_type")
+}
+
+model Product {
+  id          String @id @default(uuid(7)) @db.Uuid
+  category_id Int
+  admin_id    Int    @db.SmallInt
+  owner_id    Int
+  license_id  Int
+
+  drive_file_id String?
+  download_url  String?
+
+  is_published Boolean   @default(false)
+  is_pinned    Boolean   @default(false)
+  name         String    @db.VarChar(150)
+  slug         String    @unique @db.VarChar(150)
+  price_type   PriceType
+  created_at   Int
+  updated_at   Int
+
+  admin    Admin    @relation(fields: [admin_id], references: [id], onDelete: NoAction)
+  category Category @relation(fields: [category_id], references: [id], onDelete: NoAction)
+  owner    Owner    @relation(fields: [owner_id], references: [id], onDelete: NoAction)
+  license  License  @relation(fields: [license_id], references: [id], onDelete: NoAction)
+
+  translations ProductTranslation[]
+  versions     ProductVersion[]
+  discount     ProductDiscount?
+  coupon       ProductCoupon?
+  images       ProductImage[]
+  variants     ProductVariant[]
+  secretKey    SecretKeyLicense?
+
+  @@map("products")
+}
+
+model ProductTranslation {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  product_id  String   @db.Uuid
+  language    Language
+  description String
+
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@map("product_translations")
+}
+
+model ProductVersion {
+  id          String @id @default(uuid(7)) @db.Uuid
+  product_id  String @db.Uuid
+  version     String @db.VarChar(50)
+  released_at Int
+
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  translations ProductVersionTranslation[]
+
+  @@unique([product_id, version])
+  @@map("product_versions")
+}
+
+model ProductVersionTranslation {
+  id                 String   @id @default(uuid(7)) @db.Uuid
+  product_version_id String   @db.Uuid
+  language           Language
+  changelog          String?
+
+  productVersion ProductVersion @relation(fields: [product_version_id], references: [id], onDelete: Cascade)
+
+  @@map("product_version_translations")
+}
+
+model ProductDiscount {
+  id         Int    @id @default(autoincrement()) @db.SmallInt
+  product_id String @unique @db.Uuid
+  discount   Int    @db.SmallInt
+  expired_at Int
+
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@map("product_discount")
+}
+
+model ProductCoupon {
+  id         String @id @default(uuid(7)) @db.Uuid
+  product_id String @unique @db.Uuid
+  code       String @db.VarChar(150)
+  discount   Int    @db.SmallInt
+  expired_at Int
+
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@map("product_coupon")
+}
+
+model ProductImage {
+  id           String  @id @default(uuid(7)) @db.Uuid
+  product_id   String  @db.Uuid
+  url          String
+  is_thumbnail Boolean
+  width        Int     @db.SmallInt
+  height       Int     @db.SmallInt
+
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model ProductVariant {
+  id                   String  @id @default(uuid(7)) @db.Uuid
+  product_id           String  @db.Uuid
+  name                 String  @db.VarChar(100)
+  download_url         String?
+  file_access_password String? @db.VarChar(100)
+
+  product Product        @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  prices  ProductPrice[]
+
+  @@map("product_variants")
+}
+
+model ProductPrice {
+  id            String       @id @default(uuid(7)) @db.Uuid
+  variant_id    String       @db.Uuid
+  currency_code CurrencyCode
+  price         Decimal      @db.Decimal(10, 2)
+
+  variant            ProductVariant      @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  transcationDetails TransactionDetail[]
+
+  @@map("product_prices")
+}
+
+enum Language {
+  id
+  en
+
+  @@map("language")
+}
+
+model TermsOfService {
+  id         Int @id @default(autoincrement()) @db.SmallInt
+  created_at Int
+  updated_at Int
+
+  translations TermsOfServiceTranslation[]
+
+  @@map("terms_of_service")
+}
+
+model TermsOfServiceTranslation {
+  id                  Int      @id @default(autoincrement()) @db.SmallInt
+  terms_of_service_id Int      @db.SmallInt
+  language            Language
+  content             String
+
+  terms_of_service TermsOfService @relation(fields: [terms_of_service_id], references: [id], onDelete: Cascade)
+
+  @@map("terms_of_service_translations")
+}
+
+model PrivacyPolicy {
+  id         Int @id @default(autoincrement()) @db.SmallInt
+  created_at Int
+  updated_at Int
+
+  translations PrivacyPolicyTranslation[]
+
+  @@map("privacy_policy")
+}
+
+model PrivacyPolicyTranslation {
+  id                Int      @id @default(autoincrement()) @db.SmallInt
+  privacy_policy_id Int      @db.SmallInt
+  language          Language
+  content           String
+
+  privacy_policy PrivacyPolicy @relation(fields: [privacy_policy_id], references: [id], onDelete: Cascade)
+
+  @@map("privacy_policy_translations")
+}
+
+model AboutUs {
+  id               Int    @id @default(autoincrement()) @db.SmallInt
+  support_email    String @db.VarChar(254)
+  support_whatsapp String @db.VarChar(20)
+
+  translations AboutUsTranslation[]
+
+  @@map("about_us")
+}
+
+model AboutUsTranslation {
+  id           Int      @id @default(autoincrement()) @db.SmallInt
+  about_us_id  Int      @db.SmallInt
+  language     Language
+  content      String
+  office_hours String   @db.VarChar(255)
+
+  about_us AboutUs @relation(fields: [about_us_id], references: [id], onDelete: Cascade)
+
+  @@map("about_us_translations")
+}
+
+model Faq {
+  id         Int @id @default(autoincrement())
+  created_at Int
+  updated_at Int
+
+  translations FaqTranslation[]
+
+  @@map("faqs")
+}
+
+model FaqTranslation {
+  id       Int      @id @default(autoincrement())
+  faq_id   Int
+  language Language
+  title    String   @db.VarChar(150)
+  content  String
+
+  faq Faq @relation(fields: [faq_id], references: [id], onDelete: Cascade)
+
+  @@map("faq_translations")
+}
+
+model Customer {
+  id           String  @id @default(uuid(7)) @db.Uuid
+  oauth_id     String? @unique @db.VarChar(255)
+  is_banned    Boolean @default(false)
+  first_name   String  @db.VarChar(100)
+  last_name    String  @db.VarChar(100)
+  email        String  @unique @db.VarChar(254)
+  phone_number String? @db.VarChar(20)
+  picture      String? @db.VarChar(255)
+  last_active  Int?
+  created_at   Int
+  updated_at   Int
+
+  transactions Transaction[]
+  licenseKeys  LicenseKey[]
+
+  @@map("customers")
+}
+
+enum TransactionStatus {
+  pending
+  paid
+  cancelled
+  refund
+
+  @@map("transaction_status")
+}
+
+enum ShareMethod {
+  download_link
+  drive_share
+  manual_required
+
+  @@map("share_method")
+}
+
+model Transaction {
+  id          String  @id @default(uuid(7)) @db.Uuid
+  code        String  @unique @db.VarChar(32)
+  customer_id String? @db.Uuid
+
+  admin_id    Int    @db.SmallInt // only for reference
+  admin_email String @db.VarChar(254)
+
+  status        TransactionStatus
+  created_at    Int
+  updated_at    Int
+  currency_code CurrencyCode
+  total_amount  Decimal           @db.Decimal(10, 2)
+
+  customer_name         String  @db.VarChar(200)
+  customer_email        String  @db.VarChar(254)
+  customer_phone_number String? @db.VarChar(20)
+
+  customer Customer?           @relation(fields: [customer_id], references: [id], onDelete: SetNull)
+  details  TransactionDetail[]
+  invoices Invoice[]
+
+  @@map("transactions")
+}
+
+enum InvoiceStatus {
+  active
+  void
+
+  @@map("invoice_status")
+}
+
+model Invoice {
+  id             String        @id @default(uuid(7)) @db.Uuid
+  transaction_id String        @db.Uuid
+  invoice_number String        @unique @db.VarChar(32)
+  status         InvoiceStatus
+  issued_at      Int
+  voided_at      Int?
+
+  transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+
+  @@map("invoices")
+}
+
+model TransactionDetail {
+  id                String  @id @default(uuid(7)) @db.Uuid
+  transaction_id    String  @db.Uuid
+  product_id        String  @db.Uuid
+  product_price_id  String? @db.Uuid
+  product_coupon_id String? @db.Uuid
+  quantity          Int     @db.SmallInt
+
+  product_name          String  @db.VarChar(150)
+  product_version       String  @db.VarChar(50)
+  product_drive_file_id String?
+  product_download_url  String?
+
+  product_variant              String  @db.VarChar(100)
+  variant_download_url         String?
+  variant_file_access_password String? @db.VarChar(100)
+
+  product_currency_code   CurrencyCode
+  product_price           Decimal      @db.Decimal(10, 2)
+  product_discount        Int?         @db.SmallInt
+  product_coupon_code     String?      @db.VarChar(150)
+  product_coupon_discount Int?         @db.SmallInt
+
+  drive_permission_id String?      @db.VarChar(100)
+  share_method        ShareMethod?
+  shared_at           Int?
+
+  transaction Transaction   @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+  price       ProductPrice? @relation(fields: [product_price_id], references: [id], onDelete: SetNull)
+
+  @@map("transaction_details")
+}
+
+model Feedback {
+  id         String  @id @default(uuid(7)) @db.Uuid
+  is_read    Boolean @default(false)
+  name       String? @db.VarChar(100)
+  email      String? @db.VarChar(254)
+  message    String
+  created_at Int     @unique
+
+  @@map("feedbacks")
+}
+
+model Testimonial {
+  id             Int    @id @default(autoincrement()) @db.SmallInt
+  picture        String @db.VarChar(255)
+  name           String @db.VarChar(100)
+  sm_profile_url String @db.VarChar(100)
+  created_at     Int
+  updated_at     Int
+
+  translations TestimonialTranslation[]
+
+  @@map("testimonials")
+}
+
+model TestimonialTranslation {
+  id             Int      @id @default(autoincrement()) @db.SmallInt
+  testimonial_id Int      @db.SmallInt
+  language       Language
+  message        String
+
+  testimonial Testimonial @relation(fields: [testimonial_id], references: [id], onDelete: Cascade)
+
+  @@map("testimonial_translations")
+}
+
+// Secret keys and license keys
+model SecretKeyLicense {
+  id             Int     @id @default(autoincrement())
+  product_id     String? @unique @db.Uuid
+  key            String  @db.VarChar(100)
+  created_at     Int
+  regenerated_at Int?
+
+  product Product? @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  licenseKey LicenseKey[]
+
+  @@map("secret_key_licenses")
+}
+
+model LicenseKey {
+  id             String  @id @default(uuid(7)) @db.Uuid
+  secret_key_id  Int
+  customer_id    String  @db.Uuid
+  code           String
+  can_regenerate Boolean @default(false)
+  is_revoked     Boolean @default(false)
+  created_at     Int
+  updated_at     Int
+  regenerated_at Int?
+
+  device_id         String? @db.VarChar(100)
+  last_reset_period String? @db.VarChar(10)
+  reset_count       Int     @default(0) @db.SmallInt
+
+  secretKey SecretKeyLicense @relation(fields: [secret_key_id], references: [id], onDelete: Cascade)
+  customer  Customer         @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+  @@unique([customer_id, secret_key_id])
+  @@map("license_keys")
+}

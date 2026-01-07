@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import pjmeDBPrismaClient from '@/lib/pjme-prisma-client';
+import prisma from '@/lib/prisma';
 import GoogleProvider from 'next-auth/providers/google';
 
 export const authOptions = {
@@ -45,7 +45,7 @@ export const authOptions = {
             first_name: true,
             last_name: true,
           };
-          let admin = await pjmeDBPrismaClient.admin.findUnique({
+          let admin = await prisma.admin.findUnique({
             where: {
               auth_id: profile.sub,
             },
@@ -53,7 +53,7 @@ export const authOptions = {
           });
 
           if (!admin) {
-            admin = await pjmeDBPrismaClient.admin.findFirst({
+            admin = await prisma.admin.findFirst({
               where: {
                 email: profile.email,
                 auth_id: null,
@@ -67,7 +67,7 @@ export const authOptions = {
             if (admin) {
               // claim this account
               const currentTime = Math.floor(new Date().getTime() / 1000);
-              const result = await pjmeDBPrismaClient.admin.updateMany({
+              const result = await prisma.admin.updateMany({
                 data: {
                   auth_id: profile.sub,
                   updated_at: currentTime,

@@ -41,3 +41,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Generated prisma client, only until when Prisma ORM is
+# fully transitioned from Rust to TypeScript, and then we can safely invlude the generated
+# directory in version control
+# reference: https://www.prisma.io/docs/orm/prisma-schema/overview/generators
+/prisma/generated
