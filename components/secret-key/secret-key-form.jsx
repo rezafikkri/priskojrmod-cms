@@ -5,20 +5,12 @@ import {
   AlertTitle,
 } from '../ui/alert';
 import Error404 from '../icon/error-404';
-import { getProducts } from '@/lib/services/product-service';
+import { getSelectableProducts } from '@/lib/services/product-service';
 import CreateForm from './create-form';
 
 export default async function SecretKeyForm({ mode = 'create', id }) {
   if (mode === 'create') {
-    const products = await getProducts({
-      select: { id: true, name: true },
-      filters: {
-        price_type: 'paid',
-        category: {
-          slug: 'application',
-        },
-      },
-    });
+    const products = await getSelectableProducts();
     return <CreateForm products={products} />;
   }
 

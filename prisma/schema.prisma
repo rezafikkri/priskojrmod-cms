@@ -137,7 +137,7 @@ model Product {
   coupon       ProductCoupon?
   images       ProductImage[]
   variants     ProductVariant[]
-  secretKey    SecretKeyLicense?
+  secretKey    SecretKey?
 
   @@map("products")
 }
@@ -482,7 +482,7 @@ model TestimonialTranslation {
 }
 
 // Secret keys and license keys
-model SecretKeyLicense {
+model SecretKey {
   id             Int     @id @default(autoincrement())
   product_id     String? @unique @db.Uuid
   key            String  @db.VarChar(100)
@@ -493,7 +493,7 @@ model SecretKeyLicense {
 
   licenseKey LicenseKey[]
 
-  @@map("secret_key_licenses")
+  @@map("secret_keys")
 }
 
 model LicenseKey {
@@ -511,7 +511,7 @@ model LicenseKey {
   last_reset_period String? @db.VarChar(10)
   reset_count       Int     @default(0) @db.SmallInt
 
-  secretKey SecretKeyLicense @relation(fields: [secret_key_id], references: [id], onDelete: Cascade)
+  secretKey SecretKey @relation(fields: [secret_key_id], references: [id], onDelete: Cascade)
   customer  Customer         @relation(fields: [customer_id], references: [id], onDelete: Cascade)
 
   @@unique([customer_id, secret_key_id])

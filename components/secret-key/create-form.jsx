@@ -12,36 +12,28 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import {
   Loader2,
   ArrowLeft,
-  ChevronsUpDown,
-  Check,
 } from 'lucide-react';
 import { createSecretKeySchema } from '@/lib/validators/secret-key-validator';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import random32Bytes from '@/actions/random-32-bytes-actions';
 import { addSecretKey } from '@/actions/secret-key-actions';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import { cn } from '@/lib/utils';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { cmsConfig } from '@/config/cms';
 
-export default function CreateForm({ products }) {
+export default function CreateForm({ products: data }) {
+  const [products, setProducts] = useState(data);
   const form = useForm({
     resolver: zodResolver(createSecretKeySchema),
     defaultValues: {
@@ -51,12 +43,14 @@ export default function CreateForm({ products }) {
   });
   const isSubmitting = form.formState.isSubmitting;
   const [loadingKey, setLoadingKey] = useState(false);
-  const [isComboboxOpen, setIsComboboxOpen] = useState(false)
 
   async function handleSubmit(data) {
     const addRes = await addSecretKey(data);
     if (addRes.status === 'success') {
       form.reset();
+      // filter product when success, cause the app already have secret-key "one-to-one"
+      setProducts(items => items.filter(item => item.id !== data.product_id));
+      
       toast.success('Secret key created successfully');
     } else {
       toast.error(addRes.message, { duration: cmsConfig.toast.duration.error });
@@ -83,64 +77,29 @@ export default function CreateForm({ products }) {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel className="text-base">Product</FormLabel>
-                <Popover open={isComboboxOpen} onOpenChange={setIsComboboxOpen}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "justify-between w-full shadow-none font-normal text-base min-h-9.5 h-auto px-3 py-1.5",
-                          !field.value && "text-muted-foreground"
-                        )}
-                        disabled={isSubmitting}
-                      >
-                        {field.value
-                          ? products.find(
-                            (product) => product.id === field.value
-                          )?.name
-                          : "Select a product"}
-                        <ChevronsUpDown className="opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="p-0 w-auto" align="start">
-                    <Command>
-                      <CommandInput
-                        placeholder="Search a product..."
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value} disabled={isSubmitting}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5">
+                      <SelectValue placeholder="Select a product" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {products.map(product => (
+                      <SelectItem
+                        key={product.id}
+                        value={product.id}
                         className="text-base"
-                      />
-                      <CommandList>
-                        <CommandEmpty>No product found.</CommandEmpty>
-                        <CommandGroup>
-                          {products.map(product => (
-                            <CommandItem
-                              className="text-base"
-                              value={product.name}
-                              key={product.id}
-                              onSelect={() => {
-                                form.setValue('product_id', product.id)
-                                setIsComboboxOpen(false);
-                              }}
-                            >
-                              {product.name}
-                              <Check
-                                className={cn(
-                                  "ml-auto",
-                                  product.id === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
+                      >
+                        {product.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormDescription>
-                  Search or select a digital product
+                  Select an application product
                 </FormDescription>
                 <FormMessage />
               </FormItem>

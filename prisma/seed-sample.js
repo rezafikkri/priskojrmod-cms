@@ -68,7 +68,7 @@ export async function seedLicenseKeys(prisma, customers) {
   for (const customer of customers) {
     const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
 
-    const secret = await prisma.secretKeyLicense.findFirst({
+    const secret = await prisma.secretKey.findFirst({
       select: { id: true, key: true },
     });
     // if secret is not found, then skip

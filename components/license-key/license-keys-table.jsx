@@ -53,7 +53,7 @@ import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
 
 const defaultColumnVisibility = {
-  app_name: true,
+  appName: true,
   regenerated_at: false,
   created_at: false,
   updated_at: false,
@@ -425,16 +425,16 @@ export default function LicenseKeysTable() {
 
     // if secretKeyId != 'all'
     if (newFilters.secretKeyId && newFilters.secretKeyId !== 'all') {
-      if (columnVisibility.app_name) {
+      if (columnVisibility.appName) {
         setColumnVisibility(prev => ({
           ...prev,
-          app_name: false,
+          appName: false,
         }));
       }
-    } else if (!columnVisibility.app_name) {
+    } else if (!columnVisibility.appName) {
       setColumnVisibility(prev => ({
         ...prev,
-        app_name: true,
+        appName: true,
       }));
     }
   }
@@ -777,7 +777,8 @@ export default function LicenseKeysTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'app_name',
+      id: 'appName',
+      accessorKey: 'secretKey.product.name',
       header: 'App Name',
     },
     {
@@ -849,7 +850,7 @@ export default function LicenseKeysTable() {
                     setResetDeviceData({
                       id: row.original.id,
                       email: row.getValue('email'),
-                      appName: row.getValue('app_name'),
+                      appName: row.getValue('appName'),
                     });
                     setIsOpenResetDeviceDialog(true);
                   }}
@@ -868,7 +869,7 @@ export default function LicenseKeysTable() {
                   setEditRevokeStatusData({
                     id: row.original.id,
                     email: row.getValue('email'),
-                    appName: row.getValue('app_name'),
+                    appName: row.getValue('appName'),
                     isRevoked: row.original.is_revoked,
                   });
                   setIsOpenEditRevokeStatusDialog(true);
@@ -887,7 +888,7 @@ export default function LicenseKeysTable() {
                   setDeleteData({
                     id: row.original.id,
                     email: row.getValue('email'),
-                    appName: row.getValue('app_name'),
+                    appName: row.getValue('appName'),
                   });
                   setIsOpenDeleteDialog(true);
                 }}

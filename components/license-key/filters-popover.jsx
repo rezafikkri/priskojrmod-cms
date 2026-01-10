@@ -41,7 +41,7 @@ export default function FiltersPopover({
     onFilter({ showRevoked: false });
   }
 
-  // handler for select app_name onOpenChange event
+  // handler for select product/app name onOpenChange event
   async function handleOpenChange(open) {
     if (open) {
       setIsLoading(true);
@@ -101,7 +101,7 @@ export default function FiltersPopover({
               <SelectItem className="text-base" value="all">All</SelectItem> 
               {secretKeys.map(secretKey => (
                 <SelectItem className="text-base" value={secretKey.id} key={secretKey.id}>
-                  {secretKey.app_name}
+                  {secretKey.product.name}
                 </SelectItem>
               ))}
               {isLoading && (

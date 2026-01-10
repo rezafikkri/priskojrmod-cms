@@ -52,10 +52,6 @@ beforeAll(() => {
       $transaction: vi.fn(),
     },
   }));
-
-  vi.mock('@/lib/services/secret-key-service', () => ({
-    updateAppName: () => {},
-  }));
 });
 
 afterEach(() => {

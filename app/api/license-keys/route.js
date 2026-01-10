@@ -26,9 +26,11 @@ export async function GET(req) {
     created_at: true,
     updated_at: true,
     regenerated_at: true,
-    secret_key: {
+    secretKey: {
       select: {
-        app_name: true,
+        product: {
+          select: { name: true },
+        },
       },
     },
   };
@@ -69,13 +71,7 @@ export async function GET(req) {
 
     return Response.json({
       message: 'success',
-      data: {
-        ...dataResponse,
-        items: dataResponse.items.map(({ secret_key, ...rest }) => ({
-          ...rest,
-          app_name: secret_key.app_name,
-        })),
-      },
+      data: dataResponse,
     });   
   } catch (err) {
     return Response.json({

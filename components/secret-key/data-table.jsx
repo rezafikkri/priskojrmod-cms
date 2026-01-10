@@ -63,7 +63,8 @@ export default function DataTable({ secretKeys: data }) {
 
   const columns = useMemo(() => [
     {
-      accessorKey: 'app_name',
+      id: 'appName',
+      accessorKey: 'product.name',
       header: 'App Name',
     },
     {
@@ -117,7 +118,7 @@ export default function DataTable({ secretKeys: data }) {
               >
                 <button
                   onClick={() => {
-                    setDeleteData({ id: row.original.id, appName: row.getValue('app_name') });
+                    setDeleteData({ id: row.original.id, appName: row.getValue('appName') });
                     setIsOpenDeleteDialog(true);
                   }}
                 >

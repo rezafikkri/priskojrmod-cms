@@ -80,7 +80,7 @@ export default function CreateForm({ secretKeys }) {
                         value={secretKey.id.toString()}
                         className="text-base"
                       >
-                        {secretKey.app_name}
+                        {secretKey.product.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
