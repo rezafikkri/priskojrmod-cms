@@ -17,30 +17,11 @@ export async function GET(req) {
     filters = { ...filters, can_regenerate: canRegenerate === 'yes' ? true : false };
   }
 
-  const select = {
-    id: true,
-    device_id: true,
-    email: true,
-    code: true,
-    is_revoked: true,
-    created_at: true,
-    updated_at: true,
-    regenerated_at: true,
-    secretKey: {
-      select: {
-        product: {
-          select: { name: true },
-        },
-      },
-    },
-  };
-
   try {
     let dataResponse;
 
     if (searchKey) {
       const licenseKeys = await searchLicenseKeys({
-        select,
         key: searchKey,
         limit: cmsConfig.search.limit,
         filters,
@@ -57,7 +38,6 @@ export async function GET(req) {
       }
     } else {
       const licenseKeys = await getLicenseKeys({
-        select,
         pageIndex,
         pageSize: cmsConfig.pagination.pageSize,
         filters,

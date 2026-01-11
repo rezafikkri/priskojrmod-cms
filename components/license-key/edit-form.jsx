@@ -63,8 +63,8 @@ export default function EditForm({ licenseKey }) {
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
           <FormItem>
             <FormLabel className="text-base">Secret key</FormLabel>
-            <p>{licenseKey.appName}</p>
-            <FormDescription>What’s displayed here is the app name, which represents the secret key used by this license key. It cannot be changed after creation.</FormDescription>
+            <p>{licenseKey.secretKey.product.name}</p>
+            <FormDescription>What’s shown here is the application name used to represent the selected secret key. It can’t be changed after creation.</FormDescription>
           </FormItem>
 
           <FormItem>

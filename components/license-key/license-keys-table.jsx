@@ -772,7 +772,8 @@ export default function LicenseKeysTable() {
       ),
     },
     {
-      accessorKey: 'email',
+      id: 'email',
+      accessorKey: 'customer.email',
       header: 'Email',
       enableHiding: false,
     },

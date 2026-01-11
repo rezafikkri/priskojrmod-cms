@@ -24,17 +24,12 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/services/customer-service', () => ({
-    getCustomer: async () => ({
-      first_name: 'adelina',
-      last_name: 'damayanti',
-      email: 'adel@gmail.com',
-    }),
-  }));
-
-  vi.mock('@/lib/pjma-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      LicenseKey: {
+      secretKey: {
+        findUnique: vi.fn(),
+      },
+      licenseKey: {
         create: vi.fn(),
         delete: vi.fn(),
         findMany: vi.fn(),
@@ -42,13 +37,8 @@ beforeAll(() => {
         update: vi.fn(),
         updateMany: vi.fn(),
       },
-    },
-  }));
-
-  vi.mock('@/lib/pjme-prisma-client', () => ({
-    default: {
-      Customer: {
-        findUnique: vi.fn(),
+      customer: {
+        findFirst: vi.fn(),
       },
     },
   }));
@@ -64,6 +54,8 @@ beforeAll(() => {
       decode: vi.fn(),
     },
   }));
+
+  vi.mock('@/config/cms', () => ({}));
 });
 
 afterEach(() => {
@@ -73,9 +65,9 @@ afterEach(() => {
 });
 
 describe('createLicenseKey function', () => {
-  it('Should call verifySession function, not call pjmaDBPrismaClient.LicenseKey.create function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.licenseKey.create function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -86,19 +78,25 @@ describe('createLicenseKey function', () => {
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmaDBPrismaClient.LicenseKey.create).not.toHaveBeenCalled();
+    expect(prisma.licenseKey.create).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmaDBPrismaClient.LicenseKey.create function correctly', async () => {
+  it('Should call prisma.licenseKey.create function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
     const { getSpecificSecretKey } = await import('@/lib/services/secret-key-service');
 
     verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
     getSpecificSecretKey.mockResolvedValue({ key: '123' });
-    pjmaDBPrismaClient.LicenseKey.create.mockResolvedValue({ secret_key_id: 1 });
+    prisma.customer.findFirst.mockResolvedValue({
+      first_name: 'test',
+      last_name: 'gege',
+      email: 'test@g.com',
+    });
+    prisma.secretKey.findUnique.mockResolvedValue({ key: 'test' });
+    prisma.licenseKey.create.mockResolvedValue({ secret_key_id: 1 });
 
     await createLicenseKey({
       secret_key_id: '2',
@@ -106,12 +104,11 @@ describe('createLicenseKey function', () => {
       type: 'online',
     });
 
-    expect(pjmaDBPrismaClient.LicenseKey.create).toHaveBeenCalledWith({
+    expect(prisma.licenseKey.create).toHaveBeenCalledWith({
       data: {
         id: expect.any(String),
         secret_key_id: 2,
         customer_id: 'b86eb08d-02d8-44a2-a3fe-1c18cf35ce3c',
-        email: 'adel@gmail.com',
         code: 'jsonwebtoken',
         created_at: Math.floor(new Date().getTime() / 1000),
         updated_at: Math.floor(new Date().getTime() / 1000),
@@ -122,9 +119,9 @@ describe('createLicenseKey function', () => {
 });
 
 describe('getLicenseKeys function', () => {
-  it('should call verifySession function, not call pjmaDBPrismaClient.LicenseKey.findMany function and throw Error with "Unauthenticated" message', async () => {
+  it('should call verifySession function, not call prisma.licenseKey.findMany function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -132,32 +129,49 @@ describe('getLicenseKeys function', () => {
       .rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmaDBPrismaClient.LicenseKey.findMany).not.toHaveBeenCalled();
+    expect(prisma.licenseKey.findMany).not.toHaveBeenCalled();
   });
 
-  it('should call pjmaDBPrismaClient.LicenseKey.findMany function correctly', async () => {
+  it('should call prisma.licenseKey.findMany function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
     const jwt = (await import('jsonwebtoken')).default;
 
     const filters = { secret_key_id: 1, is_revoked: false };
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
-    const mockLicenseKeys = [
+    const mocklicenseKeys = [
       { id: '1', created_at: 123, updated_at: 3498, key: 'key1' },
       { id: '2', created_at: 456, updated_at: 567, key: 'key2' },
     ];
-    pjmaDBPrismaClient.LicenseKey.findMany.mockResolvedValue(mockLicenseKeys);
+    prisma.licenseKey.findMany.mockResolvedValue(mocklicenseKeys);
     jwt.decode.mockReturnValue({ exp: 6789 });
 
     await getLicenseKeys({
-      select: { id: true, key: true },
       pageIndex: 1,
       pageSize: 2,
       filters,
     });
 
-    expect(pjmaDBPrismaClient.LicenseKey.findMany).toHaveBeenCalledWith({
-      select: { id: true, key: true },
+    expect(prisma.licenseKey.findMany).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        device_id: true,
+        code: true,
+        is_revoked: true,
+        created_at: true,
+        updated_at: true,
+        regenerated_at: true,
+        secretKey: {
+          select: {
+            product: {
+              select: { name: true },
+            },
+          },
+        },
+        customer: {
+          select: { email: true },
+        },
+      },
       orderBy: [
         { updated_at: 'desc' },
         { id: 'desc' },
@@ -173,49 +187,67 @@ describe('getLicenseKeys function', () => {
 });
 
 describe('searchLicenseKeys function', () => {
-  it('should call verifySession function, not call pjmaDBPrismaClient.LicenseKey.findMany function and throw Error with "Unauthenticated" message', async () => {
+  it('should call verifySession function, not call prisma.licenseKey.findMany function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(searchLicenseKeys({
-      select: {},
       searchKey: 'test',
       searchLimit: 5,
       filters: { secret_key_id: 3 },
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmaDBPrismaClient.LicenseKey.findMany).not.toHaveBeenCalled();
+    expect(prisma.licenseKey.findMany).not.toHaveBeenCalled();
   });
 
-  it('should call pjmaDBPrismaClient.LicenseKey.findMany function correctly', async () => {
+  it('should call prisma.licenseKey.findMany function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
     const jwt = (await import('jsonwebtoken')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
-    const mockLicenseKeys = [
+    const mocklicenseKeys = [
       { id: '1', created_at: 123, updated_at: 3498, regenerated_at: 512, key: 'key1' },
       { id: '2', created_at: 456, updated_at: 567, key: 'key2' },
     ];
-    pjmaDBPrismaClient.LicenseKey.findMany.mockResolvedValue(mockLicenseKeys);
+    prisma.licenseKey.findMany.mockResolvedValue(mocklicenseKeys);
     jwt.decode.mockReturnValue({ exp: 1234 });
 
     await searchLicenseKeys({
-      select: { id: true, key: true },
       key: 'test',
       limit: 5,
       filters: { secret_key_id: 4, is_revoked: true },
     });
 
-    expect(pjmaDBPrismaClient.LicenseKey.findMany).toHaveBeenCalledWith({
-      select: { id: true, key: true },
+    expect(prisma.licenseKey.findMany).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        device_id: true,
+        code: true,
+        is_revoked: true,
+        created_at: true,
+        updated_at: true,
+        regenerated_at: true,
+        secretKey: {
+          select: {
+            product: {
+              select: { name: true },
+            },
+          },
+        },
+        customer: {
+          select: { email: true },
+        },
+      },
       where: {
-        email: {
-          startsWith: 'test',
-          mode: 'insensitive',
+        customer: {
+          email: {
+            startsWith: 'test',
+            mode: 'insensitive',
+          },
         },
         secret_key_id: 4,
         is_revoked: true,
@@ -226,27 +258,27 @@ describe('searchLicenseKeys function', () => {
 });
 
 describe('deleteLicenseKey function', () => {
-  it('should call verifySession, not call pjmaDBPrismaClient.LicenseKey.delete function and throw with "Unauthenticated" message', async () => {
+  it('should call verifySession, not call prisma.licenseKey.delete function and throw with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(deleteLicenseKey('123')).rejects.toThrowError(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmaDBPrismaClient.LicenseKey.delete).not.toHaveBeenCalled();
+    expect(prisma.licenseKey.delete).not.toHaveBeenCalled();
   });
 
-  it('should call pjmaDBPrismaClient.LicenseKey.delete function correctly', async () => {
+  it('should call prisma.licenseKey.delete function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
 
     await deleteLicenseKey('f28fe573-7fc9-4c0f-bd89-c698266fd4cf');
 
-    expect(pjmaDBPrismaClient.LicenseKey.delete).toHaveBeenCalledWith({
+    expect(prisma.licenseKey.delete).toHaveBeenCalledWith({
       where: { id: 'f28fe573-7fc9-4c0f-bd89-c698266fd4cf' },
       select: { id: true },
     });
@@ -254,52 +286,60 @@ describe('deleteLicenseKey function', () => {
 });
 
 describe('getLicenseKey function', () => {
-  it('Should call verifySession function, not call pjmaDBPrismaClient.LicenseKey.findUnique function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.licenseKey.findUnique function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(getLicenseKey('1')).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmaDBPrismaClient.LicenseKey.findUnique).not.toHaveBeenCalled();
+    expect(prisma.licenseKey.findUnique).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmaDBPrismaClient.LicenseKey.findUnique function correctly', async () => {
+  it('Should call prisma.licenseKey.findUnique function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id' });
 
-    pjmeDBPrismaClient.Customer.findUnique.mockResolvedValue({
-      first_name: 'reza',
-      email: 'fikkri.reza@gmail.com',
-    });
-    pjmaDBPrismaClient.LicenseKey.findUnique.mockResolvedValue({
+    prisma.licenseKey.findUnique.mockResolvedValue({
       id: '33c993ad-097f-499d-9899-61186bb31b72',
-      customer_id: '930ee77a-2b41-4099-87a7-28e1f309d73f',
       code: 'fake-key',
-      secret_key: {
-        app_name: 'app-name',
+      customer: {
+        first_name: 'test',
+        last_name: 'gege',
+        email: 'test@g.com',
+      },
+      secretKey: {
+        product: {
+          name: 'app-name',
+        },
       },
     });
 
     await getLicenseKey('33c993ad-097f-499d-9899-61186bb31b72');
 
-    expect(pjmaDBPrismaClient.LicenseKey.findUnique).toHaveBeenCalledWith({
+    expect(prisma.licenseKey.findUnique).toHaveBeenCalledWith({
       where: { id: '33c993ad-097f-499d-9899-61186bb31b72' },
       select: {
         id: true,
-        customer_id: true,
-        email: true,
         code: true,
         reset_count: true,
         last_reset_period: true,
-        secret_key: {
+        secretKey: {
           select: {
-            app_name: true,
+            product: {
+              select: { name: true },
+            },
+          },
+        },
+        customer: {
+          select: {
+            first_name: true,
+            last_name: true,
+            email: true,
           },
         },
       },
@@ -308,9 +348,9 @@ describe('getLicenseKey function', () => {
 });
 
 describe('updateLicenseKey function', () => {
-  it('Should call verifySession function, not call pjmaDBPrismaClient.LicenseKey.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.licenseKey.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -323,19 +363,19 @@ describe('updateLicenseKey function', () => {
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmaDBPrismaClient.LicenseKey.update).not.toHaveBeenCalled();
+    expect(prisma.licenseKey.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmaDBPrismaClient.LicenseKey.update function correctly', async () => {
+  it('Should call prisma.licenseKey.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149); // deterministic timestamp
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id' });
 
-    pjmaDBPrismaClient.LicenseKey.findUnique.mockResolvedValue(null);
+    prisma.licenseKey.findUnique.mockResolvedValue(null);
 
     await updateLicenseKey({
       id: '3f50e7ba-9c3e-4cf1-8a98-77be2c32c71a',
@@ -343,7 +383,7 @@ describe('updateLicenseKey function', () => {
       change_expiration_date: true,
     });
 
-    expect(pjmaDBPrismaClient.LicenseKey.update).toHaveBeenCalledWith({
+    expect(prisma.licenseKey.update).toHaveBeenCalledWith({
       where: { id: '3f50e7ba-9c3e-4cf1-8a98-77be2c32c71a' },
       select: {
         id: true,
@@ -356,9 +396,9 @@ describe('updateLicenseKey function', () => {
 });
 
 describe('setCanRegenerateLicenseKeys function', () => {
-  it('Should call verifySession function, not call pjmaDBPrismaClient.LicenseKey.updateMany function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.licenseKey.updateMany function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -367,25 +407,25 @@ describe('setCanRegenerateLicenseKeys function', () => {
     ])).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmaDBPrismaClient.LicenseKey.updateMany).not.toHaveBeenCalled();
+    expect(prisma.licenseKey.updateMany).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmaDBPrismaClient.LicenseKey.updateMany function correctly', async () => {
+  it('Should call prisma.licenseKey.updateMany function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149); // deterministic timestamp
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
-    pjmaDBPrismaClient.LicenseKey.updateMany.mockResolvedValue({ count: 2 });
+    prisma.licenseKey.updateMany.mockResolvedValue({ count: 2 });
 
     const uuid1 = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
     const uuid2 = 'b1aebc99-8d0b-4ef8-aa6d-6bb9bd380b22';
 
     await setCanRegenerateLicenseKeys([uuid1, uuid2]);
 
-    expect(pjmaDBPrismaClient.LicenseKey.updateMany).toHaveBeenCalledWith({
+    expect(prisma.licenseKey.updateMany).toHaveBeenCalledWith({
       where: {
         id: { in: [uuid1, uuid2] },
       },
