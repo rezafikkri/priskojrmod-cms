@@ -461,7 +461,7 @@ describe('deleteCustomer function', () => {
 
     pjmeDBPrismaClient.Customer.findFirst.mockResolvedValue({
       is_banned: true,
-      oauth_id: null,
+      google_user_id: null,
       last_active: Math.floor(Date.now() / 1000) - 999999,
     });
 

@@ -47,7 +47,7 @@ export const authOptions = {
           };
           let admin = await prisma.admin.findUnique({
             where: {
-              auth_id: profile.sub,
+              google_user_id: profile.sub,
             },
             select,
           });
@@ -56,7 +56,7 @@ export const authOptions = {
             admin = await prisma.admin.findFirst({
               where: {
                 email: profile.email,
-                auth_id: null,
+                google_user_id: null,
               },
               select: {
                 ...select,
@@ -69,18 +69,18 @@ export const authOptions = {
               const currentTime = Math.floor(new Date().getTime() / 1000);
               const result = await prisma.admin.updateMany({
                 data: {
-                  auth_id: profile.sub,
+                  google_user_id: profile.sub,
                   updated_at: currentTime,
                 },
                 where: {
                   email: profile.email,
-                  auth_id: null,
+                  google_user_id: null,
                 },
               });
 
               if (result.count === 0) {
                 console.error(
-                  `SignIn failed: admin ID ${admin.id} - auth_id already set, cannot claim account`,
+                  `SignIn failed: admin ID ${admin.id} - google_user_id already set, cannot claim account`,
                 );
                 return '/signin?error=UnableToSignIn';
               }

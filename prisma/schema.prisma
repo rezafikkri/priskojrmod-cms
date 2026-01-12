@@ -17,8 +17,8 @@ enum AdminRole {
 model Admin {
   id Int @id @default(autoincrement()) @db.SmallInt
 
-  role    AdminRole
-  auth_id String?   @unique @db.VarChar(255)
+  role           AdminRole
+  google_user_id String?   @unique @db.VarChar(255)
 
   first_name            String @db.VarChar(100)
   last_name             String @db.VarChar(100)
@@ -333,17 +333,17 @@ model FaqTranslation {
 }
 
 model Customer {
-  id           String  @id @default(uuid(7)) @db.Uuid
-  oauth_id     String? @unique @db.VarChar(255)
-  is_banned    Boolean @default(false)
-  first_name   String  @db.VarChar(100)
-  last_name    String  @db.VarChar(100)
-  email        String  @unique @db.VarChar(254)
-  phone_number String? @db.VarChar(20)
-  picture      String? @db.VarChar(255)
-  last_active  Int?
-  created_at   Int
-  updated_at   Int
+  id             String  @id @default(uuid(7)) @db.Uuid
+  google_user_id String? @unique @db.VarChar(255)
+  is_banned      Boolean @default(false)
+  first_name     String  @db.VarChar(100)
+  last_name      String  @db.VarChar(100)
+  email          String  @unique @db.VarChar(254)
+  phone_number   String? @db.VarChar(20)
+  picture        String? @db.VarChar(255)
+  last_active    Int?
+  created_at     Int
+  updated_at     Int
 
   transactions Transaction[]
   licenseKeys  LicenseKey[]
@@ -512,7 +512,7 @@ model LicenseKey {
   reset_count       Int     @default(0) @db.SmallInt
 
   secretKey SecretKey @relation(fields: [secret_key_id], references: [id], onDelete: Cascade)
-  customer  Customer         @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  customer  Customer  @relation(fields: [customer_id], references: [id], onDelete: Cascade)
 
   @@unique([customer_id, secret_key_id])
   @@map("license_keys")

@@ -9,7 +9,7 @@ export async function GET(req) {
   const filters = { is_banned: searchParams.get('ib') === 'false' ? false : true };
   const select = {
     id: true,
-    oauth_id: true,
+    google_user_id: true,
     is_banned: true,
     first_name: true,
     last_name: true,

@@ -452,10 +452,10 @@ export default function CustomersTable() {
   }
 
   // TABLE definition
-  const shouldShowDeleteButton = useCallback(({ oauthId, lastActive, isBanned }) => {
+  const shouldShowDeleteButton = useCallback(({ googleUserId, lastActive, isBanned }) => {
     const now = Math.floor(new Date().getTime() / 1000);
     return (
-      !oauthId ||
+      !googleUserId ||
       !lastActive ||
       (now - lastActive > (60 * 60 * 24 * 30)) ||
       isBanned
@@ -535,7 +535,7 @@ export default function CustomersTable() {
               </button>
             </DropdownMenuItem>
             {shouldShowDeleteButton({
-              oauthId: row.original.oauth_id,
+              googleUserId: row.original.google_user_id,
               lastActive: row.getValue('last_active'),
               isBanned: row.original.is_banned,
             }) && (

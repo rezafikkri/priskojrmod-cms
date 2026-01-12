@@ -10,7 +10,7 @@ import 'dotenv/config';
  */
 export async function seedAdmin(prisma) {
   const admin = await prisma.admin.findFirst({
-    where: { auth_id: process.env.ADMIN_GOOGLE_ID },
+    where: { google_user_id: process.env.ADMIN_GOOGLE_ID },
     select: { id: true },
   });
   if (!admin) {
@@ -18,7 +18,7 @@ export async function seedAdmin(prisma) {
     await prisma.admin.create({
       data: {
         role: 'owner',
-        auth_id: process.env.ADMIN_GOOGLE_ID,
+        google_user_id: process.env.ADMIN_GOOGLE_ID,
         email: 'fikkri.reza@gmail.com',
         picture: 'https://res.cloudinary.com/priskojrmod/image/upload/q_auto/IIC_1795_owpaav.jpg',
         first_name: 'Reza',
