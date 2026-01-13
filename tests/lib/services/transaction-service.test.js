@@ -346,7 +346,7 @@ describe('updateTransactionStatus function', () => {
       ],
     });
     pjmeDBPrismaClient.Product.findMany.mockResolvedValue([
-      { id: 'prod-uuid-1', category_id: 'cat-uuid-1', name: 'Product A' }
+      { id: 'prod-uuid-1', categoryId: 'cat-uuid-1', name: 'Product A' }
     ]);
     pjmeDBPrismaClient.Category.findUnique.mockResolvedValue({ id: 'cat-uuid-app' });
     pjmaDBPrismaClient.SecretKeyLicense.findMany.mockResolvedValue([]);
@@ -409,7 +409,7 @@ describe('correctTransactionStatus function', () => {
       ],
     });
     pjmeDBPrismaClient.Product.findMany.mockResolvedValue([
-      { id: 'prod-uuid-1', category_id: 'cat-uuid-1', name: 'Product A' }
+      { id: 'prod-uuid-1', categoryId: 'cat-uuid-1', name: 'Product A' }
     ]);
     pjmeDBPrismaClient.Category.findUnique.mockResolvedValue({ id: 'cat-uuid-app' });
     pjmaDBPrismaClient.SecretKeyLicense.findMany.mockResolvedValue([

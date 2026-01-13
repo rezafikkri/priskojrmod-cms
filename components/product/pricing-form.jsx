@@ -65,7 +65,7 @@ export default function PricingForm({
   function syncPrices(pricing) {
     let newPrices = [];
 
-    if (basic.price_type === PriceType.PAID) {
+    if (basic.priceType === PriceType.PAID) {
       for (const variant of extras.variants) {
         // This is for updating prices. It ensures that when the admin goes back to the previous step 
         // and edits a variant name, the new variant name will be reflected here.
@@ -81,15 +81,15 @@ export default function PricingForm({
           }
         }
         
-        // if new variant exist, or price_type changed to paid (that mean, each variant doesn't have
+        // if new variant exist, or priceType changed to paid (that mean, each variant doesn't have
         // any prices), then add prices for each variant to newPrices array. 
         if (!pricing.prices.some(price => (variant.id ?? variant.dbId) === price.variantId)) {
           newPrices.push({
             variantId: variant.id ?? variant.dbId,
             variantName: variant.name,
             currencies: [
-              { price: '', currency_code: CurrencyCode.IDR },
-              { price: '', currency_code: CurrencyCode.USD },
+              { price: '', currencyCode: CurrencyCode.IDR },
+              { price: '', currencyCode: CurrencyCode.USD },
             ],
           });
         }
@@ -132,7 +132,7 @@ export default function PricingForm({
 
     data.prices.forEach((price, i) => {
       price.currencies.forEach((currency, j) => {
-        if (currency.currency_code === CurrencyCode.IDR && !Number.isInteger(currency.price)) {
+        if (currency.currencyCode === CurrencyCode.IDR && !Number.isInteger(currency.price)) {
           const fieldName = `prices.${i}.currencies.${j}.price`;
 
           if (!fieldNameToFocus) fieldNameToFocus = fieldName;
@@ -159,11 +159,11 @@ export default function PricingForm({
     };
 
     if (mode === 'create') {
-      product.is_published = data.is_published;
+      product.isPublished = data.isPublished;
     }
     
     // if price type == paid
-    if (product.price_type === PriceType.PAID) {
+    if (product.priceType === PriceType.PAID) {
       product.variants = product.variants.map(variant => {
         let newVariant = { ...variant };
 
@@ -180,14 +180,14 @@ export default function PricingForm({
 
       product.discount = {
         ...data.discount,
-        expired_at: data.discount.expired_at !== ''
-          ? getExpiredAtEpoch(data.discount.expired_at)
+        expiredAt: data.discount.expiredAt !== ''
+          ? getExpiredAtEpoch(data.discount.expiredAt)
           : '',
       };
       product.coupon = {
         ...data.coupon,
-        expired_at: data.coupon.expired_at !== ''
-          ? getExpiredAtEpoch(data.coupon.expired_at)
+        expiredAt: data.coupon.expiredAt !== ''
+          ? getExpiredAtEpoch(data.coupon.expiredAt)
           : '',
       };
     } else {
@@ -242,7 +242,7 @@ export default function PricingForm({
 
         } else if (data.discount.id && !data.discount.value) {
           // reset discount
-          newPricing.discount = { value: '', expired_at: '' };
+          newPricing.discount = { value: '', expiredAt: '' };
         }
 
         let successMessage = 'Product updated successfully';
@@ -252,7 +252,7 @@ export default function PricingForm({
             ...data.coupon,
           };
         } else if (data.coupon.id && (!data.coupon.code || dbVersion !== basic.version)) {
-          newPricing.coupon = { code: '', discount: '', expired_at: '' };
+          newPricing.coupon = { code: '', discount: '', expiredAt: '' };
           successMessage += ' The old coupon has been removed because a new version was released';
         }
 
@@ -262,7 +262,7 @@ export default function PricingForm({
         // reset versionStatus state and update reference (dbVersion, dsb)
         setVersionStatus('pristine');
         setReference({
-          dbPriceType: basic.price_type,
+          dbPriceType: basic.priceType,
           dbVersion: basic.version,
           dbChangelog: content.changelog,
         });
@@ -287,7 +287,7 @@ export default function PricingForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
-        {basic.price_type === PriceType.PAID && (
+        {basic.priceType === PriceType.PAID && (
           <>
             <section className="space-y-6 mb-9">
               <h3 className="text-lg font-bold mb-0">Prices</h3>
@@ -353,12 +353,12 @@ export default function PricingForm({
 
         {mode === 'create' && (
           <>
-            {basic.price_type === PriceType.PAID && (
+            {basic.priceType === PriceType.PAID && (
               <Separator />
             )}
             <FormField
               control={form.control}
-              name="is_published"
+              name="isPublished"
               render={({ field }) => (
                 <FormItem className="flex space-x-2 items-start">
                   <FormControl>

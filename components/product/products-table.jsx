@@ -46,11 +46,11 @@ import { cmsConfig } from '@/config/cms';
 
 const defaultColumnVisibility = {
   category: false,
-  is_published: true,
-  released_at: true,
+  isPublished: true,
+  releasedAt: true,
   admin: false,
-  created_at: false,
-  updated_at: false,
+  createdAt: false,
+  updatedAt: false,
 };
 
 export default function ProductsTable({
@@ -96,22 +96,22 @@ export default function ProductsTable({
         let newProduct = { ...product };
 
         // mapping prices
-        if (newProduct.price_type === PriceType.PAID) {
+        if (newProduct.priceType === PriceType.PAID) {
           const prices = newProduct.variants.flatMap(variant => variant.prices);
-          newProduct.prices = prices.reduce((acc, { currency_code, price }) => {
-            if (!acc[currency_code]) {
-              acc[currency_code] = { min: price, max: price };
+          newProduct.prices = prices.reduce((acc, { currencyCode, price }) => {
+            if (!acc[currencyCode]) {
+              acc[currencyCode] = { min: price, max: price };
             } else {
-              if (acc[currency_code].min > price) acc[currency_code].min = price;
-              if (acc[currency_code].max < price) acc[currency_code].max = price;
+              if (acc[currencyCode].min > price) acc[currencyCode].min = price;
+              if (acc[currencyCode].max < price) acc[currencyCode].max = price;
             }
             return acc;
           }, {});
         }
         delete newProduct.variants;
 
-        // mapping released_at
-        newProduct.released_at = newProduct.versions[0].released_at;
+        // mapping releasedAt
+        newProduct.releasedAt = newProduct.versions[0].releasedAt;
         delete newProduct.versions;
 
         return newProduct;
@@ -138,10 +138,10 @@ export default function ProductsTable({
         if (!oldData) return oldData;
 
         let updatedProduct = { ...oldData.items.find(data => data.id === editRes.data.id) };
-        updatedProduct.updated_at = editRes.data.updated_at;
-        updatedProduct.is_pinned = !isPinned;
+        updatedProduct.updatedAt = editRes.data.updatedAt;
+        updatedProduct.isPinned = !isPinned;
 
-        const targetIndex = oldData.items.findLastIndex(data => data.is_pinned);
+        const targetIndex = oldData.items.findLastIndex(data => data.isPinned);
         const filteredProducts = oldData.items.filter(data => data.id !== editRes.data.id);
 
         if (!isPinned) {
@@ -181,13 +181,13 @@ export default function ProductsTable({
         if (!oldData) return oldData;
 
         let updatedProduct = { ...oldData.items.find(data => data.id === editRes.data.id) };
-        updatedProduct.updated_at = editRes.data.updated_at;
-        updatedProduct.is_published = !isPublished;
+        updatedProduct.updatedAt = editRes.data.updatedAt;
+        updatedProduct.isPublished = !isPublished;
 
-        let targetIndex = oldData.items.findIndex(data => !data.is_pinned);
+        let targetIndex = oldData.items.findIndex(data => !data.isPinned);
         const filteredProducts = oldData.items.filter(data => data.id !== editRes.data.id);
 
-        if (updatedProduct.is_pinned) {
+        if (updatedProduct.isPinned) {
           return { items: [updatedProduct, ...filteredProducts] };
         } else {
           filteredProducts.splice(targetIndex, 0, updatedProduct);
@@ -240,7 +240,7 @@ export default function ProductsTable({
       header: 'Name',
       enableHiding: false,
       cell: ({ row }) => {
-        if (row.original.is_pinned) {
+        if (row.original.isPinned) {
           return (
             <>
               <span>{row.getValue('name')}</span>
@@ -286,7 +286,7 @@ export default function ProductsTable({
         </>
       ),
       cell: ({ row }) => {
-        if (row.original.price_type === PriceType.PAID) {
+        if (row.original.priceType === PriceType.PAID) {
           const prices = row.getValue('prices')[priceCurrency];
           const min = formatCurrency({
             value: prices.min,
@@ -309,20 +309,20 @@ export default function ProductsTable({
       },
     },
     {
-      accessorKey: 'is_published',
+      accessorKey: 'isPublished',
       header: <div className="text-center">Published</div>,
       cell: ({ row }) => (
         <div className="text-center">{
-          row.getValue('is_published')
+          row.getValue('isPublished')
             ? <Check className="size-4 inline-block" />
             : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
         }</div>
       ),
     },
     {
-      accessorKey: 'released_at',
+      accessorKey: 'releasedAt',
       header: 'Released At',
-      cell: ({ row }) => formatDateTime(row.getValue('released_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('releasedAt')),
     },
     {
       id: 'admin',
@@ -341,14 +341,14 @@ export default function ProductsTable({
       ),
     },
     {
-      accessorKey: 'created_at',
+      accessorKey: 'createdAt',
       header: 'Created At',
-      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('createdAt')),
     },
     {
-      accessorKey: 'updated_at',
+      accessorKey: 'updatedAt',
       header: 'Updated At',
-      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('updatedAt')),
     },
     {
       id: 'actions',
@@ -381,10 +381,10 @@ export default function ProductsTable({
                 <button
                   onClick={() => handleEditPinnedStatus(
                     row.original.id,
-                    row.original.is_pinned,
+                    row.original.isPinned,
                   )}
                 >
-                  {row.original.is_pinned ? 'Unpin' : 'Pin'}
+                  {row.original.isPinned ? 'Unpin' : 'Pin'}
                 </button>
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -394,13 +394,13 @@ export default function ProductsTable({
                 <button
                   onClick={() => handleEditPublishedStatus(
                     row.original.id,
-                    row.original.is_published,
+                    row.original.isPublished,
                   )}
                 >
-                  {row.getValue('is_published') ? 'Unpublish' : 'Publish'}
+                  {row.getValue('isPublished') ? 'Unpublish' : 'Publish'}
                 </button>
               </DropdownMenuItem>
-              {!row.original.is_pinned && !row.getValue('is_published') && (
+              {!row.original.isPinned && !row.getValue('isPublished') && (
                 <>
                   <DropdownMenuSeparator className="-mx-1.5" />
                   <DropdownMenuItem

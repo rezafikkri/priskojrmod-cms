@@ -27,17 +27,17 @@ export default function ImageGrid({
 
   function handleSetAsThumbnail({ index, image }) {
     for (const [currentIndex, image] of images.entries()) {
-      if (image.is_thumbnail) {
+      if (image.isThumbnail) {
         onUpdate(currentIndex, {
           ...image,
-          is_thumbnail: false,
+          isThumbnail: false,
         });
         break;
       }
     }
     onUpdate(index, {
       ...image,
-      is_thumbnail: true,
+      isThumbnail: true,
     });
   }
 
@@ -76,10 +76,10 @@ export default function ImageGrid({
             </div>
           )}
           <div
-            className={`rounded-md border bg-gray-100 dark:bg-zinc-900/50 overflow-hidden relative group ${image.is_thumbnail ? 'border-green-500 dark:border-green-600 border-2' : ''}`}
+            className={`rounded-md border bg-gray-100 dark:bg-zinc-900/50 overflow-hidden relative group ${image.isThumbnail ? 'border-green-500 dark:border-green-600 border-2' : ''}`}
           >
             <div className="absolute right-2 top-2 space-x-2 items-center invisible opacity-0 group-hover:visible group-hover:opacity-100 animate-in fade-in duration-200 z-1">
-              {!image.is_thumbnail && (
+              {!image.isThumbnail && (
                 <TooltipWrapper text="Set as thumbnail">
                   <Button
                     variant="outline"
@@ -111,7 +111,7 @@ export default function ImageGrid({
               width={image.width}
               height={image.height}
             />
-            {image.is_thumbnail && (
+            {image.isThumbnail && (
               <span
                 className="absolute bottom-2 left-2 text-xs bg-zinc-100 dark:bg-zinc-900 rounded-sm py-0.5 px-1 invisible opacity-0 group-hover:visible group-hover:opacity-100 animate-in fade-in duration-200"
               >

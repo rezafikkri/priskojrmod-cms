@@ -20,12 +20,12 @@ export const defaultFormStoreInitState = {
   form: {
     basic: {
       name: '',
-      category_id: '',
-      owner_id: '',
-      license_id: '',
-      price_type: '',
-      drive_file_id: '',
-      download_url: '',
+      categoryId: '',
+      ownerId: '',
+      licenseId: '',
+      priceType: '',
+      driveFileId: '',
+      downloadUrl: '',
       version: '',
     },
     content: {
@@ -39,8 +39,8 @@ export const defaultFormStoreInitState = {
         {
           id: v4(),
           name: '',
-          download_url: '',
-          file_access_password: '',
+          downloadUrl: '',
+          fileAccessPassword: '',
         },
       ],
       images: [],
@@ -49,14 +49,14 @@ export const defaultFormStoreInitState = {
       prices: [],
       discount: {
         value: '',
-        expired_at: '',
+        expiredAt: '',
       },
       coupon: {
         code: '',
         discount: '',
-        expired_at: '',
+        expiredAt: '',
       },
-      is_published: false,
+      isPublished: false,
     },
   },
   reference: {},
@@ -73,8 +73,8 @@ export default async function ProductForm({ mode = 'create', id = null }) {
   const owners = await getOwners({
     select: {
       id: true,
-      first_name: true,
-      last_name: true,
+      firstName: true,
+      lastName: true,
       smProfileUrl: true,
     },
     withDisplayLabel: true,
@@ -86,8 +86,8 @@ export default async function ProductForm({ mode = 'create', id = null }) {
     admins = await getAdmins({
       select: {
         id: true,
-        first_name: true,
-        last_name: true,
+        firstName: true,
+        lastName: true,
         email: true,
       },
       withDisplayLabel: true,
@@ -100,7 +100,7 @@ export default async function ProductForm({ mode = 'create', id = null }) {
 
   if (mode === 'create') {
     if (isOwner) {
-      defaultFormStoreInitState.form.basic.admin_id = '';
+      defaultFormStoreInitState.form.basic.adminId = '';
     }
 
     return (

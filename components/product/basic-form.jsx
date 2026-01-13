@@ -37,18 +37,18 @@ export default function BasicForm({
   admins,
   mode = 'create',
 }) {
-  const { admin_id, ...basic } = useProductFormStore(state => state.form.basic);
+  const { adminId, ...basic } = useProductFormStore(state => state.form.basic);
   const setBasic = useProductFormStore(state => state.setBasic);
   const clearDraft = useProductFormStore(state => state.clearDraft);
   const defaultValues = {
     ...basic,
-    category_id: basic.category_id.toString(),
-    owner_id: basic.owner_id.toString(),
-    license_id: basic.license_id.toString(),
+    categoryId: basic.categoryId.toString(),
+    ownerId: basic.ownerId.toString(),
+    licenseId: basic.licenseId.toString(),
   };
 
   if (admins) {
-    defaultValues.admin_id = admin_id.toString();
+    defaultValues.adminId = adminId.toString();
   }
 
   let basicSchema;
@@ -80,7 +80,7 @@ export default function BasicForm({
   function handleNext(data) {
     let isError = false;
 
-    if (data.category_id === applicationCategoryId) {
+    if (data.categoryId === applicationCategoryId) {
       if (!isSemverFormat(data.version)) {
         form.setError(
           'version',
@@ -91,11 +91,11 @@ export default function BasicForm({
       }
     }
 
-    // validate drive_file_id, download_url, and version
-    if (data.category_id === applicationCategoryId || data.price_type === PriceType.FREE) {
-      if (data.download_url === '') {
+    // validate driveFileId, downloadUrl, and version
+    if (data.categoryId === applicationCategoryId || data.priceType === PriceType.FREE) {
+      if (data.downloadUrl === '') {
         form.setError(
-          'download_url',
+          'downloadUrl',
           { message: 'Can\'t be empty' },
           { shouldFocus: true },
         );
@@ -105,19 +105,19 @@ export default function BasicForm({
 
     if (isError) return;
 
-    onPricingStepVisibility(data.price_type);
+    onPricingStepVisibility(data.priceType);
     setBasic(data);
     onNextStep();
   }
 
   function beforeNext(e) {
     if (
-      form.getValues('category_id') === applicationCategoryId.toString() ||
-      form.getValues('price_type') === PriceType.FREE
+      form.getValues('categoryId') === applicationCategoryId.toString() ||
+      form.getValues('priceType') === PriceType.FREE
     ) {
-      form.setValue('drive_file_id', '');
+      form.setValue('driveFileId', '');
     } else {
-      form.setValue('download_url', '');
+      form.setValue('downloadUrl', '');
     }
 
     form.handleSubmit(handleNext)(e);
@@ -145,7 +145,7 @@ export default function BasicForm({
 
   // categories for showed in select option
   let availableCategories = categories;
-  if (mode === 'edit' && basic.category_id !== applicationCategoryId) {
+  if (mode === 'edit' && basic.categoryId !== applicationCategoryId) {
     availableCategories = categories.filter((category) => category.id !== applicationCategoryId);
   }
 
@@ -167,7 +167,7 @@ export default function BasicForm({
           )}
         />
 
-        {(mode === 'edit' && basic.category_id === applicationCategoryId) ? (
+        {(mode === 'edit' && basic.categoryId === applicationCategoryId) ? (
           <FormItem>
             <FormLabel className="text-base">Category</FormLabel>
             <p className="capitalize">{applicationCategory.name}</p>
@@ -176,7 +176,7 @@ export default function BasicForm({
         ) : (
           <FormField
             control={form.control}
-            name="category_id"
+            name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base">Category</FormLabel>
@@ -211,7 +211,7 @@ export default function BasicForm({
         {admins ? (
           <FormField
             control={form.control}
-            name="admin_id"
+            name="adminId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base">Admin</FormLabel>
@@ -248,7 +248,7 @@ export default function BasicForm({
 
         <FormField
           control={form.control}
-          name="owner_id"
+          name="ownerId"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-base">Owner</FormLabel>
@@ -278,7 +278,7 @@ export default function BasicForm({
 
         <FormField
           control={form.control}
-          name="license_id"
+          name="licenseId"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-base">License</FormLabel>
@@ -309,13 +309,13 @@ export default function BasicForm({
         {(mode === 'edit' && dbPriceType === PriceType.PAID) ? (
           <FormItem>
             <FormLabel className="text-base">Price type</FormLabel>
-            <p className="capitalize">{basic.price_type}</p>
+            <p className="capitalize">{basic.priceType}</p>
             <FormDescription>This is a paid product. Price type cannot be changed.</FormDescription>
           </FormItem>
         ) : (
           <FormField
             control={form.control}
-            name="price_type"
+            name="priceType"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base">Price type</FormLabel>

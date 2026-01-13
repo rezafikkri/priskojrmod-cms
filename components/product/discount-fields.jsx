@@ -44,7 +44,7 @@ export default function DiscountFields({
       const removeRes = await removeProductDiscount(discount.id, basic.id);
 
       if (removeRes.status === 'success') {
-        form.setValue('discount', { value: '', expired_at: '' });
+        form.setValue('discount', { value: '', expiredAt: '' });
       } else {
         toast.error(removeRes.message, {
           duration: cmsConfig.toast.duration.error
@@ -88,7 +88,7 @@ export default function DiscountFields({
 
         <FormField
           control={form.control}
-          name="discount.expired_at"
+          name="discount.expiredAt"
           render={({ field }) =>
             <ExpiredAtInput
               field={field}

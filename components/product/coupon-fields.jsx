@@ -44,7 +44,7 @@ export default function CouponFields({
       const removeRes = await removeProductCoupon(coupon.id, basic.id);
 
       if (removeRes.status === 'success') {
-        form.setValue('coupon', { code: '', discount: '', expired_at: '' });
+        form.setValue('coupon', { code: '', discount: '', expiredAt: '' });
       } else {
         toast.error(removeRes.message, {
           duration: cmsConfig.toast.duration.error
@@ -110,7 +110,7 @@ export default function CouponFields({
 
           <FormField
             control={form.control}
-            name="coupon.expired_at"
+            name="coupon.expiredAt"
             render={({ field }) =>
               <ExpiredAtInput
                 field={field}

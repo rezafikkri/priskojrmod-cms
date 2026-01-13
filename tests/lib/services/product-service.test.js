@@ -84,10 +84,10 @@ describe('createProduct function', () => {
 
     const input = {
       name: 'Awesome New Product',
-      category_id: 1,
-      license_id: 1,
-      owner_id: 1,
-      download_link: 'https://example.com/download',
+      categoryId: 1,
+      licenseId: 1,
+      ownerId: 1,
+      downloadUrl: 'https://example.com/download',
       description: {
         id: 'Deskripsi produk keren',
         en: 'Awesome product description',
@@ -98,10 +98,10 @@ describe('createProduct function', () => {
         },
       ],
       images: [
-        { url: 'https://images.unsplash.com/photo-1750222382424-610417abf3b1', is_thumbnail: true, width: 100, height: 100 },
+        { url: 'https://images.unsplash.com/photo-1750222382424-610417abf3b1', isThumbnail: true, width: 100, height: 100 },
       ],
-      is_published: true,
-      price_type: PriceType.FREE,
+      isPublished: true,
+      priceType: PriceType.FREE,
       version: '1.0.0',
     };
 
@@ -111,17 +111,17 @@ describe('createProduct function', () => {
 
     expect(pjmeDBPrismaClient.Product.create).toHaveBeenCalledWith({
       data: {
-        category_id: input.category_id,
-        admin_id: 'admin-id-123',
-        owner_id: input.owner_id,
-        license_id: input.license_id,
+        categoryId: input.categoryId,
+        adminId: 'admin-id-123',
+        ownerId: input.ownerId,
+        licenseId: input.licenseId,
         name: input.name,
         slug: 'awesome-new-product',
-        price_type: input.price_type,
-        is_published: input.is_published,
-        created_at: currentTime,
-        updated_at: currentTime,
-        download_link: input.download_link,
+        priceType: input.priceType,
+        isPublished: input.isPublished,
+        createdAt: currentTime,
+        updatedAt: currentTime,
+        downloadUrl: input.downloadUrl,
         translations: {
           create: [
             { language: Language.ID, description: input.description.id },
@@ -130,7 +130,7 @@ describe('createProduct function', () => {
         },
         versions: {
           create: {
-            released_at: 1744853503,
+            releasedAt: 1744853503,
             version: '1.0.0',
           },
         },
@@ -171,19 +171,19 @@ describe('updateProductPinnedStatus function', () => {
     pjmeDBPrismaClient.Product.count.mockResolvedValue(2);
     pjmeDBPrismaClient.Product.update.mockResolvedValue({
       id: '999c549f-33d7-461e-9f0e-928b17097e42',
-      updated_at: Math.floor(new Date().getTime() / 1000),
+      updatedAt: Math.floor(new Date().getTime() / 1000),
     });
 
     await updateProductPinnedStatus('999c549f-33d7-461e-9f0e-928b17097e42', true);
 
-    expect(pjmeDBPrismaClient.Product.count).toHaveBeenCalledWith({ where: { is_pinned: true }});
+    expect(pjmeDBPrismaClient.Product.count).toHaveBeenCalledWith({ where: { isPinned: true }});
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({
       where: { id: '999c549f-33d7-461e-9f0e-928b17097e42' },
       data: {
-        is_pinned: true,
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        isPinned: true,
+        updatedAt: Math.floor(new Date().getTime() / 1000),
       },
-      select: { id: true, updated_at: true },
+      select: { id: true, updatedAt: true },
     });
   });
 });
@@ -212,7 +212,7 @@ describe('updateProductPublishedStatus function', () => {
 
     pjmeDBPrismaClient.Product.update.mockResolvedValue({
       id: 'fd209fe2-3f60-42b2-9985-99b3fc4f8600',
-      updated_at: Math.floor(new Date().getTime() / 1000),
+      updatedAt: Math.floor(new Date().getTime() / 1000),
     });
 
     await updateProductPublishedStatus('fd209fe2-3f60-42b2-9985-99b3fc4f8600', false);
@@ -220,10 +220,10 @@ describe('updateProductPublishedStatus function', () => {
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({
       where: { id: 'fd209fe2-3f60-42b2-9985-99b3fc4f8600' },
       data: {
-        is_published: false,
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        isPublished: false,
+        updatedAt: Math.floor(new Date().getTime() / 1000),
       },
-      select: { id: true, updated_at: true },
+      select: { id: true, updatedAt: true },
     });
   });
 });
@@ -247,8 +247,8 @@ describe('deleteProduct function', () => {
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id-123' });
     pjmeDBPrismaClient.Product.findUnique.mockResolvedValue({
-      is_pinned: false,
-      is_published: false,
+      isPinned: false,
+      isPublished: false,
     });
 
     await deleteProduct('6cb32c0f-a38a-4e42-bf45-d5a964205ab3');
@@ -297,7 +297,7 @@ describe('deleteProductVariant function', () => {
     });
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({
       where: { id: '629f8469-ff43-4d49-bca6-4875b93f4b69' },
-      data: { updated_at: currentTime },
+      data: { updatedAt: currentTime },
       select: { id: true },
     });
   });
@@ -340,7 +340,7 @@ describe('deleteProductImage function', () => {
     });
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({
       where: { id: '2e497c7c-3aa2-450a-ac53-e199f5c3cc84' },
-      data: { updated_at: currentTime },
+      data: { updatedAt: currentTime },
       select: { id: true },
     });
   });
@@ -381,7 +381,7 @@ describe('deleteProductDiscount function', () => {
     });
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({
       where: { id: '2e497c7c-3aa2-450a-ac53-e199f5c3cc94' },
-      data: { updated_at: currentTime },
+      data: { updatedAt: currentTime },
       select: { id: true },
     });
   });
@@ -427,7 +427,7 @@ describe('deleteProductCoupon function', () => {
     });
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({
       where: { id: '2e497c7c-3aa2-450a-ac53-e129f5c3cc94' },
-      data: { updated_at: currentTime },
+      data: { updatedAt: currentTime },
       select: { id: true },
     });
   });
@@ -458,11 +458,11 @@ describe('updateProduct function', () => {
     const input = {
       id: '2e497c7c-3aa2-450a-ac53-e129f5c4cc34',
       name: 'Updated Awesome Product',
-      category_id: 2,
-      owner_id: 2,
-      license_id: 2,
-      download_link: 'https://example.com/new-download',
-      drive_file_id: '',
+      categoryId: 2,
+      ownerId: 2,
+      licenseId: 2,
+      downloadUrl: 'https://example.com/new-download',
+      driveFileId: '',
       translationId: {
         id: '2e497c7c-3aa2-450a-ac53-e129f5c3cc34',
         en: '1e497c7c-3aa2-450a-ac53-e129f5c3cc34',
@@ -471,20 +471,20 @@ describe('updateProduct function', () => {
       changelog: { id: '', en: '' },
       versionId: '1e497c7c-3aa2-450a-ac53-e129f5c3cc34',
       version: '1.0.0',
-      price_type: PriceType.PAID,
+      priceType: PriceType.PAID,
       variants: [
         {
           dbId: '2e497c7c-3aa2-450a-ac53-e129f5c4cc34',
           name: 'Middle',
-          download_link: 'https://chatgpt.com/c/68b8ccfa-fb94-832e-aadc-0108da26bc6e',
-          file_access_password: 'lN384%_Z7f4ivJVd',
+          downloadUrl: 'https://chatgpt.com/c/68b8ccfa-fb94-832e-aadc-0108da26bc6e',
+          fileAccessPassword: 'lN384%_Z7f4ivJVd',
         },
       ],
       images: [
         {
           dbId: '2e497c7c-3aa2-450a-ac53-e129f5c4ac36',
           url: 'https://images.unsplash.com/photo-1750797636255-8c939940bcad',
-          is_thumbnail: true,
+          isThumbnail: true,
           width: 123,
           height: 456,
         },
@@ -495,7 +495,7 @@ describe('updateProduct function', () => {
       name: input.name,
       versions: [
         {
-          released_at: currentTime,
+          releasedAt: currentTime,
           version: input.version,
         },
       ],
@@ -521,14 +521,14 @@ describe('updateProduct function', () => {
     expect(pjmeDBPrismaClient.Product.update).toHaveBeenCalledWith({
       where: { id: input.id },
       data: {
-        category_id: input.category_id,
-        owner_id: input.owner_id,
-        license_id: input.license_id,
+        categoryId: input.categoryId,
+        ownerId: input.ownerId,
+        licenseId: input.licenseId,
         name: input.name,
         slug: 'updated-awesome-product',
-        download_link: input.download_link,
-        drive_file_id: null,
-        updated_at: currentTime,
+        downloadUrl: input.downloadUrl,
+        driveFileId: null,
+        updatedAt: currentTime,
         translations: {
           update: [
             {
@@ -569,12 +569,12 @@ describe('updateProduct function', () => {
             };
           }),
         },
-        price_type: input.price_type,
+        priceType: input.priceType,
       },
       select: {
         versions: {
           orderBy: [
-            { released_at: 'desc' },
+            { releasedAt: 'desc' },
             { id: 'desc' },
           ],
           take: 1,
@@ -589,7 +589,7 @@ describe('updateProduct function', () => {
           select: {
             id: true,
             url: true,
-            is_thumbnail: true,
+            isThumbnail: true,
             width: true,
             height: true,
           },
@@ -598,12 +598,12 @@ describe('updateProduct function', () => {
           select: {
             id: true,
             name: true,
-            download_link: true,
-            file_access_password: true,
+            downloadUrl: true,
+            fileAccessPassword: true,
             prices: {
               select: {
                 id: true,
-                currency_code: true,
+                currencyCode: true,
                 price: true,
               },
             },

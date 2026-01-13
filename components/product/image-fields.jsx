@@ -13,7 +13,7 @@ export default function ImageFields({
   images,
 }) {
   function computeHasThumbnail() {
-    return images.some(image => image.is_thumbnail);
+    return images.some(image => image.isThumbnail);
   }
 
   const [hasThumbnail, setHasThumbnail] = useState(computeHasThumbnail);
@@ -36,7 +36,7 @@ export default function ImageFields({
       url,
       width,
       height,
-      is_thumbnail: isThumbnail,
+      isThumbnail: isThumbnail,
       ...updatedField,
     });
 
@@ -85,7 +85,7 @@ export default function ImageFields({
       url,
       width,
       height,
-      is_thumbnail: isThumbnail,
+      isThumbnail: isThumbnail,
     });
     if (!hasThumbnail && isThumbnail) {
       setHasThumbnail(true);
@@ -175,13 +175,13 @@ export default function ImageFields({
       </div>
       <div className="flex items-start gap-4">
         <Checkbox
-          id="is_thumbnail"
+          id="isThumbnail"
           checked={isThumbnail}
           onCheckedChange={() => setIsThumbnail(prev => !prev)}
           disabled={hasThumbnail}
         />
         <div className="space-y-2">
-          <Label htmlFor="is_thumbnail" className="text-base leading-none">Use as thumbnail</Label>
+          <Label htmlFor="isThumbnail" className="text-base leading-none">Use as thumbnail</Label>
           <p className="text-muted-foreground text-sm">
             Check if this image should be used as the main thumbnail on the product page.
           </p>

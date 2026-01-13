@@ -44,8 +44,8 @@ export default function VariantFields({
     onAppend({
       id: v4(),
       name: '',
-      download_url: '',
-      file_access_password: '',
+      downloadUrl: '',
+      fileAccessPassword: '',
     });
   }
 
@@ -107,7 +107,7 @@ export default function VariantFields({
             />
             <FormField
               control={form.control}
-              name={`variants.${index}.download_url`}
+              name={`variants.${index}.downloadUrl`}
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel className="text-base">Download link</FormLabel>
@@ -125,7 +125,7 @@ export default function VariantFields({
             />
             <FormField
               control={form.control}
-              name={`variants.${index}.file_access_password`}
+              name={`variants.${index}.fileAccessPassword`}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-base">File access password</FormLabel>

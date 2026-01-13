@@ -112,7 +112,7 @@ export default function ExtrasForm({
       // reset versionStatus state and update reference (dbVersion, dsb)
       setVersionStatus('pristine');
       setReference({
-        dbPriceType: basic.price_type,
+        dbPriceType: basic.priceType,
         dbVersion: basic.version,
         dbChangelog: content.changelog,
       });
@@ -150,9 +150,9 @@ export default function ExtrasForm({
 
     // do reverse loop for when error is many, then focus is for first input from top, not last input.
     for (let i = variantCount; i--; i > 0) {
-      if (variants[i].download_url && !variants[i].file_access_password) {
+      if (variants[i].downloadUrl && !variants[i].fileAccessPassword) {
         form.setError(
-          `variants.${i}.file_access_password`,
+          `variants.${i}.fileAccessPassword`,
           { message: 'Can\'t be empty' },
           { shouldFocus: true },
         );
@@ -162,7 +162,7 @@ export default function ExtrasForm({
 
     if (isError) return;
 
-    if (mode == 'edit' && basic.price_type === PriceType.FREE) {
+    if (mode == 'edit' && basic.priceType === PriceType.FREE) {
       await handleSubmit(data);
     } else {
       handleNext(data);
@@ -233,7 +233,7 @@ export default function ExtrasForm({
           <ArrowLeft className="icon" /> Previous
         </Button>
 
-        {(mode === 'edit' && basic.price_type === PriceType.FREE) ? (
+        {(mode === 'edit' && basic.priceType === PriceType.FREE) ? (
           <div className="relative inline-block">
             <Button
               type="submit"

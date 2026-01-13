@@ -27,7 +27,7 @@ export default function MainFileFields({ form, applicationCategoryId }) {
   async function handleGetFileInfo() {
     setIsLoading(true);
 
-    const fileInfo = await fetchDriveFileInfo(form.getValues('drive_file_id'));
+    const fileInfo = await fetchDriveFileInfo(form.getValues('driveFileId'));
 
     if (fileInfo.status === 'success') {
       setFileName(fileInfo.data.name);
@@ -43,16 +43,16 @@ export default function MainFileFields({ form, applicationCategoryId }) {
     setIsLoading(false);
   }
 
-  const categoryId = useWatch({ control: form.control, name: 'category_id' });
-  const priceType = useWatch({ control: form.control, name: 'price_type' });
+  const categoryId = useWatch({ control: form.control, name: 'categoryId' });
+  const priceType = useWatch({ control: form.control, name: 'priceType' });
 
   return (
     <>
       {(priceType === PriceType.FREE || categoryId === applicationCategoryId.toString()) ? (
         <FormField
-          key="download_url"
+          key="downloadUrl"
           control={form.control}
-          name="download_url"
+          name="downloadUrl"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-base">Download link</FormLabel>
@@ -69,9 +69,9 @@ export default function MainFileFields({ form, applicationCategoryId }) {
         />
       ) : (
         <FormField
-          key="drive_file_id"
+          key="driveFileId"
           control={form.control}
-          name="drive_file_id"
+          name="driveFileId"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-base">Drive file ID</FormLabel>

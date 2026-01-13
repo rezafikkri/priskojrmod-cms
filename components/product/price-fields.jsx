@@ -39,11 +39,11 @@ export default function PriceFields({
             name={`${name}.${index}.price`}
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel className="text-base">{currency.currency_code} price</FormLabel>
+                <FormLabel className="text-base">{currency.currencyCode} price</FormLabel>
                 <p className="text-sm text-zinc-500">
                   Preview: {formatCurrency({
                     value: Number(field.value),
-                    currencyCode: currency.currency_code,
+                    currencyCode: currency.currencyCode,
                   })}
                 </p>
                 <FormControl>
@@ -54,7 +54,7 @@ export default function PriceFields({
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>Enter the product price in {currency.currency_code}</FormDescription>
+                <FormDescription>Enter the product price in {currency.currencyCode}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

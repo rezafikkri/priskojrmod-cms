@@ -36,8 +36,8 @@ export async function seedCustomers(prisma, count) {
       first_name: faker.person.firstName(),
       last_name: faker.person.lastName(),
       email: faker.internet.email().toLowerCase(),
-      created_at: currentTime,
-      updated_at: currentTime,
+      createdAt: currentTime,
+      updatedAt: currentTime,
     };
 
     if (i % 2 === 0) {
@@ -84,8 +84,8 @@ export async function seedLicenseKeys(prisma, customers) {
       code,
       customer_id: customer.id,
       secret_key_id: secret.id,
-      created_at: currentTime,
-      updated_at: currentTime,
+      createdAt: currentTime,
+      updatedAt: currentTime,
     });
   }
 
@@ -166,8 +166,8 @@ function getTransactionDetails({
 export async function seedTransactions(prisma, count) {
   // seed transaction
   const products = await prisma.product.findMany({
-    where: { price_type: 'paid' },
-    orderBy: { updated_at: 'desc' },
+    where: { priceType: 'paid' },
+    orderBy: { updatedAt: 'desc' },
     include: {
       versions: {
         orderBy: [
@@ -202,7 +202,7 @@ export async function seedTransactions(prisma, count) {
     const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
 
     transactions.push({
-      admin_id: selectedAdmin.id,
+      adminId: selectedAdmin.id,
       admin_email: selectedAdmin.email,
       customer_id: selectedCustomer.id,
       status: 'pending',
@@ -229,8 +229,8 @@ export async function seedTransactions(prisma, count) {
       customer_name: selectedCustomer.first_name,
       customer_email: selectedCustomer.email,
       customer_phone_number: selectedCustomer.phone_number,
-      created_at: currentTime,
-      updated_at: currentTime,
+      createdAt: currentTime,
+      updatedAt: currentTime,
       details: {
         create: transactionDetails,
       },
