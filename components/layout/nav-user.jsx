@@ -28,7 +28,7 @@ import NavUserSkeleton from '../loadings/nav-user-skeleton';
 export function NavUser() {
   const { isMobile } = useSidebar()
   const { data: session, status } = useSession();
-  const name = `${session?.user?.first_name} ${session?.user?.last_name}`;
+  const name = `${session?.user?.firstName} ${session?.user?.lastName}`;
   const email = session?.user?.email;
   const image = session?.user?.image;
 

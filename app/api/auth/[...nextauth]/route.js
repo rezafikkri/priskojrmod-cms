@@ -42,12 +42,12 @@ export const authOptions = {
             id: true,
             picture: true,
             role: true,
-            first_name: true,
-            last_name: true,
+            firstName: true,
+            lastName: true,
           };
           let admin = await prisma.admin.findUnique({
             where: {
-              google_user_id: profile.sub,
+              googleUserId: profile.sub,
             },
             select,
           });
@@ -56,31 +56,31 @@ export const authOptions = {
             admin = await prisma.admin.findFirst({
               where: {
                 email: profile.email,
-                google_user_id: null,
+                googleUserId: null,
               },
               select: {
                 ...select,
-                updated_at: true,
+                updatedAt: true,
               },
             });
 
             if (admin) {
               // claim this account
               const currentTime = Math.floor(new Date().getTime() / 1000);
-              const result = await prisma.admin.updateMany({
+              const result = await prisma.admin.update({
                 data: {
-                  google_user_id: profile.sub,
-                  updated_at: currentTime,
+                  googleUserId: profile.sub,
+                  updatedAt: currentTime,
                 },
                 where: {
                   email: profile.email,
-                  google_user_id: null,
+                  googleUserId: null,
                 },
               });
 
               if (result.count === 0) {
                 console.error(
-                  `SignIn failed: admin ID ${admin.id} - google_user_id already set, cannot claim account`,
+                  `SignIn failed: admin ID ${admin.id} - googleUserId already set, cannot claim account`,
                 );
                 return '/signin?error=UnableToSignIn';
               }
@@ -92,8 +92,8 @@ export const authOptions = {
           user.id = admin.id;
           user.role = admin.role;
           user.picture = admin.picture;
-          user.first_name = admin.first_name;
-          user.last_name = admin.last_name;
+          user.firstName = admin.firstName;
+          user.lastName = admin.lastName;
         }
 
         return true;       
@@ -107,8 +107,8 @@ export const authOptions = {
         token.userId = user.id;
         token.role = user.role;
         token.picture = user.picture;
-        token.first_name = user.first_name;
-        token.last_name = user.last_name;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
 
         delete token.name;
       }
@@ -116,8 +116,8 @@ export const authOptions = {
       if (trigger === 'update') {
         // updateSession can called in any place, so we cannot ensure each property exists,
         // cause it, we need check every property that really need to updated
-        if (session?.first_name) token.first_name = session.first_name;
-        if (session?.last_name) token.last_name = session.last_name;
+        if (session?.firstName) token.firstName = session.firstName;
+        if (session?.lastName) token.lastName = session.lastName;
         if (session?.picture) token.picture = session.picture;
       }
       
@@ -127,8 +127,8 @@ export const authOptions = {
       session.user = {
         id: token.userId,
         role: token.role,
-        first_name: token.first_name,
-        last_name: token.last_name,
+        firstName: token.firstName,
+        lastName: token.lastName,
         email: token.email,
         image: token.picture,
       };

@@ -85,7 +85,7 @@ export default function PhoneNumberFields({
   const isSubmitting = form.formState.isSubmitting;
   const phoneNumberErrors = form.formState.errors[name];
 
-  const countryIso = useWatch({ control: form.control, name: `${name}.country_iso` });
+  const countryIso = useWatch({ control: form.control, name: `${name}.countryIso` });
   const number = useWatch({ control: form.control, name: `${name}.number` });
   const parsedNumber = parsePhoneNumber(
     number,
@@ -108,7 +108,7 @@ export default function PhoneNumberFields({
 
       const newCountryIso = countryIsoMap.has(detectedCountry) ? detectedCountry : 'OTHER';
 
-      form.setValue(`${name}.country_iso`, newCountryIso, {
+      form.setValue(`${name}.countryIso`, newCountryIso, {
         shouldValidate: true,
       });
     }, 100);
@@ -135,7 +135,7 @@ export default function PhoneNumberFields({
       <div className="flex">
         <FormField
           control={form.control}
-          name={`${name}.country_iso`}
+          name={`${name}.countryIso`}
           render={({ field }) => (
             <FormItem>
               <Select
@@ -186,9 +186,9 @@ export default function PhoneNumberFields({
       </div>
 
       <FormDescription>{description}</FormDescription>
-      {phoneNumberErrors?.country_iso && (
+      {phoneNumberErrors?.countryIso && (
         <p className="dark:text-red-500/85 text-destructive text-sm">
-          {phoneNumberErrors.country_iso.message}
+          {phoneNumberErrors.countryIso.message}
         </p>
       )}
       {phoneNumberErrors?.number && (

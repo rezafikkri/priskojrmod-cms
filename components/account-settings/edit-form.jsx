@@ -20,16 +20,16 @@ export function EditForm({
     defaultValues: {
       role: account.role,
       email: account.email,
-      first_name: account.first_name,
-      last_name: account.last_name,
-      whatsapp_phone_number: account.whatsapp_phone_number,
+      firstName: account.firstName,
+      lastName: account.lastName,
+      whatsappPhoneNumber: account.whatsappPhoneNumber,
       picture: account.picture,
-      donation_links: generateDonationLinkValues(account.donation_links),
+      donationLinks: generateDonationLinkValues(account.donationLinks),
     },
   });
   const { fields: donationLinks } = useFieldArray({
     control: form.control,
-    name: 'donation_links',
+    name: 'donationLinks',
   });
 
   const [deletingDonationLinkIds, setDeletingDonationLinkIds] = useState([]);
@@ -42,11 +42,11 @@ export function EditForm({
     setDeletingDonationLinkIds(prevIds => prevIds.filter(prevId => prevId !== id));
 
     if (removeRes.status === 'success') {
-      const prevDonationLinks = form.getValues('donation_links'); 
+      const prevDonationLinks = form.getValues('donationLinks'); 
       form.setValue(
-        'donation_links',
+        'donationLinks',
         prevDonationLinks.map(dl => {
-          if (dl.dbId === id) return { url: '', currency_code: dl.currency_code };
+          if (dl.dbId === id) return { url: '', currencyCode: dl.currencyCode };
           return dl;
         }),
       );
@@ -61,23 +61,23 @@ export function EditForm({
     if (editRes.status === 'success') {
       // update several session data
       if (
-        session?.user?.first_name !== data.first_name ||
-        session?.user?.last_name !== data.last_name ||
+        session?.user?.firstName !== data.firstName ||
+        session?.user?.lastName !== data.lastName ||
         session?.user?.image !== data.picture
       ) {
         await updateSession({
-          first_name: data.first_name,
-          last_name: data.last_name,
+          firstName: data.firstName,
+          lastName: data.lastName,
           picture: data.picture,
         });
       }
 
       // update donation link data in form
       if (
-        editRes.data.donation_links ||
-        form.getValues('donation_links').some(dl => 'dbId' in dl)
+        editRes.data.donationLinks ||
+        form.getValues('donationLinks').some(dl => 'dbId' in dl)
       ) {
-        form.setValue('donation_links', generateDonationLinkValues(editRes.data.donation_links ?? []));
+        form.setValue('donationLinks', generateDonationLinkValues(editRes.data.donationLinks ?? []));
       }
 
       toast.success('Account settings updated successfully');

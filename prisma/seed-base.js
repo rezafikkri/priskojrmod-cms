@@ -10,7 +10,7 @@ import 'dotenv/config';
  */
 export async function seedAdmin(prisma) {
   const admin = await prisma.admin.findFirst({
-    where: { google_user_id: process.env.ADMIN_GOOGLE_ID },
+    where: { googleUserId: process.env.ADMIN_GOOGLE_ID },
     select: { id: true },
   });
   if (!admin) {
@@ -18,14 +18,14 @@ export async function seedAdmin(prisma) {
     await prisma.admin.create({
       data: {
         role: 'owner',
-        google_user_id: process.env.ADMIN_GOOGLE_ID,
+        googleUserId: process.env.ADMIN_GOOGLE_ID,
         email: 'fikkri.reza@gmail.com',
         picture: 'https://res.cloudinary.com/priskojrmod/image/upload/q_auto/IIC_1795_owpaav.jpg',
-        first_name: 'Reza',
-        last_name: 'Sariful Fikri',
-        whatsapp_phone_number: '+6285758438583',
-        created_at: currentTime,
-        updated_at: currentTime,
+        firstName: 'Reza',
+        lastName: 'Sariful Fikri',
+        whatsappPhoneNumber: '+6285758438583',
+        createdAt: currentTime,
+        updatedAt: currentTime,
       },
       select: { id: true },
     });
@@ -54,8 +54,8 @@ export async function seedCategory(prisma) {
       data: {
         name,
         slug,
-        created_at: currentTime,
-        updated_at: currentTime,
+        createdAt: currentTime,
+        updatedAt: currentTime,
       },
     });
 

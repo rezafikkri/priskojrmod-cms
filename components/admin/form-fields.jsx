@@ -64,7 +64,7 @@ export default function FormFields({
         <div className="flex gap-3 items-start">
           <FormField
             control={form.control}
-            name="first_name"
+            name="firstName"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel className="text-base">First name</FormLabel>
@@ -77,7 +77,7 @@ export default function FormFields({
           />
           <FormField
             control={form.control}
-            name="last_name"
+            name="lastName"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel className="text-base">Last name</FormLabel>
@@ -108,7 +108,7 @@ export default function FormFields({
 
         <PhoneNumberFields
           form={form}
-          name="whatsapp_phone_number"
+          name="whatsappPhoneNumber"
           label="WhatsApp Phone Number"
           description="Enter a reachable WhatsApp phone number"
         />
@@ -123,10 +123,10 @@ export default function FormFields({
               <FormField
                 key={dl.id}
                 control={form.control}
-                name={`donation_links.${index}.url`}
+                name={`donationLinks.${index}.url`}
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel className="text-base">{dl.currency_code} donation link</FormLabel>
+                    <FormLabel className="text-base">{dl.currencyCode} donation link</FormLabel>
                     <div className="flex gap-2">
                       <FormControl>
                         <Input
@@ -158,7 +158,7 @@ export default function FormFields({
                         </div>
                       )}
                     </div>
-                    <FormDescription>Enter the donation URL for {dl.currency_code}</FormDescription>
+                    <FormDescription>Enter the donation URL for {dl.currencyCode}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

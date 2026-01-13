@@ -16,18 +16,18 @@ export default function EditForm({ admin }) {
     defaultValues: {
       id: admin.id,
       email: admin.email,
-      first_name: admin.first_name,
-      last_name: admin.last_name,
-      whatsapp_phone_number: admin.whatsapp_phone_number,
+      firstName: admin.firstName,
+      lastName: admin.lastName,
+      whatsappPhoneNumber: admin.whatsappPhoneNumber,
       picture: admin.picture,
       role: admin.role,
-      donation_links: generateDonationLinkValues(admin.donation_links),
+      donationLinks: generateDonationLinkValues(admin.donationLinks),
     },
   });
 
   const { fields: donationLinks } = useFieldArray({
     control: form.control,
-    name: 'donation_links',
+    name: 'donationLinks',
   });
 
   const [deletingDonationLinkIds, setDeletingDonationLinkIds] = useState([]);
@@ -40,11 +40,11 @@ export default function EditForm({ admin }) {
     setDeletingDonationLinkIds(prevIds => prevIds.filter(prevId => prevId !== id));
 
     if (removeRes.status === 'success') {
-      const prevDonationLinks = form.getValues('donation_links'); 
+      const prevDonationLinks = form.getValues('donationLinks'); 
       form.setValue(
-        'donation_links',
+        'donationLinks',
         prevDonationLinks.map(dl => {
-          if (dl.dbId === id) return { url: '', currency_code: dl.currency_code };
+          if (dl.dbId === id) return { url: '', currencyCode: dl.currencyCode };
           return dl;
         }),
       );
@@ -58,10 +58,10 @@ export default function EditForm({ admin }) {
     const editRes = await editAdmin(data);
     if (editRes.status === 'success') {
       if (
-        editRes.data.donation_links ||
-        form.getValues('donation_links').some(dl => 'dbId' in dl)
+        editRes.data.donationLinks ||
+        form.getValues('donationLinks').some(dl => 'dbId' in dl)
       ) {
-        form.setValue('donation_links', generateDonationLinkValues(editRes.data.donation_links ?? []));
+        form.setValue('donationLinks', generateDonationLinkValues(editRes.data.donationLinks ?? []));
       }
       toast.success('Admin updated successfully');
     } else {

@@ -15,22 +15,22 @@ export default function CreateForm() {
     defaultValues: {
       role: AdminRole.STAFF,
       email: '',
-      first_name: '',
-      last_name: '',
-      whatsapp_phone_number: {
-        country_iso: '',
+      firstName: '',
+      lastName: '',
+      whatsappPhoneNumber: {
+        countryIso: '',
         number: '',
       },
       picture: '',
-      donation_links: [
-        { url: '', currency_code: CurrencyCode.IDR },
-        { url: '', currency_code: CurrencyCode.USD },
+      donationLinks: [
+        { url: '', currencyCode: CurrencyCode.IDR },
+        { url: '', currencyCode: CurrencyCode.USD },
       ],
     },
   });
   const { fields: donationLinks } = useFieldArray({
     control: form.control,
-    name: 'donation_links',
+    name: 'donationLinks',
   });
 
   async function handleSubmit(data) {

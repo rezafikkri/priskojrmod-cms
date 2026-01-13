@@ -17,19 +17,19 @@ enum AdminRole {
 model Admin {
   id Int @id @default(autoincrement()) @db.SmallInt
 
-  role           AdminRole
-  google_user_id String?   @unique @db.VarChar(255)
+  role         AdminRole
+  googleUserId String?   @unique @map("google_user_id") @db.VarChar(255)
 
-  first_name            String @db.VarChar(100)
-  last_name             String @db.VarChar(100)
-  email                 String @unique @db.VarChar(254)
-  whatsapp_phone_number String @db.VarChar(20)
-  picture               String @db.VarChar(255)
-  created_at            Int
-  updated_at            Int
+  firstName            String @map("first_name") @db.VarChar(100)
+  lastName             String @map("last_name") @db.VarChar(100)
+  email                String @unique @db.VarChar(254)
+  whatsappPhoneNumber  String @map("whatsapp_phone_number") @db.VarChar(20)
+  picture              String @db.VarChar(255)
+  createdAt            Int    @map("created_at")
+  updatedAt            Int    @map("updated_at")
 
-  donation_links DonationLink[]
-  products       Product[]
+  donationLinks DonationLink[]
+  products      Product[]
 
   @@map("admins")
 }
@@ -42,12 +42,12 @@ enum CurrencyCode {
 }
 
 model DonationLink {
-  id            Int          @id @default(autoincrement())
-  admin_id      Int          @db.SmallInt
-  currency_code CurrencyCode
-  url           String       @db.VarChar(100)
+  id           Int @id @default(autoincrement())
+  adminId      Int @map("admin_id") @db.SmallInt
+  currencyCode CurrencyCode @map("currency_code")
+  url          String @db.VarChar(100)
 
-  admin Admin @relation(fields: [admin_id], references: [id], onDelete: Cascade)
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
   @@map("donation_links")
 }
