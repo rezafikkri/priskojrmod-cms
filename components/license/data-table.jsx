@@ -90,14 +90,14 @@ export default function DataTable({ licenses: data }) {
       ),
     },
     {
-      accessorKey: 'created_at',
+      accessorKey: 'createdAt',
       header: 'Created At',
-      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('createdAt')),
     },
     {
-      accessorKey: 'updated_at',
+      accessorKey: 'updatedAt',
       header: 'Updated At',
-      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('updatedAt')),
     },
     {
       id: 'actions',

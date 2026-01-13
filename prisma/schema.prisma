@@ -20,13 +20,13 @@ model Admin {
   role         AdminRole
   googleUserId String?   @unique @map("google_user_id") @db.VarChar(255)
 
-  firstName            String @map("first_name") @db.VarChar(100)
-  lastName             String @map("last_name") @db.VarChar(100)
-  email                String @unique @db.VarChar(254)
-  whatsappPhoneNumber  String @map("whatsapp_phone_number") @db.VarChar(20)
-  picture              String @db.VarChar(255)
-  createdAt            Int    @map("created_at")
-  updatedAt            Int    @map("updated_at")
+  firstName           String @map("first_name") @db.VarChar(100)
+  lastName            String @map("last_name") @db.VarChar(100)
+  email               String @unique @db.VarChar(254)
+  whatsappPhoneNumber String @map("whatsapp_phone_number") @db.VarChar(20)
+  picture             String @db.VarChar(255)
+  createdAt           Int    @map("created_at")
+  updatedAt           Int    @map("updated_at")
 
   donationLinks DonationLink[]
   products      Product[]
@@ -42,10 +42,10 @@ enum CurrencyCode {
 }
 
 model DonationLink {
-  id           Int @id @default(autoincrement())
-  adminId      Int @map("admin_id") @db.SmallInt
+  id           Int          @id @default(autoincrement())
+  adminId      Int          @map("admin_id") @db.SmallInt
   currencyCode CurrencyCode @map("currency_code")
-  url          String @db.VarChar(100)
+  url          String       @db.VarChar(100)
 
   admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
@@ -55,12 +55,12 @@ model DonationLink {
 model Owner {
   id Int @id @default(autoincrement())
 
-  firstName     String @map("first_name") @db.VarChar(100)
-  lastName      String @map("last_name") @db.VarChar(100)
-  smProfileUrl  String @map("sm_profile_url") @db.VarChar(255)
-  picture       String @db.VarChar(255)
-  createdAt     Int    @map("created_at")
-  updatedAt     Int    @map("updated_at")
+  firstName    String @map("first_name") @db.VarChar(100)
+  lastName     String @map("last_name") @db.VarChar(100)
+  smProfileUrl String @map("sm_profile_url") @db.VarChar(255)
+  picture      String @db.VarChar(255)
+  createdAt    Int    @map("created_at")
+  updatedAt    Int    @map("updated_at")
 
   products Product[]
 
@@ -68,9 +68,9 @@ model Owner {
 }
 
 model License {
-  id         Int @id @default(autoincrement())
-  created_at Int
-  updated_at Int
+  id        Int @id @default(autoincrement())
+  createdAt Int @map("created_at")
+  updatedAt Int @map("updated_at")
 
   products     Product[]
   translations LicenseTranslation[]
@@ -79,13 +79,13 @@ model License {
 }
 
 model LicenseTranslation {
-  id         Int      @id @default(autoincrement())
-  license_id Int
-  language   Language
-  name       String   @db.VarChar(100)
-  content    String
+  id        Int      @id @default(autoincrement())
+  licenseId Int      @map("license_id")
+  language  Language
+  name      String   @db.VarChar(100)
+  content   String
 
-  license License @relation(fields: [license_id], references: [id], onDelete: Cascade)
+  license License @relation(fields: [licenseId], references: [id], onDelete: Cascade)
 
   @@map("license_translations")
 }
