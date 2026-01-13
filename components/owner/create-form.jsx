@@ -15,9 +15,9 @@ export default function CreateForm() {
   const form = useForm({
     resolver: zodResolver(createOwnerSchema),
     defaultValues: {
-      first_name: '',
-      last_name: '',
-      sm_profile_url: '',
+      firstName: '',
+      lastName: '',
+      smProfileUrl: '',
       picture: '',
     },
   });
@@ -35,8 +35,8 @@ export default function CreateForm() {
 
   async function handleFillWithAdminInfo() {
     if (session) {
-      form.setValue('first_name', session?.user?.first_name);
-      form.setValue('last_name', session?.user?.last_name);
+      form.setValue('firstName', session?.user?.firstName);
+      form.setValue('lastName', session?.user?.lastName);
       form.setValue('picture', session?.user?.image);
     }
   }

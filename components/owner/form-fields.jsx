@@ -26,7 +26,7 @@ export default function FormFields({
         <div className="flex gap-3 items-start">
           <FormField
             control={form.control}
-            name="first_name"
+            name="firstName"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel className="text-base">First name</FormLabel>
@@ -39,7 +39,7 @@ export default function FormFields({
           />
           <FormField
             control={form.control}
-            name="last_name"
+            name="lastName"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel className="text-base">Last name</FormLabel>
@@ -54,7 +54,7 @@ export default function FormFields({
 
         <FormField
           control={form.control}
-          name="sm_profile_url"
+          name="smProfileUrl"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-base">Social media profile URL</FormLabel>

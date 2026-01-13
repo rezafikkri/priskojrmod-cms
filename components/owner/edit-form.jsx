@@ -13,9 +13,9 @@ export default function EditForm({ owner }) {
     resolver: zodResolver(editOwnerSchema),
     defaultValues: {
       id: owner.id,
-      first_name: owner.first_name,
-      last_name: owner.last_name,
-      sm_profile_url: owner.sm_profile_url,
+      firstName: owner.firstName,
+      lastName: owner.lastName,
+      smProfileUrl: owner.smProfileUrl,
       picture: owner.picture,
     },
   });
