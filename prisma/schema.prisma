@@ -94,8 +94,8 @@ model Category {
   id         Int    @id @default(autoincrement())
   name       String @db.VarChar(100)
   slug       String @unique @db.VarChar(100)
-  created_at Int
-  updated_at Int
+  createdAt Int @map("created_at")
+  updatedAt Int @map("updated_at")
 
   products Product[]
 
