@@ -25,7 +25,7 @@ export default function DataTable({
 
       case 'user_info':
       case 'message':
-      case 'created_at':
+      case 'createdAt':
         return `${!isRead ? 'font-semibold' : 'text-zinc-800 dark:text-zinc-300'} hover:cursor-pointer`;
 
       default:
@@ -39,11 +39,11 @@ export default function DataTable({
         name: row.original.name,
         email: row.original.email,
         message: row.getValue('message'),
-        created_at: row.getValue('created_at'),
+        createdAt: row.getValue('createdAt'),
       });
       onIsOpenDetailDialogChange(true);
 
-      onEditReadStatus(row.original.id, row.original.is_read);
+      onEditReadStatus(row.original.id, row.original.isRead);
     }
   }
 
@@ -76,14 +76,14 @@ export default function DataTable({
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
                 className={cn(
-                  row.original.is_read && 'bg-muted/80',
+                  row.original.isRead && 'bg-muted/80',
                   processingIds.includes(row.original.id) && 'opacity-50'
                 )}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
-                    className={`p-3 ${getTableCellClassNames(cell.column.id, row.original.is_read)}`}
+                    className={`p-3 ${getTableCellClassNames(cell.column.id, row.original.isRead)}`}
                     onClick={() => handleOpenDetailDialog(cell.column.id, row)}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

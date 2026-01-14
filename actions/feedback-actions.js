@@ -20,9 +20,9 @@ export async function removeFeedbacks(ids) {
   }
 }
 
-export async function editFeedbackReadStatus(id, is_read) {
+export async function editFeedbackReadStatus(id, isRead) {
   try {
-    await updateFeedbackReadStatus(id, is_read);
+    await updateFeedbackReadStatus(id, isRead);
     return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };

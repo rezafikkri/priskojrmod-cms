@@ -102,7 +102,7 @@ describe('updateFeedbackReadStatus function', () => {
 
     expect(pjmeDBPrismaClient.Feedback.update).toHaveBeenCalledWith({
       where: { id: '550e8400-e29b-41d4-a716-446655440002' },
-      data: { is_read: true },
+      data: { isRead: true },
       select: { id: true },
     });
   });

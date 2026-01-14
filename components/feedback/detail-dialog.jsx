@@ -44,7 +44,7 @@ export default function DetailDialog({
           </p>
 
           <time className="text-[13px] text-zinc-500 leading-3">
-            Created {formatDateTime(detailData?.created_at)}
+            Created {formatDateTime(detailData?.createdAt)}
           </time>
         </DialogHeader>
       </DialogContent>

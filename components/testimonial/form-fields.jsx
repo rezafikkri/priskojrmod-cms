@@ -57,7 +57,7 @@ export default function FormFields({
 
           <FormField
             control={form.control}
-            name="sm_profile_url"
+            name="smProfileUrl"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base">Social media profile URL</FormLabel>

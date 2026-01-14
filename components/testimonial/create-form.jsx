@@ -14,7 +14,7 @@ export default function CreateForm() {
     resolver: zodResolver(createTestimonialSchema),
     defaultValues: {
       name: '',
-      sm_profile_url: '',
+      smProfileUrl: '',
       picture: '',
       message: {
         id: '',

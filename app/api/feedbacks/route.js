@@ -7,7 +7,7 @@ export async function GET(req) {
 
   let filters;
   if (readStatus) {
-    filters = { is_read: readStatus === 'unread' ? false : true }
+    filters = { isRead: readStatus === 'unread' ? false : true }
   }
 
   try {

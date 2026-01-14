@@ -43,7 +43,7 @@ import { deepEqual } from 'fast-equals';
 import { cmsConfig } from '@/config/cms';
 
 const defaultColumnVisibility = {
-  created_at: true,
+  createdAt: true,
 };
 
 export default function FeedbacksTable() {
@@ -336,7 +336,7 @@ export default function FeedbacksTable() {
         return next;
       });
     } else {
-      // just change the is_read status = true
+      // just change the isRead status = true
       queryClient.setQueryData(
         ['feedbacks', filters],
         (oldData) => {
@@ -345,7 +345,7 @@ export default function FeedbacksTable() {
           return {
             items: oldData.items.map((feedback) => ({
               ...feedback,
-              is_read: feedback.id === id ? true : feedback.is_read,
+              isRead: feedback.id === id ? true : feedback.isRead,
             })),
           };
         },
@@ -375,7 +375,7 @@ export default function FeedbacksTable() {
           },
         );
       } else {
-        // change back is_read = false
+        // change back isRead = false
         queryClient.setQueryData(
           ['feedbacks', removedSnaphost.filters],
           (oldData) => {
@@ -384,7 +384,7 @@ export default function FeedbacksTable() {
             return {
               items: oldData.items.map((feedback) => ({
                 ...feedback,
-                is_read: feedback.id === id ? false : feedback.is_read,
+                isRead: feedback.id === id ? false : feedback.isRead,
               })),
             };
           },
@@ -464,7 +464,7 @@ export default function FeedbacksTable() {
             return {
               items: oldData.items.map((feedback) => ({
                 ...feedback,
-                is_read: feedback.id === id ? true : feedback.is_read,
+                isRead: feedback.id === id ? true : feedback.isRead,
               })),
             };
           },
@@ -538,9 +538,9 @@ export default function FeedbacksTable() {
           : row.getValue('message')
     },
     {
-      accessorKey: 'created_at',
+      accessorKey: 'createdAt',
       header: () => 'Created At',
-      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('createdAt')),
     },
     {
       id: 'actions',
@@ -550,7 +550,7 @@ export default function FeedbacksTable() {
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className={`size-8 p-0 focus-visible:ring-ring ${row.original.is_read ? 'invisible' : ''}`}
+              className={`size-8 p-0 focus-visible:ring-ring ${row.original.isRead ? 'invisible' : ''}`}
               disabled={markingAsReadIds.includes(row.original.id)}
             >
               <MoreHorizontal />

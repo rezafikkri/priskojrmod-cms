@@ -394,6 +394,41 @@ model Transaction {
   @@map("transactions")
 }
 
+model Feedback {
+  id        String  @id @default(uuid(7)) @db.Uuid
+  isRead    Boolean @default(false) @map("is_read")
+  name      String? @db.VarChar(100)
+  email     String? @db.VarChar(254)
+  message   String
+  createdAt Int     @unique @map("created_at")
+
+  @@map("feedbacks")
+}
+
+model Testimonial {
+  id           Int    @id @default(autoincrement()) @db.SmallInt
+  picture      String @db.VarChar(255)
+  name         String @db.VarChar(100)
+  smProfileUrl String @map("sm_profile_url") @db.VarChar(100)
+  createdAt    Int    @map("created_at")
+  updatedAt    Int    @map("updated_at")
+
+  translations TestimonialTranslation[]
+
+  @@map("testimonials")
+}
+
+model TestimonialTranslation {
+  id            Int      @id @default(autoincrement()) @db.SmallInt
+  testimonialId Int      @map("testimonial_id") @db.SmallInt
+  language      Language
+  message       String
+
+  testimonial Testimonial @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+
+  @@map("testimonial_translations")
+}
+
 enum InvoiceStatus {
   active
   void
@@ -445,41 +480,6 @@ model TransactionDetail {
   price       ProductPrice? @relation(fields: [product_price_id], references: [id], onDelete: SetNull)
 
   @@map("transaction_details")
-}
-
-model Feedback {
-  id         String  @id @default(uuid(7)) @db.Uuid
-  is_read    Boolean @default(false)
-  name       String? @db.VarChar(100)
-  email      String? @db.VarChar(254)
-  message    String
-  created_at Int     @unique
-
-  @@map("feedbacks")
-}
-
-model Testimonial {
-  id             Int    @id @default(autoincrement()) @db.SmallInt
-  picture        String @db.VarChar(255)
-  name           String @db.VarChar(100)
-  sm_profile_url String @db.VarChar(100)
-  created_at     Int
-  updated_at     Int
-
-  translations TestimonialTranslation[]
-
-  @@map("testimonials")
-}
-
-model TestimonialTranslation {
-  id             Int      @id @default(autoincrement()) @db.SmallInt
-  testimonial_id Int      @db.SmallInt
-  language       Language
-  message        String
-
-  testimonial Testimonial @relation(fields: [testimonial_id], references: [id], onDelete: Cascade)
-
-  @@map("testimonial_translations")
 }
 
 // Secret keys and license keys

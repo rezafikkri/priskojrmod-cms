@@ -20,9 +20,9 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      Testimonial: {
+      testimonial: {
         create: vi.fn(),
         update: vi.fn(),
         count: vi.fn(),
@@ -37,15 +37,15 @@ afterEach(() => {
 });
 
 describe('createTestimonial function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Testimonial.create function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.testimonial.create function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(createTestimonial({
       name: 'Reza',
-      sm_username: 'reza_id',
+      smProfileUrl: 'https://x.com/FikkriReza',
       picture: 'https://translat/img.jpg',
       message: {
         id: 'Pesan ID',
@@ -54,22 +54,22 @@ describe('createTestimonial function', () => {
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Testimonial.create).not.toHaveBeenCalled();
+    expect(prisma.testimonial.create).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Testimonial.create function correctly', async () => {
+  it('Should call prisma.testimonial.create function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
-    pjmeDBPrismaClient.Testimonial.count.mockResolvedValue(2);
+    prisma.testimonial.count.mockResolvedValue(2);
 
     await createTestimonial({
       name: 'Reza',
-      sm_username: 'reza_id',
+      smProfileUrl: 'https://x.com/FikkriReza',
       picture: 'https://translat/img.jpg',
       message: {
         id: 'Pesan ID',
@@ -78,13 +78,13 @@ describe('createTestimonial function', () => {
     });
 
     const currentTime = Math.floor(new Date().getTime() / 1000);
-    expect(pjmeDBPrismaClient.Testimonial.create).toHaveBeenCalledWith({
+    expect(prisma.testimonial.create).toHaveBeenCalledWith({
       data: {
         name: 'Reza',
-        sm_username: 'reza_id',
+        smProfileUrl: 'https://x.com/FikkriReza',
         picture: 'https://translat/img.jpg',
-        created_at: currentTime,
-        updated_at: currentTime,
+        createdAt: currentTime,
+        updatedAt: currentTime,
         translations: {
           create: [
             {
@@ -104,16 +104,16 @@ describe('createTestimonial function', () => {
 });
 
 describe('updateTestimonial function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Testimonial.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.testimonial.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(updateTestimonial({
       id: 1,
       name: 'Reza',
-      sm_username: 'reza_id',
+      smProfileUrl: 'https://x.com/FikkriReza',
       picture: 'https://translat/img.jpg',
       translationId: {
         id: 100,
@@ -126,22 +126,22 @@ describe('updateTestimonial function', () => {
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Testimonial.update).not.toHaveBeenCalled();
+    expect(prisma.testimonial.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Testimonial.update function correctly', async () => {
+  it('Should call prisma.testimonial.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
     await updateTestimonial({
       id: 1,
       name: 'Reza',
-      sm_username: 'reza_id',
+      smProfileUrl: 'https://x.com/FikkriReza',
       picture: 'https://translat/img.jpg',
       translationId: {
         id: 100,
@@ -153,13 +153,13 @@ describe('updateTestimonial function', () => {
       },
     });
 
-    expect(pjmeDBPrismaClient.Testimonial.update).toHaveBeenCalledWith({
+    expect(prisma.testimonial.update).toHaveBeenCalledWith({
       where: { id: 1 },
       data: {
         name: 'Reza',
-        sm_username: 'reza_id',
+        smProfileUrl: 'https://x.com/FikkriReza',
         picture: 'https://translat/img.jpg',
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {
