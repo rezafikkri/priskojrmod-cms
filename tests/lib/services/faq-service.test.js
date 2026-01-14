@@ -21,9 +21,9 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      Faq: {
+      faq: {
         create: vi.fn(),
         delete: vi.fn(),
         update: vi.fn(),
@@ -38,9 +38,9 @@ afterEach(() => {
 });
 
 describe('createFaq function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Faq.create function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.faq.create function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -56,15 +56,15 @@ describe('createFaq function', () => {
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Faq.create).not.toHaveBeenCalled();
+    expect(prisma.faq.create).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Faq.create function correctly', async () => {
+  it('Should call prisma.faq.create function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true });
 
@@ -79,10 +79,10 @@ describe('createFaq function', () => {
       },
     });
 
-    expect(pjmeDBPrismaClient.Faq.create).toHaveBeenCalledWith({
+    expect(prisma.faq.create).toHaveBeenCalledWith({
       data: {
-        created_at: Math.floor(new Date().getTime() / 1000),
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        createdAt: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
         translations: {
           create: [
             { language: Language.ID, title: 'Judul ID', content: 'Konten ID' },
@@ -98,27 +98,27 @@ describe('createFaq function', () => {
 });
 
 describe('deleteFaq function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Faq.delete function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.faq.delete function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(deleteFaq(1)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Faq.delete).not.toHaveBeenCalled();
+    expect(prisma.faq.delete).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Faq.delete function correctly', async () => {
+  it('Should call prisma.faq.delete function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true });
 
     await deleteFaq(1);
 
-    expect(pjmeDBPrismaClient.Faq.delete).toHaveBeenCalledWith({
+    expect(prisma.faq.delete).toHaveBeenCalledWith({
       where: { id: 1 },
       select: { id: true },
     });
@@ -126,24 +126,24 @@ describe('deleteFaq function', () => {
 });
 
 describe('updateFaq function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Faq.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.faq.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(updateFaq({})).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Faq.update).not.toHaveBeenCalled();
+    expect(prisma.faq.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Faq.update function correctly', async () => {
+  it('Should call prisma.faq.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true });
 
@@ -163,10 +163,10 @@ describe('updateFaq function', () => {
       },
     });
 
-    expect(pjmeDBPrismaClient.Faq.update).toHaveBeenCalledWith({
+    expect(prisma.faq.update).toHaveBeenCalledWith({
       where: { id: 123 },
       data: {
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {

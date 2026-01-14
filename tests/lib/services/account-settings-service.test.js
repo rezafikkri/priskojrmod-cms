@@ -9,7 +9,7 @@ import {
 import {
   getAccount,
   updateAccount,
-  deleteDonationLink,
+  deletedonationLink,
 } from '@/lib/services/account-settings-service';
 import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
@@ -20,13 +20,13 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      Admin: {
+      admin: {
         findUnique: vi.fn(),
         update: vi.fn(),
       },
-      DonationLink: {
+      donationLink: {
         delete: vi.fn(),
       },
       $transaction: vi.fn(),
@@ -48,21 +48,21 @@ afterEach(() => {
 });
 
 describe('getAccount function', () => {
-  it('should call verifySession function, not call pjmeDBPrismaClient.Admin.findUnique function and throw Error with "Unauthenticated" message', async () => {
+  it('should call verifySession function, not call prisma.Admin.findUnique function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(getAccount()).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Admin.findUnique).not.toHaveBeenCalled();
+    expect(prisma.Admin.findUnique).not.toHaveBeenCalled();
   });
 
-  it('should call pjmeDBPrismaClient.Admin.findUnique function correctly', async () => {
+  it('should call prisma.Admin.findUnique function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({
       isAuth: true,
@@ -72,24 +72,24 @@ describe('getAccount function', () => {
       userPicture: 'pic.jpg',
     });
 
-    pjmeDBPrismaClient.Admin.findUnique.mockResolvedValue({
-      last_name: 'Doe',
-      whatsapp_phone_number: '+6285758438583',
-      donation_links: [],
+    prisma.Admin.findUnique.mockResolvedValue({
+      lastName: 'Doe',
+      whatsappPhoneNumber: '+6285758438583',
+      donationLinks: [],
     });
 
     await getAccount();
 
-    expect(pjmeDBPrismaClient.Admin.findUnique).toHaveBeenCalledWith({
+    expect(prisma.Admin.findUnique).toHaveBeenCalledWith({
       where: { id: 'admin-id' },
       select: {
         role: true,
-        last_name: true,
-        whatsapp_phone_number: true,
-        donation_links: {
+        lastName: true,
+        whatsappPhoneNumber: true,
+        donationLinks: {
           select: {
             id: true,
-            currency_code: true,
+            currencyCode: true,
             link: true,
           },
         },
@@ -99,96 +99,96 @@ describe('getAccount function', () => {
 });
 
 describe('updateAccount function', () => {
-  it('should call verifySession function, not call pjmeDBPrismaClient.Admin.update function and throw Error with "Unauthenticated" message', async () => {
+  it('should call verifySession function, not call prisma.Admin.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(updateAccount({
-      first_name: 'John',
-      last_name: 'Doe',
-      whatsapp_phone_number: '+6285758438583',
+      firstName: 'John',
+      lastName: 'Doe',
+      whatsappPhoneNumber: '+6285758438583',
       picture: 'https://test.co/pic.jpg',
-      donation_links: [
-        { dbId: 1, currency_code: 'IDR', link: 'https://donate1.com' },
-        { currency_code: 'USD', link: 'https://donate2.com' },
+      donationLinks: [
+        { dbId: 1, currencyCode: 'IDR', link: 'https://donate1.com' },
+        { currencyCode: 'USD', link: 'https://donate2.com' },
       ],
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Admin.update).not.toHaveBeenCalled();
+    expect(prisma.Admin.update).not.toHaveBeenCalled();
   });
 
-  it('should call pjmeDBPrismaClient.Admin.update function correctly', async () => {
+  it('should call prisma.Admin.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853703149);
     const currentTime = Math.floor(new Date().getTime() / 1000);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 12 });
 
-    pjmeDBPrismaClient.$transaction.mockResolvedValue([
+    prisma.$transaction.mockResolvedValue([
       {
         id: 12,
-        donation_links: [
-          { id: 1, currency_code: 'IDR', link: 'https://donate1.com' },
-          { id: 2, currency_code: 'USD', link: 'https://donate2.com' },
+        donationLinks: [
+          { id: 1, currencyCode: 'IDR', link: 'https://donate1.com' },
+          { id: 2, currencyCode: 'USD', link: 'https://donate2.com' },
         ],
       },
     ]);
 
-    pjmeDBPrismaClient.Admin.update.mockResolvedValue({
+    prisma.Admin.update.mockResolvedValue({
       id: 12,
-      donation_links: [
-        { id: 1, currency_code: 'IDR', link: 'https://donate1.com' },
-        { id: 2, currency_code: 'USD', link: 'https://donate2.com' },
+      donationLinks: [
+        { id: 1, currencyCode: 'IDR', link: 'https://donate1.com' },
+        { id: 2, currencyCode: 'USD', link: 'https://donate2.com' },
       ],
     });
 
     await updateAccount({
-      first_name: 'John',
-      last_name: 'Doe',
-      whatsapp_phone_number: {
-        country_iso: 'ID',
+      firstName: 'John',
+      lastName: 'Doe',
+      whatsappPhoneNumber: {
+        countryIso: 'ID',
         number: '+6285758438583',
       },
       picture: 'https://test.co/pic.jpg',
-      donation_links: [
-        { dbId: 1, currency_code: 'IDR', link: 'https://donate1.com' },
-        { dbId: 2, currency_code: 'USD', link: 'https://donate2.com' },
+      donationLinks: [
+        { dbId: 1, currencyCode: 'IDR', link: 'https://donate1.com' },
+        { dbId: 2, currencyCode: 'USD', link: 'https://donate2.com' },
       ],
     });
 
-    expect(pjmeDBPrismaClient.Admin.update).toHaveBeenCalledWith({
+    expect(prisma.Admin.update).toHaveBeenCalledWith({
       where: { id: 12 },
       data: {
-        first_name: 'John',
-        last_name: 'Doe',
-        whatsapp_phone_number: '+6285758438583',
+        firstName: 'John',
+        lastName: 'Doe',
+        whatsappPhoneNumber: '+6285758438583',
         picture: 'https://test.co/pic.jpg',
-        donation_links: {
+        donationLinks: {
           update: [
             {
-              data: { currency_code: 'IDR', link: 'https://donate1.com' },
+              data: { currencyCode: 'IDR', link: 'https://donate1.com' },
               where: { id: 1 },
             },
             {
-              data: { currency_code: 'USD', link: 'https://donate2.com' },
+              data: { currencyCode: 'USD', link: 'https://donate2.com' },
               where: { id: 2 },
             },
           ],
         },
-        updated_at: currentTime,
+        updatedAt: currentTime,
       },
       select: {
         id: true,
-        donation_links: {
+        donationLinks: {
           select: {
             id: true,
-            currency_code: true,
+            currencyCode: true,
             link: true,
           },
         },
@@ -197,34 +197,34 @@ describe('updateAccount function', () => {
   });
 });
 
-describe('deleteDonationLink function', () => {
-  it('should call verifySession function, not call pjmeDBPrismaClient.DonationLink.delete function and throw Error with "Unauthenticated" message', async () => {
+describe('deletedonationLink function', () => {
+  it('should call verifySession function, not call prisma.donationLink.delete function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteDonationLink(1)).rejects.toThrow(UnauthenticatedError);
+    await expect(deletedonationLink(1)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.DonationLink.delete).not.toHaveBeenCalled();
+    expect(prisma.donationLink.delete).not.toHaveBeenCalled();
   });
 
-  it('should call pjmeDBPrismaClient.DonationLink.delete function correctly', async () => {
+  it('should call prisma.donationLink.delete function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 12 });
 
-    pjmeDBPrismaClient.$transaction.mockResolvedValue([
+    prisma.$transaction.mockResolvedValue([
       { id: 1 },
       { id: 12 },
     ]);
-    pjmeDBPrismaClient.DonationLink.delete.mockResolvedValue({ id: 1 });
+    prisma.donationLink.delete.mockResolvedValue({ id: 1 });
 
-    await deleteDonationLink(1);
+    await deletedonationLink(1);
 
-    expect(pjmeDBPrismaClient.DonationLink.delete).toHaveBeenCalledWith({
+    expect(prisma.donationLink.delete).toHaveBeenCalledWith({
       where: { id: 1 },
       select: { id: true },
     });

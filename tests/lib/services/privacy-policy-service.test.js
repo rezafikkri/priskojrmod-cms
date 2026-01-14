@@ -17,7 +17,7 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
       PrivacyPolicy: {
         create: vi.fn(),
@@ -33,9 +33,9 @@ afterEach(() => {
 });
 
 describe('createPrivacyPolicy function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.PrivacyPolicy.create function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.privacyPolicy.create function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -49,15 +49,15 @@ describe('createPrivacyPolicy function', () => {
     ).rejects.toThrowError(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.PrivacyPolicy.create).not.toHaveBeenCalled();
+    expect(prisma.privacyPolicy.create).not.toHaveBeenCalled();
   })
 
-  it('Should call pjmeDBPrismaClient.PrivacyPolicy.create function correctly', async () => {
+  it('Should call prisma.privacyPolicy.create function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
@@ -68,7 +68,7 @@ describe('createPrivacyPolicy function', () => {
         { id: 2, language: Language.EN },
       ],
     };
-    pjmeDBPrismaClient.PrivacyPolicy.create.mockResolvedValue({
+    prisma.privacyPolicy.create.mockResolvedValue({
       ...prismaResult,
     });
 
@@ -81,10 +81,10 @@ describe('createPrivacyPolicy function', () => {
       content: inputContent,
     });
 
-    expect(pjmeDBPrismaClient.PrivacyPolicy.create).toHaveBeenCalledWith({
+    expect(prisma.privacyPolicy.create).toHaveBeenCalledWith({
       data: {
-        created_at: Math.floor(new Date().getTime() / 1000),
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        createdAt: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
         translations: {
           create: [
             { language: Language.ID, content: inputContent.id },
@@ -106,9 +106,9 @@ describe('createPrivacyPolicy function', () => {
 });
 
 describe('updatePrivacyPolicy function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.PrivacyPolicy.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.privacyPolicy.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -127,19 +127,19 @@ describe('updatePrivacyPolicy function', () => {
     ).rejects.toThrowError(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.PrivacyPolicy.update).not.toHaveBeenCalled();
+    expect(prisma.privacyPolicy.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.PrivacyPolicy.update function correctly', async () => {
+  it('Should call prisma.privacyPolicy.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149); // Fixed time
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
-    pjmeDBPrismaClient.PrivacyPolicy.update.mockResolvedValue({ id: 1 });
+    prisma.privacyPolicy.update.mockResolvedValue({ id: 1 });
 
     const input = {
       id: 1,
@@ -155,10 +155,10 @@ describe('updatePrivacyPolicy function', () => {
 
     await updatePrivacyPolicy(input);
 
-    expect(pjmeDBPrismaClient.PrivacyPolicy.update).toHaveBeenCalledWith({
+    expect(prisma.privacyPolicy.update).toHaveBeenCalledWith({
       where: { id: input.id },
       data: {
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {

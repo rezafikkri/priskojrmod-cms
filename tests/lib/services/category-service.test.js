@@ -20,9 +20,9 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      Category: {
+      category: {
         create: vi.fn(),
         delete: vi.fn(),
         update: vi.fn(),
@@ -38,9 +38,9 @@ afterEach(() => {
 });
 
 describe('createCategory function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Category.create function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.category.create function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -48,26 +48,26 @@ describe('createCategory function', () => {
       .rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Category.create).not.toHaveBeenCalled();
+    expect(prisma.category.create).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Category.create function correctly', async () => {
+  it('Should call prisma.category.create function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true });
 
     await createCategory({ name: 'Programming Tips' });
 
-    expect(pjmeDBPrismaClient.Category.create).toHaveBeenCalledWith({
+    expect(prisma.category.create).toHaveBeenCalledWith({
       data: {
         name: 'Programming Tips',
         slug: 'programming-tips',
-        created_at: Math.floor(new Date().getTime() / 1000),
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        createdAt: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -75,27 +75,27 @@ describe('createCategory function', () => {
 });
 
 describe('deleteCategory function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Category.delete function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.category.delete function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(deleteCategory(10)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Category.delete).not.toHaveBeenCalled();
+    expect(prisma.category.delete).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Category.delete function correctly', async () => {
+  it('Should call prisma.category.delete function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true });
 
     await deleteCategory(7);
 
-    expect(pjmeDBPrismaClient.Category.delete).toHaveBeenCalledWith({
+    expect(prisma.category.delete).toHaveBeenCalledWith({
       where: { id: 7 },
       select: { id: true },
     });
@@ -103,9 +103,9 @@ describe('deleteCategory function', () => {
 });
 
 describe('updateCategory function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Category.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.category.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -115,15 +115,15 @@ describe('updateCategory function', () => {
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Category.update).not.toHaveBeenCalled();
+    expect(prisma.category.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Category.update function correctly', async () => {
+  it('Should call prisma.category.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true });
 
@@ -132,12 +132,12 @@ describe('updateCategory function', () => {
       name: 'Advanced Dev',
     });
 
-    expect(pjmeDBPrismaClient.Category.update).toHaveBeenCalledWith({
+    expect(prisma.category.update).toHaveBeenCalledWith({
       where: { id: 9 },
       data: {
         name: 'Advanced Dev',
         slug: 'advanced-dev',
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });

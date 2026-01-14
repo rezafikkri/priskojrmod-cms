@@ -17,9 +17,9 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      License: {
+      license: {
         create: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
@@ -34,9 +34,9 @@ afterEach(() => {
 });
 
 describe('createLicense function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.License.create function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.license.create function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -52,15 +52,15 @@ describe('createLicense function', () => {
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.License.create).not.toHaveBeenCalled();
+    expect(prisma.license.create).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.License.create function correctly', async () => {
+  it('Should call prisma.license.create function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149); // arbitrary fixed timestamp
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
@@ -77,10 +77,10 @@ describe('createLicense function', () => {
 
     const expectedTimestamp = Math.floor(new Date().getTime() / 1000);
 
-    expect(pjmeDBPrismaClient.License.create).toHaveBeenCalledWith({
+    expect(prisma.license.create).toHaveBeenCalledWith({
       data: {
-        created_at: expectedTimestamp,
-        updated_at: expectedTimestamp,
+        createdAt: expectedTimestamp,
+        updatedAt: expectedTimestamp,
         translations: {
           create: [
             {
@@ -104,9 +104,9 @@ describe('createLicense function', () => {
 });
 
 describe('updateLicense function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.License.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.license.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -127,15 +127,15 @@ describe('updateLicense function', () => {
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.License.update).not.toHaveBeenCalled();
+    expect(prisma.license.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.License.update function correctly', async () => {
+  it('Should call prisma.license.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
@@ -155,10 +155,10 @@ describe('updateLicense function', () => {
       },
     });
 
-    expect(pjmeDBPrismaClient.License.update).toHaveBeenCalledWith({
+    expect(prisma.license.update).toHaveBeenCalledWith({
       where: { id: 1 },
       data: {
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {
@@ -188,27 +188,27 @@ describe('updateLicense function', () => {
 });
 
 describe('deleteLicense function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.License.delete function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.license.delete function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(deleteLicense(1)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.License.delete).not.toHaveBeenCalled();
+    expect(prisma.license.delete).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.License.delete function correctly', async () => {
+  it('Should call prisma.license.delete function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
     await deleteLicense(1);
 
-    expect(pjmeDBPrismaClient.License.delete).toHaveBeenCalledWith({
+    expect(prisma.license.delete).toHaveBeenCalledWith({
       where: { id: 1 },
       select: { id: true },
     });

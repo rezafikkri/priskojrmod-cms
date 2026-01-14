@@ -19,8 +19,8 @@ import { termsOfServiceSchema } from '@/lib/validators/terms-of-service-validato
 import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ termsOfService }) {
-  const [createdAt, setCreatedAt] = useState(termsOfService?.created_at);
-  const [updatedAt, setUpdatedAt] = useState(termsOfService?.updated_at);
+  const [createdAt, setCreatedAt] = useState(termsOfService?.createdAt);
+  const [updatedAt, setUpdatedAt] = useState(termsOfService?.updatedAt);
   const [hasTermsOfService, setHasTermsOfService] = useState(termsOfService !== null);
   // generate form default values
   let defaultValues = {
@@ -60,7 +60,7 @@ export default function EditForm({ termsOfService }) {
       let successMessage;
       if (hasTermsOfService) {
         successMessage = 'Terms of service updated successfully';
-        setUpdatedAt(saveRes.data.updated_at);
+        setUpdatedAt(saveRes.data.updatedAt);
       } else {
         successMessage = 'Terms of service created successfully';
 
@@ -72,8 +72,8 @@ export default function EditForm({ termsOfService }) {
         form.setValue('translationId.id', saveRes.data.translations.id.id);
         form.setValue('translationId.en', saveRes.data.translations.id.en);
 
-        setCreatedAt(saveRes.data.created_at);
-        setUpdatedAt(saveRes.data.updated_at);
+        setCreatedAt(saveRes.data.createdAt);
+        setUpdatedAt(saveRes.data.updatedAt);
         setHasTermsOfService(true);
       }
 

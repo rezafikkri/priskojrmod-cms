@@ -17,7 +17,7 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
       TermsOfService: {
         create: vi.fn(),
@@ -33,9 +33,9 @@ afterEach(() => {
 });
 
 describe('createTermsOfService function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.TermsOfService.create function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.termsOfService.create function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -49,15 +49,15 @@ describe('createTermsOfService function', () => {
     ).rejects.toThrowError(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.TermsOfService.create).not.toHaveBeenCalled();
+    expect(prisma.termsOfService.create).not.toHaveBeenCalled();
   });
   
-  it('Should call pjmeDBPrismaClient.TermsOfService.create function correctly', async () => {
+  it('Should call prisma.termsOfService.create function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
@@ -68,7 +68,7 @@ describe('createTermsOfService function', () => {
         { id: 2, language: Language.EN },
       ],
     };
-    pjmeDBPrismaClient.TermsOfService.create.mockResolvedValue({
+    prisma.termsOfService.create.mockResolvedValue({
       ...prismaResult,
     });
 
@@ -81,10 +81,10 @@ describe('createTermsOfService function', () => {
       content: inputContent,
     });
 
-    expect(pjmeDBPrismaClient.TermsOfService.create).toHaveBeenCalledWith({
+    expect(prisma.termsOfService.create).toHaveBeenCalledWith({
       data: {
-        created_at: Math.floor(new Date().getTime() / 1000),
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        createdAt: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
         translations: {
           create: [
             { language: Language.ID, content: inputContent.id },
@@ -106,9 +106,9 @@ describe('createTermsOfService function', () => {
 });
 
 describe('updateTermsOfService function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.TermsOfService.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.termsOfService.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -121,20 +121,20 @@ describe('updateTermsOfService function', () => {
     ).rejects.toThrowError(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.TermsOfService.update).not.toHaveBeenCalled();
+    expect(prisma.termsOfService.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.TermsOfService.update function correctly', async () => {
+  it('Should call prisma.termsOfService.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
     const prismaResult = { id: 1 };
-    pjmeDBPrismaClient.TermsOfService.update.mockResolvedValue({ ...prismaResult });
+    prisma.termsOfService.update.mockResolvedValue({ ...prismaResult });
 
     const input = {
       id: 1,
@@ -144,10 +144,10 @@ describe('updateTermsOfService function', () => {
 
     await updateTermsOfService(input);
 
-    expect(pjmeDBPrismaClient.TermsOfService.update).toHaveBeenCalledWith({
+    expect(prisma.termsOfService.update).toHaveBeenCalledWith({
       where: { id: input.id },
       data: {
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
         translations: {
           update: [
             {

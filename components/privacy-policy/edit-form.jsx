@@ -19,8 +19,8 @@ import { formatDateTime } from '@/lib/format-date';
 import { cmsConfig } from '@/config/cms';
 
 export default function EditForm({ privacyPolicy }) {
-  const [createdAt, setCreatedAt] = useState(privacyPolicy?.created_at);
-  const [updatedAt, setUpdatedAt] = useState(privacyPolicy?.updated_at);
+  const [createdAt, setCreatedAt] = useState(privacyPolicy?.createdAt);
+  const [updatedAt, setUpdatedAt] = useState(privacyPolicy?.updatedAt);
   const [hasPrivacyPolicy, setHasPrivacyPolicy] = useState(privacyPolicy !== null);
   // generate form default values
   let defaultValues = {
@@ -60,7 +60,7 @@ export default function EditForm({ privacyPolicy }) {
       let successMessage;
       if (hasPrivacyPolicy) {
         successMessage = 'Privacy policy updated successfully';
-        setUpdatedAt(saveRes.data.updated_at);
+        setUpdatedAt(saveRes.data.updatedAt);
       } else {
         successMessage = 'Privacy policy created successfully';
 
@@ -72,8 +72,8 @@ export default function EditForm({ privacyPolicy }) {
         form.setValue('translationId.id', saveRes.data.translations.id.id);
         form.setValue('translationId.en', saveRes.data.translations.id.en);
 
-        setCreatedAt(saveRes.data.created_at);
-        setUpdatedAt(saveRes.data.updated_at);
+        setCreatedAt(saveRes.data.createdAt);
+        setUpdatedAt(saveRes.data.updatedAt);
         setHasPrivacyPolicy(true);
       }
 

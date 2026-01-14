@@ -17,13 +17,13 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      AboutUs: {
+      aboutUs: {
         create: vi.fn(),
       },
       $transaction: vi.fn(),
-      AboutUsTranslation: {
+      aboutUsTranslation: {
         update: vi.fn(),
       },
     },
@@ -35,9 +35,9 @@ afterEach(() => {
 });
 
 describe('createAboutUs function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.AboutUs.create function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.aboutUs.create function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -51,12 +51,12 @@ describe('createAboutUs function', () => {
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.AboutUs.create).not.toHaveBeenCalled();
+    expect(prisma.aboutUs.create).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.AboutUs.create function correctly', async () => {
+  it('Should call prisma.aboutUs.create function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true });
 
@@ -73,11 +73,11 @@ describe('createAboutUs function', () => {
       ],
     };
 
-    pjmeDBPrismaClient.AboutUs.create.mockResolvedValue({ ...prismaResult });
+    prisma.aboutUs.create.mockResolvedValue({ ...prismaResult });
 
     await createAboutUs({ content: inputContent });
 
-    expect(pjmeDBPrismaClient.AboutUs.create).toHaveBeenCalledWith({
+    expect(prisma.aboutUs.create).toHaveBeenCalledWith({
       data: {
         translations: {
           create: [
@@ -100,9 +100,9 @@ describe('createAboutUs function', () => {
 });
 
 describe('updateAboutUs function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.$transaction and pjmeDBPrismaClient.AboutUs.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.$transaction and prisma.aboutUs.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -121,13 +121,13 @@ describe('updateAboutUs function', () => {
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.$transaction).not.toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.AboutUsTranslation.update).not.toHaveBeenCalled();
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+    expect(prisma.aboutUsTranslation.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.$transaction function and call pjmeDBPrismaClient.AboutUs.update function twice correctly', async () => {
+  it('Should call prisma.$transaction function and call prisma.aboutUs.update function twice correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true });
 
@@ -145,17 +145,17 @@ describe('updateAboutUs function', () => {
 
     await updateAboutUs(input);
 
-    expect(pjmeDBPrismaClient.$transaction).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.AboutUsTranslation.update).toBeCalledTimes(2);
-    expect(pjmeDBPrismaClient.AboutUsTranslation.update).toHaveBeenCalledWith({
+    expect(prisma.$transaction).toHaveBeenCalled();
+    expect(prisma.aboutUsTranslation.update).toBeCalledTimes(2);
+    expect(prisma.aboutUsTranslation.update).toHaveBeenCalledWith({
       data: { content: input.content.id },
       select: { id: true },
-      where: { id: input.translationId.id, about_us_id: input.id },
+      where: { id: input.translationId.id, aboutUsId: input.id },
     });
-    expect(pjmeDBPrismaClient.AboutUsTranslation.update).toHaveBeenCalledWith({
+    expect(prisma.aboutUsTranslation.update).toHaveBeenCalledWith({
       data: { content: input.content.en },
       select: { id: true },
-      where: { id: input.translationId.en, about_us_id: input.id },
+      where: { id: input.translationId.en, aboutUsId: input.id },
     });
   });
 });

@@ -45,12 +45,12 @@ export default function EditForm({ aboutUs }) {
   const [hasAboutUs, setHasAboutUs] = useState(aboutUs !== null);
   // generate form default values
   let defaultValues = {
-    support_email: '',
-    support_whatsapp: {
-      country_iso: '',
+    supportEmail: '',
+    supportWhatsapp: {
+      countryIso: '',
       number: '',
     },
-    office_hours: {
+    officeHours: {
       id: '',
       en: '',
     },
@@ -62,15 +62,15 @@ export default function EditForm({ aboutUs }) {
   if (aboutUs) {
     defaultValues = {
       id: aboutUs.id,
-      support_email: aboutUs.support_email,
-      support_whatsapp: aboutUs.support_whatsapp,
+      supportEmail: aboutUs.supportEmail,
+      supportWhatsapp: aboutUs.supportWhatsapp,
       translationId: {
         id: aboutUs.translations.id.id,
         en: aboutUs.translations.id.en,
       },
-      office_hours: {
-        id: aboutUs.translations.office_hours.id,
-        en: aboutUs.translations.office_hours.en,
+      officeHours: {
+        id: aboutUs.translations.officeHours.id,
+        en: aboutUs.translations.officeHours.en,
       },
       content: {
         id: aboutUs.translations.content.id,
@@ -126,7 +126,7 @@ export default function EditForm({ aboutUs }) {
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
           <FormField
             control={form.control}
-            name="support_email"
+            name="supportEmail"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base">Support Email</FormLabel>
@@ -141,7 +141,7 @@ export default function EditForm({ aboutUs }) {
 
           <PhoneNumberFields
             form={form}
-            name="support_whatsapp"
+            name="supportWhatsapp"
             label="Support WhatsApp"
             description="Enter a reachable WhatsApp phone number"
           />
@@ -150,7 +150,7 @@ export default function EditForm({ aboutUs }) {
             <>
               <FormField
                 control={form.control}
-                name={`office_hours.${Language.ID}`}
+                name={`officeHours.${Language.ID}`}
                 render={({ field }) =>
                   <OfficeHoursInput
                     field={field}
@@ -177,7 +177,7 @@ export default function EditForm({ aboutUs }) {
             <>
               <FormField
                 control={form.control}
-                name={`office_hours.${Language.EN}`}
+                name={`officeHours.${Language.EN}`}
                 render={({ field }) =>
                   <OfficeHoursInput
                     field={field}
