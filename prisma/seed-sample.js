@@ -33,18 +33,18 @@ export async function seedCustomers(prisma, count) {
 
     const createData = {
       id: uuidv7(),
-      first_name: faker.person.firstName(),
-      last_name: faker.person.lastName(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
       email: faker.internet.email().toLowerCase(),
       createdAt: currentTime,
       updatedAt: currentTime,
     };
 
     if (i % 2 === 0) {
-      createData.is_banned = true;
+      createData.isBanned = true;
     }
     if (i % 3 === 0) {
-      createData.phone_number = faker.phone.number({ style: 'international' });
+      createData.phoneNumber = faker.phone.number({ style: 'international' });
     }
     if (i % 4 === 0) {
       createData.picture = 'https://images.pexels.com/photos/29881401/pexels-photo-29881401.jpeg';
@@ -187,7 +187,7 @@ export async function seedTransactions(prisma, count) {
     },
   });
   const customers = await prisma.customer.findMany({
-    where: { is_banned: false },
+    where: { isBanned: false },
   });
   const admins = await prisma.admin.findMany();
 
@@ -226,9 +226,9 @@ export async function seedTransactions(prisma, count) {
           });
           return total + subtotal;
         }, 0),
-      customer_name: selectedCustomer.first_name,
+      customer_name: selectedCustomer.firstName,
       customer_email: selectedCustomer.email,
-      customer_phone_number: selectedCustomer.phone_number,
+      customer_phone_number: selectedCustomer.phoneNumber,
       createdAt: currentTime,
       updatedAt: currentTime,
       details: {

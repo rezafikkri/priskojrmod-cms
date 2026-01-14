@@ -91,8 +91,8 @@ describe('createLicenseKey function', () => {
     verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
     getSpecificSecretKey.mockResolvedValue({ key: '123' });
     prisma.customer.findFirst.mockResolvedValue({
-      first_name: 'test',
-      last_name: 'gege',
+      firstName: 'test',
+      lastName: 'gege',
       email: 'test@g.com',
     });
     prisma.secretKey.findUnique.mockResolvedValue({ key: 'test' });
@@ -308,8 +308,8 @@ describe('getLicenseKey function', () => {
       id: '33c993ad-097f-499d-9899-61186bb31b72',
       code: 'fake-key',
       customer: {
-        first_name: 'test',
-        last_name: 'gege',
+        firstName: 'test',
+        lastName: 'gege',
         email: 'test@g.com',
       },
       secretKey: {
@@ -337,8 +337,8 @@ describe('getLicenseKey function', () => {
         },
         customer: {
           select: {
-            first_name: true,
-            last_name: true,
+            firstName: true,
+            lastName: true,
             email: true,
           },
         },

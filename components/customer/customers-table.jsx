@@ -41,9 +41,9 @@ import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
 
 const defaultColumnVisibility = {
-  last_active: true,
-  created_at: false,
-  updated_at: false,
+  lastActive: true,
+  createdAt: false,
+  updatedAt: false,
 };
 
 export default function CustomersTable() {
@@ -483,22 +483,22 @@ export default function CustomersTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'last_active',
+      accessorKey: 'lastActive',
       header: () => 'Last Active',
       cell: ({ row }) => 
-        row.getValue('last_active')
-          ? formatDateTime(row.getValue('last_active'))
+        row.getValue('lastActive')
+          ? formatDateTime(row.getValue('lastActive'))
           : <Minus className="size-4 text-zinc-300" />,
     },
     {
-      accessorKey: 'created_at',
+      accessorKey: 'createdAt',
       header: () => 'Created At',
-      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('createdAt')),
     },
     {
-      accessorKey: 'updated_at',
+      accessorKey: 'updatedAt',
       header: () => 'Updated At',
-      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('updatedAt')),
     },
     {
       id: 'actions',
@@ -526,18 +526,18 @@ export default function CustomersTable() {
               className="w-full text-base"
               onClick={() => handleEditBanStatus({
                 id: row.original.id,
-                isBanned: !row.original.is_banned,
+                isBanned: !row.original.isBanned,
               })}
               asChild
             >
               <button>
-                {row.original.is_banned === false ? 'Ban' : 'Unban'}
+                {row.original.isBanned === false ? 'Ban' : 'Unban'}
               </button>
             </DropdownMenuItem>
             {shouldShowDeleteButton({
-              googleUserId: row.original.google_user_id,
-              lastActive: row.getValue('last_active'),
-              isBanned: row.original.is_banned,
+              googleUserId: row.original.googleUserId,
+              lastActive: row.getValue('lastActive'),
+              isBanned: row.original.isBanned,
             }) && (
               <>
                 <DropdownMenuSeparator className="-mx-1.5" />

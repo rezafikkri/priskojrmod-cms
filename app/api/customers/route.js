@@ -6,18 +6,18 @@ export async function GET(req) {
   const pageIndex = parseInt(searchParams.get('pi'));
   const searchKey = searchParams.get('sk');
   // params for filters
-  const filters = { is_banned: searchParams.get('ib') === 'false' ? false : true };
+  const filters = { isBanned: searchParams.get('ib') === 'false' ? false : true };
   const select = {
     id: true,
-    google_user_id: true,
-    is_banned: true,
-    first_name: true,
-    last_name: true,
+    googleUserId: true,
+    isBanned: true,
+    firstName: true,
+    lastName: true,
     picture: true,
     email: true,
-    last_active: true,
-    created_at: true,
-    updated_at: true,
+    lastActive: true,
+    createdAt: true,
+    updatedAt: true,
   };
 
   try {

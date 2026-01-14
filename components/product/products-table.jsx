@@ -333,7 +333,7 @@ export default function ProductsTable({
             <p>Myself</p>
           ) : (
             <>
-              <p>{row.original.admin?.first_name} {row.original.admin?.last_name}</p>
+              <p>{row.original.admin?.firstName} {row.original.admin?.lastName}</p>
               <p className="text-sm text-zinc-600">{row.original.admin?.email}</p>
             </>
           )}

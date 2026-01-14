@@ -25,9 +25,9 @@ export async function editCustomer(data) {
   }
 }
 
-export async function editCustomerBanStatus(id, is_banned) {
+export async function editCustomerBanStatus(id, isBanned) {
   try {
-    await updateCustomerBanStatus(id, is_banned);
+    await updateCustomerBanStatus(id, isBanned);
     return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };

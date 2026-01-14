@@ -334,17 +334,17 @@ model FaqTranslation {
 }
 
 model Customer {
-  id             String  @id @default(uuid(7)) @db.Uuid
-  google_user_id String? @unique @db.VarChar(255)
-  is_banned      Boolean @default(false)
-  first_name     String  @db.VarChar(100)
-  last_name      String  @db.VarChar(100)
-  email          String  @unique @db.VarChar(254)
-  phone_number   String? @db.VarChar(20)
-  picture        String? @db.VarChar(255)
-  last_active    Int?
-  created_at     Int
-  updated_at     Int
+  id           String  @id @default(uuid(7)) @db.Uuid
+  googleUserId String? @unique @map("google_user_id") @db.VarChar(255)
+  isBanned     Boolean @default(false) @map("is_banned")
+  firstName    String  @map("first_name") @db.VarChar(100)
+  lastName     String  @map("last_name") @db.VarChar(100)
+  email        String  @unique @db.VarChar(254)
+  phoneNumber  String? @map("phone_number") @db.VarChar(20)
+  picture      String? @db.VarChar(255)
+  lastActive   Int?    @map("last_active")
+  createdAt    Int     @map("created_at")
+  updatedAt    Int     @map("updated_at")
 
   transactions Transaction[]
   licenseKeys  LicenseKey[]

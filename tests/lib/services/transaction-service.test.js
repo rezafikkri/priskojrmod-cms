@@ -340,7 +340,7 @@ describe('updateTransactionStatus function', () => {
       customer_name: 'John Doe',
       customer_email: 'john@example.com',
       updated_at: Date.now(),
-      customer: { is_banned: false },
+      customer: { isBanned: false },
       details: [
         { id: '018f3c00-2222-4f66-b8f0-abcdef123456', product_id: 'prod-uuid-1', product_drive_file_id: null, share_method: null }
       ],
@@ -403,7 +403,7 @@ describe('correctTransactionStatus function', () => {
       customer_name: 'John Doe',
       customer_email: 'john@example.com',
       updated_at: Date.now(),
-      customer: { is_banned: false },
+      customer: { isBanned: false },
       details: [
         { id: '018f3c00-2222-4f66-b8f0-abcdef123456', product_id: 'prod-uuid-1', product_drive_file_id: null, share_method: ShareMethod.MANUAL_REQUIRED }
       ],

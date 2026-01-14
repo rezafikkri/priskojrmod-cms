@@ -15,11 +15,11 @@ export default function EditForm({ customer }) {
     resolver: zodResolver(editCustomerSchema),
     defaultValues: {
       id: customer.id,
-      is_banned: customer.is_banned,
+      isBanned: customer.isBanned,
       email: customer.email,
-      phone_number: customer.phone_number,
-      first_name: customer.first_name,
-      last_name: customer.last_name,
+      phoneNumber: customer.phoneNumber,
+      firstName: customer.firstName,
+      lastName: customer.lastName,
       picture: customer.picture ?? '',
     },
   });
@@ -27,11 +27,11 @@ export default function EditForm({ customer }) {
   async function handleSubmit(data) {
     const newCustomer = {
       id: data.id,
-      first_name: data.first_name,
-      last_name: data.last_name,
+      firstName: data.firstName,
+      lastName: data.lastName,
       picture: data.picture,
     };
-    if (customer.is_banned) {
+    if (customer.isBanned) {
       newCustomer.email = data.email;
     }
 

@@ -24,7 +24,7 @@ export default function FormFields({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-10">
-        {(mode === 'create' || form.getValues('is_banned')) ? (
+        {(mode === 'create' || form.getValues('isBanned')) ? (
           <FormField
             control={form.control}
             name="email"
@@ -50,7 +50,7 @@ export default function FormFields({
         <div className="flex gap-3 items-start">
           <FormField
             control={form.control}
-            name="first_name"
+            name="firstName"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel className="text-base">First name</FormLabel>
@@ -63,7 +63,7 @@ export default function FormFields({
           />
           <FormField
             control={form.control}
-            name="last_name"
+            name="lastName"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel className="text-base">Last name</FormLabel>
@@ -79,8 +79,8 @@ export default function FormFields({
         {mode === 'edit' ? (
           <FormItem>
             <FormLabel className="text-base">Phone number</FormLabel>
-            <p className="tabular-nums">{form.getValues('phone_number') ?? <Minus className="icon text-zinc-300 dark:text-zinc-700" />}</p>
-            {!form.getValues('phone_number') && (
+            <p className="tabular-nums">{form.getValues('phoneNumber') ?? <Minus className="icon text-zinc-300 dark:text-zinc-700" />}</p>
+            {!form.getValues('phoneNumber') && (
               <FormDescription>This information can only be provided by the customer.</FormDescription>
             )}
           </FormItem>

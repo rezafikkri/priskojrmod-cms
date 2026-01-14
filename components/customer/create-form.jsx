@@ -14,8 +14,8 @@ export default function CreateForm() {
   const form = useForm({
     resolver: zodResolver(createCustomerSchema),
     defaultValues: {
-      first_name: '',
-      last_name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       picture: '',
     },

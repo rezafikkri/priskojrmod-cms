@@ -25,9 +25,9 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      Customer: {
+      customer: {
         create: vi.fn(),
         findMany: vi.fn(),
         findUnique: vi.fn(),
@@ -38,9 +38,9 @@ beforeAll(() => {
     },
   }));
 
-  vi.mock('@/lib/pjma-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      LicenseKey: {
+      licenseKey: {
         deleteMany: () => {},
         count: () => 0,
         updateMany: () => {},
@@ -55,51 +55,51 @@ afterEach(() => {
 });
 
 describe('createCustomer function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Customer.create function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.customer.create function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(
       createCustomer({
-        first_name: 'Reza',
-        last_name: 'Setiawan',
+        firstName: 'Reza',
+        lastName: 'Setiawan',
         email: 'reza@domain.com',
         picture: null,
       }),
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Customer.create).not.toHaveBeenCalled();
+    expect(prisma.customer.create).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Customer.create function correctly', async () => {
+  it('Should call prisma.customer.create function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149); // Mocked timestamp
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
-    pjmeDBPrismaClient.Customer.create.mockResolvedValue({ id: 'e65385e2-25a1-4ef9-940f-a33b6450f462' });
+    prisma.customer.create.mockResolvedValue({ id: 'e65385e2-25a1-4ef9-940f-a33b6450f462' });
 
     await createCustomer({
-      first_name: 'Adel',
-      last_name: 'Putra',
+      firstName: 'Adel',
+      lastName: 'Putra',
       email: 'adel@gmail.com',
       picture: 'https://example.com/avatar.png',
     });
 
-    expect(pjmeDBPrismaClient.Customer.create).toHaveBeenCalledWith({
+    expect(prisma.customer.create).toHaveBeenCalledWith({
       data: {
-        first_name: 'Adel',
-        last_name: 'Putra',
+        firstName: 'Adel',
+        lastName: 'Putra',
         email: 'adel@gmail.com',
         picture: 'https://example.com/avatar.png',
-        created_at: Math.floor(new Date().getTime() / 1000),
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        createdAt: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -107,15 +107,15 @@ describe('createCustomer function', () => {
 });
 
 describe('getCustomers function', () => {
-  it('should call verifySession function, not call pjmeDBPrismaClient.Customer.findMany function and throw Error with "Unauthenticated" message', async () => {
+  it('should call verifySession function, not call prisma.customer.findMany function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(
       getCustomers({
-        select: { id: true, first_name: true },
+        select: { id: true, firstName: true },
         pageIndex: 0,
         pageSize: 10,
         filters: {},
@@ -123,93 +123,93 @@ describe('getCustomers function', () => {
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Customer.findMany).not.toHaveBeenCalled();
+    expect(prisma.customer.findMany).not.toHaveBeenCalled();
   });
 
-  it('should call pjmeDBPrismaClient.Customer.findMany function correctly', async () => {
+  it('should call prisma.customer.findMany function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
-    pjmeDBPrismaClient.Customer.findMany.mockResolvedValue([
+    prisma.customer.findMany.mockResolvedValue([
       {
         id: '344fa7a4-fe6f-4632-97b5-1fe9b9d9a424',
-        first_name: 'Reza',
-        last_name: 'Setiawan',
-        created_at: 1744853503,
-        updated_at: 1744853599,
-        last_active: 1744853699,
+        firstName: 'Reza',
+        lastName: 'Setiawan',
+        createdAt: 1744853503,
+        updatedAt: 1744853599,
+        lastActive: 1744853699,
       },
     ]);
 
     await getCustomers({
       select: {
         id: true,
-        first_name: true,
-        last_name: true,
-        created_at: true,
-        updated_at: true,
-        last_active: true,
+        firstName: true,
+        lastName: true,
+        createdAt: true,
+        updatedAt: true,
+        lastActive: true,
       },
       pageIndex: 0,
       pageSize: 10,
-      filters: { is_banned: false },
+      filters: { isBanned: false },
     });
 
-    expect(pjmeDBPrismaClient.Customer.findMany).toHaveBeenCalledWith({
+    expect(prisma.customer.findMany).toHaveBeenCalledWith({
       select: {
         id: true,
-        first_name: true,
-        last_name: true,
-        created_at: true,
-        updated_at: true,
-        last_active: true,
+        firstName: true,
+        lastName: true,
+        createdAt: true,
+        updatedAt: true,
+        lastActive: true,
       },
-      orderBy: { updated_at: 'desc' },
+      orderBy: { updatedAt: 'desc' },
       take: 10,
       skip: 0,
-      where: { is_banned: false },
+      where: { isBanned: false },
     });
   });
 });
 
 describe('searchCustomers function', () => {
-  it('should call verifySession function, not call pjmeDBPrismaClient.Customer.findMany function and throw Error with "Unauthenticated" message', async () => {
+  it('should call verifySession function, not call prisma.customer.findMany function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(
       searchCustomers({
         key: 're',
-        select: { id: true, email: true, first_name: true },
+        select: { id: true, email: true, firstName: true },
         limit: 10,
-        filters: { is_banned: false },
+        filters: { isBanned: false },
       }),
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Customer.findMany).not.toHaveBeenCalled();
+    expect(prisma.customer.findMany).not.toHaveBeenCalled();
   });
 
-  it('should call pjmeDBPrismaClient.Customer.findMany function correctly', async () => {
+  it('should call prisma.customer.findMany function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
-    pjmeDBPrismaClient.Customer.findMany.mockResolvedValue([
+    prisma.customer.findMany.mockResolvedValue([
       {
         id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1',
         email: 'reza@example.com',
-        first_name: 'Reza',
-        last_name: 'Setiawan',
-        is_banned: false,
-        created_at: 1744853503,
-        updated_at: 1744853599,
-        last_active: 1744853699,
+        firstName: 'Reza',
+        lastName: 'Setiawan',
+        isBanned: false,
+        createdAt: 1744853503,
+        updatedAt: 1744853599,
+        lastActive: 1744853699,
       },
     ]);
 
@@ -218,34 +218,34 @@ describe('searchCustomers function', () => {
       select: {
         id: true,
         email: true,
-        first_name: true,
-        last_name: true,
-        is_banned: true,
-        created_at: true,
-        updated_at: true,
-        last_active: true,
+        firstName: true,
+        lastName: true,
+        isBanned: true,
+        createdAt: true,
+        updatedAt: true,
+        lastActive: true,
       },
       limit: 10,
-      filters: { is_banned: false },
+      filters: { isBanned: false },
     });
 
-    expect(pjmeDBPrismaClient.Customer.findMany).toHaveBeenCalledWith({
+    expect(prisma.customer.findMany).toHaveBeenCalledWith({
       select: {
         id: true,
         email: true,
-        first_name: true,
-        last_name: true,
-        is_banned: true,
-        created_at: true,
-        updated_at: true,
-        last_active: true,
+        firstName: true,
+        lastName: true,
+        isBanned: true,
+        createdAt: true,
+        updatedAt: true,
+        lastActive: true,
       },
       where: {
         email: {
           startsWith: 'reza',
           mode: 'insensitive',
         },
-        is_banned: false,
+        isBanned: false,
       },
       take: 11, // limit + 1
     });
@@ -253,9 +253,9 @@ describe('searchCustomers function', () => {
 });
 
 describe('getCustomer function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Customer.findFirst function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.customer.findFirst function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -264,28 +264,28 @@ describe('getCustomer function', () => {
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Customer.findFirst).not.toHaveBeenCalled();
+    expect(prisma.customer.findFirst).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Customer.findFirst function correctly', async () => {
+  it('Should call prisma.customer.findFirst function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
-    pjmeDBPrismaClient.Customer.findFirst.mockResolvedValue({ id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' });
+    prisma.customer.findFirst.mockResolvedValue({ id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' });
 
     await getCustomer({ id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' });
 
-    expect(pjmeDBPrismaClient.Customer.findFirst).toHaveBeenCalledWith({
+    expect(prisma.customer.findFirst).toHaveBeenCalledWith({
       where: { id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' },
       select: {
         id: true,
-        is_banned: true,
-        first_name: true,
-        last_name: true,
+        isBanned: true,
+        firstName: true,
+        lastName: true,
         email: true,
-        phone_number: true,
+        phoneNumber: true,
         picture: true,
       },
     });
@@ -293,60 +293,60 @@ describe('getCustomer function', () => {
 });
 
 describe('updateCustomer function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Customer.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.customer.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
     await expect(
       updateCustomer({
         id: 'fa156c2c-e2c3-412f-93f5-5f8bf9ce2b7e',
-        first_name: 'Reza',
-        last_name: 'Setiawan',
+        firstName: 'Reza',
+        lastName: 'Setiawan',
         email: 'reza@x.com',
         picture: null,
       }),
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Customer.update).not.toHaveBeenCalled();
+    expect(prisma.customer.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Customer.update function correctly', async () => {
+  it('Should call prisma.customer.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
     // Return that the customer is still banned
-    pjmeDBPrismaClient.Customer.findUnique.mockResolvedValue({
-      is_banned: true,
+    prisma.customer.findUnique.mockResolvedValue({
+      isBanned: true,
     });
 
-    pjmeDBPrismaClient.Customer.update.mockResolvedValue({ id: 'fa156c2c-e2c3-412f-93f5-5f8bf9ce2b7e' });
+    prisma.customer.update.mockResolvedValue({ id: 'fa156c2c-e2c3-412f-93f5-5f8bf9ce2b7e' });
 
     await updateCustomer({
       id: 'fa156c2c-e2c3-412f-93f5-5f8bf9ce2b7e',
-      first_name: 'Adel',
-      last_name: 'Putra',
+      firstName: 'Adel',
+      lastName: 'Putra',
       email: 'adel@domain.com',
       picture: 'https://image.com/avatar.png',
     });
 
     const currentTime = Math.floor(new Date().getTime() / 1000);
 
-    expect(pjmeDBPrismaClient.Customer.update).toHaveBeenCalledWith({
+    expect(prisma.customer.update).toHaveBeenCalledWith({
       where: { id: 'fa156c2c-e2c3-412f-93f5-5f8bf9ce2b7e' },
       data: {
-        first_name: 'Adel',
-        last_name: 'Putra',
+        firstName: 'Adel',
+        lastName: 'Putra',
         picture: 'https://image.com/avatar.png',
         email: 'adel@domain.com',
-        updated_at: currentTime,
+        updatedAt: currentTime,
       },
       select: { id: true },
     });
@@ -354,9 +354,9 @@ describe('updateCustomer function', () => {
 });
 
 describe('updateCustomerBanStatus function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Customer.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.customer.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -365,27 +365,27 @@ describe('updateCustomerBanStatus function', () => {
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Customer.update).not.toHaveBeenCalled();
+    expect(prisma.customer.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Customer.update function correctly', async () => {
+  it('Should call prisma.customer.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853503149);
 
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
 
-    pjmeDBPrismaClient.Customer.update.mockResolvedValue({ id: 'c705f67d-4f2b-45f7-99fd-2fc193f5e000' });
+    prisma.customer.update.mockResolvedValue({ id: 'c705f67d-4f2b-45f7-99fd-2fc193f5e000' });
 
     await updateCustomerBanStatus('c705f67d-4f2b-45f7-99fd-2fc193f5e000', true);
 
-    expect(pjmeDBPrismaClient.Customer.update).toHaveBeenCalledWith({
+    expect(prisma.customer.update).toHaveBeenCalledWith({
       where: { id: 'c705f67d-4f2b-45f7-99fd-2fc193f5e000' },
       data: {
-        is_banned: true,
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        isBanned: true,
+        updatedAt: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -393,9 +393,9 @@ describe('updateCustomerBanStatus function', () => {
 });
 
 describe('getCustomersForAutocomplete function', () => {
-  it('should call verifySession function, not call pjmeDBPrismaClient.Customer.findMany function and throw Error with "Unauthenticated" message', async () => {
+  it('should call verifySession function, not call prisma.customer.findMany function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -404,33 +404,33 @@ describe('getCustomersForAutocomplete function', () => {
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Customer.findMany).not.toHaveBeenCalled();
+    expect(prisma.customer.findMany).not.toHaveBeenCalled();
   });
 
-  it('should call pjmeDBPrismaClient.Customer.findMany function correctly', async () => {
+  it('should call prisma.customer.findMany function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({ isAuth: true });
 
-    pjmeDBPrismaClient.Customer.findMany.mockResolvedValue([
-      { id: '1', first_name: 'Alice', email: 'alice@mail.com' },
-      { id: '2', first_name: 'Bob', email: 'bob@mail.com' },
+    prisma.customer.findMany.mockResolvedValue([
+      { id: '1', firstName: 'Alice', email: 'alice@mail.com' },
+      { id: '2', firstName: 'Bob', email: 'bob@mail.com' },
     ]);
 
     await getCustomersForAutocomplete('a');
 
-    expect(pjmeDBPrismaClient.Customer.findMany).toHaveBeenCalledWith({
+    expect(prisma.customer.findMany).toHaveBeenCalledWith({
       where: {
         email: {
           startsWith: 'a',
           mode: 'insensitive',
         },
-        is_banned: false,
+        isBanned: false,
       },
       select: {
         id: true,
-        first_name: true,
+        firstName: true,
         email: true,
       },
       take: 10,
@@ -439,37 +439,37 @@ describe('getCustomersForAutocomplete function', () => {
 });
 
 describe('deleteCustomer function', () => {
-  it('should call verifySession, not call pjmeDBPrismaClient.Customer.delete function and throw with "Unauthenticated" message', async () => {
+  it('should call verifySession, not call prisma.customer.delete function and throw with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(null);
 
     await expect(deleteCustomer('28c841fc-8efb-4469-b7c9-d3c90b417e60')).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Customer.delete).not.toHaveBeenCalled();
+    expect(prisma.customer.delete).not.toHaveBeenCalled();
   });
 
-  it('should call pjmeDBPrismaClient.Customer.delete function correctly', async () => {
+  it('should call prisma.customer.delete function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     const fakeId = '28c841fc-8efb-4469-b7c9-d3c90b417e60';
 
     verifySession.mockResolvedValue({ isAuth: true });
 
-    pjmeDBPrismaClient.Customer.findFirst.mockResolvedValue({
-      is_banned: true,
-      google_user_id: null,
-      last_active: Math.floor(Date.now() / 1000) - 999999,
+    prisma.customer.findFirst.mockResolvedValue({
+      isBanned: true,
+      googleUserId: null,
+      lastActive: Math.floor(Date.now() / 1000) - 999999,
     });
 
-    pjmeDBPrismaClient.Customer.delete.mockResolvedValue({ id: fakeId });
+    prisma.customer.delete.mockResolvedValue({ id: fakeId });
 
     await deleteCustomer(fakeId);
 
-    expect(pjmeDBPrismaClient.Customer.delete).toHaveBeenCalledWith({
+    expect(prisma.customer.delete).toHaveBeenCalledWith({
       where: { id: fakeId },
       select: { id: true },
     });
