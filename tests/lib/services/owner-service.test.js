@@ -29,6 +29,12 @@ beforeAll(() => {
       },
     },
   }));
+
+  vi.mock('@/config/cms', () => ({}));
+
+  vi.mock('next/cache', () => ({
+    revalidatePath: vi.fn(),
+  }));
 });
 
 afterEach(() => {
@@ -61,7 +67,7 @@ describe('createOwner function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await createOwner({
       firstName: 'Jane',
@@ -101,7 +107,7 @@ describe('deleteOwner function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await deleteOwner(5);
 
@@ -138,7 +144,7 @@ describe('updateOwner function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await updateOwner({
       id: 2,

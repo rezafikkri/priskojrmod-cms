@@ -35,14 +35,30 @@ describe('verifySession function', () => {
     expect(result).toBe(false);
   });
 
-  it('Should return object correctly with isAuth: true and userId from session.user.id when getServerSession returns a session object', async () => {
+  it('Should return object correctly when getServerSession returns a session object', async () => {
     const { getServerSession } = await import('next-auth');
-    const mockSession = { user: { id: '123' } };
+    const mockSession = {
+      user: {
+        id: '123',
+        role: 'staff',
+        firstName: 'test',
+        lastName: 'test',
+        image: 'http://test.com/test.jpg',
+        email: 'test@g.co',
+      },
+    };
     getServerSession.mockResolvedValue(mockSession);
 
     const result = await verifySession();
 
     expect(getServerSession).toHaveBeenCalled();
-    expect(result).toEqual({ isAuth: true, userId: '123' });
+    expect(result).toEqual({
+      userId: mockSession.user.id,
+      userRole: mockSession.user.role,
+      userFirstName: mockSession.user.firstName,
+      userLastName: mockSession.user.lastName,
+      userPicture: mockSession.user.image,
+      userEmail: mockSession.user.email,
+    });
   });
 });

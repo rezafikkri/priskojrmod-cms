@@ -9,7 +9,7 @@ import {
 import {
   getAccount,
   updateAccount,
-  deletedonationLink,
+  deleteDonationLink,
 } from '@/lib/services/account-settings-service';
 import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
@@ -40,6 +40,11 @@ beforeAll(() => {
       isValid: () => true,
     }),
   }));
+
+  vi.mock('@/config/cms', () => ({}));
+  vi.mock('next/cache', () => ({
+    revalidatePath: () => {},
+  }));
 });
 
 afterEach(() => {
@@ -48,7 +53,7 @@ afterEach(() => {
 });
 
 describe('getAccount function', () => {
-  it('should call verifySession function, not call prisma.Admin.findUnique function and throw Error with "Unauthenticated" message', async () => {
+  it('should call verifySession function, not call prisma.admin.findUnique function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
@@ -57,22 +62,21 @@ describe('getAccount function', () => {
     await expect(getAccount()).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(prisma.Admin.findUnique).not.toHaveBeenCalled();
+    expect(prisma.admin.findUnique).not.toHaveBeenCalled();
   });
 
-  it('should call prisma.Admin.findUnique function correctly', async () => {
+  it('should call prisma.admin.findUnique function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({
-      isAuth: true,
-      userId: 'admin-id',
+      userId: 1,
       userName: 'John',
       userEmail: 'john@example.com',
       userPicture: 'pic.jpg',
     });
 
-    prisma.Admin.findUnique.mockResolvedValue({
+    prisma.admin.findUnique.mockResolvedValue({
       lastName: 'Doe',
       whatsappPhoneNumber: '+6285758438583',
       donationLinks: [],
@@ -80,17 +84,16 @@ describe('getAccount function', () => {
 
     await getAccount();
 
-    expect(prisma.Admin.findUnique).toHaveBeenCalledWith({
-      where: { id: 'admin-id' },
+    expect(prisma.admin.findUnique).toHaveBeenCalledWith({
+      where: { id: 1 },
       select: {
         role: true,
-        lastName: true,
         whatsappPhoneNumber: true,
         donationLinks: {
           select: {
             id: true,
             currencyCode: true,
-            link: true,
+            url: true,
           },
         },
       },
@@ -99,7 +102,7 @@ describe('getAccount function', () => {
 });
 
 describe('updateAccount function', () => {
-  it('should call verifySession function, not call prisma.Admin.update function and throw Error with "Unauthenticated" message', async () => {
+  it('should call verifySession function, not call prisma.admin.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
@@ -111,16 +114,16 @@ describe('updateAccount function', () => {
       whatsappPhoneNumber: '+6285758438583',
       picture: 'https://test.co/pic.jpg',
       donationLinks: [
-        { dbId: 1, currencyCode: 'IDR', link: 'https://donate1.com' },
-        { currencyCode: 'USD', link: 'https://donate2.com' },
+        { dbId: 1, currencyCode: 'IDR', url: 'https://donate1.com' },
+        { currencyCode: 'USD', url: 'https://donate2.com' },
       ],
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(prisma.Admin.update).not.toHaveBeenCalled();
+    expect(prisma.admin.update).not.toHaveBeenCalled();
   });
 
-  it('should call prisma.Admin.update function correctly', async () => {
+  it('should call prisma.admin.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853703149);
     const currentTime = Math.floor(new Date().getTime() / 1000);
@@ -128,23 +131,23 @@ describe('updateAccount function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 12 });
+    verifySession.mockResolvedValue({ userId: 12 });
 
     prisma.$transaction.mockResolvedValue([
       {
         id: 12,
         donationLinks: [
-          { id: 1, currencyCode: 'IDR', link: 'https://donate1.com' },
-          { id: 2, currencyCode: 'USD', link: 'https://donate2.com' },
+          { id: 1, currencyCode: 'IDR', url: 'https://donate1.com' },
+          { id: 2, currencyCode: 'USD', url: 'https://donate2.com' },
         ],
       },
     ]);
 
-    prisma.Admin.update.mockResolvedValue({
+    prisma.admin.update.mockResolvedValue({
       id: 12,
       donationLinks: [
-        { id: 1, currencyCode: 'IDR', link: 'https://donate1.com' },
-        { id: 2, currencyCode: 'USD', link: 'https://donate2.com' },
+        { id: 1, currencyCode: 'IDR', url: 'https://donate1.com' },
+        { id: 2, currencyCode: 'USD', url: 'https://donate2.com' },
       ],
     });
 
@@ -157,12 +160,12 @@ describe('updateAccount function', () => {
       },
       picture: 'https://test.co/pic.jpg',
       donationLinks: [
-        { dbId: 1, currencyCode: 'IDR', link: 'https://donate1.com' },
-        { dbId: 2, currencyCode: 'USD', link: 'https://donate2.com' },
+        { dbId: 1, currencyCode: 'IDR', url: 'https://donate1.com' },
+        { dbId: 2, currencyCode: 'USD', url: 'https://donate2.com' },
       ],
     });
 
-    expect(prisma.Admin.update).toHaveBeenCalledWith({
+    expect(prisma.admin.update).toHaveBeenCalledWith({
       where: { id: 12 },
       data: {
         firstName: 'John',
@@ -172,11 +175,11 @@ describe('updateAccount function', () => {
         donationLinks: {
           update: [
             {
-              data: { currencyCode: 'IDR', link: 'https://donate1.com' },
+              data: { currencyCode: 'IDR', url: 'https://donate1.com' },
               where: { id: 1 },
             },
             {
-              data: { currencyCode: 'USD', link: 'https://donate2.com' },
+              data: { currencyCode: 'USD', url: 'https://donate2.com' },
               where: { id: 2 },
             },
           ],
@@ -189,7 +192,7 @@ describe('updateAccount function', () => {
           select: {
             id: true,
             currencyCode: true,
-            link: true,
+            url: true,
           },
         },
       },
@@ -197,14 +200,14 @@ describe('updateAccount function', () => {
   });
 });
 
-describe('deletedonationLink function', () => {
+describe('deleteDonationLink function', () => {
   it('should call verifySession function, not call prisma.donationLink.delete function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deletedonationLink(1)).rejects.toThrow(UnauthenticatedError);
+    await expect(deleteDonationLink(1)).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
     expect(prisma.donationLink.delete).not.toHaveBeenCalled();
@@ -214,7 +217,7 @@ describe('deletedonationLink function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 12 });
+    verifySession.mockResolvedValue({ userId: 12 });
 
     prisma.$transaction.mockResolvedValue([
       { id: 1 },
@@ -222,7 +225,7 @@ describe('deletedonationLink function', () => {
     ]);
     prisma.donationLink.delete.mockResolvedValue({ id: 1 });
 
-    await deletedonationLink(1);
+    await deleteDonationLink(1);
 
     expect(prisma.donationLink.delete).toHaveBeenCalledWith({
       where: { id: 1 },

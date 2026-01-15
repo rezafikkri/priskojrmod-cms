@@ -19,11 +19,16 @@ beforeAll(() => {
 
   vi.mock('@/lib/prisma', () => ({
     default: {
-      TermsOfService: {
+      termsOfService: {
         create: vi.fn(),
         update: vi.fn(),
       },
     },
+  }));
+
+  vi.mock('@/config/cms', () => ({}));
+  vi.mock('next/cache', () => ({
+    revalidatePath: vi.fn(),
   }));
 });
 
@@ -59,7 +64,7 @@ describe('createTermsOfService function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     const prismaResult = {
       id: 1,
@@ -131,7 +136,7 @@ describe('updateTermsOfService function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     const prismaResult = { id: 1 };
     prisma.termsOfService.update.mockResolvedValue({ ...prismaResult });

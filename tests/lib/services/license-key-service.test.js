@@ -88,7 +88,7 @@ describe('createLicenseKey function', () => {
     const prisma = (await import('@/lib/prisma')).default;
     const { getSpecificSecretKey } = await import('@/lib/services/secret-key-service');
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
+    verifySession.mockResolvedValue({ userId: 1 });
     getSpecificSecretKey.mockResolvedValue({ key: '123' });
     prisma.customer.findFirst.mockResolvedValue({
       firstName: 'test',
@@ -138,7 +138,7 @@ describe('getLicenseKeys function', () => {
     const jwt = (await import('jsonwebtoken')).default;
 
     const filters = { secretKeyId: 1, isRevoked: false };
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
+    verifySession.mockResolvedValue({ userId: 1 });
     const mocklicenseKeys = [
       { id: '1', createdAt: 123, updatedAt: 3498, key: 'key1' },
       { id: '2', createdAt: 456, updatedAt: 567, key: 'key2' },
@@ -208,7 +208,7 @@ describe('searchLicenseKeys function', () => {
     const prisma = (await import('@/lib/prisma')).default;
     const jwt = (await import('jsonwebtoken')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
+    verifySession.mockResolvedValue({ userId: 1 });
     const mocklicenseKeys = [
       { id: '1', createdAt: 123, updatedAt: 3498, regeneratedAt: 512, key: 'key1' },
       { id: '2', createdAt: 456, updatedAt: 567, key: 'key2' },
@@ -274,7 +274,7 @@ describe('deleteLicenseKey function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await deleteLicenseKey('f28fe573-7fc9-4c0f-bd89-c698266fd4cf');
 
@@ -302,7 +302,7 @@ describe('getLicenseKey function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.licenseKey.findUnique.mockResolvedValue({
       id: '33c993ad-097f-499d-9899-61186bb31b72',
@@ -373,7 +373,7 @@ describe('updateLicenseKey function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'admin-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.licenseKey.findUnique.mockResolvedValue(null);
 
@@ -417,7 +417,7 @@ describe('setCanRegenerateLicenseKeys function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
     prisma.licenseKey.updateMany.mockResolvedValue({ count: 2 });
 
     const uuid1 = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';

@@ -10,7 +10,6 @@ import {
   createSecretKey,
   deleteSecretKey,
   getSecretKeys,
-  getSpecificSecretKey,
   getSecretKey,
   saveRegeneratedSecretKey,
 } from '@/lib/services/secret-key-service';
@@ -72,7 +71,8 @@ describe('createSecretKey function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
+    verifySession.mockResolvedValue({ userId: 1 });
+
     prisma.secretKey.create.mockResolvedValue({ id: 1 });
     prisma.product.findUnique.mockResolvedValue({ name: 'Product Name' });
 
@@ -109,7 +109,7 @@ describe('deleteSecretKey function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
+    verifySession.mockResolvedValue({ userId: 1 });
     prisma.secretKey.delete.mockResolvedValue({
       id: 2,
     });
@@ -147,7 +147,7 @@ describe('getSecretKeys function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
+    verifySession.mockResolvedValue({ userId: 1 });
     prisma.secretKey.findMany.mockResolvedValue([{
       id: 2,
       product: {
@@ -165,48 +165,14 @@ describe('getSecretKeys function', () => {
     expect(prisma.secretKey.findMany).toHaveBeenCalledWith({
       select: {
         id: true,
+        regeneratedAt: true,
+        key: true,
+        createdAt: true,
         product: {
           select: { name: true },
         },
       },
       orderBy: { createdAt: 'desc' },
-    });
-  });
-});
-
-describe('getSpecificSecretKey function', () => {
-  it('should call verifySession function, not call prisma.secretKey.findUnique function and throw Error with "Unauthenticated" message', async () => {
-    const verifySession = (await import('@/lib/verifySession')).default;
-    const prisma = (await import('@/lib/prisma')).default;
-
-    verifySession.mockResolvedValue(false);
-
-    await expect(getSpecificSecretKey(
-      '1',
-      { key: true },
-    )).rejects.toThrow(UnauthenticatedError);
-
-    expect(verifySession).toHaveBeenCalled();
-    expect(prisma.secretKey.findUnique).not.toHaveBeenCalled();
-  });
-
-  it('should call prisma.LicenseKey.findUnique function correctly', async () => {
-    const verifySession = (await import('@/lib/verifySession')).default;
-    const prisma = (await import('@/lib/prisma')).default;
-
-    verifySession.mockResolvedValue({ isAuth: true, userId: '123' });
-    prisma.secretKey.findUnique.mockResolvedValue({
-      key: '12345',
-    });
-
-    await getSpecificSecretKey(
-      2,
-      { key: true },
-    );
-
-    expect(prisma.secretKey.findUnique).toHaveBeenCalledWith({
-      where: { id: 2 },
-      select: { key: true },
     });
   });
 });
@@ -228,7 +194,7 @@ describe('getSecretKey function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.secretKey.findUnique.mockResolvedValue({
       id: 123,
@@ -279,7 +245,7 @@ describe('saveRegeneratedSecretKey function', () => {
 
     const regeneratedKey = '6f927ec4f37c8a99880ad233b9d9cf7ea539b58b99bd7e21d7bcd2f4a7d9123e';
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.secretKey.update.mockResolvedValue({
       key: regeneratedKey,

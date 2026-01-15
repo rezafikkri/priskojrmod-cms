@@ -25,9 +25,14 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/utils', () => ({
-    isOwnerAdmin: vi.fn(),
-  }));
+  vi.mock('@/lib/utils', async (importOriginal) => {
+    const original = await importOriginal();
+
+    return {
+      ...original,
+      isOwnerAdmin: vi.fn(),
+    };
+  });
 
   vi.mock('@/lib/prisma', () => ({
     default: {
@@ -57,6 +62,8 @@ beforeAll(() => {
       isValid: () => true,
     }),
   }));
+
+  vi.mock('@/config/cms', () => ({}));
 });
 
 afterEach(() => {
@@ -86,7 +93,6 @@ describe('getAdmins function', () => {
 
     // userId smallint
     verifySession.mockResolvedValue({
-      isAuth: true,
       userId: 11,
       userRole: AdminRole.STAFF,
     });
@@ -107,7 +113,6 @@ describe('getAdmins function', () => {
 
     // owner id smallint
     verifySession.mockResolvedValue({
-      isAuth: true,
       userId: 1,
       userRole: AdminRole.OWNER,
     });
@@ -160,8 +165,8 @@ describe('createAdmin function', () => {
       whatsappPhoneNumber: { countryIso: 'ID', number: '08123456789' },
       picture: 'https://test.com/pic.jpg',
       donationLinks: [
-        { currencyCode: 'IDR', link: '' },
-        { currencyCode: 'USD', link: '' },
+        { currencyCode: 'IDR', url: '' },
+        { currencyCode: 'USD', url: '' },
       ],
     };
 
@@ -178,7 +183,6 @@ describe('createAdmin function', () => {
     const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({
-      isAuth: true,
       userId: 10,
       userRole: AdminRole.STAFF,
     });
@@ -192,8 +196,8 @@ describe('createAdmin function', () => {
       whatsappPhoneNumber: { countryIso: 'ID', number: '08123456789' },
       picture: 'https://test.com/pic.jpg',
       donationLinks: [
-        { currencyCode: 'IDR', link: '' },
-        { currencyCode: 'USD', link: '' },
+        { currencyCode: 'IDR', url: '' },
+        { currencyCode: 'USD', url: '' },
       ],
     };
 
@@ -213,7 +217,6 @@ describe('createAdmin function', () => {
     const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({
-      isAuth: true,
       userId: 1,
       userRole: AdminRole.OWNER,
     });
@@ -229,8 +232,8 @@ describe('createAdmin function', () => {
       whatsappPhoneNumber: { countryIso: 'ID', number: '08123456789' },
       picture: 'https://test.com/pic.jpg',
       donationLinks: [
-        { currencyCode: 'IDR', link: 'https://a.com' },
-        { currencyCode: 'USD', link: '' },
+        { currencyCode: 'IDR', url: 'https://a.com' },
+        { currencyCode: 'USD', url: '' },
       ],
     };
 
@@ -252,7 +255,7 @@ describe('createAdmin function', () => {
           create: [
             {
               currencyCode: 'IDR',
-              link: 'https://a.com',
+              url: 'https://a.com',
             },
           ],
         },
@@ -283,7 +286,6 @@ describe('getAdmin function', () => {
     const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({
-      isAuth: true,
       userId: 10,
       userRole: AdminRole.STAFF,
     });
@@ -303,7 +305,6 @@ describe('getAdmin function', () => {
     const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({
-      isAuth: true,
       userId: 1,
       userRole: AdminRole.STAFF,
     });
@@ -319,8 +320,8 @@ describe('getAdmin function', () => {
       picture: 'https://images.com/photo.jpg',
       role: AdminRole.STAFF,
       donationLinks: [
-        { id: 91, currencyCode: 'IDR', link: 'https://saweria.id/budi' },
-        { id: 92, currencyCode: 'USD', link: 'https://ko-fi.com/budi' },
+        { id: 91, currencyCode: 'IDR', url: 'https://saweria.id/budi' },
+        { id: 92, currencyCode: 'USD', url: 'https://ko-fi.com/budi' },
       ],
     });
 
@@ -340,7 +341,7 @@ describe('getAdmin function', () => {
           select: {
             id: true,
             currencyCode: true,
-            link: true,
+            url: true,
           },
         },
       },
@@ -405,8 +406,8 @@ describe('updateAdmin function', () => {
       },
       picture: 'https://example.com/avatar.jpg',
       donationLinks: [
-        { dbId: 55, currencyCode: 'IDR', link: 'https://donate.com/1' },
-        { dbId: 66, currencyCode: 'USD', link: '' },
+        { dbId: 55, currencyCode: 'IDR', url: 'https://donate.com/1' },
+        { dbId: 66, currencyCode: 'USD', url: '' },
       ],
     };
 
@@ -415,7 +416,7 @@ describe('updateAdmin function', () => {
       {
         id: 12,
         donationLinks: [
-          { id: 55, currencyCode: 'IDR', link: 'https://donate.com/1' },
+          { id: 55, currencyCode: 'IDR', url: 'https://donate.com/1' },
         ],
       },
     ]);
@@ -437,7 +438,7 @@ describe('updateAdmin function', () => {
               where: { id: 55 },
               data: {
                 currencyCode: 'IDR',
-                link: 'https://donate.com/1',
+                url: 'https://donate.com/1',
               },
             },
           ],
@@ -449,7 +450,7 @@ describe('updateAdmin function', () => {
           select: {
             id: true,
             currencyCode: true,
-            link: true,
+            url: true,
           },
         },
       },

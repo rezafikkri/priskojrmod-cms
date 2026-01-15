@@ -26,6 +26,12 @@ beforeAll(() => {
       },
     },
   }));
+
+  vi.mock('@/config/cms', () => ({}));
+
+  vi.mock('next/cache', () => ({
+    revalidatePath: vi.fn(),
+  }));
 });
 
 afterEach(() => {
@@ -62,7 +68,7 @@ describe('createLicense function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await createLicense({
       name: {
@@ -137,7 +143,7 @@ describe('updateLicense function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await updateLicense({
       id: 1,
@@ -204,7 +210,7 @@ describe('deleteLicense function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await deleteLicense(1);
 

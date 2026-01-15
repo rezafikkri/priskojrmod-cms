@@ -30,6 +30,12 @@ beforeAll(() => {
       },
     },
   }));
+
+  vi.mock('@/config/cms', () => ({}));
+
+  vi.mock('next/cache', () => ({
+    revalidatePath: vi.fn(),
+  }));
 });
 
 afterEach(() => {
@@ -66,7 +72,7 @@ describe('createFaq function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await createFaq({
       title: {
@@ -114,7 +120,7 @@ describe('deleteFaq function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await deleteFaq(1);
 
@@ -145,7 +151,7 @@ describe('updateFaq function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await updateFaq({
       id: 123,

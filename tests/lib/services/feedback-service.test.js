@@ -19,9 +19,9 @@ beforeAll(() => {
     default: vi.fn(),
   }));
 
-  vi.mock('@/lib/pjme-prisma-client', () => ({
+  vi.mock('@/lib/prisma', () => ({
     default: {
-      Feedback: {
+      feedback: {
         deleteMany: vi.fn(),
         update: vi.fn(),
       },
@@ -34,9 +34,9 @@ afterEach(() => {
 });
 
 describe('deleteFeedbacks function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Feedback.deleteMany function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.feedback.deleteMany function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -46,21 +46,21 @@ describe('deleteFeedbacks function', () => {
     ])).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Feedback.deleteMany).not.toHaveBeenCalled();
+    expect(prisma.feedback.deleteMany).not.toHaveBeenCalled();
   });
   
-  it('Should call pjmeDBPrismaClient.Feedback.deleteMany function correctly', async () => {
+  it('Should call prisma.feedback.deleteMany function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await deleteFeedbacks([
       '550e8400-e29b-41d4-a716-446655440000',
       '550e8400-e29b-41d4-a716-446655440001',
     ]);
 
-    expect(pjmeDBPrismaClient.Feedback.deleteMany).toHaveBeenCalledWith({
+    expect(prisma.feedback.deleteMany).toHaveBeenCalledWith({
       where: {
         id: {
           in: [
@@ -74,9 +74,9 @@ describe('deleteFeedbacks function', () => {
 });
 
 describe('updateFeedbackReadStatus function', () => {
-  it('Should call verifySession function, not call pjmeDBPrismaClient.Feedback.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.feedback.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
@@ -86,21 +86,21 @@ describe('updateFeedbackReadStatus function', () => {
     )).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(pjmeDBPrismaClient.Feedback.update).not.toHaveBeenCalled();
+    expect(prisma.feedback.update).not.toHaveBeenCalled();
   });
 
-  it('Should call pjmeDBPrismaClient.Feedback.update function correctly', async () => {
+  it('Should call prisma.feedback.update function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
-    const pjmeDBPrismaClient = (await import('@/lib/pjme-prisma-client')).default;
+    const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await updateFeedbackReadStatus(
       '550e8400-e29b-41d4-a716-446655440002',
       true
     );
 
-    expect(pjmeDBPrismaClient.Feedback.update).toHaveBeenCalledWith({
+    expect(prisma.feedback.update).toHaveBeenCalledWith({
       where: { id: '550e8400-e29b-41d4-a716-446655440002' },
       data: { isRead: true },
       select: { id: true },

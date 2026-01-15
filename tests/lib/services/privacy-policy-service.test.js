@@ -19,11 +19,17 @@ beforeAll(() => {
 
   vi.mock('@/lib/prisma', () => ({
     default: {
-      PrivacyPolicy: {
+      privacyPolicy: {
         create: vi.fn(),
         update: vi.fn(),
       },
     },
+  }));
+
+  vi.mock('@/config/cms', () => ({}));
+
+  vi.mock('next/cache', () => ({
+    revalidatePath: vi.fn(),
   }));
 });
 
@@ -59,7 +65,7 @@ describe('createPrivacyPolicy function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     const prismaResult = {
       id: 1,
@@ -137,7 +143,7 @@ describe('updatePrivacyPolicy function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.privacyPolicy.update.mockResolvedValue({ id: 1 });
 

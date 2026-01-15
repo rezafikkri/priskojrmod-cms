@@ -29,6 +29,11 @@ beforeAll(() => {
       },
     },
   }));
+
+  vi.mock('@/config/cms', () => ({}));
+  vi.mock('next/cache', () => ({
+    revalidatePath: vi.fn(),
+  }));
 });
 
 afterEach(() => {
@@ -64,7 +69,7 @@ describe('createTestimonial function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
     prisma.testimonial.count.mockResolvedValue(2);
 
     await createTestimonial({
@@ -136,7 +141,7 @@ describe('updateTestimonial function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await updateTestimonial({
       id: 1,

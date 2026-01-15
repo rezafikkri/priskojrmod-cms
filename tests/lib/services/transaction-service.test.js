@@ -49,6 +49,16 @@ beforeAll(() => {
     },
   }));
 
+  vi.mock('@/prisma/generated/client', () => ({
+    Prisma: {
+      sql: vi.fn((strings, ...values) => ({ strings, values })),
+    },
+  }));
+
+  vi.mock('@/config/cms', () => ({
+
+  }));
+
   vi.mock('@/lib/services/license-key-service', () => ({
     createLicenseKeys: () => {},
     updateLicenseKeys: () => {},
@@ -66,15 +76,6 @@ beforeAll(() => {
       request: vi.fn().mockResolvedValue({ data: { id: 'perm-123' } }),
     })),
   }));
-
-  vi.mock('@/prisma-pjme-db/pjme-db-client', () => ({
-    Prisma: {
-      sql: vi.fn((strings, ...values) => ({ strings, values })),
-    },
-  }));
-
-  process.env.NEXT_PUBLIC_BRAND_URL = 'https://example.com';
-  process.env.NEXT_PUBLIC_BRAND_NAME = 'Example Brand';
 });
 
 afterEach(() => {
@@ -105,7 +106,7 @@ describe('getTransactions function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     const mockTransactions = [
       {
@@ -176,7 +177,7 @@ describe('searchTransactions function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     const mockTransactions = [
       {
@@ -269,7 +270,7 @@ describe('getTransactionDetails function', () => {
           productName: 'Product A',
           productVersion: '1.0.0',
           productDriveFileId: 'drive-123',
-          product_download_link: 'https://example.com/download',
+          productDownloadUrl: 'https://example.com/download',
           productVariant: 'standard',
           variantDownloadUrl: 'https://example.com/variant',
           variantFileAccessPassword: null,
@@ -321,7 +322,6 @@ describe('updateTransactionStatus function', () => {
   it('should call prisma.transaction.update function correctly when authenticated', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
 
     verifySession.mockResolvedValue({ user: { id: 'user-123' } });
 
@@ -340,11 +340,11 @@ describe('updateTransactionStatus function', () => {
         { id: '018f3c00-2222-4f66-b8f0-abcdef123456', productId: 'prod-uuid-1', productDriveFileId: null, shareMethod: null }
       ],
     });
-    prisma.Product.findMany.mockResolvedValue([
+    prisma.product.findMany.mockResolvedValue([
       { id: 'prod-uuid-1', categoryId: 'cat-uuid-1', name: 'Product A' }
     ]);
-    prisma.Category.findUnique.mockResolvedValue({ id: 'cat-uuid-app' });
-    pjmaDBPrismaClient.SecretKeyLicense.findMany.mockResolvedValue([]);
+    prisma.category.findUnique.mockResolvedValue({ id: 'cat-uuid-app' });
+    prisma.secretKey.findMany.mockResolvedValue([]);
     prisma.transaction.update.mockResolvedValue({ id: uuidV7 });
     prisma.$transaction.mockImplementation(async (fn) => fn({
       Invoice: {
@@ -384,7 +384,6 @@ describe('correctTransactionStatus function', () => {
   it('should call prisma.transaction.update function correctly when authenticated', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
-    const pjmaDBPrismaClient = (await import('@/lib/pjma-prisma-client')).default;
 
     verifySession.mockResolvedValue({ user: { id: 'user-123' } });
 
@@ -403,28 +402,28 @@ describe('correctTransactionStatus function', () => {
         { id: '018f3c00-2222-4f66-b8f0-abcdef123456', productId: 'prod-uuid-1', productDriveFileId: null, shareMethod: ShareMethod.MANUAL_REQUIRED }
       ],
     });
-    prisma.Product.findMany.mockResolvedValue([
+    prisma.product.findMany.mockResolvedValue([
       { id: 'prod-uuid-1', categoryId: 'cat-uuid-1', name: 'Product A' }
     ]);
-    prisma.Category.findUnique.mockResolvedValue({ id: 'cat-uuid-app' });
-    pjmaDBPrismaClient.SecretKeyLicense.findMany.mockResolvedValue([
+    prisma.category.findUnique.mockResolvedValue({ id: 'cat-uuid-app' });
+    prisma.secretKey.findMany.mockResolvedValue([
       {
         id: 'sk-uuid-1',
         productId: 'prod-uuid-1',
         key: 'SECRET_KEY',
-        license_key: [
+        licenseKey: [
           { id: 'lk-uuid-1', isRevoked: true, code: 'OLD_CODE', updatedAt: Date.now() }
         ],
       }
     ]);
     prisma.transaction.update.mockResolvedValue({ id: uuidV7 });
     const txMock = {
-      Invoice: {
+      invoice: {
         findFirst: vi.fn().mockResolvedValue(null),
         create: vi.fn().mockResolvedValue({ id: 'inv-uuid-1', invoiceNumber: 'INV-001' }),
         update: vi.fn().mockResolvedValue({ id: 'inv-uuid-1' }),
       },
-      Transaction: {
+      transaction: {
         update: vi.fn().mockResolvedValue({ id: uuidV7 }),
       },
     };
@@ -455,7 +454,7 @@ describe('generateConfirmationMessage function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     const mockTransaction = {
       code: 'TRX-123',
@@ -513,7 +512,7 @@ describe('generateTransactionExport function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     const mockTransactions = [
       {
@@ -545,6 +544,11 @@ describe('generateTransactionExport function', () => {
     });
 
     expect(verifySession).toHaveBeenCalled();
-    expect(prisma.$queryRaw).toHaveBeenCalledWith(expect.any(Object));
+
+    const sql = prisma.$queryRaw.mock.calls[0][0]
+    const nested = sql.values[1]
+
+    expect(sql.values).toContain('IDR');
+    expect(nested.values).toContain('paid');
   });
 });

@@ -35,11 +35,6 @@ beforeAll(() => {
         update: vi.fn(),
         delete: vi.fn(),
       },
-    },
-  }));
-
-  vi.mock('@/lib/prisma', () => ({
-    default: {
       licenseKey: {
         deleteMany: () => {},
         count: () => 0,
@@ -47,6 +42,8 @@ beforeAll(() => {
       },
     },
   }));
+
+  vi.mock('@/config/cms', () => ({}));
 });
 
 afterEach(() => {
@@ -81,7 +78,7 @@ describe('createCustomer function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.customer.create.mockResolvedValue({ id: 'e65385e2-25a1-4ef9-940f-a33b6450f462' });
 
@@ -130,7 +127,7 @@ describe('getCustomers function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.customer.findMany.mockResolvedValue([
       {
@@ -198,7 +195,7 @@ describe('searchCustomers function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.customer.findMany.mockResolvedValue([
       {
@@ -271,7 +268,7 @@ describe('getCustomer function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.customer.findFirst.mockResolvedValue({ id: 'f094e3f7-a479-4768-be14-b464ac3ee3f1' });
 
@@ -320,7 +317,7 @@ describe('updateCustomer function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     // Return that the customer is still banned
     prisma.customer.findUnique.mockResolvedValue({
@@ -375,7 +372,7 @@ describe('updateCustomerBanStatus function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true, userId: 'user-id' });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.customer.update.mockResolvedValue({ id: 'c705f67d-4f2b-45f7-99fd-2fc193f5e000' });
 
@@ -411,7 +408,7 @@ describe('getCustomersForAutocomplete function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.customer.findMany.mockResolvedValue([
       { id: '1', firstName: 'Alice', email: 'alice@mail.com' },
@@ -431,6 +428,7 @@ describe('getCustomersForAutocomplete function', () => {
       select: {
         id: true,
         firstName: true,
+        lastName: true,
         email: true,
       },
       take: 10,
@@ -457,7 +455,7 @@ describe('deleteCustomer function', () => {
 
     const fakeId = '28c841fc-8efb-4469-b7c9-d3c90b417e60';
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     prisma.customer.findFirst.mockResolvedValue({
       isBanned: true,

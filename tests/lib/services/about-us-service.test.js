@@ -21,12 +21,14 @@ beforeAll(() => {
     default: {
       aboutUs: {
         create: vi.fn(),
-      },
-      $transaction: vi.fn(),
-      aboutUsTranslation: {
         update: vi.fn(),
       },
     },
+  }));
+
+  vi.mock('@/config/cms', () => ({}));
+  vi.mock('next/cache', () => ({
+    revalidatePath: () => {},
   }));
 });
 
@@ -58,11 +60,19 @@ describe('createAboutUs function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
-    const inputContent = {
-      id: 'Tentang Kami ID',
-      en: 'About Us EN',
+    const input = {
+      content: {
+        id: 'Tentang Kami ID',
+        en: 'About Us EN',
+      },
+      supportEmail: 'support@tokokami.com',
+      supportWhatsapp: { countryIso: 'ID', number: '+6281234567890' },
+      officeHours: {
+        id: 'Senin - Jumat: 09.00 - 17.00 | Sabtu & Minggu: Tutup',
+        en: 'Monday - Friday: 09:00 AM - 05:00 PM | Saturday & Sunday: Closed',
+      },
     };
 
     const prismaResult = {
@@ -75,14 +85,24 @@ describe('createAboutUs function', () => {
 
     prisma.aboutUs.create.mockResolvedValue({ ...prismaResult });
 
-    await createAboutUs({ content: inputContent });
+    await createAboutUs(input);
 
     expect(prisma.aboutUs.create).toHaveBeenCalledWith({
       data: {
+        supportWhatsapp: input.supportWhatsapp.number,
+        supportEmail: input.supportEmail,
         translations: {
           create: [
-            { language: Language.ID, content: inputContent.id },
-            { language: Language.EN, content: inputContent.en },
+            {
+              language: Language.ID,
+              content: input.content.id,
+              officeHours: input.officeHours.id,
+            },
+            {
+              language: Language.EN,
+              content: input.content.en,
+              officeHours: input.officeHours.en,
+            },
           ],
         },
       },
@@ -100,7 +120,7 @@ describe('createAboutUs function', () => {
 });
 
 describe('updateAboutUs function', () => {
-  it('Should call verifySession function, not call prisma.$transaction and prisma.aboutUs.update function and throw Error with "Unauthenticated" message', async () => {
+  it('Should call verifySession function, not call prisma.aboutUs.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
@@ -113,23 +133,28 @@ describe('updateAboutUs function', () => {
           id: 1,
           en: 2,
         },
+        supportEmail: 'support@tokokami.com',
+        supportWhatsapp: { countryIso: 'ID', number: '+6281234567890' },
         content: {
           id: 'Konten Indonesia',
           en: 'English Content',
+        },
+        officeHours: {
+          id: 'Senin - Jumat: 09.00 - 17.00 | Sabtu & Minggu: Tutup',
+          en: 'Monday - Friday: 09:00 AM - 05:00 PM | Saturday & Sunday: Closed',
         },
       })
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(prisma.$transaction).not.toHaveBeenCalled();
-    expect(prisma.aboutUsTranslation.update).not.toHaveBeenCalled();
+    expect(prisma.aboutUs.update).not.toHaveBeenCalled();
   });
 
-  it('Should call prisma.$transaction function and call prisma.aboutUs.update function twice correctly', async () => {
+  it('Should call prisma.aboutUs.update function correctly', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     const input = {
       id: 1,
@@ -137,25 +162,46 @@ describe('updateAboutUs function', () => {
         id: 1,
         en: 2,
       },
+      supportEmail: 'support@tokokami.com',
+      supportWhatsapp: { countryIso: 'ID', number: '+6281234567890' },
       content: {
         id: 'Konten Indonesia',
         en: 'English Content',
+      },
+      officeHours: {
+        id: 'Senin - Jumat: 09.00 - 17.00 | Sabtu & Minggu: Tutup',
+        en: 'Monday - Friday: 09:00 AM - 05:00 PM | Saturday & Sunday: Closed',
       },
     };
 
     await updateAboutUs(input);
 
-    expect(prisma.$transaction).toHaveBeenCalled();
-    expect(prisma.aboutUsTranslation.update).toBeCalledTimes(2);
-    expect(prisma.aboutUsTranslation.update).toHaveBeenCalledWith({
-      data: { content: input.content.id },
+    expect(prisma.aboutUs.update).toHaveBeenCalledWith({
+      where: { id: input.id },
+      data: {
+        supportEmail: input.supportEmail,
+        supportWhatsapp: input.supportWhatsapp.number,
+        translations: {
+          update: [
+            {
+              data: {
+                content: input.content.id,
+                officeHours: input.officeHours.id,
+              },
+              where: { id: input.translationId.id },
+            },
+            {
+              data: {
+                content: input.content.en,
+                officeHours: input.officeHours.en,
+              },
+              where: { id: input.translationId.en },
+            },
+          ],
+        },
+
+      },
       select: { id: true },
-      where: { id: input.translationId.id, aboutUsId: input.id },
-    });
-    expect(prisma.aboutUsTranslation.update).toHaveBeenCalledWith({
-      data: { content: input.content.en },
-      select: { id: true },
-      where: { id: input.translationId.en, aboutUsId: input.id },
     });
   });
 });

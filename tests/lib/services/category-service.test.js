@@ -30,6 +30,10 @@ beforeAll(() => {
       },
     },
   }));
+
+  vi.mock('next/cache', () => ({
+    revalidatePath: vi.fn(),
+  }));
 });
 
 afterEach(() => {
@@ -58,7 +62,7 @@ describe('createCategory function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await createCategory({ name: 'Programming Tips' });
 
@@ -91,7 +95,7 @@ describe('deleteCategory function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await deleteCategory(7);
 
@@ -125,7 +129,7 @@ describe('updateCategory function', () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ isAuth: true });
+    verifySession.mockResolvedValue({ userId: 1 });
 
     await updateCategory({
       id: 9,
