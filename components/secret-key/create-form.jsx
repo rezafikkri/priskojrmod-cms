@@ -37,7 +37,7 @@ export default function CreateForm({ products: data }) {
   const form = useForm({
     resolver: zodResolver(createSecretKeySchema),
     defaultValues: {
-      product_id: '',
+      productId: '',
       key: '',
     },
   });
@@ -49,7 +49,7 @@ export default function CreateForm({ products: data }) {
     if (addRes.status === 'success') {
       form.reset();
       // filter product when success, cause the app already have secret-key "one-to-one"
-      setProducts(items => items.filter(item => item.id !== data.product_id));
+      setProducts(items => items.filter(item => item.id !== data.productId));
       
       toast.success('Secret key created successfully');
     } else {
@@ -73,7 +73,7 @@ export default function CreateForm({ products: data }) {
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
           <FormField
             control={form.control}
-            name="product_id"
+            name="productId"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel className="text-base">Product</FormLabel>

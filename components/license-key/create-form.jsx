@@ -35,7 +35,7 @@ export default function CreateForm({ secretKeys }) {
   const form = useForm({
     resolver: zodResolver(createLicenseKeySchema),
     defaultValues: {
-      secret_key_id: '',
+      secretKeyId: '',
       customerId: '',
     },
   });
@@ -60,7 +60,7 @@ export default function CreateForm({ secretKeys }) {
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mb-10">
           <FormField
             control={form.control}
-            name="secret_key_id"
+            name="secretKeyId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base">Secret key</FormLabel>

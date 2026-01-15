@@ -77,15 +77,15 @@ describe('createSecretKey function', () => {
     prisma.product.findUnique.mockResolvedValue({ name: 'Product Name' });
 
     await createSecretKey({
-      product_id: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
+      productId: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
       key: '8f23fcc4c918eb26c991b3950c79a243a6b0d683c2e58e0d31fc367b652e2b05',
     });
 
     expect(prisma.secretKey.create).toHaveBeenCalledWith({
       data: {
         key: '8f23fcc4c918eb26c991b3950c79a243a6b0d683c2e58e0d31fc367b652e2b05',
-        product_id: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
-        created_at: Math.floor(new Date().getTime() / 1000),
+        productId: '24dd4d78-ead8-45b8-bfa5-e2bb289cb4d2',
+        createdAt: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -169,7 +169,7 @@ describe('getSecretKeys function', () => {
           select: { name: true },
         },
       },
-      orderBy: { created_at: 'desc' },
+      orderBy: { createdAt: 'desc' },
     });
   });
 });
@@ -295,7 +295,7 @@ describe('saveRegeneratedSecretKey function', () => {
       where: { id: 123 },
       data: {
         key: regeneratedKey,
-        regenerated_at: Math.floor(new Date().getTime() / 1000),
+        regeneratedAt: Math.floor(new Date().getTime() / 1000),
       },
       select: { key: true },
     });

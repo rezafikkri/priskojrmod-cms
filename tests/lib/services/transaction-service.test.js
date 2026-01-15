@@ -413,7 +413,7 @@ describe('correctTransactionStatus function', () => {
         productId: 'prod-uuid-1',
         key: 'SECRET_KEY',
         license_key: [
-          { id: 'lk-uuid-1', is_revoked: true, code: 'OLD_CODE', updatedAt: Date.now() }
+          { id: 'lk-uuid-1', isRevoked: true, code: 'OLD_CODE', updatedAt: Date.now() }
         ],
       }
     ]);

@@ -54,9 +54,9 @@ import SearchInput from '../ui/search-input';
 
 const defaultColumnVisibility = {
   appName: true,
-  regenerated_at: false,
-  created_at: false,
-  updated_at: false,
+  regeneratedAt: false,
+  createdAt: false,
+  updatedAt: false,
 };
 
 export default function LicenseKeysTable() {
@@ -651,8 +651,8 @@ export default function LicenseKeysTable() {
             if (slk.id === resetData.id) {
               return {
                 ...slk,
-                device_id: null,
-                updated_at: releaseRes.data.updated_at,
+                deviceId: null,
+                updatedAt: releaseRes.data.updatedAt,
               };
             }
             return slk;
@@ -675,8 +675,8 @@ export default function LicenseKeysTable() {
                   items: [
                     {
                       ...targetLicenseKey,
-                      device_id: null,
-                      updated_at: releaseRes.data.updated_at,
+                      deviceId: null,
+                      updatedAt: releaseRes.data.updatedAt,
                     },
                     ...oldData.items.filter(lk => lk.id !== resetData.id),
                   ],
@@ -789,22 +789,22 @@ export default function LicenseKeysTable() {
       cell: ({ row }) => formatDateTime(row.getValue('expired_at')),
     },
     {
-      accessorKey: 'regenerated_at',
+      accessorKey: 'regeneratedAt',
       header: () => 'Regenerated At',
       cell: ({ row }) => 
-        row.getValue('regenerated_at')
-          ? formatDateTime(row.getValue('regenerated_at'))
+        row.getValue('regeneratedAt')
+          ? formatDateTime(row.getValue('regeneratedAt'))
           : <Minus className="size-4 text-zinc-300" />,
     },
     {
-      accessorKey: 'created_at',
+      accessorKey: 'createdAt',
       header: () => 'Created At',
-      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('createdAt')),
     },
     {
-      accessorKey: 'updated_at',
+      accessorKey: 'updatedAt',
       header: () => 'Updated At',
-      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('updatedAt')),
     },
     {
       id: 'actions',
@@ -841,7 +841,7 @@ export default function LicenseKeysTable() {
               </button>
             </DropdownMenuItem>
 
-            {row.original.device_id && (
+            {row.original.deviceId && (
               <DropdownMenuItem
                 className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
                 asChild
@@ -871,12 +871,12 @@ export default function LicenseKeysTable() {
                     id: row.original.id,
                     email: row.getValue('email'),
                     appName: row.getValue('appName'),
-                    isRevoked: row.original.is_revoked,
+                    isRevoked: row.original.isRevoked,
                   });
                   setIsOpenEditRevokeStatusDialog(true);
                 }}
               >
-                {row.original.is_revoked ? 'Unrevoke' : 'Revoke'}
+                {row.original.isRevoked ? 'Unrevoke' : 'Revoke'}
               </button>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="-mx-1.5" />

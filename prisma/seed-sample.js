@@ -65,7 +65,7 @@ export async function seedCustomers(prisma, count) {
 export async function seedLicenseKeys(prisma, customers) {
   const licenseKeys = [];
 
-  for (const customer of customers) {
+  for (const [i, customer] of customers.entries()) {
     const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
 
     const secret = await prisma.secretKey.findFirst({
@@ -75,15 +75,14 @@ export async function seedLicenseKeys(prisma, customers) {
     if (!secret) continue;
 
     const licenseKeyId = uuidv7();
-    const payload = generateLicenseKeyPayload(email, licenseKeyId);
+    const payload = generateLicenseKeyPayload(customer.email, licenseKeyId);
     const code = generateLicenseKeyCode(payload, secret.key);
 
     licenseKeys.push({
       id: licenseKeyId,
-      email: customer.email,
       code,
       customerId: customer.id,
-      secret_key_id: secret.id,
+      secretKeyId: secret.id,
       createdAt: currentTime,
       updatedAt: currentTime,
     });

@@ -9,12 +9,12 @@ export async function GET(req) {
   const secretKeyId = searchParams.get('ski');
   const canRegenerate = searchParams.get('cr');
 
-  let filters = { is_revoked: searchParams.get('ir') === 'false' ? false : true };
+  let filters = { isRevoked: searchParams.get('ir') === 'false' ? false : true };
   if (secretKeyId) {
-    filters = { ...filters, secret_key_id: secretKeyId };
+    filters = { ...filters, secretKeyId: secretKeyId };
   }
   if (canRegenerate) {
-    filters = { ...filters, can_regenerate: canRegenerate === 'yes' ? true : false };
+    filters = { ...filters, canRegenerate: canRegenerate === 'yes' ? true : false };
   }
 
   try {

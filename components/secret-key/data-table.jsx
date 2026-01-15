@@ -68,16 +68,16 @@ export default function DataTable({ secretKeys: data }) {
       header: 'App Name',
     },
     {
-      accessorKey: 'created_at',
+      accessorKey: 'createdAt',
       header: () => 'Created At',
-      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('createdAt')),
     },
     {
-      accessorKey: 'regenerated_at',
+      accessorKey: 'regeneratedAt',
       header: () => 'Regenerated At',
       cell: ({ row }) => 
-        row.getValue('regenerated_at')
-          ? formatDateTime(row.getValue('regenerated_at'))
+        row.getValue('regeneratedAt')
+          ? formatDateTime(row.getValue('regeneratedAt'))
           : <Minus className="size-4 text-zinc-300" />,
     },
     {

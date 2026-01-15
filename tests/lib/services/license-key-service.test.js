@@ -72,8 +72,8 @@ describe('createLicenseKey function', () => {
     verifySession.mockResolvedValue(false);
 
     await expect(createLicenseKey({
-      secret_key_id: '123',
-      customer_id: 'customer-id',
+      secretKeyId: '123',
+      customerId: 'customer-id',
       type: 'online',
     })).rejects.toThrow(UnauthenticatedError);
 
@@ -96,22 +96,22 @@ describe('createLicenseKey function', () => {
       email: 'test@g.com',
     });
     prisma.secretKey.findUnique.mockResolvedValue({ key: 'test' });
-    prisma.licenseKey.create.mockResolvedValue({ secret_key_id: 1 });
+    prisma.licenseKey.create.mockResolvedValue({ secretKeyId: 1 });
 
     await createLicenseKey({
-      secret_key_id: '2',
-      customer_id: 'b86eb08d-02d8-44a2-a3fe-1c18cf35ce3c',
+      secretKeyId: '2',
+      customerId: 'b86eb08d-02d8-44a2-a3fe-1c18cf35ce3c',
       type: 'online',
     });
 
     expect(prisma.licenseKey.create).toHaveBeenCalledWith({
       data: {
         id: expect.any(String),
-        secret_key_id: 2,
-        customer_id: 'b86eb08d-02d8-44a2-a3fe-1c18cf35ce3c',
+        secretKeyId: 2,
+        customerId: 'b86eb08d-02d8-44a2-a3fe-1c18cf35ce3c',
         code: 'jsonwebtoken',
-        created_at: Math.floor(new Date().getTime() / 1000),
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        createdAt: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
       },
       select: { id: true },
     });
@@ -125,7 +125,7 @@ describe('getLicenseKeys function', () => {
 
     verifySession.mockResolvedValue(false);
 
-    await expect(getLicenseKeys({ select: {}, pageIndex: 0, pageSize: 10, filters: { secret_key_id: 2 } }))
+    await expect(getLicenseKeys({ select: {}, pageIndex: 0, pageSize: 10, filters: { secretKeyId: 2 } }))
       .rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
@@ -137,11 +137,11 @@ describe('getLicenseKeys function', () => {
     const prisma = (await import('@/lib/prisma')).default;
     const jwt = (await import('jsonwebtoken')).default;
 
-    const filters = { secret_key_id: 1, is_revoked: false };
+    const filters = { secretKeyId: 1, isRevoked: false };
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
     const mocklicenseKeys = [
-      { id: '1', created_at: 123, updated_at: 3498, key: 'key1' },
-      { id: '2', created_at: 456, updated_at: 567, key: 'key2' },
+      { id: '1', createdAt: 123, updatedAt: 3498, key: 'key1' },
+      { id: '2', createdAt: 456, updatedAt: 567, key: 'key2' },
     ];
     prisma.licenseKey.findMany.mockResolvedValue(mocklicenseKeys);
     jwt.decode.mockReturnValue({ exp: 6789 });
@@ -155,12 +155,12 @@ describe('getLicenseKeys function', () => {
     expect(prisma.licenseKey.findMany).toHaveBeenCalledWith({
       select: {
         id: true,
-        device_id: true,
+        deviceId: true,
         code: true,
-        is_revoked: true,
-        created_at: true,
-        updated_at: true,
-        regenerated_at: true,
+        isRevoked: true,
+        createdAt: true,
+        updatedAt: true,
+        regeneratedAt: true,
         secretKey: {
           select: {
             product: {
@@ -173,14 +173,14 @@ describe('getLicenseKeys function', () => {
         },
       },
       orderBy: [
-        { updated_at: 'desc' },
+        { updatedAt: 'desc' },
         { id: 'desc' },
       ],
       take: 2,
       skip: 2,
       where: {
-        secret_key_id: 1,
-        is_revoked: false,
+        secretKeyId: 1,
+        isRevoked: false,
       },
     });
   });
@@ -196,7 +196,7 @@ describe('searchLicenseKeys function', () => {
     await expect(searchLicenseKeys({
       searchKey: 'test',
       searchLimit: 5,
-      filters: { secret_key_id: 3 },
+      filters: { secretKeyId: 3 },
     })).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
@@ -210,8 +210,8 @@ describe('searchLicenseKeys function', () => {
 
     verifySession.mockResolvedValue({ isAuth: true, userId: 'abc' });
     const mocklicenseKeys = [
-      { id: '1', created_at: 123, updated_at: 3498, regenerated_at: 512, key: 'key1' },
-      { id: '2', created_at: 456, updated_at: 567, key: 'key2' },
+      { id: '1', createdAt: 123, updatedAt: 3498, regeneratedAt: 512, key: 'key1' },
+      { id: '2', createdAt: 456, updatedAt: 567, key: 'key2' },
     ];
     prisma.licenseKey.findMany.mockResolvedValue(mocklicenseKeys);
     jwt.decode.mockReturnValue({ exp: 1234 });
@@ -219,18 +219,18 @@ describe('searchLicenseKeys function', () => {
     await searchLicenseKeys({
       key: 'test',
       limit: 5,
-      filters: { secret_key_id: 4, is_revoked: true },
+      filters: { secretKeyId: 4, isRevoked: true },
     });
 
     expect(prisma.licenseKey.findMany).toHaveBeenCalledWith({
       select: {
         id: true,
-        device_id: true,
+        deviceId: true,
         code: true,
-        is_revoked: true,
-        created_at: true,
-        updated_at: true,
-        regenerated_at: true,
+        isRevoked: true,
+        createdAt: true,
+        updatedAt: true,
+        regeneratedAt: true,
         secretKey: {
           select: {
             product: {
@@ -249,8 +249,8 @@ describe('searchLicenseKeys function', () => {
             mode: 'insensitive',
           },
         },
-        secret_key_id: 4,
-        is_revoked: true,
+        secretKeyId: 4,
+        isRevoked: true,
       },
       take: 6,
     });
@@ -326,8 +326,8 @@ describe('getLicenseKey function', () => {
       select: {
         id: true,
         code: true,
-        reset_count: true,
-        last_reset_period: true,
+        resetCount: true,
+        lastResetPeriod: true,
         secretKey: {
           select: {
             product: {
@@ -389,7 +389,7 @@ describe('updateLicenseKey function', () => {
         id: true,
       },
       data: {
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        updatedAt: Math.floor(new Date().getTime() / 1000),
       },
     });
   });
@@ -430,8 +430,8 @@ describe('setCanRegenerateLicenseKeys function', () => {
         id: { in: [uuid1, uuid2] },
       },
       data: {
-        can_regenerate: true,
-        updated_at: Math.floor(new Date().getTime() / 1000),
+        canRegenerate: true,
+        updatedAt: Math.floor(new Date().getTime() / 1000),
       },
     });
   });
