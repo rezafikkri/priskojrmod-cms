@@ -17,17 +17,17 @@ export async function GET(req) {
     id: true,
     code: true,
     status: true,
-    total_amount: true,
-    currency_code: true,
-    customer_email: true,
-    created_at: true,
-    updated_at: true,
+    totalAmount: true,
+    currencyCode: true,
+    customerEmail: true,
+    createdAt: true,
+    updatedAt: true,
     invoices: {
       select: {
-        invoice_number: true,
+        invoiceNumber: true,
       },
       take: 1,
-      orderBy: { issued_at: 'desc' },
+      orderBy: { issuedAt: 'desc' },
     },
   };
 

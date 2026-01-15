@@ -36,7 +36,7 @@ export default function CreateForm({ secretKeys }) {
     resolver: zodResolver(createLicenseKeySchema),
     defaultValues: {
       secret_key_id: '',
-      customer_id: '',
+      customerId: '',
     },
   });
 

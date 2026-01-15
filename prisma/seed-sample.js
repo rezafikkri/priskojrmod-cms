@@ -82,7 +82,7 @@ export async function seedLicenseKeys(prisma, customers) {
       id: licenseKeyId,
       email: customer.email,
       code,
-      customer_id: customer.id,
+      customerId: customer.id,
       secret_key_id: secret.id,
       createdAt: currentTime,
       updatedAt: currentTime,
@@ -133,27 +133,27 @@ function getTransactionDetails({
   const transactionDetails = [];
   for (const product of products) {
     const detail = {
-      product_id: product.id,
-      product_price_id: product.variants[0].prices[0].id,
+      productId: product.id,
+      productPriceId: product.variants[0].prices[0].id,
       quantity: generateRandomInt(2, 5),
 
-      product_name: product.name,
-      product_version: product.versions[0].version,
-      product_drive_file_id: product.drive_file_id,
-      product_download_url: product.download_url,
+      productName: product.name,
+      productVersion: product.versions[0].version,
+      productDriveFileId: product.driveFileId,
+      productDownloadUrl: product.downloadUrl,
 
-      product_variant: product.variants[0].name,
-      product_currency_code: product.variants[0].prices[0].currency_code,
-      product_price: product.variants[0].prices[0].price.toNumber(),
+      productVariant: product.variants[0].name,
+      productCurrencyCode: product.variants[0].prices[0].currencyCode,
+      productPrice: product.variants[0].prices[0].price.toNumber(),
     };
 
     if (product.discount) {
-      detail.product_discount = product.discount.discount;
+      detail.productDiscount = product.discount.discount;
     }
 
     if (product.coupon) {
-      detail.product_coupon_code = product.coupon.code;
-      detail.product_coupon_discount = product.coupon.discount;
+      detail.productCouponCode = product.coupon.code;
+      detail.productCouponDiscount = product.coupon.discount;
     }
 
     transactionDetails.push(detail);
@@ -171,7 +171,7 @@ export async function seedTransactions(prisma, count) {
     include: {
       versions: {
         orderBy: [
-          { released_at: 'desc' },
+          { releasedAt: 'desc' },
           { id: 'desc' },
         ],
         take: 1,
@@ -203,19 +203,19 @@ export async function seedTransactions(prisma, count) {
 
     transactions.push({
       adminId: selectedAdmin.id,
-      admin_email: selectedAdmin.email,
-      customer_id: selectedCustomer.id,
+      adminEmail: selectedAdmin.email,
+      customerId: selectedCustomer.id,
       status: 'pending',
       code: generateDocumentCode('TRX'),
-      currency_code: transactionDetails[0].product_currency_code,
-      total_amount: transactionDetails
+      currencyCode: transactionDetails[0].productCurrencyCode,
+      totalAmount: transactionDetails
         .reduce((total, detail) => {
           const {
             quantity: qty,
-            product_price: price,
-            product_discount: discount = 0,
-            product_coupon_discount: couponDiscount = 0,
-            product_currency_code: currencyCode,
+            productPrice: price,
+            productDiscount: discount = 0,
+            productCouponDiscount: couponDiscount = 0,
+            productCurrencyCode: currencyCode,
           } = detail;
           const subtotal = getSubtotal({
             qty,
@@ -226,9 +226,9 @@ export async function seedTransactions(prisma, count) {
           });
           return total + subtotal;
         }, 0),
-      customer_name: selectedCustomer.firstName,
-      customer_email: selectedCustomer.email,
-      customer_phone_number: selectedCustomer.phoneNumber,
+      customerName: selectedCustomer.firstName,
+      customerEmail: selectedCustomer.email,
+      customerPhoneNumber: selectedCustomer.phoneNumber,
       createdAt: currentTime,
       updatedAt: currentTime,
       details: {

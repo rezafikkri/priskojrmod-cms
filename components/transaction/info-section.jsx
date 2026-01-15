@@ -26,8 +26,8 @@ export default function InfoSection({ info }) {
             className="text-lg font-semibold tabular-nums"
           >
             {formatCurrency({
-              value: info.total_amount,
-              currencyCode: info.currency_code,
+              value: info.totalAmount,
+              currencyCode: info.currencyCode,
             })}
           </span>
           <span
@@ -41,10 +41,10 @@ export default function InfoSection({ info }) {
       <div className="flex gap-10">
         <dl>
           <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Created At</dt>
-          <dd className="mb-6">{formatDateTime(info.created_at)}</dd>
+          <dd className="mb-6">{formatDateTime(info.createdAt)}</dd>
 
           <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Updated At</dt>
-          <dd>{formatDateTime(info.updated_at)}</dd>
+          <dd>{formatDateTime(info.updatedAt)}</dd>
         </dl>
 
         <Separator orientation="vertical" className="!h-25 mt-3" />
@@ -59,16 +59,16 @@ export default function InfoSection({ info }) {
         <TableBody>
           <TableRow className="hover:bg-transparent border-0">
             <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-60">Customer Name</TableHead>
-            <TableCell>{info.customer_name}</TableCell>
+            <TableCell>{info.customerName}</TableCell>
           </TableRow>
           <TableRow className="hover:bg-transparent border-0">
             <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Customer Email</TableHead>
-            <TableCell>{info.customer_email}</TableCell>
+            <TableCell>{info.customerEmail}</TableCell>
           </TableRow>
           <TableRow className="hover:bg-transparent border-0">
             <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Customer Phone Number</TableHead>
             <TableCell>
-              {info.customer_phone_number ?? <Minus className="icon text-zinc-300" />}
+              {info.customerPhoneNumber ?? <Minus className="icon text-zinc-300" />}
             </TableCell>
           </TableRow>
         </TableBody>

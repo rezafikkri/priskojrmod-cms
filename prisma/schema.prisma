@@ -352,48 +352,6 @@ model Customer {
   @@map("customers")
 }
 
-enum TransactionStatus {
-  pending
-  paid
-  cancelled
-  refund
-
-  @@map("transaction_status")
-}
-
-enum ShareMethod {
-  download_link
-  drive_share
-  manual_required
-
-  @@map("share_method")
-}
-
-model Transaction {
-  id          String  @id @default(uuid(7)) @db.Uuid
-  code        String  @unique @db.VarChar(32)
-  customer_id String? @db.Uuid
-
-  admin_id    Int    @db.SmallInt // only for reference
-  admin_email String @db.VarChar(254)
-
-  status        TransactionStatus
-  created_at    Int
-  updated_at    Int
-  currency_code CurrencyCode
-  total_amount  Decimal           @db.Decimal(10, 2)
-
-  customer_name         String  @db.VarChar(200)
-  customer_email        String  @db.VarChar(254)
-  customer_phone_number String? @db.VarChar(20)
-
-  customer Customer?           @relation(fields: [customer_id], references: [id], onDelete: SetNull)
-  details  TransactionDetail[]
-  invoices Invoice[]
-
-  @@map("transactions")
-}
-
 model Feedback {
   id        String  @id @default(uuid(7)) @db.Uuid
   isRead    Boolean @default(false) @map("is_read")
@@ -429,6 +387,48 @@ model TestimonialTranslation {
   @@map("testimonial_translations")
 }
 
+enum TransactionStatus {
+  pending
+  paid
+  cancelled
+  refund
+
+  @@map("transaction_status")
+}
+
+enum ShareMethod {
+  download_link
+  drive_share
+  manual_required
+
+  @@map("share_method")
+}
+
+model Transaction {
+  id         String  @id @default(uuid(7)) @db.Uuid
+  code       String  @unique @db.VarChar(32)
+  customerId String? @map("customer_id") @db.Uuid
+
+  adminId    Int    @map("admin_id") @db.SmallInt // only for reference
+  adminEmail String @map("admin_email") @db.VarChar(254)
+
+  status       TransactionStatus
+  createdAt    Int               @map("created_at")
+  updatedAt    Int               @map("updated_at")
+  currencyCode CurrencyCode      @map("currency_code")
+  totalAmount  Decimal           @map("total_amount") @db.Decimal(10, 2)
+
+  customerName        String  @map("customer_name") @db.VarChar(200)
+  customerEmail       String  @map("customer_email") @db.VarChar(254)
+  customerPhoneNumber String? @map("customer_phone_number") @db.VarChar(20)
+
+  customer Customer?           @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  details  TransactionDetail[]
+  invoices Invoice[]
+
+  @@map("transactions")
+}
+
 enum InvoiceStatus {
   active
   void
@@ -437,47 +437,47 @@ enum InvoiceStatus {
 }
 
 model Invoice {
-  id             String        @id @default(uuid(7)) @db.Uuid
-  transaction_id String        @db.Uuid
-  invoice_number String        @unique @db.VarChar(32)
-  status         InvoiceStatus
-  issued_at      Int
-  voided_at      Int?
+  id            String        @id @default(uuid(7)) @db.Uuid
+  transactionId String        @map("transaction_id") @db.Uuid
+  invoiceNumber String        @unique @map("invoice_number") @db.VarChar(32)
+  status        InvoiceStatus
+  issuedAt      Int           @map("issued_at")
+  voidedAt      Int?          @map("voided_at")
 
-  transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
 
   @@map("invoices")
 }
 
 model TransactionDetail {
-  id                String  @id @default(uuid(7)) @db.Uuid
-  transaction_id    String  @db.Uuid
-  product_id        String  @db.Uuid
-  product_price_id  String? @db.Uuid
-  product_coupon_id String? @db.Uuid
-  quantity          Int     @db.SmallInt
+  id              String  @id @default(uuid(7)) @db.Uuid
+  transactionId   String  @map("transaction_id") @db.Uuid
+  productId       String  @map("product_id") @db.Uuid
+  productPriceId  String? @map("product_price_id") @db.Uuid
+  productCouponId String? @map("product_coupon_id") @db.Uuid
+  quantity        Int     @db.SmallInt
 
-  product_name          String  @db.VarChar(150)
-  product_version       String  @db.VarChar(50)
-  product_drive_file_id String?
-  product_download_url  String?
+  productName        String  @map("product_name") @db.VarChar(150)
+  productVersion     String  @map("product_version") @db.VarChar(50)
+  productDriveFileId String? @map("product_drive_file_id")
+  productDownloadUrl String? @map("product_download_url")
 
-  product_variant              String  @db.VarChar(100)
-  variant_download_url         String?
-  variant_file_access_password String? @db.VarChar(100)
+  productVariant            String  @map("product_variant") @db.VarChar(100)
+  variantDownloadUrl        String? @map("variant_download_url")
+  variantFileAccessPassword String? @map("variant_file_access_password") @db.VarChar(100)
 
-  product_currency_code   CurrencyCode
-  product_price           Decimal      @db.Decimal(10, 2)
-  product_discount        Int?         @db.SmallInt
-  product_coupon_code     String?      @db.VarChar(150)
-  product_coupon_discount Int?         @db.SmallInt
+  productCurrencyCode   CurrencyCode @map("product_currency_code")
+  productPrice          Decimal      @map("product_price") @db.Decimal(10, 2)
+  productDiscount       Int?         @map("product_discount") @db.SmallInt
+  productCouponCode     String?      @map("product_coupon_code") @db.VarChar(150)
+  productCouponDiscount Int?         @map("product_coupon_discount") @db.SmallInt
 
-  drive_permission_id String?      @db.VarChar(100)
-  share_method        ShareMethod?
-  shared_at           Int?
+  drivePermissionId String?      @map("drive_permission_id") @db.VarChar(100)
+  shareMethod       ShareMethod? @map("share_method")
+  sharedAt          Int?         @map("shared_at")
 
-  transaction Transaction   @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
-  price       ProductPrice? @relation(fields: [product_price_id], references: [id], onDelete: SetNull)
+  transaction Transaction   @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  price       ProductPrice? @relation(fields: [productPriceId], references: [id], onDelete: SetNull)
 
   @@map("transaction_details")
 }

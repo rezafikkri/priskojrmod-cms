@@ -48,8 +48,8 @@ import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
 
 const defaultColumnVisibility = {
-  created_at: true,
-  updated_at: false,
+  createdAt: true,
+  updatedAt: false,
 };
 
 export default function TransactionsTable() {
@@ -282,7 +282,7 @@ export default function TransactionsTable() {
                 const result = {
                   ...transaction,
                   status,
-                  updated_at: editRes.data.updated_at,
+                  updatedAt: editRes.data.updatedAt,
                 };
                 if (status === TransactionStatus.PAID) {
                   result.invoices = editRes.data.invoices;
@@ -316,7 +316,7 @@ export default function TransactionsTable() {
                 const newTargetTransaction = {
                   ...targetTransaction,
                   status,
-                  updated_at: editRes.data.updated_at,
+                  updatedAt: editRes.data.updatedAt,
                 };
                 if (status === TransactionStatus.PAID) {
                   newTargetTransaction.invoices = editRes.data.invoices;
@@ -476,7 +476,7 @@ export default function TransactionsTable() {
                 const result = {
                   ...transaction,
                   status: correctData.newStatus,
-                  updated_at: editRes.data.updated_at,
+                  updatedAt: editRes.data.updatedAt,
                 };
                 if (correctData.newStatus === TransactionStatus.PAID) {
                   result.invoices = editRes.data.invoices;
@@ -510,7 +510,7 @@ export default function TransactionsTable() {
                 const newTargetTransaction = {
                   ...targetTransaction,
                   status: correctData.newStatus,
-                  updated_at: editRes.data.updated_at,
+                  updatedAt: editRes.data.updatedAt,
                 };
                 if (correctData.newStatus === TransactionStatus.PAID) {
                   newTargetTransaction.invoices = editRes.data.invoices;
@@ -668,7 +668,7 @@ export default function TransactionsTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'customer_email',
+      accessorKey: 'customerEmail',
       header: 'Email',
       enableHiding: false,
     },
@@ -685,7 +685,7 @@ export default function TransactionsTable() {
       ),
     },
     {
-      accessorKey: 'total_amount',
+      accessorKey: 'totalAmount',
       enableHiding: false,
       header: () => (
         <>
@@ -698,21 +698,21 @@ export default function TransactionsTable() {
       cell: ({ row }) => (
         <div className="text-right">
           {formatCurrency({
-            value: row.getValue('total_amount'),
-            currencyCode: row.original.currency_code,
+            value: row.getValue('totalAmount'),
+            currencyCode: row.original.currencyCode,
           })}
         </div>
       ),
     },
     {
-      accessorKey: 'created_at',
+      accessorKey: 'createdAt',
       header: () => 'Created At',
-      cell: ({ row }) => formatDateTime(row.getValue('created_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('createdAt')),
     },
     {
-      accessorKey: 'updated_at',
+      accessorKey: 'updatedAt',
       header: () => 'Updated At',
-      cell: ({ row }) => formatDateTime(row.getValue('updated_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('updatedAt')),
     },
     {
       id: 'actions',
@@ -791,7 +791,7 @@ export default function TransactionsTable() {
               {row.original.invoices.length > 0 && (
                 <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
                   <Link
-                    href={`/invoice/${row.original.invoices[0].invoice_number}/pdf`}
+                    href={`/invoice/${row.original.invoices[0].invoiceNumber}/pdf`}
                     target='_blank'
                   >View invoice</Link>
                 </DropdownMenuItem>

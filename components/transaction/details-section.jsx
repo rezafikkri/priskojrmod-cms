@@ -30,15 +30,15 @@ export default function DetailsSection({ details }) {
           <TableBody>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-50">Name</TableHead>
-              <TableCell>{detail.product_name}</TableCell>
+              <TableCell>{detail.productName}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Version</TableHead>
-              <TableCell>{detail.product_version}</TableCell>
+              <TableCell>{detail.productVersion}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Variant</TableHead>
-              <TableCell>{detail.product_variant}</TableCell>
+              <TableCell>{detail.productVariant}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Quantity</TableHead>
@@ -46,36 +46,36 @@ export default function DetailsSection({ details }) {
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Currency</TableHead>
-              <TableCell>{detail.product_currency_code}</TableCell>
+              <TableCell>{detail.productCurrencyCode}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Price</TableHead>
               <TableCell className="tabular-nums">
                 {formatCurrency({
-                  value: detail.product_price,
-                  currencyCode: detail.product_currency_code,
+                  value: detail.productPrice,
+                  currencyCode: detail.productCurrencyCode,
                 })}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Discount</TableHead>
               <TableCell>
-                {detail.product_discount
-                  ? `${detail.product_discount}%`
+                {detail.productDiscount
+                  ? `${detail.productDiscount}%`
                   : <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Coupon Code</TableHead>
               <TableCell>
-                {detail.product_coupon_code ?? <Minus className="icon text-zinc-300" />}
+                {detail.productCouponCode ?? <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Coupon Discount</TableHead>
               <TableCell>
-                {detail.product_coupon_discount
-                  ? `${detail.product_coupon_discount}%`
+                {detail.productCouponDiscount
+                  ? `${detail.productCouponDiscount}%`
                   : <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
@@ -84,7 +84,7 @@ export default function DetailsSection({ details }) {
               <TableCell className="tabular-nums">
                 {formatCurrency({
                   value: detail.subtotal,
-                  currencyCode: detail.product_currency_code,
+                  currencyCode: detail.productCurrencyCode,
                 })}
               </TableCell>
             </TableRow>
@@ -99,16 +99,16 @@ export default function DetailsSection({ details }) {
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-50">Share Method</TableHead>
               <TableCell className="capitalize">
-                {detail.share_method
-                  ? detail.share_method.replace('_', ' ')
+                {detail.shareMethod
+                  ? detail.shareMethod.replace('_', ' ')
                   : <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Shared At</TableHead>
               <TableCell>
-                {detail.shared_at
-                  ? formatDateTime(detail.shared_at)
+                {detail.sharedAt
+                  ? formatDateTime(detail.sharedAt)
                   : <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
@@ -123,13 +123,13 @@ export default function DetailsSection({ details }) {
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-50">Drive File ID</TableHead>
               <TableCell>
-                {detail.product_drive_file_id ?? <Minus className="icon text-zinc-300" />}
+                {detail.productDriveFileId ?? <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Download Link</TableHead>
               <TableCell>
-                {detail.product_download_url ?? <Minus className="icon text-zinc-300" />}
+                {detail.productDownloadUrl ?? <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
           </TableBody>
@@ -143,13 +143,13 @@ export default function DetailsSection({ details }) {
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-50">Download Link</TableHead>
               <TableCell>
-                {detail.variant_download_url ?? <Minus className="icon text-zinc-300" />}
+                {detail.variantDownloadUrl ?? <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">File Access Password</TableHead>
               <TableCell>
-                {detail.variant_file_access_password ?? <Minus className="icon text-zinc-300" />}
+                {detail.variantFileAccessPassword ?? <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
           </TableBody>

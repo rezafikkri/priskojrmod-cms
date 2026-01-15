@@ -43,7 +43,7 @@ export default function CustomerCombobox({
 
   const customerId = useWatch({
     control: form.control,
-    name: 'customer_id',
+    name: 'customerId',
   });
   useEffect(() => {
     if (!customerId && selectedLabel) {
@@ -65,7 +65,7 @@ export default function CustomerCombobox({
   return (
     <FormField
       control={form.control}
-      name="customer_id"
+      name="customerId"
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel className="text-base">Customer</FormLabel>

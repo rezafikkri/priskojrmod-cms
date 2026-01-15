@@ -48,7 +48,7 @@ export default function InvoicesSection({ invoices }) {
           <TableBody>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Invoice Number</TableHead>
-              <TableCell>{invoice.invoice_number}</TableCell>
+              <TableCell>{invoice.invoiceNumber}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Status</TableHead>
@@ -56,13 +56,13 @@ export default function InvoicesSection({ invoices }) {
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Issued At</TableHead>
-              <TableCell>{formatDateTime(invoice.issued_at)}</TableCell>
+              <TableCell>{formatDateTime(invoice.issuedAt)}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Voided At</TableHead>
               <TableCell>
-                {invoice.voided_at
-                  ? formatDateTime(invoice.voided_at)
+                {invoice.voidedAt
+                  ? formatDateTime(invoice.voidedAt)
                   : <Minus className="icon text-zinc-300" />}
               </TableCell>
             </TableRow>
