@@ -105,7 +105,7 @@ export default function CustomerCombobox({
                   {isFetching ? (
                     <CommandEmpty>Searching...</CommandEmpty>
                   ) : (
-                    <CommandEmpty>No customer found.</CommandEmpty>
+                    <CommandEmpty>No customer found</CommandEmpty>
                   )}
                   <CommandGroup>
                     {data.map(customer => (

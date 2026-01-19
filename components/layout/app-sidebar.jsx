@@ -43,8 +43,8 @@ const menu = {
     { text: 'Products', url: '/product' },
   ],
   application: [
-    { text: 'License keys', url: '/license-key' },
     { text: 'Secret keys', url: '/secret-key' },
+    { text: 'License keys', url: '/license-key' },
   ],
   system: [
     { text: 'Admins', url: '/admin', role: AdminRole.OWNER },

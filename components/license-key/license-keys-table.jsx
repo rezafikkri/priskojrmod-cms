@@ -54,6 +54,7 @@ import SearchInput from '../ui/search-input';
 
 const defaultColumnVisibility = {
   appName: true,
+  lastUsedAt: false,
   regeneratedAt: false,
   createdAt: false,
   updatedAt: false,
@@ -783,10 +784,18 @@ export default function LicenseKeysTable() {
       header: 'App Name',
     },
     {
-      accessorKey: 'expired_at',
+      accessorKey: 'expiredAt',
       enableHiding: false,
       header: () => 'Expired At',
-      cell: ({ row }) => formatDateTime(row.getValue('expired_at')),
+      cell: ({ row }) => formatDateTime(row.getValue('expiredAt')),
+    },
+    {
+      accessorKey: 'lastUsedAt',
+      header: () => 'Last Used At',
+      cell: ({ row }) =>
+        row.getValue('lastUsedAt')
+          ? formatDateTime(row.getValue('lastUsedAt'))
+          : <Minus className="size-4 text-zinc-300" />,
     },
     {
       accessorKey: 'regeneratedAt',

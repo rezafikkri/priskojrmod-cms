@@ -514,6 +514,7 @@ model LicenseKey {
   isRevoked     Boolean @default(false) @map("is_revoked")
   createdAt     Int     @map("created_at")
   updatedAt     Int     @map("updated_at")
+  lastUsedAt    Int?    @map("last_used_at")
   regeneratedAt Int?    @map("regenerated_at")
 
   deviceId        String? @map("device_id") @db.VarChar(100)
