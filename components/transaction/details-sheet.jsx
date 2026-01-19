@@ -111,7 +111,7 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
             onFinally: () => {
               setIsLoading(false);
             },
-            errorMessage: 'Something went wrong while searching. Please try again.',
+            errorMessage: 'Something went wrong while loading the details. Please try again.',
             signal,
           });
         },

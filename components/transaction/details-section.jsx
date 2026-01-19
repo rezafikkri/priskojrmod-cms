@@ -33,6 +33,10 @@ export default function DetailsSection({ details }) {
               <TableCell>{detail.productName}</TableCell>
             </TableRow>
             <TableRow>
+              <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-50">Category</TableHead>
+              <TableCell>{detail.productCategorySlug}</TableCell>
+            </TableRow>
+            <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Version</TableHead>
               <TableCell>{detail.productVersion}</TableCell>
             </TableRow>

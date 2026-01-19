@@ -127,13 +127,13 @@ model Product {
   driveFileId String? @map("drive_file_id")
   downloadUrl String? @map("download_url")
 
-  status      ProductStatus
-  isPinned    Boolean   @default(false) @map("is_pinned")
-  name        String    @db.VarChar(150)
-  slug        String    @unique @db.VarChar(150)
-  priceType   PriceType @map("price_type")
-  createdAt   Int       @map("created_at")
-  updatedAt   Int       @map("updated_at")
+  status    ProductStatus
+  isPinned  Boolean       @default(false) @map("is_pinned")
+  name      String        @db.VarChar(150)
+  slug      String        @unique @db.VarChar(150)
+  priceType PriceType     @map("price_type")
+  createdAt Int           @map("created_at")
+  updatedAt Int           @map("updated_at")
 
   admin    Admin    @relation(fields: [adminId], references: [id], onDelete: NoAction)
   category Category @relation(fields: [categoryId], references: [id], onDelete: NoAction)
@@ -465,10 +465,11 @@ model TransactionDetail {
   productCouponId String? @map("product_coupon_id") @db.Uuid
   quantity        Int     @db.SmallInt
 
-  productName        String  @map("product_name") @db.VarChar(150)
-  productVersion     String  @map("product_version") @db.VarChar(50)
-  productDriveFileId String? @map("product_drive_file_id")
-  productDownloadUrl String? @map("product_download_url")
+  productCategorySlug String  @map("product_category_slug") @db.VarChar(100)
+  productName         String  @map("product_name") @db.VarChar(150)
+  productVersion      String  @map("product_version") @db.VarChar(50)
+  productDriveFileId  String? @map("product_drive_file_id")
+  productDownloadUrl  String? @map("product_download_url")
 
   productVariant            String  @map("product_variant") @db.VarChar(100)
   variantDownloadUrl        String? @map("variant_download_url")

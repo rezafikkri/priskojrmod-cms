@@ -136,6 +136,7 @@ function getTransactionDetails({
       productPriceId: product.variants[0].prices[0].id,
       quantity: generateRandomInt(2, 5),
 
+      productCategorySlug: product.category.slug,
       productName: product.name,
       productVersion: product.versions[0].version,
       productDriveFileId: product.driveFileId,
@@ -168,6 +169,9 @@ export async function seedTransactions(prisma, count) {
     where: { priceType: 'paid' },
     orderBy: { updatedAt: 'desc' },
     include: {
+      category: {
+        select: { slug: true },
+      },
       versions: {
         orderBy: [
           { releasedAt: 'desc' },
@@ -196,8 +200,8 @@ export async function seedTransactions(prisma, count) {
   for (let i = 0; i < count; i++) {
     const transactionDetails = getTransactionDetails({ max: 2, products });
 
-    const selectedCustomer = customers[generateRandomInt(5, customers.length - 1)];
-    const selectedAdmin = admins[generateRandomInt(1, admins.length - 1)];
+    const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];
+    const selectedAdmin = admins[generateRandomInt(0, admins.length - 1)];
     const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
 
     transactions.push({
