@@ -15,6 +15,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { isOwnerAdmin } from '@/lib/utils';
 import { getAdmins } from '@/lib/services/admin-service';
 import { v4 } from 'uuid';
+import { ProductStatus } from '@/constants/enums';
 
 export const defaultFormStoreInitState = {
   form: {
@@ -56,7 +57,7 @@ export const defaultFormStoreInitState = {
         discount: '',
         expiredAt: '',
       },
-      isPublished: false,
+      status: ProductStatus.UNPUBLISHED,
     },
   },
   reference: {},

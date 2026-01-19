@@ -13,6 +13,12 @@ export const Language = Object.freeze({
   EN: 'en',
 });
 
+export const ProductStatus = Object.freeze({
+  PUBLISHED: 'published',
+  UNPUBLISHED: 'unpublished',
+  INACTIVE: 'inactive',
+});
+
 export const TransactionStatus = Object.freeze({
   PENDING: 'pending',
   PAID: 'paid',

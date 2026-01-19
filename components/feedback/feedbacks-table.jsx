@@ -93,7 +93,7 @@ export default function FeedbacksTable() {
   /**
    * This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
    * We need it because our async function (sent to the child) might "remember"
-   * an old `searchedCustomer` and more state value, which is called a "stale closure" problem.
+   * state value, which is called a "stale closure" problem.
    */
   const filtersRef = useRef(filters);
   // This same as filtersRef but, This is too for handleMarkAsRead actions process, that used for ui,

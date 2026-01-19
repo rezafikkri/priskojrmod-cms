@@ -8,6 +8,7 @@ import {
   MoreHorizontal,
   Check,
   Minus,
+  RotateCw,
 } from 'lucide-react';
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import {
@@ -18,14 +19,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { useState, useMemo } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState, useMemo, useRef, useCallback } from 'react';
+import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import { PriceType, CurrencyCode } from '@/constants/enums';
-import { editProductPinnedStatus, editProductPublishedStatus, removeProduct } from '@/actions/product-actions';
+import { PriceType, CurrencyCode, ProductStatus } from '@/constants/enums';
+import {
+  editProductPinned,
+  editProductStatus,
+  removeProduct,
+} from '@/actions/product-actions';
 import { toast } from 'sonner';
 import { safeFetch } from '@/lib/safe-fetch';
 import Dot from '../icon/Dot';
@@ -43,20 +48,27 @@ import DataTable from '../ui/data-table';
 import TablePagination from '../ui/table-pagination';
 import DeleteDialog from './delete-dialog';
 import { cmsConfig } from '@/config/cms';
+import { getStatusClasses } from '@/lib/utils';
+import { deepEqual } from 'fast-equals';
+import FiltersPopover from './filters-popover';
 
 const defaultColumnVisibility = {
   category: false,
-  isPublished: true,
   releasedAt: true,
   admin: false,
   createdAt: false,
   updatedAt: false,
 };
 
-export default function ProductsTable({
-  isOwner,
-}) {
+export default function ProductsTable({ isOwner }) {
   const queryClient = useQueryClient();
+
+  // determine show table skeleton or not in
+  const shouldShowSkeletonLoading = useRef(true);
+
+  // filters state
+  const [filters, setFilters] = useState({ status: 'active' });
+  const [isFilterActive, setIsFilterActive] = useState(false);
 
   // table state
   const columnVisibilityStorageKey = 'products:column-visibility';
@@ -79,8 +91,8 @@ export default function ProductsTable({
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
-  const [updatingPinnedStatusIds, setUpdatingPinnedStatusIds] = useState([]);
-  const [updatingPublishedIds, setUpdatingPublishedIds] = useState([]);
+  const [updatingStatusIds, setUpdatingStatusIds] = useState([]);
+  const [updatingPinnedIds, setUpdatingPinnedIds] = useState([]);
   const [deletingIds, setDeletingIds] = useState([]);
 
   const {
@@ -89,8 +101,24 @@ export default function ProductsTable({
     isError: isErrorP,
     error: errorP,
   } = useQuery({
-    queryKey: ['products'],
-    queryFn: async () => (await safeFetch({ url: '/api/products' })).data,
+    queryKey: ['products', filters],
+    queryFn: async () => {
+      let toastId;
+
+      if (!shouldShowSkeletonLoading.current) {
+        toastId = toast.loading('Loading products...');
+      }
+
+      const results = await safeFetch({
+        url: `/api/products?s=${filters.status}`,
+        onFinally: () => {
+          if (toastId) {
+            toast.dismiss(toastId);
+          }
+        },
+      });
+      return results.data;
+    },
     select: (product) => ({
       items: product.items.map(product => {
         let newProduct = { ...product };
@@ -117,24 +145,49 @@ export default function ProductsTable({
         return newProduct;
       }),
     }),
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 20,
     gcTime: 1000 * 60,
   });
 
-  async function handleEditPinnedStatus(id, isPinned) {
+  function handleRefresh() {
+    // not show table skeleton loading
+    shouldShowSkeletonLoading.current = false;
+    queryClient.invalidateQueries({ queryKey: ['products'] });
+  }
+
+  // set isFilterActive when apply and clear
+  function syncIsFilterActive(appliedFilters) {
+    if (appliedFilters.status !== 'active') {
+      setIsFilterActive(true);
+    } else {
+      setIsFilterActive(false);
+    }
+  }
+
+  function handleFilter(newFilters) {
+    // not show table skeleton loading
+    shouldShowSkeletonLoading.current = false;
+
+    // set filters for trigger refetch
+    setFilters(newFilters);
+    syncIsFilterActive(newFilters);
+  }
+
+  const handleEditPinned = useCallback(async (id, isPinned) => {
     // This is for add opacity-50 style to deleted row
-    setUpdatingPinnedStatusIds((prevUpdatingPinnedStatusIds) => [...prevUpdatingPinnedStatusIds, id]);
+    setUpdatingPinnedIds((prevIds) => [...prevIds, id]);
     // show loading
     const toastId = toast.loading(!isPinned ? 'Pinning product...' : 'Unpinning product...');
 
-    const editRes = await editProductPinnedStatus(id, !isPinned);
+    const editRes = await editProductPinned(id, !isPinned);
 
-    setUpdatingPinnedStatusIds((prevUpdatingPinnedStatusIds) =>
-      prevUpdatingPinnedStatusIds.filter((updatingId) => updatingId !== id)
+    setUpdatingPinnedIds((prevIds) =>
+      prevIds.filter((prevId) => prevId !== id)
     );
 
     if (editRes.status === 'success') {
-      queryClient.setQueryData(['products'], (oldData) => {
+      queryClient.setQueryData(['products', filters], (oldData) => {
         if (!oldData) return oldData;
 
         let updatedProduct = { ...oldData.items.find(data => data.id === editRes.data.id) };
@@ -161,63 +214,79 @@ export default function ProductsTable({
     } else {
       toast.error(editRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }
-  }
+  }, [filters]);
 
-  async function handleEditPublishedStatus(id, isPublished) {
+  const handleEditStatus = useCallback(async ({ id, newStatus, currentStatus }) => {
+    const toastText = {
+      [ProductStatus.PUBLISHED]: {
+        loading: 'Publishing product...',
+        success: 'Product published successfully',
+      },
+      [ProductStatus.UNPUBLISHED]: {
+        loading: 'Unpublishing product...',
+        success: 'Product unpublished successfully',
+      },
+      [ProductStatus.INACTIVE]: {
+        loading: 'Deactivating product...',
+        success: 'Product deactivated successfully',
+      },
+    };
+
     // This is for add opacity-50 style to deleted row
-    setUpdatingPublishedIds((prevUpdatingPublishedIds) => [...prevUpdatingPublishedIds, id]);
+    setUpdatingStatusIds((prevIds) => [...prevIds, id]);
 
     // show loading
-    const toastId = toast.loading(!isPublished ? 'Publishing product...' : 'Unpublishing product...');
+    const toastId = toast.loading(toastText[newStatus].loading);
 
-    const editRes = await editProductPublishedStatus(id, !isPublished);
+    const editRes = await editProductStatus(id, newStatus);
 
-    setUpdatingPublishedIds((prevUpdatingPublishedIds) =>
-      prevUpdatingPublishedIds.filter((updatingId) => updatingId !== id)
-    );
+    setUpdatingStatusIds((prevIds) => prevIds.filter((prevId) => prevId !== id));
 
     if (editRes.status === 'success') {
-      queryClient.setQueryData(['products'], (oldData) => {
-        if (!oldData) return oldData;
+      if (newStatus === ProductStatus.INACTIVE || currentStatus === ProductStatus.INACTIVE) {
+        queryClient.setQueryData(['products', filters], (oldData) => {
+          if (!oldData) return oldData;
 
-        let updatedProduct = { ...oldData.items.find(data => data.id === editRes.data.id) };
-        updatedProduct.updatedAt = editRes.data.updatedAt;
-        updatedProduct.isPublished = !isPublished;
+          return {
+            items: oldData.items.filter((data) => data.id !== id),
+          };
+        });
 
-        let targetIndex = oldData.items.findIndex(data => !data.isPinned);
-        const filteredProducts = oldData.items.filter(data => data.id !== editRes.data.id);
+        queryClient.invalidateQueries({ queryKey: ['products'], refetchType: 'none' });
+      } else {
+        queryClient.setQueryData(['products', filters], (oldData) => {
+          if (!oldData) return oldData;
 
-        if (updatedProduct.isPinned) {
-          return { items: [updatedProduct, ...filteredProducts] };
-        } else {
+          let updatedProduct = { ...oldData.items.find(data => data.id === editRes.data.id) };
+          updatedProduct.updatedAt = editRes.data.updatedAt;
+          updatedProduct.status = newStatus;
+
+          let targetIndex = oldData.items.findIndex(data => !data.isPinned);
+          const filteredProducts = oldData.items.filter(data => data.id !== editRes.data.id);
+
           filteredProducts.splice(targetIndex, 0, updatedProduct);
           return { items: filteredProducts };
-        }
-      });
+        });
+      }
 
-      toast.success(
-        !isPublished
-          ? 'Product published successfully'
-          : 'Product unpublished successfully',
-        { id: toastId },
-      );
+      toast.success(toastText[newStatus].success, { id: toastId });
     } else {
-      toast.error(editRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
-    }
-  }
+      toast.error(editRes.message, { id: toastId });
+    }   
+  }, [filters]);
 
   async function handleDelete({ deleteData, toastId }) {
     // This is for add opacity-50 style to deleted row
-    setDeletingIds((prevDeletingIds) => [...prevDeletingIds, deleteData.id]);
+    setDeletingIds((prevIds) => [...prevIds, deleteData.id]);
 
     const removeRes = await removeProduct(deleteData.id);
 
-    setDeletingIds((prevDeletingIds) =>
-      prevDeletingIds.filter((id) => id !== deleteData.id)
+    setDeletingIds((prevIds) =>
+      prevIds.filter((id) => id !== deleteData.id)
     );
 
     if (removeRes.status === 'success') {
-      queryClient.setQueryData(['products'], (oldData) => {
+      queryClient.setQueryData(['products', filters], (oldData) => {
         if (!oldData) return oldData;
 
         return {
@@ -309,14 +378,15 @@ export default function ProductsTable({
       },
     },
     {
-      accessorKey: 'isPublished',
-      header: <div className="text-center">Published</div>,
+      accessorKey: 'status',
+      header: 'Status',
+      enableHiding: false,
       cell: ({ row }) => (
-        <div className="text-center">{
-          row.getValue('isPublished')
-            ? <Check className="size-4 inline-block" />
-            : <Dot className="size-4 text-zinc-300 dark:text-zinc-700 inline-block" />
-        }</div>
+        <span
+          className={`px-2 py-1 rounded-lg capitalize font-medium ${getStatusClasses(row.getValue('status'))}`}
+        >
+          {row.getValue('status')}
+        </span>
       ),
     },
     {
@@ -354,6 +424,10 @@ export default function ProductsTable({
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
+        const currentStatus = row.getValue('status');
+        const showUnpublishAction = currentStatus === ProductStatus.INACTIVE ||
+          (!row.original.isPinned && currentStatus === ProductStatus.PUBLISHED);
+
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -361,8 +435,8 @@ export default function ProductsTable({
                 variant="ghost"
                 className="h-8 w-8 p-0 focus-visible:ring-ring"
                 disabled={
-                  updatingPinnedStatusIds.includes(row.original.id) ||
-                  updatingPublishedIds.includes(row.original.id) ||
+                  updatingPinnedIds.includes(row.original.id) ||
+                  updatingStatusIds.includes(row.original.id) ||
                   deletingIds.includes(row.original.id)
                 }
               >
@@ -371,36 +445,73 @@ export default function ProductsTable({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-50">
               <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-              <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
-                <Link href={`/product/${row.original.id}/edit`}>Edit</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="w-full text-base"
-                asChild
-              >
-                <button
-                  onClick={() => handleEditPinnedStatus(
-                    row.original.id,
-                    row.original.isPinned,
-                  )}
+              {currentStatus !== ProductStatus.INACTIVE && (
+                <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+                  <Link href={`/product/${row.original.id}/edit`}>Edit</Link>
+                </DropdownMenuItem>
+              )}
+
+              {currentStatus === ProductStatus.PUBLISHED && (
+                <DropdownMenuItem
+                  className="w-full text-base"
+                  asChild
                 >
-                  {row.original.isPinned ? 'Unpin' : 'Pin'}
-                </button>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="w-full text-base"
-                asChild
-              >
-                <button
-                  onClick={() => handleEditPublishedStatus(
-                    row.original.id,
-                    row.original.isPublished,
-                  )}
+                  <button
+                    onClick={() => handleEditPinned(
+                      row.original.id,
+                      row.original.isPinned,
+                    )}
+                  >
+                    {row.original.isPinned ? 'Unpin' : 'Pin'}
+                  </button>
+                </DropdownMenuItem>
+              )}
+
+              {currentStatus === ProductStatus.UNPUBLISHED && (
+                <>
+                  <DropdownMenuItem
+                    className="w-full text-base"
+                    asChild
+                  >
+                    <button
+                      onClick={() => handleEditStatus({
+                        id: row.original.id,
+                        newStatus: ProductStatus.PUBLISHED,
+                        currentStatus: row.getValue('status'),
+                      })}
+                    >Publish</button>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+                    asChild
+                  >
+                    <button
+                      onClick={() => handleEditStatus({
+                        id: row.original.id,
+                        newStatus: ProductStatus.INACTIVE,
+                        currentStatus: row.getValue('status'),
+                      })}
+                    >Deactive</button>
+                  </DropdownMenuItem>
+                </>
+              )}
+
+              {showUnpublishAction && (
+                <DropdownMenuItem
+                  className="w-full text-base"
+                  asChild
                 >
-                  {row.getValue('isPublished') ? 'Unpublish' : 'Publish'}
-                </button>
-              </DropdownMenuItem>
-              {!row.original.isPinned && !row.getValue('isPublished') && (
+                  <button
+                    onClick={() => handleEditStatus({
+                      id: row.original.id,
+                      newStatus: ProductStatus.UNPUBLISHED,
+                      currentStatus: row.getValue('status'),
+                    })}
+                  >Unpublish</button>
+                </DropdownMenuItem>
+              )}
+
+              {currentStatus !== ProductStatus.PUBLISHED && (
                 <>
                   <DropdownMenuSeparator className="-mx-1.5" />
                   <DropdownMenuItem
@@ -423,7 +534,14 @@ export default function ProductsTable({
         );
       },
     }
-  ], [priceCurrency, updatingPinnedStatusIds, updatingPublishedIds, deletingIds]);
+  ], [
+    priceCurrency,
+    updatingPinnedIds,
+    updatingStatusIds,
+    deletingIds,
+    handleEditPinned,
+    handleEditStatus,
+  ]);
   const table = useReactTable({
     data: dataP?.items,
     columns,
@@ -436,12 +554,33 @@ export default function ProductsTable({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row lg:justify-between gap-3 mb-4">
-        <TooltipWrapper text="Create product">
-          <Button asChild variant="outline" className="h-auto inline-block text-base px-3 py-1.5">
-            <Link href="/product/new"><Plus className="icon" /> Create</Link>
-          </Button>
-        </TooltipWrapper>
+      <div className="flex flex-col lg:flex-row lg:justify-between gap-3 items-start mb-4">
+        <div className="flex space-x-3 max-lg:flex-wrap max-lg:w-full gap-3">
+          <TooltipWrapper text="Create product">
+            <Button asChild variant="outline" className="h-auto inline-block text-base px-3 py-1.5">
+              <Link href="/product/new"><Plus className="icon" /> Create</Link>
+            </Button>
+          </TooltipWrapper>
+
+          <div className="flex space-x-3">
+            <TooltipWrapper text="Refresh">
+              <Button
+                variant="outline"
+                className="text-base px-3 py-1.5 h-auto inline-block"
+                disabled={isFetchingP}
+                onClick={handleRefresh}
+              >
+                <RotateCw className="icon" />
+              </Button>
+            </TooltipWrapper>
+
+            <FiltersPopover
+              onFilter={handleFilter}
+              isFilterActive={isFilterActive}
+              disabled={isFetchingP}
+            />
+          </div>
+        </div>
 
         <TableColumnVisibility
           table={table}
@@ -457,7 +596,7 @@ export default function ProductsTable({
         />
       </div>
 
-      {isFetchingP ? (
+      {(shouldShowSkeletonLoading.current && isFetchingP) ? (
         <TablePaginationSkeleton showPagination={false} />
       ) : isErrorP ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
@@ -469,8 +608,8 @@ export default function ProductsTable({
           <DataTable
             table={table}
             processingIds={[
-              ...updatingPinnedStatusIds,
-              ...updatingPublishedIds,
+              ...updatingPinnedIds,
+              ...updatingStatusIds,
               ...deletingIds,
             ]}
           />

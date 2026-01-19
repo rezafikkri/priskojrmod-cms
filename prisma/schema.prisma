@@ -109,6 +109,14 @@ enum PriceType {
   @@map("price_type")
 }
 
+enum ProductStatus {
+  published
+  unpublished
+  inactive
+
+  @@map("product_status")
+}
+
 model Product {
   id         String @id @default(uuid(7)) @db.Uuid
   categoryId Int    @map("category_id")
@@ -119,7 +127,7 @@ model Product {
   driveFileId String? @map("drive_file_id")
   downloadUrl String? @map("download_url")
 
-  isPublished Boolean   @default(false) @map("is_published")
+  status      ProductStatus
   isPinned    Boolean   @default(false) @map("is_pinned")
   name        String    @db.VarChar(150)
   slug        String    @unique @db.VarChar(150)

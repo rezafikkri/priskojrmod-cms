@@ -2,8 +2,8 @@
 
 import {
   createProduct,
-  updateProductPinnedStatus,
-  updateProductPublishedStatus,
+  updateProductStatus,
+  updateProductPinned,
   deleteProduct,
   deleteProductDiscount,
   deleteProductCoupon,
@@ -22,18 +22,18 @@ export async function addProduct(data) {
   }
 }
 
-export async function editProductPinnedStatus(id, isPinned) {
+export async function editProductStatus(id, status) {
   try {
-    const updatedData = await updateProductPinnedStatus(id, isPinned);
+    const updatedData = await updateProductStatus(id, status);
     return { status: 'success', data: updatedData };
   } catch (err) {
     return { status: 'error', message: err.message };
   }
 }
 
-export async function editProductPublishedStatus(id, isPublished) {
+export async function editProductPinned(id, isPinned) {
   try {
-    const updatedData = await updateProductPublishedStatus(id, isPublished);
+    const updatedData = await updateProductPinned(id, isPinned);
     return { status: 'success', data: updatedData };
   } catch (err) {
     return { status: 'error', message: err.message };

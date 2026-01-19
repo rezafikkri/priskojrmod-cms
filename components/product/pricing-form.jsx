@@ -9,8 +9,11 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '../ui/form';
-import { CurrencyCode, PriceType } from '@/constants/enums';
+import { Label } from '../ui/label';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { CurrencyCode, PriceType, ProductStatus } from '@/constants/enums';
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
@@ -159,7 +162,7 @@ export default function PricingForm({
     };
 
     if (mode === 'create') {
-      product.isPublished = data.isPublished;
+      product.status = data.status;
     }
     
     // if price type == paid
@@ -330,7 +333,7 @@ export default function PricingForm({
             {mode === 'edit' && (
               <>
                 <Separator />
-                <section className="space-y-6 mb-9">
+                <section className="space-y-6">
                   <h3 className="text-lg font-bold mb-0">Coupon</h3>
                   <h4 className="text-zinc-700 dark:text-zinc-300/80">
                     Optional. Provides a discount for previous buyers when purchasing product upgrades.
@@ -358,22 +361,26 @@ export default function PricingForm({
             )}
             <FormField
               control={form.control}
-              name="isPublished"
+              name="status"
               render={({ field }) => (
-                <FormItem className="flex space-x-2 items-start">
+                <FormItem className="gap-6 mb-9">
+                  <FormLabel className="text-lg font-bold">Status</FormLabel>
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                      disabled={isSubmitting}
-                    />
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      value={field.value}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <RadioGroupItem value="unpublished" id="unpublished" />
+                        <Label htmlFor="unpublished" className="text-base font-medium">Publish Later</Label>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <RadioGroupItem value="published" id="published" />
+                        <Label htmlFor="published" className="text-base">Publish Now</Label>
+                      </div>
+                    </RadioGroup>
                   </FormControl>
-                  <div className="space-y-2">
-                    <FormLabel className="text-base leading-none">Publish</FormLabel>
-                    <FormDescription>
-                      Make this product visible on the website
-                    </FormDescription>
-                  </div>
+                  <FormMessage />
                 </FormItem>
               )}
             />
