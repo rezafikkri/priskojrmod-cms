@@ -522,11 +522,11 @@ export default function FeedbacksTable() {
       ),
     },
     {
-      accessorKey: 'user_info',
+      accessorKey: 'userInfo',
       header: 'User Info',
       enableHiding: false,
       cell: ({ row }) => 
-        row.getValue('user_info') ?? <Minus className="size-4 text-zinc-300" />,
+        row.getValue('userInfo') ?? <Minus className="size-4 text-zinc-300" />,
     },
     {
       accessorKey: 'message',

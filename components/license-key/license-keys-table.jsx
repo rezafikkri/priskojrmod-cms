@@ -132,14 +132,14 @@ export default function LicenseKeysTable() {
   // allowing us to update the loading toast instead of showing a new one.
   const grantRegenerateToastIdRef = useRef(null);
 
-  // add secretKeyId and canRegenerate filters
+  // add filters to url
   function addFiltersToURL(url, appliedFilters) {
-    let newUrl = url + `&ir=${appliedFilters.showRevoked}`;
+    let newUrl = url + `&sr=${appliedFilters.showRevoked}`;
 
     if (appliedFilters.secretKeyId && appliedFilters.secretKeyId !== 'all') {
       newUrl += `&ski=${appliedFilters.secretKeyId}`;
     }
-    if (appliedFilters.secretKeyId && appliedFilters.canRegenerate !== 'all') {
+    if (appliedFilters.canRegenerate && appliedFilters.canRegenerate !== 'all') {
       newUrl += `&cr=${appliedFilters.canRegenerate}`;
     }
 

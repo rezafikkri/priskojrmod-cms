@@ -102,6 +102,11 @@ export default function CustomersTable() {
     paginationRef.current = pagination;
   }, [searchedCustomer, filters, pagination]);
 
+  // add filters to url
+  function addFiltersToURL(url, appliedFilters) {
+    return `${url}&sb=${appliedFilters.showBanned}`;
+  }
+
   const {
     data: dataC,
     isFetching: isFetchingC,
@@ -117,7 +122,7 @@ export default function CustomersTable() {
       }
 
       const results = await safeFetch({
-        url: `/api/customers?pi=${pagination.pageIndex}&ib=${filters.showBanned}`,
+        url: addFiltersToURL(`/api/customers?pi=${pagination.pageIndex}`, filters),
         onFinally: () => {
           if (toastId) {
             toast.dismiss(toastId);
@@ -150,7 +155,7 @@ export default function CustomersTable() {
           }
 
           return await safeFetch({
-            url: `/api/customers?sk=${parsedKey}&ib=${appliedFilters.showBanned}`,
+            url: addFiltersToURL(`/api/customers?sk=${parsedKey}`, filters),
             onFinally: () => {
               if (toastId) {
                 toast.dismiss(toastId);

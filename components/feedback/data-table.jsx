@@ -23,7 +23,7 @@ export default function DataTable({
       case 'actions':
         return 'text-right';
 
-      case 'user_info':
+      case 'userInfo':
       case 'message':
       case 'createdAt':
         return `${!isRead ? 'font-semibold' : 'text-zinc-800 dark:text-zinc-300'} hover:cursor-pointer`;

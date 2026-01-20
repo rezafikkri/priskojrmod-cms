@@ -110,7 +110,7 @@ export default function ProductsTable({ isOwner }) {
       }
 
       const results = await safeFetch({
-        url: `/api/products?s=${filters.status}`,
+        url: `/api/products?ps=${filters.status}`,
         onFinally: () => {
           if (toastId) {
             toast.dismiss(toastId);

@@ -3,7 +3,7 @@ import { getProducts } from '@/lib/services/product-service';
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
   const filters = {
-    status: searchParams.get('s'),
+    status: searchParams.get('ps'),
   };
 
   try {

@@ -46,9 +46,6 @@ export async function seedCustomers(prisma, count) {
     if (i % 3 === 0) {
       createData.phoneNumber = faker.phone.number({ style: 'international' });
     }
-    if (i % 4 === 0) {
-      createData.picture = 'https://images.pexels.com/photos/29881401/pexels-photo-29881401.jpeg';
-    }
 
     customers.push(createData);
   }
@@ -64,25 +61,28 @@ export async function seedCustomers(prisma, count) {
 /** @param {PrismaClient} prisma */
 export async function seedLicenseKeys(prisma, customers) {
   const licenseKeys = [];
+  const secretKeys = await prisma.secretKey.findMany({
+    select: { id: true, key: true },
+  });
+  // if secret is not found, then return
+  if (secretKeys.length < 1) {
+    console.log('Secret key not found when seeding license keys');
+    return;
+  }
 
   for (const [i, customer] of customers.entries()) {
     const currentTime = Math.floor((Date.now() / 1000) - (60 * 60 * 24 * i));
 
-    const secret = await prisma.secretKey.findFirst({
-      select: { id: true, key: true },
-    });
-    // if secret is not found, then skip
-    if (!secret) continue;
-
     const licenseKeyId = uuidv7();
     const payload = generateLicenseKeyPayload(customer.email, licenseKeyId);
-    const code = generateLicenseKeyCode(payload, secret.key);
+    const selectedSecretKey = secretKeys[generateRandomInt(0, secretKeys.length - 1)];
+    const code = generateLicenseKeyCode(payload, selectedSecretKey.key);
 
     licenseKeys.push({
       id: licenseKeyId,
       code,
       customerId: customer.id,
-      secretKeyId: secret.id,
+      secretKeyId: selectedSecretKey.id,
       createdAt: currentTime,
       updatedAt: currentTime,
     });

@@ -2,12 +2,11 @@ import { getFeedbacks } from "@/lib/services/feedback-service";
 
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
-  // params for filters
   const readStatus = searchParams.get('rs');
 
   let filters;
   if (readStatus) {
-    filters = { isRead: readStatus === 'unread' ? false : true }
+    filters = { readStatus };
   }
 
   try {

@@ -1,4 +1,4 @@
-import { countTransactions, getTransactions, searchTransactions } from "@/lib/services/transaction-service";
+import { countTransactions, getTransactions, searchTransactions } from '@/lib/services/transaction-service';
 import { cmsConfig } from '@/config/cms';
 
 export async function GET(req) {
