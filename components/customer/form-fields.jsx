@@ -81,7 +81,7 @@ export default function FormFields({
             <FormLabel className="text-base">Phone number</FormLabel>
             <p className="tabular-nums">{form.getValues('phoneNumber') ?? <Minus className="icon text-zinc-300 dark:text-zinc-700" />}</p>
             {!form.getValues('phoneNumber') && (
-              <FormDescription>This information can only be provided by the customer.</FormDescription>
+              <FormDescription>Can only be provided by the customer</FormDescription>
             )}
           </FormItem>
         ) : null}

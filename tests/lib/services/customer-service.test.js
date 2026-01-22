@@ -13,7 +13,7 @@ import {
   getCustomer,
   updateCustomer,
   updateCustomerBanStatus,
-  getCustomersForAutocomplete,
+  getCustomerSuggestions,
   deleteCustomer,
 } from '@/lib/services/customer-service';
 import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
@@ -389,7 +389,7 @@ describe('updateCustomerBanStatus function', () => {
   });
 });
 
-describe('getCustomersForAutocomplete function', () => {
+describe('getCustomerSuggestions function', () => {
   it('should call verifySession function, not call prisma.customer.findMany function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
@@ -397,7 +397,7 @@ describe('getCustomersForAutocomplete function', () => {
     verifySession.mockResolvedValue(false);
 
     await expect(
-      getCustomersForAutocomplete('example')
+      getCustomerSuggestions('example')
     ).rejects.toThrow(UnauthenticatedError);
 
     expect(verifySession).toHaveBeenCalled();
@@ -415,7 +415,7 @@ describe('getCustomersForAutocomplete function', () => {
       { id: '2', firstName: 'Bob', email: 'bob@mail.com' },
     ]);
 
-    await getCustomersForAutocomplete('a');
+    await getCustomerSuggestions('a');
 
     expect(prisma.customer.findMany).toHaveBeenCalledWith({
       where: {

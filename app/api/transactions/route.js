@@ -13,30 +13,11 @@ export async function GET(req) {
     filters = { status: transactionStatus };
   }
 
-  const select = {
-    id: true,
-    code: true,
-    status: true,
-    totalAmount: true,
-    currencyCode: true,
-    customerEmail: true,
-    createdAt: true,
-    updatedAt: true,
-    invoices: {
-      select: {
-        invoiceNumber: true,
-      },
-      take: 1,
-      orderBy: { issuedAt: 'desc' },
-    },
-  };
-
   try {
     let dataResponse;
 
     if (searchKey) {
       const transactions = await searchTransactions({
-        select,
         key: searchKey,
         limit: cmsConfig.search.limit,
         filters,
@@ -53,7 +34,6 @@ export async function GET(req) {
       }
     } else {
       const transactions = await getTransactions({
-        select,
         pageIndex,
         pageSize: cmsConfig.pagination.pageSize,
         filters,

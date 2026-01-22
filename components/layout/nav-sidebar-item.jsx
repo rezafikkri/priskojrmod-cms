@@ -8,13 +8,14 @@ import {
 import Link from 'next/link';
 import sidebarIcons from './sidebar-icons';
 import { Skeleton } from '../ui/skeleton';
+import { hasAccess } from '@/lib/authorization';
 
 export default function NavSidebarItem({ items }) {
   const { data: session, status } = useSession();
   let filteredItems = items;
 
   if (status !== 'loading') {
-    filteredItems = items.filter(item => !item.role || session?.user?.role === item.role);
+    filteredItems = items.filter(item => !item.role || hasAccess(session?.user?.role, item.role));
   }
 
   return filteredItems.map(item => {

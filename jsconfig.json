@@ -3,9 +3,6 @@
     "node_modules"
   ],
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "checkJs": false,
     "paths": {
       "@/*": ["./*"]
     }

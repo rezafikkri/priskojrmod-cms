@@ -1,7 +1,7 @@
-import { getCategories } from '@/lib/services/category-service';
+import { getSelectableCategories } from '@/lib/services/category-service';
 import CreateForm from './create-form';
-import { getOwners } from '@/lib/services/owner-service';
-import { getLicensesWithTranslation } from '@/lib/services/license-service';
+import { getSelectableOwners } from '@/lib/services/owner-service';
+import { getSelectableLicenses } from '@/lib/services/license-service';
 import { getProduct } from '@/lib/services/product-service';
 import EditForm from './edit-form';
 import {
@@ -13,9 +13,10 @@ import { ProductFormStoreProvider } from '@/lib/providers/product-form-store-pro
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { isOwnerAdmin } from '@/lib/utils';
-import { getAdmins } from '@/lib/services/admin-service';
+import { getSelectableAdmins } from '@/lib/services/admin-service';
 import { v4 } from 'uuid';
-import { ProductStatus } from '@/constants/enums';
+import { AdminRole, ProductStatus } from '@/constants/enums';
+import { hasAccess } from '@/lib/authorization';
 
 export const defaultFormStoreInitState = {
   form: {
@@ -66,41 +67,14 @@ export const defaultFormStoreInitState = {
 
 export default async function ProductForm({ mode = 'create', id = null }) {
   const session = await getServerSession(authOptions);
-  const categories = await getCategories({
-    id: true,
-    name: true,
-    slug: true,
-  });
-  const owners = await getOwners({
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      smProfileUrl: true,
-    },
-    withDisplayLabel: true,
-  });
-  const licenses = await getLicensesWithTranslation();
-  const isOwner = isOwnerAdmin(session?.user?.role);
-  let admins;
-  if (isOwner) {
-    admins = await getAdmins({
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-      },
-      withDisplayLabel: true,
-    });
-    admins.unshift({
-      id: session.user.id,
-      displayLabel: 'Myself',
-    });
-  }
+  
+  const categories = await getSelectableCategories();
+  const owners = await getSelectableOwners();
+  const licenses = await getSelectableLicenses();
+  const admins = await getSelectableAdmins();
 
   if (mode === 'create') {
-    if (isOwner) {
+    if (hasAccess(session.user.role, AdminRole.OWNER)) {
       defaultFormStoreInitState.form.basic.adminId = '';
     }
 

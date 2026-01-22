@@ -47,7 +47,7 @@ export default function BasicForm({
     licenseId: basic.licenseId.toString(),
   };
 
-  if (admins) {
+  if (admins.length > 0) {
     defaultValues.adminId = adminId.toString();
   }
 
@@ -208,7 +208,7 @@ export default function BasicForm({
           />
         )}
 
-        {admins ? (
+        {admins.length > 0 ? (
           <FormField
             control={form.control}
             name="adminId"

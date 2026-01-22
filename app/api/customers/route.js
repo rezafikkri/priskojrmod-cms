@@ -7,25 +7,12 @@ export async function GET(req) {
   const searchKey = searchParams.get('sk');
   // params for filters
   const filters = { showBanned: searchParams.get('sb') };
-  const select = {
-    id: true,
-    googleUserId: true,
-    isBanned: true,
-    firstName: true,
-    lastName: true,
-    picture: true,
-    email: true,
-    lastActive: true,
-    createdAt: true,
-    updatedAt: true,
-  };
 
   try {
     let dataResponse;
 
     if (searchKey) {
       const customers = await searchCustomers({
-        select,
         key: searchKey,
         limit: cmsConfig.search.limit,
         filters,
@@ -42,7 +29,6 @@ export async function GET(req) {
       }
     } else {
       const customers = await getCustomers({
-        select,
         pageIndex,
         pageSize: cmsConfig.pagination.pageSize,
         filters,

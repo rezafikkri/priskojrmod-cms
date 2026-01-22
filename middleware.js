@@ -1,7 +1,8 @@
 import { getToken } from 'next-auth/jwt';
 import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
-import { isOwnerAdmin } from './lib/utils';
+import { hasAccess } from './lib/authorization';
+import { AdminRole } from './constants/enums';
 
 export default withAuth(
   async function middleware(req) {
@@ -10,7 +11,7 @@ export default withAuth(
 
     if (
       (pathname === '/signin' && token) ||
-      (pathname.startsWith('/admin') && !isOwnerAdmin(token?.role))
+      (pathname.startsWith('/admin') && !hasAccess(token?.role, AdminRole.OWNER))
     ) {
       return NextResponse.redirect(new URL('/', req.url));
     }

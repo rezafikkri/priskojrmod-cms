@@ -1,6 +1,7 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import ProductsTable from '@/components/product/products-table';
-import { isOwnerAdmin } from '@/lib/utils';
+import { AdminRole } from '@/constants/enums';
+import { hasAccess } from '@/lib/authorization';
 import { getServerSession } from 'next-auth';
 
 export const metadata = {
@@ -9,7 +10,7 @@ export const metadata = {
 
 export default async function ProductListPage() {
   const session = await getServerSession(authOptions);
-  const isOwner = isOwnerAdmin(session.user.role)
+  const isOwner = hasAccess(session.user.role, AdminRole.OWNER);
   return (
     <>
       <h1 className={`text-2xl ${isOwner ? 'mb-7' : 'mb-1'} font-bold`}>Products</h1>

@@ -1,4 +1,4 @@
-import { getCustomersForAutocomplete } from "@/lib/services/customer-service";
+import { getCustomerSuggestions } from '@/lib/services/customer-service';
 
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
@@ -6,6 +6,6 @@ export async function GET(req) {
 
   return Response.json({
     message: 'success',
-    data: await getCustomersForAutocomplete(searchKey),
+    data: await getCustomerSuggestions(searchKey),
   });
 }
