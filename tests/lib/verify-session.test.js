@@ -7,6 +7,7 @@ import {
   beforeAll,
 } from 'vitest';
 import verifySession from '@/lib/verifySession';
+import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 
 describe('verifySession function', () => {
   beforeAll(() => {
@@ -29,10 +30,12 @@ describe('verifySession function', () => {
   it('Should call getServerSession correctly with authOptions and return false when getServerSession returns null', async () => {
     const { getServerSession } = await import('next-auth');
     getServerSession.mockResolvedValue(null);
-    const result = await verifySession();
+
+    await expect(async () =>
+      await verifySession()
+    ).rejects.toThrow(UnauthenticatedError);
 
     expect(getServerSession).toHaveBeenCalledWith({ test: 'value' });
-    expect(result).toBe(false);
   });
 
   it('Should return object correctly when getServerSession returns a session object', async () => {
