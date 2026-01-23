@@ -67,7 +67,7 @@ export const authOptions = {
             if (admin) {
               // claim this account
               const currentTime = Math.floor(new Date().getTime() / 1000);
-              const result = await prisma.admin.update({
+              const result = await prisma.admin.updateMany({
                 data: {
                   googleUserId: profile.sub,
                   updatedAt: currentTime,

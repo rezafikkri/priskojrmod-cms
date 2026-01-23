@@ -37,9 +37,11 @@ export const InvoiceStatus = Object.freeze({
   VOID: 'void',
 });
 
-export const AdminRole = Object.freeze({
+export const UserRole = Object.freeze({
   /**
    * Owner has full access to the system.
+   * This is an admin-specific role with the highest level of privileges.
+   * 
    * This role alone holds the following exclusive privileges:
    * - Managing admin accounts (create, update, delete)
    * - Managing all products, regardless of assigned admin
@@ -51,9 +53,10 @@ export const AdminRole = Object.freeze({
   OWNER: 'owner',
 
   /**
-   * Staff can perform all operational tasks within the system,
-   * except for the exclusive privileges reserved for Owner.
-   * In other words, Staff can manage their own products and handle most CMS functions,
+   * Staff can perform all operational tasks within the system.
+   * This is an admin-specific role with operational privileges.
+   * 
+   * Staff can manage their own products and handle most CMS functions,
    * but cannot manage admin accounts or reassign product responsibility.
    */
   STAFF: 'staff',

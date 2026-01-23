@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'sonner';
-import { AdminRole, CurrencyCode } from '@/constants/enums';
+import { UserRole, CurrencyCode } from '@/constants/enums';
 import { createAdminSchema } from '@/lib/validators/admin-validator';
 import FormFields from './form-fields';
 import { addAdmin } from '@/actions/admin-actions';
@@ -13,7 +13,7 @@ export default function CreateForm() {
   const form = useForm({
     resolver: zodResolver(createAdminSchema),
     defaultValues: {
-      role: AdminRole.STAFF,
+      role: UserRole.STAFF,
       email: '',
       firstName: '',
       lastName: '',

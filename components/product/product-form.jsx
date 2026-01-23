@@ -12,10 +12,9 @@ import Error404 from '../icon/error-404';
 import { ProductFormStoreProvider } from '@/lib/providers/product-form-store-provider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { isOwnerAdmin } from '@/lib/utils';
 import { getSelectableAdmins } from '@/lib/services/admin-service';
 import { v4 } from 'uuid';
-import { AdminRole, ProductStatus } from '@/constants/enums';
+import { UserRole, ProductStatus } from '@/constants/enums';
 import { hasAccess } from '@/lib/authorization';
 
 export const defaultFormStoreInitState = {
@@ -74,7 +73,7 @@ export default async function ProductForm({ mode = 'create', id = null }) {
   const admins = await getSelectableAdmins();
 
   if (mode === 'create') {
-    if (hasAccess(session.user.role, AdminRole.OWNER)) {
+    if (hasAccess(session.user.role, UserRole.OWNER)) {
       defaultFormStoreInitState.form.basic.adminId = '';
     }
 

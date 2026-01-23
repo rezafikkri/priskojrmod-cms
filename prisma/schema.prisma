@@ -7,17 +7,17 @@ datasource db {
   provider = "postgresql"
 }
 
-enum AdminRole {
+enum UserRole {
   owner
   staff
 
-  @@map("admin_role")
+  @@map("user_role")
 }
 
 model Admin {
   id Int @id @default(autoincrement()) @db.SmallInt
 
-  role         AdminRole
+  role         UserRole
   googleUserId String?   @unique @map("google_user_id") @db.VarChar(255)
 
   firstName           String @map("first_name") @db.VarChar(100)

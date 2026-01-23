@@ -12,7 +12,7 @@ import NavSidebarGroup from './nav-sidebar-group';
 import { NavUser } from './nav-user';
 import NavSidebarItem from './nav-sidebar-item';
 import NavSidebarItemCollapsible from './nav-sidebar-item-collapsible';
-import { AdminRole } from '@/constants/enums';
+import { UserRole } from '@/constants/enums';
 
 // Menu items
 const menu = {
@@ -47,7 +47,7 @@ const menu = {
     { text: 'License keys', url: '/license-key' },
   ],
   system: [
-    { text: 'Admins', url: '/admin', role: AdminRole.OWNER },
+    { text: 'Admins', url: '/admin', role: UserRole.OWNER },
   ],
 };
 

@@ -8,7 +8,7 @@ import {
 } from 'vitest';
 import UnauthenticatedError from '@/lib/errors/UnauthenticatedError';
 import NotAllowedError from '@/lib/errors/NotAllowedError';
-import { AdminRole } from '@/constants/enums';
+import { UserRole } from '@/constants/enums';
 import {
   getAdmins,
   createAdmin,
@@ -94,7 +94,7 @@ describe('getAdmins function', () => {
     // userId smallint
     verifySession.mockResolvedValue({
       userId: 11,
-      userRole: AdminRole.STAFF,
+      userRole: UserRole.STAFF,
     });
 
     isOwnerAdmin.mockReturnValue(false);
@@ -102,7 +102,7 @@ describe('getAdmins function', () => {
     await expect(getAdmins()).rejects.toThrow(NotAllowedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(isOwnerAdmin).toHaveBeenCalledWith(AdminRole.STAFF);
+    expect(isOwnerAdmin).toHaveBeenCalledWith(UserRole.STAFF);
     expect(prisma.admin.findMany).not.toHaveBeenCalled();
   });
 
@@ -114,7 +114,7 @@ describe('getAdmins function', () => {
     // owner id smallint
     verifySession.mockResolvedValue({
       userId: 1,
-      userRole: AdminRole.OWNER,
+      userRole: UserRole.OWNER,
     });
 
     isOwnerAdmin.mockReturnValue(true);
@@ -184,7 +184,7 @@ describe('createAdmin function', () => {
 
     verifySession.mockResolvedValue({
       userId: 10,
-      userRole: AdminRole.STAFF,
+      userRole: UserRole.STAFF,
     });
 
     isOwnerAdmin.mockReturnValue(false);
@@ -204,7 +204,7 @@ describe('createAdmin function', () => {
     await expect(createAdmin(input)).rejects.toThrow(NotAllowedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(isOwnerAdmin).toHaveBeenCalledWith(AdminRole.STAFF);
+    expect(isOwnerAdmin).toHaveBeenCalledWith(UserRole.STAFF);
     expect(prisma.admin.create).not.toHaveBeenCalled();
   });
 
@@ -218,7 +218,7 @@ describe('createAdmin function', () => {
 
     verifySession.mockResolvedValue({
       userId: 1,
-      userRole: AdminRole.OWNER,
+      userRole: UserRole.OWNER,
     });
 
     isOwnerAdmin.mockReturnValue(true);
@@ -287,7 +287,7 @@ describe('getAdmin function', () => {
 
     verifySession.mockResolvedValue({
       userId: 10,
-      userRole: AdminRole.STAFF,
+      userRole: UserRole.STAFF,
     });
 
     isOwnerAdmin.mockReturnValue(false);
@@ -295,7 +295,7 @@ describe('getAdmin function', () => {
     await expect(getAdmin(5)).rejects.toThrow(NotAllowedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(isOwnerAdmin).toHaveBeenCalledWith(AdminRole.STAFF);
+    expect(isOwnerAdmin).toHaveBeenCalledWith(UserRole.STAFF);
     expect(prisma.admin.findUnique).not.toHaveBeenCalled();
   });
 
@@ -306,7 +306,7 @@ describe('getAdmin function', () => {
 
     verifySession.mockResolvedValue({
       userId: 1,
-      userRole: AdminRole.STAFF,
+      userRole: UserRole.STAFF,
     });
 
     isOwnerAdmin.mockReturnValue(true);
@@ -318,7 +318,7 @@ describe('getAdmin function', () => {
       email: 'budi@example.com',
       whatsappPhoneNumber: '+628123456789',
       picture: 'https://images.com/photo.jpg',
-      role: AdminRole.STAFF,
+      role: UserRole.STAFF,
       donationLinks: [
         { id: 91, currencyCode: 'IDR', url: 'https://saweria.id/budi' },
         { id: 92, currencyCode: 'USD', url: 'https://ko-fi.com/budi' },
@@ -371,7 +371,7 @@ describe('updateAdmin function', () => {
     const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue({
-      userRole: AdminRole.STAFF,
+      userRole: UserRole.STAFF,
     });
 
     isOwnerAdmin.mockReturnValue(false);
@@ -393,7 +393,7 @@ describe('updateAdmin function', () => {
     const { isOwnerAdmin } = await import('@/lib/utils');
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ userRole: AdminRole.OWNER });
+    verifySession.mockResolvedValue({ userRole: UserRole.OWNER });
     isOwnerAdmin.mockReturnValue(true);
 
     const input = {
@@ -478,13 +478,13 @@ describe('deleteAdmin function', () => {
     const { isOwnerAdmin } = await import('@/lib/utils');
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ userRole: AdminRole.STAFF });
+    verifySession.mockResolvedValue({ userRole: UserRole.STAFF });
     isOwnerAdmin.mockReturnValue(false);
 
     await expect(deleteAdmin(1)).rejects.toThrow(NotAllowedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(isOwnerAdmin).toHaveBeenCalledWith(AdminRole.STAFF);
+    expect(isOwnerAdmin).toHaveBeenCalledWith(UserRole.STAFF);
     expect(prisma.admin.delete).not.toHaveBeenCalled();
   });
 
@@ -494,7 +494,7 @@ describe('deleteAdmin function', () => {
     const prisma = (await import('@/lib/prisma')).default;
     const { revalidatePath } = await import('next/cache');
 
-    verifySession.mockResolvedValue({ userRole: AdminRole.OWNER });
+    verifySession.mockResolvedValue({ userRole: UserRole.OWNER });
     isOwnerAdmin.mockReturnValue(true);
 
     prisma.admin.delete.mockResolvedValue({ id: 10 });
@@ -504,7 +504,7 @@ describe('deleteAdmin function', () => {
     expect(prisma.admin.delete).toHaveBeenCalledWith({
       where: {
         id: 10,
-        role: { not: AdminRole.OWNER },
+        role: { not: UserRole.OWNER },
       },
       select: { id: true },
     });
@@ -535,13 +535,13 @@ describe('deleteDonationLink function', () => {
     const { isOwnerAdmin } = await import('@/lib/utils');
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ userRole: AdminRole.STAFF });
+    verifySession.mockResolvedValue({ userRole: UserRole.STAFF });
     isOwnerAdmin.mockReturnValue(false);
 
     await expect(deleteDonationLink(1, 2)).rejects.toThrow(NotAllowedError);
 
     expect(verifySession).toHaveBeenCalled();
-    expect(isOwnerAdmin).toHaveBeenCalledWith(AdminRole.STAFF);
+    expect(isOwnerAdmin).toHaveBeenCalledWith(UserRole.STAFF);
     expect(prisma.$transaction).not.toHaveBeenCalled();
     expect(prisma.donationLink.delete).not.toHaveBeenCalled();
   });
@@ -555,7 +555,7 @@ describe('deleteDonationLink function', () => {
     const { isOwnerAdmin } = await import('@/lib/utils');
     const prisma = (await import('@/lib/prisma')).default;
 
-    verifySession.mockResolvedValue({ userRole: AdminRole.OWNER });
+    verifySession.mockResolvedValue({ userRole: UserRole.OWNER });
     isOwnerAdmin.mockReturnValue(true);
 
     const donationLinkId = 100;
