@@ -10,7 +10,7 @@ import { Button } from '../ui/button';
 import { useSession } from 'next-auth/react';
 import { cmsConfig } from '@/config/cms';
 
-export default function CreateForm() {
+export default function CreateForm() { 
   const { data: session } = useSession();
   const form = useForm({
     resolver: zodResolver(createOwnerSchema),

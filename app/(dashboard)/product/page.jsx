@@ -10,7 +10,7 @@ export const metadata = {
 
 export default async function ProductListPage() {
   const session = await getServerSession(authOptions);
-  const isOwner = hasAccess(session.user.role, UserRole.OWNER);
+  const isOwner = hasAccess(session?.user?.role, UserRole.OWNER);
   return (
     <>
       <h1 className={`text-2xl ${isOwner ? 'mb-7' : 'mb-1'} font-bold`}>Products</h1>

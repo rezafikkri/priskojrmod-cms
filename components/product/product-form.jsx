@@ -73,7 +73,7 @@ export default async function ProductForm({ mode = 'create', id = null }) {
   const admins = await getSelectableAdmins();
 
   if (mode === 'create') {
-    if (hasAccess(session.user.role, UserRole.OWNER)) {
+    if (hasAccess(session?.user?.role, UserRole.OWNER)) {
       defaultFormStoreInitState.form.basic.adminId = '';
     }
 
