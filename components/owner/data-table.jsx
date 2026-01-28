@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,16 +36,16 @@ export default function DataTable({ owners: data }) {
   const [owners, setOwners] = useState(data)
   const [deletingIds, setDeletingIds] = useState([]);
 
-  async function handleDelete(id) {
+  const handleDelete = useCallback(async (id) => {
     // This is for add opacity-50 style to deleted row
-    setDeletingIds((prevDeletingIds) => [...prevDeletingIds, id]);
+    setDeletingIds((prevIds) => [...prevIds, id]);
     // show loading
     const toastId = toast.loading('Deleting owner...');
 
     const removeRes = await removeOwner(id);
 
-    setDeletingIds((prevDeletingIds) =>
-      prevDeletingIds.filter((deletingId) => deletingId !== id)
+    setDeletingIds((prevIds) =>
+      prevIds.filter((prevId) => prevId !== id)
     );
 
     if (removeRes.status === 'success') {
@@ -61,7 +61,7 @@ export default function DataTable({ owners: data }) {
         duration: cmsConfig.toast.duration.error,
       });
     }
-  }
+  }, []);
 
   const columns = useMemo(() => [
     {
@@ -135,7 +135,7 @@ export default function DataTable({ owners: data }) {
         );
       },
     }
-  ], [deletingIds]);
+  ], [deletingIds, handleDelete]);
   const table = useReactTable({
     data: owners,
     columns,

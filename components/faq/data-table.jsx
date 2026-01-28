@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,16 +37,16 @@ export default function DataTable({ faqs: data }) {
   const [titleLang, setTitleLang] = useState(cmsConfig.defaults.language);
   const [deletingIds, setDeletingIds] = useState([]);
 
-  async function handleDelete(id) {
+  const handleDelete = useCallback(async (id) => {
     // This is for add opacity-50 style to deleted row
-    setDeletingIds((prevDeletingIds) => [...prevDeletingIds, id]);
+    setDeletingIds((prevIds) => [...prevIds, id]);
     // show loading
     const toastId = toast.loading('Deleting FAQ...');
     
     const removeRes = await removeFaq(id);
 
-    setDeletingIds((prevDeletingIds) =>
-      prevDeletingIds.filter((deletingId) => deletingId !== id)
+    setDeletingIds((prevIds) =>
+      prevIds.filter((prevId) => prevId !== id)
     );
 
     if (removeRes.status === 'success') {
@@ -60,7 +60,7 @@ export default function DataTable({ faqs: data }) {
         duration: cmsConfig.toast.duration.error
       });
     }
-  }
+  }, []);
 
   const columns = useMemo(() => [
     {
