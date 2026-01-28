@@ -42,9 +42,10 @@ export default function TableColumnVisibility({
     localStorageRemove(storageKey);
   }
 
-  function formatColumnLabel(columnId) {
-    const words = columnId.replace('_', ' ').replace('is','').trim();
-    return words.charAt(0).toUpperCase() + words.slice(1);
+  function camelToTitle(str) {
+    return str
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, (match) => match.toUpperCase())
   }
 
   function handleColumnVisibilityChange(column, value) {
@@ -88,7 +89,7 @@ export default function TableColumnVisibility({
             onSelect={(e) => e.preventDefault()}
             onCheckedChange={(value) => handleColumnVisibilityChange(column, value)}
           >
-            {formatColumnLabel(column.id)}
+            {camelToTitle(column.id)}
           </DropdownMenuCheckboxItem>
         ))}
         {hasUserCustomization && (
