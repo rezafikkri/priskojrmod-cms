@@ -6,7 +6,6 @@ import {
   Plus,
   AlertCircle,
   MoreHorizontal,
-  Check,
   Minus,
   RotateCw,
 } from 'lucide-react';
@@ -33,7 +32,6 @@ import {
 } from '@/actions/product-actions';
 import { toast } from 'sonner';
 import { safeFetch } from '@/lib/safe-fetch';
-import Dot from '../icon/Dot';
 import { formatDateTime } from '@/lib/format-date';
 import { formatCurrency } from '@/lib/format-currency';
 import { Badge } from '../ui/badge';
@@ -49,7 +47,6 @@ import TablePagination from '../ui/table-pagination';
 import DeleteDialog from './delete-dialog';
 import { cmsConfig } from '@/config/cms';
 import { getStatusClasses } from '@/lib/utils';
-import { deepEqual } from 'fast-equals';
 import FiltersPopover from './filters-popover';
 
 const defaultColumnVisibility = {
@@ -271,7 +268,7 @@ export default function ProductsTable({ isOwner }) {
 
       toast.success(toastText[newStatus].success, { id: toastId });
     } else {
-      toast.error(editRes.message, { id: toastId });
+      toast.error(editRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }   
   }, [filters]);
 
@@ -555,7 +552,7 @@ export default function ProductsTable({ isOwner }) {
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-3 items-start mb-4">
-        <div className="flex space-x-3 max-lg:flex-wrap max-lg:w-full gap-3">
+        <div className="flex max-lg:flex-wrap max-lg:w-full gap-6">
           <TooltipWrapper text="Create product">
             <Button asChild variant="outline" className="h-auto inline-block text-base px-3 py-1.5">
               <Link href="/product/new"><Plus className="icon" /> Create</Link>

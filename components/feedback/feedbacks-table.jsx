@@ -1,7 +1,7 @@
 'use client';
 
 import DataTable from './data-table';
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
 import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
@@ -17,6 +17,7 @@ import {
   AlertCircle,
   MoreHorizontal,
   Minus,
+  RotateCw,
 } from 'lucide-react';
 import { Trash } from 'lucide-react';
 import { editFeedbackReadStatus, loadFeedbacks, removeFeedbacks } from '@/actions/feedback-actions';
@@ -39,7 +40,6 @@ import TableSelectionAlert from '../ui/table-selection-alert';
 import TablePagination from '../ui/table-pagination';
 import DetailDialog from './detail-dialog';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
-import { deepEqual } from 'fast-equals';
 import { cmsConfig } from '@/config/cms';
 
 const defaultColumnVisibility = {
@@ -72,37 +72,14 @@ export default function FeedbacksTable() {
   // filters state
   const [filters, setFilters] = useState(null);
   const [isFilterActive, setIsFilterActive] = useState(false);
-  
-  // This is for prevent double editFeedbackReadStatus process and prevent unnecessary multiple refetches 
-  // when running multiple editReadStatus concurrently
-  const updatingReadStatusIdsRef = useRef([]);
-
-  // Works in conjunction with `updatingReadStatusIdsRef` to control
-  // when a single refetch should occur after a batch update.
-  const hasSuccessfulEditReadStatusRef = useRef(false);
 
   // mark as read status state
   const [markingAsReadIds, setMarkingAsReadIds] = useState([]);
-  /**
-   * True if markAsRead is pending and filters.readStatus was changed to "read"
-   * during that time. Used to decide if a single invalidateQueries should occur
-   * and to avoid multiple unnecessary refetches.
-   */
-  const shouldInvalidateAfterMarkAsReadRef = useRef(false);
-
-  /**
-   * This `useRef` is here to **always keep the newest `filtersRef` and more state value**.
-   * We need it because our async function (sent to the child) might "remember"
-   * state value, which is called a "stale closure" problem.
-   */
-  const filtersRef = useRef(filters);
-  // This same as filtersRef but, This is too for handleMarkAsRead actions process, that used for ui,
-  // like add opacity-50 to targeted row, disable button `mark as read`, and more
+  
+  // Prevents duplicate read status updates
+  // from handleEditReadStatus (optimistic) and handleMarkAsRead (user-triggered)
+  const updatingReadStatusIdsRef = useRef([]);
   const markingAsReadIdsRef = useRef(markingAsReadIds);
-
-  useEffect(() => {
-    filtersRef.current = filters;
-  }, [filters]);
 
   // isDeleting state
   const [isDeleting, setIsDeleting] = useState(false);
@@ -162,6 +139,12 @@ export default function FeedbacksTable() {
     staleTime: 1000 * 20,
     gcTime: 1000 * 60 * 3,
   });
+
+  function handleRefresh() {
+    // not show table skeleton loading
+    shouldShowSkeletonLoading.current = false;
+    queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+  }
 
   // set isFilterActive when apply and clear
   function syncIsFilterActive(appliedFilters) {
@@ -355,7 +338,7 @@ export default function FeedbacksTable() {
     const editRes = await editFeedbackReadStatus(id, true);
 
     if (editRes.status === 'success') {
-      hasSuccessfulEditReadStatusRef.current = true;
+      queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
     } else {
       // if readStatus filters = unread and removedSnaphost item is exist
       if (removedSnaphost.filters?.readStatus === 'unread' && removedSnaphost.item) {
@@ -395,23 +378,6 @@ export default function FeedbacksTable() {
     // remove id from updatingReadStatusIdsRef.current
     updatingReadStatusIdsRef.current = updatingReadStatusIdsRef.current
       .filter(updatingId => updatingId !== id);
-
-    // For still invalidateQueries feedbacks, when last updating item fails, filters is changed while
-    // updating is pending and at least one editReadStatus succeeded.
-    if (
-      updatingReadStatusIdsRef.current.length === 0 &&
-      hasSuccessfulEditReadStatusRef.current
-    ) {
-      // Only directly trigger refetch when the filters changed while process is still pending
-      if (!deepEqual(removedSnaphost.filters, filtersRef.current)) {
-        queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
-      } else {
-        // invalidate all queryKey, but not trigger refetch for current active queryKey
-        queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
-      }
-
-      hasSuccessfulEditReadStatusRef.current = false;
-    }
   }
 
   const handleMarkAsRead = useCallback(async (id) => {
@@ -435,9 +401,9 @@ export default function FeedbacksTable() {
     });
 
     if (editRes.status === 'success') {
-      if (filtersRef.current?.readStatus === 'unread') {
+      if (filters?.readStatus === 'unread') {
         queryClient.setQueryData(
-          ['feedbacks', filtersRef.current],
+          ['feedbacks', filters],
           (oldData) => {
             if (!oldData) return oldData;
 
@@ -453,11 +419,9 @@ export default function FeedbacksTable() {
           const { [id]:_, ...next } = prev;
           return next;
         });
-      } else if (filtersRef.current?.readStatus === 'read') {
-        shouldInvalidateAfterMarkAsReadRef.current = true;
       } else {
         queryClient.setQueryData(
-          ['feedbacks', filtersRef.current],
+          ['feedbacks', filters],
           (oldData) => {
             if (!oldData) return oldData;
 
@@ -471,10 +435,7 @@ export default function FeedbacksTable() {
         );
       }
 
-      if (filtersRef.current?.readStatus !== 'read') {
-        queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
-      }
-
+      queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
       toast.success('Feedback marked as read successfully', { id: toastId });
     } else {
       toast.error(editRes.message, {
@@ -482,15 +443,7 @@ export default function FeedbacksTable() {
         duration: cmsConfig.toast.duration.error
       });
     }
-
-    if (
-      markingAsReadIdsRef.current.length === 0 &&
-      shouldInvalidateAfterMarkAsReadRef.current
-    ) {
-      queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
-      shouldInvalidateAfterMarkAsReadRef.current = false;
-    }
-  }, []);
+  }, [filters]);
 
   // TABLE definition
   const columns = useMemo(() => [
@@ -570,7 +523,7 @@ export default function FeedbacksTable() {
         </DropdownMenu>
       ),
     },
-  ], [markingAsReadIds]);
+  ], [markingAsReadIds, handleMarkAsRead]);
   const table = useReactTable({
     data: dataF?.items,
     columns,
@@ -598,8 +551,19 @@ export default function FeedbacksTable() {
           </Button>
         </TooltipWrapper>
 
-        <div className="flex space-x-6 items-start justify-between flex-1">
-          <div className="flex space-x-6 items-start">
+        <div className="flex gap-3 items-start justify-between flex-1">
+          <div className="flex gap-3 items-start">
+            <TooltipWrapper text="Refresh">
+              <Button
+                variant="outline"
+                className="text-base px-3 py-1.5 h-auto inline-block"
+                disabled={isFetchingF}
+                onClick={handleRefresh}
+              >
+                <RotateCw className="icon" />
+              </Button>
+            </TooltipWrapper>
+
             <FiltersPopover
               onFilter={handleFilter}
               isFilterActive={isFilterActive}

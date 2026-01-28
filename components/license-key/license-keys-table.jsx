@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { isLastPage } from '@/lib/utils';
 import { AlertCircle, RotateCw } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import {
   Alert,
@@ -110,21 +110,11 @@ export default function LicenseKeysTable() {
   const hasSuccessfulRevokeRef = useRef(false);
   const hasSuccessfulResetDeviceRef = useRef(false);
 
-  // This `useRef` is here to **always keep the newest `searchedLicenseKey and more state` value**.
-  // We need it because our async function (sent to the child) might "remember"
-  // an old `searchedLicenseKey and more state` value, which is called a "stale closure" problem.
-  const searchedLicenseKeyRef = useRef(searchedLicenseKey);
-  const filtersRef = useRef(filters);
-  const paginationRef = useRef(pagination);
+  // For track pending IDs to avoid repeated refetches when multiple actions run at once.
+  // Refetch triggers only once after a success, keeping pages in sync.
   const deletingIdsRef = useRef(deletingIds);
   const updatingRevokeStatusIdsRef = useRef(updatingRevokeStatusIds);
   const resetDeviceIdsRef = useRef(resetDeviceIds);
-
-  useEffect(() => {
-    searchedLicenseKeyRef.current = searchedLicenseKey;
-    filtersRef.current = filters;
-    paginationRef.current = pagination;
-  }, [searchedLicenseKey, filters, pagination]);
 
   // set can regenerate state
   const [isRegenerating, setIsRegenerating] = useState(false);
@@ -160,7 +150,7 @@ export default function LicenseKeysTable() {
 
       if (!shouldShowSkeletonLoading.current) {
         if (activeToastId) {
-          toastId = toast.loading('Loading license keys...', { id: activeToastId });
+          toastId = toast.loading('Refreshing license keys...', { id: activeToastId });
 
           grantRegenerateToastIdRef.current = null;
         } else {
@@ -251,9 +241,7 @@ export default function LicenseKeysTable() {
 
   function handleRefresh() {
     // not show table skeleton loading
-    if (!searchedLicenseKey && shouldShowSkeletonLoading.current) {
-      shouldShowSkeletonLoading.current = false;
-    }
+    shouldShowSkeletonLoading.current = false;
 
     queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
     queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
@@ -268,9 +256,7 @@ export default function LicenseKeysTable() {
 
   async function handleDelete({ deleteData, toastId }) {
     // not show table skeleton loading
-    if (!searchedLicenseKey && shouldShowSkeletonLoading.current) {
-      shouldShowSkeletonLoading.current = false;
-    }
+    shouldShowSkeletonLoading.current = false;
 
     // This is for add opacity-50 style to deleted row
     setDeletingIds((prev) => {
@@ -289,12 +275,12 @@ export default function LicenseKeysTable() {
 
     const licenseKey = queryClient.getQueryData([
       'licenseKeys',
-      paginationRef.current.pageIndex,
-      filtersRef.current,
+      pagination.pageIndex,
+      filters,
     ]);
 
     if (removeRes.status === 'success') {
-      if (searchedLicenseKeyRef.current) {
+      if (searchedLicenseKey) {
         setSearchedLicenseKey((prevLicenseKey) => ({
           ...prevLicenseKey,
           items: prevLicenseKey.items.filter(slk => slk.id !== deleteData.id),
@@ -306,27 +292,25 @@ export default function LicenseKeysTable() {
         const newRowCount = licenseKey.rowCount - 1;
 
         if (!isLastPage({
-          pageIndex: paginationRef.current.pageIndex,
-          pageSize: paginationRef.current.pageSize,
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
           rowCount: licenseKey.rowCount,
         })) {
           queryClient.setQueryData(
-            ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+            ['licenseKeys', pagination.pageIndex, filters],
             { items: newLicenseKeys, rowCount: newRowCount },
           );
 
-          if (!hasSuccessfulDeleteRef.current) {
-            hasSuccessfulDeleteRef.current = true;
-          }
+          hasSuccessfulDeleteRef.current = true;
         } else {
           if (newLicenseKeys.length === 0 && newRowCount > 0) {
             queryClient.removeQueries({
-              queryKey: ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+              queryKey: ['licenseKeys', pagination.pageIndex, filters],
               exact: true,
             });
 
             queryClient.setQueryData(
-              ['licenseKeys', paginationRef.current.pageIndex - 1, filtersRef.current],
+              ['licenseKeys', pagination.pageIndex - 1, filters],
               (oldData) => {
                 if (!oldData) return oldData;
 
@@ -340,7 +324,7 @@ export default function LicenseKeysTable() {
             }));
           } else {
             queryClient.setQueryData(
-              ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+              ['licenseKeys', pagination.pageIndex, filters],
               { items: newLicenseKeys, rowCount: newRowCount },
             );
           }
@@ -367,13 +351,13 @@ export default function LicenseKeysTable() {
     // For still invalidateQueries licenseKeys, when not in last page, last delete item fails, and 
     // at least one delete succeeded.
     if (
-      !searchedLicenseKeyRef.current &&
+      !searchedLicenseKey &&
       deletingIdsRef.current.length === 0 &&
       hasSuccessfulDeleteRef.current
     ) {
       if (!isLastPage({
-        pageIndex: paginationRef.current.pageIndex,
-        pageSize: paginationRef.current.pageSize,
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
         rowCount: licenseKey.rowCount,
       })) {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
@@ -445,9 +429,7 @@ export default function LicenseKeysTable() {
     if (rowSelections.length <= 0) return false;
 
     // not show table skeleton loading
-    if (!searchedLicenseKey && shouldShowSkeletonLoading.current) {
-      shouldShowSkeletonLoading.current = false;
-    }
+    shouldShowSkeletonLoading.current = false;
 
     setIsRegenerating(true);
     // show loading
@@ -463,15 +445,15 @@ export default function LicenseKeysTable() {
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
 
       if (!searchedLicenseKey) {
-        if (filtersRef.current?.canRegenerate !== 'all') {
+        if (filters?.canRegenerate !== 'all') {
           const licenseKey = queryClient.getQueryData([
             'licenseKeys',
-            paginationRef.current.pageIndex,
-            filtersRef.current,
+            pagination.pageIndex,
+            filters,
           ]);
           const newLastPageIndex = Math.ceil(licenseKey.rowCount / cmsConfig.pagination.pageSize) - 1;
 
-          if (paginationRef.current.pageIndex > newLastPageIndex) {
+          if (pagination.pageIndex > newLastPageIndex) {
             // change pagination to new last page index
             setPagination(pagination => ({
               ...pagination,
@@ -480,7 +462,7 @@ export default function LicenseKeysTable() {
           }
         }
       } else {
-        await handleSearch(filtersRef.current);
+        await handleSearch(filters);
       }
 
       setRowSelection({});
@@ -505,9 +487,7 @@ export default function LicenseKeysTable() {
 
   async function handleEditRevokeStatus({ editRevokeStatusData, toastId }) {
     // not show table skeleton loading
-    if (!searchedLicenseKey) {
-      shouldShowSkeletonLoading.current = false;
-    }
+    shouldShowSkeletonLoading.current = false;
 
     // This is for add opacity-50 style to updated revoke status row
     setUpdatingRevokeStatusIds((prev) => {
@@ -526,12 +506,12 @@ export default function LicenseKeysTable() {
 
     const licenseKey = queryClient.getQueryData([
       'licenseKeys',
-      paginationRef.current.pageIndex,
-      filtersRef.current,
+      pagination.pageIndex,
+      filters,
     ]);
 
     if (editRes.status === 'success') {
-      if (searchedLicenseKeyRef.current) {
+      if (searchedLicenseKey) {
         setSearchedLicenseKey((prevLicenseKey) => ({
           ...prevLicenseKey,
           items: prevLicenseKey.items.filter(slk => slk.id !== editRevokeStatusData.id),
@@ -543,12 +523,12 @@ export default function LicenseKeysTable() {
         const newRowCount = licenseKey.rowCount - 1;
 
         if (!isLastPage({
-          pageIndex: paginationRef.current.pageIndex,
-          pageSize: paginationRef.current.pageSize,
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
           rowCount: licenseKey.rowCount,
         })) {
           queryClient.setQueryData(
-            ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+            ['licenseKeys', pagination.pageIndex, filters],
             { items: newLicenseKeys, rowCount: newRowCount },
           );
 
@@ -556,12 +536,12 @@ export default function LicenseKeysTable() {
         } else {
           if (newLicenseKeys.length === 0 && newRowCount > 0) {
             queryClient.removeQueries({
-              queryKey: ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+              queryKey: ['licenseKeys', pagination.pageIndex, filters],
               exact: true,
             });
 
             queryClient.setQueryData(
-              ['licenseKeys', paginationRef.current.pageIndex - 1, filtersRef.current],
+              ['licenseKeys', pagination.pageIndex - 1, filters],
               (oldData) => {
                 if (!oldData) return oldData;
 
@@ -575,7 +555,7 @@ export default function LicenseKeysTable() {
             }));
           } else {
             queryClient.setQueryData(
-              ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+              ['licenseKeys', pagination.pageIndex, filters],
               { items: newLicenseKeys, rowCount: newRowCount },
             );
           }
@@ -607,13 +587,15 @@ export default function LicenseKeysTable() {
     // For still invalidateQueries licenseKeys, when not in last page, last revoke/unrevoke item fails, and 
     // at least one revoke/unrevoke succeeded.
     if (
-      !searchedLicenseKeyRef.current &&
+      !searchedLicenseKey &&
       updatingRevokeStatusIdsRef.current.length === 0 &&
       hasSuccessfulRevokeRef.current
     ) {
+      // Double check page position in case user navigated 
+      // while async operation was still in progress
       if (!isLastPage({
-        pageIndex: paginationRef.current.pageIndex,
-        pageSize: paginationRef.current.pageSize,
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
         rowCount: licenseKey.rowCount,
       })) {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
@@ -624,10 +606,8 @@ export default function LicenseKeysTable() {
   }
 
   async function handleResetDevice({ resetData, toastId }) {
-     // not show table skeleton loading
-    if (!searchedLicenseKey) {
-      shouldShowSkeletonLoading.current = false;
-    }   
+    // not show table skeleton loading
+    shouldShowSkeletonLoading.current = false;
 
     // This is for add opacity-50 style target row
     setResetDeviceIds((prev) => {
@@ -645,7 +625,7 @@ export default function LicenseKeysTable() {
     });
 
     if (releaseRes.status === 'success') {
-      if (searchedLicenseKeyRef.current) {
+      if (searchedLicenseKey) {
         setSearchedLicenseKey((prevLicenseKey) => ({
           ...prevLicenseKey,
           items: prevLicenseKey.items.map(slk => {
@@ -662,9 +642,9 @@ export default function LicenseKeysTable() {
 
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });       
       } else {
-        if (paginationRef.current.pageIndex === 0) {
+        if (pagination.pageIndex === 0) {
           queryClient.setQueryData(
-            ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+            ['licenseKeys', pagination.pageIndex, filters],
             (oldData) => {
               if (!oldData) return oldData;
               
@@ -690,7 +670,7 @@ export default function LicenseKeysTable() {
           queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
         } else {
           queryClient.setQueryData(
-            ['licenseKeys', paginationRef.current.pageIndex, filtersRef.current],
+            ['licenseKeys', pagination.pageIndex, filters],
             (oldData) => {
               if (!oldData) return oldData;
 
@@ -723,11 +703,13 @@ export default function LicenseKeysTable() {
     // For still invalidateQueries licenseKeys, when not in first page, last reset device item fails, and 
     // at least one resetDevice succeeded.
     if (
-      !searchedLicenseKeyRef.current &&
+      !searchedLicenseKey &&
       resetDeviceIdsRef.current.length === 0 &&
       hasSuccessfulResetDeviceRef.current
     ) {
-      if (paginationRef.current.pageIndex !== 0) {
+      // Double check page position in case user navigated 
+      // while async operation was still in progress
+      if (pagination.pageIndex !== 0) {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });       
       }
 
@@ -931,14 +913,18 @@ export default function LicenseKeysTable() {
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-3 items-start mb-4">
-        <div className="flex space-x-3 max-lg:flex-wrap max-lg:w-full gap-3">
+        <div className="flex max-lg:flex-wrap max-lg:w-full gap-6">
           <TooltipWrapper text="Create license key">
-            <Button asChild variant="outline" className="md:w-auto h-auto text-base px-3 py-1.5 inline-block">
+            <Button
+              asChild
+              variant="outline"
+              className="md:w-auto h-auto text-base px-3 py-1.5 inline-block"
+            >
               <Link href="/license-key/new"><Plus className="icon" /> Create</Link>
             </Button>
           </TooltipWrapper>
 
-          <div className="flex space-x-3">
+          <div className="flex gap-3">
             <TooltipWrapper text="Refresh">
               <Button
                 variant="outline"
@@ -969,7 +955,8 @@ export default function LicenseKeysTable() {
             )}
           </div>
         </div>
-        <div className="flex space-x-3 max-lg:w-full w-2/5">
+
+        <div className="flex gap-3 max-lg:w-full w-2/5">
           <SearchInput
             className="flex-1"
             placeholder="Search with email..."
