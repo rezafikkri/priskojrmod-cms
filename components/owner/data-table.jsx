@@ -110,7 +110,7 @@ export default function DataTable({ owners: data }) {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="h-8 w-8 p-0 focus-visible:ring-ring"
+                className="h-8 w-8 p-0"
                 disabled={deletingIds.includes(row.original.id)}
               >
                 <MoreHorizontal />
