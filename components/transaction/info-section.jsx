@@ -35,6 +35,7 @@ export default function InfoSection({ info }) {
           >
             {info.status}</span>
         </dd>
+        <dd className="text-sm text-muted-foreground">(Excluding tax)</dd>
       </dl>
       <Separator />
 

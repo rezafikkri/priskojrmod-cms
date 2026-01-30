@@ -890,6 +890,8 @@ export default function TransactionsTable() {
         </>
       )}
 
+      <p className="mt-5 text-muted-foreground text-sm"><b>Note</b>: Totals shown do not include tax</p>
+
       <CorrectStatusDialog
         onCorrect={handleCorrectTransactionStatus}
         isOpen={isOpenCorrectStatusDialog}
