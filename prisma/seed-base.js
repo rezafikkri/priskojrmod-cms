@@ -1,3 +1,4 @@
+import { APPLICATION_CATEGORY_SLUG } from '@/constants/categories';
 import 'dotenv/config';
 
 /** @typedef {import('./generated/client').PrismaClient} PrismaClient */
@@ -41,7 +42,7 @@ export async function seedAdmin(prisma) {
  */
 export async function seedCategory(prisma) {
   const name = 'Application';
-  const slug = 'application';
+  const slug = APPLICATION_CATEGORY_SLUG;
   const currentTime = Math.floor(new Date().getTime() / 1000);
 
   // check if category Application exist or not

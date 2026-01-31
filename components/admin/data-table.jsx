@@ -94,43 +94,39 @@ export default function DataTable({ admins: data }) {
     {
       id: 'actions',
       enableHiding: false,
-      cell: ({ row }) => {
-        if (row.original.slug === 'application') return null;
-
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="h-8 w-8 p-0 focus-visible:ring-ring"
-                disabled={deletingIds.includes(row.original.id)}
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 focus-visible:ring-ring"
+              disabled={deletingIds.includes(row.original.id)}
+            >
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+            <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+              <Link href={`/admin/${row.original.id}/edit`}>Edit</Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="-mx-1.5" />
+            <DropdownMenuItem
+              className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
+              asChild
+            >
+              <button
+                onClick={() => {
+                  setDeleteData({ id: row.original.id, email: row.getValue('email') });
+                  setIsOpenDeleteDialog(true);
+                }}
               >
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-              <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
-                <Link href={`/admin/${row.original.id}/edit`}>Edit</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="-mx-1.5" />
-              <DropdownMenuItem
-                className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                asChild
-              >
-                <button
-                  onClick={() => {
-                    setDeleteData({ id: row.original.id, email: row.getValue('email') });
-                    setIsOpenDeleteDialog(true);
-                  }}
-                >
-                  Delete
-                </button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
+                Delete
+              </button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
     }
   ], [deletingIds]);
   const table = useReactTable({

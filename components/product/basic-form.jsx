@@ -27,6 +27,7 @@ import { useProductFormStore } from '@/lib/providers/product-form-store-provider
 import { PriceType } from '@/constants/enums';
 import MainFileFields from './main-file-fields';
 import { isSemverFormat } from '@/lib/utils';
+import { APPLICATION_CATEGORY_SLUG } from '@/constants/categories';
 
 export default function BasicForm({
   onNextStep,
@@ -74,7 +75,7 @@ export default function BasicForm({
     defaultValues,
   });
 
-  const applicationCategory = categories.find((category) => category.slug === 'application');
+  const applicationCategory = categories.find((category) => category.slug === APPLICATION_CATEGORY_SLUG);
   const applicationCategoryId = applicationCategory?.id ?? null;
 
   function handleNext(data) {

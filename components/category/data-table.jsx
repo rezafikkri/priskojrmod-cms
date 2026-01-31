@@ -30,6 +30,7 @@ import { formatDateTime } from '@/lib/format-date';
 import { removeCategory } from '@/actions/category-actions';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { cmsConfig } from '@/config/cms';
+import { APPLICATION_CATEGORY_SLUG } from '@/constants/categories';
 
 export default function DataTable({ categories: data }) {
   const [categories, setCategories] = useState(data);
@@ -79,7 +80,7 @@ export default function DataTable({ categories: data }) {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
-        if (row.original.slug === 'application') return null;
+        if (row.original.slug === APPLICATION_CATEGORY_SLUG) return null;
 
         return (
           <DropdownMenu>
