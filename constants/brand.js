@@ -7,7 +7,6 @@
  * 
  * Note: For UI branding (sidebar logo, header), use hardcoded values in components.
  */
-export const BRAND = {
-  name: 'Prisko Jr Mod',
-  url: 'https://priskojrmod.my.id', // Main website homepage
-};
+
+export const BRAND_NAME = 'Prisko Jr Mod';
+export const BRAND_URL = 'https://priskojrmod.my.id'; // Main website homepage
