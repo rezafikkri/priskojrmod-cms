@@ -1,4 +1,4 @@
-import { APPLICATION_CATEGORY_SLUG } from '@/constants/categories';
+import { APPLICATION_CATEGORY_SLUG } from '../constants/categories';
 import 'dotenv/config';
 
 /** @typedef {import('./generated/client').PrismaClient} PrismaClient */
