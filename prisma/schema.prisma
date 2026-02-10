@@ -423,6 +423,7 @@ model Transaction {
   status       TransactionStatus
   createdAt    Int               @map("created_at")
   updatedAt    Int               @map("updated_at")
+  paidAt       Int?              @map("paid_at")
   currencyCode CurrencyCode      @map("currency_code")
   totalAmount  Decimal           @map("total_amount") @db.Decimal(10, 2)
 

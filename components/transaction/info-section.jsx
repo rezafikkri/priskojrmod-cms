@@ -44,14 +44,15 @@ export default function InfoSection({ info }) {
           <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Created At</dt>
           <dd className="mb-6">{formatDateTime(info.createdAt)}</dd>
 
-          <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Updated At</dt>
-          <dd>{formatDateTime(info.updatedAt)}</dd>
+          <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Paid At</dt>
+          <dd>{formatDateTime(info.paidAt)}</dd>
         </dl>
 
         <Separator orientation="vertical" className="!h-25 mt-3" />
+
         <dl>
-          <dt className="mb-1 text-zinc-700 dark:text-zinc-300">Transaction Code</dt>
-          <dd>{info.code}</dd>
+          <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Updated At</dt>
+          <dd>{formatDateTime(info.updatedAt)}</dd>
         </dl>
       </div>
 

@@ -72,7 +72,7 @@ export default function CorrectStatusDialog({
           </DialogDescription>
           
           <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            The transaction <b>{correctTarget}</b> will be corrected <b>from <span className="capitalize">{currentStatus}</span> to <span className="capitalize">{newStatus}</span></b>.
+            Transaction <b>{correctTarget}</b> will be corrected <b>from <span className="capitalize">{currentStatus}</span> to <span className="capitalize">{newStatus}</span></b>.
           </DialogDescription>
 
           <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">

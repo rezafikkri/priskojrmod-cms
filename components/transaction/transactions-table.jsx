@@ -19,7 +19,7 @@ import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import { AlertCircle, RotateCw, MoreHorizontal } from 'lucide-react';
+import { AlertCircle, RotateCw, MoreHorizontal, Minus } from 'lucide-react';
 import InfoCircle from '../icon/info-circle';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { searchKeySchema } from '@/lib/validators/base-validator';
@@ -46,9 +46,11 @@ import { formatDateTime } from '@/lib/format-date';
 import Link from 'next/link';
 import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
+import RefundConfirmDialog from './refund-confirm-dialog';
 
 const defaultColumnVisibility = {
   createdAt: true,
+  paidAt: false,
   updatedAt: false,
 };
 
@@ -80,10 +82,12 @@ export default function TransactionsTable() {
     localStorageGet(columnVisibilityStorageKey) ?? defaultColumnVisibility
   );
 
-  // correct status and see details dialog state
+  // dialog state
   const [correctData, setCorrectData] = useState(null);
   const [isOpenCorrectStatusDialog, setIsOpenCorrectStatusDialog] = useState(false);
   const [seeDetailsId, setSeeDetailsId] = useState(null);
+  const [refundData, setRefundData] = useState(null);
+  const [isOpenRefundConfirmDialog, setIsOpenRefundConfirmDialog] = useState(false);
 
   // updating ids state
   const [updatingTransactionStatusIds, setUpdatingTransactionStatusIds] = useState([]);
@@ -272,6 +276,10 @@ export default function TransactionsTable() {
                 };
                 if (status === TransactionStatus.PAID) {
                   result.invoices = editRes.data.invoices;
+
+                  if (editRes.data.paidAt) {
+                    result.paidAt = editRes.data.paidAt;
+                  }
                 }
 
                 return result;
@@ -306,6 +314,10 @@ export default function TransactionsTable() {
                 };
                 if (status === TransactionStatus.PAID) {
                   newTargetTransaction.invoices = editRes.data.invoices;
+
+                  if (editRes.data.paidAt) {
+                    newTargetTransaction.paidAt = editRes.data.paidAt;
+                  }
                 }
 
                 return {
@@ -466,6 +478,10 @@ export default function TransactionsTable() {
                 };
                 if (correctData.newStatus === TransactionStatus.PAID) {
                   result.invoices = editRes.data.invoices;
+
+                  if (editRes.data.paidAt) {
+                    result.paidAt = editRes.data.paidAt;
+                  }
                 }
 
                 return result;
@@ -500,6 +516,10 @@ export default function TransactionsTable() {
                 };
                 if (correctData.newStatus === TransactionStatus.PAID) {
                   newTargetTransaction.invoices = editRes.data.invoices;
+
+                  if (editRes.data.paidAt) {
+                    newTargetTransaction.paidAt = editRes.data.paidAt;
+                  }
                 }
 
                 return {
@@ -698,6 +718,14 @@ export default function TransactionsTable() {
       cell: ({ row }) => formatDateTime(row.getValue('createdAt')),
     },
     {
+      accessorKey: 'paidAt',
+      header: () => 'Paid At',
+      cell: ({ row }) => 
+        row.getValue('paidAt')
+          ? formatDateTime(row.getValue('paidAt'))
+          : <Minus className="size-4 text-zinc-300" />,
+    },
+    {
       accessorKey: 'updatedAt',
       header: () => 'Updated At',
       cell: ({ row }) => formatDateTime(row.getValue('updatedAt')),
@@ -737,9 +765,22 @@ export default function TransactionsTable() {
                     >
                       <button
                         onClick={() => {
-                          handleEditTransactionStatus(row.original.id, cs);
+                          if (
+                            cs === TransactionStatus.REFUND &&
+                            (!row.original.customerId || row.original.customer.isBanned)
+                          ) {
+                            setIsOpenRefundConfirmDialog(true);
+                            setRefundData({
+                              id: row.original.id,
+                              transactionCode: row.getValue('code'),
+                              email: row.getValue('customerEmail'),
+                              customerId: row.original.customerId,
+                            });
+                          } else {
+                            handleEditTransactionStatus(row.original.id, cs);
+                          }
                         }}
-                      >{cs.charAt(0).toUpperCase()}{cs.slice(1)}</button>
+                      >{cs.replace(/^./, (match) => match.toUpperCase())}</button>
                     </DropdownMenuItem>
                   ))}
 
@@ -901,6 +942,14 @@ export default function TransactionsTable() {
       />
 
       <DetailsSheet detailsId={seeDetailsId} onDetailsIdChange={setSeeDetailsId} />
+
+      <RefundConfirmDialog
+        onRefund={handleEditTransactionStatus}
+        isOpen={isOpenRefundConfirmDialog}
+        onIsOpenChange={setIsOpenRefundConfirmDialog}
+        onRefundDataChange={setRefundData}
+        refundData={refundData}
+      />
     </>
   );
 }

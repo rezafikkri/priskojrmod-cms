@@ -23,6 +23,8 @@ import {
 import Error404 from '../icon/error-404';
 import { AlertCircle } from 'lucide-react';
 import { CancelledError } from '@tanstack/react-query';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '../ui/skeleton';
 
 function DetailsContent({ isLoading, data, error }) {
   if (!isLoading) {
@@ -146,7 +148,14 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
     <Sheet open={!!detailsId} onOpenChange={handleOpenChange}>
       <SheetContent className="sm:max-w-xl overflow-auto">
         <SheetHeader>
-          <SheetTitle className="text-2xl font-bold">Transaction</SheetTitle>
+          <SheetTitle className="text-2xl font-bold flex items-center">
+            Transaction
+            {isLoading ? (
+              <Skeleton className="h-5.5 w-50 ms-2 rounded-sm" />
+            ) : (
+              <Badge variant="secondary" className="ms-2">{details?.code}</Badge>
+            )}
+          </SheetTitle>
           <SheetDescription className="text-base">
             Information about the transaction, including its details and invoice history.
           </SheetDescription>
