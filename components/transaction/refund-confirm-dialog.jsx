@@ -50,7 +50,7 @@ export default function RefundConfirmDialog({
         onInteractOutside={handleClickOutside}
       >
         <DialogHeader className="text-left">
-          <DialogTitle className="text-xl">Attention Required</DialogTitle>
+          <DialogTitle className="text-xl">Customer Account Unavailable</DialogTitle>
           <DialogDescription
             className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold"
             dangerouslySetInnerHTML={{ __html: description }}

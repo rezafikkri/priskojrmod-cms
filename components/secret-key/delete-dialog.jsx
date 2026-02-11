@@ -22,6 +22,9 @@ export default function DeleteDialog({
 }) {
   const [appName, setAppName] = useState('');
 
+  const targetAppName = deleteData?.appName;
+  const isDeleteConfirmed = appName === targetAppName;
+
   function handleDelete() {
     if (appName !== deleteData.appName) return false;
 
@@ -31,10 +34,6 @@ export default function DeleteDialog({
     const toastId = toast.loading('Deleting secret key...');
     onDelete({ deleteData, toastId });
   }
-
-  let checkAppName = false;
-  if (appName === deleteData?.appName) checkAppName = true;
-  const deleteTarget = deleteData?.appName ? deleteData?.appName : appName;
 
   function handleOpenChange() {
     setIsOpenDeleteDialog(false);
@@ -56,7 +55,7 @@ export default function DeleteDialog({
       >
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">The secret key for the <b>{deleteTarget}</b> app will be permanently deleted. To confirm, type the app name "<b>{deleteTarget}</b>" in the box below.</DialogDescription>
+          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">The secret key for the <b>{targetAppName}</b> app will be permanently deleted. To confirm, type the app name "{targetAppName}" in the box below.</DialogDescription>
         </DialogHeader>
         <Input
           placeholder="App name..."
@@ -70,7 +69,7 @@ export default function DeleteDialog({
             variant="destructive"
             className={`w-full h-auto text-base px-3 py-1.5 dark:bg-destructive dark:hover:bg-destructive/90 text-primary-foreground`}
             onClick={handleDelete}
-            disabled={!checkAppName}
+            disabled={!isDeleteConfirmed}
           > 
             Yes, delete
           </Button>

@@ -800,6 +800,7 @@ export default function TransactionsTable() {
                       setCorrectData({
                         id: row.original.id,
                         transactionCode: row.getValue('code'),
+                        email: row.getValue('customerEmail'),
                         currentStatus: row.getValue('status'),
                       });
                     }}

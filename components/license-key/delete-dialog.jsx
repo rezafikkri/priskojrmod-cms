@@ -23,8 +23,12 @@ export default function DeleteDialog({
   const [email, setEmail] = useState('');
   const [appName, setAppName] = useState('');
 
+  const targetEmail = deleteData?.email;
+  const targetAppName = deleteData?.appName;
+  const isDeleteConfirmed = email === targetEmail && appName === targetAppName;
+
   function handleDelete() {
-    if (email !== deleteData.email || appName !== deleteData.appName) return false;
+    if (email !== targetEmail || appName !== targetAppName) return false;
 
     onIsOpenChange(false);
     onDeleteDataChange(null);
@@ -33,11 +37,6 @@ export default function DeleteDialog({
     const toastId = toast.loading('Deleting license key...');
     onDelete({ deleteData, toastId });
   }
-
-  const isEmailConfirmed = email === deleteData?.email;
-  const isAppConfirmed = appName === deleteData?.appName;
-  const emailToDelete = deleteData?.email ? deleteData.email : email;
-  const appNameToDelete = deleteData?.appName ? deleteData.appName : appName;
 
   function handleOpenChange() {
     onIsOpenChange(false);
@@ -59,11 +58,11 @@ export default function DeleteDialog({
       >
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            The license key for <b>{emailToDelete}</b> under app <b>{appNameToDelete}</b> will be permanently deleted.
+          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
+            The license key for <b>{targetEmail}</b> under app <b>{targetAppName}</b> will be permanently deleted.
           </DialogDescription>
-          <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            To confirm, type the email "<b>{emailToDelete}</b>" and app name "<b>{appNameToDelete}</b>" in the fields below.
+          <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300">
+            To confirm, type the email "{targetEmail}" and app name "{targetAppName}" in the fields below.
           </DialogDescription>
         </DialogHeader>
 
@@ -87,7 +86,7 @@ export default function DeleteDialog({
             variant="destructive"
             className="w-full h-auto text-base px-3 py-1.5 dark:bg-destructive dark:hover:bg-destructive/90 text-primary-foreground"
             onClick={handleDelete}
-            disabled={!isEmailConfirmed || !isAppConfirmed}
+            disabled={!isDeleteConfirmed}
           > 
             Yes, delete
           </Button>

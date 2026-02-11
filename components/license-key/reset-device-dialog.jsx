@@ -36,9 +36,6 @@ export default function ResetDeviceDialog({
     }
   }
 
-  const email = resetData?.email;
-  const appName = resetData?.appName;
-
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
@@ -46,9 +43,9 @@ export default function ResetDeviceDialog({
         onInteractOutside={handleClickOutside}
       >
         <DialogHeader className="text-left">
-          <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            You are about to reset the device bound to the license key for <b>{email}</b> under the app <b>{appName}</b>, allowing the customer to activate it on a new device.
+          <DialogTitle className="text-xl">Reset Device</DialogTitle>
+          <DialogDescription className="text-base my-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
+            This action will reset the device bound to the license key for <b>{resetData?.email}</b> under the app <b>{resetData?.appName}</b>, allowing the customer to activate it on a new device.
           </DialogDescription>
         </DialogHeader>
 

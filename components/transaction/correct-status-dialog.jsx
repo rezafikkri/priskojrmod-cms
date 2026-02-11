@@ -22,10 +22,14 @@ export default function CorrectStatusDialog({
   onCorrectDataChange,
 }) {
   const [transactionCode, setTransactionCode] = useState('');
+  const [email, setEmail] = useState('');
 
-  let checkTransactionCode = false;
-  if (transactionCode === correctData?.transactionCode) checkTransactionCode = true;
-  const correctTarget = correctData?.transactionCode ? correctData?.transactionCode : transactionCode;
+  const targetTransactionCode = correctData?.transactionCode;
+  const targetEmail = correctData?.email;
+
+  const isTransactionCodeMatch = transactionCode === targetTransactionCode;
+  const isEmailMatch = email === targetEmail;
+  const isCorrectStatusConfirmed = isTransactionCodeMatch && isEmailMatch;
 
   const correctStatusMap = {
     [TransactionStatus.CANCELLED]: TransactionStatus.PAID,
@@ -42,6 +46,7 @@ export default function CorrectStatusDialog({
     onIsOpenChange(false);
     onCorrectDataChange(null);
     setTransactionCode('');
+    setEmail('');
     const toastId = toast.loading(`Correcting status to ${newStatus}...`);
     correctData.newStatus = newStatus;
     onCorrect({ correctData, toastId });
@@ -70,13 +75,13 @@ export default function CorrectStatusDialog({
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300">
             This action is meant to correct a previously incorrect transaction status. Please ensure you fully understand the impact of this correction before proceeding.
           </DialogDescription>
-          
+
           <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            Transaction <b>{correctTarget}</b> will be corrected <b>from <span className="capitalize">{currentStatus}</span> to <span className="capitalize">{newStatus}</span></b>.
+            Transaction <b>{targetTransactionCode}</b>, owned by customer <b>{targetEmail}</b>, will be corrected <b>from <span className="capitalize">{currentStatus}</span> to <span className="capitalize">{newStatus}</span></b>.
           </DialogDescription>
 
-          <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            To confirm, type the transaction code "<b>{correctTarget}</b>" in the box below.
+          <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300">
+            To confirm, type the transaction code "{targetTransactionCode}" and email "{targetEmail}" in the fields below.
           </DialogDescription>
         </DialogHeader>
 
@@ -86,13 +91,19 @@ export default function CorrectStatusDialog({
           onChange={(e) => setTransactionCode(e.target.value)}
           value={transactionCode}
         />
+        <Input
+          placeholder="Email..."
+          className="mb-1.5 md:text-base h-auto px-3 py-1.5 shadow-none border-orange-500 focus-visible:border-orange-500 focus-visible:ring-orange-500/50"
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+        />
 
         <DialogFooter className="relative">
           <Button
             variant="destructive"
             className="h-auto text-base w-full px-3 py-1.5 bg-orange-500 dark:bg-orange-600/90 hover:bg-orange-500/90 hover:dark:bg-orange-600/80 focus-visible:ring-orange-400/50"
             onClick={handleCorrect}
-            disabled={!checkTransactionCode}
+            disabled={!isCorrectStatusConfirmed}
           >
             Yes, correct
           </Button>

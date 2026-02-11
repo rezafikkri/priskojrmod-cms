@@ -22,8 +22,11 @@ export default function DeleteDialog({
 }) {
   const [name, setName] = useState('');
 
+  const targetName = deleteData?.name;
+  const isDeleteConfirmed = name === targetName;
+
   function handleDelete() {
-    if (name !== deleteData.name) return false;
+    if (name !== targetName) return false;
 
     onIsOpenDeleteDialogChange(false);
     onDeleteDataChange(null);
@@ -31,10 +34,6 @@ export default function DeleteDialog({
     const toastId = toast.loading('Deleting product...');
     onDelete({ deleteData, toastId });
   }
-
-  let checkName = false;
-  if (name === deleteData?.name) checkName = true;
-  const deleteTarget = deleteData?.name ? deleteData?.name : name;
 
   function handleOpenChange() {
     onIsOpenDeleteDialogChange(false);
@@ -56,8 +55,8 @@ export default function DeleteDialog({
       >
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            The product <b>{deleteTarget}</b> will be permanently deleted. To confirm, type the product name "<b>{deleteTarget}</b>" in the box below.
+          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
+            The product <b>{targetName}</b> will be permanently deleted. To confirm, type the product name "{targetName}" in the box below.
           </DialogDescription>
         </DialogHeader>
         <Input
@@ -72,7 +71,7 @@ export default function DeleteDialog({
             variant="destructive"
             className="w-full h-auto text-base px-3 py-1.5 dark:bg-destructive dark:hover:bg-destructive/90 text-primary-foreground"
             onClick={handleDelete}
-            disabled={!checkName}
+            disabled={!isDeleteConfirmed}
           >
             Yes, delete
           </Button>

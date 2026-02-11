@@ -22,8 +22,11 @@ export default function DeleteDialog({
 }) {
   const [email, setEmail] = useState('');
 
+  const targetEmail = deleteData?.email;
+  const isDeleteConfirmed = email === targetEmail;
+
   function handleDelete() {
-    if (email !== deleteData.email) return false;
+    if (email !== targetEmail) return false;
 
     onIsOpenChange(false);
     onDeleteDataChange(null);
@@ -31,9 +34,6 @@ export default function DeleteDialog({
     const toastId = toast.loading('Deleting customer...');
     onDelete({ deleteData, toastId });
   }
-
-  const checkEmail = email === deleteData?.email;
-  const emailToDelete = deleteData?.email || email;
 
   function handleOpenChange() {
     onIsOpenChange(false);
@@ -55,9 +55,9 @@ export default function DeleteDialog({
       >
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            The customer with email <b>{emailToDelete}</b> will be permanently deleted.
-            To confirm, type the email "<b>{emailToDelete}</b>" in the box below.
+          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
+            The customer with email <b>{targetEmail}</b> will be permanently deleted.
+            To confirm, type the email "{targetEmail}" in the box below.
           </DialogDescription>
         </DialogHeader>
         <Input
@@ -72,7 +72,7 @@ export default function DeleteDialog({
             variant="destructive"
             className="w-full h-auto text-base px-3 py-1.5 dark:bg-destructive dark:hover:bg-destructive/90 text-primary-foreground"
             onClick={handleDelete}
-            disabled={!checkEmail}
+            disabled={!isDeleteConfirmed}
           >
             Yes, delete
           </Button>
