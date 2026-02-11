@@ -1,14 +1,23 @@
+import NotFoundError from '@/lib/errors/NotFoundError';
 import { generateInvoicePdf } from '@/lib/services/invoice-service';
 
 export async function GET(_, { params }) {
   const { number } = await params;
 
-  const pdfBuffer = await generateInvoicePdf(number);
+  try {
+    const pdfBuffer = await generateInvoicePdf(number);
 
-  return new Response(pdfBuffer, {
-    headers: {
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `inline; filename=${number}.pdf`,
-    },
-  });
+    return new Response(pdfBuffer, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `inline; filename=${number}.pdf`,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+
+    if (err instanceof NotFoundError) {
+      return new Response(err.message, { status: 404 });
+    }
+  }
 }

@@ -229,7 +229,7 @@ export async function seedTransactions(prisma, count) {
           });
           return total + subtotal;
         }, 0),
-      customerName: selectedCustomer.firstName,
+      customerName: selectedCustomer.firstName + ' ' + selectedCustomer.lastName,
       customerEmail: selectedCustomer.email,
       customerPhoneNumber: selectedCustomer.phoneNumber,
       createdAt: currentTime,
