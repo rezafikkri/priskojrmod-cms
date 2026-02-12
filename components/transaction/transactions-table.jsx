@@ -47,6 +47,7 @@ import Link from 'next/link';
 import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
 import RefundConfirmDialog from './refund-confirm-dialog';
+import RefundDeadlineDialog from './refund-deadline-dialog';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -88,6 +89,8 @@ export default function TransactionsTable() {
   const [seeDetailsId, setSeeDetailsId] = useState(null);
   const [refundData, setRefundData] = useState(null);
   const [isOpenRefundConfirmDialog, setIsOpenRefundConfirmDialog] = useState(false);
+  const [refundDeadlineData, setRefundDeadlineData] = useState(null);
+  const [isOpenRefundDeadlineDialog, setIsOpenRefundDeadlineDialog] = useState(false);
 
   // updating ids state
   const [updatingTransactionStatusIds, setUpdatingTransactionStatusIds] = useState([]);
@@ -677,7 +680,7 @@ export default function TransactionsTable() {
     },
     {
       accessorKey: 'customerEmail',
-      header: 'Email',
+      header: 'Customer Email',
       enableHiding: false,
     },
     {
@@ -828,14 +831,31 @@ export default function TransactionsTable() {
               )}
 
               {row.getValue('status') === TransactionStatus.PAID && (
-                <DropdownMenuItem
-                  className="w-full text-base"
-                  asChild
-                >
-                  <button onClick={() => handleCopyableMessage(row.original.id)}>
-                    Copy confirmation message
-                  </button>
-                </DropdownMenuItem>
+                <>
+                  <DropdownMenuItem
+                    className="w-full text-base"
+                    asChild
+                  >
+                    <button onClick={() => handleCopyableMessage(row.original.id)}>
+                      Copy confirmation message
+                    </button>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    className="w-full text-base"
+                    asChild
+                    onClick={() => {
+                      setIsOpenRefundDeadlineDialog(true);
+                      setRefundDeadlineData({
+                        transactionCode: row.getValue('code'),
+                        email: row.getValue('customerEmail'),
+                        paidAt: row.getValue('paidAt'),
+                      });
+                    }}
+                  >
+                    <button>Check refund deadline</button>
+                  </DropdownMenuItem>
+                </>
               )}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -950,6 +970,13 @@ export default function TransactionsTable() {
         onIsOpenChange={setIsOpenRefundConfirmDialog}
         onRefundDataChange={setRefundData}
         refundData={refundData}
+      />
+
+      <RefundDeadlineDialog
+        isOpen={isOpenRefundDeadlineDialog}
+        onIsOpenChange={setIsOpenRefundDeadlineDialog}
+        onRefundDeadlineDataChange={setRefundDeadlineData}
+        refundDeadlineData={refundDeadlineData}
       />
     </>
   );
