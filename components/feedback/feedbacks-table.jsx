@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { localStorageGet, localStorageSet } from '@/lib/local-storage';
 import { Checkbox } from '../ui/checkbox';
-import { formatDateTime } from '@/lib/format-date';
+import { formatDateTime, FormatTime } from '@/lib/format-date';
 import {
   getCoreRowModel,
   useReactTable,
@@ -54,8 +54,8 @@ export default function FeedbacksTable() {
 
   // pull new data state
   const [isPulling, setIsPulling] = useState(false);
-  const [lastPullTime, setLastPullTime] = useState(() =>
-    localStorageGet('lastPullTime', true) ?? null
+  const [lastPulledAt, setLastPulledAt] = useState(() =>
+    localStorageGet('lastPulledAt', true) ?? null
   );
 
   // table state
@@ -168,20 +168,16 @@ export default function FeedbacksTable() {
   }
 
   async function handlePullFeedbacks() {
-    // check if now - lastPullTime > 1 hour, then pull, otherwise show alert
-    const lastPulledAt = new Date(lastPullTime);
-    if ((Date.now() - lastPulledAt.getTime()) < 60 * 60 * 1000) {
-      const nextPullTime = new Date(lastPulledAt);
-      nextPullTime.setHours(
-        lastPulledAt.getHours() + 1,
-        lastPulledAt.getMinutes() + 1,
-      );
+    if (lastPulledAt) {
+      // only each 1 hour can pull again
+      const nextPullAllowedAt = lastPulledAt + (60 * 60);
+      if (Math.floor(new Date().getTime() / 1000) < nextPullAllowedAt) {
+        const reminder = nextPullAllowedAt % 60;
+        const roundedForDisplay = reminder === 0 ? nextPullAllowedAt : nextPullAllowedAt + (60 - reminder);
 
-      const hour = nextPullTime.getHours().toString().padStart(2, '0');
-      const minute = nextPullTime.getMinutes().toString().padStart(2, '0');
-
-      toast.info(`Please wait until ${hour}:${minute} to pull new feedback`);
-      return;
+        toast.info(`Please wait until ${FormatTime(roundedForDisplay)} to pull new feedback`);
+        return;
+      }
     }
 
     // not show table skeleton loading
@@ -196,9 +192,9 @@ export default function FeedbacksTable() {
     if (loadRes.status === 'success') {
       if (loadRes.data.count > 0) {
         // set or update last pull time
-        const currentLastPullTime = new Date().toISOString();
-        localStorageSet('lastPullTime', currentLastPullTime, true);
-        setLastPullTime(currentLastPullTime);
+        const currentTime = Math.floor(new Date().getTime() / 1000);
+        localStorageSet('lastPulledAt', currentTime, true);
+        setLastPulledAt(currentTime);
 
         // note the toast id, for updated in queryFn useQuery
         pullFeedbacksToastIdRef.current = toastId;
