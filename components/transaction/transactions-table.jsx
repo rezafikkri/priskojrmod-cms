@@ -48,6 +48,7 @@ import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
 import RefundConfirmDialog from './refund-confirm-dialog';
 import RefundDeadlineDialog from './refund-deadline-dialog';
+import CancelConfirmDialog from './cancel-confirm-dialog';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -91,6 +92,8 @@ export default function TransactionsTable() {
   const [isOpenRefundConfirmDialog, setIsOpenRefundConfirmDialog] = useState(false);
   const [refundDeadlineData, setRefundDeadlineData] = useState(null);
   const [isOpenRefundDeadlineDialog, setIsOpenRefundDeadlineDialog] = useState(false);
+  const [cancelData, setCancelData] = useState(null);
+  const [isOpenCancelConfirmDialog, setIsOpenCancelConfirmDialog] = useState(false);
 
   // updating ids state
   const [updatingTransactionStatusIds, setUpdatingTransactionStatusIds] = useState([]);
@@ -779,6 +782,13 @@ export default function TransactionsTable() {
                               email: row.getValue('customerEmail'),
                               customerId: row.original.customerId,
                             });
+                          } else if (cs === TransactionStatus.CANCELLED) {
+                            setIsOpenCancelConfirmDialog(true);
+                            setCancelData({
+                              id: row.original.id,
+                              transactionCode: row.getValue('code'),
+                              email: row.getValue('customerEmail'),
+                            });
                           } else {
                             handleEditTransactionStatus(row.original.id, cs);
                           }
@@ -977,6 +987,14 @@ export default function TransactionsTable() {
         onIsOpenChange={setIsOpenRefundDeadlineDialog}
         onRefundDeadlineDataChange={setRefundDeadlineData}
         refundDeadlineData={refundDeadlineData}
+      />
+
+      <CancelConfirmDialog
+        onCancel={handleEditTransactionStatus}
+        isOpen={isOpenCancelConfirmDialog}
+        onIsOpenChange={setIsOpenCancelConfirmDialog}
+        cancelData={cancelData}
+        onCancelDataChange={setCancelData}
       />
     </>
   );
