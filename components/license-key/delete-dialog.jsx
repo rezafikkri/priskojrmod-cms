@@ -59,24 +59,22 @@ export default function DeleteDialog({
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            The license key for <b>{targetEmail}</b> under app <b>{targetAppName}</b> will be permanently deleted.
+            License key owned by customer <b>{targetEmail}</b> for app <b>{targetAppName}</b> will be permanently deleted.
           </DialogDescription>
           <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300">
-            To confirm, type the email "{targetEmail}" and app name "{targetAppName}" in the fields below.
+            To confirm, type the email and app name in the fields below.
           </DialogDescription>
         </DialogHeader>
 
         <Input
           placeholder="Email..."
           className="mt-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
-          aria-invalid={true}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />
         <Input
           placeholder="App name..."
           className="mb-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
-          aria-invalid={true}
           onChange={(e) => setAppName(e.target.value)}
           value={appName}
         />

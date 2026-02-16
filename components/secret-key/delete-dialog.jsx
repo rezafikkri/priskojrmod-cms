@@ -55,12 +55,11 @@ export default function DeleteDialog({
       >
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">The secret key for the <b>{targetAppName}</b> app will be permanently deleted. To confirm, type the app name "{targetAppName}" in the box below.</DialogDescription>
+          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">Secret key for app <b>{targetAppName}</b> will be permanently deleted. To confirm, type the app name in the field below.</DialogDescription>
         </DialogHeader>
         <Input
           placeholder="App name..."
           className="mt-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
-          aria-invalid={true}
           onChange={(e) => setAppName(e.target.value)}
           value={appName}
         />

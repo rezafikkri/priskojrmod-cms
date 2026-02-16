@@ -45,7 +45,7 @@ export default function ResetDeviceDialog({
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl">Reset Device</DialogTitle>
           <DialogDescription className="text-base my-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            This action will reset the device bound to the license key for <b>{resetData?.email}</b> under the app <b>{resetData?.appName}</b>, allowing the customer to activate it on a new device.
+            This action will reset the device bound to the license key owned by customer <b>{resetData?.email}</b> for app <b>{resetData?.appName}</b>, allowing the customer to activate it on a new device.
           </DialogDescription>
         </DialogHeader>
 

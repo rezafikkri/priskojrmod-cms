@@ -56,14 +56,12 @@ export default function DeleteDialog({
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            The customer with email <b>{targetEmail}</b> will be permanently deleted.
-            To confirm, type the email "{targetEmail}" in the box below.
+            Customer <b>{targetEmail}</b> will be permanently deleted. To confirm, type the email in the field below.
           </DialogDescription>
         </DialogHeader>
         <Input
           placeholder="Email..."
           className="mt-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
-          aria-invalid={true}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />

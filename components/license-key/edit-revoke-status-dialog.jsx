@@ -35,10 +35,10 @@ export default function EditRevokeStatusDialog({
   let description;
   if (editRevokeStatusData?.isRevoked) {
     title = 'Unrevoke License Key';
-    description = `The license key for <b>${editRevokeStatusData?.email}</b> under app <b>${editRevokeStatusData?.appName}</b> will be <b>unrevoked</b>. As a result, this license key can be used again to activate and access the application.`;
+    description = `License key owned by customer <b>${editRevokeStatusData?.email}</b> for app <b>${editRevokeStatusData?.appName}</b> will be <b>unrevoked</b>. As a result, this license key can be used again to activate and access the application.`;
   } else {
     title = 'Revoke License Key';
-    description = `The license key for <b>${editRevokeStatusData?.email}</b> under app <b>${editRevokeStatusData?.appName}</b> will be <b>revoked</b>. As a result, this license key can no longer be used to activate or access the application.`;
+    description = `License key owned by customer <b>${editRevokeStatusData?.email}</b> for app <b>${editRevokeStatusData?.appName}</b> will be <b>revoked</b>. As a result, this license key can no longer be used to activate or access the application.`;
   }
 
   function handleClickOutside(e) {
@@ -56,7 +56,7 @@ export default function EditRevokeStatusDialog({
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl">{title}</DialogTitle>
           <DialogDescription
-            className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-bold" 
+            className="text-base my-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-bold" 
             dangerouslySetInnerHTML={{ __html: description }}
           />
         </DialogHeader>

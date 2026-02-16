@@ -45,8 +45,8 @@ export default function DeleteDialog({
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
 
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
-            The admin (role: Staff) with email <b>{deleteData?.email}</b> will be permanently deleted.
+          <DialogDescription className="text-base my-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
+            Admin <b>{deleteData?.email}</b> (role: Staff) will be permanently deleted.
           </DialogDescription>
         </DialogHeader>
 

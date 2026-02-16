@@ -56,13 +56,12 @@ export default function DeleteDialog({
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            The product <b>{targetName}</b> will be permanently deleted. To confirm, type the product name "{targetName}" in the box below.
+            Product <b>{targetName}</b> will be permanently deleted. To confirm, type the product name in the field below.
           </DialogDescription>
         </DialogHeader>
         <Input
           placeholder="Product name..."
           className="mt-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
-          aria-invalid={true}
           onChange={(e) => setName(e.target.value)}
           value={name}
         />
