@@ -95,19 +95,19 @@ export default function DetailsSection({ details }) {
                 <TableCell>
                   {detail.productDiscount
                     ? `${detail.productDiscount}%`
-                    : <Minus className="icon text-zinc-300" />}
+                    : <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Discount Saving</TableHead>
                 <TableCell className="tabular-nums">
-                  {discountPrice ?? <Minus className="icon text-zinc-300" />}
+                  {discountPrice ?? <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Coupon Code</TableHead>
                 <TableCell>
-                  {detail.productCouponCode ?? <Minus className="icon text-zinc-300" />}
+                  {detail.productCouponCode ?? <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -115,13 +115,13 @@ export default function DetailsSection({ details }) {
                 <TableCell>
                   {detail.productCouponDiscount
                     ? `${detail.productCouponDiscount}%`
-                    : <Minus className="icon text-zinc-300" />}
+                    : <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Coupon Saving</TableHead>
                 <TableCell className="tabular-nums">
-                  {couponPrice ?? <Minus className="icon text-zinc-300" />}
+                  {couponPrice ?? <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -137,7 +137,7 @@ export default function DetailsSection({ details }) {
                 <TableCell className="capitalize">
                   {detail.shareMethod
                     ? detail.shareMethod.replace('_', ' ')
-                    : <Minus className="icon text-zinc-300" />}
+                    : <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -145,7 +145,7 @@ export default function DetailsSection({ details }) {
                 <TableCell>
                   {detail.sharedAt
                     ? formatDateTime(detail.sharedAt)
-                    : <Minus className="icon text-zinc-300" />}
+                    : <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -159,13 +159,13 @@ export default function DetailsSection({ details }) {
               <TableRow>
                 <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-50">Drive File ID</TableHead>
                 <TableCell>
-                  {detail.productDriveFileId ?? <Minus className="icon text-zinc-300" />}
+                  {detail.productDriveFileId ?? <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Download Link</TableHead>
                 <TableCell>
-                  {detail.productDownloadUrl ?? <Minus className="icon text-zinc-300" />}
+                  {detail.productDownloadUrl ?? <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -179,13 +179,13 @@ export default function DetailsSection({ details }) {
               <TableRow>
                 <TableHead className="font-normal text-zinc-700 dark:text-zinc-300 w-50">Download Link</TableHead>
                 <TableCell>
-                  {detail.variantDownloadUrl ?? <Minus className="icon text-zinc-300" />}
+                  {detail.variantDownloadUrl ?? <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">File Access Password</TableHead>
                 <TableCell>
-                  {detail.variantFileAccessPassword ?? <Minus className="icon text-zinc-300" />}
+                  {detail.variantFileAccessPassword ?? <Minus className="size-4 text-zinc-300" />}
                 </TableCell>
               </TableRow>
             </TableBody>

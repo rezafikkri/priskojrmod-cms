@@ -13,21 +13,21 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-export default function InfoSection({ info }) {
-  return (
-    <div className="space-y-4 mt-2.5">
-      <dl className="space-y-1.5">
-        <dt className="flex items-center text-zinc-600 dark:text-zinc-400">
-          <Banknote className="icon me-1 text-zinc-400 dark:text-zinc-400/80" />
-          <span>Total Amount</span>
-        </dt>
-        <dd className="space-x-5 flex items-center">
-          <span
-            className="text-lg font-semibold tabular-nums"
-          >
-            {formatCurrency({
-              value: info.totalAmount,
-              currencyCode: info.currencyCode,
+  export default function InfoSection({ info }) {
+    return (
+      <div className="space-y-4 mt-2.5">
+        <dl className="space-y-1.5">
+          <dt className="flex items-center text-zinc-600 dark:text-zinc-400">
+            <Banknote className="me-1 text-zinc-400 dark:text-zinc-400/80" />
+            <span>Total Amount</span>
+          </dt>
+          <dd className="space-x-5 flex items-center">
+            <span
+              className="text-lg font-semibold tabular-nums"
+            >
+              {formatCurrency({
+                value: info.totalAmount,
+                currencyCode: info.currencyCode,
             })}
           </span>
           <span
@@ -45,12 +45,17 @@ export default function InfoSection({ info }) {
           <dd className="mb-6">{formatDateTime(info.createdAt)}</dd>
 
           <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Paid At</dt>
-          <dd>{formatDateTime(info.paidAt)}</dd>
+          <dd>{info.paidAt ? formatDateTime(info.paidAt) : <Minus className="size-4 text-zinc-300" />}</dd>
         </dl>
 
         <Separator orientation="vertical" className="!h-25 mt-3" />
 
         <dl>
+          <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Refunded At</dt>
+          <dd className="mb-6">
+            {info.refundedAt ? formatDateTime(info.refundedAt) : <Minus className="size-4 text-zinc-300" />}
+          </dd>
+
           <dt className="text-zinc-700 dark:text-zinc-300 mb-1">Updated At</dt>
           <dd>{formatDateTime(info.updatedAt)}</dd>
         </dl>
@@ -70,7 +75,7 @@ export default function InfoSection({ info }) {
           <TableRow className="hover:bg-transparent border-0">
             <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Customer Phone Number</TableHead>
             <TableCell>
-              {info.customerPhoneNumber ?? <Minus className="icon text-zinc-300" />}
+              {info.customerPhoneNumber ?? <Minus className="size-4 text-zinc-300" />}
             </TableCell>
           </TableRow>
         </TableBody>

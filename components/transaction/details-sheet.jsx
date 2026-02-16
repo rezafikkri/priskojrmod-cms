@@ -58,7 +58,7 @@ function DetailsContent({ isLoading, data, error }) {
   }
 
   return (
-    <div className="space-y-6 p-4 pt-0">
+    <div className="space-y-7 p-4 pt-0">
       <section>
         <h3 className="text-xl font-semibold">Transaction Info</h3>
 
@@ -79,7 +79,7 @@ function DetailsContent({ isLoading, data, error }) {
         )}
       </section>
 
-      <section>
+      <section className="last:mb-7">
         <h3 className="text-xl font-semibold">Invoices</h3>
 
         {isLoading ? (
@@ -88,6 +88,14 @@ function DetailsContent({ isLoading, data, error }) {
           <InvoicesSection invoices={invoices} />
         )}
       </section>
+
+      {info?.refundNote && (
+        <section className="mb-7">
+          <h3 className="text-xl font-semibold">Refund Note</h3>
+
+          <p className="mt-2 leading-7">{info.refundNote}</p>
+        </section>
+      )}
     </div>
   );
 }

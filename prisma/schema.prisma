@@ -18,7 +18,7 @@ model Admin {
   id Int @id @default(autoincrement()) @db.SmallInt
 
   role         UserRole
-  googleUserId String?   @unique @map("google_user_id") @db.VarChar(255)
+  googleUserId String?  @unique @map("google_user_id") @db.VarChar(255)
 
   firstName           String @map("first_name") @db.VarChar(100)
   lastName            String @map("last_name") @db.VarChar(100)
@@ -430,6 +430,9 @@ model Transaction {
   customerName        String  @map("customer_name") @db.VarChar(200)
   customerEmail       String  @map("customer_email") @db.VarChar(254)
   customerPhoneNumber String? @map("customer_phone_number") @db.VarChar(20)
+
+  refundNote String? @map("refund_note")
+  refundedAt Int?    @map("refunded_at")
 
   customer Customer?           @relation(fields: [customerId], references: [id], onDelete: SetNull)
   details  TransactionDetail[]

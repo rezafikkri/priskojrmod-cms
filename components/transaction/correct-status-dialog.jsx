@@ -40,6 +40,17 @@ export default function CorrectStatusDialog({
   const currentStatus = correctData?.currentStatus;
   const newStatus = correctStatusMap[currentStatus];
 
+  let correctionNotice = 'Ensure you understand the impact before proceeding.';
+
+  switch (currentStatus) {
+    case TransactionStatus.REFUND:
+      correctionNotice = 'This action will permanently delete <b>Refund Note</b> and <b>Refunded At</b>. Only use this if the current refund status was incorrect.';
+      break;
+
+    case TransactionStatus.PAID:
+      correctionNotice = 'This action will permanently delete <b>Paid At</b>. Only use this if the current paid status was incorrect. If payment was made, refund the transaction instead.';
+  }
+
   function handleCorrect() {
     if (transactionCode !== correctData.transactionCode) return false;
 
@@ -72,28 +83,29 @@ export default function CorrectStatusDialog({
       >
         <DialogHeader>
           <DialogTitle className="text-xl">Correct Transaction Status</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300">
-            This action is meant to correct a previously incorrect transaction status. Please ensure you fully understand the impact of this correction before proceeding.
-          </DialogDescription>
-
-          <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
+          <DialogDescription className="mt-1.5 text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
             Transaction <b>{targetTransactionCode}</b>, owned by customer <b>{targetEmail}</b>, will be corrected <b>from <span className="capitalize">{currentStatus}</span> to <span className="capitalize">{newStatus}</span></b>.
           </DialogDescription>
 
+          <DialogDescription
+            className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold"
+            dangerouslySetInnerHTML={{ __html: correctionNotice }}
+          />
+
           <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300">
-            To confirm, type the transaction code "{targetTransactionCode}" and email "{targetEmail}" in the fields below.
+            To confirm, type the transaction code and email in the fields below.
           </DialogDescription>
         </DialogHeader>
 
         <Input
           placeholder="Transaction code..."
-          className="mt-1.5 md:text-base h-auto px-3 py-1.5 shadow-none border-orange-500 focus-visible:border-orange-500 focus-visible:ring-orange-500/50"
+          className="mt-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
           onChange={(e) => setTransactionCode(e.target.value)}
           value={transactionCode}
         />
         <Input
           placeholder="Email..."
-          className="mb-1.5 md:text-base h-auto px-3 py-1.5 shadow-none border-orange-500 focus-visible:border-orange-500 focus-visible:ring-orange-500/50"
+          className="mb-1.5 md:text-base h-auto px-3 py-1.5 shadow-none"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />

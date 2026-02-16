@@ -12,13 +12,13 @@ import {
 import { TransactionStatus } from '@/constants/enums';
 
 export default function RefundConfirmDialog({
-  onRefund,
+  onContinue,
   isOpen,
   onIsOpenChange,
   onRefundDataChange,
   refundData,
 }) {
-  let description = `Transaction <b>${refundData?.transactionCode}</b>, owned by customer <b>${refundData?.email}</b>, will have its status changed <b>from Paid to Refund</b>. However, the customer account`;
+  let description = `Transaction <b>${refundData?.transactionCode}</b>, owned by customer <b>${refundData?.email}</b>, will have its status changed <b>from <span className="capitalize">${TransactionStatus.PAID}</span> to <span className="capitalize">${TransactionStatus.REFUND}</span></b>. However, the customer account`;
 
   if (!refundData?.customerId) {
     description += ' has been <b>deleted</b>.';
@@ -28,8 +28,7 @@ export default function RefundConfirmDialog({
 
   function handleContinue() {
     onIsOpenChange(false);
-    onRefundDataChange(null);
-    onRefund(refundData.id, TransactionStatus.REFUND);
+    onContinue(true); // open refund form dialog
   }
 
   function handleOpenChange() {

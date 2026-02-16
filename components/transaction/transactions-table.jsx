@@ -49,10 +49,12 @@ import SearchInput from '../ui/search-input';
 import RefundConfirmDialog from './refund-confirm-dialog';
 import RefundDeadlineDialog from './refund-deadline-dialog';
 import CancelConfirmDialog from './cancel-confirm-dialog';
+import RefundFormDialog from './refund-form-dialog';
 
 const defaultColumnVisibility = {
   createdAt: true,
   paidAt: false,
+  refundedAt: false,
   updatedAt: false,
 };
 
@@ -90,6 +92,7 @@ export default function TransactionsTable() {
   const [seeDetailsId, setSeeDetailsId] = useState(null);
   const [refundData, setRefundData] = useState(null);
   const [isOpenRefundConfirmDialog, setIsOpenRefundConfirmDialog] = useState(false);
+  const [isOpenRefundFormDialog, setIsOpenRefundFormDialog] = useState(false);
   const [refundDeadlineData, setRefundDeadlineData] = useState(null);
   const [isOpenRefundDeadlineDialog, setIsOpenRefundDeadlineDialog] = useState(false);
   const [cancelData, setCancelData] = useState(null);
@@ -241,7 +244,7 @@ export default function TransactionsTable() {
     }
   }
 
-  const handleEditTransactionStatus = useCallback(async (id, status) => {
+  const handleEditTransactionStatus = useCallback(async ({ id, status, refundNote }) => {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
 
@@ -253,7 +256,7 @@ export default function TransactionsTable() {
     });
     const toastId = toast.loading(`Changing status to ${status}...`);
 
-    const editRes = await editTransactionStatus({ id, status });
+    const editRes = await editTransactionStatus({ id, status, refundNote });
 
     setUpdatingTransactionStatusIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);
@@ -286,6 +289,10 @@ export default function TransactionsTable() {
                   if (editRes.data.paidAt) {
                     result.paidAt = editRes.data.paidAt;
                   }
+                }
+
+                if (status === TransactionStatus.REFUND) {
+                  result.refundedAt = editRes.data.refundedAt;
                 }
 
                 return result;
@@ -324,6 +331,10 @@ export default function TransactionsTable() {
                   if (editRes.data.paidAt) {
                     newTargetTransaction.paidAt = editRes.data.paidAt;
                   }
+                }
+
+                if (status === TransactionStatus.REFUND) {
+                  newTargetTransaction.refundedAt = editRes.data.refundedAt;
                 }
 
                 return {
@@ -488,6 +499,14 @@ export default function TransactionsTable() {
                   if (editRes.data.paidAt) {
                     result.paidAt = editRes.data.paidAt;
                   }
+
+                  if (correctData.currentStatus === TransactionStatus.REFUND) {
+                    result.refundedAt = null;
+                  }
+                }
+
+                if (correctData.newStatus === TransactionStatus.CANCELLED) {
+                  result.paidAt = null;
                 }
 
                 return result;
@@ -526,6 +545,14 @@ export default function TransactionsTable() {
                   if (editRes.data.paidAt) {
                     newTargetTransaction.paidAt = editRes.data.paidAt;
                   }
+
+                  if (correctData.currentStatus === TransactionStatus.REFUND) {
+                    newTargetTransaction.refundedAt = null;
+                  }
+                }
+
+                if (correctData.newStatus === TransactionStatus.CANCELLED) {
+                  newTargetTransaction.paidAt = null;
                 }
 
                 return {
@@ -732,6 +759,14 @@ export default function TransactionsTable() {
           : <Minus className="size-4 text-zinc-300" />,
     },
     {
+      accessorKey: 'refundedAt',
+      header: () => 'Refunded At',
+      cell: ({ row }) => 
+        row.getValue('refundedAt')
+          ? formatDateTime(row.getValue('refundedAt'))
+          : <Minus className="size-4 text-zinc-300" />,
+    },
+    {
       accessorKey: 'updatedAt',
       header: () => 'Updated At',
       cell: ({ row }) => formatDateTime(row.getValue('updatedAt')),
@@ -771,17 +806,21 @@ export default function TransactionsTable() {
                     >
                       <button
                         onClick={() => {
-                          if (
-                            cs === TransactionStatus.REFUND &&
-                            (!row.original.customerId || row.original.customer.isBanned)
-                          ) {
-                            setIsOpenRefundConfirmDialog(true);
-                            setRefundData({
+                          if (cs === TransactionStatus.REFUND) {
+                            let newRefundData = {
                               id: row.original.id,
                               transactionCode: row.getValue('code'),
                               email: row.getValue('customerEmail'),
-                              customerId: row.original.customerId,
-                            });
+                            };
+
+                            if (!row.original.customerId || row.original.customer.isBanned) {
+                              setIsOpenRefundConfirmDialog(true);
+                              newRefundData.customerId = row.original.customerId;
+                            } else {
+                              setIsOpenRefundFormDialog(true);
+                            }
+
+                            setRefundData(newRefundData);
                           } else if (cs === TransactionStatus.CANCELLED) {
                             setIsOpenCancelConfirmDialog(true);
                             setCancelData({
@@ -790,7 +829,7 @@ export default function TransactionsTable() {
                               email: row.getValue('customerEmail'),
                             });
                           } else {
-                            handleEditTransactionStatus(row.original.id, cs);
+                            handleEditTransactionStatus({ id: row.original.id, status: cs });
                           }
                         }}
                       >{cs.replace(/^./, (match) => match.toUpperCase())}</button>
@@ -975,9 +1014,17 @@ export default function TransactionsTable() {
       <DetailsSheet detailsId={seeDetailsId} onDetailsIdChange={setSeeDetailsId} />
 
       <RefundConfirmDialog
-        onRefund={handleEditTransactionStatus}
+        onContinue={setIsOpenRefundFormDialog}
         isOpen={isOpenRefundConfirmDialog}
         onIsOpenChange={setIsOpenRefundConfirmDialog}
+        onRefundDataChange={setRefundData}
+        refundData={refundData}
+      />
+
+      <RefundFormDialog
+        onRefund={handleEditTransactionStatus}
+        isOpen={isOpenRefundFormDialog}
+        onIsOpenChange={setIsOpenRefundFormDialog}
         onRefundDataChange={setRefundData}
         refundData={refundData}
       />

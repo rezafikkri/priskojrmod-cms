@@ -21,7 +21,7 @@ export default function CancelConfirmDialog({
   function handleCancel() {
     onIsOpenChange(false);
     onCancelDataChange(null);
-    onCancel(cancelData.id, TransactionStatus.CANCELLED);
+    onCancel({ id: cancelData.id, status: TransactionStatus.CANCELLED });
   }
 
   function handleOpenChange() {
@@ -46,14 +46,17 @@ export default function CancelConfirmDialog({
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">  
             Transaction <b>{cancelData?.transactionCode}</b>, owned by customer <b>{cancelData?.email}</b>, will be changed <b>from <span className="capitalize">{TransactionStatus.PENDING}</span> to <span className="capitalize">{TransactionStatus.CANCELLED}</span></b>.
           </DialogDescription>
-          <DialogDescription className="mb-1.5 text-base text-zinc-700 dark:text-zinc-300">
-            Only proceed if:
-            <ul className="list-disc list-inside">
+
+          <div>
+            <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300">
+              Only proceed if: 
+            </DialogDescription>
+            <ul className="list-disc list-inside mb-1.5 text-base text-zinc-700 dark:text-zinc-300">
               <li>Payment was NOT received</li>
               <li>Customer explicitly requested cancellation</li>
               <li>There is a clear and valid reason for cancellation</li>
             </ul>
-          </DialogDescription>
+          </div>
         </DialogHeader>
 
         <DialogFooter className="relative">

@@ -43,7 +43,7 @@ export default function InvoicesSection({ invoices }) {
         </div>
       )}
 
-      <div className="rounded-md border mb-4 mt-1.5">
+      <div className="rounded-md border mt-1.5">
         <Table className="text-base">
           <TableBody>
             <TableRow>
@@ -63,7 +63,7 @@ export default function InvoicesSection({ invoices }) {
               <TableCell>
                 {invoice.voidedAt
                   ? formatDateTime(invoice.voidedAt)
-                  : <Minus className="icon text-zinc-300" />}
+                  : <Minus className="size-4 text-zinc-300" />}
               </TableCell>
             </TableRow>
           </TableBody>
