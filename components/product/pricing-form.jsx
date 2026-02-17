@@ -369,6 +369,7 @@ export default function PricingForm({
                     <RadioGroup
                       onValueChange={field.onChange}
                       value={field.value}
+                      disabled={isSubmitting}
                     >
                       <div className="flex items-center space-x-4">
                         <RadioGroupItem value="unpublished" id="unpublished" />
