@@ -55,8 +55,9 @@ export default function RootLayout({ children }) {
                 richColors
                 expand
                 visibleToasts={3}
-                position="bottom-center"
+                position="bottom-right"
                 toastOptions={{
+                  style: { minWidth: '400px' },
                   classNames: {
                     toast: 'group-[.toaster]:pointer-events-auto',
                     title: 'text-[15px]',

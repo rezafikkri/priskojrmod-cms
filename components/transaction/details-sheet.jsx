@@ -165,7 +165,7 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
             )}
           </SheetTitle>
           <SheetDescription className="text-base">
-            Information about the transaction, including its details and invoice history.
+            Detailed information and history of the transaction.
           </SheetDescription>
         </SheetHeader>
 
