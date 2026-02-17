@@ -18,7 +18,7 @@ export default function RefundConfirmDialog({
   onRefundDataChange,
   refundData,
 }) {
-  let description = `Transaction <b>${refundData?.transactionCode}</b>, owned by customer <b>${refundData?.email}</b>, will have its status changed <b>from <span className="capitalize">${TransactionStatus.PAID}</span> to <span className="capitalize">${TransactionStatus.REFUND}</span></b>. However, the customer account`;
+  let description = `Transaction <b>${refundData?.transactionCode}</b>, owned by customer <b>${refundData?.email}</b>, will have its status changed <b>from <span>${TransactionStatus.PAID}</span> to <span>${TransactionStatus.REFUND}</span></b>. However, the customer account`;
 
   if (!refundData?.customerId) {
     description += ' has been <b>deleted</b>.';
@@ -51,10 +51,10 @@ export default function RefundConfirmDialog({
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl">Customer Account Unavailable</DialogTitle>
           <DialogDescription
-            className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold"
+            className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold [&_span]:capitalize"
             dangerouslySetInnerHTML={{ __html: description }}
           />  
-          <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-medium">
+          <DialogDescription className="mb-1.5 text-base text-zinc-700 dark:text-zinc-300">
             Please apply strict verification and write a clear refund note.
           </DialogDescription>
         </DialogHeader>

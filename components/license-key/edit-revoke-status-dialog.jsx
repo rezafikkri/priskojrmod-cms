@@ -56,7 +56,7 @@ export default function EditRevokeStatusDialog({
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl">{title}</DialogTitle>
           <DialogDescription
-            className="text-base my-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-bold" 
+            className="text-base my-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold" 
             dangerouslySetInnerHTML={{ __html: description }}
           />
         </DialogHeader>

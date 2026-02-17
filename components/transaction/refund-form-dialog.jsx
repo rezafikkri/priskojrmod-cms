@@ -51,7 +51,7 @@ export default function RefundFormDialog({
         </DialogHeader>
 
         <Textarea
-          className="mb-1.5 md:text-base h-auto px-3 py-1.5 shadow-none min-h-30"
+          className="md:text-base h-auto px-3 py-1.5 shadow-none min-h-30"
           placeholder="Note..."
           value={note}
           onChange={(e) => setNote(e.target.value)}
