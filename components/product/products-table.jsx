@@ -488,7 +488,7 @@ export default function ProductsTable({ isOwner }) {
                         newStatus: ProductStatus.INACTIVE,
                         currentStatus: row.getValue('status'),
                       })}
-                    >Deactive</button>
+                    >Deactivate</button>
                   </DropdownMenuItem>
                 </>
               )}
