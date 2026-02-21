@@ -39,6 +39,7 @@ import TablePagination from '../ui/table-pagination';
 import DeleteDialog from './delete-dialog';
 import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
+import BanDialog from './ban-dialog';
 
 const defaultColumnVisibility = {
   lastActive: true,
@@ -74,9 +75,11 @@ export default function CustomersTable() {
     localStorageGet(columnVisibilityStorageKey) ?? defaultColumnVisibility,
   );
 
-  // delete dialog state
+  // dialog state
   const [deleteData, setDeleteData] = useState(null);
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  const [banData, setBanData] = useState(null);
+  const [isOpenBanDialog, setIsOpenBanDialog] = useState(false);
 
   // deleting ids and ban/unban state
   const [deletingIds, setDeletingIds] = useState([]);
@@ -513,10 +516,21 @@ export default function CustomersTable() {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="w-full text-base"
-              onClick={() => handleEditBanStatus({
-                id: row.original.id,
-                isBanned: !row.original.isBanned,
-              })}
+              onClick={() => {
+                if (row.original.isBanned === false) {
+                  setIsOpenBanDialog(true);
+                  setBanData({
+                    id: row.original.id,
+                    isBanned: row.original.isBanned,
+                    email: row.getValue('email'),
+                  });
+                } else {
+                  handleEditBanStatus({
+                    id: row.original.id,
+                    isBanned: !row.original.isBanned,
+                  });
+                }
+              }}
               asChild
             >
               <button>
@@ -661,6 +675,14 @@ export default function CustomersTable() {
         onIsOpenChange={setIsOpenDeleteDialog}
         onDeleteDataChange={setDeleteData}
         deleteData={deleteData}
+      />
+
+      <BanDialog
+        onBan={handleEditBanStatus}
+        isOpen={isOpenBanDialog}
+        onIsOpenChange={setIsOpenBanDialog}
+        onBanDataChange={setBanData}
+        banData={banData}
       />
     </>
   );
