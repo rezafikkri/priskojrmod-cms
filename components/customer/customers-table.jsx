@@ -536,7 +536,11 @@ export default function CustomersTable() {
                 >
                   <button
                     onClick={() => {
-                      setDeleteData({ id: row.original.id, email: row.getValue('email') });
+                      setDeleteData({
+                          id: row.original.id,
+                          email: row.getValue('email'),
+                          isBanned: row.original.isBanned,
+                        });
                       setIsOpenDeleteDialog(true);
                     }}
                   >

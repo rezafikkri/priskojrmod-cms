@@ -56,7 +56,17 @@ export default function DeleteDialog({
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            Customer <b>{targetEmail}</b> will be permanently deleted. To confirm, type the email in the field below.
+            Customer <b>{targetEmail}</b> will be permanently deleted. 
+          </DialogDescription>
+
+          {deleteData?.isBanned && (
+            <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
+              If this customer has any associated license keys, <b>all of them will also be permanently deleted</b>. Please ensure you have a valid and strong reason before proceeding.
+            </DialogDescription>
+          )}
+
+          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300">
+            To confirm, type the email in the field below.
           </DialogDescription>
         </DialogHeader>
         <Input
