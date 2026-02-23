@@ -9,7 +9,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { toast } from 'sonner';
 
 export default function EditRevokeStatusDialog({
   onEditRevokeStatus,
@@ -21,10 +20,7 @@ export default function EditRevokeStatusDialog({
   function handleEditRevokeStatus() {
     onIsOpenChange(false);
     onEditRevokeStatusDataChange(null);
-    const toastId = toast.loading(
-      `${editRevokeStatusData.isRevoked ? 'Unrevoking' : 'Revoking'} license key...`,
-    );
-    onEditRevokeStatus({ editRevokeStatusData, toastId });
+    onEditRevokeStatus(editRevokeStatusData);
   }
 
   function handleOpenChange() {

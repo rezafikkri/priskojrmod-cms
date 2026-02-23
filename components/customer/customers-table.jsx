@@ -328,21 +328,23 @@ export default function CustomersTable() {
     }
   }, [pagination, filters, searchedCustomer]);
 
-  async function handleDelete({ deleteData, toastId }) {
+  async function handleDelete({ id }) {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
+    // show loading
+    const toastId = toast.loading('Deleting customer...');
 
     // This is for add opacity-50 style to deleted row
     setDeletingIds((prev) => {
-      const newIds = [...prev, deleteData.id];
+      const newIds = [...prev, id];
       deletingIdsRef.current = newIds;
       return newIds;
     });
 
-    const removeRes = await removeCustomer(deleteData.id);
+    const removeRes = await removeCustomer(id);
 
     setDeletingIds((prev) => {
-      const newIds = prev.filter(id => id !== deleteData.id);
+      const newIds = prev.filter(prevId => prevId !== id);
       deletingIdsRef.current = newIds;
       return newIds;
     });
@@ -359,12 +361,12 @@ export default function CustomersTable() {
       if (searchedCustomer) {
         setSearchedCustomer((prevCustomer) => ({
           ...prevCustomer,
-          items: prevCustomer.items.filter(customer => customer.id !== deleteData.id),
+          items: prevCustomer.items.filter(customer => customer.id !== id),
         }));
 
         queryClient.invalidateQueries({ queryKey: ['customers'] });
       } else {
-        const newCustomers = customer.items.filter(customer => customer.id !== deleteData.id);
+        const newCustomers = customer.items.filter(customer => customer.id !== id);
         const newRowCount = customer.rowCount - 1;
 
         if (!isLastPage({

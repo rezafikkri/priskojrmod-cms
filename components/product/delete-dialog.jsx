@@ -31,8 +31,7 @@ export default function DeleteDialog({
     onIsOpenDeleteDialogChange(false);
     onDeleteDataChange(null);
     setName('');
-    const toastId = toast.loading('Deleting product...');
-    onDelete({ deleteData, toastId });
+    onDelete(deleteData);
   }
 
   function handleOpenChange() {

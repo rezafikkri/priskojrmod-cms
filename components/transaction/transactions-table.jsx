@@ -455,21 +455,23 @@ export default function TransactionsTable() {
     toast.success('Message copied to clipboard', { id: toastId });
   }, []);
 
-  async function handleCorrectTransactionStatus({ correctData, toastId }) {
+  async function handleCorrectTransactionStatus({ id, newStatus, currentStatus }) {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
+    //show loading
+    const toastId = toast.loading(`Correcting status to ${newStatus}...`);
 
     // This is for add opacity-50 style to updated row
     setCorrectingTransactionStatusIds((prev) => {
-      const newIds = [...prev, correctData.id];
+      const newIds = [...prev, id];
       correctingTransactionStatusIdsRef.current = newIds;
       return newIds;
     });
 
-    const editRes = await fixTransactionStatus({ id: correctData.id, status: correctData.newStatus });
+    const editRes = await fixTransactionStatus({ id, status: newStatus });
 
     setCorrectingTransactionStatusIds((prev) => {
-      const newIds = prev.filter(prevId => prevId !== correctData.id);
+      const newIds = prev.filter(prevId => prevId !== id);
       correctingTransactionStatusIdsRef.current = newIds;
       return newIds;
     });
@@ -487,25 +489,25 @@ export default function TransactionsTable() {
 
           if (!filters?.status || filters?.status === 'all') {
             newTransactions = prevTransaction.items.map(transaction => {
-              if (transaction.id === correctData.id) {
+              if (transaction.id === id) {
                 const result = {
                   ...transaction,
-                  status: correctData.newStatus,
+                  status: newStatus,
                   updatedAt: editRes.data.updatedAt,
                 };
-                if (correctData.newStatus === TransactionStatus.PAID) {
+                if (newStatus === TransactionStatus.PAID) {
                   result.invoices = editRes.data.invoices;
 
                   if (editRes.data.paidAt) {
                     result.paidAt = editRes.data.paidAt;
                   }
 
-                  if (correctData.currentStatus === TransactionStatus.REFUND) {
+                  if (currentStatus === TransactionStatus.REFUND) {
                     result.refundedAt = null;
                   }
                 }
 
-                if (correctData.newStatus === TransactionStatus.CANCELLED) {
+                if (newStatus === TransactionStatus.CANCELLED) {
                   result.paidAt = null;
                 }
 
@@ -514,7 +516,7 @@ export default function TransactionsTable() {
               return transaction;
             });
           } else {
-            newTransactions = prevTransaction.items.filter(t => t.id !== correctData.id);
+            newTransactions = prevTransaction.items.filter(t => t.id !== id);
           }
 
           return {
@@ -531,27 +533,27 @@ export default function TransactionsTable() {
             (oldData) => {
               if (!oldData) return oldData;
               
-              const targetTransaction = oldData.items.find(t => t.id === correctData.id);
+              const targetTransaction = oldData.items.find(t => t.id === id);
 
               if (targetTransaction) {
                 const newTargetTransaction = {
                   ...targetTransaction,
-                  status: correctData.newStatus,
+                  status: newStatus,
                   updatedAt: editRes.data.updatedAt,
                 };
-                if (correctData.newStatus === TransactionStatus.PAID) {
+                if (newStatus === TransactionStatus.PAID) {
                   newTargetTransaction.invoices = editRes.data.invoices;
 
                   if (editRes.data.paidAt) {
                     newTargetTransaction.paidAt = editRes.data.paidAt;
                   }
 
-                  if (correctData.currentStatus === TransactionStatus.REFUND) {
+                  if (currentStatus === TransactionStatus.REFUND) {
                     newTargetTransaction.refundedAt = null;
                   }
                 }
 
-                if (correctData.newStatus === TransactionStatus.CANCELLED) {
+                if (newStatus === TransactionStatus.CANCELLED) {
                   newTargetTransaction.paidAt = null;
                 }
 
@@ -559,7 +561,7 @@ export default function TransactionsTable() {
                   ...oldData,
                   items: [
                     newTargetTransaction,
-                    ...oldData.items.filter(t => t.id !== correctData.id),
+                    ...oldData.items.filter(t => t.id !== id),
                   ],
                 };
               }
@@ -576,7 +578,7 @@ export default function TransactionsTable() {
 
               return {
                 ...oldData,
-                items: oldData.items.filter(t => t.id !== correctData.id),
+                items: oldData.items.filter(t => t.id !== id),
               };
             },
           );
@@ -584,7 +586,7 @@ export default function TransactionsTable() {
           hasSuccessfulCorrectStatusRef.current = true;
         }
       } else {
-        const newTransactions = transaction.items.filter(t => t.id !== correctData.id);
+        const newTransactions = transaction.items.filter(t => t.id !== id);
         const newRowCount = transaction.rowCount - 1;
 
         if (!isLastPage({

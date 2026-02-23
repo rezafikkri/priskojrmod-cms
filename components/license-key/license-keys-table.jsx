@@ -254,21 +254,23 @@ export default function LicenseKeysTable() {
     }
   }
 
-  async function handleDelete({ deleteData, toastId }) {
+  async function handleDelete({ id }) {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
+    // show loading
+    const toastId = toast.loading('Deleting license key...');
 
     // This is for add opacity-50 style to deleted row
     setDeletingIds((prev) => {
-      const newIds = [...prev, deleteData.id];
+      const newIds = [...prev, id];
       deletingIdsRef.current = newIds;
       return newIds;
     });
 
-    const removeRes = await removeLicenseKey(deleteData.id);
+    const removeRes = await removeLicenseKey(id);
 
     setDeletingIds((prev) => {
-      const newIds = prev.filter(id => id !== deleteData.id);
+      const newIds = prev.filter(prevId => prevId !== id);
       deletingIdsRef.current = newIds;
       return newIds;
     });
@@ -283,12 +285,12 @@ export default function LicenseKeysTable() {
       if (searchedLicenseKey) {
         setSearchedLicenseKey((prevLicenseKey) => ({
           ...prevLicenseKey,
-          items: prevLicenseKey.items.filter(slk => slk.id !== deleteData.id),
+          items: prevLicenseKey.items.filter(slk => slk.id !== id),
         }));
 
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       } else {
-        const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== deleteData.id);
+        const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== id);
         const newRowCount = licenseKey.rowCount - 1;
 
         if (!isLastPage({
@@ -335,8 +337,8 @@ export default function LicenseKeysTable() {
       
       // if id exist in rowSelection then remove
       setRowSelection(prev => {
-        if (!(deleteData.id in prev)) return prev;
-        const { [deleteData.id]:_, ...next } = prev;
+        if (!(id in prev)) return prev;
+        const { [id]:_, ...next } = prev;
         return next;
       });
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
@@ -485,21 +487,24 @@ export default function LicenseKeysTable() {
     setIsRegenerating(false);
   }
 
-  async function handleEditRevokeStatus({ editRevokeStatusData, toastId }) {
+  async function handleEditRevokeStatus({ id, isRevoked }) {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
+    const toastId = toast.loading(
+      `${isRevoked ? 'Unrevoking' : 'Revoking'} license key...`,
+    );
 
     // This is for add opacity-50 style to updated revoke status row
     setUpdatingRevokeStatusIds((prev) => {
-      const newIds = [...prev, editRevokeStatusData.id];
+      const newIds = [...prev, id];
       updatingRevokeStatusIdsRef.current = newIds;
       return newIds;
     });
 
-    const editRes = await editLicenseKeyRevokeStatus(editRevokeStatusData.id, !editRevokeStatusData.isRevoked);
+    const editRes = await editLicenseKeyRevokeStatus(id, !isRevoked);
 
     setUpdatingRevokeStatusIds((prev) => {
-      const newIds = prev.filter(id => id !== editRevokeStatusData.id);
+      const newIds = prev.filter(prevId => prevId !== id);
       updatingRevokeStatusIdsRef.current = newIds;
       return newIds;
     });
@@ -514,12 +519,12 @@ export default function LicenseKeysTable() {
       if (searchedLicenseKey) {
         setSearchedLicenseKey((prevLicenseKey) => ({
           ...prevLicenseKey,
-          items: prevLicenseKey.items.filter(slk => slk.id !== editRevokeStatusData.id),
+          items: prevLicenseKey.items.filter(slk => slk.id !== id),
         }));
 
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       } else {
-        const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== editRevokeStatusData.id);
+        const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== id);
         const newRowCount = licenseKey.rowCount - 1;
 
         if (!isLastPage({
@@ -566,13 +571,13 @@ export default function LicenseKeysTable() {
 
       // if id exist in rowSelection then remove
       setRowSelection(prev => {
-        if (!(editRevokeStatusData.id in prev)) return prev;
-        const { [editRevokeStatusData.id]:_, ...next } = prev;
+        if (!(id in prev)) return prev;
+        const { [id]:_, ...next } = prev;
         return next;
       });
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       toast.success(
-        editRevokeStatusData.isRevoked
+        isRevoked
           ? 'License key unrevoked successfully'
           : 'License key revoked successfully',
         { id: toastId },
@@ -605,21 +610,23 @@ export default function LicenseKeysTable() {
     }
   }
 
-  async function handleResetDevice({ resetData, toastId }) {
+  async function handleResetDevice({ id }) {
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
+    // show loading
+    const toastId = toast.loading('Resetting device...');
 
     // This is for add opacity-50 style target row
     setResetDeviceIds((prev) => {
-      const newIds = [...prev, resetData.id];
+      const newIds = [...prev, id];
       resetDeviceIdsRef.current = newIds;
       return newIds;
     });
 
-    const releaseRes = await releaseDevice(resetData.id);
+    const releaseRes = await releaseDevice(id);
 
     setResetDeviceIds((prev) => {
-      const newIds = prev.filter(id => id !== resetData.id);
+      const newIds = prev.filter(prevId => prevId !== id);
       resetDeviceIdsRef.current = newIds;
       return newIds;
     });
@@ -629,7 +636,7 @@ export default function LicenseKeysTable() {
         setSearchedLicenseKey((prevLicenseKey) => ({
           ...prevLicenseKey,
           items: prevLicenseKey.items.map(slk => {
-            if (slk.id === resetData.id) {
+            if (slk.id === id) {
               return {
                 ...slk,
                 deviceId: null,
@@ -648,7 +655,7 @@ export default function LicenseKeysTable() {
             (oldData) => {
               if (!oldData) return oldData;
               
-              const targetLicenseKey = oldData.items.find(lk => lk.id === resetData.id);
+              const targetLicenseKey = oldData.items.find(lk => lk.id === id);
 
               if (targetLicenseKey) {
                 return {
@@ -659,7 +666,7 @@ export default function LicenseKeysTable() {
                       deviceId: null,
                       updatedAt: releaseRes.data.updatedAt,
                     },
-                    ...oldData.items.filter(lk => lk.id !== resetData.id),
+                    ...oldData.items.filter(lk => lk.id !== id),
                   ],
                 };
               }
@@ -676,7 +683,7 @@ export default function LicenseKeysTable() {
 
               return {
                 ...oldData,
-                items: oldData.items.filter(lk => lk.id !== resetData.id),
+                items: oldData.items.filter(lk => lk.id !== id),
               };
             },
           );
@@ -687,8 +694,8 @@ export default function LicenseKeysTable() {
 
       // if id exist in rowSelection then remove
       setRowSelection(prev => {
-        if (!(resetData.id in prev)) return prev;
-        const { [resetData.id]:_, ...next } = prev;
+        if (!(id in prev)) return prev;
+        const { [id]:_, ...next } = prev;
         return next;
       });
       queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });

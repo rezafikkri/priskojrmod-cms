@@ -11,7 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { toast } from 'sonner';
 
 export default function DeleteDialog({
   onDelete,
@@ -31,8 +30,7 @@ export default function DeleteDialog({
     onIsOpenChange(false);
     onDeleteDataChange(null);
     setEmail('');
-    const toastId = toast.loading('Deleting customer...');
-    onDelete({ deleteData, toastId });
+    onDelete(deleteData);
   }
 
   function handleOpenChange() {

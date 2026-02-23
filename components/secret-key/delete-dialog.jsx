@@ -31,8 +31,7 @@ export default function DeleteDialog({
     setIsOpenDeleteDialog(false);
     setDeleteData(null);
     setAppName('');
-    const toastId = toast.loading('Deleting secret key...');
-    onDelete({ deleteData, toastId });
+    onDelete(deleteData);
   }
 
   function handleOpenChange() {

@@ -58,9 +58,8 @@ export default function CorrectStatusDialog({
     onCorrectDataChange(null);
     setTransactionCode('');
     setEmail('');
-    const toastId = toast.loading(`Correcting status to ${newStatus}...`);
     correctData.newStatus = newStatus;
-    onCorrect({ correctData, toastId });
+    onCorrect(correctData);
   }
 
   function handleOpenChange() {

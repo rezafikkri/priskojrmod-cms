@@ -272,14 +272,16 @@ export default function ProductsTable({ isOwner }) {
     }   
   }, [filters]);
 
-  async function handleDelete({ deleteData, toastId }) {
+  async function handleDelete({ id }) {
     // This is for add opacity-50 style to deleted row
-    setDeletingIds((prevIds) => [...prevIds, deleteData.id]);
+    setDeletingIds((prevIds) => [...prevIds, id]);
+    // show loading
+    const toastId = toast.loading('Deleting product...');
 
-    const removeRes = await removeProduct(deleteData.id);
+    const removeRes = await removeProduct(id);
 
     setDeletingIds((prevIds) =>
-      prevIds.filter((id) => id !== deleteData.id)
+      prevIds.filter((prevId) => prevId !== id)
     );
 
     if (removeRes.status === 'success') {
@@ -287,7 +289,7 @@ export default function ProductsTable({ isOwner }) {
         if (!oldData) return oldData;
 
         return {
-          items: oldData.items.filter((data) => data.id !== deleteData.id),
+          items: oldData.items.filter((data) => data.id !== id),
         };
       });
 

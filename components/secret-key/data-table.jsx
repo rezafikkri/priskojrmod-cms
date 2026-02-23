@@ -38,19 +38,21 @@ export default function DataTable({ secretKeys: data }) {
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deletingIds, setDeletingIds] = useState([]);
 
-  async function handleDelete({ deleteData, toastId }) {
+  async function handleDelete({ id }) {
     // This is for add opacity-50 style to deleted row
-    setDeletingIds((prevDeletingIds) => [...prevDeletingIds, deleteData.id]);
+    setDeletingIds((prevIds) => [...prevIds, id]);
+    // show loading
+    const toastId = toast.loading('Deleting secret key...');
 
-    const removeRes = await removeSecretKey(deleteData.id);
+    const removeRes = await removeSecretKey(id);
 
-    setDeletingIds((prevDeletingIds) =>
-      prevDeletingIds.filter((id) => id !== deleteData.id)
+    setDeletingIds((prevIds) =>
+      prevIds.filter((prevId) => prevId !== id)
     );
 
     if (removeRes.status === 'success') {
       setSecretKeys((prevSecretKeys) =>
-        prevSecretKeys.filter((s) => s.id !== deleteData.id)
+        prevSecretKeys.filter((s) => s.id !== id)
       );
 
       toast.success('Secret key deleted successfully', {

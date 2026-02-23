@@ -9,7 +9,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '../ui/button';
-import { toast } from 'sonner';
 
 export default function ResetDeviceDialog({
   onReset,
@@ -21,8 +20,7 @@ export default function ResetDeviceDialog({
   function handleReset() {
     onIsOpenChange(false);
     onResetDataChange(null);
-    const toastId = toast.loading('Resetting device...');
-    onReset({ resetData, toastId });
+    onReset(resetData);
   }
 
   function handleOpenChange() {
