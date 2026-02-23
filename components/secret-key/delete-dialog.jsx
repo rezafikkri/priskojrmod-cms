@@ -11,7 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { toast } from 'sonner';
 
 export default function DeleteDialog({
   onDelete,
@@ -53,7 +52,7 @@ export default function DeleteDialog({
         onInteractOutside={handleClickOutside}
       >
         <DialogHeader>
-          <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
+          <DialogTitle className="text-xl">Delete Secret Key</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">Secret key for app <b>{targetAppName}</b> will be permanently deleted. To confirm, type the app name in the field below.</DialogDescription>
         </DialogHeader>
         <Input

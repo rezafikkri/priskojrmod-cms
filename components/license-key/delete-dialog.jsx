@@ -55,7 +55,7 @@ export default function DeleteDialog({
         onInteractOutside={handleClickOutside}
       >
         <DialogHeader className="text-left">
-          <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
+          <DialogTitle className="text-xl">Delete License Key</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
             License key owned by customer <b>{targetEmail}</b> for app <b>{targetAppName}</b> will be permanently deleted.
           </DialogDescription>

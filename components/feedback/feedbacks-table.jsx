@@ -639,6 +639,7 @@ export default function FeedbacksTable() {
         onDelete={() => handleDelete(deleteData)}
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
+        title="Delete Feedback"
         description={`Feedback (${Object.keys(rowSelection).length}) will be permanently deleted.`}
       />
     </>

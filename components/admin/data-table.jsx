@@ -201,6 +201,7 @@ export default function DataTable({ admins: data }) {
         onDelete={() => handleDelete(deleteData)}
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
+        title="Delete Admin"
         description={`Admin <b>${deleteData?.email}</b> (role: Staff) will be permanently deleted.`}
       />
     </>

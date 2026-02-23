@@ -211,6 +211,7 @@ export default function DataTable({ licenses: data }) {
         onDelete={() => handleDelete(deleteData)}
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
+        title="Delete License"
         description={`License <b>${deleteData?.name}</b> will be permanently deleted.`}
       />
     </>

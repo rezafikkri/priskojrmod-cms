@@ -213,6 +213,7 @@ export default function DataTable({ owners: data }) {
         onDelete={() => handleDelete(deleteData)}
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
+        title="Delete Owner"
         description={`Owner <b>${deleteData?.name}</b> will be permanently deleted.`}
       />
     </>

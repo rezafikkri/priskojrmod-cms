@@ -14,6 +14,7 @@ export default function DeleteDialog({
   onDelete,
   isOpen,
   onClose,
+  title,
   description,
 }) {
   function handleDelete() {
@@ -34,7 +35,7 @@ export default function DeleteDialog({
         onInteractOutside={handleClickOutside}
       >
         <DialogHeader>
-          <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
+          <DialogTitle className="text-xl">{title}</DialogTitle>
 
           <DialogDescription
             className="text-base my-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold"

@@ -190,6 +190,7 @@ export default function DataTable({ categories: data }) {
         onDelete={() => handleDelete(deleteData)}
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
+        title="Delete Category"
         description={`Category <b>${deleteData?.name}</b> will be permanently deleted.`}
       />
     </>

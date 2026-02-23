@@ -52,7 +52,7 @@ export default function DeleteDialog({
         onInteractOutside={handleClickOutside}
       >
         <DialogHeader>
-          <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
+          <DialogTitle className="text-xl">Delete Customer</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
             Customer <b>{targetEmail}</b> will be permanently deleted. 
           </DialogDescription>
