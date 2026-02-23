@@ -31,12 +31,22 @@ import { extractSMIdentifier, getTableHeaderWidth } from '@/lib/utils';
 import { removeOwner } from '@/actions/owner-actions';
 import ProfileBadge from '../ui/profile-badge';
 import { cmsConfig } from '@/config/cms';
+import { useDialog } from '@/hooks/use-dialog';
+import DeleteDialog from '../ui/delete-dialog';
 
 export default function DataTable({ owners: data }) {
   const [owners, setOwners] = useState(data)
   const [deletingIds, setDeletingIds] = useState([]);
 
-  const handleDelete = useCallback(async (id) => {
+  // dialog state
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
+
+  async function handleDelete({ id }) {
     // This is for add opacity-50 style to deleted row
     setDeletingIds((prevIds) => [...prevIds, id]);
     // show loading
@@ -61,7 +71,7 @@ export default function DataTable({ owners: data }) {
         duration: cmsConfig.toast.duration.error,
       });
     }
-  }, []);
+  }
 
   const columns = useMemo(() => [
     {
@@ -122,11 +132,11 @@ export default function DataTable({ owners: data }) {
                 <Link href={`/owner/${row.original.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="-mx-1.5" />
-              <DropdownMenuItem
-                className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                asChild
-              >
-                <button onClick={() => handleDelete(row.original.id)}>
+              <DropdownMenuItem className="w-full text-base" asChild>
+                <button onClick={() => openDeleteDialog({
+                  id: row.original.id,
+                  name: row.getValue('name'),
+                })}>
                   Delete
                 </button>
               </DropdownMenuItem>
@@ -198,6 +208,13 @@ export default function DataTable({ owners: data }) {
           {owners.length} {owners.length === 1 ? 'result' : 'results'}
         </p>
       )}
+
+      <DeleteDialog
+        onDelete={() => handleDelete(deleteData)}
+        isOpen={isOpenDeleteDialog}
+        onClose={closeDeleteDialog}
+        description={`Owner <b>${deleteData?.name}</b> will be permanently deleted.`}
+      />
     </>
   );
 }

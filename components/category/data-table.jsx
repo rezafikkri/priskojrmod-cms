@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,12 +31,22 @@ import { removeCategory } from '@/actions/category-actions';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { cmsConfig } from '@/config/cms';
 import { APPLICATION_CATEGORY_SLUG } from '@/constants/categories';
+import DeleteDialog from '../ui/delete-dialog';
+import { useDialog } from '@/hooks/use-dialog';
 
 export default function DataTable({ categories: data }) {
   const [categories, setCategories] = useState(data);
   const [deletingIds, setDeletingIds] = useState([]);
 
-  const handleDelete = useCallback(async (id) => {
+  // dialog state
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
+
+  async function handleDelete({ id }) {
     // This is for add opacity-50 style to deleted row
     setDeletingIds((prevIds) => [...prevIds, id]);
     // show loading
@@ -59,7 +69,7 @@ export default function DataTable({ categories: data }) {
         duration: cmsConfig.toast.duration.error,
       });
     }
-  }, []);
+  }
 
   const columns = useMemo(() => [
     {
@@ -99,11 +109,11 @@ export default function DataTable({ categories: data }) {
                 <Link href={`/category/${row.original.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="-mx-1.5" />
-              <DropdownMenuItem
-                className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                asChild
-              >
-                <button onClick={() => handleDelete(row.original.id)}>
+              <DropdownMenuItem className="w-full text-base" asChild>
+                <button onClick={() => openDeleteDialog({
+                  id: row.original.id,
+                  name: row.getValue('name'),
+                })}>
                   Delete
                 </button>
               </DropdownMenuItem>
@@ -112,7 +122,7 @@ export default function DataTable({ categories: data }) {
         );
       },
     }
-  ], [deletingIds]);
+  ], [deletingIds, openDeleteDialog]);
   const table = useReactTable({
     data: categories,
     columns,
@@ -175,6 +185,13 @@ export default function DataTable({ categories: data }) {
           {categories.length} {categories.length === 1 ? 'result' : 'results'}
         </p>
       )}
+
+      <DeleteDialog
+        onDelete={() => handleDelete(deleteData)}
+        isOpen={isOpenDeleteDialog}
+        onClose={closeDeleteDialog}
+        description={`Category <b>${deleteData?.name}</b> will be permanently deleted.`}
+      />
     </>
   );
 }

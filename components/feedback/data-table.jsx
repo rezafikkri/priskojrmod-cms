@@ -13,8 +13,7 @@ import { cn, getTableHeaderWidth } from '@/lib/utils';
 
 export default function DataTable({
   table,
-  onDetailDataChange,
-  onIsOpenDetailDialogChange,
+  onOpenDetailDialog,
   processingIds,
   onEditReadStatus,
 }) {
@@ -35,13 +34,12 @@ export default function DataTable({
 
   function handleOpenDetailDialog(columnId, row) {
     if (columnId !== 'actions' && columnId !== 'select') {
-      onDetailDataChange({
+      onOpenDetailDialog({
         name: row.original.name,
         email: row.original.email,
         message: row.getValue('message'),
         createdAt: row.getValue('createdAt'),
       });
-      onIsOpenDetailDialogChange(true);
 
       onEditReadStatus(row.original.id, row.original.isRead);
     }

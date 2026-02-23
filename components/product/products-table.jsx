@@ -466,10 +466,7 @@ export default function ProductsTable({ isOwner }) {
 
               {currentStatus === ProductStatus.UNPUBLISHED && (
                 <>
-                  <DropdownMenuItem
-                    className="w-full text-base"
-                    asChild
-                  >
+                  <DropdownMenuItem className="w-full text-base" asChild>
                     <button
                       onClick={() => handleEditStatus({
                         id: row.original.id,
@@ -478,10 +475,7 @@ export default function ProductsTable({ isOwner }) {
                       })}
                     >Publish</button>
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
-                    asChild
-                  >
+                  <DropdownMenuItem className="w-full text-base" asChild>
                     <button
                       onClick={() => handleEditStatus({
                         id: row.original.id,
@@ -511,10 +505,7 @@ export default function ProductsTable({ isOwner }) {
               {currentStatus !== ProductStatus.PUBLISHED && (
                 <>
                   <DropdownMenuSeparator className="-mx-1.5" />
-                  <DropdownMenuItem
-                    className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                    asChild
-                  >
+                  <DropdownMenuItem className="w-full text-base" asChild>
                     <button
                       onClick={() => {
                         setDeleteData({ id: row.original.id, name: row.getValue('name') });

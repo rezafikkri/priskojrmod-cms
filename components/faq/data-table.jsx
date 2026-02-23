@@ -118,10 +118,7 @@ export default function DataTable({ faqs: data }) {
                 <Link href={`/faq/${row.original.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="-mx-1.5" />
-              <DropdownMenuItem
-                className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                asChild
-              >
+              <DropdownMenuItem className="w-full text-base" asChild>
                 <button onClick={() => handleDelete(row.original.id)}>
                   Delete
                 </button>

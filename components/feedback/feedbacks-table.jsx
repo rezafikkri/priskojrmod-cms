@@ -41,6 +41,8 @@ import TablePagination from '../ui/table-pagination';
 import DetailDialog from './detail-dialog';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { cmsConfig } from '@/config/cms';
+import DeleteDialog from '../ui/delete-dialog';
+import { useDialog } from '@/hooks/use-dialog';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -65,9 +67,20 @@ export default function FeedbacksTable() {
     localStorageGet(columnVisibilityStorageKey) ?? defaultColumnVisibility,
   );
 
-  // detail dialog state
-  const [detailData, setDetailData] = useState(null);
-  const [isOpenDetailDialog, setIsOpenDetailDialog] = useState(false);
+  // dialog state
+  const {
+    data: detailData,
+    isOpen: isOpenDetailDialog,
+    open: openDetailDialog,
+    close: closeDetailDialog,
+  } = useDialog();
+
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
 
   // filters state
   const [filters, setFilters] = useState(null);
@@ -223,10 +236,10 @@ export default function FeedbacksTable() {
     setIsPulling(false);
   }
 
-  async function handleDelete() {
+  async function handleDelete({ selectedId }) {
     // check selected row <= 0
-    const rowSelections = Object.keys(rowSelection);
-    if (rowSelections.length <= 0) return false;
+    const ids = Object.keys(selectedId);
+    if (ids.length <= 0) return false;
 
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
@@ -235,7 +248,7 @@ export default function FeedbacksTable() {
     const toastId = toast.loading('Deleting feedback...');
     setIsDeleting(true);
 
-    const removeRes = await removeFeedbacks(rowSelections);
+    const removeRes = await removeFeedbacks(ids);
 
     if (removeRes.status === 'success') {
       // note the toast id, for updated in queryFn useQuery
@@ -566,7 +579,7 @@ export default function FeedbacksTable() {
               disabled={isFetchingF || isPulling}
             />
 
-            <TooltipWrapper text="Delete feedbacks" background="bg-destructive">
+            <TooltipWrapper text="Delete feedback" background="bg-destructive">
               <Button
                 variant="outline"
                 className="h-auto text-base px-3 py-1.5 inline-block hover:text-destructive dark:hover:text-red-500/90"
@@ -574,7 +587,9 @@ export default function FeedbacksTable() {
                   || Object.keys(rowSelection).length <= 0
                   || isPulling
                   || isDeleting}
-                onClick={handleDelete}
+                onClick={() => openDeleteDialog({
+                  selectedId: rowSelection,
+                })}
               >
                 <Trash className="icon" />
               </Button>
@@ -603,8 +618,7 @@ export default function FeedbacksTable() {
           <TableSelectionAlert table={table} />
           <DataTable
             table={table}
-            onDetailDataChange={setDetailData}
-            onIsOpenDetailDialogChange={setIsOpenDetailDialog}
+            onOpenDetailDialog={openDetailDialog}
             processingIds={markingAsReadIds} 
             onEditReadStatus={handleEditReadStatus}
           />
@@ -617,9 +631,15 @@ export default function FeedbacksTable() {
 
       <DetailDialog
         isOpen={isOpenDetailDialog}
-        onIsOpenChange={setIsOpenDetailDialog}
         detailData={detailData}
-        onDetailDataChange={setDetailData}
+        onClose={closeDetailDialog}
+      />
+
+      <DeleteDialog
+        onDelete={() => handleDelete(deleteData)}
+        isOpen={isOpenDeleteDialog}
+        onClose={closeDeleteDialog}
+        description={`Feedback (${Object.keys(rowSelection).length}) will be permanently deleted.`}
       />
     </>
   );

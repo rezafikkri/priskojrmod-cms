@@ -9,25 +9,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { toast } from 'sonner';
 
 export default function DeleteDialog({
   onDelete,
   isOpen,
-  onIsOpenChange,
-  deleteData,
-  onDeleteDataChange,
+  onClose,
+  description,
 }) {
   function handleDelete() {
-    onIsOpenChange(false);
-    onDeleteDataChange(null);
-    const toastId = toast.loading('Deleting admin...');
-    onDelete({ deleteData, toastId });
-  }
-
-  function handleOpenChange() {
-    onIsOpenChange(false);
-    onDeleteDataChange(null);
+    onClose();
+    onDelete();
   }
 
   function handleClickOutside(e) {
@@ -37,7 +28,7 @@ export default function DeleteDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="sm:max-w-md"
         onInteractOutside={handleClickOutside}
@@ -45,9 +36,10 @@ export default function DeleteDialog({
         <DialogHeader>
           <DialogTitle className="text-xl">Are you absolutely sure?</DialogTitle>
 
-          <DialogDescription className="text-base my-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            Admin <b>{deleteData?.email}</b> (role: Staff) will be permanently deleted.
-          </DialogDescription>
+          <DialogDescription
+            className="text-base my-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         </DialogHeader>
 
         <DialogFooter className="relative">

@@ -842,10 +842,7 @@ export default function TransactionsTable() {
               <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other action</DropdownMenuLabel>
 
               {row.getValue('status') !== TransactionStatus.PENDING && (
-                <DropdownMenuItem
-                  className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
-                  asChild
-                >
+                <DropdownMenuItem className="w-full text-base" asChild>
                   <button
                     onClick={() => {
                       setIsOpenCorrectStatusDialog(true);

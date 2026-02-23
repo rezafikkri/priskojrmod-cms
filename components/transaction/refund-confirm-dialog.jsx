@@ -61,7 +61,7 @@ export default function RefundConfirmDialog({
 
         <DialogFooter className="relative">
           <Button
-            className="h-auto text-base w-full px-3 py-1.5 bg-orange-500 dark:bg-orange-600/90 hover:bg-orange-500/90 hover:dark:bg-orange-600/80 focus-visible:ring-orange-400/50"
+            className="h-auto text-base w-full px-3 py-1.5 bg-amber-530 hover:bg-amber-530/90 focus-visible:ring-amber-530/50"
             onClick={handleContinue}
           > 
             Continue

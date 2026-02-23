@@ -833,10 +833,7 @@ export default function LicenseKeysTable() {
             </DropdownMenuItem>
 
             {row.original.deviceId && (
-              <DropdownMenuItem
-                className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
-                asChild
-              >
+              <DropdownMenuItem className="w-full text-base" asChild>
                 <button
                   onClick={() => {
                     setResetDeviceData({
@@ -853,7 +850,7 @@ export default function LicenseKeysTable() {
             )}
 
             <DropdownMenuItem
-              className="w-full text-base focus:bg-orange-100 dark:focus:bg-orange-300/10"
+              className="w-full text-base"
               asChild
             >
               <button
@@ -871,10 +868,7 @@ export default function LicenseKeysTable() {
               </button>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="-mx-1.5" />
-            <DropdownMenuItem
-              className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-              asChild
-            >
+            <DropdownMenuItem className="w-full text-base" asChild>
               <button
                 onClick={() => {
                   setDeleteData({

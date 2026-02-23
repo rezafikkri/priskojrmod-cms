@@ -10,15 +10,9 @@ import { formatDateTime } from '@/lib/format-date';
 
 export default function DetailDialog({
   isOpen,
-  onIsOpenChange,
   detailData,
-  onDetailDataChange
+  onClose,
 }) {
-  function handleOpenChange() {
-    onIsOpenChange(false);
-    onDetailDataChange(null);
-  }
-
   function handleClickOutside(e) {
     if (e.target && e.target.closest('.toaster.group')) {
       e.preventDefault();
@@ -26,7 +20,7 @@ export default function DetailDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="sm:max-w-lg overflow-y-auto max-h-full"
         onInteractOutside={handleClickOutside}

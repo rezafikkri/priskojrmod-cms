@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,13 +31,23 @@ import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { removeLicense } from '@/actions/license-actions';
 import { cmsConfig } from '@/config/cms';
+import DeleteDialog from '../ui/delete-dialog';
+import { useDialog } from '@/hooks/use-dialog';
 
 export default function DataTable({ licenses: data }) {
   const [licenses, setLicenses] = useState(data);
   const [nameLang, setNameLang] = useState(cmsConfig.defaults.language);
   const [deletingIds, setDeletingIds] = useState([]);
 
-  const handleDelete = useCallback(async (id) => {
+  // dialog state
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
+
+  async function handleDelete({ id }) {
     // This is for add opacity-50 style to deleted row
     setDeletingIds((prevDeletingIds) => [...prevDeletingIds, id]);
     // show loading
@@ -62,7 +72,7 @@ export default function DataTable({ licenses: data }) {
         duration: cmsConfig.toast.duration.error
       });
     }
-  }, []);
+  }
 
   const columns = useMemo(() => [
     {
@@ -120,11 +130,11 @@ export default function DataTable({ licenses: data }) {
                 <Link href={`/license/${row.original.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="-mx-1.5" />
-              <DropdownMenuItem
-                className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                asChild
-              >
-                <button onClick={() => handleDelete(row.original.id)}>
+              <DropdownMenuItem className="w-full text-base" asChild>
+                <button onClick={() => openDeleteDialog({
+                  id: row.original.id,
+                  name: row.original.translations.name[nameLang],
+                })}>
                   Delete
                 </button>
               </DropdownMenuItem>
@@ -133,7 +143,7 @@ export default function DataTable({ licenses: data }) {
         );
       },
     }
-  ], [nameLang, deletingIds]);
+  ], [nameLang, deletingIds, openDeleteDialog]);
   const table = useReactTable({
     data: licenses,
     columns,
@@ -196,6 +206,13 @@ export default function DataTable({ licenses: data }) {
           {licenses.length} {licenses.length === 1 ? 'result' : 'results'}
         </p>
       )}
+
+      <DeleteDialog
+        onDelete={() => handleDelete(deleteData)}
+        isOpen={isOpenDeleteDialog}
+        onClose={closeDeleteDialog}
+        description={`License <b>${deleteData?.name}</b> will be permanently deleted.`}
+      />
     </>
   );
 }

@@ -112,10 +112,7 @@ export default function DataTable({ secretKeys: data }) {
                 <Link href={`/secret-key/${row.original.id}/regenerate`}>Regenerate</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="-mx-1.5" />
-              <DropdownMenuItem
-                className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                asChild
-              >
+              <DropdownMenuItem className="w-full text-base" asChild>
                 <button
                   onClick={() => {
                     setDeleteData({ id: row.original.id, appName: row.getValue('appName') });

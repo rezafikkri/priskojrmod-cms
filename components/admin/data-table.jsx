@@ -30,28 +30,36 @@ import { formatDateTime } from '@/lib/format-date';
 import { removeAdmin } from '@/actions/admin-actions';
 import { getTableHeaderWidth } from '@/lib/utils';
 import ProfileBadge from '../ui/profile-badge';
-import DeleteDialog from './delete-dialog';
+import DeleteDialog from '../ui/delete-dialog';
 import { cmsConfig } from '@/config/cms';
+import { useDialog } from '@/hooks/use-dialog';
 
 export default function DataTable({ admins: data }) {
   const [admins, setAdmins] = useState(data);
   const [deletingIds, setDeletingIds] = useState([]);
-  // for handle delete dialog
-  const [deleteData, setDeleteData] = useState(null);
-  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
 
-  async function handleDelete({ deleteData, toastId }) {
+  // dialog state
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
+
+  async function handleDelete({ id }) {
     // This is for add opacity-50 style to deleted row
-    setDeletingIds((prevIds) => [...prevIds, deleteData.id]);
+    setDeletingIds((prevIds) => [...prevIds, id]);
+    // show loading
+    const toastId = toast.loading('Deleting admin...');
     
-    const removeRes = await removeAdmin(deleteData.id);
+    const removeRes = await removeAdmin(id);
 
     setDeletingIds((prevIds) =>
-      prevIds.filter((prevId) => prevId !== deleteData.id)
+      prevIds.filter((prevId) => prevId !== id)
     );
 
     if (removeRes.status === 'success') {
-      setAdmins((prevAdmins) => prevAdmins.filter(admin => admin.id !== deleteData.id));
+      setAdmins((prevAdmins) => prevAdmins.filter(admin => admin.id !== id));
       toast.success('Admin deleted successfully', {
         id: toastId,
       });
@@ -111,15 +119,12 @@ export default function DataTable({ admins: data }) {
               <Link href={`/admin/${row.original.id}/edit`}>Edit</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="-mx-1.5" />
-            <DropdownMenuItem
-              className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-              asChild
-            >
+            <DropdownMenuItem className="w-full text-base" asChild>
               <button
-                onClick={() => {
-                  setDeleteData({ id: row.original.id, email: row.getValue('email') });
-                  setIsOpenDeleteDialog(true);
-                }}
+                onClick={() => openDeleteDialog({
+                  id: row.original.id,
+                  email: row.getValue('email'),
+                })}
               >
                 Delete
               </button>
@@ -128,7 +133,7 @@ export default function DataTable({ admins: data }) {
         </DropdownMenu>
       ),
     }
-  ], [deletingIds]);
+  ], [deletingIds, openDeleteDialog]);
   const table = useReactTable({
     data: admins,
     columns,
@@ -193,11 +198,10 @@ export default function DataTable({ admins: data }) {
       )}
 
       <DeleteDialog
-        onDelete={handleDelete}
+        onDelete={() => handleDelete(deleteData)}
         isOpen={isOpenDeleteDialog}
-        onIsOpenChange={setIsOpenDeleteDialog}
-        onDeleteDataChange={setDeleteData}
-        deleteData={deleteData}
+        onClose={closeDeleteDialog}
+        description={`Admin <b>${deleteData?.email}</b> (role: Staff) will be permanently deleted.`}
       />
     </>
   );

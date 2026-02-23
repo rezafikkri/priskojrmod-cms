@@ -544,10 +544,7 @@ export default function CustomersTable() {
             }) && (
               <>
                 <DropdownMenuSeparator className="-mx-1.5" />
-                <DropdownMenuItem
-                  className="w-full text-base focus:bg-red-100/70 dark:focus:bg-red-300/10"
-                  asChild
-                >
+                <DropdownMenuItem className="w-full text-base" asChild>
                   <button
                     onClick={() => {
                       setDeleteData({
