@@ -15,8 +15,7 @@ import {
 export default function DeleteDialog({
   onDelete,
   isOpen,
-  onIsOpenChange,
-  onDeleteDataChange,
+  onClose,
   deleteData,
 }) {
   const [email, setEmail] = useState('');
@@ -27,15 +26,13 @@ export default function DeleteDialog({
   function handleDelete() {
     if (email !== targetEmail) return false;
 
-    onIsOpenChange(false);
-    onDeleteDataChange(null);
+    onClose();
     setEmail('');
     onDelete(deleteData);
   }
 
   function handleOpenChange() {
-    onIsOpenChange(false);
-    onDeleteDataChange(null);
+    onClose();
     setEmail('');
   }
 

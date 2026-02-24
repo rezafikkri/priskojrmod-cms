@@ -14,19 +14,12 @@ import { TransactionStatus } from '@/constants/enums';
 export default function CancelConfirmDialog({
   onCancel,
   isOpen,
-  onIsOpenChange,
-  onCancelDataChange,
+  onClose,
   cancelData,
 }) {
   function handleCancel() {
-    onIsOpenChange(false);
-    onCancelDataChange(null);
+    onClose();
     onCancel({ id: cancelData.id, status: TransactionStatus.CANCELLED });
-  }
-
-  function handleOpenChange() {
-    onIsOpenChange(false);
-    onCancelDataChange(null);
   }
 
   function handleClickOutside(e) {
@@ -36,7 +29,7 @@ export default function CancelConfirmDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="sm:max-w-md"
         onInteractOutside={handleClickOutside}

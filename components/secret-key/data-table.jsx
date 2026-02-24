@@ -31,12 +31,19 @@ import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import Link from 'next/link';
 import { cmsConfig } from '@/config/cms';
+import { useDialog } from '@/hooks/use-dialog';
 
 export default function DataTable({ secretKeys: data }) {
   const [secretKeys, setSecretKeys] = useState(data);
-  const [deleteData, setDeleteData] = useState(null);
-  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
   const [deletingIds, setDeletingIds] = useState([]);
+
+  // dialog state
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
 
   async function handleDelete({ id }) {
     // This is for add opacity-50 style to deleted row
@@ -115,12 +122,10 @@ export default function DataTable({ secretKeys: data }) {
               </DropdownMenuItem>
               <DropdownMenuSeparator className="-mx-1.5" />
               <DropdownMenuItem className="w-full text-base" asChild>
-                <button
-                  onClick={() => {
-                    setDeleteData({ id: row.original.id, appName: row.getValue('appName') });
-                    setIsOpenDeleteDialog(true);
-                  }}
-                >
+                <button onClick={() => openDeleteDialog({
+                  id: row.original.id,
+                  appName: row.getValue('appName'),
+                })}>
                   Delete
                 </button>
               </DropdownMenuItem>
@@ -129,7 +134,7 @@ export default function DataTable({ secretKeys: data }) {
         );
       },
     }
-  ], [deletingIds]);
+  ], [deletingIds, openDeleteDialog]);
   const table = useReactTable({
     data: secretKeys,
     columns,
@@ -195,10 +200,9 @@ export default function DataTable({ secretKeys: data }) {
 
       <DeleteDialog
         onDelete={handleDelete}
-        isOpenDeleteDialog={isOpenDeleteDialog}
-        setIsOpenDeleteDialog={setIsOpenDeleteDialog}
+        isOpen={isOpenDeleteDialog}
+        onClose={closeDeleteDialog}
         deleteData={deleteData}
-        setDeleteData={setDeleteData}
       />
     </>
   );

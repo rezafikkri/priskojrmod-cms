@@ -13,18 +13,12 @@ import {
 export default function EditRevokeStatusDialog({
   onEditRevokeStatus,
   isOpen,
-  onIsOpenChange,
-  onEditRevokeStatusDataChange,
+  onClose,
   editRevokeStatusData,
 }) {
   function handleEditRevokeStatus() {
-    onIsOpenChange(false);
-    onEditRevokeStatusDataChange(null);
+    onClose();
     onEditRevokeStatus(editRevokeStatusData);
-  }
-
-  function handleOpenChange() {
-    onIsOpenChange(false);
   }
 
   let title;
@@ -44,7 +38,7 @@ export default function EditRevokeStatusDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="sm:max-w-md"
         onInteractOutside={handleClickOutside}

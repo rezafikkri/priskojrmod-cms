@@ -40,6 +40,7 @@ import DeleteDialog from './delete-dialog';
 import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
 import BanDialog from './ban-dialog';
+import { useDialog } from '@/hooks/use-dialog';
 
 const defaultColumnVisibility = {
   lastActive: true,
@@ -76,10 +77,18 @@ export default function CustomersTable() {
   );
 
   // dialog state
-  const [deleteData, setDeleteData] = useState(null);
-  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
-  const [banData, setBanData] = useState(null);
-  const [isOpenBanDialog, setIsOpenBanDialog] = useState(false);
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
+  const {
+    data: banData,
+    isOpen: isOpenBanDialog,
+    open: openBanDialog,
+    close: closeBanDialog,
+  } = useDialog();
 
   // deleting ids and ban/unban state
   const [deletingIds, setDeletingIds] = useState([]);
@@ -220,6 +229,7 @@ export default function CustomersTable() {
   }
 
   const handleEditBanStatus = useCallback(async ({ id, isBanned }) => {
+    const nextIsBanned = !isBanned;
     // not show table skeleton loading
     shouldShowSkeletonLoading.current = false;
 
@@ -229,9 +239,9 @@ export default function CustomersTable() {
       updatingBanStatusIdsRef.current = newIds;
       return newIds;
     });
-    const toastId = toast.loading(isBanned ? 'Banning customer...' : 'Unbanning customer...');
+    const toastId = toast.loading(nextIsBanned ? 'Banning customer...' : 'Unbanning customer...');
 
-    const editRes = await editCustomerBanStatus(id, isBanned);
+    const editRes = await editCustomerBanStatus(id, nextIsBanned);
 
     setUpdatingBanStatusIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);
@@ -300,7 +310,7 @@ export default function CustomersTable() {
 
       queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
       toast.success(
-        isBanned ? 'Customer has been banned successfully' : 'Customer has been unbanned successfully',
+        nextIsBanned ? 'Customer has been banned successfully' : 'Customer has been unbanned successfully',
         { id: toastId },
       );
     } else {
@@ -520,8 +530,7 @@ export default function CustomersTable() {
               className="w-full text-base"
               onClick={() => {
                 if (row.original.isBanned === false) {
-                  setIsOpenBanDialog(true);
-                  setBanData({
+                  openBanDialog({
                     id: row.original.id,
                     isBanned: row.original.isBanned,
                     email: row.getValue('email'),
@@ -529,7 +538,7 @@ export default function CustomersTable() {
                 } else {
                   handleEditBanStatus({
                     id: row.original.id,
-                    isBanned: !row.original.isBanned,
+                    isBanned: row.original.isBanned,
                   });
                 }
               }}
@@ -547,16 +556,11 @@ export default function CustomersTable() {
               <>
                 <DropdownMenuSeparator className="-mx-1.5" />
                 <DropdownMenuItem className="w-full text-base" asChild>
-                  <button
-                    onClick={() => {
-                      setDeleteData({
-                          id: row.original.id,
-                          email: row.getValue('email'),
-                          isBanned: row.original.isBanned,
-                        });
-                      setIsOpenDeleteDialog(true);
-                    }}
-                  >
+                  <button onClick={() => openDeleteDialog({
+                    id: row.original.id,
+                    email: row.getValue('email'),
+                    isBanned: row.original.isBanned,
+                  })}>
                     Delete
                   </button>
                 </DropdownMenuItem>
@@ -566,7 +570,13 @@ export default function CustomersTable() {
         </DropdownMenu>
       ),
     },
-  ], [deletingIds, updatingBanStatusIds, handleEditBanStatus]);
+  ], [
+    deletingIds,
+    updatingBanStatusIds,
+    handleEditBanStatus,
+    openDeleteDialog,
+    openBanDialog,
+  ]);
   const table = useReactTable({
     data: customer?.items,
     rowCount: customer?.rowCount ?? 0,
@@ -671,16 +681,14 @@ export default function CustomersTable() {
       <DeleteDialog
         onDelete={handleDelete}
         isOpen={isOpenDeleteDialog}
-        onIsOpenChange={setIsOpenDeleteDialog}
-        onDeleteDataChange={setDeleteData}
+        onClose={closeDeleteDialog}
         deleteData={deleteData}
       />
 
       <BanDialog
         onBan={handleEditBanStatus}
         isOpen={isOpenBanDialog}
-        onIsOpenChange={setIsOpenBanDialog}
-        onBanDataChange={setBanData}
+        onClose={closeBanDialog}
         banData={banData}
       />
     </>

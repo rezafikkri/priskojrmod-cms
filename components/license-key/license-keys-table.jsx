@@ -51,6 +51,7 @@ import TablePagination from '../ui/table-pagination';
 import TableSelectionAlert from '../ui/table-selection-alert';
 import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
+import { useDialog } from '@/hooks/use-dialog';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -63,7 +64,7 @@ const defaultColumnVisibility = {
 export default function LicenseKeysTable() {
   const queryClient = useQueryClient();
 
-  // seearc state
+  // search state
   const [isSearching, setIsSearching] = useState(false);
   const [searchedLicenseKey, setSearchedLicenseKey] = useState(null);
   const searchRef = useRef(null);
@@ -91,13 +92,27 @@ export default function LicenseKeysTable() {
     localStorageGet(columnVisibilityStorageKey) ?? defaultColumnVisibility,
   );
 
-  // delete, revoke/unrevoke and reset device dialog state
-  const [deleteData, setDeleteData] = useState(null);
-  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
-  const [editRevokeStatusData, setEditRevokeStatusData] = useState(null);
-  const [isOpenEditRevokeStatusDialog, setIsOpenEditRevokeStatusDialog] = useState(false);
-  const [resetDeviceData, setResetDeviceData] = useState(null);
-  const [isOpenResetDeviceDialog, setIsOpenResetDeviceDialog] = useState(false);
+  // dialog state
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
+
+  const {
+    data: editRevokeStatusData,
+    isOpen: isOpenEditRevokeStatusDialog,
+    open: openEditRevokeStatusDialog,
+    close: closeEditRevokeStatusDialog,
+  } = useDialog();
+
+  const {
+    data: resetDeviceData,
+    isOpen: isOpenResetDeviceDialog,
+    open: openResetDeviceDialog,
+    close: closeResetDeviceDialog,
+  } = useDialog();
 
   // deleting ids and revoke/unrevoke state
   const [deletingIds, setDeletingIds] = useState([]);
@@ -841,16 +856,11 @@ export default function LicenseKeysTable() {
 
             {row.original.deviceId && (
               <DropdownMenuItem className="w-full text-base" asChild>
-                <button
-                  onClick={() => {
-                    setResetDeviceData({
-                      id: row.original.id,
-                      email: row.getValue('email'),
-                      appName: row.getValue('appName'),
-                    });
-                    setIsOpenResetDeviceDialog(true);
-                  }}
-                >
+                <button onClick={() => openResetDeviceDialog({
+                  id: row.original.id,
+                  email: row.getValue('email'),
+                  appName: row.getValue('appName'),
+                })}>
                   Reset device
                 </button>
               </DropdownMenuItem>
@@ -860,32 +870,22 @@ export default function LicenseKeysTable() {
               className="w-full text-base"
               asChild
             >
-              <button
-                onClick={() => {
-                  setEditRevokeStatusData({
-                    id: row.original.id,
-                    email: row.getValue('email'),
-                    appName: row.getValue('appName'),
-                    isRevoked: row.original.isRevoked,
-                  });
-                  setIsOpenEditRevokeStatusDialog(true);
-                }}
-              >
+              <button onClick={() => openEditRevokeStatusDialog({
+                id: row.original.id,
+                email: row.getValue('email'),
+                appName: row.getValue('appName'),
+                isRevoked: row.original.isRevoked,
+              })}>
                 {row.original.isRevoked ? 'Unrevoke' : 'Revoke'}
               </button>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="-mx-1.5" />
             <DropdownMenuItem className="w-full text-base" asChild>
-              <button
-                onClick={() => {
-                  setDeleteData({
-                    id: row.original.id,
-                    email: row.getValue('email'),
-                    appName: row.getValue('appName'),
-                  });
-                  setIsOpenDeleteDialog(true);
-                }}
-              >
+              <button onClick={() => openDeleteDialog({
+                id: row.original.id,
+                email: row.getValue('email'),
+                appName: row.getValue('appName'),
+              })}>
                 Delete
               </button>
             </DropdownMenuItem>
@@ -893,7 +893,14 @@ export default function LicenseKeysTable() {
         </DropdownMenu>
       ),
     },
-  ], [deletingIds, updatingRevokeStatusIds, resetDeviceIds]);
+  ], [
+    deletingIds,
+    updatingRevokeStatusIds,
+    resetDeviceIds,
+    openDeleteDialog,
+    openEditRevokeStatusDialog,
+    openResetDeviceDialog,
+  ]);
   const table = useReactTable({
     data: licenseKey?.items,
     columns,
@@ -1015,22 +1022,19 @@ export default function LicenseKeysTable() {
       <DeleteDialog
         onDelete={handleDelete}
         isOpen={isOpenDeleteDialog}
-        onIsOpenChange={setIsOpenDeleteDialog}
-        onDeleteDataChange={setDeleteData}
+        onClose={closeDeleteDialog}
         deleteData={deleteData}
       />
       <EditRevokeStatusDialog
         onEditRevokeStatus={handleEditRevokeStatus}
         isOpen={isOpenEditRevokeStatusDialog}
-        onIsOpenChange={setIsOpenEditRevokeStatusDialog}
-        onEditRevokeStatusDataChange={setEditRevokeStatusData}
+        onClose={closeEditRevokeStatusDialog}
         editRevokeStatusData={editRevokeStatusData}
       />
       <ResetDeviceDialog
         onReset={handleResetDevice}
         isOpen={isOpenResetDeviceDialog}
-        onIsOpenChange={setIsOpenResetDeviceDialog}
-        onResetDataChange={setResetDeviceData}
+        onClose={closeResetDeviceDialog}
         resetData={resetDeviceData}
       />
     </>

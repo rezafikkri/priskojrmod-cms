@@ -50,6 +50,7 @@ import RefundConfirmDialog from './refund-confirm-dialog';
 import RefundDeadlineDialog from './refund-deadline-dialog';
 import CancelConfirmDialog from './cancel-confirm-dialog';
 import RefundFormDialog from './refund-form-dialog';
+import { useDialog } from '@/hooks/use-dialog';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -87,16 +88,32 @@ export default function TransactionsTable() {
   );
 
   // dialog state
-  const [correctData, setCorrectData] = useState(null);
-  const [isOpenCorrectStatusDialog, setIsOpenCorrectStatusDialog] = useState(false);
+  const {
+    data: correctData,
+    isOpen: isOpenCorrectStatusDialog,
+    open: openCorrectStatusDialog,
+    close: closeCorrectStatusDialog,
+  } = useDialog();    
+  
+  const {
+    data: refundDeadlineData,
+    isOpen: isOpenRefundDeadlineDialog,
+    open: openRefundDeadlineDialog,
+    close: closeRefundDeadlineDialog,
+  } = useDialog();
+
+  const {
+    data: cancelData,
+    isOpen: isOpenCancelConfirmDialog,
+    open: openCancelConfirmDialog,
+    close: closeCancelConfirmDialog,
+  } = useDialog();
+
   const [seeDetailsId, setSeeDetailsId] = useState(null);
+  
   const [refundData, setRefundData] = useState(null);
-  const [isOpenRefundConfirmDialog, setIsOpenRefundConfirmDialog] = useState(false);
   const [isOpenRefundFormDialog, setIsOpenRefundFormDialog] = useState(false);
-  const [refundDeadlineData, setRefundDeadlineData] = useState(null);
-  const [isOpenRefundDeadlineDialog, setIsOpenRefundDeadlineDialog] = useState(false);
-  const [cancelData, setCancelData] = useState(null);
-  const [isOpenCancelConfirmDialog, setIsOpenCancelConfirmDialog] = useState(false);
+  const [isOpenRefundConfirmDialog, setIsOpenRefundConfirmDialog] = useState(false);
 
   // updating ids state
   const [updatingTransactionStatusIds, setUpdatingTransactionStatusIds] = useState([]);
@@ -795,46 +812,39 @@ export default function TransactionsTable() {
             <DropdownMenuContent align="end" className="min-w-50">
               {changeStatusMenus.length > 0 && (
                 <>
-                  <DropdownMenuLabel
-                    className="text-muted-foreground text-[15px]"
-                  >
+                  <DropdownMenuLabel className="text-muted-foreground text-[15px]">
                     Change status to
                   </DropdownMenuLabel>
                   {changeStatusMenus.map(cs => (
-                    <DropdownMenuItem
-                      key={cs}
-                      className="w-full text-base"
-                      asChild
-                    >
-                      <button
-                        onClick={() => {
-                          if (cs === TransactionStatus.REFUND) {
-                            let newRefundData = {
-                              id: row.original.id,
-                              transactionCode: row.getValue('code'),
-                              email: row.getValue('customerEmail'),
-                            };
+                    <DropdownMenuItem key={cs} className="w-full text-base" asChild>
+                      <button onClick={() => {
+                        if (cs === TransactionStatus.REFUND) {
+                          let newRefundData = {
+                            id: row.original.id,
+                            transactionCode: row.getValue('code'),
+                            email: row.getValue('customerEmail'),
+                          };
 
-                            if (!row.original.customerId || row.original.customer.isBanned) {
-                              setIsOpenRefundConfirmDialog(true);
-                              newRefundData.customerId = row.original.customerId;
-                            } else {
-                              setIsOpenRefundFormDialog(true);
-                            }
-
-                            setRefundData(newRefundData);
-                          } else if (cs === TransactionStatus.CANCELLED) {
-                            setIsOpenCancelConfirmDialog(true);
-                            setCancelData({
-                              id: row.original.id,
-                              transactionCode: row.getValue('code'),
-                              email: row.getValue('customerEmail'),
-                            });
+                          if (!row.original.customerId || row.original.customer.isBanned) {
+                            setIsOpenRefundConfirmDialog(true);
+                            newRefundData.customerId = row.original.customerId;
                           } else {
-                            handleEditTransactionStatus({ id: row.original.id, status: cs });
+                            setIsOpenRefundFormDialog(true);
                           }
-                        }}
-                      >{cs.replace(/^./, (match) => match.toUpperCase())}</button>
+
+                          setRefundData(newRefundData);
+                        } else if (cs === TransactionStatus.CANCELLED) {
+                          openCancelConfirmDialog({
+                            id: row.original.id,
+                            transactionCode: row.getValue('code'),
+                            email: row.getValue('customerEmail'),
+                          });
+                        } else {
+                          handleEditTransactionStatus({ id: row.original.id, status: cs });
+                        }
+                      }}>
+                        {cs.replace(/^./, (match) => match.toUpperCase())}
+                      </button>
                     </DropdownMenuItem>
                   ))}
 
@@ -845,17 +855,12 @@ export default function TransactionsTable() {
 
               {row.getValue('status') !== TransactionStatus.PENDING && (
                 <DropdownMenuItem className="w-full text-base" asChild>
-                  <button
-                    onClick={() => {
-                      setIsOpenCorrectStatusDialog(true);
-                      setCorrectData({
-                        id: row.original.id,
-                        transactionCode: row.getValue('code'),
-                        email: row.getValue('customerEmail'),
-                        currentStatus: row.getValue('status'),
-                      });
-                    }}
-                  >
+                  <button onClick={() => openCorrectStatusDialog({
+                    id: row.original.id,
+                    transactionCode: row.getValue('code'),
+                    email: row.getValue('customerEmail'),
+                    currentStatus: row.getValue('status'),
+                  })}>
                     Correct status
                   </button>
                 </DropdownMenuItem>
@@ -880,28 +885,20 @@ export default function TransactionsTable() {
 
               {row.getValue('status') === TransactionStatus.PAID && (
                 <>
-                  <DropdownMenuItem
-                    className="w-full text-base"
-                    asChild
-                  >
+                  <DropdownMenuItem className="w-full text-base" asChild>
                     <button onClick={() => handleCopyableMessage(row.original.id)}>
                       Copy confirmation message
                     </button>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem
-                    className="w-full text-base"
-                    asChild
-                    onClick={() => {
-                      setIsOpenRefundDeadlineDialog(true);
-                      setRefundDeadlineData({
-                        transactionCode: row.getValue('code'),
-                        email: row.getValue('customerEmail'),
-                        paidAt: row.getValue('paidAt'),
-                      });
-                    }}
-                  >
-                    <button>Check refund deadline</button>
+                  <DropdownMenuItem className="w-full text-base" asChild>
+                    <button onClick={() => openRefundDeadlineDialog({
+                      transactionCode: row.getValue('code'),
+                      email: row.getValue('customerEmail'),
+                      paidAt: row.getValue('paidAt'),
+                    })}>
+                      Check refund deadline
+                    </button>
                   </DropdownMenuItem>
                 </>
               )}
@@ -915,6 +912,9 @@ export default function TransactionsTable() {
     correctingTransactionStatusIds,
     handleEditTransactionStatus,
     handleCopyableMessage,
+    openCorrectStatusDialog,
+    openRefundDeadlineDialog,
+    openCancelConfirmDialog,
   ]);
   const table = useReactTable({
     data: transaction?.items,
@@ -1005,8 +1005,7 @@ export default function TransactionsTable() {
       <CorrectStatusDialog
         onCorrect={handleCorrectTransactionStatus}
         isOpen={isOpenCorrectStatusDialog}
-        onIsOpenChange={setIsOpenCorrectStatusDialog}
-        onCorrectDataChange={setCorrectData}
+        onClose={closeCorrectStatusDialog}
         correctData={correctData}
       />
 
@@ -1030,17 +1029,15 @@ export default function TransactionsTable() {
 
       <RefundDeadlineDialog
         isOpen={isOpenRefundDeadlineDialog}
-        onIsOpenChange={setIsOpenRefundDeadlineDialog}
-        onRefundDeadlineDataChange={setRefundDeadlineData}
+        onClose={closeRefundDeadlineDialog}
         refundDeadlineData={refundDeadlineData}
       />
 
       <CancelConfirmDialog
         onCancel={handleEditTransactionStatus}
         isOpen={isOpenCancelConfirmDialog}
-        onIsOpenChange={setIsOpenCancelConfirmDialog}
+        onClose={closeCancelConfirmDialog}
         cancelData={cancelData}
-        onCancelDataChange={setCancelData}
       />
     </>
   );

@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,13 +31,23 @@ import { Language } from '@/constants/enums';
 import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth } from '@/lib/utils';
 import { cmsConfig } from '@/config/cms';
+import DeleteDialog from '../ui/delete-dialog';
+import { useDialog } from '@/hooks/use-dialog';
 
 export default function DataTable({ faqs: data }) {
   const [faqs, setFaqs] = useState(data);
   const [titleLang, setTitleLang] = useState(cmsConfig.defaults.language);
   const [deletingIds, setDeletingIds] = useState([]);
 
-  const handleDelete = useCallback(async (id) => {
+  // dialog state
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
+
+  async function handleDelete({ id }) {
     // This is for add opacity-50 style to deleted row
     setDeletingIds((prevIds) => [...prevIds, id]);
     // show loading
@@ -60,7 +70,7 @@ export default function DataTable({ faqs: data }) {
         duration: cmsConfig.toast.duration.error
       });
     }
-  }, []);
+  }
 
   const columns = useMemo(() => [
     {
@@ -119,7 +129,10 @@ export default function DataTable({ faqs: data }) {
               </DropdownMenuItem>
               <DropdownMenuSeparator className="-mx-1.5" />
               <DropdownMenuItem className="w-full text-base" asChild>
-                <button onClick={() => handleDelete(row.original.id)}>
+                <button onClick={() => openDeleteDialog({
+                  id: row.original.id,
+                  title: row.original.translations.title[titleLang],
+                })}>
                   Delete
                 </button>
               </DropdownMenuItem>
@@ -128,7 +141,7 @@ export default function DataTable({ faqs: data }) {
         );
       },
     }
-  ], [titleLang, deletingIds]);
+  ], [titleLang, deletingIds, openDeleteDialog]);
   const table = useReactTable({
     data: faqs,
     columns,
@@ -191,6 +204,14 @@ export default function DataTable({ faqs: data }) {
           {faqs.length} {faqs.length === 1 ? 'result' : 'results'}
         </p>
       )}
+
+      <DeleteDialog
+        onDelete={() => handleDelete(deleteData)}
+        isOpen={isOpenDeleteDialog}
+        onClose={closeDeleteDialog}
+        title="Delete FAQ"
+        description={`FAQ <b>${deleteData?.title}</b> will be permanently deleted.`}
+      />
     </>
   );
 }

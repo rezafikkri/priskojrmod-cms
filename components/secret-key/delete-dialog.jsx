@@ -14,10 +14,9 @@ import {
 
 export default function DeleteDialog({
   onDelete,
-  isOpenDeleteDialog,
-  setIsOpenDeleteDialog,
+  isOpen,
+  onClose,
   deleteData,
-  setDeleteData,
 }) {
   const [appName, setAppName] = useState('');
 
@@ -27,15 +26,13 @@ export default function DeleteDialog({
   function handleDelete() {
     if (appName !== deleteData.appName) return false;
 
-    setIsOpenDeleteDialog(false);
-    setDeleteData(null);
+    onClose();
     setAppName('');
     onDelete(deleteData);
   }
 
   function handleOpenChange() {
-    setIsOpenDeleteDialog(false);
-    setDeleteData(null);
+    onClose();
     setAppName('');
   }
 
@@ -46,7 +43,7 @@ export default function DeleteDialog({
   }
 
   return (
-    <Dialog open={isOpenDeleteDialog} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
         className="sm:max-w-md"
         onInteractOutside={handleClickOutside}

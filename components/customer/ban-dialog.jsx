@@ -13,19 +13,12 @@ import {
 export default function BanDialog({
   onBan,
   isOpen,
-  onIsOpenChange,
-  onBanDataChange,
+  onClose,
   banData,
 }) {
   function handleBan() {
-    onIsOpenChange(false);
-    onBanDataChange(null);
-    onBan({ id: banData.id, isBanned: !banData.isBanned });
-  }
-
-  function handleOpenChange() {
-    onIsOpenChange(false);
-    onBanDataChange(null);
+    onClose();
+    onBan(banData);
   }
 
   function handleClickOutside(e) {
@@ -35,7 +28,7 @@ export default function BanDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="sm:max-w-md"
         onInteractOutside={handleClickOutside}

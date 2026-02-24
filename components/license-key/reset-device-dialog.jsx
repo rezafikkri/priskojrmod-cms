@@ -13,19 +13,12 @@ import { Button } from '../ui/button';
 export default function ResetDeviceDialog({
   onReset,
   isOpen,
-  onIsOpenChange,
-  onResetDataChange,
+  onClose,
   resetData,
 }) {
   function handleReset() {
-    onIsOpenChange(false);
-    onResetDataChange(null);
+    onClose();
     onReset(resetData);
-  }
-
-  function handleOpenChange() {
-    onIsOpenChange(false);
-    onResetDataChange(null);
   }
 
   function handleClickOutside(e) {
@@ -35,7 +28,7 @@ export default function ResetDeviceDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="sm:max-w-md"
         onInteractOutside={handleClickOutside}

@@ -18,17 +18,11 @@ import { formatDateTime } from '@/lib/format-date';
 
 export default function RefundDeadlineDialog({
   isOpen,
-  onIsOpenChange,
-  onRefundDeadlineDataChange,
+  onClose,
   refundDeadlineData,
 }) {
   const paidAt = refundDeadlineData?.paidAt;
   const refundDeadline = paidAt + (60 * 60 * 24 * 7);
-
-  function handleOpenChange() {
-    onIsOpenChange(false);
-    onRefundDeadlineDataChange(null);
-  }
 
   function handleClickOutside(e) {
     if (e.target && e.target.closest('.toaster.group')) {
@@ -37,7 +31,7 @@ export default function RefundDeadlineDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="sm:min-w-lg"
         onInteractOutside={handleClickOutside}

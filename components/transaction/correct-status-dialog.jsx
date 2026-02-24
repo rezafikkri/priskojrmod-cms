@@ -11,15 +11,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { toast } from 'sonner';
 import { TransactionStatus } from '@/constants/enums';
 
 export default function CorrectStatusDialog({
   onCorrect,
   isOpen,
-  onIsOpenChange,
+  onClose,
   correctData,
-  onCorrectDataChange,
 }) {
   const [transactionCode, setTransactionCode] = useState('');
   const [email, setEmail] = useState('');
@@ -54,8 +52,7 @@ export default function CorrectStatusDialog({
   function handleCorrect() {
     if (transactionCode !== correctData.transactionCode) return false;
 
-    onIsOpenChange(false);
-    onCorrectDataChange(null);
+    onClose();
     setTransactionCode('');
     setEmail('');
     correctData.newStatus = newStatus;
@@ -63,9 +60,9 @@ export default function CorrectStatusDialog({
   }
 
   function handleOpenChange() {
-    onIsOpenChange(false);
-    onCorrectDataChange(null);
+    onClose();
     setTransactionCode('');
+    setEmail('');
   }
 
   function handleClickOutside(e) {

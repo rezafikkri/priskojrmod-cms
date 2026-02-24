@@ -48,6 +48,7 @@ import DeleteDialog from './delete-dialog';
 import { cmsConfig } from '@/config/cms';
 import { getStatusClasses } from '@/lib/utils';
 import FiltersPopover from './filters-popover';
+import { useDialog } from '@/hooks/use-dialog';
 
 const defaultColumnVisibility = {
   category: false,
@@ -84,9 +85,13 @@ export default function ProductsTable({ isOwner }) {
 
   const [priceCurrency, setPriceCurrency] = useState(cmsConfig.defaults.currency);
 
-  // delete dialog state
-  const [deleteData, setDeleteData] = useState(null);
-  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+  // dialog state
+  const {
+    data: deleteData,
+    isOpen: isOpenDeleteDialog,
+    open: openDeleteDialog,
+    close: closeDeleteDialog,
+  } = useDialog();
 
   const [updatingStatusIds, setUpdatingStatusIds] = useState([]);
   const [updatingPinnedIds, setUpdatingPinnedIds] = useState([]);
@@ -455,12 +460,10 @@ export default function ProductsTable({ isOwner }) {
                   className="w-full text-base"
                   asChild
                 >
-                  <button
-                    onClick={() => handleEditPinned(
-                      row.original.id,
-                      row.original.isPinned,
-                    )}
-                  >
+                  <button onClick={() => handleEditPinned(
+                    row.original.id,
+                    row.original.isPinned,
+                  )}>
                     {row.original.isPinned ? 'Unpin' : 'Pin'}
                   </button>
                 </DropdownMenuItem>
@@ -469,22 +472,22 @@ export default function ProductsTable({ isOwner }) {
               {currentStatus === ProductStatus.UNPUBLISHED && (
                 <>
                   <DropdownMenuItem className="w-full text-base" asChild>
-                    <button
-                      onClick={() => handleEditStatus({
-                        id: row.original.id,
-                        newStatus: ProductStatus.PUBLISHED,
-                        currentStatus: row.getValue('status'),
-                      })}
-                    >Publish</button>
+                    <button onClick={() => handleEditStatus({
+                      id: row.original.id,
+                      newStatus: ProductStatus.PUBLISHED,
+                      currentStatus: row.getValue('status'),
+                    })}>
+                      Publish
+                    </button>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="w-full text-base" asChild>
-                    <button
-                      onClick={() => handleEditStatus({
-                        id: row.original.id,
-                        newStatus: ProductStatus.INACTIVE,
-                        currentStatus: row.getValue('status'),
-                      })}
-                    >Deactivate</button>
+                    <button onClick={() => handleEditStatus({
+                      id: row.original.id,
+                      newStatus: ProductStatus.INACTIVE,
+                      currentStatus: row.getValue('status'),
+                    })}>
+                      Deactivate
+                    </button>
                   </DropdownMenuItem>
                 </>
               )}
@@ -494,13 +497,13 @@ export default function ProductsTable({ isOwner }) {
                   className="w-full text-base"
                   asChild
                 >
-                  <button
-                    onClick={() => handleEditStatus({
-                      id: row.original.id,
-                      newStatus: ProductStatus.UNPUBLISHED,
-                      currentStatus: row.getValue('status'),
-                    })}
-                  >Unpublish</button>
+                  <button onClick={() => handleEditStatus({
+                    id: row.original.id,
+                    newStatus: ProductStatus.UNPUBLISHED,
+                    currentStatus: row.getValue('status'),
+                  })}>
+                    Unpublish
+                  </button>
                 </DropdownMenuItem>
               )}
 
@@ -508,12 +511,10 @@ export default function ProductsTable({ isOwner }) {
                 <>
                   <DropdownMenuSeparator className="-mx-1.5" />
                   <DropdownMenuItem className="w-full text-base" asChild>
-                    <button
-                      onClick={() => {
-                        setDeleteData({ id: row.original.id, name: row.getValue('name') });
-                        setIsOpenDeleteDialog(true);
-                      }}
-                    >
+                    <button onClick={() => openDeleteDialog({
+                      id: row.original.id,
+                      name: row.getValue('name'),
+                    })}>
                       Delete
                     </button>
                   </DropdownMenuItem>
@@ -531,6 +532,7 @@ export default function ProductsTable({ isOwner }) {
     deletingIds,
     handleEditPinned,
     handleEditStatus,
+    openDeleteDialog,
   ]);
   const table = useReactTable({
     data: dataP?.items,
@@ -618,10 +620,9 @@ export default function ProductsTable({ isOwner }) {
 
       <DeleteDialog
         onDelete={handleDelete}
-        isOpenDeleteDialog={isOpenDeleteDialog}
-        onIsOpenDeleteDialogChange={setIsOpenDeleteDialog}
+        isOpen={isOpenDeleteDialog}
+        onClose={closeDeleteDialog}
         deleteData={deleteData}
-        onDeleteDataChange={setDeleteData}
       />
     </>
   );
