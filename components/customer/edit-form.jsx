@@ -39,7 +39,7 @@ export default function EditForm({ customer }) {
     if (editRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['customers'] });
       queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
-      toast.success('Customer updated successfully');
+      toast.success('Customer updated successfully.');
     } else {
       toast.error(editRes.message, { duration: cmsConfig.toast.duration.error });
     }

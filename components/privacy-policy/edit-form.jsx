@@ -59,10 +59,10 @@ export default function EditForm({ privacyPolicy }) {
     if (saveRes.status === 'success') {
       let successMessage;
       if (hasPrivacyPolicy) {
-        successMessage = 'Privacy policy updated successfully';
+        successMessage = 'Privacy policy updated successfully.';
         setUpdatedAt(saveRes.data.updatedAt);
       } else {
-        successMessage = 'Privacy policy created successfully';
+        successMessage = 'Privacy policy created successfully.';
 
         // set id to form
         form.register('id');

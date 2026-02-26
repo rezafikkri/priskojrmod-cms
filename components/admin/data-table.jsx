@@ -60,7 +60,7 @@ export default function DataTable({ admins: data }) {
 
     if (removeRes.status === 'success') {
       setAdmins((prevAdmins) => prevAdmins.filter(admin => admin.id !== id));
-      toast.success('Admin deleted successfully', {
+      toast.success('Admin deleted successfully.', {
         id: toastId,
       });
     } else {

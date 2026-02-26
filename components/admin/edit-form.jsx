@@ -48,7 +48,7 @@ export default function EditForm({ admin }) {
           return dl;
         }),
       );
-      toast.success('Donation link deleted successfully');
+      toast.success('Donation link deleted successfully.');
     } else {
       toast.error(removeRes.message, { duration: cmsConfig.toast.duration.error });
     }
@@ -63,7 +63,7 @@ export default function EditForm({ admin }) {
       ) {
         form.setValue('donationLinks', generateDonationLinkValues(editRes.data.donationLinks ?? []));
       }
-      toast.success('Admin updated successfully');
+      toast.success('Admin updated successfully.');
     } else {
       toast.error(res.message, { duration: cmsConfig.toast.duration.error });
     }

@@ -133,7 +133,7 @@ export default function ExtrasForm({
       setExtras(saveRes.data.extras);
 
       form.reset(saveRes.data.extras);
-      toast.success('Product updated successfully');
+      toast.success('Product updated successfully.');
 
       queryClient.invalidateQueries({ queryKey: ['products'] });
     } else {

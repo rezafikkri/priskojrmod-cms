@@ -60,7 +60,7 @@ export default function DataTable({ categories: data }) {
 
     if (removeRes.status === 'success') {
       setCategories((prevCategories) => prevCategories.filter(category => category.id !== id));
-      toast.success('Category deleted successfully', {
+      toast.success('Category deleted successfully.', {
         id: toastId,
       });
     } else {

@@ -59,10 +59,10 @@ export default function EditForm({ termsOfService }) {
     if (saveRes.status === 'success') {
       let successMessage;
       if (hasTermsOfService) {
-        successMessage = 'Terms of service updated successfully';
+        successMessage = 'Terms of service updated successfully.';
         setUpdatedAt(saveRes.data.updatedAt);
       } else {
-        successMessage = 'Terms of service created successfully';
+        successMessage = 'Terms of service created successfully.';
 
         // set id to form
         form.register('id');

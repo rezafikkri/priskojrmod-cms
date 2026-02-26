@@ -445,7 +445,7 @@ export default function FeedbacksTable() {
       }
 
       queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
-      toast.success('Feedback marked as read successfully', { id: toastId });
+      toast.success('Feedback marked as read successfully.', { id: toastId });
     } else {
       toast.error(editRes.message, {
         id: toastId,

@@ -51,7 +51,7 @@ export default function CreateForm({ products: data }) {
       // filter product when success, cause the app already have secret-key "one-to-one"
       setProducts(items => items.filter(item => item.id !== data.productId));
       
-      toast.success('Secret key created successfully');
+      toast.success('Secret key created successfully.');
     } else {
       toast.error(addRes.message, { duration: cmsConfig.toast.duration.error });
     }
@@ -76,7 +76,7 @@ export default function CreateForm({ products: data }) {
             name="productId"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="text-base">Product</FormLabel>
+                <FormLabel className="text-base">Application</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value} disabled={isSubmitting}
@@ -99,7 +99,7 @@ export default function CreateForm({ products: data }) {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select an application product
+                  Select an application
                 </FormDescription>
                 <FormMessage />
               </FormItem>

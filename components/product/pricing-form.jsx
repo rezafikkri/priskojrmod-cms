@@ -5,7 +5,6 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,8 +12,7 @@ import {
 } from '../ui/form';
 import { Label } from '../ui/label';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
-import { CurrencyCode, PriceType, ProductStatus } from '@/constants/enums';
-import { Checkbox } from '../ui/checkbox';
+import { CurrencyCode, PriceType } from '@/constants/enums';
 import { Button } from '../ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { createProductPricingSchema, editProductPricingSchema } from '@/lib/validators/product-validator';
@@ -213,7 +211,7 @@ export default function PricingForm({
         // reset step and form
         clearDraft();
         onResetStep();
-        toast.success('Product created successfully');
+        toast.success('Product created successfully.');
       } else {
         // if success, set basic, content, extras and pricing data, like id, etc.
         setBasic({
@@ -248,7 +246,7 @@ export default function PricingForm({
           newPricing.discount = { value: '', expiredAt: '' };
         }
 
-        let successMessage = 'Product updated successfully';
+        let successMessage = 'Product updated successfully.';
         if (!data.coupon.id && data.coupon.code) {
           newPricing.coupon = {
             id: saveRes.data.pricing.coupon.id,

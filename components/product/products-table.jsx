@@ -209,8 +209,8 @@ export default function ProductsTable({ isOwner }) {
 
       toast.success(
         !isPinned
-          ? 'Product pinned successfully'
-          : 'Product unpinned successfully',
+          ? 'Product pinned successfully.'
+          : 'Product unpinned successfully.',
         { id: toastId },
       );
     } else {
@@ -222,15 +222,15 @@ export default function ProductsTable({ isOwner }) {
     const toastText = {
       [ProductStatus.PUBLISHED]: {
         loading: 'Publishing product...',
-        success: 'Product published successfully',
+        success: 'Product published successfully.',
       },
       [ProductStatus.UNPUBLISHED]: {
         loading: 'Unpublishing product...',
-        success: 'Product unpublished successfully',
+        success: 'Product unpublished successfully.',
       },
       [ProductStatus.INACTIVE]: {
         loading: 'Deactivating product...',
-        success: 'Product deactivated successfully',
+        success: 'Product deactivated successfully.',
       },
     };
 
@@ -298,7 +298,7 @@ export default function ProductsTable({ isOwner }) {
         };
       });
 
-      toast.success('Product deleted successfully', {
+      toast.success('Product deleted successfully.', {
         id: toastId,
       });
     } else {

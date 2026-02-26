@@ -23,7 +23,7 @@ export default function EditForm({ owner }) {
   async function handleSubmit(data) {
     const editRes = await editOwner(data);
     if (editRes.status === 'success') {
-      toast.success('Owner updated successfully');
+      toast.success('Owner updated successfully.');
     } else {
       toast.error(editRes.message, { duration: cmsConfig.toast.duration.error });
     }

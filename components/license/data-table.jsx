@@ -63,7 +63,7 @@ export default function DataTable({ licenses: data }) {
       setLicenses((prevLicenses) =>
         prevLicenses.filter((license) => license.id !== id)
       );
-      toast.success('License deleted successfully', {
+      toast.success('License deleted successfully.', {
         id: toastId,
       });
     } else {

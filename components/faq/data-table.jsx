@@ -61,7 +61,7 @@ export default function DataTable({ faqs: data }) {
 
     if (removeRes.status === 'success') {
       setFaqs((prevFaqs) => prevFaqs.filter(faq => faq.id !== id));
-      toast.success('FAQ deleted successfully', {
+      toast.success('FAQ deleted successfully.', {
         id: toastId,
       });
     } else {

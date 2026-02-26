@@ -310,7 +310,7 @@ export default function CustomersTable() {
 
       queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
       toast.success(
-        nextIsBanned ? 'Customer has been banned successfully' : 'Customer has been unbanned successfully',
+        nextIsBanned ? 'Customer has been banned successfully.' : 'Customer has been unbanned successfully.',
         { id: toastId },
       );
     } else {
@@ -421,7 +421,7 @@ export default function CustomersTable() {
       }
 
       queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
-      toast.success('Customer deleted successfully', { id: toastId });
+      toast.success('Customer deleted successfully.', { id: toastId });
     } else {
       toast.error(removeRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }

@@ -62,7 +62,7 @@ export default function DataTable({ secretKeys: data }) {
         prevSecretKeys.filter((s) => s.id !== id)
       );
 
-      toast.success('Secret key deleted successfully', {
+      toast.success('Secret key deleted successfully.', {
         id: toastId,
       });
     } else {

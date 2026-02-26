@@ -50,7 +50,7 @@ export function EditForm({
           return dl;
         }),
       );
-      toast.success('Donation link deleted successfully');
+      toast.success('Donation link deleted successfully.');
     } else {
       toast.error(removeRes.message, { duration: cmsConfig.toast.duration.error });
     }
@@ -80,7 +80,7 @@ export function EditForm({
         form.setValue('donationLinks', generateDonationLinkValues(editRes.data.donationLinks ?? []));
       }
 
-      toast.success('Account settings updated successfully');
+      toast.success('Account settings updated successfully.');
     } else {
       toast.error(editRes.message, { duration: cmsConfig.toast.duration.error });
     }
