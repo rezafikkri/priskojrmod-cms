@@ -43,6 +43,7 @@ import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { cmsConfig } from '@/config/cms';
 import DeleteDialog from '../ui/delete-dialog';
 import { useDialog } from '@/hooks/use-dialog';
+import { getUnixTimestamp } from '@/lib/utils';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -184,7 +185,7 @@ export default function FeedbacksTable() {
     if (lastPulledAt) {
       // only each 1 hour can pull again
       const nextPullAllowedAt = lastPulledAt + (60 * 60);
-      if (Math.floor(new Date().getTime() / 1000) < nextPullAllowedAt) {
+      if (getUnixTimestamp() < nextPullAllowedAt) {
         const reminder = nextPullAllowedAt % 60;
         const roundedForDisplay = reminder === 0 ? nextPullAllowedAt : nextPullAllowedAt + (60 - reminder);
 
@@ -205,7 +206,7 @@ export default function FeedbacksTable() {
     if (loadRes.status === 'success') {
       if (loadRes.data.count > 0) {
         // set or update last pull time
-        const currentTime = Math.floor(new Date().getTime() / 1000);
+        const currentTime = getUnixTimestamp();
         localStorageSet('lastPulledAt', currentTime, true);
         setLastPulledAt(currentTime);
 

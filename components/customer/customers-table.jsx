@@ -15,7 +15,7 @@ import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { isLastPage } from '@/lib/utils';
+import { isLastPage, getUnixTimestamp } from '@/lib/utils';
 import {
   Alert,
   AlertTitle,
@@ -457,7 +457,7 @@ export default function CustomersTable() {
 
   // TABLE definition
   const shouldShowDeleteButton = useCallback(({ googleUserId, lastActive, isBanned }) => {
-    const now = Math.floor(new Date().getTime() / 1000);
+    const now = getUnixTimestamp();
     return (
       !googleUserId ||
       !lastActive ||
