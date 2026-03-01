@@ -42,7 +42,7 @@ export default function FormFields({
         ) : (
           <FormItem>
             <FormLabel className="text-base">Email</FormLabel>
-            <p>{form.getValues('email')}</p>
+            <p className="break-all">{form.getValues('email')}</p>
             <FormDescription>To prevent account misuse, email can only be updated once the user has been banned. This is typically used during account recovery.</FormDescription>
           </FormItem>
         )}

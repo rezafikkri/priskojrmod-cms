@@ -50,9 +50,13 @@ const defaultColumnVisibility = {
 
 export default function CustomersTable() {
   const queryClient = useQueryClient();
+
+  // search state
   const [isSearching, setIsSearching] = useState(false);
   const [searchedCustomer, setSearchedCustomer] = useState(null);
+  const [searchError, setSearchError] = useState(null);
   const searchRef = useRef(null);
+  const hasSearched = !!searchedCustomer;
 
   // filters state
   const [filters, setFilters] = useState({ showBanned: false });
@@ -66,9 +70,9 @@ export default function CustomersTable() {
     pageIndex: 0,
     pageSize: cmsConfig.pagination.pageSize,
   });
-  function handlePaginationChange(pagination) {
+  function handlePaginationChange(pagination, showSkeleton = false) {
     // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
+    shouldShowSkeletonLoading.current = showSkeleton;
     setPagination(pagination);
   }
   const columnVisibilityStorageKey = 'customers:column-visibility';
@@ -136,7 +140,7 @@ export default function CustomersTable() {
     placeholderData: keepPreviousData,
     staleTime: 1000 * 20,
     gcTime: 1000 * 60 * 3,
-    enabled: !searchedCustomer,
+    enabled: !hasSearched,
   });
 
   async function handleSearch(appliedFilters) {
@@ -152,7 +156,7 @@ export default function CustomersTable() {
           // if previoesly searchedCustomer is null, then show skeleton loading
           // for all table, besides that, then show toast loading only
           let toastId;
-          if (searchedCustomer) {
+          if (hasSearched) {
             toastId = toast.loading('Searching customers...');
           }
 
@@ -164,16 +168,21 @@ export default function CustomersTable() {
               }
               setIsSearching(false);
             },
-            errorMessage: 'Something went wrong while searching. Please try again.',
+            defaultErrorMessage: 'Something went wrong while searching. Please try again.',
           });
         },
         staleTime: 10_000,
         gcTime: 10_000,
       });
 
+      setSearchError(null);
       setSearchedCustomer(result.data);
     } catch (err) {
-      console.error(err);
+      // Keep the searchedCustomer state to mark the current mode as search mode,
+      // even if the search fails. The Clear button will still be shown,
+      // allowing the admin to clear the search and return to normal mode.
+      setSearchedCustomer([]);
+      setSearchError(err);
     }
   }
 
@@ -184,11 +193,15 @@ export default function CustomersTable() {
   }
 
   function handleClearSearchInput() {
-    handlePaginationChange({
-      ...pagination,
-      pageIndex: 0,
-    });
+    handlePaginationChange(
+      {
+        ...pagination,
+        pageIndex: 0,
+      }, // pagination
+      true, // showSkeleton
+    );
     setSearchedCustomer(null);
+    setSearchError(null);
     searchRef.current.value = '';
   }
 
@@ -202,13 +215,16 @@ export default function CustomersTable() {
   }
 
   function handleFilter(newFilters) {
-    if (searchedCustomer) {
+    if (hasSearched) {
       handleSearch(newFilters);
     } else {
-      handlePaginationChange({
-        ...pagination,
-        pageIndex: 0,
-      });
+      handlePaginationChange(
+        {
+          ...pagination,
+          pageIndex: 0,
+        }, // pagination
+        dataC ? false : true, // showSkeleton
+      );
     }
 
     // set filters for trigger refetch in normal mode
@@ -217,13 +233,15 @@ export default function CustomersTable() {
   }
 
   function handleRefresh() {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
+    // Every action that triggers useQuery refetch must include this check.
+    // If data has never been successfully fetched (e.g. initial fetch failed),
+    // show skeleton instead of toast to prevent error caused by undefined data being passed to the table
+    shouldShowSkeletonLoading.current = dataC ? false : true;
     
     queryClient.invalidateQueries({ queryKey: ['customers'] });
     queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
 
-    if (searchedCustomer) {
+    if (hasSearched) {
       handleSearch(filters);
     }
   }
@@ -256,7 +274,7 @@ export default function CustomersTable() {
     ]);
 
     if (editRes.status === 'success') {
-      if (searchedCustomer) {
+      if (hasSearched) {
         setSearchedCustomer(prevCustomer => ({
           ...prevCustomer,
           items: prevCustomer.items.filter(customer => customer.id !== id),
@@ -320,7 +338,7 @@ export default function CustomersTable() {
     // For still invalidateQueries customers, when not in last page, last ban item fails, and 
     // at least one ban succeeded.
     if (
-      !searchedCustomer &&
+      !hasSearched &&
       updatingBanStatusIdsRef.current.length === 0 &&
       hasSuccessfulBanRef.current
     ) {
@@ -368,7 +386,7 @@ export default function CustomersTable() {
     // Test queryKey apakah akan up-to-date, ketika await masih pending, tetapi kita ubah paginationnya
     // Hasil: queryKey tidak up-to-date, alias stale
     if (removeRes.status === 'success') {
-      if (searchedCustomer) {
+      if (hasSearched) {
         setSearchedCustomer((prevCustomer) => ({
           ...prevCustomer,
           items: prevCustomer.items.filter(customer => customer.id !== id),
@@ -429,7 +447,7 @@ export default function CustomersTable() {
     // For still invalidateQueries customers, when not in last page, last delete item fails, and 
     // at least one delete succeeded.
     if (
-      !searchedCustomer &&
+      !hasSearched &&
       deletingIdsRef.current.length === 0 &&
       hasSuccessfulDeleteRef.current
     ) {
@@ -447,12 +465,18 @@ export default function CustomersTable() {
     }
   }
 
-  const hasSearched = !!searchedCustomer;
   let customer;
-  if (searchedCustomer) {
+  let activeError;
+  if (hasSearched) {
     customer = searchedCustomer;
   } else if (dataC) {
     customer = dataC;
+  }
+
+  if (!hasSearched && isErrorC) {
+    activeError = errorC.message;
+  } else if (searchError) {
+    activeError = searchError.message;
   }
 
   // TABLE definition
@@ -643,12 +667,12 @@ export default function CustomersTable() {
         </div>
       </div>
 
-      {(shouldShowSkeletonLoading.current && isFetchingC) || (isSearching && !searchedCustomer) ? (
+      {(shouldShowSkeletonLoading.current && isFetchingC) || (isSearching && !hasSearched) ? (
         <TablePaginationSkeleton showPagination={!isSearching} />
-      ) : isErrorC ? (
+      ) : activeError ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{errorC.message}</AlertTitle>
+          <AlertTitle>{activeError}</AlertTitle>
         </Alert>
       ) : (
         <>

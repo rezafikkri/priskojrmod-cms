@@ -11,6 +11,6 @@ export async function GET() {
     return Response.json({
       status: 'error',
       message: err.message,
-    }, 500);   
+    }, { status: 500 });
   }
 }

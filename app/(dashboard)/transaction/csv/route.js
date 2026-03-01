@@ -9,17 +9,21 @@ export async function GET(req) {
   const transactionStatus = searchParams.get('ts') ?? 'all';
   const currencyCode = searchParams.get('cc') ?? 'IDR';
 
-  const stream = await generateTransactionExport({
-    transactionStatus,
-    currencyCode,
-  });
+  try {
+    const stream = await generateTransactionExport({
+      transactionStatus,
+      currencyCode,
+    });
 
-  const dateTime = dayjs.utc().format('YYYYMMDD-HHmmss[Z]');
+    const dateTime = dayjs.utc().format('YYYYMMDD-HHmmss[Z]');
 
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/csv; charset=utf-8',
-      'Content-Disposition': `attachment; filename="transaction-${transactionStatus.toUpperCase()}-${currencyCode}-${dateTime}.csv"`,
-    },
-  });
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': `attachment; filename="transaction-${transactionStatus.toUpperCase()}-${currencyCode}-${dateTime}.csv"`,
+      },
+    });
+  } catch (err) {
+    return new Response(err.message, { status: 500 });
+  }
 }

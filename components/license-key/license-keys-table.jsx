@@ -67,6 +67,7 @@ export default function LicenseKeysTable() {
   // search state
   const [isSearching, setIsSearching] = useState(false);
   const [searchedLicenseKey, setSearchedLicenseKey] = useState(null);
+  const [searchError, setSearchError] = useState(null);
   const searchRef = useRef(null);
 
   // filters state
@@ -223,7 +224,7 @@ export default function LicenseKeysTable() {
 
               setIsSearching(false);
             },
-            errorMessage: 'Something went wrong while searching. Please try again.',
+            defaultErrorMessage: 'Something went wrong while searching. Please try again.',
           });
         },
         staleTime: 10_000,
@@ -231,11 +232,12 @@ export default function LicenseKeysTable() {
       });
 
       setSearchedLicenseKey(result.data);
-      // reset rowSelection
-      setRowSelection({});
     } catch (err) {
-      console.error(err);
+      setSearchError(err);
     }
+
+    // reset rowSelection
+    setRowSelection({});
   }
 
   function handleEnterSearch(e) {
@@ -251,6 +253,7 @@ export default function LicenseKeysTable() {
       pageIndex: 0,
     });
     setSearchedLicenseKey(null);
+    setSearchError(null);
     searchRef.current.value = '';
   }
 
@@ -741,10 +744,18 @@ export default function LicenseKeysTable() {
 
   const hasSearched = !!searchedLicenseKey;
   let licenseKey;
+  let activeError;
+
   if (searchedLicenseKey) {
     licenseKey = searchedLicenseKey;
   } else if (dataLK) {
     licenseKey = dataLK;
+  }
+
+  if (isErrorLK) {
+    activeError = errorLK.message;
+  } else if (searchError) {
+    activeError = searchError.message;
   }
 
   // TABLE definition
@@ -988,10 +999,10 @@ export default function LicenseKeysTable() {
 
       {(shouldShowSkeletonLoading.current && isFetchingLK) || (isSearching && !searchedLicenseKey) ? (
         <TablePaginationSkeleton showPagination={!isSearching} />
-      ) : isErrorLK ? (
+      ) : activeError ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{errorLK.message}</AlertTitle>
+          <AlertTitle>{activeError}</AlertTitle>
         </Alert>
       ) : (
         <>

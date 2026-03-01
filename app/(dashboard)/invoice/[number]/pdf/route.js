@@ -14,10 +14,10 @@ export async function GET(_, { params }) {
       },
     });
   } catch (err) {
-    console.error(err);
-
     if (err instanceof NotFoundError) {
       return new Response(err.message, { status: 404 });
     }
+
+    return new Response(err.message, { status: 500 });
   }
 }
