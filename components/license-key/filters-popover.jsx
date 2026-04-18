@@ -59,7 +59,6 @@ export default function FiltersPopover({
           queryFn: async () => {
             const results = await safeFetch({
               url: '/api/secret-keys',
-              defaultErrorMessage: 'Failed to load options.',
             });
             return results.data;
           },

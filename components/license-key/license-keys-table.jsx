@@ -182,9 +182,6 @@ export default function LicenseKeysTable() {
       const result = await safeFetch({
         url: addParamsToURL('/api/license-keys', { filters, searchKey, pagination }),
         signal,
-        ...(searchKey ?
-          { defaultErrorMessage: 'Something went wrong while searching. Please try again.' }
-          : {}),
       });
       return result.data;
     },

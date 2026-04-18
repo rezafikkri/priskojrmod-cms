@@ -110,7 +110,6 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
       const results = await safeFetch({
         url: `/api/transactions/${detailsId}`,
         signal,
-        defaultErrorMessage: 'Something went wrong while loading the details. Please try again.',
       });
       return results.data;
     },

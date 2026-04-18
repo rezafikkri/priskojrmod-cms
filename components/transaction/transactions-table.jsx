@@ -172,9 +172,6 @@ export default function TransactionsTable() {
       const results = await safeFetch({
         url: addParamsToURL('/api/transactions', { pagination, filters, searchKey }),
         signal,
-        ...(searchKey ?
-          { defaultErrorMessage: 'Something went wrong while searching. Please try again.' }
-          : {}),
       });
       return results.data;
     },

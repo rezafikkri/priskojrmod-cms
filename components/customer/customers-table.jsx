@@ -144,9 +144,6 @@ export default function CustomersTable() {
       const results = await safeFetch({
         url: addParamsToURL('/api/customers', { filters, searchKey, pagination }),
         signal,
-        ...(searchKey ?
-          { defaultErrorMessage: 'Something went wrong while searching. Please try again.' }
-          : {}),
       });
       return results.data;
     },

@@ -58,7 +58,6 @@ export default function CustomerCombobox({
       const results = await safeFetch({
         url: `/api/customers/autocomplete?sk=${debouncedKey}`,
         signal,
-        defaultErrorMessage: 'Failed to load options.',
       });
       return results.data;
     },
