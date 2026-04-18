@@ -1,7 +1,7 @@
 'use client';
 
 import DataTable from './data-table';
-import { useState, useRef, useCallback, useMemo } from 'react';
+import { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { localStorageGet, localStorageSet } from '@/lib/local-storage';
 import { Checkbox } from '../ui/checkbox';
-import { formatDateTime, FormatTime } from '@/lib/format-date';
+import { formatDateTime, formatTime } from '@/lib/format-date';
 import {
   getCoreRowModel,
   useReactTable,
@@ -44,21 +44,25 @@ import { cmsConfig } from '@/config/cms';
 import DeleteDialog from '../ui/delete-dialog';
 import { useDialog } from '@/hooks/use-dialog';
 import { getUnixTimestamp } from '@/lib/utils';
+import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
+import { deepEqual } from 'fast-equals';
 
 const defaultColumnVisibility = {
   createdAt: true,
 };
+const STALE_TIME = 1000 * 20;
 
 export default function FeedbacksTable() {
   const queryClient = useQueryClient();
+  const isQueryStale = useCheckQueryStale();
 
-  // determine show table skeleton or not in
-  const shouldShowSkeletonLoading = useRef(true);
+  // toast loading ref
+  const loadingToastIdRef = useRef(null);
 
   // pull new data state
   const [isPulling, setIsPulling] = useState(false);
   const [lastPulledAt, setLastPulledAt] = useState(() =>
-    localStorageGet('lastPulledAt', true) ?? null
+    localStorageGet('lastPulledAt') ?? null
   );
 
   // table state
@@ -83,9 +87,12 @@ export default function FeedbacksTable() {
     close: closeDeleteDialog,
   } = useDialog();
 
-  // filters state
+  // filters and fetch action state
   const [filters, setFilters] = useState(null);
-  const [isFilterActive, setIsFilterActive] = useState(false);
+  // Tracks active user-triggered or post-mutation fetch action.
+  // Determines loading toast visibility and message.
+  // 'refresh' | 'filter' | null (null = no toast shown)
+  const [fetchAction, setFetchAction] = useState(null);
 
   // mark as read status state
   const [markingAsReadIds, setMarkingAsReadIds] = useState([]);
@@ -104,81 +111,101 @@ export default function FeedbacksTable() {
   const pullFeedbacksToastIdRef = useRef(null);
 
   // add readStatus filters
-  function addFiltersToURL(url, appliedFilters) {
-    if (!appliedFilters) return url;
+  function addParamsToURL(url, { filters }) {
+    if (!filters) return url;
 
     let newUrl = url;
-    if (appliedFilters.readStatus !== 'all') {
-      newUrl += `?rs=${appliedFilters.readStatus}`;
+    if (filters.readStatus && filters.readStatus !== 'all') {
+      newUrl += `?rs=${filters.readStatus}`;
     }
     return newUrl;
   }
 
   const {
     data: dataF,
-    isFetching: isFetchingF,
+    isLoading: isLoadingF,
+    isRefetching: isRefetchingF,
     isError: isErrorF,
     error: errorF,
   } = useQuery({
     queryKey: ['feedbacks', filters],
-    queryFn: async () => {
-      let toastId;
-      const activeToastId = deletionToastIdRef.current ?? pullFeedbacksToastIdRef.current;
-
-      if (!shouldShowSkeletonLoading.current) {
-        if (activeToastId) {
-          toastId = toast.loading('Refreshing feedback...', { id: activeToastId });
-
-          if (deletionToastIdRef.current) {
-            deletionToastIdRef.current = null;
-          } else {
-            pullFeedbacksToastIdRef.current = null;
-          }
-        } else {
-          toastId = toast.loading('Loading feedback...');
-        }
-      }
-
+    queryFn: async ({ signal }) => {
       const results = await safeFetch({
-        url: addFiltersToURL(`/api/feedbacks`, filters),
-        onFinally: () => {
-          if (toastId && !activeToastId) {
-            toast.dismiss(toastId);
-          }
-        },
+        url: addParamsToURL('/api/feedbacks', { filters }),
+        signal,
       });
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 60 * 3,
+    staleTime: STALE_TIME,
   });
 
-  function handleRefresh() {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
-    queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
-  }
+  // manage toast loading
+  useEffect(() => {
+    if (isRefetchingF && fetchAction) {
+      const activeActionToastId = deletionToastIdRef.current ?? pullFeedbacksToastIdRef.current;
+      const loadingToastId = loadingToastIdRef.current;
 
-  // set isFilterActive when apply and clear
-  function syncIsFilterActive(appliedFilters) {
-    if (appliedFilters) {
-      setIsFilterActive(true);
-    } else {
-      setIsFilterActive(false);
+      let loadingVerb = 'Loading';
+      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
+      const loadingMessage = `${loadingVerb} feedback...`;
+
+      if (activeActionToastId) {
+        toast.loading(loadingMessage, { id: activeActionToastId });
+
+        if (deletionToastIdRef.current) {
+          deletionToastIdRef.current = null;
+        } else {
+          pullFeedbacksToastIdRef.current = null;
+        }
+      } else if (loadingToastId) {
+        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
+      } else {
+        // Use requestAnimationFrame so the toast is created after the UI
+        // stabilizes, preventing it from being skipped during rapid rerenders.
+        requestAnimationFrame(() => {
+          loadingToastIdRef.current = toast.loading(loadingMessage);
+        });
+      }
+    } else if (!isRefetchingF) {
+      if (loadingToastIdRef.current) {
+        // dismiss toast
+        toast.dismiss(loadingToastIdRef.current);
+        loadingToastIdRef.current = null;
+      }
+
+      // reset fetchAction
+      if (fetchAction !== 'refresh') {
+        setFetchAction(null);
+      }
     }
+  }, [isRefetchingF, fetchAction]);
+
+  async function handleRefresh() {
+    setFetchAction('refresh');
+    // reset rowSelection
+    setRowSelection({});
+
+    await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+    setFetchAction(null);
   }
 
   function handleFilter(newFilters) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
+    const queryKey = ['feedbacks', newFilters];
+    const isStale = isQueryStale(queryKey, STALE_TIME);
 
-    // reset row selection
-    setRowSelection({});
+    if (isStale) {
+      setFetchAction('filter');
+
+      if (deepEqual(filters, newFilters)) {
+        queryClient.invalidateQueries({ queryKey, exact: true });
+      }
+    }
     
+    // reset rowSelection
+    setRowSelection({});
     // set filters for trigger refetch
     setFilters(newFilters);
-    syncIsFilterActive(newFilters);
   }
 
   async function handlePullFeedbacks() {
@@ -186,19 +213,17 @@ export default function FeedbacksTable() {
       // only each 1 hour can pull again
       const nextPullAllowedAt = lastPulledAt + (60 * 60);
       if (getUnixTimestamp() < nextPullAllowedAt) {
+        // Round up to the nearest full minute to avoid displaying an incomplete minute.
         const reminder = nextPullAllowedAt % 60;
         const roundedForDisplay = reminder === 0 ? nextPullAllowedAt : nextPullAllowedAt + (60 - reminder);
 
-        toast.info(`Please wait until ${FormatTime(roundedForDisplay)} to pull new feedback`);
+        toast.info(`Please wait until ${formatTime(roundedForDisplay)} to pull new feedback.`);
         return;
       }
     }
 
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
-
     // show loading and disabled button
-    const toastId = toast.loading('Pulling new feedbacks...');
+    const toastId = toast.loading('Pulling new feedback...');
     setIsPulling(true);
 
     const loadRes = await loadFeedbacks();
@@ -210,18 +235,26 @@ export default function FeedbacksTable() {
         localStorageSet('lastPulledAt', currentTime, true);
         setLastPulledAt(currentTime);
 
+        let refreshFailed = false;
+        setFetchAction('refresh');
         // note the toast id, for updated in queryFn useQuery
         pullFeedbacksToastIdRef.current = toastId;
 
-        await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+        try {
+          await queryClient.invalidateQueries({ queryKey: ['feedbacks'] }, { throwOnError: true });
+        } catch (err) {
+          refreshFailed = true;
+        }
 
         // reset row selection
         setRowSelection({});
+        setFetchAction(null);
 
-        toast.success(
-          `New feedback pulled successfully for ${loadRes.data.count} entries`,
-          { id: toastId },
-        );
+        let successMessage = `New feedback pulled successfully for ${loadRes.data.count} entries.`;
+        if (refreshFailed) {
+          successMessage += ' Please refresh the table manually.';
+        }
+        toast.success(successMessage, { id: toastId });
       } else {
         // hide loading, in success not need to hide, because already hide when refetch in queryFn useQuery
         toast.info('No new feedback was pulled. They may have already been retrieved.', { id: toastId });
@@ -242,9 +275,6 @@ export default function FeedbacksTable() {
     const ids = Object.keys(selectedId);
     if (ids.length <= 0) return false;
 
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
-
     // show loading and disabled button
     const toastId = toast.loading('Deleting feedback...');
     setIsDeleting(true);
@@ -252,19 +282,32 @@ export default function FeedbacksTable() {
     const removeRes = await removeFeedbacks(ids);
 
     if (removeRes.status === 'success') {
-      // note the toast id, for updated in queryFn useQuery
-      deletionToastIdRef.current = toastId;
+      let refreshFailed = false;
 
-      await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
+      try {
+        if (removeRes.data.count > 0) {
+          setFetchAction('refresh');
+          // note the toast id, for updated in queryFn useQuery
+          deletionToastIdRef.current = toastId;
+
+          await queryClient.invalidateQueries({ queryKey: ['feedbacks'] }, { throwOnError: true });
+        }
+      } catch (err) {
+        refreshFailed = true;
+      }
       
       // reset row selection
       setRowSelection({});
 
       if (removeRes.data.count > 0) {
-        toast.success(
-          `Successfully deleted ${removeRes.data.count} feedback entr${removeRes.data.count > 1 ? 'ies' : 'y'}`,
-          { id: toastId },
-        );
+        setFetchAction(null);
+
+        let successMessage = `Successfully deleted ${removeRes.data.count} feedback entr${removeRes.data.count > 1 ? 'ies' : 'y'}.`;
+        if (refreshFailed) {
+          successMessage += ' Please refresh the table manually.';
+        }
+        toast.success(successMessage, { id: toastId });
+
       } else {
         toast.info('No feedback entries were deleted. They may have already been removed.', {
           id: toastId,
@@ -292,10 +335,9 @@ export default function FeedbacksTable() {
     // Note the id to state to prevent double process
     updatingReadStatusIdsRef.current = [ ...updatingReadStatusIdsRef.current, id ];
 
-    // Per-invocation snapshot object for this edit action.
-    // Captures the current `filters` state (intentional stale closure)
-    // and any optimistic-removed item data for safe concurrent rollback
-    // and conditional query invalidation.
+    // Snapshot for this edit action execution.
+    // Intentionally captures current `filters` (stale closure)
+    // and stores removed item data for safe concurrent rollback.
     let removedSnaphost = { filters };
 
     // optimistic update feedback
@@ -349,40 +391,37 @@ export default function FeedbacksTable() {
 
     if (editRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
+    } else if (removedSnaphost.filters?.readStatus === 'unread' && removedSnaphost.item) {
+      // add back data to ui
+      queryClient.setQueryData(
+        ['feedbacks', removedSnaphost.filters],
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          return {
+            items: [
+              ...oldData.items.slice(0, removedSnaphost.index),
+              removedSnaphost.item,
+              ...oldData.items.slice(removedSnaphost.index),
+            ],
+          };
+        },
+      );
     } else {
-      // if readStatus filters = unread and removedSnaphost item is exist
-      if (removedSnaphost.filters?.readStatus === 'unread' && removedSnaphost.item) {
-        // add back data to ui
-        queryClient.setQueryData(
-          ['feedbacks', removedSnaphost.filters],
-          (oldData) => {
-            if (!oldData) return oldData;
+      // change back isRead = false
+      queryClient.setQueryData(
+        ['feedbacks', removedSnaphost.filters],
+        (oldData) => {
+          if (!oldData) return oldData;
 
-            return {
-              items: [
-                ...oldData.items.slice(0, removedSnaphost.index),
-                removedSnaphost.item,
-                ...oldData.items.slice(removedSnaphost.index),
-              ],
-            };
-          },
-        );
-      } else {
-        // change back isRead = false
-        queryClient.setQueryData(
-          ['feedbacks', removedSnaphost.filters],
-          (oldData) => {
-            if (!oldData) return oldData;
-
-            return {
-              items: oldData.items.map((feedback) => ({
-                ...feedback,
-                isRead: feedback.id === id ? false : feedback.isRead,
-              })),
-            };
-          },
-        );
-      }
+          return {
+            items: oldData.items.map((feedback) => ({
+              ...feedback,
+              isRead: feedback.id === id ? false : feedback.isRead,
+            })),
+          };
+        },
+      );
     }
 
     // remove id from updatingReadStatusIdsRef.current
@@ -391,9 +430,6 @@ export default function FeedbacksTable() {
   }
 
   const handleMarkAsRead = useCallback(async (id) => {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
-
     // This is for add opacity-50 style to updated row
     setMarkingAsReadIds((prev) => {
       const newIds = [...prev, id];
@@ -555,7 +591,7 @@ export default function FeedbacksTable() {
             variant="outline"
             className="h-auto text-base px-3 py-1.5 inline-block"
             onClick={handlePullFeedbacks}
-            disabled={isFetchingF || isPulling}
+            disabled={isLoadingF || isPulling}
           >
             <ArrowDownToLine className="icon" /> Pull new data
           </Button>
@@ -567,7 +603,7 @@ export default function FeedbacksTable() {
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto inline-block"
-                disabled={isFetchingF}
+                disabled={isLoadingF || fetchAction === 'refresh'}
                 onClick={handleRefresh}
               >
                 <RotateCw className="icon" />
@@ -576,17 +612,17 @@ export default function FeedbacksTable() {
 
             <FiltersPopover
               onFilter={handleFilter}
-              isFilterActive={isFilterActive}
-              disabled={isFetchingF || isPulling}
+              filters={filters}
+              disabled={isLoadingF || fetchAction === 'filter'}
             />
 
             <TooltipWrapper text="Delete feedback" background="bg-destructive">
               <Button
                 variant="outline"
                 className="h-auto text-base px-3 py-1.5 inline-block hover:text-destructive dark:hover:text-red-500/90"
-                disabled={isFetchingF
+                disabled={isLoadingF
+                  || fetchAction !== null
                   || Object.keys(rowSelection).length <= 0
-                  || isPulling
                   || isDeleting}
                 onClick={() => openDeleteDialog({
                   selectedId: rowSelection,
@@ -607,7 +643,7 @@ export default function FeedbacksTable() {
         </div>
       </div>
 
-      {(shouldShowSkeletonLoading.current && isFetchingF) ? (
+      {isLoadingF ? (
         <TablePaginationSkeleton showPagination={false} />
       ) : isErrorF ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
@@ -625,7 +661,6 @@ export default function FeedbacksTable() {
           />
           <TablePagination
             data={dataF}
-            showNavigation={false}
           />
         </>
       )}

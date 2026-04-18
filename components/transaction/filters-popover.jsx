@@ -22,7 +22,7 @@ import { PopoverClose } from '@radix-ui/react-popover';
 
 export default function FiltersPopover({
   onFilter,
-  isFilterActive,
+  filters,
   disabled,
 }) {
   const [status, setStatus] = useState('all');
@@ -41,7 +41,7 @@ export default function FiltersPopover({
           disabled={disabled}
         >
           <Filter className="icon" /> Filter
-          {isFilterActive && (
+          {filters && (
             <span className="absolute top-0 right-0 inline-block size-2.5 rounded-full bg-primary dark:bg-green-500 -mt-1 -me-1" />
           )}
         </Button>
@@ -76,7 +76,7 @@ export default function FiltersPopover({
           </Select> 
         </div> 
         <div className="space-x-3 mt-6 flex"> 
-          {isFilterActive && ( 
+          {filters && ( 
             <PopoverClose asChild>
               <Button 
                 className="text-base px-3 py-1.5 h-auto inline-block" 

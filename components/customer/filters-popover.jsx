@@ -22,10 +22,11 @@ import { PopoverClose } from '@radix-ui/react-popover';
 
 export default function FiltersPopover({
   onFilter,
-  isFilterActive,
+  filters,
   disabled,
 }) {
   const [showBanned, setShowBanned] = useState(false);
+  const isFilterActive = filters.showBanned;
 
   function handleClear() {
     setShowBanned(false);

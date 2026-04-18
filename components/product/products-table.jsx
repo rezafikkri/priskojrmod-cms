@@ -18,7 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { useState, useMemo, useRef, useCallback } from 'react';
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import {
   Alert,
@@ -49,6 +49,8 @@ import { cmsConfig } from '@/config/cms';
 import { getStatusClasses } from '@/lib/utils';
 import FiltersPopover from './filters-popover';
 import { useDialog } from '@/hooks/use-dialog';
+import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
+import { deepEqual } from 'fast-equals';
 
 const defaultColumnVisibility = {
   category: false,
@@ -57,16 +59,21 @@ const defaultColumnVisibility = {
   createdAt: false,
   updatedAt: false,
 };
+const STALE_TIME = 1000 * 20;
 
 export default function ProductsTable({ isOwner }) {
   const queryClient = useQueryClient();
+  const isQueryStale = useCheckQueryStale();
 
-  // determine show table skeleton or not in
-  const shouldShowSkeletonLoading = useRef(true);
+  // toast loading ref
+  const loadingToastIdRef = useRef(null);
 
   // filters state
   const [filters, setFilters] = useState({ status: 'active' });
-  const [isFilterActive, setIsFilterActive] = useState(false);
+  // Tracks active user-triggered or post-mutation fetch action.
+  // Determines loading toast visibility and message.
+  // 'refresh' | 'filter' | null (null = no toast shown)
+  const [fetchAction, setFetchAction] = useState(null);
 
   // table state
   const columnVisibilityStorageKey = 'products:column-visibility';
@@ -99,25 +106,16 @@ export default function ProductsTable({ isOwner }) {
 
   const {
     data: dataP,
-    isFetching: isFetchingP,
+    isLoading: isLoadingP,
+    isRefetching: isRefetchingP,
     isError: isErrorP,
     error: errorP,
   } = useQuery({
     queryKey: ['products', filters],
-    queryFn: async () => {
-      let toastId;
-
-      if (!shouldShowSkeletonLoading.current) {
-        toastId = toast.loading('Loading products...');
-      }
-
+    queryFn: async ({ signal }) => {
       const results = await safeFetch({
         url: `/api/products?ps=${filters.status}`,
-        onFinally: () => {
-          if (toastId) {
-            toast.dismiss(toastId);
-          }
-        },
+        signal,
       });
       return results.data;
     },
@@ -148,32 +146,61 @@ export default function ProductsTable({ isOwner }) {
       }),
     }),
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 60,
+    staleTime: STALE_TIME,
   });
 
-  function handleRefresh() {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
-    queryClient.invalidateQueries({ queryKey: ['products'] });
-  }
+  // manage toast loading
+  useEffect(() => {
+    if (isRefetchingP && fetchAction) {
+      const loadingToastId = loadingToastIdRef.current;
 
-  // set isFilterActive when apply and clear
-  function syncIsFilterActive(appliedFilters) {
-    if (appliedFilters.status !== 'active') {
-      setIsFilterActive(true);
-    } else {
-      setIsFilterActive(false);
+      let loadingVerb = 'Loading';
+      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
+      const loadingMessage = `${loadingVerb} products...`;
+
+      if (loadingToastId) {
+        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
+      } else {
+        // Use requestAnimationFrame so the toast is created after the UI
+        // stabilizes, preventing it from being skipped during rapid rerenders.
+        requestAnimationFrame(() => {
+          loadingToastIdRef.current = toast.loading(loadingMessage);
+        });
+      }
+    } else if (!isRefetchingP) {
+      if (loadingToastIdRef.current) {
+        // dismiss toast
+        toast.dismiss(loadingToastIdRef.current);
+        loadingToastIdRef.current = null;
+      }
+
+      // reset fetchAction
+      if (fetchAction !== 'refresh') {
+        setFetchAction(null);
+      }
     }
+  }, [isRefetchingP, fetchAction]);
+
+  async function handleRefresh() {
+    setFetchAction('refresh');
+    await queryClient.invalidateQueries({ queryKey: ['products'] });
+    setFetchAction(null);
   }
 
   function handleFilter(newFilters) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
+    const queryKey = ['products', newFilters];
+    const isStale = isQueryStale(queryKey, STALE_TIME);
+
+    if (isStale) {
+      setFetchAction('filter');
+
+      if (deepEqual(filters, newFilters)) {
+        queryClient.invalidateQueries({ queryKey, exact: true });
+      }
+    }
 
     // set filters for trigger refetch
     setFilters(newFilters);
-    syncIsFilterActive(newFilters);
   }
 
   const handleEditPinned = useCallback(async (id, isPinned) => {
@@ -192,12 +219,17 @@ export default function ProductsTable({ isOwner }) {
       queryClient.setQueryData(['products', filters], (oldData) => {
         if (!oldData) return oldData;
 
-        let updatedProduct = { ...oldData.items.find(data => data.id === editRes.data.id) };
-        updatedProduct.updatedAt = editRes.data.updatedAt;
-        updatedProduct.isPinned = !isPinned;
+        const targetProduct = oldData.items.find(item => item.id === editRes.data.id);
+        if (!targetProduct) return oldData;
 
-        const targetIndex = oldData.items.findLastIndex(data => data.isPinned);
-        const filteredProducts = oldData.items.filter(data => data.id !== editRes.data.id);
+        const updatedProduct = {
+          ...targetProduct,
+          updatedAt: editRes.data.updatedAt,
+          isPinned: !isPinned,
+        };
+
+        const targetIndex = oldData.items.findLastIndex(item => item.isPinned);
+        const filteredProducts = oldData.items.filter(item => item.id !== editRes.data.id);
 
         if (!isPinned) {
           return { items: [updatedProduct, ...filteredProducts] };
@@ -259,14 +291,20 @@ export default function ProductsTable({ isOwner }) {
         queryClient.setQueryData(['products', filters], (oldData) => {
           if (!oldData) return oldData;
 
-          let updatedProduct = { ...oldData.items.find(data => data.id === editRes.data.id) };
-          updatedProduct.updatedAt = editRes.data.updatedAt;
-          updatedProduct.status = newStatus;
+          const targetProduct = oldData.items.find(item => item.id === editRes.data.id);
+          if (!targetProduct) return oldData;
 
-          let targetIndex = oldData.items.findIndex(data => !data.isPinned);
-          const filteredProducts = oldData.items.filter(data => data.id !== editRes.data.id);
+          const updatedProduct = {
+            ...targetProduct,
+            updatedAt: editRes.data.updatedAt,
+            status: newStatus,
+          };
+
+          const targetIndex = oldData.items.findIndex(item => !item.isPinned);
+          const filteredProducts = oldData.items.filter(item => item.id !== editRes.data.id);
 
           filteredProducts.splice(targetIndex, 0, updatedProduct);
+
           return { items: filteredProducts };
         });
       }
@@ -559,7 +597,7 @@ export default function ProductsTable({ isOwner }) {
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto inline-block"
-                disabled={isFetchingP}
+                disabled={isLoadingP || fetchAction === 'refresh'}
                 onClick={handleRefresh}
               >
                 <RotateCw className="icon" />
@@ -568,8 +606,8 @@ export default function ProductsTable({ isOwner }) {
 
             <FiltersPopover
               onFilter={handleFilter}
-              isFilterActive={isFilterActive}
-              disabled={isFetchingP}
+              filters={filters}
+              disabled={isLoadingP || fetchAction === 'filter'}
             />
           </div>
         </div>
@@ -588,7 +626,7 @@ export default function ProductsTable({ isOwner }) {
         />
       </div>
 
-      {(shouldShowSkeletonLoading.current && isFetchingP) ? (
+      {isLoadingP ? (
         <TablePaginationSkeleton showPagination={false} />
       ) : isErrorP ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">

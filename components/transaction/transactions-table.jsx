@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useMemo, useCallback } from 'react';
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -51,6 +51,8 @@ import RefundDeadlineDialog from './refund-deadline-dialog';
 import CancelConfirmDialog from './cancel-confirm-dialog';
 import RefundFormDialog from './refund-form-dialog';
 import { useDialog } from '@/hooks/use-dialog';
+import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
+import { deepEqual } from 'fast-equals';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -58,29 +60,39 @@ const defaultColumnVisibility = {
   refundedAt: false,
   updatedAt: false,
 };
+const STALE_TIME = 1000 * 20;
 
 export default function TransactionsTable() {
   const queryClient = useQueryClient();
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchedTransaction, setSearchedTransaction] = useState(null);
-  const searchRef = useRef(null);
+  const isQueryStale = useCheckQueryStale();
+
+  // toast loading ref
+  const loadingToastIdRef = useRef(null);
+
+  // search state
+  const [searchKey, setSearchKey] = useState(null);
+  const hasSearched = !!searchKey;
 
   // filters state
   const [filters, setFilters] = useState(null);
-  const [isFilterActive, setIsFilterActive] = useState(false);
-
-  // determine show table skeleton or not in normal mode
-  const shouldShowSkeletonLoading = useRef(true);
+  // Tracks active user-triggered or post-mutation fetch action.
+  // Determines loading toast visibility and message.
+  // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' | null (null = no toast shown)
+  const [fetchAction, setFetchAction] = useState(null);
 
   // table state
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: cmsConfig.pagination.pageSize,
   });
-  function handlePaginationChange(pagination) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
-    setPagination(pagination);
+  function handlePaginationChange(updater) {
+    const newPagination = typeof updater === 'function' ? updater(pagination) : updater
+    const isStale = isQueryStale(['transactions', newPagination, filters, searchKey], STALE_TIME);
+
+    if (isStale) {
+      setFetchAction('paginate');
+    }
+    setPagination(newPagination);
   }
   const columnVisibilityStorageKey = 'transactions:column-visibility';
   const [columnVisibility, setColumnVisibility] = useState(() =>
@@ -130,12 +142,18 @@ export default function TransactionsTable() {
   const correctingTransactionStatusIdsRef = useRef(correctingTransactionStatusIds);
 
   // add status filters
-  function addFiltersToURL(url, appliedFilters) {
-    if (!appliedFilters) return url;
-
+  function addParamsToURL(url, { filters, pagination, searchKey }) {
     let newUrl = url;
-    if (appliedFilters.status && appliedFilters.status !== 'all') {
-      newUrl += `&ts=${appliedFilters.status}`;
+
+    // add search param to url
+    if (searchKey) {
+      newUrl += `?sk=${searchKey}`;
+    } else {
+      newUrl += `?pi=${pagination.pageIndex}`;
+    }
+
+    if (filters?.status && filters.status !== 'all') {
+      newUrl += `&ts=${filters.status}`;
     }
 
     return newUrl;
@@ -143,128 +161,149 @@ export default function TransactionsTable() {
 
   const {
     data: dataT,
-    isFetching: isFetchingT,
+    isLoading: isLoadingT,
+    isRefetching: isRefetchingT,
     isError: isErrorT,
     error: errorT,
     isPlaceholderData: isPlaceholderDataT,
   } = useQuery({
-    queryKey: ['transactions', pagination.pageIndex, filters],
-    queryFn: async () => {
-      let toastId;
-      if (!shouldShowSkeletonLoading.current) {
-        toastId = toast.loading('Loading transactions...');
-      }
-
+    queryKey: ['transactions', pagination, filters, searchKey],
+    queryFn: async ({ signal }) => {
       const results = await safeFetch({
-        url: addFiltersToURL(`/api/transactions?pi=${pagination.pageIndex}`, filters),
-        onFinally: () => {
-          if (toastId) {
-            toast.dismiss(toastId);
-          }
-        },
+        url: addParamsToURL('/api/transactions', { pagination, filters, searchKey }),
+        signal,
+        ...(searchKey ?
+          { defaultErrorMessage: 'Something went wrong while searching. Please try again.' }
+          : {}),
       });
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 60 * 3,
-    enabled: !searchedTransaction,
+    staleTime: STALE_TIME,
   });
 
-  async function handleSearch(appliedFilters) {
-    const keyResult = searchKeySchema.safeParse(searchRef.current.value);
+  // manage toast loading
+  useEffect(() => {
+    if (isRefetchingT && fetchAction) {
+      const loadingToastId = loadingToastIdRef.current;
+
+      let loadingVerb = 'Loading';
+      if (fetchAction === 'search') loadingVerb = 'Searching';
+      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
+      const loadingMessage = `${loadingVerb} transactions...`;
+
+      if (loadingToastId) {
+        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
+      } else {
+        // Use requestAnimationFrame so the toast is created after the UI
+        // stabilizes, preventing it from being skipped during rapid rerenders.
+        requestAnimationFrame(() => {
+          loadingToastIdRef.current = toast.loading(loadingMessage);
+        });
+      }
+    } else if (!isRefetchingT) {
+      if (loadingToastIdRef.current) {
+        // dismiss toast
+        toast.dismiss(loadingToastIdRef.current);
+        loadingToastIdRef.current = null;
+      }
+
+      // reset fetchAction
+      if (fetchAction !== 'refresh') {
+        setFetchAction(null);
+      }
+    }
+  }, [isRefetchingT, fetchAction]);
+
+  async function handleSearch(key) {
+    const keyResult = searchKeySchema.safeParse(key);
     if (!keyResult.success) return false;
     const parsedKey = keyResult.data;
-    
-    try {
-      const result = await queryClient.fetchQuery({
-        queryKey: ['transactionsSearch', parsedKey, appliedFilters],
-        queryFn: async () => {
-          setIsSearching(true);
-          // if previoesly searchedTransaction is null, then show skeleton loading
-          // for all table, besides that, then show toast loading only
-          let toastId;
-          if (searchedTransaction) {
-            toastId = toast.loading('Searching transactions...');
-          }
 
-          return await safeFetch({
-            url: addFiltersToURL(`/api/transactions?sk=${parsedKey}`, appliedFilters),
-            onFinally: () => {
-              if (toastId) {
-                toast.dismiss(toastId);
-              }
-              setIsSearching(false);
-            },
-            errorMessage: 'Something went wrong while searching. Please try again.',
-          });
-        },
-        staleTime: 10_000,
-        gcTime: 10_000,
-      });
+    const queryKey = ['transactions', pagination, filters, parsedKey];
+    const isStale = isQueryStale(queryKey, STALE_TIME);
 
-      setSearchedTransaction(result.data);
-    } catch (err) {
-      console.error(err);
+    if (isStale) {
+      setFetchAction('search');
+
+      if (searchKey === parsedKey) {
+        queryClient.invalidateQueries({ queryKey, exact: true });
+      }
     }
+    setSearchKey(parsedKey);
   }
 
   function handleEnterSearch(e) {
     if (e.key === 'Enter') {
-      handleSearch(filters);
+      handleSearch(e.target.value);
     }
   }
 
   function handleClearSearchInput() {
-    handlePaginationChange({
-      ...pagination,
-      pageIndex: 0,
-    });
-    setSearchedTransaction(null);
-    searchRef.current.value = '';
+    const isStale = isQueryStale(
+      ['transactions', { ...pagination, pageIndex: 0 }, filters, null],
+      STALE_TIME,
+    );
+
+    if (isStale) {
+      setFetchAction('clear-search');
+    }
+
+    setPagination({ ...pagination, pageIndex: 0 });
+    setSearchKey(null);
   }
 
-  // set isFilterActive when apply and clear
-  function syncIsFilterActive(appliedFilters) {
-    if (appliedFilters) {
-      setIsFilterActive(true);
-    } else {
-      setIsFilterActive(false);
-    }
+  async function handleRefresh() {
+    setFetchAction('refresh');
+
+    await queryClient.invalidateQueries({ queryKey: ['transactions'] });
+    queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
+
+    setFetchAction(null);
   }
 
   function handleFilter(newFilters) {
-    if (searchedTransaction) {
-      handleSearch(newFilters);
-    } else {
-      handlePaginationChange({
-        ...pagination,
-        pageIndex: 0,
-      });
-    }
+    const queryKey = ['transactions', pagination, newFilters, searchKey];
+    const isStale = isQueryStale(queryKey, STALE_TIME);
 
-    // set filters for trigger refetch in normal mode
+    if (isStale) {
+      setFetchAction('filter');
+
+      if (deepEqual(filters, newFilters) && (hasSearched || pagination.pageIndex === 0)) {
+        queryClient.invalidateQueries({ queryKey, exact: true });
+      }
+    }
+    
+    if (!hasSearched) {
+      setPagination({ ...pagination, pageIndex: 0 });
+    }
+    // set filters for trigger refetch
     setFilters(newFilters);
-    syncIsFilterActive(newFilters);
   }
 
-  function handleRefresh() {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
+  function applyStatusUpdate({ transaction, status, editData }) {
+    const result = {
+      ...transaction,
+      status,
+      updatedAt: editData.updatedAt,
+    };
     
-    queryClient.invalidateQueries({ queryKey: ['transactions'] });
-    queryClient.invalidateQueries({ queryKey: ['transactionsSearch'] });
-    queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
+    if (status === TransactionStatus.PAID) {
+      result.invoices = editData.invoices;
 
-    if (searchedTransaction) {
-      handleSearch(filters);
+      if (editData.paidAt) {
+        result.paidAt = editData.paidAt;
+      }
     }
+
+    if (status === TransactionStatus.REFUND) {
+      result.refundedAt = editData.refundedAt;
+    }
+
+    return result;
   }
 
   const handleEditTransactionStatus = useCallback(async ({ id, status, refundNote }) => {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
-
     // This is for add opacity-50 style to updated row
     setUpdatingTransactionStatusIds((prev) => {
       const newIds = [...prev, id];
@@ -281,95 +320,60 @@ export default function TransactionsTable() {
       return newIds;
     });
 
-    const transaction = queryClient.getQueryData([
-      'transactions',
-      pagination.pageIndex,
-      filters,
-    ]);
+    const transaction = queryClient.getQueryData(['transactions', pagination, filters, searchKey]);
 
     if (editRes.status === 'success') {
-      if (searchedTransaction) {
-        setSearchedTransaction(prevTransaction => {
-          let newTransactions;
+      if (hasSearched) {
+        queryClient.setQueryData(
+          ['transactions', pagination, filters, searchKey],
+          (oldData) => {
+            if (!oldData) return oldData;
+          
+            let updatedTransactions;
 
-          if (!filters?.status || filters?.status === 'all') {
-            newTransactions = prevTransaction.items.map(transaction => {
-              if (transaction.id === id) {
-                const result = {
-                  ...transaction,
-                  status,
-                  updatedAt: editRes.data.updatedAt,
-                };
-                if (status === TransactionStatus.PAID) {
-                  result.invoices = editRes.data.invoices;
+            if (!filters?.status || filters?.status === 'all') {
+              updatedTransactions = oldData.items.map(transaction =>
+                transaction.id === id
+                  ? applyStatusUpdate({ transaction, status, editData: editRes.data })
+                  : transaction
+              );
+            } else {
+              updatedTransactions = oldData.items.filter(t => t.id !== id);
+            }
 
-                  if (editRes.data.paidAt) {
-                    result.paidAt = editRes.data.paidAt;
-                  }
-                }
+            return { ...oldData, items: updatedTransactions };
+          },
+        );
 
-                if (status === TransactionStatus.REFUND) {
-                  result.refundedAt = editRes.data.refundedAt;
-                }
-
-                return result;
-              }
-              return transaction;
-            });
-          } else {
-            newTransactions = prevTransaction.items.filter(t => t.id !== id);
-          }
-
-          return {
-            ...prevTransaction,
-            items: newTransactions,
-          };
-        });
-
-        queryClient.invalidateQueries({ queryKey: ['transactions'] });
-      } else if (!filters?.status || filters?.status === 'all') {
+        queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
+      } else if (!filters?.status || filters.status === 'all') {
         if (pagination.pageIndex === 0) {
           queryClient.setQueryData(
-            ['transactions', pagination.pageIndex, filters],
+            ['transactions', pagination, filters, searchKey],
             (oldData) => {
               if (!oldData) return oldData;
-              
+
               const targetTransaction = oldData.items.find(t => t.id === id);
+              if (!targetTransaction) return oldData;
 
-              if (targetTransaction) {
-                const newTargetTransaction = {
-                  ...targetTransaction,
-                  status,
-                  updatedAt: editRes.data.updatedAt,
-                };
-                if (status === TransactionStatus.PAID) {
-                  newTargetTransaction.invoices = editRes.data.invoices;
-
-                  if (editRes.data.paidAt) {
-                    newTargetTransaction.paidAt = editRes.data.paidAt;
-                  }
-                }
-
-                if (status === TransactionStatus.REFUND) {
-                  newTargetTransaction.refundedAt = editRes.data.refundedAt;
-                }
-
-                return {
-                  ...oldData,
-                  items: [
-                    newTargetTransaction,
-                    ...oldData.items.filter(t => t.id !== id),
-                  ],
-                };
-              }
-              return oldData;
+              return {
+                ...oldData,
+                items: [
+                  applyStatusUpdate({
+                    transaction: targetTransaction,
+                    status,
+                    editData: editRes.data,
+                  }),
+                  ...oldData.items.filter(t => t.id !== id),
+                ],
+              };
             },
           );
 
           queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
         } else {
           queryClient.setQueryData(
-            ['transactions', pagination.pageIndex, filters],
+            ['transactions', pagination, filters, searchKey],
             (oldData) => {
               if (!oldData) return oldData;
 
@@ -379,11 +383,11 @@ export default function TransactionsTable() {
               };
             },
           );
-          
+
           hasSuccessfulUpdateStatusRef.current = true;
         }
-      } else {
-        const newTransactions = transaction.items.filter(t => t.id !== id);
+      } else if (transaction) {
+        const filteredTransactions = transaction.items.filter(t => t.id !== id);
         const newRowCount = transaction.rowCount - 1;
 
         if (!isLastPage({
@@ -392,42 +396,44 @@ export default function TransactionsTable() {
           rowCount: transaction.rowCount,
         })) {
           queryClient.setQueryData(
-            ['transactions', pagination.pageIndex, filters],
-            { items: newTransactions, rowCount: newRowCount },
+            ['transactions', pagination, filters, searchKey],
+            { items: filteredTransactions, rowCount: newRowCount },
           );
 
           hasSuccessfulUpdateStatusRef.current = true;
         } else {
-          if (newTransactions.length === 0 && newRowCount > 0) {
-            queryClient.removeQueries({
-              queryKey: ['transactions', pagination.pageIndex, filters],
-              exact: true,
-            });
+          if (filteredTransactions.length === 0 && newRowCount > 0) {
+            const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
 
             queryClient.setQueryData(
-              ['transactions', pagination.pageIndex - 1, filters],
+              ['transactions', newPagination, filters, searchKey],
               (oldData) => {
                 if (!oldData) return oldData;
                 return { ...oldData, rowCount: newRowCount };
               },
             );
 
-            setPagination((pagination) => ({
-              ...pagination,
-              pageIndex: pagination.pageIndex - 1,
-            }));
+            // change page to prev page
+            setFetchAction('paginate');
+            setPagination(newPagination);
+
+            queryClient.removeQueries({
+              queryKey: ['transactions', pagination, filters, searchKey],
+              exact: true,
+            });
           } else {
             queryClient.setQueryData(
-              ['transactions', pagination.pageIndex, filters ],
-              { items: newTransactions, rowCount: newRowCount },
+              ['transactions', pagination, filters, searchKey],
+              { items: filteredTransactions, rowCount: newRowCount },
             );
           }
 
           queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
         }
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['transactions'] });
       }
 
-      queryClient.invalidateQueries({ queryKey: ['transactionsSearch'] });
       queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
       toast.success(editRes.message, { id: toastId });
     } else {
@@ -437,19 +443,14 @@ export default function TransactionsTable() {
       });
     }
 
-    // For still invalidateQueries transactions, when not in last page, last update item fails, and 
-    // at least one update succeeded.
-    if (
-      !searchedTransaction &&
-      updatingTransactionStatusIdsRef.current.length === 0 &&
-      hasSuccessfulUpdateStatusRef.current
-    ) {
-      // Double check page position in case user navigated 
-      // while async operation was still in progress
-      const hasNoStatusFilter = !filters?.status || filters?.status === 'all';
-      const shouldInvalidateQueries = hasNoStatusFilter
+    // Batches overlapping actions (new action triggered before previous one finishes)
+    // into a single invalidateQueries, once all settled and at least one succeeded.
+    // Sequential actions are not affected.
+    if (updatingTransactionStatusIdsRef.current.length === 0 && hasSuccessfulUpdateStatusRef.current) {
+      const hasNoQuery = !hasSearched && (!filters?.status || filters.status === 'all');
+      const shouldInvalidateQueries = hasNoQuery 
         ? pagination.pageIndex !== 0
-        : !isLastPage({
+        : transaction && !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           rowCount: transaction.rowCount,
@@ -461,7 +462,7 @@ export default function TransactionsTable() {
 
       hasSuccessfulUpdateStatusRef.current = false;
     }
-  }, [filters, pagination, searchedTransaction]);
+  }, [pagination, filters, searchKey]);
 
   const handleCopyableMessage = useCallback(async (id) => {
     const toastId = toast.loading('Preparing the message...');
@@ -469,12 +470,35 @@ export default function TransactionsTable() {
     const prepareRes = await prepareConfirmationMessage(id);
     navigator.clipboard.writeText(prepareRes.data.message);
 
-    toast.success('Message copied to clipboard', { id: toastId });
+    toast.success('Message copied to clipboard.', { id: toastId });
   }, []);
 
-  async function handleCorrectTransactionStatus({ id, newStatus, currentStatus }) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
+  function applyStatusCorrection({ transaction, newStatus, currentStatus, editData }) {
+    const result = {
+      ...transaction,
+      status: newStatus,
+      updatedAt: editData.updatedAt,
+    };
+    if (newStatus === TransactionStatus.PAID) {
+      result.invoices = editData.invoices;
+
+      if (editData.paidAt) {
+        result.paidAt = editData.paidAt;
+      }
+
+      if (currentStatus === TransactionStatus.REFUND) {
+        result.refundedAt = null;
+      }
+    }
+
+    if (newStatus === TransactionStatus.CANCELLED) {
+      result.paidAt = null;
+    }
+
+    return result;
+  }
+
+  async function handleFixTransactionStatus({ id, newStatus, currentStatus }) {
     //show loading
     const toastId = toast.loading(`Correcting status to ${newStatus}...`);
 
@@ -485,7 +509,7 @@ export default function TransactionsTable() {
       return newIds;
     });
 
-    const editRes = await fixTransactionStatus({ id, status: newStatus });
+    const fixRes = await fixTransactionStatus({ id, status: newStatus });
 
     setCorrectingTransactionStatusIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);
@@ -493,103 +517,69 @@ export default function TransactionsTable() {
       return newIds;
     });
 
-    const transaction = queryClient.getQueryData([
-      'transactions',
-      pagination.pageIndex,
-      filters,
-    ]);
+    const transaction = queryClient.getQueryData(['transactions', pagination, filters, searchKey]);
 
-    if (editRes.status === 'success') {
-      if (searchedTransaction) {
-        setSearchedTransaction(prevTransaction => {
-          let newTransactions;
+    if (fixRes.status === 'success') {
+      if (hasSearched) {
+        queryClient.setQueryData(
+          ['transactions', pagination, filters, searchKey],
+          (oldData) => {
+            if (!oldData) return oldData;
 
-          if (!filters?.status || filters?.status === 'all') {
-            newTransactions = prevTransaction.items.map(transaction => {
-              if (transaction.id === id) {
-                const result = {
-                  ...transaction,
-                  status: newStatus,
-                  updatedAt: editRes.data.updatedAt,
-                };
-                if (newStatus === TransactionStatus.PAID) {
-                  result.invoices = editRes.data.invoices;
+            let newTransactions;
 
-                  if (editRes.data.paidAt) {
-                    result.paidAt = editRes.data.paidAt;
-                  }
+            if (!filters?.status || filters?.status === 'all') {
+              // buat scenario test bagian ini
+              newTransactions = oldData.items.map(transaction =>
+                transaction.id === id
+                  ? applyStatusCorrection({
+                    transaction,
+                    newStatus,
+                    currentStatus,
+                    editData: fixRes.data,
+                  })
+                  : transaction
+              );
+            } else {
+              newTransactions = oldData.items.filter(t => t.id !== id);
+            }
 
-                  if (currentStatus === TransactionStatus.REFUND) {
-                    result.refundedAt = null;
-                  }
-                }
-
-                if (newStatus === TransactionStatus.CANCELLED) {
-                  result.paidAt = null;
-                }
-
-                return result;
-              }
-              return transaction;
-            });
-          } else {
-            newTransactions = prevTransaction.items.filter(t => t.id !== id);
-          }
-
-          return {
-            ...prevTransaction,
+            return {
+            ...oldData,
             items: newTransactions,
           };
         });
 
-        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+        queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
       } else if (!filters?.status || filters?.status === 'all') {
         if (pagination.pageIndex === 0) {
           queryClient.setQueryData(
-            ['transactions', pagination.pageIndex, filters],
+            ['transactions', pagination, filters, searchKey],
             (oldData) => {
               if (!oldData) return oldData;
               
               const targetTransaction = oldData.items.find(t => t.id === id);
+              if (!targetTransaction) return oldData;
 
-              if (targetTransaction) {
-                const newTargetTransaction = {
-                  ...targetTransaction,
-                  status: newStatus,
-                  updatedAt: editRes.data.updatedAt,
-                };
-                if (newStatus === TransactionStatus.PAID) {
-                  newTargetTransaction.invoices = editRes.data.invoices;
-
-                  if (editRes.data.paidAt) {
-                    newTargetTransaction.paidAt = editRes.data.paidAt;
-                  }
-
-                  if (currentStatus === TransactionStatus.REFUND) {
-                    newTargetTransaction.refundedAt = null;
-                  }
-                }
-
-                if (newStatus === TransactionStatus.CANCELLED) {
-                  newTargetTransaction.paidAt = null;
-                }
-
-                return {
-                  ...oldData,
-                  items: [
-                    newTargetTransaction,
-                    ...oldData.items.filter(t => t.id !== id),
-                  ],
-                };
-              }
-              return oldData;
+              return {
+                ...oldData,
+                items: [
+                  applyStatusCorrection({
+                    transaction: targetTransaction,
+                    newStatus,
+                    currentStatus,
+                    editData: fixRes.data,
+                  }),
+                  ...oldData.items.filter(t => t.id !== id),
+                ],
+              };
             },
           );
 
           queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
         } else {
           queryClient.setQueryData(
-            ['transactions', pagination.pageIndex, filters],
+            ['transactions', pagination, filters, searchKey],
             (oldData) => {
               if (!oldData) return oldData;
 
@@ -602,7 +592,7 @@ export default function TransactionsTable() {
           
           hasSuccessfulCorrectStatusRef.current = true;
         }
-      } else {
+      } else if (transaction) {
         const newTransactions = transaction.items.filter(t => t.id !== id);
         const newRowCount = transaction.rowCount - 1;
 
@@ -612,64 +602,64 @@ export default function TransactionsTable() {
           rowCount: transaction.rowCount,
         })) {
           queryClient.setQueryData(
-            ['transactions', pagination.pageIndex, filters],
+            ['transactions', pagination, filters, searchKey],
             { items: newTransactions, rowCount: newRowCount },
           );
 
           hasSuccessfulCorrectStatusRef.current = true;
         } else {
           if (newTransactions.length === 0 && newRowCount > 0) {
-            queryClient.removeQueries({
-              queryKey: ['transactions', pagination.pageIndex, filters],
-              exact: true,
-            });
+            const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
 
             queryClient.setQueryData(
-              ['transactions', pagination.pageIndex - 1, filters],
+              ['transactions', newPagination, filters, searchKey],
               (oldData) => {
                 if (!oldData) return oldData;
                 return { ...oldData, rowCount: newRowCount };
               },
             );
 
-            setPagination((pagination) => ({
-              ...pagination,
-              pageIndex: pagination.pageIndex - 1,
-            }));
+            // change page to prev page
+            setFetchAction('paginate');
+            setPagination(newPagination);
+
+            queryClient.removeQueries({
+              queryKey: ['transactions', pagination, filters, searchKey],
+              exact: true,
+            });
           } else {
             queryClient.setQueryData(
-              ['transactions', pagination.pageIndex, filters ],
+              ['transactions', pagination, filters, searchKey],
               { items: newTransactions, rowCount: newRowCount },
             );
           }
 
           queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
         }
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['transactions'] });
       }
 
-      queryClient.invalidateQueries({ queryKey: ['transactionsSearch'] });
       queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
-      toast.success(editRes.message, { id: toastId });
+      toast.success(fixRes.message, { id: toastId });
     } else {
-      toast.error(editRes.message, {
+      toast.error(fixRes.message, {
         id: toastId,
         duration: cmsConfig.toast.duration.error
       });
     }
 
-    // For still invalidateQueries transactions, when not in last page, last correct item fails, and 
-    // at least one correct succeeded.
+    // Batches overlapping actions (new action triggered before previous one finishes)
+    // into a single invalidateQueries, once all settled and at least one succeeded.
+    // Sequential actions are not affected.
     if (
-      !searchedTransaction &&
       correctingTransactionStatusIdsRef.current.length === 0 &&
       hasSuccessfulCorrectStatusRef.current
     ) {
-      // Double check page position in case user navigated 
-      // while async operation was still in progress
-      const hasNoStatusFilter = !filters?.status || filters?.status === 'all';
-      const shouldInvalidateQueries = hasNoStatusFilter
+      const hasNoQuery = !hasSearched && (!filters?.status || filters.status === 'all');
+      const shouldInvalidateQueries = hasNoQuery
         ? pagination.pageIndex !== 0
-        : !isLastPage({
+        : transaction && !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           rowCount: transaction.rowCount,
@@ -681,14 +671,6 @@ export default function TransactionsTable() {
 
       hasSuccessfulCorrectStatusRef.current = false;
     }
-  }
-
-  const hasSearched = !!searchedTransaction;
-  let transaction;
-  if (searchedTransaction) {
-    transaction = searchedTransaction;
-  } else if (dataT) {
-    transaction = dataT;
   }
 
   // TABLE definition
@@ -917,8 +899,8 @@ export default function TransactionsTable() {
     openCancelConfirmDialog,
   ]);
   const table = useReactTable({
-    data: transaction?.items,
-    rowCount: transaction?.rowCount,
+    data: dataT?.items,
+    rowCount: dataT?.rowCount,
     columns,
     state: {
       columnVisibility,
@@ -937,7 +919,7 @@ export default function TransactionsTable() {
             <Button
               variant="outline"
               className="text-base px-3 py-1.5 h-auto inline-block"
-              disabled={isFetchingT || isSearching}
+              disabled={isLoadingT || fetchAction === 'refresh'}
               onClick={handleRefresh}
             >
               <RotateCw className="icon" />
@@ -945,8 +927,8 @@ export default function TransactionsTable() {
           </TooltipWrapper>
           <FiltersPopover
             onFilter={handleFilter}
-            isFilterActive={isFilterActive}
-            disabled={isFetchingT || isSearching}
+            filters={filters}
+            disabled={isLoadingT || fetchAction === 'filter'}
           />
           {filters?.status !== TransactionStatus.PENDING && !hasSearched && (
             <ExportCSV filters={filters} />
@@ -956,12 +938,11 @@ export default function TransactionsTable() {
           <SearchInput
             className="flex-1"
             placeholder="Search with transaction code..."
-            disabled={isFetchingT || isSearching}
-            ref={searchRef}
+            disabled={isLoadingT || fetchAction === 'search'}
             hasSearched={hasSearched}
             onEnterSearch={handleEnterSearch}
             onClearSearch={handleClearSearchInput}
-            onSearch={() => handleSearch(filters)}
+            onSearch={handleSearch}
           />
 
           <TableColumnVisibility
@@ -974,8 +955,8 @@ export default function TransactionsTable() {
         </div>
       </div>
 
-      {(shouldShowSkeletonLoading.current && isFetchingT) || (isSearching && !searchedTransaction) ? (
-        <TablePaginationSkeleton showPagination={!isSearching} />
+      {isLoadingT ? (
+        <TablePaginationSkeleton showPagination={!hasSearched} />
       ) : isErrorT ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
@@ -991,11 +972,10 @@ export default function TransactionsTable() {
             ]}
           />
           <TablePagination
-            data={transaction}
+            data={dataT}
             table={table}
             pagination={pagination}
             isPlaceholderData={isPlaceholderDataT}
-            showNavigation={!hasSearched}
           />
         </>
       )}
@@ -1003,7 +983,7 @@ export default function TransactionsTable() {
       <p className="mt-5 text-muted-foreground text-sm"><b>Note</b>: Totals shown do not include tax</p>
 
       <CorrectStatusDialog
-        onCorrect={handleCorrectTransactionStatus}
+        onCorrect={handleFixTransactionStatus}
         isOpen={isOpenCorrectStatusDialog}
         onClose={closeCorrectStatusDialog}
         correctData={correctData}

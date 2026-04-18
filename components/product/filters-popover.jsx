@@ -19,13 +19,15 @@ import { Button } from '../ui/button';
 import { X } from 'lucide-react';
 import { useState } from 'react';
 import { PopoverClose } from '@radix-ui/react-popover';
+import { ProductStatus } from '@/constants/enums';
 
 export default function FiltersPopover({
   onFilter,
-  isFilterActive,
+  filters,
   disabled,
 }) {
   const [status, setStatus] = useState('active');
+  const isFilterActive = filters.status === ProductStatus.INACTIVE;
 
   function handleClear() {
     setStatus('active');

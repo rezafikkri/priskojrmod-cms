@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
   FormControl,
@@ -29,6 +29,7 @@ import { ChevronsUpDown, Loader2, Check } from 'lucide-react';
 import { useDebounce } from '@/hooks/use-debounce';
 import { safeFetch } from '@/lib/safe-fetch';
 import { useWatch } from 'react-hook-form';
+import { Skeleton } from '../ui/skeleton';
 
 export default function CustomerCombobox({
   form,
@@ -51,15 +52,21 @@ export default function CustomerCombobox({
     }
   }, [customerId]);
 
-  const { data, isFetching } = useQuery({
-    queryKey: ['customers-autocomplete', debouncedKey],
-    queryFn: async () => {
-      const results = await safeFetch({ url: `/api/customers/autocomplete?sk=${debouncedKey}` });
+  const { data, isError, error, isFetching, isLoading, status } = useQuery({
+    queryKey: ['customersAutocomplete', debouncedKey],
+    queryFn: async ({ signal }) => {
+      const results = await safeFetch({
+        url: `/api/customers/autocomplete?sk=${debouncedKey}`,
+        signal,
+        defaultErrorMessage: 'Failed to load options.',
+      });
       return results.data;
     },
-    placeholderData: [],
-    staleTime: 10_000,
-    enabled: debouncedKey.length > 0,
+    staleTime: 1000 * 30,
+    placeholderData: keepPreviousData,
+    enabled: debouncedKey.trim().length > 0,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
   });
 
   return (
@@ -87,56 +94,69 @@ export default function CustomerCombobox({
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className="p-0 sm:w-100 lg:w-120" align="start">
-              <Command>
+              <Command shouldFilter={false}>
                 <div className="relative">
                   <CommandInput
-                    placeholder="Search with email..."
+                    placeholder="Type email address..."
                     className="text-base"
                     value={searchKey}
                     onValueChange={(value) => setSearchKey(value)}
                   />
                   {isFetching && (
-                    <span className="absolute left-1.5 bg-white top-1 bottom-1 flex items-center px-1.5">
+                    <span className="absolute left-1.5 bg-popover top-1 bottom-1 flex items-center px-1.5">
                       <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
                     </span>
                   )}
                 </div>
-                <CommandList>
-                  {isFetching ? (
-                    <CommandEmpty>Searching...</CommandEmpty>
-                  ) : (
-                    <CommandEmpty>No customer found</CommandEmpty>
+                <CommandList className="min-h-10">
+                  {isLoading && (
+                    <CommandEmpty className="py-1 space-y-1.5 px-2">
+                      <Skeleton className="w-3/4 h-[27px]" />
+                      <Skeleton className="w-4/5 h-[27px]" />
+                      <Skeleton className="w-3/4 h-[27px]" />
+                    </CommandEmpty>
                   )}
-                  <CommandGroup>
-                    {data.map(customer => (
-                      <CommandItem
-                        className="text-base"
-                        value={customer.displayLabel}
-                        key={customer.id}
-                        onSelect={() => {
-                          field.onChange(customer.id);
-                          setSelectedLabel(customer.displayLabel);
-                          setIsComboboxOpen(false);
-                        }}
-                      >
-                        {customer.displayLabel}
-                        <Check
-                          className={cn(
-                            "ml-auto",
-                            customer.id === field.value
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+
+                  {isError ? (
+                    <CommandEmpty>
+                      <span className="text-destructive">{error.message}</span>
+                    </CommandEmpty>
+                  ) : (status !== 'pending' && data?.length < 1) && (
+                    <CommandEmpty>No results</CommandEmpty>
+                  )}
+                  
+                  {data?.length > 0 && (
+                    <CommandGroup>
+                      {data?.map(customer => (
+                        <CommandItem
+                          className="text-base"
+                          value={customer.displayLabel}
+                          key={customer.id}
+                          onSelect={() => {
+                            field.onChange(customer.id);
+                            setSelectedLabel(customer.displayLabel);
+                            setIsComboboxOpen(false);
+                          }}
+                        >
+                          {customer.displayLabel}
+                          <Check
+                            className={cn(
+                              "ml-auto",
+                              customer.id === field.value
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
                 </CommandList>
               </Command>
             </PopoverContent>
           </Popover>
           <FormDescription>
-            Search a customer.
+            Search a customer
           </FormDescription>
           <FormMessage />
         </FormItem>

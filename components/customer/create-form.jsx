@@ -25,7 +25,7 @@ export default function CreateForm() {
     const addRes = await addCustomer(data);
     if (addRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['customers'] });
-      queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
+      queryClient.invalidateQueries({ queryKey: ['customersAutocomplete'] });
       form.reset();
       toast.success('Customer created successfully.');
     } else {

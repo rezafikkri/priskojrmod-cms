@@ -46,7 +46,6 @@ export default function CreateForm({ secretKeys }) {
     const addRes = await addLicenseKey(data);
     if (addRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       form.reset();
       toast.success('License key created successfully.');
     } else {

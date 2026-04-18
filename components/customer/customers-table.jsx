@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useMemo, useCallback } from 'react';
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -41,39 +41,47 @@ import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
 import BanDialog from './ban-dialog';
 import { useDialog } from '@/hooks/use-dialog';
+import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
+import { deepEqual } from 'fast-equals';
 
 const defaultColumnVisibility = {
   lastActive: true,
   createdAt: false,
   updatedAt: false,
 };
+const STALE_TIME = 1000 * 20;
 
 export default function CustomersTable() {
   const queryClient = useQueryClient();
+  const isQueryStale = useCheckQueryStale();
+
+  // toast loading ref
+  const loadingToastIdRef = useRef(null);
 
   // search state
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchedCustomer, setSearchedCustomer] = useState(null);
-  const [searchError, setSearchError] = useState(null);
-  const searchRef = useRef(null);
-  const hasSearched = !!searchedCustomer;
+  const [searchKey, setSearchKey] = useState(null);
+  const hasSearched = !!searchKey;
 
-  // filters state
+  // filters and fetch action state
   const [filters, setFilters] = useState({ showBanned: false });
-  const [isFilterActive, setIsFilterActive] = useState(false);
-
-  // determine show table skeleton or not in normal mode
-  const shouldShowSkeletonLoading = useRef(true);
+  // Tracks active user-triggered or post-mutation fetch action.
+  // Determines loading toast visibility and message.
+  // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' | null (null = no toast shown)
+  const [fetchAction, setFetchAction] = useState(null);
 
   // table state
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: cmsConfig.pagination.pageSize,
   });
-  function handlePaginationChange(pagination, showSkeleton = false) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = showSkeleton;
-    setPagination(pagination);
+  function handlePaginationChange(updater) {
+    const newPagination = typeof updater === 'function' ? updater(pagination) : updater
+    const isStale = isQueryStale(['customers', newPagination, filters, searchKey], STALE_TIME);
+
+    if (isStale) {
+      setFetchAction('paginate');
+    }
+    setPagination(newPagination);
   }
   const columnVisibilityStorageKey = 'customers:column-visibility';
   const [columnVisibility, setColumnVisibility] = useState(() =>
@@ -87,6 +95,7 @@ export default function CustomersTable() {
     open: openDeleteDialog,
     close: closeDeleteDialog,
   } = useDialog();
+  
   const {
     data: banData,
     isOpen: isOpenBanDialog,
@@ -108,156 +117,152 @@ export default function CustomersTable() {
   const deletingIdsRef = useRef(deletingIds);
   const updatingBanStatusIdsRef = useRef(updatingBanStatusIds);
 
-  // add filters to url
-  function addFiltersToURL(url, appliedFilters) {
-    return `${url}&sb=${appliedFilters.showBanned}`;
+  // add params to url
+  function addParamsToURL(url, { filters, searchKey, pagination }) {
+    let newUrl = `${url}?sb=${filters.showBanned}`;
+
+    // add search param to url
+    if (searchKey) {
+      newUrl += `&sk=${searchKey}`;
+    } else {
+      newUrl += `&pi=${pagination.pageIndex}`;
+    }
+
+    return newUrl;
   }
 
   const {
     data: dataC,
-    isFetching: isFetchingC,
+    isLoading: isLoadingC,
+    isRefetching: isRefetchingC,
     isError: isErrorC,
     error: errorC,
     isPlaceholderData: isPlaceholderDataC,
   } = useQuery({
-    queryKey: ['customers', pagination.pageIndex, filters],
-    queryFn: async () => {
-      let toastId;
-      if (!shouldShowSkeletonLoading.current) {
-        toastId = toast.loading('Loading customers...');
-      }
-
+    queryKey: ['customers', pagination, filters, searchKey],
+    queryFn: async ({ signal }) => {
       const results = await safeFetch({
-        url: addFiltersToURL(`/api/customers?pi=${pagination.pageIndex}`, filters),
-        onFinally: () => {
-          if (toastId) {
-            toast.dismiss(toastId);
-          }
-        },
+        url: addParamsToURL('/api/customers', { filters, searchKey, pagination }),
+        signal,
+        ...(searchKey ?
+          { defaultErrorMessage: 'Something went wrong while searching. Please try again.' }
+          : {}),
       });
       return results.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 60 * 3,
-    enabled: !hasSearched,
+    staleTime: STALE_TIME,
   });
 
-  async function handleSearch(appliedFilters) {
-    const keyResult = searchKeySchema.safeParse(searchRef.current.value);
+  // manage toast loading
+  useEffect(() => {
+    if (isRefetchingC && fetchAction) {
+      const loadingToastId = loadingToastIdRef.current;
+
+      let loadingVerb = 'Loading';
+      if (fetchAction === 'search') loadingVerb = 'Searching';
+      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
+      const loadingMessage = `${loadingVerb} customers...`;
+
+      if (loadingToastId) {
+        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
+      } else {
+        // Use requestAnimationFrame so the toast is created after the UI
+        // stabilizes, preventing it from being skipped during rapid rerenders.
+        requestAnimationFrame(() => {
+          loadingToastIdRef.current = toast.loading(loadingMessage);
+        });
+      }
+    } else if (!isRefetchingC) {
+      if (loadingToastIdRef.current) {
+        // dismiss toast
+        toast.dismiss(loadingToastIdRef.current);
+        loadingToastIdRef.current = null;
+      }
+
+      // reset fetchAction
+      if (fetchAction !== 'refresh') {
+        setFetchAction(null);
+      }
+    }
+  }, [isRefetchingC, fetchAction]);
+
+  async function handleSearch(key) {
+    const keyResult = searchKeySchema.safeParse(key);
     if (!keyResult.success) return false;
     const parsedKey = keyResult.data;
-    
-    try {
-      const result = await queryClient.fetchQuery({
-        queryKey: ['customersSearch', parsedKey, appliedFilters],
-        queryFn: async () => {
-          setIsSearching(true);
-          // if previoesly searchedCustomer is null, then show skeleton loading
-          // for all table, besides that, then show toast loading only
-          let toastId;
-          if (hasSearched) {
-            toastId = toast.loading('Searching customers...');
-          }
 
-          return await safeFetch({
-            url: addFiltersToURL(`/api/customers?sk=${parsedKey}`, appliedFilters),
-            onFinally: () => {
-              if (toastId) {
-                toast.dismiss(toastId);
-              }
-              setIsSearching(false);
-            },
-            defaultErrorMessage: 'Something went wrong while searching. Please try again.',
-          });
-        },
-        staleTime: 10_000,
-        gcTime: 10_000,
-      });
+    const queryKey = ['customers', pagination, filters, parsedKey];
+    const isStale = isQueryStale(queryKey, STALE_TIME);
 
-      setSearchError(null);
-      setSearchedCustomer(result.data);
-    } catch (err) {
-      // Keep the searchedCustomer state to mark the current mode as search mode,
-      // even if the search fails. The Clear button will still be shown,
-      // allowing the admin to clear the search and return to normal mode.
-      setSearchedCustomer([]);
-      setSearchError(err);
+    if (isStale) {
+      setFetchAction('search');
+
+      if (searchKey === parsedKey) {
+        queryClient.invalidateQueries({ queryKey, exact: true });
+      }
     }
+    setSearchKey(parsedKey);
   }
 
   function handleEnterSearch(e) {
     if (e.key === 'Enter') {
-      handleSearch(filters);
+      handleSearch(e.target.value);
     }
   }
 
   function handleClearSearchInput() {
-    handlePaginationChange(
-      {
-        ...pagination,
-        pageIndex: 0,
-      }, // pagination
-      true, // showSkeleton
+    const isStale = isQueryStale(
+      ['customers', { ...pagination, pageIndex: 0 }, filters, null],
+      STALE_TIME,
     );
-    setSearchedCustomer(null);
-    setSearchError(null);
-    searchRef.current.value = '';
+
+    if (isStale) {
+      setFetchAction('clear-search');
+    }
+
+    setPagination({ ...pagination, pageIndex: 0 });
+    setSearchKey(null);
   }
 
-  // set isFilterActive when apply and clear
-  function syncIsFilterActive(appliedFilters) {
-    if (appliedFilters.showBanned) {
-      setIsFilterActive(true);
-    } else {
-      setIsFilterActive(false);
-    }
+  async function handleRefresh() {
+    setFetchAction('refresh');
+    await queryClient.invalidateQueries({ queryKey: ['customers'] });
+    setFetchAction(null);
   }
 
   function handleFilter(newFilters) {
-    if (hasSearched) {
-      handleSearch(newFilters);
-    } else {
-      handlePaginationChange(
-        {
-          ...pagination,
-          pageIndex: 0,
-        }, // pagination
-        dataC ? false : true, // showSkeleton
-      );
+    const queryKey = ['customers', pagination, newFilters, searchKey];
+    const isStale = isQueryStale(queryKey, STALE_TIME);
+
+    if (isStale) {
+      setFetchAction('filter');
+
+      if (deepEqual(filters, newFilters) && (hasSearched || pagination.pageIndex === 0)) {
+        queryClient.invalidateQueries({ queryKey, exact: true });
+      }
     }
-
-    // set filters for trigger refetch in normal mode
-    setFilters(newFilters);
-    syncIsFilterActive(newFilters);
-  }
-
-  function handleRefresh() {
-    // Every action that triggers useQuery refetch must include this check.
-    // If data has never been successfully fetched (e.g. initial fetch failed),
-    // show skeleton instead of toast to prevent error caused by undefined data being passed to the table
-    shouldShowSkeletonLoading.current = dataC ? false : true;
     
-    queryClient.invalidateQueries({ queryKey: ['customers'] });
-    queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
-
-    if (hasSearched) {
-      handleSearch(filters);
+    if (!hasSearched) {
+      setPagination({ ...pagination, pageIndex: 0 });
     }
+
+    // set filters for trigger refetch
+    setFilters(newFilters);
   }
 
   const handleEditBanStatus = useCallback(async ({ id, isBanned }) => {
     const nextIsBanned = !isBanned;
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
 
+    // show loading
+    const toastId = toast.loading(nextIsBanned ? 'Banning customer...' : 'Unbanning customer...');
+    
     // This is for add opacity-50 style to updated row
     setUpdatingBanStatusIds((prev) => {
       const newIds = [...prev, id];
       updatingBanStatusIdsRef.current = newIds;
       return newIds;
     });
-    const toastId = toast.loading(nextIsBanned ? 'Banning customer...' : 'Unbanning customer...');
 
     const editRes = await editCustomerBanStatus(id, nextIsBanned);
 
@@ -267,66 +272,72 @@ export default function CustomersTable() {
       return newIds;
     });
 
-    const customer = queryClient.getQueryData([
-      'customers',
-      pagination.pageIndex,
-      filters,
-    ]);
+    const customer = queryClient.getQueryData(['customers', pagination, filters, searchKey]);
 
     if (editRes.status === 'success') {
-      if (hasSearched) {
-        setSearchedCustomer(prevCustomer => ({
-          ...prevCustomer,
-          items: prevCustomer.items.filter(customer => customer.id !== id),
-        }));
-
-        queryClient.invalidateQueries({ queryKey: ['customers'] });
-      } else {
+      if (customer) {
         const newCustomers = customer.items.filter(customer => customer.id !== id);
-        const newRowCount = customer.rowCount - 1;
 
-        if (!isLastPage({
-          pageIndex: pagination.pageIndex,
-          pageSize: pagination.pageSize,
-          rowCount: customer.rowCount,
-        })) {
+        if (hasSearched) {
           queryClient.setQueryData(
-            ['customers', pagination.pageIndex, filters],
-            { items: newCustomers, rowCount: newRowCount },
+            ['customers', pagination, filters, searchKey],
+            (oldData) => {
+              if (!oldData) return oldData;
+
+              return { ...oldData, items: newCustomers };
+            },
           );
 
-          hasSuccessfulBanRef.current = true;
+          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
         } else {
-          if (newCustomers.length === 0 && newRowCount > 0) {
-            queryClient.removeQueries({
-              queryKey: ['customers', pagination.pageIndex, filters],
-              exact: true,
-            });
+          const newRowCount = customer.rowCount - 1;
 
+          if (!isLastPage({
+            pageIndex: pagination.pageIndex,
+            pageSize: pagination.pageSize,
+            rowCount: customer.rowCount,
+          })) {
             queryClient.setQueryData(
-              ['customers', pagination.pageIndex - 1, filters],
-              (oldData) => {
-                if (!oldData) return oldData;
-                return { ...oldData, rowCount: newRowCount };
-              },
-            );
-
-            setPagination((pagination) => ({
-              ...pagination,
-              pageIndex: pagination.pageIndex - 1,
-            }));
-          } else {
-            queryClient.setQueryData(
-              ['customers', pagination.pageIndex, filters],
+              ['customers', pagination, filters, searchKey],
               { items: newCustomers, rowCount: newRowCount },
             );
-          }
 
-          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
+            hasSuccessfulBanRef.current = true;
+          } else {
+            if (newCustomers.length === 0 && newRowCount > 0) {
+              const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
+
+              queryClient.setQueryData(
+                ['customers', newPagination, filters, searchKey],
+                (oldData) => {
+                  if (!oldData) return oldData;
+                  return { ...oldData, rowCount: newRowCount };
+                },
+              );
+
+              // change page to prev page
+              setFetchAction('paginate');
+              setPagination(newPagination);
+
+              queryClient.removeQueries({
+                queryKey: ['customers', pagination, filters, searchKey],
+                exact: true,
+              });
+            } else {
+              queryClient.setQueryData(
+                ['customers', pagination, filters, searchKey],
+                { items: newCustomers, rowCount: newRowCount },
+              );
+            }
+
+            queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
+          }
         }
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['customers'] });
       }
 
-      queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
+      queryClient.invalidateQueries({ queryKey: ['customersAutocomplete'] });
       toast.success(
         nextIsBanned ? 'Customer has been banned successfully.' : 'Customer has been unbanned successfully.',
         { id: toastId },
@@ -335,30 +346,27 @@ export default function CustomersTable() {
       toast.error(editRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
     }
 
-    // For still invalidateQueries customers, when not in last page, last ban item fails, and 
-    // at least one ban succeeded.
-    if (
-      !hasSearched &&
-      updatingBanStatusIdsRef.current.length === 0 &&
-      hasSuccessfulBanRef.current
-    ) {
-      // Double check page position in case user navigated 
-      // while async operation was still in progress
-      if (!isLastPage({
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        rowCount: customer.rowCount,
-      })) {
+    // Batches overlapping actions (new action triggered before previous one finishes)
+    // into a single invalidateQueries, once all settled and at least one succeeded.
+    // Sequential actions are not affected.
+    if (updatingBanStatusIdsRef.current.length === 0 && hasSuccessfulBanRef.current) {
+      if (
+        customer &&
+        !hasSearched &&
+        !isLastPage({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          rowCount: customer.rowCount,
+        })
+      ) {
         queryClient.invalidateQueries({ queryKey: ['customers'] });
       }
 
       hasSuccessfulBanRef.current = false;
     }
-  }, [pagination, filters, searchedCustomer]);
+  }, [pagination, filters, searchKey]);
 
   async function handleDelete({ id }) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
     // show loading
     const toastId = toast.loading('Deleting customer...');
 
@@ -377,106 +385,99 @@ export default function CustomersTable() {
       return newIds;
     });
 
-    const customer = queryClient.getQueryData([
-      'customers',
-      pagination.pageIndex,
-      filters,
-    ]);
+    const customer = queryClient.getQueryData(['customers', pagination, filters, searchKey]);
 
-    // Test queryKey apakah akan up-to-date, ketika await masih pending, tetapi kita ubah paginationnya
-    // Hasil: queryKey tidak up-to-date, alias stale
     if (removeRes.status === 'success') {
-      if (hasSearched) {
-        setSearchedCustomer((prevCustomer) => ({
-          ...prevCustomer,
-          items: prevCustomer.items.filter(customer => customer.id !== id),
-        }));
+      if (customer) {
+        const newCustomers = customer.items.filter(c => c.id !== id);
 
-        queryClient.invalidateQueries({ queryKey: ['customers'] });
+        if (hasSearched) {
+          queryClient.setQueryData(
+            ['customers', pagination, filters, searchKey],
+            (oldData) => {
+              if (!oldData) return oldData;
+
+              return { ...oldData, items: newCustomers };
+            },
+          );
+
+          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
+        } else {
+          const newRowCount = customer.rowCount - 1;
+
+          if (!isLastPage({
+            pageIndex: pagination.pageIndex,
+            pageSize: pagination.pageSize,
+            rowCount: customer.rowCount,
+          })) {
+            queryClient.setQueryData(
+              ['customers', pagination, filters, searchKey],
+              { items: newCustomers, rowCount: newRowCount },
+            );
+
+            hasSuccessfulDeleteRef.current = true;
+          } else {
+            if (newCustomers.length === 0 && newRowCount > 0) {
+              const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
+
+              queryClient.setQueryData(
+                ['customers', newPagination, filters, searchKey],
+                (oldData) => {
+                  if (!oldData) return oldData;
+
+                  return { ...oldData, rowCount: newRowCount };
+                },
+              );
+
+              // change page to prev page
+              setFetchAction('paginate');
+              setPagination(newPagination);
+
+              queryClient.removeQueries({
+                queryKey: ['customers', pagination, filters, searchKey],
+                exact: true,
+              });
+            } else {
+              queryClient.setQueryData(
+                ['customers', pagination, filters, searchKey],
+                { items: newCustomers, rowCount: newRowCount },
+              );
+            }
+
+            queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
+          }
+        }
       } else {
-        const newCustomers = customer.items.filter(customer => customer.id !== id);
-        const newRowCount = customer.rowCount - 1;
+        queryClient.invalidateQueries({ queryKey: ['customers'] });
+      }
 
-        if (!isLastPage({
+      queryClient.invalidateQueries({ queryKey: ['customersAutocomplete'] });
+      toast.success('Customer deleted successfully.', { id: toastId });
+    } else {
+      toast.error(removeRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
+    }
+
+    // Batches overlapping actions (new action triggered before previous one finishes)
+    // into a single invalidateQueries, once all settled and at least one succeeded.
+    // Sequential actions are not affected.
+    if (deletingIdsRef.current.length === 0 && hasSuccessfulDeleteRef.current) {
+      if (
+        customer &&
+        !hasSearched &&
+        !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           rowCount: customer.rowCount,
-        })) {
-          queryClient.setQueryData(
-            ['customers', pagination.pageIndex, filters],
-            { items: newCustomers, rowCount: newRowCount },
-          );
-
-          hasSuccessfulDeleteRef.current = true;
-        } else {
-          if (newCustomers.length === 0 && newRowCount > 0) {
-            queryClient.removeQueries({
-              queryKey: ['customers', pagination.pageIndex, filters],
-              exact: true,
-            });
-            
-            queryClient.setQueryData(
-              ['customers', pagination.pageIndex - 1, filters],
-              (oldData) => {
-                if (!oldData) return oldData;
-                return { ...oldData, rowCount: newRowCount };
-              },
-            );
-
-            setPagination((pagination) => ({
-              ...pagination,
-              pageIndex: pagination.pageIndex - 1,
-            }));
-          } else {
-            queryClient.setQueryData(
-              ['customers', pagination.pageIndex, filters],
-              { items: newCustomers, rowCount: newRowCount },
-            );
-          }
-
-          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
-        }
-      }
-
-      queryClient.invalidateQueries({ queryKey: ['customersSearch'] });
-      toast.success('Customer deleted successfully.', { id: toastId });
-    } else {
-      toast.error(removeRes.message, { id: toastId, duration: cmsConfig.toast.duration.error });
-    }
-
-    // For still invalidateQueries customers, when not in last page, last delete item fails, and 
-    // at least one delete succeeded.
-    if (
-      !hasSearched &&
-      deletingIdsRef.current.length === 0 &&
-      hasSuccessfulDeleteRef.current
-    ) {
-      // Double check page position in case user navigated 
-      // while async operation was still in progress
-      if (!isLastPage({
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        rowCount: customer.rowCount,
-      })) {
+        })
+      ) {
         queryClient.invalidateQueries({ queryKey: ['customers'] });
       }
 
       hasSuccessfulDeleteRef.current = false;
     }
-  }
-
-  let customer;
-  let activeError;
-  if (hasSearched) {
-    customer = searchedCustomer;
-  } else if (dataC) {
-    customer = dataC;
-  }
-
-  if (!hasSearched && isErrorC) {
-    activeError = errorC.message;
-  } else if (searchError) {
-    activeError = searchError.message;
   }
 
   // TABLE definition
@@ -602,8 +603,8 @@ export default function CustomersTable() {
     openBanDialog,
   ]);
   const table = useReactTable({
-    data: customer?.items,
-    rowCount: customer?.rowCount ?? 0,
+    data: dataC?.items,
+    rowCount: dataC?.rowCount,
     columns,
     state: {
       columnVisibility,
@@ -630,7 +631,7 @@ export default function CustomersTable() {
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto inline-block"
-                disabled={isFetchingC || isSearching}
+                disabled={isLoadingC || fetchAction === 'refresh'}
                 onClick={handleRefresh}
               >
                 <RotateCw className="icon" />
@@ -639,8 +640,8 @@ export default function CustomersTable() {
 
             <FiltersPopover
               onFilter={handleFilter}
-              isFilterActive={isFilterActive}
-              disabled={isFetchingC || isSearching}
+              filters={filters}
+              disabled={isLoadingC || fetchAction === 'filter'}
             />
            </div>
         </div>
@@ -649,12 +650,11 @@ export default function CustomersTable() {
           <SearchInput
             className="flex-1"
             placeholder="Search with email..."
-            disabled={isFetchingC || isSearching}
-            ref={searchRef}
+            disabled={isLoadingC || fetchAction === 'search'}
             hasSearched={hasSearched}
             onEnterSearch={handleEnterSearch}
             onClearSearch={handleClearSearchInput}
-            onSearch={() => handleSearch(filters)}
+            onSearch={handleSearch}
           />
 
           <TableColumnVisibility
@@ -667,12 +667,12 @@ export default function CustomersTable() {
         </div>
       </div>
 
-      {(shouldShowSkeletonLoading.current && isFetchingC) || (isSearching && !hasSearched) ? (
-        <TablePaginationSkeleton showPagination={!isSearching} />
-      ) : activeError ? (
+      {isLoadingC ? (
+        <TablePaginationSkeleton showPagination={!hasSearched} />
+      ) : isErrorC ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{activeError}</AlertTitle>
+          <AlertTitle>{errorC.message}</AlertTitle>
         </Alert>
       ) : (
         <>
@@ -684,23 +684,25 @@ export default function CustomersTable() {
             ]}
           />
           <TablePagination
-            data={customer}
+            data={dataC}
             table={table}
             pagination={pagination}
             isPlaceholderData={isPlaceholderDataC}
-            showNavigation={!hasSearched}
           />
         </>
       )}
       
-      {(hasSearched && customer?.isTooMany) ? (
-        <p className="mt-5 text-muted-foreground text-sm"><b>Info</b>: If you haven't found the customer you're looking for, please use a more specific email!</p>
-      ) : null}
-      <p className="mt-5 text-muted-foreground text-sm"><b>Notes</b>:</p>
-      <ul className="text-muted-foreground text-sm list-disc list-inside">
-        <li><i>Last Active</i> indicates the most recent recorded activity and is updated every 24 hours. This may not reflect real-time status.</li>
-        <li>Only customers who have never signed in, have been inactive for more than 30 days, do not have any license keys associated with their account, or have been banned can be deleted directly.</li>
-      </ul>
+      <div className="mt-5">
+        {dataC?.isTooMany ? (
+          <p className="mb-5 text-muted-foreground text-sm"><b>Info</b>: If you haven't found the customer you're looking for, please use a more specific email!</p>
+        ) : null}
+
+        <p className="text-muted-foreground text-sm"><b>Notes</b>:</p>
+        <ul className="text-muted-foreground text-sm list-disc list-inside">
+          <li><i>Last Active</i> indicates the most recent recorded activity and is updated every 24 hours. This may not reflect real-time status.</li>
+          <li>Only customers who have never signed in, have been inactive for more than 30 days, do not have any license keys associated with their account, or have been banned can be deleted directly.</li>
+        </ul>
+      </div>
 
       <DeleteDialog
         onDelete={handleDelete}

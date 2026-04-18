@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { isLastPage } from '@/lib/utils';
 import { AlertCircle, RotateCw } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import {
   Alert,
@@ -20,7 +20,6 @@ import {
   setCanRegenerateKeys,
 } from '@/actions/license-key-actions';
 import { toast } from 'sonner';
-import { searchKeySchema } from '@/lib/validators/base-validator';
 import FiltersPopover from './filters-popover';
 import { Button } from '../ui/button';
 import { MoreHorizontal, Minus, Plus } from 'lucide-react';
@@ -52,6 +51,9 @@ import TableSelectionAlert from '../ui/table-selection-alert';
 import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
 import { useDialog } from '@/hooks/use-dialog';
+import { searchKeySchema } from '@/lib/validators/base-validator';
+import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
+import { deepEqual } from 'fast-equals';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -60,32 +62,39 @@ const defaultColumnVisibility = {
   createdAt: false,
   updatedAt: false,
 };
+const STALE_TIME = 1000 * 20;
 
 export default function LicenseKeysTable() {
   const queryClient = useQueryClient();
+  const isQueryStale = useCheckQueryStale();
+
+  // toast loading ref
+  const loadingToastIdRef = useRef(null);
 
   // search state
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchedLicenseKey, setSearchedLicenseKey] = useState(null);
-  const [searchError, setSearchError] = useState(null);
-  const searchRef = useRef(null);
+  const [searchKey, setSearchKey] = useState(null);
+  const hasSearched = !!searchKey;
 
-  // filters state
+  // filters and fetch action state
   const [filters, setFilters] = useState({ showRevoked: false });
-  const [isFilterActive, setIsFilterActive] = useState(false);
-
-  // determine show table skeleton or not in normal mode
-  const shouldShowSkeletonLoading = useRef(true);
+  // Tracks active user-triggered or post-mutation fetch action.
+  // Determines loading toast visibility and message.
+  // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' | null (null = no toast shown)
+  const [fetchAction, setFetchAction] = useState(null);
 
   // table state
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: cmsConfig.pagination.pageSize,
   });
-  function handlePaginationChange(pagination) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
-    setPagination(pagination);
+  function handlePaginationChange(updater) {
+    const newPagination = typeof updater === 'function' ? updater(pagination) : updater
+    const isStale = isQueryStale(['licenseKeys', newPagination, filters, searchKey], STALE_TIME);
+
+    if (isStale) {
+      setFetchAction('paginate');
+    }
+    setPagination(newPagination);
   }
   const [rowSelection, setRowSelection] = useState({});
   const columnVisibilityStorageKey = 'license-keys:column-visibility';
@@ -138,15 +147,23 @@ export default function LicenseKeysTable() {
   // allowing us to update the loading toast instead of showing a new one.
   const grantRegenerateToastIdRef = useRef(null);
 
-  // add filters to url
-  function addFiltersToURL(url, appliedFilters) {
-    let newUrl = url + `&sr=${appliedFilters.showRevoked}`;
+  // add filters and search params to url
+  function addParamsToURL(url, { filters, searchKey, pagination }) {
+    // add filters params to url
+    let newUrl = url + `?sr=${filters.showRevoked}`;
 
-    if (appliedFilters.secretKeyId && appliedFilters.secretKeyId !== 'all') {
-      newUrl += `&ski=${appliedFilters.secretKeyId}`;
+    if (filters.secretKeyId && filters.secretKeyId !== 'all') {
+      newUrl += `&ski=${filters.secretKeyId}`;
     }
-    if (appliedFilters.canRegenerate && appliedFilters.canRegenerate !== 'all') {
-      newUrl += `&cr=${appliedFilters.canRegenerate}`;
+    if (filters.canRegenerate && filters.canRegenerate !== 'all') {
+      newUrl += `&cr=${filters.canRegenerate}`;
+    }
+
+    // add search param to url
+    if (searchKey) {
+      newUrl += `&sk=${searchKey}`;
+    } else {
+      newUrl += `&pi=${pagination.pageIndex}`;
     }
 
     return newUrl;
@@ -154,264 +171,137 @@ export default function LicenseKeysTable() {
 
   const {
     data: dataLK,
-    isFetching: isFetchingLK,
+    isLoading: isLoadingLK,
+    isRefetching: isRefetchingLK,
     isError: isErrorLK,
     error: errorLK,
     isPlaceholderData: isPlaceholderDataLK,
   } = useQuery({
-    queryKey: ['licenseKeys', pagination.pageIndex, filters],
-    queryFn: async () => {
-      let toastId;
-      const activeToastId = grantRegenerateToastIdRef.current;
-
-      if (!shouldShowSkeletonLoading.current) {
-        if (activeToastId) {
-          toastId = toast.loading('Refreshing license keys...', { id: activeToastId });
-
-          grantRegenerateToastIdRef.current = null;
-        } else {
-          toastId = toast.loading('Loading license keys...');
-        }
-      }
-
-      const results = await safeFetch({
-        url: addFiltersToURL(`/api/license-keys?pi=${pagination.pageIndex}`, filters),
-        onFinally: () => {
-          if (toastId && !activeToastId) {
-            toast.dismiss(toastId);
-          }
-        },
+    queryKey: ['licenseKeys', pagination, filters, searchKey],
+    queryFn: async ({ signal }) => {
+      const result = await safeFetch({
+        url: addParamsToURL('/api/license-keys', { filters, searchKey, pagination }),
+        signal,
+        ...(searchKey ?
+          { defaultErrorMessage: 'Something went wrong while searching. Please try again.' }
+          : {}),
       });
-      return results.data;
+      return result.data;
     },
     placeholderData: keepPreviousData,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 60 * 3,
-    enabled: !searchedLicenseKey,
+    staleTime: STALE_TIME,
   });
 
-  async function handleSearch(appliedFilters) {
-    const keyResult = searchKeySchema.safeParse(searchRef.current.value);
+  // manage toast loading
+  useEffect(() => {
+    if (isRefetchingLK && fetchAction) {
+      const activeActionToastId = grantRegenerateToastIdRef.current;
+      const loadingToastId = loadingToastIdRef.current;
+
+      let loadingVerb = 'Loading';
+      if (fetchAction === 'search') loadingVerb = 'Searching';
+      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
+      const loadingMessage = `${loadingVerb} license keys...`;
+
+      if (activeActionToastId) {
+        toast.loading(loadingMessage, { id: activeActionToastId });
+
+        grantRegenerateToastIdRef.current = null;
+      } else if (loadingToastId) {
+        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
+      } else {
+        // Use requestAnimationFrame so the toast is created after the UI
+        // stabilizes, preventing it from being skipped during rapid rerenders.
+        requestAnimationFrame(() => {
+          loadingToastIdRef.current = toast.loading(loadingMessage);
+        });
+      }
+    } else if (!isRefetchingLK) {
+      if (loadingToastIdRef.current) {
+        // dismiss toast
+        toast.dismiss(loadingToastIdRef.current);
+        loadingToastIdRef.current = null;
+      }
+
+      // reset fetchAction
+      if (fetchAction !== 'refresh') {
+        setFetchAction(null);
+      }
+    }
+  }, [isRefetchingLK, fetchAction]);
+
+  function handleSearch(key) {
+    const keyResult = searchKeySchema.safeParse(key);
     if (!keyResult.success) return false;
     const parsedKey = keyResult.data;
-    
-    try {
-      const result = await queryClient.fetchQuery({
-        queryKey: ['licenseKeysSearch', parsedKey, appliedFilters],
-        queryFn: async () => {
-          setIsSearching(true);
-          // if previoesly searchedLicenseKey is null, then show skeleton loading
-          // for all table, besides that, then show toast loading only
-          let toastId;
-          const activeToastId = grantRegenerateToastIdRef.current;
 
-          if (searchedLicenseKey) {
-            if (activeToastId) {
-              toastId = toast.loading('Searching license keys...', { id: activeToastId });
+    const queryKey = ['licenseKeys', pagination, filters, parsedKey];
+    const isStale = isQueryStale(queryKey, STALE_TIME);
 
-              grantRegenerateToastIdRef.current = null;
-            } else {
-              toastId = toast.loading('Searching license keys...');
-            }
-          }
+    if (isStale) {
+      setFetchAction('search');
 
-          return await safeFetch({
-            url: addFiltersToURL(`/api/license-keys?sk=${parsedKey}`, appliedFilters),
-            onFinally: () => {
-              if (toastId && !activeToastId) {
-                toast.dismiss(toastId);
-              }
-
-              setIsSearching(false);
-            },
-            defaultErrorMessage: 'Something went wrong while searching. Please try again.',
-          });
-        },
-        staleTime: 10_000,
-        gcTime: 10_000,
-      });
-
-      setSearchedLicenseKey(result.data);
-    } catch (err) {
-      setSearchError(err);
+      if (searchKey === parsedKey) {
+        queryClient.invalidateQueries({ queryKey, exact: true });
+      }
     }
 
     // reset rowSelection
     setRowSelection({});
+    setSearchKey(parsedKey);
   }
 
   function handleEnterSearch(e) {
     if (e.key === 'Enter') {
-      handleSearch(filters);
+      handleSearch(e.target.value);
     }
   }
 
   function handleClearSearchInput() {
+    const isStale = isQueryStale(
+      ['licenseKeys', { ...pagination, pageIndex: 0 }, filters, null],
+      STALE_TIME,
+    );
+
+    if (isStale) {
+      setFetchAction('clear-search');
+    }
+
+    setPagination({ ...pagination, pageIndex: 0 });
+    // reset rowSelection
     setRowSelection({});
-    handlePaginationChange({
-      ...pagination,
-      pageIndex: 0,
-    });
-    setSearchedLicenseKey(null);
-    setSearchError(null);
-    searchRef.current.value = '';
+    setSearchKey(null);
   }
 
-  function handleRefresh() {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
+  async function handleRefresh() {
+    setFetchAction('refresh');
+    // reset rowSelection
+    setRowSelection({});
 
-    queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-    queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
-
-    if (searchedLicenseKey) {
-      handleSearch(filters);
-    } else {
-      // reset rowSelection
-      setRowSelection({});
-    }
-  }
-
-  async function handleDelete({ id }) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
-    // show loading
-    const toastId = toast.loading('Deleting license key...');
-
-    // This is for add opacity-50 style to deleted row
-    setDeletingIds((prev) => {
-      const newIds = [...prev, id];
-      deletingIdsRef.current = newIds;
-      return newIds;
-    });
-
-    const removeRes = await removeLicenseKey(id);
-
-    setDeletingIds((prev) => {
-      const newIds = prev.filter(prevId => prevId !== id);
-      deletingIdsRef.current = newIds;
-      return newIds;
-    });
-
-    const licenseKey = queryClient.getQueryData([
-      'licenseKeys',
-      pagination.pageIndex,
-      filters,
-    ]);
-
-    if (removeRes.status === 'success') {
-      if (searchedLicenseKey) {
-        setSearchedLicenseKey((prevLicenseKey) => ({
-          ...prevLicenseKey,
-          items: prevLicenseKey.items.filter(slk => slk.id !== id),
-        }));
-
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-      } else {
-        const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== id);
-        const newRowCount = licenseKey.rowCount - 1;
-
-        if (!isLastPage({
-          pageIndex: pagination.pageIndex,
-          pageSize: pagination.pageSize,
-          rowCount: licenseKey.rowCount,
-        })) {
-          queryClient.setQueryData(
-            ['licenseKeys', pagination.pageIndex, filters],
-            { items: newLicenseKeys, rowCount: newRowCount },
-          );
-
-          hasSuccessfulDeleteRef.current = true;
-        } else {
-          if (newLicenseKeys.length === 0 && newRowCount > 0) {
-            queryClient.removeQueries({
-              queryKey: ['licenseKeys', pagination.pageIndex, filters],
-              exact: true,
-            });
-
-            queryClient.setQueryData(
-              ['licenseKeys', pagination.pageIndex - 1, filters],
-              (oldData) => {
-                if (!oldData) return oldData;
-
-                return { ...oldData, rowCount: newRowCount };
-              },
-            );
-
-            setPagination((pagination) => ({
-              ...pagination,
-              pageIndex: pagination.pageIndex - 1,
-            }));
-          } else {
-            queryClient.setQueryData(
-              ['licenseKeys', pagination.pageIndex, filters],
-              { items: newLicenseKeys, rowCount: newRowCount },
-            );
-          }
-
-          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
-        }
-      }
-      
-      // if id exist in rowSelection then remove
-      setRowSelection(prev => {
-        if (!(id in prev)) return prev;
-        const { [id]:_, ...next } = prev;
-        return next;
-      });
-      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
-      toast.success(`License key deleted successfully`, { id: toastId });
-    } else {
-      toast.error(removeRes.message, {
-        id: toastId,
-        duration: cmsConfig.toast.duration.error
-      });
-    }
-
-    // For still invalidateQueries licenseKeys, when not in last page, last delete item fails, and 
-    // at least one delete succeeded.
-    if (
-      !searchedLicenseKey &&
-      deletingIdsRef.current.length === 0 &&
-      hasSuccessfulDeleteRef.current
-    ) {
-      if (!isLastPage({
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        rowCount: licenseKey.rowCount,
-      })) {
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-      }
-
-      hasSuccessfulDeleteRef.current = false;
-    }
-  }
-
-  // set isFilterActive when apply and clear
-  function syncIsFilterActive(appliedFilters) {
-    if (appliedFilters.showRevoked || Object.keys(appliedFilters).length > 1) {
-      setIsFilterActive(true);
-    } else {
-      setIsFilterActive(false);
-    }
+    await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+    setFetchAction(null);
   }
 
   function handleFilter(newFilters) {
-    if (searchedLicenseKey) {
-      handleSearch(newFilters);
-    } else {
-      handlePaginationChange({
-        ...pagination,
-        pageIndex: 0,
-      });
+    const queryKey = ['licenseKeys', pagination, newFilters, searchKey];
+    const isStale = isQueryStale(queryKey, STALE_TIME);
+
+    if (isStale) {
+      setFetchAction('filter');
+
+      if (deepEqual(filters, newFilters) && (hasSearched || pagination.pageIndex === 0)) {
+        queryClient.invalidateQueries({ queryKey, exact: true });
+      }
+    }
+    
+    if (!hasSearched) {
+      setPagination({ ...pagination, pageIndex: 0 });
     }
 
     // reset rowSelection
     setRowSelection({});
-
-    // set filters for trigger refetch in normal mode
+    // set filters for trigger refetch
     setFilters(newFilters);
-    syncIsFilterActive(newFilters);
 
     // if canRegenerate = 'yes'
     if (newFilters?.canRegenerate === 'yes' || newFilters.showRevoked) {
@@ -444,54 +334,214 @@ export default function LicenseKeysTable() {
     }
   }
 
+  async function handleDelete({ id }) {
+    // show loading
+    const toastId = toast.loading('Deleting license key...');
+
+    // This is for add opacity-50 style to deleted row
+    setDeletingIds((prev) => {
+      const newIds = [...prev, id];
+      deletingIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const removeRes = await removeLicenseKey(id);
+
+    setDeletingIds((prev) => {
+      const newIds = prev.filter(prevId => prevId !== id);
+      deletingIdsRef.current = newIds;
+      return newIds;
+    });
+
+    const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
+
+    if (removeRes.status === 'success') {
+      if (licenseKey) {
+        const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== id);
+
+        if (hasSearched) {
+          queryClient.setQueryData(
+            ['licenseKeys', pagination, filters, searchKey],
+            (oldData) => {
+              if (!oldData) return oldData;
+            
+              return { ...oldData, items: newLicenseKeys };
+            },
+          );
+
+          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
+        } else {
+          const newRowCount = licenseKey.rowCount - 1;
+
+          if (!isLastPage({
+            pageIndex: pagination.pageIndex,
+            pageSize: pagination.pageSize,
+            rowCount: licenseKey.rowCount,
+          })) {
+            queryClient.setQueryData(
+              ['licenseKeys', pagination, filters, searchKey],
+              { items: newLicenseKeys, rowCount: newRowCount },
+            );
+
+            hasSuccessfulDeleteRef.current = true;
+          } else {
+            if (newLicenseKeys.length === 0 && newRowCount > 0) {
+              const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
+
+              queryClient.setQueryData(
+                ['licenseKeys', newPagination, filters, searchKey],
+                (oldData) => {
+                  if (!oldData) return oldData;
+
+                  return { ...oldData, rowCount: newRowCount };
+                },
+              );
+
+              // change page to prev page
+              setFetchAction('paginate');
+              setPagination(newPagination);
+
+              queryClient.removeQueries({
+                queryKey: ['licenseKeys', pagination, filters, searchKey],
+                exact: true,
+              });
+            } else {
+              queryClient.setQueryData(
+                ['licenseKeys', pagination, filters, searchKey],
+                { items: newLicenseKeys, rowCount: newRowCount },
+              );
+            }
+
+            queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
+          }
+        }
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+      }
+
+      // if id exist in rowSelection then remove
+      setRowSelection(prev => {
+        if (!(id in prev)) return prev;
+        const { [id]:_, ...next } = prev;
+        return next;
+      });
+      toast.success(`License key deleted successfully`, { id: toastId });
+    } else {
+      toast.error(removeRes.message, {
+        id: toastId,
+        duration: cmsConfig.toast.duration.error
+      });
+    }
+
+    // Batches overlapping actions (new action triggered before previous one finishes)
+    // into a single invalidateQueries, once all settled and at least one succeeded.
+    // Sequential actions are not affected.
+    if (deletingIdsRef.current.length === 0 && hasSuccessfulDeleteRef.current) {
+      if (
+        licenseKey &&
+        !hasSearched &&
+        !isLastPage({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          rowCount: licenseKey.rowCount,
+        })
+      ) {
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+      }
+
+      hasSuccessfulDeleteRef.current = false;
+    }
+  }
+
   async function handleSetCanRegenerate() {
     const rowSelections = Object.keys(rowSelection);
     if (rowSelections.length <= 0) return false;
-
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
 
     setIsRegenerating(true);
     // show loading
     const toastId = toast.loading('Enabling regeneration...');
 
-    // not use try/catch because in actions already using try/catch
+    // not use try/catch because in server actions already using try/catch
     const setCanRegenerateRes = await setCanRegenerateKeys(rowSelections);
 
     if (setCanRegenerateRes.status === 'success') {
-      grantRegenerateToastIdRef.current = toastId;
+      // get lastPageIndex before refreshing
+      let lastPageIndex = 0;
+      
+      if (!hasSearched && filters?.canRegenerate !== 'all') {
+        const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
+        if (licenseKey) {
+          lastPageIndex = Math.ceil(licenseKey.rowCount / cmsConfig.pagination.pageSize) - 1;
+        }
+      }
 
-      await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+      let refreshFailed = false;
+      let pageChange = false;
 
-      if (!searchedLicenseKey) {
-        if (filters?.canRegenerate !== 'all') {
-          const licenseKey = queryClient.getQueryData([
-            'licenseKeys',
-            pagination.pageIndex,
-            filters,
-          ]);
-          const newLastPageIndex = Math.ceil(licenseKey.rowCount / cmsConfig.pagination.pageSize) - 1;
+      try {
+        if (setCanRegenerateRes.data.count > 0) {
+          setFetchAction('refresh');
+          grantRegenerateToastIdRef.current = toastId;
 
-          if (pagination.pageIndex > newLastPageIndex) {
-            // change pagination to new last page index
-            setPagination(pagination => ({
-              ...pagination,
-              pageIndex: newLastPageIndex,
-            }));
+          await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] }, { throwOnError: true });
+
+          // if need to change page
+          if (!hasSearched && filters?.canRegenerate !== 'all') {
+            const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
+
+            if (licenseKey && licenseKey.rowCount > 0) {
+              const newLastPageIndex = Math.ceil(licenseKey.rowCount / cmsConfig.pagination.pageSize) - 1;
+
+              if (pagination.pageIndex > newLastPageIndex) {
+                const newPagination = { ...pagination, pageIndex: newLastPageIndex };
+
+                queryClient.setQueryData(
+                  ['licenseKeys', newPagination, filters, searchKey],
+                  (oldData) => {
+                    if (!oldData) return oldData;
+
+                    return { ...oldData, rowCount: licenseKey.rowCount };
+                  },
+                );
+
+                // invalidate again for only the new last page for refetch
+                queryClient.invalidateQueries({
+                  queryKey: ['licenseKeys', newPagination, filters, searchKey],
+                  exact: true
+                });
+                // change page to new last page index
+                setFetchAction('paginate');
+                setPagination(newPagination);
+                pageChange = true;
+
+                // remove query for some page that no have data
+                for (let i = lastPageIndex; i > newLastPageIndex; i--) {
+                  queryClient.removeQueries({
+                    queryKey: ['licenseKeys', { ...pagination, pageIndex: i }, filters, searchKey],
+                    exact: true,
+                  });
+                }
+              }
+            }
           }
         }
-      } else {
-        await handleSearch(filters);
+      } catch (err) {
+        refreshFailed = true;
       }
 
       setRowSelection({});
 
       if (setCanRegenerateRes.data.count > 0) {
-        toast.success(
-          `Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys`,
-          { id: toastId },
-        );
+        if (!pageChange) {
+          // reset fetchAction if still set, since the page didn't change
+          setFetchAction(null);
+        }
+
+        let successMessage = `Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys.`;
+        if (refreshFailed) {
+          successMessage += ' Please refresh the table manually.';
+        }
+        toast.success(successMessage, { id: toastId });
       } else {
         toast.info('No license keys were updated. They may have already been deleted.', { id: toastId });
       }
@@ -506,8 +556,6 @@ export default function LicenseKeysTable() {
   }
 
   async function handleEditRevokeStatus({ id, isRevoked }) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
     const toastId = toast.loading(
       `${isRevoked ? 'Unrevoking' : 'Revoking'} license key...`,
     );
@@ -527,64 +575,70 @@ export default function LicenseKeysTable() {
       return newIds;
     });
 
-    const licenseKey = queryClient.getQueryData([
-      'licenseKeys',
-      pagination.pageIndex,
-      filters,
-    ]);
+    const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
 
     if (editRes.status === 'success') {
-      if (searchedLicenseKey) {
-        setSearchedLicenseKey((prevLicenseKey) => ({
-          ...prevLicenseKey,
-          items: prevLicenseKey.items.filter(slk => slk.id !== id),
-        }));
-
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-      } else {
+      if (licenseKey) {
         const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== id);
-        const newRowCount = licenseKey.rowCount - 1;
 
-        if (!isLastPage({
-          pageIndex: pagination.pageIndex,
-          pageSize: pagination.pageSize,
-          rowCount: licenseKey.rowCount,
-        })) {
+        if (hasSearched) {
           queryClient.setQueryData(
-            ['licenseKeys', pagination.pageIndex, filters],
-            { items: newLicenseKeys, rowCount: newRowCount },
+            ['licenseKeys', pagination, filters, searchKey],
+            (oldData) => {
+              if (!oldData) return oldData;
+            
+              return { ...oldData, items: newLicenseKeys };
+            },
           );
 
-          hasSuccessfulRevokeRef.current = true;
+          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });         
         } else {
-          if (newLicenseKeys.length === 0 && newRowCount > 0) {
-            queryClient.removeQueries({
-              queryKey: ['licenseKeys', pagination.pageIndex, filters],
-              exact: true,
-            });
+          const newRowCount = licenseKey.rowCount - 1;
 
+          if (!isLastPage({
+            pageIndex: pagination.pageIndex,
+            pageSize: pagination.pageSize,
+            rowCount: licenseKey.rowCount,
+          })) {
             queryClient.setQueryData(
-              ['licenseKeys', pagination.pageIndex - 1, filters],
-              (oldData) => {
-                if (!oldData) return oldData;
-
-                return { ...oldData, rowCount: newRowCount };
-              },
-            );
-
-            setPagination((pagination) => ({
-              ...pagination,
-              pageIndex: pagination.pageIndex - 1,
-            }));
-          } else {
-            queryClient.setQueryData(
-              ['licenseKeys', pagination.pageIndex, filters],
+              ['licenseKeys', pagination, filters, searchKey],
               { items: newLicenseKeys, rowCount: newRowCount },
             );
-          }
 
-          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });         
+            hasSuccessfulRevokeRef.current = true;
+          } else {
+            if (newLicenseKeys.length === 0 && newRowCount > 0) {
+              const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
+
+              queryClient.setQueryData(
+                ['licenseKeys', newPagination, filters, searchKey],
+                (oldData) => {
+                  if (!oldData) return oldData;
+
+                  return { ...oldData, rowCount: newRowCount };
+                },
+              );
+
+              // change page to prev page
+              setFetchAction('paginate');
+              setPagination(newPagination);
+
+              queryClient.removeQueries({
+                queryKey: ['licenseKeys', pagination, filters, searchKey],
+                exact: true,
+              });
+            } else {
+              queryClient.setQueryData(
+                ['licenseKeys', pagination, filters, searchKey],
+                { items: newLicenseKeys, rowCount: newRowCount },
+              );
+            }
+
+            queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });         
+          }
         }
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       }
 
       // if id exist in rowSelection then remove
@@ -593,7 +647,6 @@ export default function LicenseKeysTable() {
         const { [id]:_, ...next } = prev;
         return next;
       });
-      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       toast.success(
         isRevoked
           ? 'License key unrevoked successfully.'
@@ -607,20 +660,19 @@ export default function LicenseKeysTable() {
       });
     }
 
-    // For still invalidateQueries licenseKeys, when not in last page, last revoke/unrevoke item fails, and 
-    // at least one revoke/unrevoke succeeded.
-    if (
-      !searchedLicenseKey &&
-      updatingRevokeStatusIdsRef.current.length === 0 &&
-      hasSuccessfulRevokeRef.current
-    ) {
-      // Double check page position in case user navigated 
-      // while async operation was still in progress
-      if (!isLastPage({
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        rowCount: licenseKey.rowCount,
-      })) {
+    // Batches overlapping actions (new action triggered before previous one finishes)
+    // into a single invalidateQueries, once all settled and at least one succeeded.
+    // Sequential actions are not affected.
+    if (updatingRevokeStatusIdsRef.current.length === 0 && hasSuccessfulRevokeRef.current) {
+      if (
+        licenseKey &&
+        !hasSearched && 
+        !isLastPage({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          rowCount: licenseKey.rowCount,
+        })
+      ) {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       }
 
@@ -629,8 +681,6 @@ export default function LicenseKeysTable() {
   }
 
   async function handleResetDevice({ id }) {
-    // not show table skeleton loading
-    shouldShowSkeletonLoading.current = false;
     // show loading
     const toastId = toast.loading('Resetting device...');
 
@@ -649,74 +699,82 @@ export default function LicenseKeysTable() {
       return newIds;
     });
 
+    const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
+    const newLicenseKeys = licenseKey?.items?.filter(lk => lk.id !== id);
+
     if (releaseRes.status === 'success') {
-      if (searchedLicenseKey) {
-        setSearchedLicenseKey((prevLicenseKey) => ({
-          ...prevLicenseKey,
-          items: prevLicenseKey.items.map(slk => {
-            if (slk.id === id) {
-              return {
-                ...slk,
-                deviceId: null,
-                updatedAt: releaseRes.data.updatedAt,
-              };
-            }
-            return slk;
-          }),
-        }));
+      if (hasSearched) {
+        queryClient.setQueryData(
+          ['licenseKeys', pagination, filters, searchKey],
+          (oldData) => {
+            if (!oldData) return oldData;
 
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });       
-      } else {
-        if (pagination.pageIndex === 0) {
-          queryClient.setQueryData(
-            ['licenseKeys', pagination.pageIndex, filters],
-            (oldData) => {
-              if (!oldData) return oldData;
-              
-              const targetLicenseKey = oldData.items.find(lk => lk.id === id);
+            return {
+              ...oldData,
+              items: oldData.items.map(lk => {
+                if (lk.id === id) {
+                  return {
+                    ...lk,
+                    deviceId: null,
+                    updatedAt: releaseRes.data.updatedAt,
+                  };
+                }
+                return lk;
+              }),
+            };
+          },
+        );
+      } else if (pagination.pageIndex === 0) {
+        queryClient.setQueryData(
+          ['licenseKeys', pagination, filters, searchKey],
+          (oldData) => {
+            if (!oldData) return oldData;
 
-              if (targetLicenseKey) {
-                return {
-                  ...oldData,
-                  items: [
-                    {
-                      ...targetLicenseKey,
-                      deviceId: null,
-                      updatedAt: releaseRes.data.updatedAt,
-                    },
-                    ...oldData.items.filter(lk => lk.id !== id),
-                  ],
-                };
-              }
-              return oldData;
-            },
-          );
+            const targetLicenseKey = oldData.items.find(lk => lk.id === id);
 
-          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
-        } else {
-          queryClient.setQueryData(
-            ['licenseKeys', pagination.pageIndex, filters],
-            (oldData) => {
-              if (!oldData) return oldData;
-
+            if (targetLicenseKey) {
               return {
                 ...oldData,
-                items: oldData.items.filter(lk => lk.id !== id),
+                items: [
+                  {
+                    ...targetLicenseKey,
+                    deviceId: null,
+                    updatedAt: releaseRes.data.updatedAt,
+                  },
+                  ...oldData.items.filter(lk => lk.id !== id),
+                ],
               };
-            },
-          );
-          
-          hasSuccessfulResetDeviceRef.current = true;
-        }
+            }
+            return oldData;
+          },
+        );
+      } else if (newLicenseKeys?.length === 0) {
+        // if new license length exactly === 0, mean is not undefined too, then
+        setFetchAction('paginate');
+        setPagination((pagination) => ({
+          ...pagination,
+          pageIndex: pagination.pageIndex - 1,
+        }));
+      } else {
+        queryClient.setQueryData(
+          ['licenseKeys', pagination, filters, searchKey],
+          (oldData) => {
+            if (!oldData) return oldData;
+
+            return {
+              ...oldData,
+              items: oldData.items.filter(lk => lk.id !== id),
+            };
+          },
+        );
+
+        hasSuccessfulResetDeviceRef.current = true;
       }
 
-      // if id exist in rowSelection then remove
-      setRowSelection(prev => {
-        if (!(id in prev)) return prev;
-        const { [id]:_, ...next } = prev;
-        return next;
-      });
-      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
+      if (hasSearched || pagination.pageIndex === 0 || newLicenseKeys?.length === 0) {
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
+      }
+
       toast.success('License key device reset successfully.', { id: toastId });
     } else {
       toast.error(releaseRes.message, {
@@ -725,37 +783,16 @@ export default function LicenseKeysTable() {
       });
     }
 
-    // For still invalidateQueries licenseKeys, when not in first page, last reset device item fails, and 
-    // at least one resetDevice succeeded.
-    if (
-      !searchedLicenseKey &&
-      resetDeviceIdsRef.current.length === 0 &&
-      hasSuccessfulResetDeviceRef.current
-    ) {
-      // Double check page position in case user navigated 
-      // while async operation was still in progress
-      if (pagination.pageIndex !== 0) {
+    // Batches overlapping actions (new action triggered before previous one finishes)
+    // into a single invalidateQueries, once all settled and at least one succeeded.
+    // Sequential actions are not affected.
+    if (resetDeviceIdsRef.current.length === 0 && hasSuccessfulResetDeviceRef.current) {
+      if (!hasSearched && pagination.pageIndex !== 0 && newLicenseKeys?.length !== 0) {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });       
       }
 
       hasSuccessfulResetDeviceRef.current = false;
     }
-  }
-
-  const hasSearched = !!searchedLicenseKey;
-  let licenseKey;
-  let activeError;
-
-  if (searchedLicenseKey) {
-    licenseKey = searchedLicenseKey;
-  } else if (dataLK) {
-    licenseKey = dataLK;
-  }
-
-  if (isErrorLK) {
-    activeError = errorLK.message;
-  } else if (searchError) {
-    activeError = searchError.message;
   }
 
   // TABLE definition
@@ -913,9 +950,9 @@ export default function LicenseKeysTable() {
     openResetDeviceDialog,
   ]);
   const table = useReactTable({
-    data: licenseKey?.items,
+    data: dataLK?.items,
     columns,
-    rowCount: licenseKey?.rowCount,
+    rowCount: dataLK?.rowCount,
     state: {
       columnVisibility,
       pagination,
@@ -948,7 +985,7 @@ export default function LicenseKeysTable() {
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto inline-block"
-                disabled={isFetchingLK || isSearching}
+                disabled={isLoadingLK || fetchAction === 'refresh'}
                 onClick={handleRefresh}
               >
                 <RotateCw className="icon" />
@@ -957,16 +994,16 @@ export default function LicenseKeysTable() {
             
             <FiltersPopover
               onFilter={handleFilter}
-              isFilterActive={isFilterActive}
-              disabled={isFetchingLK || isSearching}
+              filters={filters}
+              disabled={isLoadingLK || fetchAction === 'filter'}
             />
 
             {(filters?.canRegenerate !== 'yes' && !filters.showRevoked) && (
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto"
-                disabled={isFetchingLK
-                  || isSearching
+                disabled={isLoadingLK
+                  || (fetchAction !== 'paginate' && fetchAction !== null)
                   || Object.keys(rowSelection).length <= 0
                   || isRegenerating}
                 onClick={handleSetCanRegenerate}
@@ -979,12 +1016,11 @@ export default function LicenseKeysTable() {
           <SearchInput
             className="flex-1"
             placeholder="Search with email..."
-            disabled={isFetchingLK || isSearching}
-            ref={searchRef}
+            disabled={isLoadingLK || fetchAction === 'search'}
             hasSearched={hasSearched}
             onEnterSearch={handleEnterSearch}
             onClearSearch={handleClearSearchInput}
-            onSearch={() => handleSearch(filters)}
+            onSearch={handleSearch}
           />
 
           <TableColumnVisibility
@@ -997,12 +1033,12 @@ export default function LicenseKeysTable() {
         </div>
       </div>
 
-      {(shouldShowSkeletonLoading.current && isFetchingLK) || (isSearching && !searchedLicenseKey) ? (
-        <TablePaginationSkeleton showPagination={!isSearching} />
-      ) : activeError ? (
+      {isLoadingLK ? (
+        <TablePaginationSkeleton showPagination={!hasSearched} />
+      ) : isErrorLK ? (
         <Alert variant="destructive" className="border-destructive/50 text-base">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{activeError}</AlertTitle>
+          <AlertTitle>{errorLK.message}</AlertTitle>
         </Alert>
       ) : (
         <>
@@ -1016,19 +1052,17 @@ export default function LicenseKeysTable() {
             ]}
           />
           <TablePagination
-            data={licenseKey}
+            data={dataLK}
             table={table}
             pagination={pagination}
             isPlaceholderData={isPlaceholderDataLK}
-            showNavigation={!hasSearched}
           />
         </>
       )}
 
-      {(hasSearched && licenseKey?.isTooMany) ? (
+      {dataLK?.isTooMany ? (
         <p className="mt-5 text-muted-foreground text-sm"><b>Info</b>: If you haven't found the license key you're looking for, please use a more specific email!</p>
       ) : null}
-      <p className="mt-5 text-muted-foreground text-sm"><b>Note</b>: <i>Activate</i> indicates that the license key has been used to activate the application</p>
 
       <DeleteDialog
         onDelete={handleDelete}

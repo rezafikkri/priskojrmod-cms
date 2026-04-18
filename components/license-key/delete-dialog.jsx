@@ -37,6 +37,7 @@ export default function DeleteDialog({
   function handleOpenChange() {
     onClose();
     setEmail('');
+    setAppName('');
   }
 
   function handleClickOutside(e) {

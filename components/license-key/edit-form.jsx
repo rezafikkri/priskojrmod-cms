@@ -44,7 +44,6 @@ export default function EditForm({ licenseKey }) {
 
     if (editRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-      queryClient.invalidateQueries({ queryKey: ['licenseKeysSearch'] });
       form.setValue('change_expiration_date', false);
 
       if (editRes.data.exp) {

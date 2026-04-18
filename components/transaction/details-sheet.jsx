@@ -7,11 +7,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
-import { useState } from 'react';
 import DetailsSection from './details-section';
 import InfoSection from './info-section';
 import InvoicesSection from './invoices-section';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import InfoSectionSkeleton from './info-section-skeleton';
 import DetailsSectionSkeleton from './details-section-skeleton';
 import InvoicesSectionSkeleton from './invoices-section-skeleton';
@@ -22,12 +21,22 @@ import {
 } from '@/components/ui/alert';
 import Error404 from '../icon/error-404';
 import { AlertCircle } from 'lucide-react';
-import { CancelledError } from '@tanstack/react-query';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '../ui/skeleton';
 
-function DetailsContent({ isLoading, data, error }) {
-  if (!isLoading) {
+function DetailsContent({ isFetching, data, isError, error }) {
+  if (!isFetching) {
+    if (isError) {
+      return (
+        <div className="px-4">
+          <Alert variant="destructive" className="border-destructive/50 text-base">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>{error.message}</AlertTitle>
+          </Alert>
+        </div>
+      );
+    }
+
     if (!data) {
       return (
         <div className="px-4">
@@ -38,22 +47,11 @@ function DetailsContent({ isLoading, data, error }) {
         </div>
       );
     }
-
-    if (error) {
-      return (
-        <div className="px-4">
-          <Alert variant="destructive" className="border-destructive/50 text-base">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>{error}</AlertTitle>
-          </Alert>
-        </div>
-      );
-    }
   }
 
   let details, invoices, info;
 
-  if (!isLoading) {
+  if (!isFetching) {
     ({ details, invoices, ...info } = data);
   }
 
@@ -62,7 +60,7 @@ function DetailsContent({ isLoading, data, error }) {
       <section>
         <h3 className="text-xl font-semibold">Transaction Info</h3>
 
-        {isLoading ? (
+        {isFetching ? (
           <InfoSectionSkeleton />
         ) : (
           <InfoSection info={info} />
@@ -72,7 +70,7 @@ function DetailsContent({ isLoading, data, error }) {
       <section>
         <h3 className="text-xl font-semibold">Transaction Details</h3>
 
-        {isLoading ? (
+        {isFetching ? (
           <DetailsSectionSkeleton />
         ) : (
           <DetailsSection details={details} />
@@ -82,7 +80,7 @@ function DetailsContent({ isLoading, data, error }) {
       <section className="last:mb-7">
         <h3 className="text-xl font-semibold">Invoices</h3>
 
-        {isLoading ? (
+        {isFetching ? (
           <InvoicesSectionSkeleton />
         ) : (
           <InvoicesSection invoices={invoices} />
@@ -105,47 +103,25 @@ function DetailsContent({ isLoading, data, error }) {
 // include transaction info itself and also details of it.
 export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
   const queryClient = useQueryClient();
-  const [details, setDetails] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  async function fetchDetails() {
-    try {
-      const result = await queryClient.fetchQuery({
-        queryKey: ['transactionDetails', detailsId],
-        queryFn: async ({ signal }) => {
-          setIsLoading(true);
-
-          return await safeFetch({
-            url: `/api/transactions/${detailsId}`,
-            onFinally: () => {
-              setIsLoading(false);
-            },
-            errorMessage: 'Something went wrong while loading the details. Please try again.',
-            signal,
-          });
-        },
-        staleTime: 10_000,
-        gcTime: 10_000,
+  const { data, isError, error, isFetching } = useQuery({
+    queryKey: ['transactionDetails', detailsId],
+    queryFn: async ({ signal }) => {
+      const results = await safeFetch({
+        url: `/api/transactions/${detailsId}`,
+        signal,
+        defaultErrorMessage: 'Something went wrong while loading the details. Please try again.',
       });
-
-      setDetails(result.data);
-    } catch (err) {
-      if (err instanceof CancelledError) return;
-
-      console.error(err);
-      setError(err.message);
-    }
-  }
-
-  if (detailsId) {
-    fetchDetails();
-  }
+      return results.data;
+    },
+    staleTime: 1000 * 30,
+    enabled: !!detailsId,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
+  });
 
   function handleOpenChange(isOpen) {
     if (!isOpen) {
-      setDetails(null);
-      setError(null);
       onDetailsIdChange(null);
       // abort fetch
       queryClient.cancelQueries({ queryKey: ['transactionDetails', detailsId] });
@@ -158,10 +134,10 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
         <SheetHeader>
           <SheetTitle className="text-2xl font-bold flex items-center">
             Transaction
-            {isLoading ? (
+            {isFetching ? (
               <Skeleton className="h-5.5 w-50 ms-2 rounded-sm" />
             ) : (
-              <Badge variant="secondary" className="ms-2">{details?.code}</Badge>
+              <Badge variant="secondary" className="ms-2">{data?.code}</Badge>
             )}
           </SheetTitle>
           <SheetDescription className="text-base">
@@ -170,8 +146,9 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
         </SheetHeader>
 
         <DetailsContent
-          isLoading={isLoading}
-          data={details}
+          isFetching={isFetching}
+          data={data}
+          isError={isError}
           error={error}
         />
       </SheetContent>

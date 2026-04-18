@@ -8,21 +8,20 @@ export default function TablePagination({
   table,
   pagination,
   isPlaceholderData,
-  showNavigation,
 }) {
   // generate pageInfo like this: 1-10 of 20
   const currentCount = data?.items?.length ?? 0;
   const pageInfo = generatePageInfo({
     pageIndex: pagination?.pageIndex,
-    isPaginated: showNavigation,
+    isPaginated: data?.rowCount,
     totalCount: data?.rowCount ?? 0,
     currentCount,
   });
 
-  return currentCount > 0 ? (
+  return (
     <div className="flex max-md:flex-col max-md:items-start gap-3 md:gap-5 md:justify-between mt-4 items-center">
       <span className="text-muted-foreground">{pageInfo}</span>
-      {showNavigation ? (
+      {data?.rowCount ? (
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -45,5 +44,5 @@ export default function TablePagination({
         </div>
       ) : null}
     </div>
-  ) : null;
+  );
 }
