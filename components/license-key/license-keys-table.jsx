@@ -6,13 +6,9 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { isLastPage } from '@/lib/utils';
-import { AlertCircle, RotateCw } from 'lucide-react';
+import { RotateCw } from 'lucide-react';
 import { useMemo, useRef, useState, useEffect } from 'react';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
-import {
-  Alert,
-  AlertTitle,
-} from '@/components/ui/alert';
 import {
   editLicenseKeyRevokeStatus,
   releaseDevice,
@@ -54,6 +50,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
+import TableErrorAlert from '../ui/table-error-alert';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -171,7 +168,7 @@ export default function LicenseKeysTable() {
 
   const {
     data: dataLK,
-    isLoading: isLoadingLK,
+    isPending: isPendingLK,
     isRefetching: isRefetchingLK,
     isError: isErrorLK,
     error: errorLK,
@@ -946,8 +943,10 @@ export default function LicenseKeysTable() {
     openEditRevokeStatusDialog,
     openResetDeviceDialog,
   ]);
+
+  const defaultData = useMemo(() => [], []);
   const table = useReactTable({
-    data: dataLK?.items,
+    data: dataLK?.items ?? defaultData,
     columns,
     rowCount: dataLK?.rowCount,
     state: {
@@ -982,7 +981,7 @@ export default function LicenseKeysTable() {
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto inline-block"
-                disabled={isLoadingLK || fetchAction === 'refresh'}
+                disabled={isPendingLK || fetchAction === 'refresh'}
                 onClick={handleRefresh}
               >
                 <RotateCw className="icon" />
@@ -992,14 +991,14 @@ export default function LicenseKeysTable() {
             <FiltersPopover
               onFilter={handleFilter}
               filters={filters}
-              disabled={isLoadingLK || fetchAction === 'filter'}
+              disabled={isPendingLK || fetchAction === 'filter'}
             />
 
             {(filters?.canRegenerate !== 'yes' && !filters.showRevoked) && (
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto"
-                disabled={isLoadingLK
+                disabled={isPendingLK
                   || (fetchAction !== 'paginate' && fetchAction !== null)
                   || Object.keys(rowSelection).length <= 0
                   || isRegenerating}
@@ -1013,7 +1012,7 @@ export default function LicenseKeysTable() {
           <SearchInput
             className="flex-1"
             placeholder="Search with email..."
-            disabled={isLoadingLK || fetchAction === 'search'}
+            disabled={isPendingLK || fetchAction === 'search'}
             hasSearched={hasSearched}
             onEnterSearch={handleEnterSearch}
             onClearSearch={handleClearSearchInput}
@@ -1030,32 +1029,32 @@ export default function LicenseKeysTable() {
         </div>
       </div>
 
-      {isLoadingLK ? (
-        <TablePaginationSkeleton showPagination={!hasSearched} />
-      ) : isErrorLK ? (
-        <Alert variant="destructive" className="border-destructive/50 text-base">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{errorLK.message}</AlertTitle>
-        </Alert>
-      ) : (
-        <>
-          <TableSelectionAlert table={table} />
-          <DataTable
-            table={table}
-            processingIds={[
-              ...deletingIds,
-              ...updatingRevokeStatusIds,
-              ...resetDeviceIds,
-            ]}
-          />
-          <TablePagination
-            data={dataLK}
-            table={table}
-            pagination={pagination}
-            isPlaceholderData={isPlaceholderDataLK}
-          />
-        </>
-      )}
+      {isPendingLK
+        ? <TablePaginationSkeleton showPagination={!hasSearched} />
+        : (
+          <>
+            <TableErrorAlert
+              isError={isErrorLK}
+              isRefetching={isRefetchingLK}
+              message={errorLK?.message}
+            />
+            <TableSelectionAlert table={table} />
+            <DataTable
+              table={table}
+              processingIds={[
+                ...deletingIds,
+                ...updatingRevokeStatusIds,
+                ...resetDeviceIds,
+              ]}
+            />
+            <TablePagination
+              data={dataLK}
+              table={table}
+              pagination={pagination}
+              isPlaceholderData={isPlaceholderDataLK}
+            />
+          </>
+        )}
 
       {dataLK?.isTooMany ? (
         <p className="mt-5 text-muted-foreground text-sm"><b>Info</b>: If you haven't found the license key you're looking for, please use a more specific email!</p>

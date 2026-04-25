@@ -20,7 +20,7 @@ export default function Error({ error, reset }) {
 
   return (
     <div className={`${montserrat.variable} w-full h-screen flex flex-col justify-center items-center`}>
-      <h2 className="text-xl font-medium mb-7">Something went wrong!</h2>
+      <h2 className="text-xl font-medium mb-7">Something went wrong. Please try again.</h2>
       <Button
         className="h-auto inline-block text-base px-3 py-1.5"
         variant="secondary"

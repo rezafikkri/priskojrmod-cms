@@ -15,11 +15,7 @@ import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { isLastPage, getStatusClasses } from '@/lib/utils';
-import {
-  Alert,
-  AlertTitle,
-} from '@/components/ui/alert';
-import { AlertCircle, RotateCw, MoreHorizontal, Minus } from 'lucide-react';
+import { RotateCw, MoreHorizontal, Minus } from 'lucide-react';
 import InfoCircle from '../icon/info-circle';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { searchKeySchema } from '@/lib/validators/base-validator';
@@ -53,6 +49,7 @@ import RefundFormDialog from './refund-form-dialog';
 import { useDialog } from '@/hooks/use-dialog';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
+import TableErrorAlert from '../ui/table-error-alert';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -161,7 +158,7 @@ export default function TransactionsTable() {
 
   const {
     data: dataT,
-    isLoading: isLoadingT,
+    isPending: isPendingT,
     isRefetching: isRefetchingT,
     isError: isErrorT,
     error: errorT,
@@ -895,8 +892,10 @@ export default function TransactionsTable() {
     openRefundDeadlineDialog,
     openCancelConfirmDialog,
   ]);
+
+  const defaultData = useMemo(() => [], []);
   const table = useReactTable({
-    data: dataT?.items,
+    data: dataT?.items ?? defaultData,
     rowCount: dataT?.rowCount,
     columns,
     state: {
@@ -916,7 +915,7 @@ export default function TransactionsTable() {
             <Button
               variant="outline"
               className="text-base px-3 py-1.5 h-auto inline-block"
-              disabled={isLoadingT || fetchAction === 'refresh'}
+              disabled={isPendingT || fetchAction === 'refresh'}
               onClick={handleRefresh}
             >
               <RotateCw className="icon" />
@@ -925,7 +924,7 @@ export default function TransactionsTable() {
           <FiltersPopover
             onFilter={handleFilter}
             filters={filters}
-            disabled={isLoadingT || fetchAction === 'filter'}
+            disabled={isPendingT || fetchAction === 'filter'}
           />
           {filters?.status !== TransactionStatus.PENDING && !hasSearched && (
             <ExportCSV filters={filters} />
@@ -935,7 +934,7 @@ export default function TransactionsTable() {
           <SearchInput
             className="flex-1"
             placeholder="Search with transaction code..."
-            disabled={isLoadingT || fetchAction === 'search'}
+            disabled={isPendingT || fetchAction === 'search'}
             hasSearched={hasSearched}
             onEnterSearch={handleEnterSearch}
             onClearSearch={handleClearSearchInput}
@@ -952,30 +951,30 @@ export default function TransactionsTable() {
         </div>
       </div>
 
-      {isLoadingT ? (
-        <TablePaginationSkeleton showPagination={!hasSearched} />
-      ) : isErrorT ? (
-        <Alert variant="destructive" className="border-destructive/50 text-base">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{errorT.message}</AlertTitle>
-        </Alert>
-      ) : (
-        <>
-          <DataTable
-            table={table}
-            processingIds={[
-              ...updatingTransactionStatusIds,
-              ...correctingTransactionStatusIds,
-            ]}
-          />
-          <TablePagination
-            data={dataT}
-            table={table}
-            pagination={pagination}
-            isPlaceholderData={isPlaceholderDataT}
-          />
-        </>
-      )}
+      {isPendingT
+        ? <TablePaginationSkeleton showPagination={!hasSearched} />
+        : (
+          <>
+            <TableErrorAlert
+              isError={isErrorT}
+              isRefetching={isRefetchingT}
+              message={errorT?.message}
+            />
+            <DataTable
+              table={table}
+              processingIds={[
+                ...updatingTransactionStatusIds,
+                ...correctingTransactionStatusIds,
+              ]}
+            />
+            <TablePagination
+              data={dataT}
+              table={table}
+              pagination={pagination}
+              isPlaceholderData={isPlaceholderDataT}
+            />
+          </>
+        )}
 
       <p className="mt-5 text-muted-foreground text-sm"><b>Note</b>: Totals shown do not include tax</p>
 

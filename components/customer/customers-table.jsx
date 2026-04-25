@@ -16,11 +16,7 @@ import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { isLastPage, getUnixTimestamp } from '@/lib/utils';
-import {
-  Alert,
-  AlertTitle,
-} from '@/components/ui/alert';
-import { AlertCircle, Plus, MoreHorizontal, Minus } from 'lucide-react';
+import { Plus, MoreHorizontal, Minus } from 'lucide-react';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
@@ -43,6 +39,7 @@ import BanDialog from './ban-dialog';
 import { useDialog } from '@/hooks/use-dialog';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
+import TableErrorAlert from '../ui/table-error-alert';
 
 const defaultColumnVisibility = {
   lastActive: true,
@@ -133,7 +130,7 @@ export default function CustomersTable() {
 
   const {
     data: dataC,
-    isLoading: isLoadingC,
+    isPending: isPendingC,
     isRefetching: isRefetchingC,
     isError: isErrorC,
     error: errorC,
@@ -599,8 +596,10 @@ export default function CustomersTable() {
     openDeleteDialog,
     openBanDialog,
   ]);
+  
+  const defaultData = useMemo(() => [], []);
   const table = useReactTable({
-    data: dataC?.items,
+    data: dataC?.items ?? defaultData,
     rowCount: dataC?.rowCount,
     columns,
     state: {
@@ -628,7 +627,7 @@ export default function CustomersTable() {
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto inline-block"
-                disabled={isLoadingC || fetchAction === 'refresh'}
+                disabled={isPendingC || fetchAction === 'refresh'}
                 onClick={handleRefresh}
               >
                 <RotateCw className="icon" />
@@ -638,7 +637,7 @@ export default function CustomersTable() {
             <FiltersPopover
               onFilter={handleFilter}
               filters={filters}
-              disabled={isLoadingC || fetchAction === 'filter'}
+              disabled={isPendingC || fetchAction === 'filter'}
             />
            </div>
         </div>
@@ -647,7 +646,7 @@ export default function CustomersTable() {
           <SearchInput
             className="flex-1"
             placeholder="Search with email..."
-            disabled={isLoadingC || fetchAction === 'search'}
+            disabled={isPendingC || fetchAction === 'search'}
             hasSearched={hasSearched}
             onEnterSearch={handleEnterSearch}
             onClearSearch={handleClearSearchInput}
@@ -664,31 +663,31 @@ export default function CustomersTable() {
         </div>
       </div>
 
-      {isLoadingC ? (
-        <TablePaginationSkeleton showPagination={!hasSearched} />
-      ) : isErrorC ? (
-        <Alert variant="destructive" className="border-destructive/50 text-base">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{errorC.message}</AlertTitle>
-        </Alert>
-      ) : (
-        <>
-          <DataTable
-            table={table}
-            processingIds={[
-              ...deletingIds,
-              ...updatingBanStatusIds,
-            ]}
-          />
-          <TablePagination
-            data={dataC}
-            table={table}
-            pagination={pagination}
-            isPlaceholderData={isPlaceholderDataC}
-          />
-        </>
-      )}
-      
+      {isPendingC
+        ? <TablePaginationSkeleton showPagination={!hasSearched} />
+        : (
+          <>
+            <TableErrorAlert
+              isError={isErrorC}
+              isRefetching={isRefetchingC}
+              message={errorC?.message}
+            />
+            <DataTable
+              table={table}
+              processingIds={[
+                ...deletingIds,
+                ...updatingBanStatusIds,
+              ]}
+            />
+            <TablePagination
+              data={dataC}
+              table={table}
+              pagination={pagination}
+              isPlaceholderData={isPlaceholderDataC}
+            />
+          </>
+        )}
+
       <div className="mt-5">
         {dataC?.isTooMany ? (
           <p className="mb-5 text-muted-foreground text-sm"><b>Info</b>: If you haven't found the customer you're looking for, please use a more specific email!</p>

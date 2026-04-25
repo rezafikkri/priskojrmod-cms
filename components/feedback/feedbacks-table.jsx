@@ -7,14 +7,9 @@ import TooltipWrapper from '../ui/tooltip-wrapper';
 import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import {
-  Alert,
-  AlertTitle,
-} from '@/components/ui/alert';
 import { safeFetch } from '@/lib/safe-fetch';
 import {
   ArrowDownToLine,
-  AlertCircle,
   MoreHorizontal,
   Minus,
   RotateCw,
@@ -46,6 +41,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { getUnixTimestamp } from '@/lib/utils';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
+import TableErrorAlert from '../ui/table-error-alert';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -123,7 +119,7 @@ export default function FeedbacksTable() {
 
   const {
     data: dataF,
-    isLoading: isLoadingF,
+    isPending: isPendingF,
     isRefetching: isRefetchingF,
     isError: isErrorF,
     error: errorF,
@@ -570,13 +566,16 @@ export default function FeedbacksTable() {
       ),
     },
   ], [markingAsReadIds, handleMarkAsRead]);
+
+  const defaultData = useMemo(() => [], []);
   const table = useReactTable({
-    data: dataF?.items,
+    data: dataF?.items ?? defaultData,
     columns,
     state: {
       rowSelection,
       columnVisibility,
     },
+    manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
     getRowId: row => row.id,
     onRowSelectionChange: setRowSelection,
@@ -591,7 +590,7 @@ export default function FeedbacksTable() {
             variant="outline"
             className="h-auto text-base px-3 py-1.5 inline-block"
             onClick={handlePullFeedbacks}
-            disabled={isLoadingF || isPulling}
+            disabled={isPendingF || isPulling}
           >
             <ArrowDownToLine className="icon" /> Pull new data
           </Button>
@@ -603,7 +602,7 @@ export default function FeedbacksTable() {
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto inline-block"
-                disabled={isLoadingF || fetchAction === 'refresh'}
+                disabled={isPendingF || fetchAction === 'refresh'}
                 onClick={handleRefresh}
               >
                 <RotateCw className="icon" />
@@ -613,14 +612,14 @@ export default function FeedbacksTable() {
             <FiltersPopover
               onFilter={handleFilter}
               filters={filters}
-              disabled={isLoadingF || fetchAction === 'filter'}
+              disabled={isPendingF || fetchAction === 'filter'}
             />
 
             <TooltipWrapper text="Delete feedback" background="bg-destructive">
               <Button
                 variant="outline"
                 className="h-auto text-base px-3 py-1.5 inline-block hover:text-destructive dark:hover:text-red-500/90"
-                disabled={isLoadingF
+                disabled={isPendingF
                   || fetchAction !== null
                   || Object.keys(rowSelection).length <= 0
                   || isDeleting}
@@ -643,27 +642,25 @@ export default function FeedbacksTable() {
         </div>
       </div>
 
-      {isLoadingF ? (
-        <TablePaginationSkeleton showPagination={false} />
-      ) : isErrorF ? (
-        <Alert variant="destructive" className="border-destructive/50 text-base">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{errorF.message}</AlertTitle>
-        </Alert>
-      ) : (
-        <>
-          <TableSelectionAlert table={table} />
-          <DataTable
-            table={table}
-            onOpenDetailDialog={openDetailDialog}
-            processingIds={markingAsReadIds} 
-            onEditReadStatus={handleEditReadStatus}
-          />
-          <TablePagination
-            data={dataF}
-          />
-        </>
-      )}
+      {isPendingF
+        ? <TablePaginationSkeleton showPagination={false} />
+        : (
+          <>
+            <TableErrorAlert
+              isError={isErrorF}
+              isRefetching={isRefetchingF}
+              message={errorF?.message}
+            />
+            <TableSelectionAlert table={table} />
+            <DataTable
+              table={table}
+              onOpenDetailDialog={openDetailDialog}
+              processingIds={markingAsReadIds} 
+              onEditReadStatus={handleEditReadStatus}
+            />
+            <TablePagination data={dataF} />
+          </>
+        )}
 
       <DetailDialog
         isOpen={isOpenDetailDialog}

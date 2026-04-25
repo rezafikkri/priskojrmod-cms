@@ -56,12 +56,15 @@ export default function DataTable({
               </TableRow>
             ))
           ) : (
-              <TableRow>
-                <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
-                  No results
-                </TableCell>
-              </TableRow>
-            )}
+            <TableRow>
+              <TableCell
+                colSpan={table.getAllColumns().length}
+                className="h-24 text-center text-zinc-600"
+              >
+                No results
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

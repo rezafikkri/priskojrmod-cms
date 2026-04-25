@@ -51,6 +51,7 @@ import FiltersPopover from './filters-popover';
 import { useDialog } from '@/hooks/use-dialog';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
+import TableErrorAlert from '../ui/table-error-alert';
 
 const defaultColumnVisibility = {
   category: false,
@@ -106,7 +107,7 @@ export default function ProductsTable({ isOwner }) {
 
   const {
     data: dataP,
-    isLoading: isLoadingP,
+    isPending: isPendingP,
     isRefetching: isRefetchingP,
     isError: isErrorP,
     error: errorP,
@@ -572,12 +573,15 @@ export default function ProductsTable({ isOwner }) {
     handleEditStatus,
     openDeleteDialog,
   ]);
+
+  const defaultData = useMemo(() => [], []);
   const table = useReactTable({
-    data: dataP?.items,
+    data: dataP?.items ?? defaultData,
     columns,
     state: {
       columnVisibility,
     },
+    manualPagination: true,
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -597,7 +601,7 @@ export default function ProductsTable({ isOwner }) {
               <Button
                 variant="outline"
                 className="text-base px-3 py-1.5 h-auto inline-block"
-                disabled={isLoadingP || fetchAction === 'refresh'}
+                disabled={isPendingP || fetchAction === 'refresh'}
                 onClick={handleRefresh}
               >
                 <RotateCw className="icon" />
@@ -607,7 +611,7 @@ export default function ProductsTable({ isOwner }) {
             <FiltersPopover
               onFilter={handleFilter}
               filters={filters}
-              disabled={isLoadingP || fetchAction === 'filter'}
+              disabled={isPendingP || fetchAction === 'filter'}
             />
           </div>
         </div>
@@ -626,29 +630,29 @@ export default function ProductsTable({ isOwner }) {
         />
       </div>
 
-      {isLoadingP ? (
-        <TablePaginationSkeleton showPagination={false} />
-      ) : isErrorP ? (
-        <Alert variant="destructive" className="border-destructive/50 text-base">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{errorP.message}</AlertTitle>
-        </Alert>
-      ) : (
-        <>
-          <DataTable
-            table={table}
-            processingIds={[
-              ...updatingPinnedIds,
-              ...updatingStatusIds,
-              ...deletingIds,
-            ]}
-          />
-          <TablePagination
-            data={dataP}
-            showNavigation={false}
-          />
-        </>
-      )}
+      {isPendingP
+        ? <TablePaginationSkeleton showPagination={false} />
+        : (
+          <>
+            <TableErrorAlert
+              isError={isErrorP}
+              isRefetching={isRefetchingP}
+              message={errorP?.message}
+            />
+            <DataTable
+              table={table}
+              processingIds={[
+                ...updatingPinnedIds,
+                ...updatingStatusIds,
+                ...deletingIds,
+              ]}
+            />
+            <TablePagination
+              data={dataP}
+              showNavigation={false}
+            />
+          </>
+        )}
 
       <p className="mt-5 inline-block text-muted-foreground text-sm"><b>Notes</b>:</p>
       <ul className="text-muted-foreground text-sm list-disc list-inside">
