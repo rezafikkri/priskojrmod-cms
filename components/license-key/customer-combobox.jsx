@@ -109,24 +109,29 @@ export default function CustomerCombobox({
                 </div>
                 <CommandList className="min-h-10">
                   {isLoading && (
-                    <CommandEmpty className="py-1 space-y-1.5 px-2">
+                    <div className="py-1 space-y-1.5 px-2">
                       <Skeleton className="w-3/4 h-[27px]" />
                       <Skeleton className="w-4/5 h-[27px]" />
                       <Skeleton className="w-3/4 h-[27px]" />
-                    </CommandEmpty>
+                    </div>
                   )}
 
                   {isError ? (
-                    <CommandEmpty>
-                      <span className="text-destructive">{error.message}</span>
-                    </CommandEmpty>
+                    <>
+                      <div className="p-1">
+                        <p className="text-base text-destructive px-2 py-1.5">{error.message}</p>
+                      </div>
+                      {data?.length > 0 && (
+                        <hr className="bg-border mx-1" />
+                      )}
+                    </>
                   ) : (status !== 'pending' && data?.length < 1) && (
-                    <CommandEmpty>No results</CommandEmpty>
+                    <CommandEmpty><span className="text-zinc-600">No results</span></CommandEmpty>
                   )}
                   
                   {data?.length > 0 && (
                     <CommandGroup>
-                      {data?.map(customer => (
+                      {data.map(customer => (
                         <CommandItem
                           className="text-base"
                           value={customer.displayLabel}

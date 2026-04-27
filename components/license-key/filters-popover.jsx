@@ -50,8 +50,6 @@ export default function FiltersPopover({
   // handler for select product/app name onOpenChange event
   async function handleOpenChange(open) {
     if (open) {
-      if (error) setError(null);
-
       setIsLoading(true);
       try {
         const result = await queryClient.fetchQuery({
@@ -62,8 +60,10 @@ export default function FiltersPopover({
             });
             return results.data;
           },
-          staleTime: 1000 * 60,
+          staleTime: 1000 * 30,
         }); 
+
+        setError(null);
         setSecretKeys(result);
       } catch (err) {
         setError(err);
