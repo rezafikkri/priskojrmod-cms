@@ -8,6 +8,7 @@ import { AppSidebar } from '@/components/layout/app-sidebar';
 import ReactQueryProvider from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/sonner';
 import SessionProviderWrapper from '@/components/session-provider';
+import NextTopLoader from 'nextjs-toploader';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -32,6 +33,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${montserrat.variable}`}
       >
+        <NextTopLoader
+          color="#1CB454"
+          showSpinner={false}
+        />
         <SessionProviderWrapper>
           <SidebarProvider>
             <ThemeProvider

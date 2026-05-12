@@ -51,6 +51,7 @@ import { searchKeySchema } from '@/lib/validators/base-validator';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
+import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -64,9 +65,10 @@ const STALE_TIME = 1000 * 20;
 export default function LicenseKeysTable() {
   const queryClient = useQueryClient();
   const isQueryStale = useCheckQueryStale();
+  const { start: startProgress, done: doneProgress } = useStableTopLoader();
 
-  // toast loading ref
-  const loadingToastIdRef = useRef(null);
+  // Temporarily hides the top progress bar for refetch after a table action (e.g. update, delete)
+  const suppressProgressBarRef = useRef(false);
 
   // search state
   const [searchKey, setSearchKey] = useState(null);
@@ -74,9 +76,10 @@ export default function LicenseKeysTable() {
 
   // filters and fetch action state
   const [filters, setFilters] = useState({ showRevoked: false });
-  // Tracks active user-triggered or post-mutation fetch action.
-  // Determines loading toast visibility and message.
-  // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' | null (null = no toast shown)
+  // Tracks user-triggered refetches.
+  // Controls progress bar visibility and disables related UI buttons while fetching.
+  // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' |
+  // 'bulk-refresh' (triggered after a successful bulk action) | null
   const [fetchAction, setFetchAction] = useState(null);
 
   // table state
@@ -188,41 +191,23 @@ export default function LicenseKeysTable() {
 
   // manage toast loading
   useEffect(() => {
-    if (isRefetchingLK && fetchAction) {
+    if (isRefetchingLK) {
       const activeActionToastId = grantRegenerateToastIdRef.current;
-      const loadingToastId = loadingToastIdRef.current;
 
-      let loadingVerb = 'Loading';
-      if (fetchAction === 'search') loadingVerb = 'Searching';
-      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
-      const loadingMessage = `${loadingVerb} license keys...`;
+      if (fetchAction === 'bulk-refresh' && activeActionToastId) {
+        toast.loading('Refreshing license keys...', { id: activeActionToastId });
+      }
 
-      if (activeActionToastId) {
-        toast.loading(loadingMessage, { id: activeActionToastId });
-
-        grantRegenerateToastIdRef.current = null;
-      } else if (loadingToastId) {
-        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
-      } else {
-        // Use requestAnimationFrame so the toast is created after the UI
-        // stabilizes, preventing it from being skipped during rapid rerenders.
-        requestAnimationFrame(() => {
-          loadingToastIdRef.current = toast.loading(loadingMessage);
-        });
+      if ((!suppressProgressBarRef.current || fetchAction) && fetchAction !== 'bulk-refresh') {
+        startProgress();
       }
     } else if (!isRefetchingLK) {
-      if (loadingToastIdRef.current) {
-        // dismiss toast
-        toast.dismiss(loadingToastIdRef.current);
-        loadingToastIdRef.current = null;
-      }
+      doneProgress();
 
       // reset fetchAction
-      if (fetchAction !== 'refresh') {
-        setFetchAction(null);
-      }
+      setFetchAction(null);
     }
-  }, [isRefetchingLK, fetchAction]);
+  }, [isRefetchingLK, fetchAction, startProgress, doneProgress]);
 
   function handleSearch(key) {
     const keyResult = searchKeySchema.safeParse(key);
@@ -267,13 +252,12 @@ export default function LicenseKeysTable() {
     setSearchKey(null);
   }
 
-  async function handleRefresh() {
+  function handleRefresh() {
     setFetchAction('refresh');
     // reset rowSelection
     setRowSelection({});
 
-    await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-    setFetchAction(null);
+    queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
   }
 
   function handleFilter(newFilters) {
@@ -431,6 +415,8 @@ export default function LicenseKeysTable() {
     // into a single invalidateQueries, once all settled and at least one succeeded.
     // Sequential actions are not affected.
     if (deletingIdsRef.current.length === 0 && hasSuccessfulDeleteRef.current) {
+      hasSuccessfulDeleteRef.current = false;
+
       if (
         licenseKey &&
         !hasSearched &&
@@ -440,10 +426,10 @@ export default function LicenseKeysTable() {
           rowCount: licenseKey.rowCount,
         })
       ) {
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+        suppressProgressBarRef.current = true;
+        await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+        suppressProgressBarRef.current = false;
       }
-
-      hasSuccessfulDeleteRef.current = false;
     }
   }
 
@@ -474,7 +460,7 @@ export default function LicenseKeysTable() {
 
       try {
         if (setCanRegenerateRes.data.count > 0) {
-          setFetchAction('refresh');
+          setFetchAction('bulk-refresh');
           grantRegenerateToastIdRef.current = toastId;
 
           await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] }, { throwOnError: true });
@@ -526,10 +512,7 @@ export default function LicenseKeysTable() {
       setRowSelection({});
 
       if (setCanRegenerateRes.data.count > 0) {
-        if (!pageChange) {
-          // reset fetchAction if still set, since the page didn't change
-          setFetchAction(null);
-        }
+        grantRegenerateToastIdRef.current = null;
 
         let successMessage = `Regeneration enabled successfully for ${setCanRegenerateRes.data.count} license keys.`;
         if (refreshFailed) {
@@ -658,6 +641,8 @@ export default function LicenseKeysTable() {
     // into a single invalidateQueries, once all settled and at least one succeeded.
     // Sequential actions are not affected.
     if (updatingRevokeStatusIdsRef.current.length === 0 && hasSuccessfulRevokeRef.current) {
+      hasSuccessfulRevokeRef.current = false;
+
       if (
         licenseKey &&
         !hasSearched && 
@@ -667,10 +652,10 @@ export default function LicenseKeysTable() {
           rowCount: licenseKey.rowCount,
         })
       ) {
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+        suppressProgressBarRef.current = true;
+        await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+        suppressProgressBarRef.current = false;
       }
-
-      hasSuccessfulRevokeRef.current = false;
     }
   }
 
@@ -781,11 +766,13 @@ export default function LicenseKeysTable() {
     // into a single invalidateQueries, once all settled and at least one succeeded.
     // Sequential actions are not affected.
     if (resetDeviceIdsRef.current.length === 0 && hasSuccessfulResetDeviceRef.current) {
-      if (!hasSearched && pagination.pageIndex !== 0 && newLicenseKeys?.length !== 0) {
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });       
-      }
-
       hasSuccessfulResetDeviceRef.current = false;
+      
+      if (!hasSearched && pagination.pageIndex !== 0 && newLicenseKeys?.length !== 0) {
+        suppressProgressBarRef.current = true;
+        await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });       
+        suppressProgressBarRef.current = false;
+      }
     }
   }
 

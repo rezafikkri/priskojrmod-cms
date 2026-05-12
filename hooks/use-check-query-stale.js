@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 
 /**
  * Returns a function that checks whether a TanStack Query cached data is considered stale.
@@ -8,10 +9,10 @@ import { useQueryClient } from '@tanstack/react-query';
 export function useCheckQueryStale() {
   const queryClient = useQueryClient();
 
-  return (queryKey, staleTime) => {
+  return useCallback((queryKey, staleTime) => {
     const queryState = queryClient.getQueryState(queryKey);
     return !queryState ||
       queryState.isInvalidated ||
       Date.now() - queryState.dataUpdatedAt >= staleTime;
-  }
+  }, []);
 }

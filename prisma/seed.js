@@ -20,9 +20,9 @@ async function main() {
   await seedCategory(prisma);
 
   if (process.env.NODE_ENV === 'development') {
-    const customers = await seedCustomers(prisma, 30);
-    await seedLicenseKeys(prisma, customers);
-    // await seedTransactions(prisma, 2);
+    const customers = await seedCustomers(prisma, 3);
+    // await seedLicenseKeys(prisma, customers);
+    await seedTransactions(prisma, 2);
   }
 }
 

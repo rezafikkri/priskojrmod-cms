@@ -50,6 +50,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
+import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -62,9 +63,10 @@ const STALE_TIME = 1000 * 20;
 export default function TransactionsTable() {
   const queryClient = useQueryClient();
   const isQueryStale = useCheckQueryStale();
+  const { start: startProgress, done: doneProgress } = useStableTopLoader();
 
-  // toast loading ref
-  const loadingToastIdRef = useRef(null);
+  // Temporarily hides the top progress bar for refetch after a table action (e.g. update, delete)
+  const suppressProgressBarRef = useRef(false);
 
   // search state
   const [searchKey, setSearchKey] = useState(null);
@@ -72,8 +74,8 @@ export default function TransactionsTable() {
 
   // filters state
   const [filters, setFilters] = useState(null);
-  // Tracks active user-triggered or post-mutation fetch action.
-  // Determines loading toast visibility and message.
+  // Tracks user-triggered refetches.
+  // Controls progress bar visibility and disables related UI buttons while fetching.
   // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' | null (null = no toast shown)
   const [fetchAction, setFetchAction] = useState(null);
 
@@ -178,36 +180,15 @@ export default function TransactionsTable() {
 
   // manage toast loading
   useEffect(() => {
-    if (isRefetchingT && fetchAction) {
-      const loadingToastId = loadingToastIdRef.current;
-
-      let loadingVerb = 'Loading';
-      if (fetchAction === 'search') loadingVerb = 'Searching';
-      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
-      const loadingMessage = `${loadingVerb} transactions...`;
-
-      if (loadingToastId) {
-        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
-      } else {
-        // Use requestAnimationFrame so the toast is created after the UI
-        // stabilizes, preventing it from being skipped during rapid rerenders.
-        requestAnimationFrame(() => {
-          loadingToastIdRef.current = toast.loading(loadingMessage);
-        });
-      }
+    if (isRefetchingT && (!suppressProgressBarRef.current || fetchAction)) {
+      startProgress();
     } else if (!isRefetchingT) {
-      if (loadingToastIdRef.current) {
-        // dismiss toast
-        toast.dismiss(loadingToastIdRef.current);
-        loadingToastIdRef.current = null;
-      }
+      doneProgress();
 
       // reset fetchAction
-      if (fetchAction !== 'refresh') {
-        setFetchAction(null);
-      }
+      setFetchAction(null);
     }
-  }, [isRefetchingT, fetchAction]);
+  }, [isRefetchingT, fetchAction, startProgress, doneProgress]);
 
   async function handleSearch(key) {
     const keyResult = searchKeySchema.safeParse(key);
@@ -247,13 +228,11 @@ export default function TransactionsTable() {
     setSearchKey(null);
   }
 
-  async function handleRefresh() {
+  function handleRefresh() {
     setFetchAction('refresh');
 
-    await queryClient.invalidateQueries({ queryKey: ['transactions'] });
+    queryClient.invalidateQueries({ queryKey: ['transactions'] });
     queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
-
-    setFetchAction(null);
   }
 
   function handleFilter(newFilters) {
@@ -441,20 +420,22 @@ export default function TransactionsTable() {
     // into a single invalidateQueries, once all settled and at least one succeeded.
     // Sequential actions are not affected.
     if (updatingTransactionStatusIdsRef.current.length === 0 && hasSuccessfulUpdateStatusRef.current) {
-      const hasNoQuery = !hasSearched && (!filters?.status || filters.status === 'all');
-      const shouldInvalidateQueries = hasNoQuery 
+      hasSuccessfulUpdateStatusRef.current = false;
+
+      const hasNoFilter = !filters?.status || filters.status === 'all';
+      const shouldInvalidate = !hasSearched && (hasNoFilter
         ? pagination.pageIndex !== 0
         : transaction && !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           rowCount: transaction.rowCount,
-        });
+        }));
 
-      if (shouldInvalidateQueries) {
-        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      if (shouldInvalidate) {
+        suppressProgressBarRef.current = true;
+        await queryClient.invalidateQueries({ queryKey: ['transactions'] });
+        suppressProgressBarRef.current = false;
       }
-
-      hasSuccessfulUpdateStatusRef.current = false;
     }
   }, [pagination, filters, searchKey]);
 
@@ -523,7 +504,6 @@ export default function TransactionsTable() {
             let newTransactions;
 
             if (!filters?.status || filters?.status === 'all') {
-              // buat scenario test bagian ini
               newTransactions = oldData.items.map(transaction =>
                 transaction.id === id
                   ? applyStatusCorrection({
@@ -650,20 +630,22 @@ export default function TransactionsTable() {
       correctingTransactionStatusIdsRef.current.length === 0 &&
       hasSuccessfulCorrectStatusRef.current
     ) {
-      const hasNoQuery = !hasSearched && (!filters?.status || filters.status === 'all');
-      const shouldInvalidateQueries = hasNoQuery
+      hasSuccessfulCorrectStatusRef.current = false;
+
+      const hasNoFilter = !filters?.status || filters.status === 'all';
+      const shouldInvalidate = !hasSearched && (hasNoFilter
         ? pagination.pageIndex !== 0
         : transaction && !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           rowCount: transaction.rowCount,
-        });
+        }));
 
-      if (shouldInvalidateQueries) {
-        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      if (shouldInvalidate) {
+        suppressProgressBarRef.current = true;
+        await queryClient.invalidateQueries({ queryKey: ['transactions'] });
+        suppressProgressBarRef.current = false;
       }
-
-      hasSuccessfulCorrectStatusRef.current = false;
     }
   }
 
@@ -907,6 +889,7 @@ export default function TransactionsTable() {
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: handlePaginationChange,
   });
+
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-3 items-start mb-4">

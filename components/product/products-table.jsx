@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import {
   Plus,
-  AlertCircle,
   MoreHorizontal,
   Minus,
   RotateCw,
@@ -18,12 +17,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query';
-import {
-  Alert,
-  AlertTitle,
-} from '@/components/ui/alert';
 import { PriceType, CurrencyCode, ProductStatus } from '@/constants/enums';
 import {
   editProductPinned,
@@ -52,6 +47,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
+import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 
 const defaultColumnVisibility = {
   category: false,
@@ -65,14 +61,12 @@ const STALE_TIME = 1000 * 20;
 export default function ProductsTable({ isOwner }) {
   const queryClient = useQueryClient();
   const isQueryStale = useCheckQueryStale();
-
-  // toast loading ref
-  const loadingToastIdRef = useRef(null);
+  const { start: startProgress, done: doneProgress } = useStableTopLoader();
 
   // filters state
   const [filters, setFilters] = useState({ status: 'active' });
-  // Tracks active user-triggered or post-mutation fetch action.
-  // Determines loading toast visibility and message.
+  // Tracks user-triggered refetches.
+  // Controls progress bar visibility and disables related UI buttons while fetching.
   // 'refresh' | 'filter' | null (null = no toast shown)
   const [fetchAction, setFetchAction] = useState(null);
 
@@ -152,40 +146,19 @@ export default function ProductsTable({ isOwner }) {
 
   // manage toast loading
   useEffect(() => {
-    if (isRefetchingP && fetchAction) {
-      const loadingToastId = loadingToastIdRef.current;
-
-      let loadingVerb = 'Loading';
-      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
-      const loadingMessage = `${loadingVerb} products...`;
-
-      if (loadingToastId) {
-        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
-      } else {
-        // Use requestAnimationFrame so the toast is created after the UI
-        // stabilizes, preventing it from being skipped during rapid rerenders.
-        requestAnimationFrame(() => {
-          loadingToastIdRef.current = toast.loading(loadingMessage);
-        });
-      }
+    if (isRefetchingP) {
+      startProgress();
     } else if (!isRefetchingP) {
-      if (loadingToastIdRef.current) {
-        // dismiss toast
-        toast.dismiss(loadingToastIdRef.current);
-        loadingToastIdRef.current = null;
-      }
+      doneProgress();
 
       // reset fetchAction
-      if (fetchAction !== 'refresh') {
-        setFetchAction(null);
-      }
+      setFetchAction(null);
     }
-  }, [isRefetchingP, fetchAction]);
+  }, [isRefetchingP]);
 
-  async function handleRefresh() {
+  function handleRefresh() {
     setFetchAction('refresh');
-    await queryClient.invalidateQueries({ queryKey: ['products'] });
-    setFetchAction(null);
+    queryClient.invalidateQueries({ queryKey: ['products'] });
   }
 
   function handleFilter(newFilters) {

@@ -42,6 +42,7 @@ import { getUnixTimestamp } from '@/lib/utils';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
+import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -51,9 +52,7 @@ const STALE_TIME = 1000 * 20;
 export default function FeedbacksTable() {
   const queryClient = useQueryClient();
   const isQueryStale = useCheckQueryStale();
-
-  // toast loading ref
-  const loadingToastIdRef = useRef(null);
+  const { start: startProgress, done: doneProgress } = useStableTopLoader();
 
   // pull new data state
   const [isPulling, setIsPulling] = useState(false);
@@ -85,11 +84,10 @@ export default function FeedbacksTable() {
 
   // filters and fetch action state
   const [filters, setFilters] = useState(null);
-  // Tracks active user-triggered or post-mutation fetch action.
-  // Determines loading toast visibility and message.
-  // 'refresh' | 'filter' | null (null = no toast shown)
+  // Tracks user-triggered refetches.
+  // Controls progress bar visibility and disables related UI buttons while fetching.
+  // 'refresh' | 'filter' | 'bulk-refresh' (triggered after a successful bulk action) | null
   const [fetchAction, setFetchAction] = useState(null);
-
   // mark as read status state
   const [markingAsReadIds, setMarkingAsReadIds] = useState([]);
   
@@ -138,52 +136,30 @@ export default function FeedbacksTable() {
 
   // manage toast loading
   useEffect(() => {
-    if (isRefetchingF && fetchAction) {
+    if (isRefetchingF) {
       const activeActionToastId = deletionToastIdRef.current ?? pullFeedbacksToastIdRef.current;
-      const loadingToastId = loadingToastIdRef.current;
 
-      let loadingVerb = 'Loading';
-      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
-      const loadingMessage = `${loadingVerb} feedback...`;
+      if (fetchAction === 'bulk-refresh' && activeActionToastId) {
+        toast.loading('Refreshing feedback...', { id: activeActionToastId });
+      }
 
-      if (activeActionToastId) {
-        toast.loading(loadingMessage, { id: activeActionToastId });
-
-        if (deletionToastIdRef.current) {
-          deletionToastIdRef.current = null;
-        } else {
-          pullFeedbacksToastIdRef.current = null;
-        }
-      } else if (loadingToastId) {
-        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
-      } else {
-        // Use requestAnimationFrame so the toast is created after the UI
-        // stabilizes, preventing it from being skipped during rapid rerenders.
-        requestAnimationFrame(() => {
-          loadingToastIdRef.current = toast.loading(loadingMessage);
-        });
+      if (fetchAction !== 'bulk-refresh') {
+        startProgress();
       }
     } else if (!isRefetchingF) {
-      if (loadingToastIdRef.current) {
-        // dismiss toast
-        toast.dismiss(loadingToastIdRef.current);
-        loadingToastIdRef.current = null;
-      }
+      doneProgress();
 
       // reset fetchAction
-      if (fetchAction !== 'refresh') {
-        setFetchAction(null);
-      }
+      setFetchAction(null);
     }
-  }, [isRefetchingF, fetchAction]);
+  }, [isRefetchingF, fetchAction, startProgress, doneProgress]);
 
-  async function handleRefresh() {
+  function handleRefresh() {
     setFetchAction('refresh');
     // reset rowSelection
     setRowSelection({});
 
-    await queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
-    setFetchAction(null);
+    queryClient.invalidateQueries({ queryKey: ['feedbacks'] });
   }
 
   function handleFilter(newFilters) {
@@ -232,7 +208,7 @@ export default function FeedbacksTable() {
         setLastPulledAt(currentTime);
 
         let refreshFailed = false;
-        setFetchAction('refresh');
+        setFetchAction('bulk-refresh');
         // note the toast id, for updated in queryFn useQuery
         pullFeedbacksToastIdRef.current = toastId;
 
@@ -244,7 +220,7 @@ export default function FeedbacksTable() {
 
         // reset row selection
         setRowSelection({});
-        setFetchAction(null);
+        pullFeedbacksToastIdRef.current = null;
 
         let successMessage = `New feedback pulled successfully for ${loadRes.data.count} entries.`;
         if (refreshFailed) {
@@ -282,7 +258,7 @@ export default function FeedbacksTable() {
 
       try {
         if (removeRes.data.count > 0) {
-          setFetchAction('refresh');
+          setFetchAction('bulk-refresh');
           // note the toast id, for updated in queryFn useQuery
           deletionToastIdRef.current = toastId;
 
@@ -296,7 +272,7 @@ export default function FeedbacksTable() {
       setRowSelection({});
 
       if (removeRes.data.count > 0) {
-        setFetchAction(null);
+        deletionToastIdRef.current = null;
 
         let successMessage = `Successfully deleted ${removeRes.data.count} feedback entr${removeRes.data.count > 1 ? 'ies' : 'y'}.`;
         if (refreshFailed) {

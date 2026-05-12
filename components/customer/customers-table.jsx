@@ -40,6 +40,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
+import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 
 const defaultColumnVisibility = {
   lastActive: true,
@@ -51,9 +52,10 @@ const STALE_TIME = 1000 * 20;
 export default function CustomersTable() {
   const queryClient = useQueryClient();
   const isQueryStale = useCheckQueryStale();
+  const { start: startProgress, done: doneProgress } = useStableTopLoader();
 
-  // toast loading ref
-  const loadingToastIdRef = useRef(null);
+  // Temporarily hides the top progress bar for refetch after a table action (e.g. update, delete)
+  const suppressProgressBarRef = useRef(false);
 
   // search state
   const [searchKey, setSearchKey] = useState(null);
@@ -61,9 +63,9 @@ export default function CustomersTable() {
 
   // filters and fetch action state
   const [filters, setFilters] = useState({ showBanned: false });
-  // Tracks active user-triggered or post-mutation fetch action.
-  // Determines loading toast visibility and message.
-  // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' | null (null = no toast shown)
+  // Tracks user-triggered refetches.
+  // Controls progress bar visibility and disables related UI buttons while fetching.
+  // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' | null
   const [fetchAction, setFetchAction] = useState(null);
 
   // table state
@@ -150,36 +152,15 @@ export default function CustomersTable() {
 
   // manage toast loading
   useEffect(() => {
-    if (isRefetchingC && fetchAction) {
-      const loadingToastId = loadingToastIdRef.current;
-
-      let loadingVerb = 'Loading';
-      if (fetchAction === 'search') loadingVerb = 'Searching';
-      if (fetchAction === 'refresh') loadingVerb = 'Refreshing';
-      const loadingMessage = `${loadingVerb} customers...`;
-
-      if (loadingToastId) {
-        loadingToastIdRef.current = toast.loading(loadingMessage, { id: loadingToastId });
-      } else {
-        // Use requestAnimationFrame so the toast is created after the UI
-        // stabilizes, preventing it from being skipped during rapid rerenders.
-        requestAnimationFrame(() => {
-          loadingToastIdRef.current = toast.loading(loadingMessage);
-        });
-      }
+    if (isRefetchingC && (!suppressProgressBarRef.current || fetchAction)) {
+      startProgress();
     } else if (!isRefetchingC) {
-      if (loadingToastIdRef.current) {
-        // dismiss toast
-        toast.dismiss(loadingToastIdRef.current);
-        loadingToastIdRef.current = null;
-      }
+      doneProgress();
 
       // reset fetchAction
-      if (fetchAction !== 'refresh') {
-        setFetchAction(null);
-      }
+      setFetchAction(null);
     }
-  }, [isRefetchingC, fetchAction]);
+  }, [isRefetchingC, startProgress, doneProgress, fetchAction]);
 
   async function handleSearch(key) {
     const keyResult = searchKeySchema.safeParse(key);
@@ -219,10 +200,9 @@ export default function CustomersTable() {
     setSearchKey(null);
   }
 
-  async function handleRefresh() {
+  function handleRefresh() {
     setFetchAction('refresh');
-    await queryClient.invalidateQueries({ queryKey: ['customers'] });
-    setFetchAction(null);
+    queryClient.invalidateQueries({ queryKey: ['customers'] });
   }
 
   function handleFilter(newFilters) {
@@ -344,6 +324,8 @@ export default function CustomersTable() {
     // into a single invalidateQueries, once all settled and at least one succeeded.
     // Sequential actions are not affected.
     if (updatingBanStatusIdsRef.current.length === 0 && hasSuccessfulBanRef.current) {
+      hasSuccessfulBanRef.current = false;
+
       if (
         customer &&
         !hasSearched &&
@@ -353,10 +335,10 @@ export default function CustomersTable() {
           rowCount: customer.rowCount,
         })
       ) {
-        queryClient.invalidateQueries({ queryKey: ['customers'] });
+        suppressProgressBarRef.current = true;
+        await queryClient.invalidateQueries({ queryKey: ['customers'] });
+        suppressProgressBarRef.current = false;
       }
-
-      hasSuccessfulBanRef.current = false;
     }
   }, [pagination, filters, searchKey]);
 
@@ -458,6 +440,8 @@ export default function CustomersTable() {
     // into a single invalidateQueries, once all settled and at least one succeeded.
     // Sequential actions are not affected.
     if (deletingIdsRef.current.length === 0 && hasSuccessfulDeleteRef.current) {
+      hasSuccessfulDeleteRef.current = false;
+
       if (
         customer &&
         !hasSearched &&
@@ -467,10 +451,10 @@ export default function CustomersTable() {
           rowCount: customer.rowCount,
         })
       ) {
-        queryClient.invalidateQueries({ queryKey: ['customers'] });
+        suppressProgressBarRef.current = true;
+        await queryClient.invalidateQueries({ queryKey: ['customers'] });
+        suppressProgressBarRef.current = false;
       }
-
-      hasSuccessfulDeleteRef.current = false;
     }
   }
 
