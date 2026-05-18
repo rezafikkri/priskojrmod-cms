@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
               disableTransitionOnChange
             >
               <AppSidebar />
-              <SidebarInset className="min-h-screen overflow-x-hidden">
+              <SidebarInset className="min-h-[96vh] overflow-x-hidden">
                 <Header />
                 <div className="flex-1 p-4 mb-25">
                   <ReactQueryProvider>
