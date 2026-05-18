@@ -41,6 +41,7 @@ import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
+import { useFetchAction } from '@/hooks/use-fetch-action';
 
 const defaultColumnVisibility = {
   lastActive: true,
@@ -66,7 +67,7 @@ export default function CustomersTable() {
   // Tracks user-triggered refetches.
   // Controls progress bar visibility and disables related UI buttons while fetching.
   // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' | null
-  const [fetchAction, setFetchAction] = useState(null);
+  const { fetchAction, updateFetchAction, fetchActionRef } = useFetchAction();
 
   // table state
   const [pagination, setPagination] = useState({
@@ -78,7 +79,7 @@ export default function CustomersTable() {
     const isStale = isQueryStale(['customers', newPagination, filters, searchKey], STALE_TIME);
 
     if (isStale) {
-      setFetchAction('paginate');
+      updateFetchAction('paginate');
     }
     setPagination(newPagination);
   }
@@ -140,11 +141,18 @@ export default function CustomersTable() {
   } = useQuery({
     queryKey: ['customers', pagination, filters, searchKey],
     queryFn: async ({ signal }) => {
-      const results = await safeFetch({
-        url: addParamsToURL('/api/customers', { filters, searchKey, pagination }),
-        signal,
-      });
-      return results.data;
+      try {
+        const results = await safeFetch({
+          url: addParamsToURL('/api/customers', { filters, searchKey, pagination }),
+          signal,
+        });
+        return results?.data;
+      } catch (err) {
+        if (suppressProgressBarRef.current && !fetchActionRef.current) {
+          err.silent = true;
+        }
+        throw err;
+      }
     },
     placeholderData: keepPreviousData,
     staleTime: STALE_TIME,
@@ -158,7 +166,7 @@ export default function CustomersTable() {
       doneProgress();
 
       // reset fetchAction
-      setFetchAction(null);
+      updateFetchAction(null);
     }
   }, [isRefetchingC, startProgress, doneProgress, fetchAction]);
 
@@ -171,7 +179,7 @@ export default function CustomersTable() {
     const isStale = isQueryStale(queryKey, STALE_TIME);
 
     if (isStale) {
-      setFetchAction('search');
+      updateFetchAction('search');
 
       if (searchKey === parsedKey) {
         queryClient.invalidateQueries({ queryKey, exact: true });
@@ -193,7 +201,7 @@ export default function CustomersTable() {
     );
 
     if (isStale) {
-      setFetchAction('clear-search');
+      updateFetchAction('clear-search');
     }
 
     setPagination({ ...pagination, pageIndex: 0 });
@@ -201,7 +209,7 @@ export default function CustomersTable() {
   }
 
   function handleRefresh() {
-    setFetchAction('refresh');
+    updateFetchAction('refresh');
     queryClient.invalidateQueries({ queryKey: ['customers'] });
   }
 
@@ -210,7 +218,7 @@ export default function CustomersTable() {
     const isStale = isQueryStale(queryKey, STALE_TIME);
 
     if (isStale) {
-      setFetchAction('filter');
+      updateFetchAction('filter');
 
       if (deepEqual(filters, newFilters) && (hasSearched || pagination.pageIndex === 0)) {
         queryClient.invalidateQueries({ queryKey, exact: true });
@@ -290,7 +298,7 @@ export default function CustomersTable() {
               );
 
               // change page to prev page
-              setFetchAction('paginate');
+              updateFetchAction('paginate');
               setPagination(newPagination);
 
               queryClient.removeQueries({
@@ -406,7 +414,7 @@ export default function CustomersTable() {
               );
 
               // change page to prev page
-              setFetchAction('paginate');
+              updateFetchAction('paginate');
               setPagination(newPagination);
 
               queryClient.removeQueries({
@@ -653,8 +661,8 @@ export default function CustomersTable() {
           <>
             <TableErrorAlert
               isError={isErrorC}
-              isRefetching={isRefetchingC}
               message={errorC?.message}
+              isSilent={errorC?.silent}
             />
             <DataTable
               table={table}

@@ -52,6 +52,7 @@ import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
+import { useFetchAction } from '@/hooks/use-fetch-action';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -80,7 +81,7 @@ export default function LicenseKeysTable() {
   // Controls progress bar visibility and disables related UI buttons while fetching.
   // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' |
   // 'bulk-refresh' (triggered after a successful bulk action) | null
-  const [fetchAction, setFetchAction] = useState(null);
+  const { fetchAction, updateFetchAction, fetchActionRef } = useFetchAction();
 
   // table state
   const [pagination, setPagination] = useState({
@@ -92,7 +93,7 @@ export default function LicenseKeysTable() {
     const isStale = isQueryStale(['licenseKeys', newPagination, filters, searchKey], STALE_TIME);
 
     if (isStale) {
-      setFetchAction('paginate');
+      updateFetchAction('paginate');
     }
     setPagination(newPagination);
   }
@@ -179,11 +180,18 @@ export default function LicenseKeysTable() {
   } = useQuery({
     queryKey: ['licenseKeys', pagination, filters, searchKey],
     queryFn: async ({ signal }) => {
-      const result = await safeFetch({
-        url: addParamsToURL('/api/license-keys', { filters, searchKey, pagination }),
-        signal,
-      });
-      return result.data;
+      try {
+        const results = await safeFetch({
+          url: addParamsToURL('/api/license-keys', { filters, searchKey, pagination }),
+          signal,
+        });
+        return results?.data;
+      } catch (err) {
+        if (suppressProgressBarRef.current && !fetchActionRef.current) {
+          err.silent = true;
+        }
+        throw err;
+      }
     },
     placeholderData: keepPreviousData,
     staleTime: STALE_TIME,
@@ -205,7 +213,7 @@ export default function LicenseKeysTable() {
       doneProgress();
 
       // reset fetchAction
-      setFetchAction(null);
+      updateFetchAction(null);
     }
   }, [isRefetchingLK, fetchAction, startProgress, doneProgress]);
 
@@ -218,7 +226,7 @@ export default function LicenseKeysTable() {
     const isStale = isQueryStale(queryKey, STALE_TIME);
 
     if (isStale) {
-      setFetchAction('search');
+      updateFetchAction('search');
 
       if (searchKey === parsedKey) {
         queryClient.invalidateQueries({ queryKey, exact: true });
@@ -243,7 +251,7 @@ export default function LicenseKeysTable() {
     );
 
     if (isStale) {
-      setFetchAction('clear-search');
+      updateFetchAction('clear-search');
     }
 
     setPagination({ ...pagination, pageIndex: 0 });
@@ -253,7 +261,7 @@ export default function LicenseKeysTable() {
   }
 
   function handleRefresh() {
-    setFetchAction('refresh');
+    updateFetchAction('refresh');
     // reset rowSelection
     setRowSelection({});
 
@@ -265,7 +273,7 @@ export default function LicenseKeysTable() {
     const isStale = isQueryStale(queryKey, STALE_TIME);
 
     if (isStale) {
-      setFetchAction('filter');
+      updateFetchAction('filter');
 
       if (deepEqual(filters, newFilters) && (hasSearched || pagination.pageIndex === 0)) {
         queryClient.invalidateQueries({ queryKey, exact: true });
@@ -376,7 +384,7 @@ export default function LicenseKeysTable() {
               );
 
               // change page to prev page
-              setFetchAction('paginate');
+              updateFetchAction('paginate');
               setPagination(newPagination);
 
               queryClient.removeQueries({
@@ -460,7 +468,7 @@ export default function LicenseKeysTable() {
 
       try {
         if (setCanRegenerateRes.data.count > 0) {
-          setFetchAction('bulk-refresh');
+          updateFetchAction('bulk-refresh');
           grantRegenerateToastIdRef.current = toastId;
 
           await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] }, { throwOnError: true });
@@ -490,7 +498,7 @@ export default function LicenseKeysTable() {
                   exact: true
                 });
                 // change page to new last page index
-                setFetchAction('paginate');
+                updateFetchAction('paginate');
                 setPagination(newPagination);
                 pageChange = true;
 
@@ -597,7 +605,7 @@ export default function LicenseKeysTable() {
               );
 
               // change page to prev page
-              setFetchAction('paginate');
+              updateFetchAction('paginate');
               setPagination(newPagination);
 
               queryClient.removeQueries({
@@ -729,7 +737,7 @@ export default function LicenseKeysTable() {
         );
       } else if (newLicenseKeys?.length === 0) {
         // if new license length exactly === 0, mean is not undefined too, then
-        setFetchAction('paginate');
+        updateFetchAction('paginate');
         setPagination((pagination) => ({
           ...pagination,
           pageIndex: pagination.pageIndex - 1,
@@ -1022,8 +1030,8 @@ export default function LicenseKeysTable() {
           <>
             <TableErrorAlert
               isError={isErrorLK}
-              isRefetching={isRefetchingLK}
               message={errorLK?.message}
+              isSilent={errorLK?.silent}
             />
             <TableSelectionAlert table={table} />
             <DataTable

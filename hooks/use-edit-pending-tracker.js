@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-// This is number counter for track async process like delete variant, etc. (for edit mode only)
+// This is number counter for track async process like delete product variant,
+// etc. (for edit mode in form only)
 export default function useEditPendingTracker() {
   const [pendingCount, setPendingCount] = useState(0);
   const incrementPending = () => setPendingCount(prev => prev + 1);

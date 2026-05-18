@@ -7,14 +7,14 @@ import {
 import { AlertCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-export default function TableErrorAlert({ isError, message }) {
+export default function TableErrorAlert({ isError, message, isSilent = false }) {
   const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    if (isError) {
+    if (isError && !isSilent) {
       setShouldRender(true);
     }
-  }, [isError]);
+  }, [isError, isSilent]);
 
   const handleAnimationEnd = () => {
     if (!isError) {

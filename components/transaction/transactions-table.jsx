@@ -51,6 +51,7 @@ import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
+import { useFetchAction } from '@/hooks/use-fetch-action';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -77,7 +78,7 @@ export default function TransactionsTable() {
   // Tracks user-triggered refetches.
   // Controls progress bar visibility and disables related UI buttons while fetching.
   // 'refresh' | 'search' | 'clear-search' | 'filter' | 'paginate' | null (null = no toast shown)
-  const [fetchAction, setFetchAction] = useState(null);
+  const { fetchAction, updateFetchAction, fetchActionRef } = useFetchAction();
 
   // table state
   const [pagination, setPagination] = useState({
@@ -89,7 +90,7 @@ export default function TransactionsTable() {
     const isStale = isQueryStale(['transactions', newPagination, filters, searchKey], STALE_TIME);
 
     if (isStale) {
-      setFetchAction('paginate');
+      updateFetchAction('paginate');
     }
     setPagination(newPagination);
   }
@@ -168,11 +169,18 @@ export default function TransactionsTable() {
   } = useQuery({
     queryKey: ['transactions', pagination, filters, searchKey],
     queryFn: async ({ signal }) => {
-      const results = await safeFetch({
-        url: addParamsToURL('/api/transactions', { pagination, filters, searchKey }),
-        signal,
-      });
-      return results.data;
+      try {
+        const results = await safeFetch({
+          url: addParamsToURL('/api/transactions', { pagination, filters, searchKey }),
+          signal,
+        });
+        return results?.data;       
+      } catch (err) {
+        if (suppressProgressBarRef.current && !fetchActionRef.current) {
+          err.silent = true;
+        }
+        throw err;
+      }
     },
     placeholderData: keepPreviousData,
     staleTime: STALE_TIME,
@@ -186,7 +194,7 @@ export default function TransactionsTable() {
       doneProgress();
 
       // reset fetchAction
-      setFetchAction(null);
+      updateFetchAction(null);
     }
   }, [isRefetchingT, fetchAction, startProgress, doneProgress]);
 
@@ -199,7 +207,7 @@ export default function TransactionsTable() {
     const isStale = isQueryStale(queryKey, STALE_TIME);
 
     if (isStale) {
-      setFetchAction('search');
+      updateFetchAction('search');
 
       if (searchKey === parsedKey) {
         queryClient.invalidateQueries({ queryKey, exact: true });
@@ -221,7 +229,7 @@ export default function TransactionsTable() {
     );
 
     if (isStale) {
-      setFetchAction('clear-search');
+      updateFetchAction('clear-search');
     }
 
     setPagination({ ...pagination, pageIndex: 0 });
@@ -229,7 +237,7 @@ export default function TransactionsTable() {
   }
 
   function handleRefresh() {
-    setFetchAction('refresh');
+    updateFetchAction('refresh');
 
     queryClient.invalidateQueries({ queryKey: ['transactions'] });
     queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
@@ -240,7 +248,7 @@ export default function TransactionsTable() {
     const isStale = isQueryStale(queryKey, STALE_TIME);
 
     if (isStale) {
-      setFetchAction('filter');
+      updateFetchAction('filter');
 
       if (deepEqual(filters, newFilters) && (hasSearched || pagination.pageIndex === 0)) {
         queryClient.invalidateQueries({ queryKey, exact: true });
@@ -387,7 +395,7 @@ export default function TransactionsTable() {
             );
 
             // change page to prev page
-            setFetchAction('paginate');
+            updateFetchAction('paginate');
             setPagination(newPagination);
 
             queryClient.removeQueries({
@@ -594,7 +602,7 @@ export default function TransactionsTable() {
             );
 
             // change page to prev page
-            setFetchAction('paginate');
+            updateFetchAction('paginate');
             setPagination(newPagination);
 
             queryClient.removeQueries({
@@ -940,8 +948,8 @@ export default function TransactionsTable() {
           <>
             <TableErrorAlert
               isError={isErrorT}
-              isRefetching={isRefetchingT}
               message={errorT?.message}
+              isSilent={errorT?.silent}
             />
             <DataTable
               table={table}
