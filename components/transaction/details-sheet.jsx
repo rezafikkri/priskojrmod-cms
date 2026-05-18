@@ -111,7 +111,7 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
         url: `/api/transactions/${detailsId}`,
         signal,
       });
-      return results.data;
+      return results?.data;
     },
     staleTime: 1000 * 30,
     enabled: !!detailsId,

@@ -59,7 +59,7 @@ export default function CustomerCombobox({
         url: `/api/customers/autocomplete?sk=${debouncedKey}`,
         signal,
       });
-      return results.data;
+      return results?.data;
     },
     staleTime: 1000 * 30,
     placeholderData: keepPreviousData,

@@ -128,7 +128,7 @@ export default function FeedbacksTable() {
         url: addParamsToURL('/api/feedbacks', { filters }),
         signal,
       });
-      return results.data;
+      return results?.data;
     },
     placeholderData: keepPreviousData,
     staleTime: STALE_TIME,

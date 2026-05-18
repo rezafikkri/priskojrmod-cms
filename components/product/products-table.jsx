@@ -112,7 +112,7 @@ export default function ProductsTable({ isOwner }) {
         url: `/api/products?ps=${filters.status}`,
         signal,
       });
-      return results.data;
+      return results?.data;
     },
     select: (product) => ({
       items: product.items.map(product => {
