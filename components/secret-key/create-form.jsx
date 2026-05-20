@@ -31,8 +31,10 @@ import Link from 'next/link';
 import random32Bytes from '@/actions/random-32-bytes-actions';
 import { addSecretKey } from '@/actions/secret-key-actions';
 import { cmsConfig } from '@/config/cms';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function CreateForm({ products: data }) {
+  const queryClient = useQueryClient();
   const [products, setProducts] = useState(data);
   const form = useForm({
     resolver: zodResolver(createSecretKeySchema),
@@ -50,6 +52,7 @@ export default function CreateForm({ products: data }) {
       form.reset();
       // filter product when success, cause the app already have secret-key "one-to-one"
       setProducts(items => items.filter(item => item.id !== data.productId));
+      queryClient.invalidateQueries({ queryKey: ['secretKeyOptions'] });
       
       toast.success('Secret key created successfully.');
     } else {

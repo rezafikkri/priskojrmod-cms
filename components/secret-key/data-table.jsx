@@ -32,10 +32,12 @@ import { getTableHeaderWidth } from '@/lib/utils';
 import Link from 'next/link';
 import { cmsConfig } from '@/config/cms';
 import { useDialog } from '@/hooks/use-dialog';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function DataTable({ secretKeys: data }) {
   const [secretKeys, setSecretKeys] = useState(data);
   const [deletingIds, setDeletingIds] = useState([]);
+  const queryClient = useQueryClient();
 
   // dialog state
   const {
@@ -61,6 +63,8 @@ export default function DataTable({ secretKeys: data }) {
       setSecretKeys((prevSecretKeys) =>
         prevSecretKeys.filter((s) => s.id !== id)
       );
+
+      queryClient.invalidateQueries({ queryKey: ['secretKeyOptions'] });
 
       toast.success('Secret key deleted successfully.', {
         id: toastId,

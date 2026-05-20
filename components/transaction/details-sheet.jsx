@@ -26,6 +26,8 @@ import { Skeleton } from '../ui/skeleton';
 
 function DetailsContent({ isFetching, data, isError, error }) {
   if (!isFetching) {
+    if (data === undefined) return null;
+
     if (isError) {
       return (
         <div className="px-4">
@@ -37,7 +39,7 @@ function DetailsContent({ isFetching, data, isError, error }) {
       );
     }
 
-    if (!data) {
+    if (data === null) {
       return (
         <div className="px-4">
           <Alert className="text-base">
@@ -102,8 +104,6 @@ function DetailsContent({ isFetching, data, isError, error }) {
 // but refer to details of transaction,
 // include transaction info itself and also details of it.
 export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
-  const queryClient = useQueryClient();
-
   const { data, isError, error, isFetching } = useQuery({
     queryKey: ['transactionDetails', detailsId],
     queryFn: async ({ signal }) => {
@@ -122,8 +122,6 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
   function handleOpenChange(isOpen) {
     if (!isOpen) {
       onDetailsIdChange(null);
-      // abort fetch
-      queryClient.cancelQueries({ queryKey: ['transactionDetails', detailsId] });
     }
   }
 
