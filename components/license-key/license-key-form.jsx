@@ -2,11 +2,7 @@ import { getSelectableSecretKeys } from '@/lib/services/secret-key-service';
 import CreateForm from './create-form';
 import { getLicenseKey } from '@/lib/services/license-key-service';
 import EditForm from './edit-form';
-import {
-  Alert,
-  AlertTitle,
-} from '../ui/alert';
-import Error404 from '../icon/error-404';
+import NotFoundAlert from '../ui/not-found-alert';
 
 export default async function LicenseKeyForm({ mode = 'create', id = null }) {
   const secretKeys = await getSelectableSecretKeys();
@@ -16,14 +12,7 @@ export default async function LicenseKeyForm({ mode = 'create', id = null }) {
   }
 
   const licenseKey = await getLicenseKey(id);
-  if (!licenseKey) {
-    return (
-      <Alert className="text-base lg:max-w-2/3">
-        <Error404 />
-        <AlertTitle>License key not found</AlertTitle>
-      </Alert>
-    );
-  }
+  if (!licenseKey) return <NotFoundAlert message="License key not found" />;
 
   return <EditForm licenseKey={licenseKey} />;
 }

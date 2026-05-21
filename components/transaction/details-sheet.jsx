@@ -10,7 +10,7 @@ import {
 import DetailsSection from './details-section';
 import InfoSection from './info-section';
 import InvoicesSection from './invoices-section';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import InfoSectionSkeleton from './info-section-skeleton';
 import DetailsSectionSkeleton from './details-section-skeleton';
 import InvoicesSectionSkeleton from './invoices-section-skeleton';
@@ -19,33 +19,30 @@ import {
   Alert,
   AlertTitle,
 } from '@/components/ui/alert';
-import Error404 from '../icon/error-404';
 import { AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '../ui/skeleton';
+import NotFoundAlert from '../ui/not-found-alert';
 
 function DetailsContent({ isFetching, data, isError, error }) {
   if (!isFetching) {
-    if (data === undefined) return null;
-
     if (isError) {
       return (
         <div className="px-4">
-          <Alert variant="destructive" className="border-destructive/50 text-base">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>{error.message}</AlertTitle>
+          <Alert variant="destructive" className="border-destructive/50 text-base items-baseline">
+            <AlertCircle />
+            <AlertTitle className="line-clamp-0">{error.message}</AlertTitle>
           </Alert>
         </div>
       );
     }
 
+    if (data === undefined) return null;
+
     if (data === null) {
       return (
         <div className="px-4">
-          <Alert className="text-base">
-            <Error404 />
-            <AlertTitle>Transaction not found</AlertTitle>
-          </Alert>
+          <NotFoundAlert message="Transaction not found" />
         </div>
       );
     }
@@ -108,7 +105,7 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
     queryKey: ['transactionDetails', detailsId],
     queryFn: async ({ signal }) => {
       const results = await safeFetch({
-        url: `/api/transactions/${detailsId}`,
+        url: `/api/transactions/${detailsId}1`,
         signal,
       });
       return results?.data;
@@ -133,9 +130,9 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
             Transaction
             {isFetching ? (
               <Skeleton className="h-5.5 w-50 ms-2 rounded-sm" />
-            ) : (
+            ) : !isError ? (
               <Badge variant="secondary" className="ms-2">{data?.code}</Badge>
-            )}
+            ) : null}
           </SheetTitle>
           <SheetDescription className="text-base">
             Detailed information and history of the transaction.

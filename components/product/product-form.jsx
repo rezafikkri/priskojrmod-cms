@@ -4,11 +4,6 @@ import { getSelectableOwners } from '@/lib/services/owner-service';
 import { getSelectableLicenses } from '@/lib/services/license-service';
 import { getProduct } from '@/lib/services/product-service';
 import EditForm from './edit-form';
-import {
-  Alert,
-  AlertTitle,
-} from '../ui/alert';
-import Error404 from '../icon/error-404';
 import { ProductFormStoreProvider } from '@/lib/providers/product-form-store-provider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
@@ -16,6 +11,7 @@ import { getSelectableAdmins } from '@/lib/services/admin-service';
 import { v4 } from 'uuid';
 import { UserRole, ProductStatus } from '@/constants/enums';
 import { hasAccess } from '@/lib/authorization';
+import NotFoundAlert from '../ui/not-found-alert';
 
 export const defaultFormStoreInitState = {
   form: {
@@ -90,14 +86,7 @@ export default async function ProductForm({ mode = 'create', id = null }) {
   }
 
   const product = await getProduct(id);
-  if (!product) {
-    return (
-      <Alert className="text-base lg:max-w-2/3">
-        <Error404 />
-        <AlertTitle>Product not found</AlertTitle>
-      </Alert>
-    );
-  }
+  if (!product) return <NotFoundAlert message="Product not found" />;
 
   return (
     <ProductFormStoreProvider initState={product}>

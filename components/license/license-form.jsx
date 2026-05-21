@@ -1,20 +1,11 @@
 import { getLicense } from '@/lib/services/license-service';
-import {
-  Alert,
-  AlertTitle,
-} from '../ui/alert';
-import Error404 from '../icon/error-404';
 import EditForm from './edit-form';
+import NotFoundAlert from '../ui/not-found-alert';
 
 export default async function LicenseForm({ id }) {
   const license = await getLicense(id);
 
-  if (!license) return (
-    <Alert className="text-base lg:max-w-2/3">
-      <Error404 />
-      <AlertTitle>License not found</AlertTitle>
-    </Alert>
-  );
+  if (!license) return <NotFoundAlert message="License not found" />;
 
   return <EditForm license={license} />;
 }

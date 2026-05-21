@@ -27,12 +27,12 @@ export default function TableErrorAlert({ isError, message, isSilent = false }) 
   return (
     <Alert
       variant="destructive"
-      className="text-base mb-4 relative [&>svg]:translate-y-1 border-destructive/50 data-[visible=true]:animate-in data-[visible=false]:animate-out fade-in fade-out duration-150 fill-mode-forwards"
+      className="text-base mb-4 relative border-destructive/50 data-[visible=true]:animate-in data-[visible=false]:animate-out fade-in fade-out duration-150 fill-mode-forwards items-baseline"
       data-visible={isError}
       onAnimationEnd={handleAnimationEnd}
     >
       <AlertCircle />
-      <AlertTitle className="pr-7 line-clamp-0">{message}</AlertTitle>
+      <AlertTitle className="line-clamp-0">{message}</AlertTitle>
     </Alert>
   );
 }

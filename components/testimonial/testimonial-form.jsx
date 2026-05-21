@@ -1,20 +1,11 @@
 import { getTestimonial } from '@/lib/services/testimonial-service';
-import {
-  Alert,
-  AlertTitle,
-} from '../ui/alert';
-import Error404 from '../icon/error-404';
 import EditForm from './edit-form';
+import NotFoundAlert from '../ui/not-found-alert';
 
 export default async function TestimonialForm({ id }) {
   const testimonial = await getTestimonial(id);
 
-  if (!testimonial) return (
-    <Alert className="text-base lg:max-w-2/3">
-      <Error404 />
-      <AlertTitle>Testimonial not found</AlertTitle>
-    </Alert>
-  );
+  if (!testimonial) return <NotFoundAlert message="Testimonial not found" />;
 
   return <EditForm testimonial={testimonial} />;
 }

@@ -11,21 +11,12 @@ import { Minus } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Fragment } from 'react';
 import { formatDateTime } from '@/lib/format-date';
-import {
-  Alert,
-  AlertTitle,
-} from '@/components/ui/alert';
-import Error404 from '../icon/error-404';
 import { InvoiceStatus } from '@/constants/enums';
+import NotFoundAlert from '../ui/not-found-alert';
 
 export default function InvoicesSection({ invoices }) {
   if (invoices.length <= 0) {
-    return (
-      <Alert className="text-base mt-2.5 mb-4">
-        <Error404 />
-        <AlertTitle>Invoice not found</AlertTitle>
-      </Alert>
-    );
+    return <NotFoundAlert message="Invoice not found" className="mt-2.5 mb-4" />;
   }
 
   function getTextStatusColor(status) {

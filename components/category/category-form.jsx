@@ -1,20 +1,11 @@
-import {
-  Alert,
-  AlertTitle,
-} from '../ui/alert';
-import Error404 from '../icon/error-404';
 import { getCategory } from '@/lib/services/category-service';
 import EditForm from './edit-form';
+import NotFoundAlert from '../ui/not-found-alert';
 
 export default async function CategoryForm({ id }) {
   const category = await getCategory(id);
 
-  if (!category) return (
-    <Alert className="text-base lg:max-w-2/3">
-      <Error404 />
-      <AlertTitle>Category not found</AlertTitle>
-    </Alert>
-  );
+  if (!category) return <NotFoundAlert message="Category not found" />;
 
   return <EditForm category={category} />;
 }

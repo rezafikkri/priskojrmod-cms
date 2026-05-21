@@ -1,19 +1,10 @@
 import { getOwner } from '@/lib/services/owner-service';
-import {
-  Alert,
-  AlertTitle,
-} from '../ui/alert';
-import Error404 from '../icon/error-404';
 import EditForm from './edit-form';
+import NotFoundAlert from '../ui/not-found-alert';
 
 export default async function OwnerForm({ id }) {
   const owner = await getOwner(id);
-  if (!owner) return (
-    <Alert className="lg:max-w-2/3 text-base">
-      <Error404 />
-      <AlertTitle>Owner not found</AlertTitle>
-    </Alert>
-  );
+  if (!owner) return <NotFoundAlert message="Owner not found" />;
 
   return <EditForm owner={owner} />;
 }
