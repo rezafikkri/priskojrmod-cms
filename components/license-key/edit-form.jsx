@@ -33,7 +33,7 @@ export default function EditForm({ licenseKey }) {
     resolver: zodResolver(editLicenseKeySchema),
     defaultValues: {
       id: licenseKey.id,
-      change_expiration_date: false,
+      changeExpirationDate: false,
     },
   });
 
@@ -44,7 +44,7 @@ export default function EditForm({ licenseKey }) {
 
     if (editRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
-      form.setValue('change_expiration_date', false);
+      form.setValue('changeExpirationDate', false);
 
       if (editRes.data.exp) {
         setLicenseKeyExpire(formatDateTime(editRes.data.exp));
@@ -85,7 +85,7 @@ export default function EditForm({ licenseKey }) {
           
           <FormField
             control={form.control}
-            name="change_expiration_date"
+            name="changeExpirationDate"
             render={({ field }) => (
               <FormItem className="flex space-x-2 items-start">
                 <FormControl>

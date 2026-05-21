@@ -358,7 +358,7 @@ describe('updateLicenseKey function', () => {
       updateLicenseKey({
         id: '3f50e7ba-9c3e-4cf1-8a98-77be2c32c71a',
         type: 'online',
-        change_expiration_date: false,
+        changeExpirationDate: false,
       })
     ).rejects.toThrow(UnauthenticatedError);
 
@@ -380,7 +380,7 @@ describe('updateLicenseKey function', () => {
     await updateLicenseKey({
       id: '3f50e7ba-9c3e-4cf1-8a98-77be2c32c71a',
       type: 'online',
-      change_expiration_date: true,
+      changeExpirationDate: true,
     });
 
     expect(prisma.licenseKey.update).toHaveBeenCalledWith({
