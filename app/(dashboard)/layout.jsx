@@ -57,7 +57,6 @@ export default function RootLayout({ children }) {
               <Toaster
                 richColors
                 expand
-                visibleToasts={3}
                 position="bottom-right"
                 toastOptions={{
                   style: { minWidth: '400px' },
