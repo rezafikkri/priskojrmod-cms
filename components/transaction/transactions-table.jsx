@@ -3,10 +3,7 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { Button } from '../ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
@@ -15,7 +12,7 @@ import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { isLastPage, getStatusClasses } from '@/lib/utils';
-import { RotateCw, MoreHorizontal, Minus } from 'lucide-react';
+import { RotateCw, Minus } from 'lucide-react';
 import InfoCircle from '../icon/info-circle';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { searchKeySchema } from '@/lib/validators/base-validator';
@@ -52,6 +49,7 @@ import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import { useFetchAction } from '@/hooks/use-fetch-action';
+import TableActionDropdown from '../ui/table-action-dropdown';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -762,114 +760,100 @@ export default function TransactionsTable() {
       cell: ({ row }) => {
         const changeStatusMenus = getChangeStatusMenu(row.getValue('status'));
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="h-8 w-8 p-0 focus-visible:ring-ring"
-                disabled={
-                  updatingTransactionStatusIds.includes(row.original.id) ||
-                  correctingTransactionStatusIds.includes(row.original.id)
-                }
-              >
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-50">
-              {changeStatusMenus.length > 0 && (
-                <>
-                  <DropdownMenuLabel className="text-muted-foreground text-[15px]">
-                    Change status to
-                  </DropdownMenuLabel>
-                  {changeStatusMenus.map(cs => (
-                    <DropdownMenuItem key={cs} className="w-full text-base" asChild>
-                      <button onClick={() => {
-                        if (cs === TransactionStatus.REFUND) {
-                          let newRefundData = {
-                            id: row.original.id,
-                            transactionCode: row.getValue('code'),
-                            email: row.getValue('customerEmail'),
-                          };
+          <TableActionDropdown
+            disabled={
+              updatingTransactionStatusIds.includes(row.original.id) ||
+              correctingTransactionStatusIds.includes(row.original.id)
+            }
+          >
+            {changeStatusMenus.length > 0 && (
+              <>
+                <DropdownMenuLabel className="text-muted-foreground text-[15px]">
+                  Change status to
+                </DropdownMenuLabel>
+                {changeStatusMenus.map(cs => (
+                  <DropdownMenuItem key={cs} className="w-full text-base" asChild>
+                    <button onClick={() => {
+                      if (cs === TransactionStatus.REFUND) {
+                        let newRefundData = {
+                          id: row.original.id,
+                          transactionCode: row.getValue('code'),
+                          email: row.getValue('customerEmail'),
+                        };
 
-                          if (!row.original.customerId || row.original.customer.isBanned) {
-                            setIsOpenRefundConfirmDialog(true);
-                            newRefundData.customerId = row.original.customerId;
-                          } else {
-                            setIsOpenRefundFormDialog(true);
-                          }
-
-                          setRefundData(newRefundData);
-                        } else if (cs === TransactionStatus.CANCELLED) {
-                          openCancelConfirmDialog({
-                            id: row.original.id,
-                            transactionCode: row.getValue('code'),
-                            email: row.getValue('customerEmail'),
-                          });
+                        if (!row.original.customerId || row.original.customer.isBanned) {
+                          setIsOpenRefundConfirmDialog(true);
+                          newRefundData.customerId = row.original.customerId;
                         } else {
-                          handleEditTransactionStatus({ id: row.original.id, status: cs });
+                          setIsOpenRefundFormDialog(true);
                         }
-                      }}>
-                        {cs.replace(/^./, (match) => match.toUpperCase())}
-                      </button>
-                    </DropdownMenuItem>
-                  ))}
 
-                  <DropdownMenuSeparator />
-                </>
-              )}
-              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Other action</DropdownMenuLabel>
+                        setRefundData(newRefundData);
+                      } else if (cs === TransactionStatus.CANCELLED) {
+                        openCancelConfirmDialog({
+                          id: row.original.id,
+                          transactionCode: row.getValue('code'),
+                          email: row.getValue('customerEmail'),
+                        });
+                      } else {
+                        handleEditTransactionStatus({ id: row.original.id, status: cs });
+                      }
+                    }}>
+                      {cs.replace(/^./, (match) => match.toUpperCase())}
+                    </button>
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+              </>
+            )}
 
-              {row.getValue('status') !== TransactionStatus.PENDING && (
+            <DropdownMenuLabel className="text-muted-foreground text-[15px]">
+              Other action
+            </DropdownMenuLabel>
+            {row.getValue('status') !== TransactionStatus.PENDING && (
+              <DropdownMenuItem className="w-full text-base" asChild>
+                <button onClick={() => openCorrectStatusDialog({
+                  id: row.original.id,
+                  transactionCode: row.getValue('code'),
+                  email: row.getValue('customerEmail'),
+                  currentStatus: row.getValue('status'),
+                })}>
+                  Correct status
+                </button>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem className="w-full text-base" asChild onClick={() => setSeeDetailsId(row.original.id)}>
+              <button>See details</button>
+            </DropdownMenuItem>
+            {row.original.invoices.length > 0 && (
+              <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+                <Link
+                  href={`/invoice/${row.original.invoices[0].invoiceNumber}/pdf`}
+                  target='_blank'
+                >
+                  View invoice
+                </Link>
+              </DropdownMenuItem>
+            )}
+            {row.getValue('status') === TransactionStatus.PAID && (
+              <>
                 <DropdownMenuItem className="w-full text-base" asChild>
-                  <button onClick={() => openCorrectStatusDialog({
-                    id: row.original.id,
-                    transactionCode: row.getValue('code'),
-                    email: row.getValue('customerEmail'),
-                    currentStatus: row.getValue('status'),
-                  })}>
-                    Correct status
+                  <button onClick={() => handleCopyableMessage(row.original.id)}>
+                    Copy confirmation message
                   </button>
                 </DropdownMenuItem>
-              )}
-
-              <DropdownMenuItem
-                className="w-full text-base"
-                asChild
-                onClick={() => setSeeDetailsId(row.original.id)}
-              >
-                <button>See details</button>
-              </DropdownMenuItem>
-
-              {row.original.invoices.length > 0 && (
-                <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
-                  <Link
-                    href={`/invoice/${row.original.invoices[0].invoiceNumber}/pdf`}
-                    target='_blank'
-                  >View invoice</Link>
+                <DropdownMenuItem className="w-full text-base" asChild>
+                  <button onClick={() => openRefundDeadlineDialog({
+                    transactionCode: row.getValue('code'),
+                    email: row.getValue('customerEmail'),
+                    paidAt: row.getValue('paidAt'),
+                  })}>
+                    Check refund deadline
+                  </button>
                 </DropdownMenuItem>
-              )}
-
-              {row.getValue('status') === TransactionStatus.PAID && (
-                <>
-                  <DropdownMenuItem className="w-full text-base" asChild>
-                    <button onClick={() => handleCopyableMessage(row.original.id)}>
-                      Copy confirmation message
-                    </button>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem className="w-full text-base" asChild>
-                    <button onClick={() => openRefundDeadlineDialog({
-                      transactionCode: row.getValue('code'),
-                      email: row.getValue('customerEmail'),
-                      paidAt: row.getValue('paidAt'),
-                    })}>
-                      Check refund deadline
-                    </button>
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </>
+            )}
+          </TableActionDropdown>
         );
       },
     },

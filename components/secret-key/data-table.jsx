@@ -15,15 +15,11 @@ import {
 } from '@/components/ui/table';
 import { useMemo, useState } from 'react';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
-import { MoreHorizontal, Minus } from 'lucide-react';
+import { Minus } from 'lucide-react';
 import { toast } from 'sonner';
 import { removeSecretKey } from '@/actions/secret-key-actions';
 import DeleteDialog from './delete-dialog';
@@ -33,6 +29,7 @@ import Link from 'next/link';
 import { cmsConfig } from '@/config/cms';
 import { useDialog } from '@/hooks/use-dialog';
 import { useQueryClient } from '@tanstack/react-query';
+import TableActionDropdown from '../ui/table-action-dropdown';
 
 export default function DataTable({ secretKeys: data }) {
   const [secretKeys, setSecretKeys] = useState(data);
@@ -98,43 +95,29 @@ export default function DataTable({ secretKeys: data }) {
       enableHiding: false,
       cell: ({ row }) => {
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="h-8 w-8 p-0 focus-visible:ring-ring"
-                disabled={deletingIds.includes(row.original.id)}
-              >
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-50">
-              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                className="w-full text-base"
-                asChild
-              >
-                <button onClick={() => {
-                  navigator.clipboard.writeText(row.original.key);
-                  toast.success('Secret key copied to clipboard');
-                }}>
-                  Copy secret key
-                </button>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
-                <Link href={`/secret-key/${row.original.id}/regenerate`}>Regenerate</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="-mx-1.5" />
-              <DropdownMenuItem className="w-full text-base" asChild>
-                <button onClick={() => openDeleteDialog({
-                  id: row.original.id,
-                  appName: row.getValue('appName'),
-                })}>
-                  Delete
-                </button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <TableActionDropdown disabled={deletingIds.includes(row.original.id)}>
+            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+            <DropdownMenuItem className="w-full text-base" asChild>
+              <button onClick={() => {
+                navigator.clipboard.writeText(row.original.key);
+                toast.success('Secret key copied to clipboard');
+              }}>
+                Copy secret key
+              </button>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
+              <Link href={`/secret-key/${row.original.id}/regenerate`}>Regenerate</Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="-mx-1.5" />
+            <DropdownMenuItem className="w-full text-base" asChild>
+              <button onClick={() => openDeleteDialog({
+                id: row.original.id,
+                appName: row.getValue('appName'),
+              })}>
+                Delete
+              </button>
+            </DropdownMenuItem>
+          </TableActionDropdown>
         );
       },
     }

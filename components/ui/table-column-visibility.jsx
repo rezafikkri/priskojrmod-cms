@@ -71,7 +71,7 @@ export default function TableColumnVisibility({
   const hasUserCustomization = !deepEqual(defaultColumnVisibility, comparableVisibility);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <TooltipWrapper text="Manage columns">
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="text-base px-3 py-1.5 h-auto inline-block">

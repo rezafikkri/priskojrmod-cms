@@ -3,11 +3,8 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { Button } from '../ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
@@ -16,7 +13,7 @@ import FiltersPopover from './filters-popover';
 import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { isLastPage, getUnixTimestamp } from '@/lib/utils';
-import { Plus, MoreHorizontal, Minus } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { RotateCw } from 'lucide-react';
 import { searchKeySchema } from '@/lib/validators/base-validator';
@@ -42,6 +39,7 @@ import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import { useFetchAction } from '@/hooks/use-fetch-action';
+import TableActionDropdown from '../ui/table-action-dropdown';
 
 const defaultColumnVisibility = {
   lastActive: true,
@@ -519,26 +517,18 @@ export default function CustomersTable() {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 focus-visible:ring-ring"
-              disabled={
-                deletingIds.includes(row.original.id) ||
-                updatingBanStatusIds.includes(row.original.id)
-              }
-            >
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-50">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-            <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
-              <Link href={`/customer/${row.original.id}/edit`}>Edit</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="w-full text-base"
+        <TableActionDropdown
+          disabled={
+            deletingIds.includes(row.original.id) ||
+            updatingBanStatusIds.includes(row.original.id)
+          }
+        >
+          <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+          <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
+            <Link href={`/customer/${row.original.id}/edit`}>Edit</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="w-full text-base" asChild>
+            <button
               onClick={() => {
                 if (row.original.isBanned === false) {
                   openBanDialog({
@@ -553,32 +543,29 @@ export default function CustomersTable() {
                   });
                 }
               }}
-              asChild
             >
-              <button>
-                {row.original.isBanned === false ? 'Ban' : 'Unban'}
-              </button>
-            </DropdownMenuItem>
-            {shouldShowDeleteButton({
-              googleUserId: row.original.googleUserId,
-              lastActive: row.getValue('lastActive'),
-              isBanned: row.original.isBanned,
-            }) && (
-              <>
-                <DropdownMenuSeparator className="-mx-1.5" />
-                <DropdownMenuItem className="w-full text-base" asChild>
-                  <button onClick={() => openDeleteDialog({
-                    id: row.original.id,
-                    email: row.getValue('email'),
-                    isBanned: row.original.isBanned,
-                  })}>
-                    Delete
-                  </button>
-                </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+              {row.original.isBanned === false ? 'Ban' : 'Unban'}
+            </button>
+          </DropdownMenuItem>
+          {shouldShowDeleteButton({
+            googleUserId: row.original.googleUserId,
+            lastActive: row.getValue('lastActive'),
+            isBanned: row.original.isBanned,
+          }) && (
+            <>
+              <DropdownMenuSeparator className="-mx-1.5" />
+              <DropdownMenuItem className="w-full text-base" asChild>
+                <button onClick={() => openDeleteDialog({
+                  id: row.original.id,
+                  email: row.getValue('email'),
+                  isBanned: row.original.isBanned,
+                })}>
+                  Delete
+                </button>
+              </DropdownMenuItem>
+            </>
+          )}
+        </TableActionDropdown>
       ),
     },
   ], [

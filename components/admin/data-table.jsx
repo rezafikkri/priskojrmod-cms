@@ -15,15 +15,10 @@ import {
 } from '@/components/ui/table';
 import { useMemo, useState } from 'react';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
-import { MoreHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
@@ -33,6 +28,7 @@ import ProfileBadge from '../ui/profile-badge';
 import DeleteDialog from '../ui/delete-dialog';
 import { cmsConfig } from '@/config/cms';
 import { useDialog } from '@/hooks/use-dialog';
+import TableActionDropdown from '../ui/table-action-dropdown';
 
 export default function DataTable({ admins: data }) {
   const [admins, setAdmins] = useState(data);
@@ -103,34 +99,21 @@ export default function DataTable({ admins: data }) {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 focus-visible:ring-ring"
-              disabled={deletingIds.includes(row.original.id)}
-            >
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-            <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
-              <Link href={`/admin/${row.original.id}/edit`}>Edit</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="-mx-1.5" />
-            <DropdownMenuItem className="w-full text-base" asChild>
-              <button
-                onClick={() => openDeleteDialog({
-                  id: row.original.id,
-                  email: row.getValue('email'),
-                })}
-              >
-                Delete
-              </button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <TableActionDropdown disabled={deletingIds.includes(row.original.id)}>
+          <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+          <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+            <Link href={`/admin/${row.original.id}/edit`}>Edit</Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className="-mx-1.5" />
+          <DropdownMenuItem className="w-full text-base" asChild>
+            <button onClick={() => openDeleteDialog({
+              id: row.original.id,
+              email: row.getValue('email'),
+            })}>
+              Delete
+            </button>
+          </DropdownMenuItem>
+        </TableActionDropdown>
       ),
     }
   ], [deletingIds, openDeleteDialog]);

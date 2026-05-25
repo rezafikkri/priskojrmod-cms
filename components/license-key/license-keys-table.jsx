@@ -18,12 +18,9 @@ import {
 import { toast } from 'sonner';
 import FiltersPopover from './filters-popover';
 import { Button } from '../ui/button';
-import { MoreHorizontal, Minus, Plus } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
@@ -53,6 +50,7 @@ import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import { useFetchAction } from '@/hooks/use-fetch-action';
+import TableActionDropdown from '../ui/table-action-dropdown';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -860,74 +858,65 @@ export default function LicenseKeysTable() {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 focus-visible:ring-ring"
-              disabled={
-                deletingIds.includes(row.original.id) ||
-                updatingRevokeStatusIds.includes(row.original.id) ||
-                resetDeviceIds.includes(row.original.id)
-              }
-            >
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-50">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-            <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
-              <Link href={`/license-key/${row.original.id}/edit`}>Edit</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button onClick={() => {
-                navigator.clipboard.writeText(row.original.code);
-                toast.success('License key code copied to clipboard');
-              }}>
-                Copy code
-              </button>
-            </DropdownMenuItem>
+        <TableActionDropdown
+          disabled={
+            deletingIds.includes(row.original.id) ||
+            updatingRevokeStatusIds.includes(row.original.id) ||
+            resetDeviceIds.includes(row.original.id)
+          }
+        >
+          <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+          <DropdownMenuItem asChild className="text-base hover:cursor-pointer">
+            <Link href={`/license-key/${row.original.id}/edit`}>Edit</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="w-full text-base"
+            asChild
+          >
+            <button onClick={() => {
+              navigator.clipboard.writeText(row.original.code);
+              toast.success('License key code copied to clipboard');
+            }}>
+              Copy code
+            </button>
+          </DropdownMenuItem>
 
-            {row.original.deviceId && (
-              <DropdownMenuItem className="w-full text-base" asChild>
-                <button onClick={() => openResetDeviceDialog({
-                  id: row.original.id,
-                  email: row.getValue('email'),
-                  appName: row.getValue('appName'),
-                })}>
-                  Reset device
-                </button>
-              </DropdownMenuItem>
-            )}
-
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button onClick={() => openEditRevokeStatusDialog({
-                id: row.original.id,
-                email: row.getValue('email'),
-                appName: row.getValue('appName'),
-                isRevoked: row.original.isRevoked,
-              })}>
-                {row.original.isRevoked ? 'Unrevoke' : 'Revoke'}
-              </button>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="-mx-1.5" />
+          {row.original.deviceId && (
             <DropdownMenuItem className="w-full text-base" asChild>
-              <button onClick={() => openDeleteDialog({
+              <button onClick={() => openResetDeviceDialog({
                 id: row.original.id,
                 email: row.getValue('email'),
                 appName: row.getValue('appName'),
               })}>
-                Delete
+                Reset device
               </button>
             </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          )}
+
+          <DropdownMenuItem
+            className="w-full text-base"
+            asChild
+          >
+            <button onClick={() => openEditRevokeStatusDialog({
+              id: row.original.id,
+              email: row.getValue('email'),
+              appName: row.getValue('appName'),
+              isRevoked: row.original.isRevoked,
+            })}>
+              {row.original.isRevoked ? 'Unrevoke' : 'Revoke'}
+            </button>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className="-mx-1.5" />
+          <DropdownMenuItem className="w-full text-base" asChild>
+            <button onClick={() => openDeleteDialog({
+              id: row.original.id,
+              email: row.getValue('email'),
+              appName: row.getValue('appName'),
+            })}>
+              Delete
+            </button>
+          </DropdownMenuItem>
+        </TableActionDropdown>
       ),
     },
   ], [

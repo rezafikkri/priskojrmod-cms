@@ -4,16 +4,12 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import {
   Plus,
-  MoreHorizontal,
   Minus,
   RotateCw,
 } from 'lucide-react';
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
@@ -48,6 +44,7 @@ import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
+import TableActionDropdown from '../ui/table-action-dropdown';
 
 const defaultColumnVisibility = {
   category: false,
@@ -445,95 +442,76 @@ export default function ProductsTable({ isOwner }) {
           (!row.original.isPinned && currentStatus === ProductStatus.PUBLISHED);
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="h-8 w-8 p-0 focus-visible:ring-ring"
-                disabled={
-                  updatingPinnedIds.includes(row.original.id) ||
-                  updatingStatusIds.includes(row.original.id) ||
-                  deletingIds.includes(row.original.id)
-                }
-              >
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-50">
-              <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-              {currentStatus !== ProductStatus.INACTIVE && (
-                <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
-                  <Link href={`/product/${row.original.id}/edit`}>Edit</Link>
-                </DropdownMenuItem>
-              )}
-
-              {currentStatus === ProductStatus.PUBLISHED && (
-                <DropdownMenuItem
-                  className="w-full text-base"
-                  asChild
-                >
-                  <button onClick={() => handleEditPinned(
-                    row.original.id,
-                    row.original.isPinned,
-                  )}>
-                    {row.original.isPinned ? 'Unpin' : 'Pin'}
-                  </button>
-                </DropdownMenuItem>
-              )}
-
-              {currentStatus === ProductStatus.UNPUBLISHED && (
-                <>
-                  <DropdownMenuItem className="w-full text-base" asChild>
-                    <button onClick={() => handleEditStatus({
-                      id: row.original.id,
-                      newStatus: ProductStatus.PUBLISHED,
-                      currentStatus: row.getValue('status'),
-                    })}>
-                      Publish
-                    </button>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="w-full text-base" asChild>
-                    <button onClick={() => handleEditStatus({
-                      id: row.original.id,
-                      newStatus: ProductStatus.INACTIVE,
-                      currentStatus: row.getValue('status'),
-                    })}>
-                      Deactivate
-                    </button>
-                  </DropdownMenuItem>
-                </>
-              )}
-
-              {showUnpublishAction && (
-                <DropdownMenuItem
-                  className="w-full text-base"
-                  asChild
-                >
+          <TableActionDropdown
+            disabled={
+              updatingPinnedIds.includes(row.original.id) ||
+              updatingStatusIds.includes(row.original.id) ||
+              deletingIds.includes(row.original.id)
+            }
+          >
+            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+            {currentStatus !== ProductStatus.INACTIVE && (
+              <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+                <Link href={`/product/${row.original.id}/edit`}>Edit</Link>
+              </DropdownMenuItem>
+            )}
+            {currentStatus === ProductStatus.PUBLISHED && (
+              <DropdownMenuItem className="w-full text-base" asChild>
+                <button onClick={() => handleEditPinned(
+                  row.original.id,
+                  row.original.isPinned,
+                )}>
+                  {row.original.isPinned ? 'Unpin' : 'Pin'}
+                </button>
+              </DropdownMenuItem>
+            )}
+            {currentStatus === ProductStatus.UNPUBLISHED && (
+              <>
+                <DropdownMenuItem className="w-full text-base" asChild>
                   <button onClick={() => handleEditStatus({
                     id: row.original.id,
-                    newStatus: ProductStatus.UNPUBLISHED,
+                    newStatus: ProductStatus.PUBLISHED,
                     currentStatus: row.getValue('status'),
                   })}>
-                    Unpublish
+                    Publish
                   </button>
                 </DropdownMenuItem>
-              )}
-
-              {currentStatus !== ProductStatus.PUBLISHED && (
-                <>
-                  <DropdownMenuSeparator className="-mx-1.5" />
-                  <DropdownMenuItem className="w-full text-base" asChild>
-                    <button onClick={() => openDeleteDialog({
-                      id: row.original.id,
-                      name: row.getValue('name'),
-                    })}>
-                      Delete
-                    </button>
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuItem className="w-full text-base" asChild>
+                  <button onClick={() => handleEditStatus({
+                    id: row.original.id,
+                    newStatus: ProductStatus.INACTIVE,
+                    currentStatus: row.getValue('status'),
+                  })}>
+                    Deactivate
+                  </button>
+                </DropdownMenuItem>
+              </>
+            )}
+            {showUnpublishAction && (
+              <DropdownMenuItem className="w-full text-base" asChild>
+                <button onClick={() => handleEditStatus({
+                  id: row.original.id,
+                  newStatus: ProductStatus.UNPUBLISHED,
+                  currentStatus: row.getValue('status'),
+                })}>
+                  Unpublish
+                </button>
+              </DropdownMenuItem>
+            )}
+            {currentStatus !== ProductStatus.PUBLISHED && (
+              <>
+                <DropdownMenuSeparator className="-mx-1.5" />
+                <DropdownMenuItem className="w-full text-base" asChild>
+                  <button onClick={() => openDeleteDialog({
+                    id: row.original.id,
+                    name: row.getValue('name'),
+                  })}>
+                    Delete
+                  </button>
+                </DropdownMenuItem>
+              </>
+            )}
+          </TableActionDropdown>
         );
       },
     }

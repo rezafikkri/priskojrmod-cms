@@ -105,7 +105,7 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
     queryKey: ['transactionDetails', detailsId],
     queryFn: async ({ signal }) => {
       const results = await safeFetch({
-        url: `/api/transactions/${detailsId}1`,
+        url: `/api/transactions/${detailsId}`,
         signal,
       });
       return results?.data;

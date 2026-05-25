@@ -15,18 +15,14 @@ import {
 } from '@/components/ui/table';
 import { useMemo, useState } from 'react';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
-import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth, extractSMIdentifier } from '@/lib/utils';
 import ProfileBadge from '../ui/profile-badge';
+import TableActionDropdown from '../ui/table-action-dropdown';
 
 export default function DataTable({ testimonials: data }) {
   const [testimonials] = useState(data);
@@ -73,19 +69,12 @@ export default function DataTable({ testimonials: data }) {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0 focus-visible:ring-ring">
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-            <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
-              <Link href={`/testimonial/${row.original.id}/edit`}>Edit</Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <TableActionDropdown>
+          <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+          <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
+            <Link href={`/testimonial/${row.original.id}/edit`}>Edit</Link>
+          </DropdownMenuItem>
+        </TableActionDropdown>
       ),
     }
   ], []);

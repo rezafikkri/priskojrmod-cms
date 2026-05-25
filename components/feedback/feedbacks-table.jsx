@@ -43,6 +43,7 @@ import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
 import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
+import TableActionDropdown from '../ui/table-action-dropdown';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -517,28 +518,17 @@ export default function FeedbacksTable() {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className={`size-8 p-0 focus-visible:ring-ring ${row.original.isRead ? 'invisible' : ''}`}
-              disabled={markingAsReadIds.includes(row.original.id)}
-            >
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-50">
-            <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              className="w-full text-base"
-              asChild
-            >
-              <button onClick={() => handleMarkAsRead(row.original.id)}>
-                Mark as read
-              </button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <TableActionDropdown
+          visible={!row.original.isRead}
+          disabled={markingAsReadIds.includes(row.original.id)}
+        >
+          <DropdownMenuLabel className="text-muted-foreground text-[15px]">Actions</DropdownMenuLabel>
+          <DropdownMenuItem className="w-full text-base" asChild>
+            <button onClick={() => handleMarkAsRead(row.original.id)}>
+              Mark as read
+            </button>
+          </DropdownMenuItem>
+        </TableActionDropdown>
       ),
     },
   ], [markingAsReadIds, handleMarkAsRead]);
