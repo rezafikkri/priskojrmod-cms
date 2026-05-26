@@ -45,7 +45,6 @@ export default function DataTable({ licenses: data }) {
   } = useDialog();
 
   async function handleDelete({ id }) {
-    // This is for add opacity-50 style to deleted row
     setDeletingIds((prevDeletingIds) => [...prevDeletingIds, id]);
     // show loading
     const toastId = toast.loading('Deleting license...');
@@ -164,7 +163,6 @@ export default function DataTable({ licenses: data }) {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className={deletingIds.includes(row.original.id) ? 'opacity-50' : ''}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

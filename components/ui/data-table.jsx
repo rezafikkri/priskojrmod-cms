@@ -11,10 +11,7 @@ import {
 } from '@/components/ui/table';
 import { getTableHeaderWidth } from '@/lib/utils';
 
-export default function DataTable({
-  table,
-  processingIds,
-}) {
+export default function DataTable({ table }) {
   return (
     <div className="rounded-md border">
       <Table className="text-base">
@@ -43,7 +40,6 @@ export default function DataTable({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
-                className={processingIds.includes(row.original.id) ? 'opacity-50' : ''}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell

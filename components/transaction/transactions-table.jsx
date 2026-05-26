@@ -283,7 +283,6 @@ export default function TransactionsTable() {
   }
 
   const handleEditTransactionStatus = useCallback(async ({ id, status, refundNote }) => {
-    // This is for add opacity-50 style to updated row
     setUpdatingTransactionStatusIds((prev) => {
       const newIds = [...prev, id];
       updatingTransactionStatusIdsRef.current = newIds;
@@ -483,7 +482,6 @@ export default function TransactionsTable() {
     //show loading
     const toastId = toast.loading(`Correcting status to ${newStatus}...`);
 
-    // This is for add opacity-50 style to updated row
     setCorrectingTransactionStatusIds((prev) => {
       const newIds = [...prev, id];
       correctingTransactionStatusIdsRef.current = newIds;
@@ -935,13 +933,7 @@ export default function TransactionsTable() {
               message={errorT?.message}
               isSilent={errorT?.silent}
             />
-            <DataTable
-              table={table}
-              processingIds={[
-                ...updatingTransactionStatusIds,
-                ...correctingTransactionStatusIds,
-              ]}
-            />
+            <DataTable table={table} />
             <TablePagination
               data={dataT}
               table={table}

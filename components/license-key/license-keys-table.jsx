@@ -322,7 +322,6 @@ export default function LicenseKeysTable() {
     // show loading
     const toastId = toast.loading('Deleting license key...');
 
-    // This is for add opacity-50 style to deleted row
     setDeletingIds((prev) => {
       const newIds = [...prev, id];
       deletingIdsRef.current = newIds;
@@ -543,7 +542,6 @@ export default function LicenseKeysTable() {
       `${isRevoked ? 'Unrevoking' : 'Revoking'} license key...`,
     );
 
-    // This is for add opacity-50 style to updated revoke status row
     setUpdatingRevokeStatusIds((prev) => {
       const newIds = [...prev, id];
       updatingRevokeStatusIdsRef.current = newIds;
@@ -669,7 +667,6 @@ export default function LicenseKeysTable() {
     // show loading
     const toastId = toast.loading('Resetting device...');
 
-    // This is for add opacity-50 style target row
     setResetDeviceIds((prev) => {
       const newIds = [...prev, id];
       resetDeviceIdsRef.current = newIds;
@@ -1023,14 +1020,7 @@ export default function LicenseKeysTable() {
               isSilent={errorLK?.silent}
             />
             <TableSelectionAlert table={table} />
-            <DataTable
-              table={table}
-              processingIds={[
-                ...deletingIds,
-                ...updatingRevokeStatusIds,
-                ...resetDeviceIds,
-              ]}
-            />
+            <DataTable table={table} />
             <TablePagination
               data={dataLK}
               table={table}

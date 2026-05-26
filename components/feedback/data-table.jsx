@@ -14,7 +14,6 @@ import { cn, getTableHeaderWidth } from '@/lib/utils';
 export default function DataTable({
   table,
   onOpenDetailDialog,
-  processingIds,
   onEditReadStatus,
 }) {
   function getTableCellClassNames(columnId, isRead) {
@@ -75,7 +74,6 @@ export default function DataTable({
                 data-state={row.getIsSelected() && 'selected'}
                 className={cn(
                   row.original.isRead && 'bg-muted/80',
-                  processingIds.includes(row.original.id) && 'opacity-50'
                 )}
               >
                 {row.getVisibleCells().map((cell) => (

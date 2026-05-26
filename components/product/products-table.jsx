@@ -175,7 +175,6 @@ export default function ProductsTable({ isOwner }) {
   }
 
   const handleEditPinned = useCallback(async (id, isPinned) => {
-    // This is for add opacity-50 style to deleted row
     setUpdatingPinnedIds((prevIds) => [...prevIds, id]);
     // show loading
     const toastId = toast.loading(!isPinned ? 'Pinning product...' : 'Unpinning product...');
@@ -237,7 +236,6 @@ export default function ProductsTable({ isOwner }) {
       },
     };
 
-    // This is for add opacity-50 style to deleted row
     setUpdatingStatusIds((prevIds) => [...prevIds, id]);
 
     // show loading
@@ -287,7 +285,6 @@ export default function ProductsTable({ isOwner }) {
   }, [filters]);
 
   async function handleDelete({ id }) {
-    // This is for add opacity-50 style to deleted row
     setDeletingIds((prevIds) => [...prevIds, id]);
     // show loading
     const toastId = toast.loading('Deleting product...');
@@ -590,14 +587,7 @@ export default function ProductsTable({ isOwner }) {
               isRefetching={isRefetchingP}
               message={errorP?.message}
             />
-            <DataTable
-              table={table}
-              processingIds={[
-                ...updatingPinnedIds,
-                ...updatingStatusIds,
-                ...deletingIds,
-              ]}
-            />
+            <DataTable table={table} />
             <TablePagination
               data={dataP}
               showNavigation={false}

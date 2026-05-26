@@ -237,7 +237,6 @@ export default function CustomersTable() {
     // show loading
     const toastId = toast.loading(nextIsBanned ? 'Banning customer...' : 'Unbanning customer...');
     
-    // This is for add opacity-50 style to updated row
     setUpdatingBanStatusIds((prev) => {
       const newIds = [...prev, id];
       updatingBanStatusIdsRef.current = newIds;
@@ -352,7 +351,6 @@ export default function CustomersTable() {
     // show loading
     const toastId = toast.loading('Deleting customer...');
 
-    // This is for add opacity-50 style to deleted row
     setDeletingIds((prev) => {
       const newIds = [...prev, id];
       deletingIdsRef.current = newIds;
@@ -651,13 +649,7 @@ export default function CustomersTable() {
               message={errorC?.message}
               isSilent={errorC?.silent}
             />
-            <DataTable
-              table={table}
-              processingIds={[
-                ...deletingIds,
-                ...updatingBanStatusIds,
-              ]}
-            />
+            <DataTable table={table} />
             <TablePagination
               data={dataC}
               table={table}

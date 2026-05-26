@@ -403,7 +403,6 @@ export default function FeedbacksTable() {
   }
 
   const handleMarkAsRead = useCallback(async (id) => {
-    // This is for add opacity-50 style to updated row
     setMarkingAsReadIds((prev) => {
       const newIds = [...prev, id];
       markingAsReadIdsRef.current = newIds;
@@ -621,7 +620,6 @@ export default function FeedbacksTable() {
             <DataTable
               table={table}
               onOpenDetailDialog={openDetailDialog}
-              processingIds={markingAsReadIds} 
               onEditReadStatus={handleEditReadStatus}
             />
             <TablePagination data={dataF} />
