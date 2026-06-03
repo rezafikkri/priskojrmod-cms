@@ -40,6 +40,7 @@ import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import { useFetchAction } from '@/hooks/use-fetch-action';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import { changeToLastValidPage } from '@/lib/data-table';
 
 const defaultColumnVisibility = {
   lastActive: true,
@@ -206,9 +207,36 @@ export default function CustomersTable() {
     setSearchKey(null);
   }
 
-  function handleRefresh() {
+  async function handleRefresh() {
     updateFetchAction('refresh');
-    queryClient.invalidateQueries({ queryKey: ['customers'] });
+    let lastPageIndex = 0;
+
+    if (!hasSearched && pagination.pageIndex !== 0) {
+      const customer = queryClient.getQueryData(['customers', pagination, filters, searchKey]);
+
+      if (customer) {
+        lastPageIndex = Math.ceil(customer.rowCount / cmsConfig.pagination.pageSize) - 1;
+      }
+    }
+
+    await queryClient.invalidateQueries({ queryKey: ['customers'] });
+
+    if (hasSearched || pagination.pageIndex === 0) return;
+
+    const customer = queryClient.getQueryData(['customers', pagination, filters, searchKey]);
+    if (customer) {
+      changeToLastValidPage({
+        rowCount: customer.rowCount,
+        pagination,
+        searchKey,
+        filters,
+        updateFetchAction,
+        queryClient,
+        baseQueryKey: 'customers',
+        setPagination,
+        lastPageIndex,
+      });
+    }
   }
 
   function handleFilter(newFilters) {
@@ -428,7 +456,7 @@ export default function CustomersTable() {
           }
         }
       } else {
-        queryClient.invalidateQueries({ queryKey: ['customers'] });
+        queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
       }
 
       queryClient.invalidateQueries({ queryKey: ['customersAutocomplete'] });

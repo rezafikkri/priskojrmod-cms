@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
               <AppSidebar />
               <SidebarInset className="min-h-[96vh] overflow-x-hidden">
                 <Header />
-                <div className="flex-1 p-4 mb-25">
+                <div className="flex-1 p-4 mb-35">
                   <ReactQueryProvider>
                     {children}
                   </ReactQueryProvider>

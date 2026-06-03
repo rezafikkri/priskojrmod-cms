@@ -51,6 +51,7 @@ import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import { useFetchAction } from '@/hooks/use-fetch-action';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import { changeToLastValidPage } from '@/lib/data-table';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -258,12 +259,37 @@ export default function LicenseKeysTable() {
     setSearchKey(null);
   }
 
-  function handleRefresh() {
+  async function handleRefresh() {
     updateFetchAction('refresh');
-    // reset rowSelection
     setRowSelection({});
+    let lastPageIndex = 0;
 
-    queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+    if (!hasSearched && pagination.pageIndex !== 0) {
+      const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
+
+      if (licenseKey) {
+        lastPageIndex = Math.ceil(licenseKey.rowCount / cmsConfig.pagination.pageSize) - 1;
+      }
+    }
+
+    await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+
+    if (hasSearched || pagination.pageIndex === 0) return;
+
+    const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
+    if (licenseKey) {
+      changeToLastValidPage({
+        rowCount: licenseKey.rowCount,
+        pagination,
+        searchKey,
+        filters,
+        updateFetchAction,
+        queryClient,
+        baseQueryKey: 'licenseKeys',
+        setPagination,
+        lastPageIndex,
+      });
+    }
   }
 
   function handleFilter(newFilters) {
@@ -399,7 +425,7 @@ export default function LicenseKeysTable() {
           }
         }
       } else {
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
       }
 
       // if id exist in rowSelection then remove
@@ -446,22 +472,22 @@ export default function LicenseKeysTable() {
     // show loading
     const toastId = toast.loading('Enabling regeneration...');
 
-    // not use try/catch because in server actions already using try/catch
     const setCanRegenerateRes = await setCanRegenerateKeys(rowSelections);
 
     if (setCanRegenerateRes.status === 'success') {
       // get lastPageIndex before refreshing
       let lastPageIndex = 0;
+      const hasCanRegenerateFilter = filters?.canRegenerate && filters?.canRegenerate !== 'all';
       
-      if (!hasSearched && filters?.canRegenerate !== 'all') {
+      if (!hasSearched && hasCanRegenerateFilter && pagination.pageIndex !== 0) {
         const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
+
         if (licenseKey) {
           lastPageIndex = Math.ceil(licenseKey.rowCount / cmsConfig.pagination.pageSize) - 1;
         }
       }
 
       let refreshFailed = false;
-      let pageChange = false;
 
       try {
         if (setCanRegenerateRes.data.count > 0) {
@@ -471,42 +497,26 @@ export default function LicenseKeysTable() {
           await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] }, { throwOnError: true });
 
           // if need to change page
-          if (!hasSearched && filters?.canRegenerate !== 'all') {
-            const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
+          if (!hasSearched && hasCanRegenerateFilter && pagination.pageIndex !== 0) {
+            const licenseKey = queryClient.getQueryData([
+              'licenseKeys',
+              pagination,
+              filters,
+              searchKey,
+            ]);
 
-            if (licenseKey && licenseKey.rowCount > 0) {
-              const newLastPageIndex = Math.ceil(licenseKey.rowCount / cmsConfig.pagination.pageSize) - 1;
-
-              if (pagination.pageIndex > newLastPageIndex) {
-                const newPagination = { ...pagination, pageIndex: newLastPageIndex };
-
-                queryClient.setQueryData(
-                  ['licenseKeys', newPagination, filters, searchKey],
-                  (oldData) => {
-                    if (!oldData) return oldData;
-
-                    return { ...oldData, rowCount: licenseKey.rowCount };
-                  },
-                );
-
-                // invalidate again for only the new last page for refetch
-                queryClient.invalidateQueries({
-                  queryKey: ['licenseKeys', newPagination, filters, searchKey],
-                  exact: true
-                });
-                // change page to new last page index
-                updateFetchAction('paginate');
-                setPagination(newPagination);
-                pageChange = true;
-
-                // remove query for some page that no have data
-                for (let i = lastPageIndex; i > newLastPageIndex; i--) {
-                  queryClient.removeQueries({
-                    queryKey: ['licenseKeys', { ...pagination, pageIndex: i }, filters, searchKey],
-                    exact: true,
-                  });
-                }
-              }
+            if (licenseKey) {
+              changeToLastValidPage({
+                rowCount: licenseKey.rowCount,
+                pagination,
+                searchKey,
+                filters,
+                updateFetchAction,
+                queryClient,
+                baseQueryKey: 'licenseKeys',
+                setPagination,
+                lastPageIndex,
+              });
             }
           }
         }

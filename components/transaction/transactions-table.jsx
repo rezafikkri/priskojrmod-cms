@@ -50,6 +50,7 @@ import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import { useFetchAction } from '@/hooks/use-fetch-action';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import { changeToLastValidPage } from '@/lib/data-table';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -234,11 +235,38 @@ export default function TransactionsTable() {
     setSearchKey(null);
   }
 
-  function handleRefresh() {
+  async function handleRefresh() {
     updateFetchAction('refresh');
+    let lastPageIndex = 0;
 
-    queryClient.invalidateQueries({ queryKey: ['transactions'] });
-    queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
+    const hasStatusFilter = filters?.status && filters.status !== 'all';
+    if (!hasSearched && pagination.pageIndex !== 0 && hasStatusFilter) {
+      const transaction = queryClient.getQueryData(['transactions', pagination, filters, searchKey]);
+
+      if (transaction) {
+        lastPageIndex = Math.ceil(transaction.rowCount / cmsConfig.pagination.pageSize) - 1;
+      }
+    }
+
+    await queryClient.invalidateQueries({ queryKey: ['transactions'] });
+    queryClient.invalidateQueries({ queryKey: ['transactionDetails'] });
+
+    if (hasSearched || pagination.pageIndex === 0 || !hasStatusFilter) return;
+
+    const transaction = queryClient.getQueryData(['transactions', pagination, filters, searchKey]);
+    if (transaction) {
+      changeToLastValidPage({
+        rowCount: transaction.rowCount,
+        pagination,
+        searchKey,
+        filters,
+        updateFetchAction,
+        queryClient,
+        baseQueryKey: 'transactions',
+        setPagination,
+        lastPageIndex,
+      });
+    }
   }
 
   function handleFilter(newFilters) {
@@ -409,7 +437,7 @@ export default function TransactionsTable() {
           queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
         }
       } else {
-        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+        queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
       }
 
       queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 
@@ -615,7 +643,7 @@ export default function TransactionsTable() {
           queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
         }
       } else {
-        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+        queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
       }
 
       queryClient.invalidateQueries({ queryKey: ['transactionDetails'] }); 

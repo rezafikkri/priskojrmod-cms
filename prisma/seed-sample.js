@@ -38,11 +38,12 @@ export async function seedCustomers(prisma, count) {
       email: faker.internet.email().toLowerCase(),
       createdAt: currentTime,
       updatedAt: currentTime,
+      isBanned: true,
     };
 
-    if (i % 2 === 0) {
-      createData.isBanned = true;
-    }
+    // if (i % 2 === 0) {
+    //   createData.isBanned = true;
+    // }
     if (i % 3 === 0) {
       createData.phoneNumber = faker.phone.number({ style: 'international' });
     }
