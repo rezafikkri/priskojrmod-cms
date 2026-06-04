@@ -199,7 +199,7 @@ export async function seedTransactions(prisma, count) {
 
   const transactions = [];
   for (let i = 0; i < count; i++) {
-    const transactionDetails = getTransactionDetails({ max: 2, products });
+    const transactionDetails = getTransactionDetails({ max: 8, products });
 
     const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];
     const selectedAdmin = admins[generateRandomInt(0, admins.length - 1)];

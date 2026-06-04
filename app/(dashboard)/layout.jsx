@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
               <AppSidebar />
               <SidebarInset className="min-h-[96vh] overflow-x-hidden">
                 <Header />
-                <div className="flex-1 p-4 mb-35">
+                <div className="flex-1 p-4 mb-25">
                   <ReactQueryProvider>
                     {children}
                   </ReactQueryProvider>
@@ -56,10 +56,9 @@ export default function RootLayout({ children }) {
               </SidebarInset>
               <Toaster
                 richColors
-                expand
-                position="bottom-right"
+                position="top-right"
                 toastOptions={{
-                  style: { minWidth: '400px' },
+                  style: { minWidth: '450px' },
                   classNames: {
                     toast: 'group-[.toaster]:pointer-events-auto',
                     title: 'text-[15px]',
