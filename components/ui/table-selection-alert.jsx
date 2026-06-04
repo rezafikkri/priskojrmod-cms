@@ -13,7 +13,7 @@ export default function TableSelectionAlert({
   if (totalSelectedCount <= 0) return null;
 
   return (
-    <Alert className="mb-4 flex items-center justify-center -mx-4 w-auto border-x-0 rounded-none text-center h-[50px] p-0">
+    <Alert className="mb-4 flex items-center justify-center -mx-4 w-auto border-x-0 rounded-none text-center h-[40px] p-0">
       <AlertDescription className="text-base inline-block space-x-2">
         <span className="pe-1">
           {totalSelectedCount} rows selected
