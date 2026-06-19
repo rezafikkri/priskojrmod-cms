@@ -150,7 +150,7 @@ export default function LicenseKeysTable() {
   // add filters and search params to url
   function addParamsToURL(url, { filters, searchKey, pagination }) {
     // add filters params to url
-    let newUrl = url + `?sr=${filters.showRevoked}`;
+    let newUrl = url + `?sr=${filters.showRevoked}&pi=${pagination.pageIndex}`;
 
     if (filters.secretKeyId && filters.secretKeyId !== 'all') {
       newUrl += `&ski=${filters.secretKeyId}`;
@@ -158,14 +158,9 @@ export default function LicenseKeysTable() {
     if (filters.canRegenerate && filters.canRegenerate !== 'all') {
       newUrl += `&cr=${filters.canRegenerate}`;
     }
-
-    // add search param to url
     if (searchKey) {
       newUrl += `&sk=${searchKey}`;
-    } else {
-      newUrl += `&pi=${pagination.pageIndex}`;
-    }
-
+    } 
     return newUrl;
   }
 
@@ -232,6 +227,7 @@ export default function LicenseKeysTable() {
       }
     }
 
+    setPagination({ ...pagination, pageIndex: 0 });
     // reset rowSelection
     setRowSelection({});
     setSearchKey(parsedKey);
@@ -264,7 +260,7 @@ export default function LicenseKeysTable() {
     setRowSelection({});
     let lastPageIndex = 0;
 
-    if (!hasSearched && pagination.pageIndex !== 0) {
+    if (pagination.pageIndex !== 0) {
       const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
 
       if (licenseKey) {
@@ -274,7 +270,7 @@ export default function LicenseKeysTable() {
 
     await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
 
-    if (hasSearched || pagination.pageIndex === 0) return;
+    if (pagination.pageIndex === 0) return;
 
     const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
     if (licenseKey) {
@@ -299,15 +295,12 @@ export default function LicenseKeysTable() {
     if (isStale) {
       updateFetchAction('filter');
 
-      if (deepEqual(filters, newFilters) && (hasSearched || pagination.pageIndex === 0)) {
+      if (deepEqual(filters, newFilters) && pagination.pageIndex === 0) {
         queryClient.invalidateQueries({ queryKey, exact: true });
       }
     }
     
-    if (!hasSearched) {
-      setPagination({ ...pagination, pageIndex: 0 });
-    }
-
+    setPagination({ ...pagination, pageIndex: 0 });
     // reset rowSelection
     setRowSelection({});
     // set filters for trigger refetch
@@ -367,62 +360,48 @@ export default function LicenseKeysTable() {
     if (removeRes.status === 'success') {
       if (licenseKey) {
         const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== id);
+        const newRowCount = licenseKey.rowCount - 1;
 
-        if (hasSearched) {
+        if (!isLastPage({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          rowCount: licenseKey.rowCount,
+        })) {
           queryClient.setQueryData(
             ['licenseKeys', pagination, filters, searchKey],
-            (oldData) => {
-              if (!oldData) return oldData;
-            
-              return { ...oldData, items: newLicenseKeys };
-            },
+            { items: newLicenseKeys, rowCount: newRowCount },
           );
 
-          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
+          hasSuccessfulDeleteRef.current = true;
         } else {
-          const newRowCount = licenseKey.rowCount - 1;
+          if (newLicenseKeys.length === 0 && newRowCount > 0) {
+            const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
 
-          if (!isLastPage({
-            pageIndex: pagination.pageIndex,
-            pageSize: pagination.pageSize,
-            rowCount: licenseKey.rowCount,
-          })) {
+            queryClient.setQueryData(
+              ['licenseKeys', newPagination, filters, searchKey],
+              (oldData) => {
+                if (!oldData) return oldData;
+
+                return { ...oldData, rowCount: newRowCount };
+              },
+            );
+
+            // change page to prev page
+            updateFetchAction('paginate');
+            setPagination(newPagination);
+
+            queryClient.removeQueries({
+              queryKey: ['licenseKeys', pagination, filters, searchKey],
+              exact: true,
+            });
+          } else {
             queryClient.setQueryData(
               ['licenseKeys', pagination, filters, searchKey],
               { items: newLicenseKeys, rowCount: newRowCount },
             );
-
-            hasSuccessfulDeleteRef.current = true;
-          } else {
-            if (newLicenseKeys.length === 0 && newRowCount > 0) {
-              const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
-
-              queryClient.setQueryData(
-                ['licenseKeys', newPagination, filters, searchKey],
-                (oldData) => {
-                  if (!oldData) return oldData;
-
-                  return { ...oldData, rowCount: newRowCount };
-                },
-              );
-
-              // change page to prev page
-              updateFetchAction('paginate');
-              setPagination(newPagination);
-
-              queryClient.removeQueries({
-                queryKey: ['licenseKeys', pagination, filters, searchKey],
-                exact: true,
-              });
-            } else {
-              queryClient.setQueryData(
-                ['licenseKeys', pagination, filters, searchKey],
-                { items: newLicenseKeys, rowCount: newRowCount },
-              );
-            }
-
-            queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
           }
+
+          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
         }
       } else {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
@@ -450,7 +429,6 @@ export default function LicenseKeysTable() {
 
       if (
         licenseKey &&
-        !hasSearched &&
         !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -479,7 +457,7 @@ export default function LicenseKeysTable() {
       let lastPageIndex = 0;
       const hasCanRegenerateFilter = filters?.canRegenerate && filters?.canRegenerate !== 'all';
       
-      if (!hasSearched && hasCanRegenerateFilter && pagination.pageIndex !== 0) {
+      if (hasCanRegenerateFilter && pagination.pageIndex !== 0) {
         const licenseKey = queryClient.getQueryData(['licenseKeys', pagination, filters, searchKey]);
 
         if (licenseKey) {
@@ -497,7 +475,7 @@ export default function LicenseKeysTable() {
           await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] }, { throwOnError: true });
 
           // if need to change page
-          if (!hasSearched && hasCanRegenerateFilter && pagination.pageIndex !== 0) {
+          if (hasCanRegenerateFilter && pagination.pageIndex !== 0) {
             const licenseKey = queryClient.getQueryData([
               'licenseKeys',
               pagination,
@@ -571,62 +549,48 @@ export default function LicenseKeysTable() {
     if (editRes.status === 'success') {
       if (licenseKey) {
         const newLicenseKeys = licenseKey.items.filter(lk => lk.id !== id);
+        const newRowCount = licenseKey.rowCount - 1;
 
-        if (hasSearched) {
+        if (!isLastPage({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          rowCount: licenseKey.rowCount,
+        })) {
           queryClient.setQueryData(
             ['licenseKeys', pagination, filters, searchKey],
-            (oldData) => {
-              if (!oldData) return oldData;
-            
-              return { ...oldData, items: newLicenseKeys };
-            },
+            { items: newLicenseKeys, rowCount: newRowCount },
           );
 
-          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });         
+          hasSuccessfulRevokeRef.current = true;
         } else {
-          const newRowCount = licenseKey.rowCount - 1;
+          if (newLicenseKeys.length === 0 && newRowCount > 0) {
+            const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
 
-          if (!isLastPage({
-            pageIndex: pagination.pageIndex,
-            pageSize: pagination.pageSize,
-            rowCount: licenseKey.rowCount,
-          })) {
+            queryClient.setQueryData(
+              ['licenseKeys', newPagination, filters, searchKey],
+              (oldData) => {
+                if (!oldData) return oldData;
+
+                return { ...oldData, rowCount: newRowCount };
+              },
+            );
+
+            // change page to prev page
+            updateFetchAction('paginate');
+            setPagination(newPagination);
+
+            queryClient.removeQueries({
+              queryKey: ['licenseKeys', pagination, filters, searchKey],
+              exact: true,
+            });
+          } else {
             queryClient.setQueryData(
               ['licenseKeys', pagination, filters, searchKey],
               { items: newLicenseKeys, rowCount: newRowCount },
             );
-
-            hasSuccessfulRevokeRef.current = true;
-          } else {
-            if (newLicenseKeys.length === 0 && newRowCount > 0) {
-              const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
-
-              queryClient.setQueryData(
-                ['licenseKeys', newPagination, filters, searchKey],
-                (oldData) => {
-                  if (!oldData) return oldData;
-
-                  return { ...oldData, rowCount: newRowCount };
-                },
-              );
-
-              // change page to prev page
-              updateFetchAction('paginate');
-              setPagination(newPagination);
-
-              queryClient.removeQueries({
-                queryKey: ['licenseKeys', pagination, filters, searchKey],
-                exact: true,
-              });
-            } else {
-              queryClient.setQueryData(
-                ['licenseKeys', pagination, filters, searchKey],
-                { items: newLicenseKeys, rowCount: newRowCount },
-              );
-            }
-
-            queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });         
           }
+
+          queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });         
         }
       } else {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
@@ -659,7 +623,6 @@ export default function LicenseKeysTable() {
 
       if (
         licenseKey &&
-        !hasSearched && 
         !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -695,28 +658,7 @@ export default function LicenseKeysTable() {
     const newLicenseKeys = licenseKey?.items?.filter(lk => lk.id !== id);
 
     if (releaseRes.status === 'success') {
-      if (hasSearched) {
-        queryClient.setQueryData(
-          ['licenseKeys', pagination, filters, searchKey],
-          (oldData) => {
-            if (!oldData) return oldData;
-
-            return {
-              ...oldData,
-              items: oldData.items.map(lk => {
-                if (lk.id === id) {
-                  return {
-                    ...lk,
-                    deviceId: null,
-                    updatedAt: releaseRes.data.updatedAt,
-                  };
-                }
-                return lk;
-              }),
-            };
-          },
-        );
-      } else if (pagination.pageIndex === 0) {
+      if (pagination.pageIndex === 0) {
         queryClient.setQueryData(
           ['licenseKeys', pagination, filters, searchKey],
           (oldData) => {
@@ -741,7 +683,6 @@ export default function LicenseKeysTable() {
           },
         );
       } else if (newLicenseKeys?.length === 0) {
-        // if new license length exactly === 0, mean is not undefined too, then
         updateFetchAction('paginate');
         setPagination((pagination) => ({
           ...pagination,
@@ -763,7 +704,7 @@ export default function LicenseKeysTable() {
         hasSuccessfulResetDeviceRef.current = true;
       }
 
-      if (hasSearched || pagination.pageIndex === 0 || newLicenseKeys?.length === 0) {
+      if (pagination.pageIndex === 0 || newLicenseKeys?.length === 0) {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
       }
 
@@ -781,7 +722,7 @@ export default function LicenseKeysTable() {
     if (resetDeviceIdsRef.current.length === 0 && hasSuccessfulResetDeviceRef.current) {
       hasSuccessfulResetDeviceRef.current = false;
       
-      if (!hasSearched && pagination.pageIndex !== 0 && newLicenseKeys?.length !== 0) {
+      if (pagination.pageIndex !== 0 && newLicenseKeys?.length !== 0) {
         suppressProgressBarRef.current = true;
         await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });       
         suppressProgressBarRef.current = false;
@@ -1021,7 +962,7 @@ export default function LicenseKeysTable() {
       </div>
 
       {isPendingLK
-        ? <TablePaginationSkeleton showPagination={!hasSearched} />
+        ? <TablePaginationSkeleton />
         : (
           <>
             <TableErrorAlert
@@ -1039,10 +980,6 @@ export default function LicenseKeysTable() {
             />
           </>
         )}
-
-      {dataLK?.isTooMany ? (
-        <p className="mt-5 text-muted-foreground text-sm"><b>Info</b>: If you haven't found the license key you're looking for, please use a more specific email!</p>
-      ) : null}
 
       <DeleteDialog
         onDelete={handleDelete}

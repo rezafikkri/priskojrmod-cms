@@ -118,13 +118,11 @@ export default function CustomersTable() {
 
   // add params to url
   function addParamsToURL(url, { filters, searchKey, pagination }) {
-    let newUrl = `${url}?sb=${filters.showBanned}`;
+    let newUrl = `${url}?sb=${filters.showBanned}&pi=${pagination.pageIndex}`;
 
     // add search param to url
     if (searchKey) {
       newUrl += `&sk=${searchKey}`;
-    } else {
-      newUrl += `&pi=${pagination.pageIndex}`;
     }
 
     return newUrl;
@@ -184,6 +182,8 @@ export default function CustomersTable() {
         queryClient.invalidateQueries({ queryKey, exact: true });
       }
     }
+    
+    setPagination({ ...pagination, pageIndex: 0 });
     setSearchKey(parsedKey);
   }
 
@@ -211,7 +211,7 @@ export default function CustomersTable() {
     updateFetchAction('refresh');
     let lastPageIndex = 0;
 
-    if (!hasSearched && pagination.pageIndex !== 0) {
+    if (pagination.pageIndex !== 0) {
       const customer = queryClient.getQueryData(['customers', pagination, filters, searchKey]);
 
       if (customer) {
@@ -221,7 +221,7 @@ export default function CustomersTable() {
 
     await queryClient.invalidateQueries({ queryKey: ['customers'] });
 
-    if (hasSearched || pagination.pageIndex === 0) return;
+    if (pagination.pageIndex === 0) return;
 
     const customer = queryClient.getQueryData(['customers', pagination, filters, searchKey]);
     if (customer) {
@@ -246,15 +246,12 @@ export default function CustomersTable() {
     if (isStale) {
       updateFetchAction('filter');
 
-      if (deepEqual(filters, newFilters) && (hasSearched || pagination.pageIndex === 0)) {
+      if (deepEqual(filters, newFilters) && pagination.pageIndex === 0) {
         queryClient.invalidateQueries({ queryKey, exact: true });
       }
     }
     
-    if (!hasSearched) {
-      setPagination({ ...pagination, pageIndex: 0 });
-    }
-
+    setPagination({ ...pagination, pageIndex: 0 });
     // set filters for trigger refetch
     setFilters(newFilters);
   }
@@ -284,61 +281,47 @@ export default function CustomersTable() {
     if (editRes.status === 'success') {
       if (customer) {
         const newCustomers = customer.items.filter(customer => customer.id !== id);
+        const newRowCount = customer.rowCount - 1;
 
-        if (hasSearched) {
+        if (!isLastPage({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          rowCount: customer.rowCount,
+        })) {
           queryClient.setQueryData(
             ['customers', pagination, filters, searchKey],
-            (oldData) => {
-              if (!oldData) return oldData;
-
-              return { ...oldData, items: newCustomers };
-            },
+            { items: newCustomers, rowCount: newRowCount },
           );
 
-          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
+          hasSuccessfulBanRef.current = true;
         } else {
-          const newRowCount = customer.rowCount - 1;
+          if (newCustomers.length === 0 && newRowCount > 0) {
+            const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
 
-          if (!isLastPage({
-            pageIndex: pagination.pageIndex,
-            pageSize: pagination.pageSize,
-            rowCount: customer.rowCount,
-          })) {
+            queryClient.setQueryData(
+              ['customers', newPagination, filters, searchKey],
+              (oldData) => {
+                if (!oldData) return oldData;
+                return { ...oldData, rowCount: newRowCount };
+              },
+            );
+
+            // change page to prev page
+            updateFetchAction('paginate');
+            setPagination(newPagination);
+
+            queryClient.removeQueries({
+              queryKey: ['customers', pagination, filters, searchKey],
+              exact: true,
+            });
+          } else {
             queryClient.setQueryData(
               ['customers', pagination, filters, searchKey],
               { items: newCustomers, rowCount: newRowCount },
             );
-
-            hasSuccessfulBanRef.current = true;
-          } else {
-            if (newCustomers.length === 0 && newRowCount > 0) {
-              const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
-
-              queryClient.setQueryData(
-                ['customers', newPagination, filters, searchKey],
-                (oldData) => {
-                  if (!oldData) return oldData;
-                  return { ...oldData, rowCount: newRowCount };
-                },
-              );
-
-              // change page to prev page
-              updateFetchAction('paginate');
-              setPagination(newPagination);
-
-              queryClient.removeQueries({
-                queryKey: ['customers', pagination, filters, searchKey],
-                exact: true,
-              });
-            } else {
-              queryClient.setQueryData(
-                ['customers', pagination, filters, searchKey],
-                { items: newCustomers, rowCount: newRowCount },
-              );
-            }
-
-            queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
           }
+
+          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
         }
       } else {
         queryClient.invalidateQueries({ queryKey: ['customers'] });
@@ -361,7 +344,6 @@ export default function CustomersTable() {
 
       if (
         customer &&
-        !hasSearched &&
         !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -398,62 +380,48 @@ export default function CustomersTable() {
     if (removeRes.status === 'success') {
       if (customer) {
         const newCustomers = customer.items.filter(c => c.id !== id);
+        const newRowCount = customer.rowCount - 1;
 
-        if (hasSearched) {
+        if (!isLastPage({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          rowCount: customer.rowCount,
+        })) {
           queryClient.setQueryData(
             ['customers', pagination, filters, searchKey],
-            (oldData) => {
-              if (!oldData) return oldData;
-
-              return { ...oldData, items: newCustomers };
-            },
+            { items: newCustomers, rowCount: newRowCount },
           );
 
-          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
+          hasSuccessfulDeleteRef.current = true;
         } else {
-          const newRowCount = customer.rowCount - 1;
+          if (newCustomers.length === 0 && newRowCount > 0) {
+            const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
 
-          if (!isLastPage({
-            pageIndex: pagination.pageIndex,
-            pageSize: pagination.pageSize,
-            rowCount: customer.rowCount,
-          })) {
+            queryClient.setQueryData(
+              ['customers', newPagination, filters, searchKey],
+              (oldData) => {
+                if (!oldData) return oldData;
+
+                return { ...oldData, rowCount: newRowCount };
+              },
+            );
+
+            // change page to prev page
+            updateFetchAction('paginate');
+            setPagination(newPagination);
+
+            queryClient.removeQueries({
+              queryKey: ['customers', pagination, filters, searchKey],
+              exact: true,
+            });
+          } else {
             queryClient.setQueryData(
               ['customers', pagination, filters, searchKey],
               { items: newCustomers, rowCount: newRowCount },
             );
-
-            hasSuccessfulDeleteRef.current = true;
-          } else {
-            if (newCustomers.length === 0 && newRowCount > 0) {
-              const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
-
-              queryClient.setQueryData(
-                ['customers', newPagination, filters, searchKey],
-                (oldData) => {
-                  if (!oldData) return oldData;
-
-                  return { ...oldData, rowCount: newRowCount };
-                },
-              );
-
-              // change page to prev page
-              updateFetchAction('paginate');
-              setPagination(newPagination);
-
-              queryClient.removeQueries({
-                queryKey: ['customers', pagination, filters, searchKey],
-                exact: true,
-              });
-            } else {
-              queryClient.setQueryData(
-                ['customers', pagination, filters, searchKey],
-                { items: newCustomers, rowCount: newRowCount },
-              );
-            }
-
-            queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
           }
+
+          queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
         }
       } else {
         queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
@@ -476,7 +444,6 @@ export default function CustomersTable() {
 
       if (
         customer &&
-        !hasSearched &&
         !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -669,7 +636,7 @@ export default function CustomersTable() {
       </div>
 
       {isPendingC
-        ? <TablePaginationSkeleton showPagination={!hasSearched} />
+        ? <TablePaginationSkeleton />
         : (
           <>
             <TableErrorAlert
@@ -688,10 +655,6 @@ export default function CustomersTable() {
         )}
 
       <div className="mt-5">
-        {dataC?.isTooMany ? (
-          <p className="mb-5 text-muted-foreground text-sm"><b>Info</b>: If you haven't found the customer you're looking for, please use a more specific email!</p>
-        ) : null}
-
         <p className="text-muted-foreground text-sm"><b>Notes</b>:</p>
         <ul className="text-muted-foreground text-sm list-disc list-inside">
           <li><i>Last Active</i> indicates the most recent recorded activity and is updated every 24 hours. This may not reflect real-time status.</li>

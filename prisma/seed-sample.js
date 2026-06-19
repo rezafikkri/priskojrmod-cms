@@ -38,7 +38,7 @@ export async function seedCustomers(prisma, count) {
       email: faker.internet.email().toLowerCase(),
       createdAt: currentTime,
       updatedAt: currentTime,
-      isBanned: true,
+      isBanned: false,
     };
 
     // if (i % 2 === 0) {

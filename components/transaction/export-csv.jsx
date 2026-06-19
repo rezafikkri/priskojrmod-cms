@@ -10,12 +10,19 @@ import { Button } from '../ui/button';
 import { ChevronDown } from 'lucide-react';
 import { CurrencyCode } from '@/constants/enums';
 
-export default function ExportCSV({ filters }) {
+export default function ExportCSV({ filters, searchKey }) {
   function handleExport(currencyCode, transactionStatus) {
-    window.open(
-      `/transaction/csv?cc=${currencyCode}&ts=${transactionStatus}`,
-      '_blank',
-    );
+    let url = `/transaction/csv?cc=${currencyCode}`;
+
+    if (transactionStatus && transactionStatus !== 'all') {
+      url +=  `&ts=${transactionStatus}`;
+    }
+
+    if (searchKey) {
+      url += `&sk=${searchKey}`;
+    }
+
+    window.open(url, '_blank');
   }
 
   return (
@@ -28,12 +35,12 @@ export default function ExportCSV({ filters }) {
       <DropdownMenuContent>
         <DropdownMenuItem asChild className="text-base hover:cursor-pointer w-full">
           <button
-            onClick={() => handleExport(CurrencyCode.IDR, filters?.status ?? 'all')}
+            onClick={() => handleExport(CurrencyCode.IDR, filters?.status)}
           >{CurrencyCode.IDR}</button>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="text-base hover:cursor-pointer w-full">
           <button
-            onClick={() => handleExport(CurrencyCode.USD, filters?.status ?? 'all')}
+            onClick={() => handleExport(CurrencyCode.USD, filters?.status)}
           >{CurrencyCode.USD}</button>
         </DropdownMenuItem>
       </DropdownMenuContent>

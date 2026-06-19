@@ -142,15 +142,13 @@ export default function TransactionsTable() {
 
   // add status filters
   function addParamsToURL(url, { filters, pagination, searchKey }) {
-    let newUrl = url;
+    let newUrl = url + `?pi=${pagination.pageIndex}`;
 
     // add search param to url
     if (searchKey) {
-      newUrl += `?sk=${searchKey}`;
-    } else {
-      newUrl += `?pi=${pagination.pageIndex}`;
+      newUrl += `&sk=${searchKey}`;
     }
-
+    
     if (filters?.status && filters.status !== 'all') {
       newUrl += `&ts=${filters.status}`;
     }
@@ -212,6 +210,8 @@ export default function TransactionsTable() {
         queryClient.invalidateQueries({ queryKey, exact: true });
       }
     }
+
+    setPagination({ ...pagination, pageIndex: 0 });
     setSearchKey(parsedKey);
   }
 
@@ -239,8 +239,7 @@ export default function TransactionsTable() {
     updateFetchAction('refresh');
     let lastPageIndex = 0;
 
-    const hasStatusFilter = filters?.status && filters.status !== 'all';
-    if (!hasSearched && pagination.pageIndex !== 0 && hasStatusFilter) {
+    if (pagination.pageIndex !== 0) {
       const transaction = queryClient.getQueryData(['transactions', pagination, filters, searchKey]);
 
       if (transaction) {
@@ -251,7 +250,7 @@ export default function TransactionsTable() {
     await queryClient.invalidateQueries({ queryKey: ['transactions'] });
     queryClient.invalidateQueries({ queryKey: ['transactionDetails'] });
 
-    if (hasSearched || pagination.pageIndex === 0 || !hasStatusFilter) return;
+    if (pagination.pageIndex === 0) return;
 
     const transaction = queryClient.getQueryData(['transactions', pagination, filters, searchKey]);
     if (transaction) {
@@ -276,14 +275,12 @@ export default function TransactionsTable() {
     if (isStale) {
       updateFetchAction('filter');
 
-      if (deepEqual(filters, newFilters) && (hasSearched || pagination.pageIndex === 0)) {
+      if (deepEqual(filters, newFilters) && pagination.pageIndex === 0) {
         queryClient.invalidateQueries({ queryKey, exact: true });
       }
     }
     
-    if (!hasSearched) {
-      setPagination({ ...pagination, pageIndex: 0 });
-    }
+    setPagination({ ...pagination, pageIndex: 0 });
     // set filters for trigger refetch
     setFilters(newFilters);
   }
@@ -327,32 +324,10 @@ export default function TransactionsTable() {
     });
 
     const transaction = queryClient.getQueryData(['transactions', pagination, filters, searchKey]);
+    const newTransactions = transaction?.items?.filter(t => t.id !== id);
 
     if (editRes.status === 'success') {
-      if (hasSearched) {
-        queryClient.setQueryData(
-          ['transactions', pagination, filters, searchKey],
-          (oldData) => {
-            if (!oldData) return oldData;
-          
-            let updatedTransactions;
-
-            if (!filters?.status || filters?.status === 'all') {
-              updatedTransactions = oldData.items.map(transaction =>
-                transaction.id === id
-                  ? applyStatusUpdate({ transaction, status, editData: editRes.data })
-                  : transaction
-              );
-            } else {
-              updatedTransactions = oldData.items.filter(t => t.id !== id);
-            }
-
-            return { ...oldData, items: updatedTransactions };
-          },
-        );
-
-        queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
-      } else if (!filters?.status || filters.status === 'all') {
+      if (!filters?.status || filters.status === 'all') {
         if (pagination.pageIndex === 0) {
           queryClient.setQueryData(
             ['transactions', pagination, filters, searchKey],
@@ -375,8 +350,12 @@ export default function TransactionsTable() {
               };
             },
           );
-
-          queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
+        } else if (newTransactions?.length === 0) {
+          updateFetchAction('paginate');
+          setPagination((pagination) => ({
+            ...pagination,
+            pageIndex: pagination.pageIndex - 1,
+          }));
         } else {
           queryClient.setQueryData(
             ['transactions', pagination, filters, searchKey],
@@ -392,8 +371,11 @@ export default function TransactionsTable() {
 
           hasSuccessfulUpdateStatusRef.current = true;
         }
+
+        if (pagination.pageIndex === 0 || newTransactions?.length === 0) {
+          queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
+        }
       } else if (transaction) {
-        const filteredTransactions = transaction.items.filter(t => t.id !== id);
         const newRowCount = transaction.rowCount - 1;
 
         if (!isLastPage({
@@ -403,12 +385,12 @@ export default function TransactionsTable() {
         })) {
           queryClient.setQueryData(
             ['transactions', pagination, filters, searchKey],
-            { items: filteredTransactions, rowCount: newRowCount },
+            { items: newTransactions, rowCount: newRowCount },
           );
 
           hasSuccessfulUpdateStatusRef.current = true;
         } else {
-          if (filteredTransactions.length === 0 && newRowCount > 0) {
+          if (newTransactions.length === 0 && newRowCount > 0) {
             const newPagination = { ...pagination, pageIndex: pagination.pageIndex - 1 };
 
             queryClient.setQueryData(
@@ -430,7 +412,7 @@ export default function TransactionsTable() {
           } else {
             queryClient.setQueryData(
               ['transactions', pagination, filters, searchKey],
-              { items: filteredTransactions, rowCount: newRowCount },
+              { items: newTransactions, rowCount: newRowCount },
             );
           }
 
@@ -456,13 +438,13 @@ export default function TransactionsTable() {
       hasSuccessfulUpdateStatusRef.current = false;
 
       const hasNoFilter = !filters?.status || filters.status === 'all';
-      const shouldInvalidate = !hasSearched && (hasNoFilter
-        ? pagination.pageIndex !== 0
+      const shouldInvalidate = hasNoFilter
+        ? pagination.pageIndex !== 0 && newTransactions?.length !== 0
         : transaction && !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           rowCount: transaction.rowCount,
-        }));
+        });
 
       if (shouldInvalidate) {
         suppressProgressBarRef.current = true;
@@ -525,39 +507,10 @@ export default function TransactionsTable() {
     });
 
     const transaction = queryClient.getQueryData(['transactions', pagination, filters, searchKey]);
+    const newTransactions = transaction?.items?.filter(t => t.id !== id);
 
     if (fixRes.status === 'success') {
-      if (hasSearched) {
-        queryClient.setQueryData(
-          ['transactions', pagination, filters, searchKey],
-          (oldData) => {
-            if (!oldData) return oldData;
-
-            let newTransactions;
-
-            if (!filters?.status || filters?.status === 'all') {
-              newTransactions = oldData.items.map(transaction =>
-                transaction.id === id
-                  ? applyStatusCorrection({
-                    transaction,
-                    newStatus,
-                    currentStatus,
-                    editData: fixRes.data,
-                  })
-                  : transaction
-              );
-            } else {
-              newTransactions = oldData.items.filter(t => t.id !== id);
-            }
-
-            return {
-            ...oldData,
-            items: newTransactions,
-          };
-        });
-
-        queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
-      } else if (!filters?.status || filters?.status === 'all') {
+      if (!filters?.status || filters?.status === 'all') {
         if (pagination.pageIndex === 0) {
           queryClient.setQueryData(
             ['transactions', pagination, filters, searchKey],
@@ -581,8 +534,12 @@ export default function TransactionsTable() {
               };
             },
           );
-
-          queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
+        } else if (newTransactions?.length === 0) {
+          updateFetchAction('paginate');
+          setPagination((pagination) => ({
+            ...pagination,
+            pageIndex: pagination.pageIndex - 1,
+          }));
         } else {
           queryClient.setQueryData(
             ['transactions', pagination, filters, searchKey],
@@ -598,8 +555,11 @@ export default function TransactionsTable() {
           
           hasSuccessfulCorrectStatusRef.current = true;
         }
+
+        if (pagination.pageIndex === 0 || newTransactions?.length === 0) {
+          queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'none' });
+        }
       } else if (transaction) {
-        const newTransactions = transaction.items.filter(t => t.id !== id);
         const newRowCount = transaction.rowCount - 1;
 
         if (!isLastPage({
@@ -665,13 +625,13 @@ export default function TransactionsTable() {
       hasSuccessfulCorrectStatusRef.current = false;
 
       const hasNoFilter = !filters?.status || filters.status === 'all';
-      const shouldInvalidate = !hasSearched && (hasNoFilter
-        ? pagination.pageIndex !== 0
+      const shouldInvalidate = hasNoFilter
+        ? pagination.pageIndex !== 0 && newTransactions?.length !== 0
         : transaction && !isLastPage({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           rowCount: transaction.rowCount,
-        }));
+        });
 
       if (shouldInvalidate) {
         suppressProgressBarRef.current = true;
@@ -927,9 +887,7 @@ export default function TransactionsTable() {
             filters={filters}
             disabled={isPendingT || fetchAction === 'filter'}
           />
-          {filters?.status !== TransactionStatus.PENDING && !hasSearched && (
-            <ExportCSV filters={filters} />
-          )}
+          <ExportCSV filters={filters} searchKey={searchKey} />
         </div>
         <div className="flex space-x-3 max-lg:w-full w-2/5">
           <SearchInput
@@ -953,7 +911,7 @@ export default function TransactionsTable() {
       </div>
 
       {isPendingT
-        ? <TablePaginationSkeleton showPagination={!hasSearched} />
+        ? <TablePaginationSkeleton />
         : (
           <>
             <TableErrorAlert
