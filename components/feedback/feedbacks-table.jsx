@@ -10,17 +10,13 @@ import { toast } from 'sonner';
 import { safeFetch } from '@/lib/safe-fetch';
 import {
   ArrowDownToLine,
-  MoreHorizontal,
   Minus,
   RotateCw,
 } from 'lucide-react';
 import { Trash } from 'lucide-react';
 import { editFeedbackReadStatus, loadFeedbacks, removeFeedbacks } from '@/actions/feedback-actions';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import { localStorageGet, localStorageSet } from '@/lib/local-storage';
@@ -32,9 +28,7 @@ import {
 } from '@tanstack/react-table';
 import TableColumnVisibility from '../ui/table-column-visibility';
 import TableSelectionAlert from '../ui/table-selection-alert';
-import TablePagination from '../ui/table-pagination';
 import DetailDialog from './detail-dialog';
-import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { cmsConfig } from '@/config/cms';
 import DeleteDialog from '../ui/delete-dialog';
 import { useDialog } from '@/hooks/use-dialog';
@@ -44,6 +38,8 @@ import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import TableSkeleton from '../loadings/table-skeleton';
+import TableResultCount from '../ui/table-result-count';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -608,7 +604,7 @@ export default function FeedbacksTable() {
       </div>
 
       {isPendingF
-        ? <TablePaginationSkeleton showPagination={false} />
+        ? <TableSkeleton />
         : (
           <>
             <TableErrorAlert
@@ -622,7 +618,7 @@ export default function FeedbacksTable() {
               onOpenDetailDialog={openDetailDialog}
               onEditReadStatus={handleEditReadStatus}
             />
-            <TablePagination data={dataF} />
+            <TableResultCount data={dataF} />
           </>
         )}
 

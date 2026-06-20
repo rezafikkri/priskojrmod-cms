@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import OwnersTable from '@/components/owner/owners-table';
-import TablePaginationSkeleton from '@/components/loadings/table-pagination-skeleton';
+import TableSkeleton from '@/components/loadings/table-skeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +24,7 @@ export default function OwnerListPage() {
         </Button>
       </TooltipWrapper>
 
-      <Suspense fallback={<TablePaginationSkeleton showPagination={false} />}>
+      <Suspense fallback={<TableSkeleton />}>
         <OwnersTable />
       </Suspense>
     </>

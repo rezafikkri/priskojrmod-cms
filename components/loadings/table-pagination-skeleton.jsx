@@ -4,7 +4,7 @@ import TableSkeleton from './table-skeleton';
 export default function TablePaginationSkeleton() {
   return (
     <>
-      <TableSkeleton />
+      <TableSkeleton showResultCount={false} />
       <div className="flex justify-between items-center gap-5 mt-4">
         <Skeleton className="w-20 h-[27px] rounded-md" />
           <div className="gap-2 flex">

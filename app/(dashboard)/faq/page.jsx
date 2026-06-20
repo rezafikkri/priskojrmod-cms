@@ -4,7 +4,7 @@ import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import TablePaginationSkeleton from '@/components/loadings/table-pagination-skeleton';
+import TableSkeleton from '@/components/loadings/table-skeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +24,7 @@ export default function FaqListPage() {
         </Button>
       </TooltipWrapper>
 
-      <Suspense fallback={<TablePaginationSkeleton showPagination={false} />}>
+      <Suspense fallback={<TableSkeleton />}>
         <FaqsTable />
       </Suspense>
     </>

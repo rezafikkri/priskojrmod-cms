@@ -4,7 +4,7 @@ import SecretKeysTable from '@/components/secret-key/secret-keys-table';
 import { Suspense } from 'react';
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 import { Plus } from 'lucide-react';
-import TablePaginationSkeleton from '@/components/loadings/table-pagination-skeleton';
+import TableSkeleton from '@/components/loadings/table-skeleton';
 
 export const metadata = {
   title: 'Secret Keys',
@@ -22,7 +22,7 @@ export default async function SecretKeyListPage() {
         </Button>
       </TooltipWrapper>
       
-      <Suspense fallback={<TablePaginationSkeleton showPagination={false} />}>
+      <Suspense fallback={<TableSkeleton />}>
         <SecretKeysTable />
       </Suspense>
     </>

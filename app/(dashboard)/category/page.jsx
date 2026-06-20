@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import TooltipWrapper from '@/components/ui/tooltip-wrapper';
-import TablePaginationSkeleton from '@/components/loadings/table-pagination-skeleton';
+import TableSkeleton from '@/components/loadings/table-skeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,7 +23,7 @@ export default function CategoryListPage() {
         </Button>
       </TooltipWrapper>
 
-      <Suspense fallback={<TablePaginationSkeleton showPagination={false} />}>
+      <Suspense fallback={<TableSkeleton />}>
         <CategoriesTable />
       </Suspense>
     </>

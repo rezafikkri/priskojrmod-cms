@@ -31,10 +31,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { localStorageGet } from '@/lib/local-storage';
-import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import TableColumnVisibility from '../ui/table-column-visibility';
 import DataTable from '../ui/data-table';
-import TablePagination from '../ui/table-pagination';
 import DeleteDialog from './delete-dialog';
 import { cmsConfig } from '@/config/cms';
 import { getStatusClasses } from '@/lib/utils';
@@ -45,6 +43,8 @@ import { deepEqual } from 'fast-equals';
 import TableErrorAlert from '../ui/table-error-alert';
 import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import TableSkeleton from '../loadings/table-skeleton';
+import TableResultCount from '../ui/table-result-count';
 
 const defaultColumnVisibility = {
   category: false,
@@ -579,7 +579,7 @@ export default function ProductsTable({ isOwner }) {
       </div>
 
       {isPendingP
-        ? <TablePaginationSkeleton showPagination={false} />
+        ? <TableSkeleton />
         : (
           <>
             <TableErrorAlert
@@ -588,10 +588,7 @@ export default function ProductsTable({ isOwner }) {
               message={errorP?.message}
             />
             <DataTable table={table} />
-            <TablePagination
-              data={dataP}
-              showNavigation={false}
-            />
+            <TableResultCount data={dataP} />
           </>
         )}
 
