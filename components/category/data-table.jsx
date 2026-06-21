@@ -29,6 +29,7 @@ import { APPLICATION_CATEGORY_SLUG } from '@/constants/categories';
 import DeleteDialog from '../ui/delete-dialog';
 import { useDialog } from '@/hooks/use-dialog';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import TableResultCount from '../ui/table-result-count';
 
 export default function DataTable({ categories: data }) {
   const [categories, setCategories] = useState(data);
@@ -163,11 +164,7 @@ export default function DataTable({ categories: data }) {
         </Table>
       </div>
 
-      {categories.length > 0 && (
-        <p className="text-muted-foreground mt-4">
-          {categories.length} {categories.length === 1 ? 'result' : 'results'}
-        </p>
-      )}
+      <TableResultCount data={categories} />
 
       <DeleteDialog
         onDelete={() => handleDelete(deleteData)}

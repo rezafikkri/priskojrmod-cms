@@ -30,6 +30,7 @@ import { cmsConfig } from '@/config/cms';
 import DeleteDialog from '../ui/delete-dialog';
 import { useDialog } from '@/hooks/use-dialog';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import TableResultCount from '../ui/table-result-count';
 
 export default function DataTable({ faqs: data }) {
   const [faqs, setFaqs] = useState(data);
@@ -183,11 +184,7 @@ export default function DataTable({ faqs: data }) {
         </Table>
       </div>
 
-      {faqs.length > 0 && (
-        <p className="text-muted-foreground mt-4">
-          {faqs.length} {faqs.length === 1 ? 'result' : 'results'}
-        </p>
-      )}
+      <TableResultCount data={faqs} />
 
       <DeleteDialog
         onDelete={() => handleDelete(deleteData)}

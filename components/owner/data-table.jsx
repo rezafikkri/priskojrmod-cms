@@ -29,6 +29,7 @@ import { cmsConfig } from '@/config/cms';
 import { useDialog } from '@/hooks/use-dialog';
 import DeleteDialog from '../ui/delete-dialog';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import TableResultCount from '../ui/table-result-count';
 
 export default function DataTable({ owners: data }) {
   const [owners, setOwners] = useState(data)
@@ -186,11 +187,7 @@ export default function DataTable({ owners: data }) {
         </Table>
       </div>
 
-      {owners.length > 0 && (
-        <p className="text-muted-foreground mt-4">
-          {owners.length} {owners.length === 1 ? 'result' : 'results'}
-        </p>
-      )}
+      <TableResultCount data={owners} />
 
       <DeleteDialog
         onDelete={() => handleDelete(deleteData)}

@@ -30,6 +30,7 @@ import { cmsConfig } from '@/config/cms';
 import { useDialog } from '@/hooks/use-dialog';
 import { useQueryClient } from '@tanstack/react-query';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import TableResultCount from '../ui/table-result-count';
 
 export default function DataTable({ secretKeys: data }) {
   const [secretKeys, setSecretKeys] = useState(data);
@@ -177,11 +178,7 @@ export default function DataTable({ secretKeys: data }) {
         </Table>
       </div>
 
-      {secretKeys.length > 0 && (
-        <p className="text-muted-foreground mt-4">
-          {secretKeys.length} {secretKeys.length === 1 ? 'result' : 'results'}
-        </p>
-      )}
+      <TableResultCount data={secretKeys} />
 
       <DeleteDialog
         onDelete={handleDelete}

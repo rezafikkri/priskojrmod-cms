@@ -588,7 +588,7 @@ export default function ProductsTable({ isOwner }) {
               message={errorP?.message}
             />
             <DataTable table={table} />
-            <TableResultCount data={dataP} />
+            <TableResultCount data={dataP?.items} />
           </>
         )}
 

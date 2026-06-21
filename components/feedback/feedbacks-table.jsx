@@ -618,7 +618,7 @@ export default function FeedbacksTable() {
               onOpenDetailDialog={openDetailDialog}
               onEditReadStatus={handleEditReadStatus}
             />
-            <TableResultCount data={dataF} />
+            <TableResultCount data={dataF?.items} />
           </>
         )}
 

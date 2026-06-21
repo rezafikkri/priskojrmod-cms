@@ -23,6 +23,7 @@ import { formatDateTime } from '@/lib/format-date';
 import { getTableHeaderWidth, extractSMIdentifier } from '@/lib/utils';
 import ProfileBadge from '../ui/profile-badge';
 import TableActionDropdown from '../ui/table-action-dropdown';
+import TableResultCount from '../ui/table-result-count';
 
 export default function DataTable({ testimonials: data }) {
   const [testimonials] = useState(data);
@@ -133,11 +134,7 @@ export default function DataTable({ testimonials: data }) {
         </Table>
       </div>
 
-      {testimonials.length > 0 && (
-        <p className="text-muted-foreground mt-4">
-          {testimonials.length} {testimonials.length === 1 ? 'result' : 'results'}
-        </p>
-      )}
+      <TableResultCount data={testimonials} />
     </>
   );
 }
