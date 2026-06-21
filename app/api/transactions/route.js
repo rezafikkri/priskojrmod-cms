@@ -4,11 +4,17 @@ import { cmsConfig } from '@/config/cms';
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
   const pageIndex = parseInt(searchParams.get('pi'));
+  const searchKey = searchParams.get('sk');
+  const transactionStatus = searchParams.get('ts');
 
-  const filters = {
-    status: searchParams.get('ts'),
-    searchKey: searchParams.get('sk'),
-  };
+  let filters;
+  if (transactionStatus) {
+    filters = { status: transactionStatus }
+  }
+
+  if (searchKey) {
+    filters = { searchKey, ...filters };
+  }
 
   try {
     let dataResponse;

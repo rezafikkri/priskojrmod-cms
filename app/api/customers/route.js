@@ -7,11 +7,10 @@ export async function GET(req) {
   const searchKey = searchParams.get('sk');
   // params for filters
   const filters = { showBanned: searchParams.get('sb') };
+  if (searchKey) filters.searchKey = searchKey; 
 
   try {
     let dataResponse;
-
-    if (searchKey) filters.searchKey = searchKey; 
 
     const customers = await getCustomers({
       pageIndex,
