@@ -144,8 +144,8 @@ function getTransactionDetails({
       productDownloadUrl: product.downloadUrl,
 
       productVariant: product.variants[0].name,
-      productCurrencyCode: product.variants[0].prices[0].currencyCode,
-      productPrice: product.variants[0].prices[0].price.toNumber(),
+      productCurrencyCode: product.variants[0].prices[1].currencyCode,
+      productPrice: product.variants[0].prices[1].price.toNumber(),
     };
 
     if (product.discount) {

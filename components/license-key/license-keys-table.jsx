@@ -52,6 +52,7 @@ import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import { useFetchAction } from '@/hooks/use-fetch-action';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import { changeToLastValidPage } from '@/lib/data-table';
+import TableTwoLineCell from '../ui/table-two-line-cell';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -760,10 +761,15 @@ export default function LicenseKeysTable() {
       ),
     },
     {
-      id: 'email',
-      accessorKey: 'customer.email',
-      header: 'Email',
+      id: 'customer',
+      header: 'Customer',
       enableHiding: false,
+      cell: ({ row }) => (
+        <TableTwoLineCell
+          primary={`${row.original.customer.firstName} ${row.original.customer.lastName}`}
+          secondary={row.original.customer.email}
+        />
+      ),
     },
     {
       id: 'appName',

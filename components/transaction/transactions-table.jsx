@@ -51,6 +51,7 @@ import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import { useFetchAction } from '@/hooks/use-fetch-action';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import { changeToLastValidPage } from '@/lib/data-table';
+import TableTwoLineCell from '../ui/table-two-line-cell';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -678,9 +679,15 @@ export default function TransactionsTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'customerEmail',
-      header: 'Customer Email',
+      accessorKey: 'customer',
+      header: 'Customer',
       enableHiding: false,
+      cell: ({ row }) => (
+        <TableTwoLineCell
+          primary={row.original.customerName}
+          secondary={row.original.customerEmail}
+        />
+      ),
     },
     {
       accessorKey: 'status',

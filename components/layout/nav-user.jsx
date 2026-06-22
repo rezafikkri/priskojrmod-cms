@@ -53,7 +53,7 @@ export function NavUser() {
                 />
                 <div className="min-w-0 flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold block">{name}</span>
-                  <span className="truncate text-xs block">{email}</span>
+                  <span className="truncate text-xs block text-zinc-600 dark:text-zinc-400">{email}</span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
@@ -75,7 +75,7 @@ export function NavUser() {
                   />
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{name}</span>
-                    <span className="truncate text-xs">{email}</span>
+                    <span className="truncate text-xs text-zinc-600 dark:text-zinc-400">{email}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>

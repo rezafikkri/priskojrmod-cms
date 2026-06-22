@@ -43,6 +43,7 @@ import TableActionDropdown from '../ui/table-action-dropdown';
 import { changeToLastValidPage } from '@/lib/data-table';
 
 const defaultColumnVisibility = {
+  phoneNumber: false,
   lastActive: true,
   createdAt: false,
   updatedAt: false,
@@ -487,6 +488,15 @@ export default function CustomersTable() {
       accessorKey: 'email',
       header: 'Email',
       enableHiding: false,
+    },
+    {
+      accessorKey: 'phoneNumber',
+      header: 'Phone Number',
+      cell: ({ row }) => 
+        row.getValue('phoneNumber')
+          ? row.getValue('phoneNumber')
+          : <Minus className="size-4 text-zinc-300" />,
+
     },
     {
       accessorKey: 'lastActive',

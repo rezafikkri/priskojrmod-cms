@@ -12,8 +12,8 @@ import {
   ArrowDownToLine,
   Minus,
   RotateCw,
+  Trash,
 } from 'lucide-react';
-import { Trash } from 'lucide-react';
 import { editFeedbackReadStatus, loadFeedbacks, removeFeedbacks } from '@/actions/feedback-actions';
 import {
   DropdownMenuLabel,
@@ -40,6 +40,7 @@ import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import TableSkeleton from '../loadings/table-skeleton';
 import TableResultCount from '../ui/table-result-count';
+import TableTwoLineCell from '../ui/table-two-line-cell';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -489,11 +490,22 @@ export default function FeedbacksTable() {
       ),
     },
     {
-      accessorKey: 'userInfo',
-      header: 'User Info',
+      accessorKey: 'sender',
+      header: 'Sender',
       enableHiding: false,
-      cell: ({ row }) => 
-        row.getValue('userInfo') ?? <Minus className="size-4 text-zinc-300" />,
+      cell: ({ row }) => (
+        row.original.name && row.original.email ? (
+          <TableTwoLineCell
+            primary={row.original.name}
+            secondary={row.original.email}
+            secondaryClassName={!row.original.isRead && 'font-medium'}
+          />
+        ) : row.original.name || row.original.email ? (
+          <span>{row.original.name ?? row.original.email}</span>
+        ) : (
+          <Minus className="size-4 text-zinc-300" />
+        )
+      )
     },
     {
       accessorKey: 'message',
