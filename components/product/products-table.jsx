@@ -45,6 +45,7 @@ import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import TableSkeleton from '../loadings/table-skeleton';
 import TableResultCount from '../ui/table-result-count';
+import TableTwoLineCell from '../ui/table-two-line-cell';
 
 const defaultColumnVisibility = {
   category: false,
@@ -412,10 +413,10 @@ export default function ProductsTable({ isOwner }) {
           {row.original.admin?.isCurrentUser ? (
             <p>Myself</p>
           ) : (
-            <>
-              <p>{row.original.admin?.firstName} {row.original.admin?.lastName}</p>
-              <p className="text-sm text-zinc-600">{row.original.admin?.email}</p>
-            </>
+            <TableTwoLineCell
+              primary={row.original.admin?.firstName + ' ' + row.original.admin?.lastName}
+              secondary={row.original.admin?.email}
+            />
           )}
         </div>
       ),

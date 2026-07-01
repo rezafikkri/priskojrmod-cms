@@ -36,7 +36,6 @@ import {
 } from '@tanstack/react-table';
 import { formatCurrency } from '@/lib/format-currency';
 import { formatDateTime } from '@/lib/format-date';
-import Link from 'next/link';
 import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
 import RefundConfirmDialog from './refund-confirm-dialog';
@@ -54,6 +53,7 @@ import { changeToLastValidPage } from '@/lib/data-table';
 import TableTwoLineCell from '../ui/table-two-line-cell';
 
 const defaultColumnVisibility = {
+  admin: true,
   createdAt: true,
   paidAt: false,
   refundedAt: false,
@@ -679,13 +679,23 @@ export default function TransactionsTable() {
       enableHiding: false,
     },
     {
-      accessorKey: 'customer',
+      id: 'customer',
       header: 'Customer',
       enableHiding: false,
       cell: ({ row }) => (
         <TableTwoLineCell
           primary={row.original.customerName}
           secondary={row.original.customerEmail}
+        />
+      ),
+    },
+    {
+      id: 'admin',
+      header: 'Admin',
+      cell: ({ row }) => (
+        <TableTwoLineCell
+          primary={row.original.adminName}
+          secondary={row.original.adminEmail}
         />
       ),
     },
@@ -771,7 +781,7 @@ export default function TransactionsTable() {
                         let newRefundData = {
                           id: row.original.id,
                           transactionCode: row.getValue('code'),
-                          email: row.getValue('customerEmail'),
+                          email: row.original.customerEmail,
                         };
 
                         if (!row.original.customerId || row.original.customer.isBanned) {
@@ -786,7 +796,7 @@ export default function TransactionsTable() {
                         openCancelConfirmDialog({
                           id: row.original.id,
                           transactionCode: row.getValue('code'),
-                          email: row.getValue('customerEmail'),
+                          email: row.original.customerEmail,
                         });
                       } else {
                         handleEditTransactionStatus({ id: row.original.id, status: cs });
@@ -808,24 +818,29 @@ export default function TransactionsTable() {
                 <button onClick={() => openCorrectStatusDialog({
                   id: row.original.id,
                   transactionCode: row.getValue('code'),
-                  email: row.getValue('customerEmail'),
+                  email: row.original.customerEmail,
                   currentStatus: row.getValue('status'),
                 })}>
                   Correct status
                 </button>
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem className="w-full text-base" asChild onClick={() => setSeeDetailsId(row.original.id)}>
+            <DropdownMenuItem
+              className="w-full text-base"
+              asChild
+              onClick={() => setSeeDetailsId(row.original.id)}
+            >
               <button>See details</button>
             </DropdownMenuItem>
             {row.original.invoices.length > 0 && (
-              <DropdownMenuItem asChild className="text-base py-2 hover:cursor-pointer">
-                <Link
-                  href={`/invoice/${row.original.invoices[0].invoiceNumber}/pdf`}
-                  target='_blank'
+              <DropdownMenuItem asChild className="text-base w-full py-2 hover:cursor-pointer">
+                <button
+                  onClick={() =>
+                    window.open(`/invoice/${row.original.invoices[0].invoiceNumber}/pdf`, '_blank')
+                  }
                 >
                   View invoice
-                </Link>
+                </button>
               </DropdownMenuItem>
             )}
             {row.getValue('status') === TransactionStatus.PAID && (
@@ -838,7 +853,7 @@ export default function TransactionsTable() {
                 <DropdownMenuItem className="w-full text-base" asChild>
                   <button onClick={() => openRefundDeadlineDialog({
                     transactionCode: row.getValue('code'),
-                    email: row.getValue('customerEmail'),
+                    email: row.original.customerEmail,
                     paidAt: row.getValue('paidAt'),
                   })}>
                     Check refund deadline

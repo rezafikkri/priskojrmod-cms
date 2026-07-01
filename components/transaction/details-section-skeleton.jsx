@@ -19,8 +19,8 @@ export default function DetailsSectionSkeleton() {
         </div>
       </div>
 
-      <Skeleton className="w-1/2 flex-auto h-[24px] rounded-sm" />
       <div className="space-y-2">
+        <Skeleton className="w-1/3 flex-auto h-[24px] rounded-sm" />
         <div className="flex space-x-3">
           <Skeleton className="w-50 flex-auto h-[35px] rounded-md" />
           <Skeleton className="w-70 flex-auto h-[35px] rounded-md" />

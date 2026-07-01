@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import { v7 as uuidv7 } from 'uuid';
 import { generateDocumentCode } from '../lib/generate-document-code';
 import 'dotenv/config';
+import { CurrencyCode } from '../constants/enums';
 
 /** @typedef {import('./generated/client').PrismaClient} PrismaClient */
 
@@ -132,10 +133,19 @@ function getTransactionDetails({
 }) {
   const transactionDetails = [];
   for (const product of products) {
+    const selectedVariant = product.variants[0];
+    let selectedPrice;
+
+    if (selectedVariant.prices[0].currencyCode === CurrencyCode.IDR) {
+      selectedPrice = selectedVariant.prices[0];
+    } else {
+      selectedPrice = selectedVariant.prices[1];
+    }
+
     const detail = {
       productId: product.id,
-      productPriceId: product.variants[0].prices[0].id,
-      quantity: generateRandomInt(2, 5),
+      productPriceId: selectedPrice.id,
+      quantity: generateRandomInt(1, 4),
 
       productCategorySlug: product.category.slug,
       productName: product.name,
@@ -143,10 +153,15 @@ function getTransactionDetails({
       productDriveFileId: product.driveFileId,
       productDownloadUrl: product.downloadUrl,
 
-      productVariant: product.variants[0].name,
-      productCurrencyCode: product.variants[0].prices[1].currencyCode,
-      productPrice: product.variants[0].prices[1].price.toNumber(),
+      productVariant: selectedVariant.name,
+      productCurrencyCode: selectedPrice.currencyCode,
+      productPrice: selectedPrice.price.toNumber(),
     };
+
+    if (selectedVariant.downloadUrl) detail.variantDownloadUrl = selectedVariant.downloadUrl;
+    if (selectedVariant.fileAccessPassword) {
+      detail.variantFileAccessPassword = selectedVariant.fileAccessPassword;
+    }
 
     if (product.discount) {
       detail.productDiscount = product.discount.discount;
@@ -199,7 +214,8 @@ export async function seedTransactions(prisma, count) {
 
   const transactions = [];
   for (let i = 0; i < count; i++) {
-    const transactionDetails = getTransactionDetails({ max: 8, products });
+    // you can set max to specify how maximal product in one transaction
+    const transactionDetails = getTransactionDetails({ max: 3, products });
 
     const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];
     const selectedAdmin = admins[generateRandomInt(0, admins.length - 1)];
@@ -208,6 +224,8 @@ export async function seedTransactions(prisma, count) {
     transactions.push({
       adminId: selectedAdmin.id,
       adminEmail: selectedAdmin.email,
+      adminName: selectedAdmin.firstName + ' ' + selectedAdmin.lastName,
+      adminWhatsappPhoneNumber: selectedAdmin.whatsappPhoneNumber,
       customerId: selectedCustomer.id,
       status: 'pending',
       code: generateDocumentCode('TRX'),

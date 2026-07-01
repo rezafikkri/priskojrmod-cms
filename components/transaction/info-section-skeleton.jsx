@@ -11,21 +11,6 @@ export default function InfoSectionSkeleton() {
         <Skeleton className="w-3/4 h-[36px] rounded-md" />
         <Skeleton className="w-1/3 h-[36px] rounded-md" />
       </div>
-
-      <div className="space-y-2">
-        <div className="flex space-x-3">
-          <Skeleton className="w-50 flex-auto h-[30px] rounded-md" />
-          <Skeleton className="w-70 flex-auto h-[30px] rounded-md" />
-        </div>
-        <div className="flex space-x-3">
-          <Skeleton className="w-50 flex-auto h-[30px] rounded-md" />
-          <Skeleton className="w-70 flex-auto h-[30px] rounded-md" />
-        </div>
-        <div className="flex space-x-3">
-          <Skeleton className="w-50 flex-auto h-[30px] rounded-md" />
-          <Skeleton className="w-70 flex-auto h-[30px] rounded-md" />
-        </div>
-      </div>
     </div>
   );
 }

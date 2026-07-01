@@ -23,6 +23,8 @@ import { AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '../ui/skeleton';
 import NotFoundAlert from '../ui/not-found-alert';
+import PartiesSection from './parties-section';
+import PartiesSectionSkeleton from './parties-section-skeleton';
 
 function DetailsContent({ isFetching, data, isError, error }) {
   if (!isFetching) {
@@ -48,16 +50,16 @@ function DetailsContent({ isFetching, data, isError, error }) {
     }
   }
 
-  let details, invoices, info;
+  let details, invoices, info, parties;
 
   if (!isFetching) {
-    ({ details, invoices, ...info } = data);
+    ({ details, invoices, parties, ...info } = data);
   }
 
   return (
     <div className="space-y-7 p-4 pt-0">
       <section>
-        <h3 className="text-xl font-semibold">Transaction Info</h3>
+        <h3 className="text-xl font-semibold">Info</h3>
 
         {isFetching ? (
           <InfoSectionSkeleton />
@@ -67,7 +69,17 @@ function DetailsContent({ isFetching, data, isError, error }) {
       </section>
 
       <section>
-        <h3 className="text-xl font-semibold">Transaction Details</h3>
+        <h3 className="text-xl font-semibold">Parties</h3>
+
+        {isFetching ? (
+          <PartiesSectionSkeleton />
+        ) : (
+          <PartiesSection data={parties} />
+        )}
+      </section>
+
+      <section>
+        <h3 className="text-xl font-semibold">Details</h3>
 
         {isFetching ? (
           <DetailsSectionSkeleton />
@@ -135,7 +147,7 @@ export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
             ) : null}
           </SheetTitle>
           <SheetDescription className="text-base">
-            Detailed information and history of the transaction.
+            Detailed information and history of the transaction. Tax is not calculated or included in these figures.
           </SheetDescription>
         </SheetHeader>
 

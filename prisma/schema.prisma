@@ -417,8 +417,10 @@ model Transaction {
   code       String  @unique @db.VarChar(32)
   customerId String? @map("customer_id") @db.Uuid
 
-  adminId    Int    @map("admin_id") @db.SmallInt // only for reference
-  adminEmail String @map("admin_email") @db.VarChar(254)
+  adminId                  Int    @map("admin_id") @db.SmallInt // only for reference
+  adminEmail               String @map("admin_email") @db.VarChar(254)
+  adminName                String @map("admin_name") @db.VarChar(200)
+  adminWhatsappPhoneNumber String @map("admin_whatsapp_phone_number") @db.VarChar(20)
 
   status       TransactionStatus
   createdAt    Int               @map("created_at")
