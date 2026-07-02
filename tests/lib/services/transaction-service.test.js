@@ -266,7 +266,7 @@ describe('getTransactionDetails function', () => {
       details: [
         {
           id: 'detail-1',
-          quantity: 2,
+          qty: 2,
           productName: 'Product A',
           productVersion: '1.0.0',
           productDriveFileId: 'drive-123',
@@ -527,7 +527,7 @@ describe('generateTransactionExport function', () => {
         productName: 'Produk A',
         productVersion: '1.0',
         productVariant: 'Default',
-        quantity: 1,
+        qty: 1,
         productPrice: { toNumber: () => 15000 },
         productCurrencyCode: 'IDR',
         productDiscount: 0,

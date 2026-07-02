@@ -32,16 +32,16 @@ import { useTheme } from 'next-themes';
 import { formatNumber } from '@/lib/format-number';
 
 const topSellingProducts = [
-  { name: 'SEO Master Course', quantity: 2847 },
-  { name: 'Canva Template Pack', quantity: 2134 },
-  { name: 'Digital Marketing E-Book', quantity: 1992 },
-  { name: 'Notion Productivity Kit', quantity: 1428 },
-  { name: 'Lightroom Presets Bundle', quantity: 1056 },
-  { name: 'After Effects Tutorial', quantity: 823 },
-  { name: 'Copywriting Guide', quantity: 697 },
-  { name: 'Figma UI Kit', quantity: 671 },
-  { name: 'Content Calendar Template', quantity: 489 },
-  { name: 'Email Template Pack', quantity: 412 },
+  { name: 'SEO Master Course', qty: 2847 },
+  { name: 'Canva Template Pack', qty: 2134 },
+  { name: 'Digital Marketing E-Book', qty: 1992 },
+  { name: 'Notion Productivity Kit', qty: 1428 },
+  { name: 'Lightroom Presets Bundle', qty: 1056 },
+  { name: 'After Effects Tutorial', qty: 823 },
+  { name: 'Copywriting Guide', qty: 697 },
+  { name: 'Figma UI Kit', qty: 671 },
+  { name: 'Content Calendar Template', qty: 489 },
+  { name: 'Email Template Pack', qty: 412 },
 ];
 
 const chartConfig = Object.fromEntries(
@@ -106,7 +106,7 @@ export default function ChartTopSellingProducts() {
             <CartesianGrid vertical={false} />
             <XAxis
               type="number"
-              dataKey="quantity"
+              dataKey="qty"
               hide
             />
             <YAxis
@@ -149,7 +149,7 @@ export default function ChartTopSellingProducts() {
                       <span className={`size-3 rounded-sm`} style={{ backgroundColor: payload[0].color }} />
                       <div>
                         <span className="font-semibold">
-                          {formatNumber({ value: product.quantity})}
+                          {formatNumber({ value: product.qty})}
                         </span>
                         {' '}
                         <span className="text-zinc-800 dark:text-zinc-300">sold</span>
@@ -160,12 +160,12 @@ export default function ChartTopSellingProducts() {
               }}
             />
             <Bar
-              dataKey="quantity"
+              dataKey="qty"
               fill="var(--chart-1)"
               radius={[2, 4, 4, 2]} // top-left, top-right, bottom-right, bottom-left
             >
               <LabelList
-                dataKey="quantity"
+                dataKey="qty"
                 position="right"
                 offset={8}
                 fontSize={13.5}

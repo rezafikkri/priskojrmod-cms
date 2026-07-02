@@ -469,7 +469,7 @@ model TransactionDetail {
   productId       String  @map("product_id") @db.Uuid
   productPriceId  String? @map("product_price_id") @db.Uuid
   productCouponId String? @map("product_coupon_id") @db.Uuid
-  quantity        Int     @db.SmallInt
+  qty             Int     @db.SmallInt
 
   productCategorySlug String  @map("product_category_slug") @db.VarChar(100)
   productName         String  @map("product_name") @db.VarChar(150)

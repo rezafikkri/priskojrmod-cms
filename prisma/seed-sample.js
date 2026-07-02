@@ -145,7 +145,7 @@ function getTransactionDetails({
     const detail = {
       productId: product.id,
       productPriceId: selectedPrice.id,
-      quantity: generateRandomInt(1, 4),
+      qty: generateRandomInt(1, 4),
 
       productCategorySlug: product.category.slug,
       productName: product.name,
@@ -233,7 +233,7 @@ export async function seedTransactions(prisma, count) {
       totalAmount: transactionDetails
         .reduce((total, detail) => {
           const {
-            quantity: qty,
+            qty,
             productPrice: price,
             productDiscount: discount = 0,
             productCouponDiscount: couponDiscount = 0,

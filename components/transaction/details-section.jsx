@@ -58,7 +58,7 @@ export default function DetailsSection({ details }) {
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Qty</TableHead>
-              <TableCell>{detail.quantity}</TableCell>
+              <TableCell>{detail.qty}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Discount</TableHead>
