@@ -6,9 +6,10 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 import TooltipWrapper from '../ui/tooltip-wrapper';
-import { ArrowRight, CircleQuestionMark } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Dot from '../icon/Dot';
 import { formatCurrency } from '@/lib/format-currency';
+import HelpIcon from '../icon/help-icon';
 
 export function CardTotal({
   title,
@@ -53,7 +54,7 @@ export function CardTotal({
               <>
                 {' '}
                 <TooltipWrapper text={tooltip} {...(title === 'Unpaid' && { background: 'bg-gray-600' })}>
-                  <CircleQuestionMark className="icon text-zinc-400 dark:text-zinc-600" size={14} />
+                  <HelpIcon />
                 </TooltipWrapper>
               </>
             )}

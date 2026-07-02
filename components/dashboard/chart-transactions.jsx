@@ -18,7 +18,6 @@ import {
   ChartContainer,
   ChartTooltip,
 } from '../ui/chart';
-import { Info } from 'lucide-react';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
@@ -28,6 +27,7 @@ import { formatCurrency } from '@/lib/format-currency';
 import { formatNumber } from '@/lib/format-number';
 import { formatMonthYear } from '@/lib/format-date';
 import { cmsConfig } from '@/config/cms';
+import HelpIcon from '../icon/help-icon';
 
 const chartData = [
   { timestamp: 1706634000, IDR: 920_000, USD: 45 },
@@ -67,7 +67,7 @@ export default function ChartTransactions() {
               <span>Monthly Sales</span>
               {' '}
               <TooltipWrapper text="Sales figures exclude tax">
-                <Info className="icon text-zinc-400 dark:text-zinc-600" size={14} />
+                <HelpIcon />
               </TooltipWrapper>
             </CardTitle>
             <CardDescription

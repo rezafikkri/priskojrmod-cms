@@ -6,6 +6,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Minus } from 'lucide-react';
+import HelpIcon from '../icon/help-icon';
+import TooltipWrapper from '../ui/tooltip-wrapper';
 
 export default function PartiesSection({ data }) {
   return (
@@ -36,7 +38,12 @@ export default function PartiesSection({ data }) {
         </Table>
       </div>
 
-      <h5 className="mt-2 mb-1 text-zinc-700 dark:text-zinc-300 text-sm font-light">Admin</h5>
+      <h5 className="mt-2 mb-1 text-zinc-700 dark:text-zinc-300 text-sm font-light">
+        <span className="me-1">Admin</span>
+        <TooltipWrapper text="Admin assigned to this transaction">
+          <HelpIcon size={12} />
+        </TooltipWrapper>
+      </h5>
       <div className="rounded-md border">
         <Table className="text-base">
           <TableBody>

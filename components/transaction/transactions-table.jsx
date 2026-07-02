@@ -13,7 +13,6 @@ import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-quer
 import { toast } from 'sonner';
 import { isLastPage, getStatusClasses } from '@/lib/utils';
 import { RotateCw, Minus } from 'lucide-react';
-import InfoCircle from '../icon/info-circle';
 import TablePaginationSkeleton from '../loadings/table-pagination-skeleton';
 import { searchKeySchema } from '@/lib/validators/base-validator';
 import { safeFetch } from '@/lib/safe-fetch';
@@ -51,6 +50,7 @@ import { useFetchAction } from '@/hooks/use-fetch-action';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import { changeToLastValidPage } from '@/lib/data-table';
 import TableTwoLineCell from '../ui/table-two-line-cell';
+import HelpIcon from '../icon/help-icon';
 
 const defaultColumnVisibility = {
   admin: true,
@@ -672,7 +672,7 @@ export default function TransactionsTable() {
         <>
           <span className="me-1">Code</span>
           <TooltipWrapper text="Transaction code">
-            <span className="cursor-help"><InfoCircle /></span>
+            <HelpIcon />
           </TooltipWrapper>
         </>
       ),
@@ -691,7 +691,14 @@ export default function TransactionsTable() {
     },
     {
       id: 'admin',
-      header: 'Admin',
+      header: () => (
+        <>
+          <span className="me-1">Admin</span>
+          <TooltipWrapper text="Admin assigned to this transaction">
+            <HelpIcon />
+          </TooltipWrapper>
+        </>
+      ),
       cell: ({ row }) => (
         <TableTwoLineCell
           primary={row.original.adminName}
@@ -718,7 +725,7 @@ export default function TransactionsTable() {
         <>
           <span className="me-1">Total</span>
           <TooltipWrapper text="Total amount paid by customer">
-            <span className="cursor-help"><InfoCircle /></span>
+            <HelpIcon />
           </TooltipWrapper>
         </>
       ),
