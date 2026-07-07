@@ -140,13 +140,13 @@ model Product {
   owner    Owner    @relation(fields: [ownerId], references: [id], onDelete: NoAction)
   license  License  @relation(fields: [licenseId], references: [id], onDelete: NoAction)
 
-  translations ProductTranslation[]
-  versions     ProductVersion[]
-  discount     ProductDiscount?
-  coupon       ProductCoupon?
-  images       ProductImage[]
-  variants     ProductVariant[]
-  secretKey    SecretKey?
+  translations  ProductTranslation[]
+  versions      ProductVersion[]
+  discount      ProductDiscount?
+  upgradeCoupon ProductUpgradeCoupon?
+  images        ProductImage[]
+  variants      ProductVariant[]
+  secretKey     SecretKey?
 
   @@map("products")
 }
@@ -198,7 +198,7 @@ model ProductDiscount {
   @@map("product_discount")
 }
 
-model ProductCoupon {
+model ProductUpgradeCoupon {
   id        String @id @default(uuid(7)) @db.Uuid
   productId String @unique @map("product_id") @db.Uuid
   code      String @db.VarChar(150)
@@ -207,7 +207,7 @@ model ProductCoupon {
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@map("product_coupon")
+  @@map("product_upgrade_coupon")
 }
 
 model ProductImage {
@@ -464,12 +464,12 @@ model Invoice {
 }
 
 model TransactionDetail {
-  id              String  @id @default(uuid(7)) @db.Uuid
-  transactionId   String  @map("transaction_id") @db.Uuid
-  productId       String  @map("product_id") @db.Uuid
-  productPriceId  String? @map("product_price_id") @db.Uuid
-  productCouponId String? @map("product_coupon_id") @db.Uuid
-  qty             Int     @db.SmallInt
+  id                     String  @id @default(uuid(7)) @db.Uuid
+  transactionId          String  @map("transaction_id") @db.Uuid
+  productId              String  @map("product_id") @db.Uuid
+  productPriceId         String? @map("product_price_id") @db.Uuid
+  productUpgradeCouponId String? @map("product_upgrade_coupon_id") @db.Uuid
+  qty                    Int     @db.SmallInt
 
   productCategorySlug String  @map("product_category_slug") @db.VarChar(100)
   productName         String  @map("product_name") @db.VarChar(150)
@@ -481,11 +481,11 @@ model TransactionDetail {
   variantDownloadUrl        String? @map("variant_download_url")
   variantFileAccessPassword String? @map("variant_file_access_password") @db.VarChar(100)
 
-  productCurrencyCode   CurrencyCode @map("product_currency_code")
-  productPrice          Decimal      @map("product_price") @db.Decimal(10, 2)
-  productDiscount       Int?         @map("product_discount") @db.SmallInt
-  productCouponCode     String?      @map("product_coupon_code") @db.VarChar(150)
-  productCouponDiscount Int?         @map("product_coupon_discount") @db.SmallInt
+  productCurrencyCode          CurrencyCode @map("product_currency_code")
+  productPrice                 Decimal      @map("product_price") @db.Decimal(10, 2)
+  productDiscount              Int?         @map("product_discount") @db.SmallInt
+  productUpgradeCouponCode     String?      @map("product_upgrade_coupon_code") @db.VarChar(150)
+  productUpgradeCouponDiscount Int?         @map("product_upgrade_coupon_discount") @db.SmallInt
 
   drivePermissionId String?      @map("drive_permission_id") @db.VarChar(100)
   shareMethod       ShareMethod? @map("share_method")

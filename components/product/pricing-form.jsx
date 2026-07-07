@@ -22,11 +22,12 @@ import { Fragment, useMemo } from 'react';
 import { addProduct, editProduct } from '@/actions/product-actions';
 import PriceFields from './price-fields';
 import DiscountFields from './discount-fields';
-import CouponFields from './coupon-fields';
+import UpgradeCouponFields from './upgrade-coupon-fields';
 import useEditPendingTracker from '@/hooks/use-edit-pending-tracker';
 import { Separator } from '../ui/separator';
 import { useQueryClient } from '@tanstack/react-query';
 import { cmsConfig } from '@/config/cms';
+import { Alert, AlertTitle } from '../ui/alert';
 
 export default function PricingForm({
   onPrevStep,
@@ -185,12 +186,15 @@ export default function PricingForm({
           ? getExpiredAtEpoch(data.discount.expiredAt)
           : '',
       };
-      product.coupon = {
-        ...data.coupon,
-        expiredAt: data.coupon.expiredAt !== ''
-          ? getExpiredAtEpoch(data.coupon.expiredAt)
-          : '',
-      };
+
+      if (mode === 'edit') {
+        product.upgradeCoupon = {
+          ...data.upgradeCoupon,
+          expiredAt: data.upgradeCoupon.expiredAt !== ''
+            ? getExpiredAtEpoch(data.upgradeCoupon.expiredAt)
+            : '',
+        };
+      }
     } else {
       product.variants = product.variants.map(variant => {
         let newVariant = { ...variant };
@@ -231,7 +235,7 @@ export default function PricingForm({
         let newPricing = {
           prices: saveRes.data.pricing.prices,
           discount: data.discount,
-          coupon: data.coupon,
+          upgradeCoupon: data.upgradeCoupon,
         };
 
         if (!data.discount.id && data.discount.value) {
@@ -247,14 +251,14 @@ export default function PricingForm({
         }
 
         let successMessage = 'Product updated successfully.';
-        if (!data.coupon.id && data.coupon.code) {
-          newPricing.coupon = {
-            id: saveRes.data.pricing.coupon.id,
-            ...data.coupon,
+        if (!data.upgradeCoupon.id && data.upgradeCoupon.code) {
+          newPricing.upgradeCoupon = {
+            id: saveRes.data.pricing.upgradeCoupon.id,
+            ...data.upgradeCoupon,
           };
-        } else if (data.coupon.id && (!data.coupon.code || dbVersion !== basic.version)) {
-          newPricing.coupon = { code: '', discount: '', expiredAt: '' };
-          successMessage += ' The old coupon has been removed because a new version was released';
+        } else if (data.upgradeCoupon.id && (!data.upgradeCoupon.code || dbVersion !== basic.version)) {
+          newPricing.upgradeCoupon = { code: '', discount: '', expiredAt: '' };
+          successMessage += ' The old upgrade coupon has been removed because a new version was released.';
         }
 
         setPricing(newPricing);
@@ -332,12 +336,12 @@ export default function PricingForm({
               <>
                 <Separator />
                 <section className="space-y-6">
-                  <h3 className="text-lg font-bold mb-0">Coupon</h3>
+                  <h3 className="text-lg font-bold mb-0">Upgrade Coupon</h3>
                   <h4 className="text-zinc-700 dark:text-zinc-300/80">
                     Optional. Provides a discount for previous buyers when purchasing product upgrades.
                   </h4>
 
-                  <CouponFields
+                  <UpgradeCouponFields
                     form={form}
                     basic={basic}
                     handlers={{

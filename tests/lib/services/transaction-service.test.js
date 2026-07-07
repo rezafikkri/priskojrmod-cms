@@ -277,8 +277,8 @@ describe('getTransactionDetails function', () => {
           productCurrencyCode: 'USD',
           productPrice: { toNumber: () => 500 },
           productDiscount: 0,
-          productCouponCode: null,
-          productCouponDiscount: 0,
+          productUpgradeCouponCode: null,
+          productUpgradeCouponDiscount: 0,
           shareMethod: 'link',
           sharedAt: null,
         },
@@ -531,8 +531,8 @@ describe('generateTransactionExport function', () => {
         productPrice: { toNumber: () => 15000 },
         productCurrencyCode: 'IDR',
         productDiscount: 0,
-        productCouponCode: null,
-        productCouponDiscount: 0,
+        productUpgradeCouponCode: null,
+        productUpgradeCouponDiscount: 0,
       },
     ];
 

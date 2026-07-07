@@ -101,7 +101,7 @@ function roundToTwoDecimals(value) {
   return Math.round(value * 100) / 100;
 }
 
-function getSubtotal({ qty, price, currencyCode, discount, couponDiscount }) {
+function getSubtotal({ qty, price, currencyCode, discount, upgradeCouponDiscount }) {
   let subtotal = price * qty;
 
   if (discount) {
@@ -112,12 +112,12 @@ function getSubtotal({ qty, price, currencyCode, discount, couponDiscount }) {
     subtotal -= discountPrice;
   }
 
-  if (couponDiscount) {
-    let couponPrice = subtotal * (couponDiscount / 100);
-    if (currencyCode === 'IDR') couponPrice = Math.round(couponPrice);
-    if (currencyCode === 'USD') couponPrice = roundToTwoDecimals(couponPrice);
+  if (upgradeCouponDiscount) {
+    let upgradeCouponPrice = subtotal * (upgradeCouponDiscount / 100);
+    if (currencyCode === 'IDR') upgradeCouponPrice = Math.round(upgradeCouponPrice);
+    if (currencyCode === 'USD') upgradeCouponPrice = roundToTwoDecimals(upgradeCouponPrice);
 
-    subtotal -= couponPrice;
+    subtotal -= upgradeCouponPrice;
   }
 
   if (currencyCode === 'USD') {
@@ -167,9 +167,9 @@ function getTransactionDetails({
       detail.productDiscount = product.discount.discount;
     }
 
-    if (product.coupon) {
-      detail.productCouponCode = product.coupon.code;
-      detail.productCouponDiscount = product.coupon.discount;
+    if (product.upgradeCoupon) {
+      detail.productUpgradeCouponCode = product.upgradeCoupon.code;
+      detail.productUpgradeCouponDiscount = product.upgradeCoupon.discount;
     }
 
     transactionDetails.push(detail);
@@ -202,7 +202,7 @@ export async function seedTransactions(prisma, count) {
         },
       },
       discount: true,
-      coupon: true,
+      upgradeCoupon: true,
     },
   });
   const customers = await prisma.customer.findMany({
@@ -215,7 +215,7 @@ export async function seedTransactions(prisma, count) {
   const transactions = [];
   for (let i = 0; i < count; i++) {
     // you can set max to specify how maximal product in one transaction
-    const transactionDetails = getTransactionDetails({ max: 3, products });
+    const transactionDetails = getTransactionDetails({ max: 4, products });
 
     const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];
     const selectedAdmin = admins[generateRandomInt(0, admins.length - 1)];
@@ -236,7 +236,7 @@ export async function seedTransactions(prisma, count) {
             qty,
             productPrice: price,
             productDiscount: discount = 0,
-            productCouponDiscount: couponDiscount = 0,
+            productUpgradeCouponDiscount: upgradeCouponDiscount = 0,
             productCurrencyCode: currencyCode,
           } = detail;
           const subtotal = getSubtotal({
@@ -244,7 +244,7 @@ export async function seedTransactions(prisma, count) {
             price,
             currencyCode,
             discount,
-            couponDiscount,
+            upgradeCouponDiscount,
           });
           return total + subtotal;
         }, 0),

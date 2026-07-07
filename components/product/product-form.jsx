@@ -48,7 +48,7 @@ export const defaultFormStoreInitState = {
         value: '',
         expiredAt: '',
       },
-      coupon: {
+      upgradeCoupon: {
         code: '',
         discount: '',
         expiredAt: '',

@@ -20,10 +20,10 @@ import ExpiredAtInput from './expired-at-input';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
-import { removeProductCoupon } from '@/actions/product-actions';
+import { removeProductUpgradeCoupon } from '@/actions/product-actions';
 import { cmsConfig } from '@/config/cms';
 
-export default function CouponFields({
+export default function UpgradeCouponFields({
   form,
   basic,
   handlers,
@@ -34,17 +34,17 @@ export default function CouponFields({
     onDecrementPending,
   } = handlers;
   const [isDeleting, setIsDeleting] = useState(false);
-  const coupon = form.getValues('coupon');
+  const upgradeCoupon = form.getValues('upgradeCoupon');
 
   async function handleDelete() {
-    if (coupon.id) {
+    if (upgradeCoupon.id) {
       // set pending state for disabled prev next button and show loading
       onIncrementPending();
       setIsDeleting(true);
-      const removeRes = await removeProductCoupon(coupon.id, basic.id);
+      const removeRes = await removeProductUpgradeCoupon(upgradeCoupon.id, basic.id);
 
       if (removeRes.status === 'success') {
-        form.setValue('coupon', { code: '', discount: '', expiredAt: '' });
+        form.setValue('upgradeCoupon', { code: '', discount: '', expiredAt: '' });
       } else {
         toast.error(removeRes.message, {
           duration: cmsConfig.toast.duration.error
@@ -64,7 +64,7 @@ export default function CouponFields({
           <div className="flex items-start gap-3">
             <FormField
               control={form.control}
-              name="coupon.code"
+              name="upgradeCoupon.code"
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel className="text-base">Code</FormLabel>
@@ -75,14 +75,16 @@ export default function CouponFields({
                       className="md:text-base h-auto px-3 py-1.5 shadow-none"
                     />
                   </FormControl>
-                  <FormDescription>Enter the coupon code in UPPERCASE (e.g. SAVE-20-NOW)</FormDescription>
+                  <FormDescription>
+                    Enter the upgrade coupon code in UPPERCASE (e.g. SAVE-20-NOW)
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="coupon.discount"
+              name="upgradeCoupon.discount"
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel className="text-base">Discount</FormLabel>
@@ -110,23 +112,23 @@ export default function CouponFields({
 
           <FormField
             control={form.control}
-            name="coupon.expiredAt"
+            name="upgradeCoupon.expiredAt"
             render={({ field }) =>
               <ExpiredAtInput
                 field={field}
-                description="Select the expiration date and time of the coupon."
+                description="Select the expiration date and time of the upgrade coupon."
                 disabled={isDeleting || disabled}
               />
             }
           />
         </div>
 
-        {coupon.id && (
+        {upgradeCoupon.id && (
           <>
             <Separator orientation="vertical" className="h-30!" />
 
             <div className="relative inline-block">
-              <TooltipWrapper text="Delete coupon" background="bg-destructive">
+              <TooltipWrapper text="Delete upgrade coupon" background="bg-destructive">
                 <Button
                   type="button"
                   variant="secondary"

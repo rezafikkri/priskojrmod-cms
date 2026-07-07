@@ -84,20 +84,22 @@ export default function DetailsSection({ details }) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Coupon Code</TableHead>
+              <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">
+                Upgrade Coupon Code
+              </TableHead>
               <TableCell>
-                {detail.productCouponCode ?? <Minus className="size-4 text-zinc-300" />}
+                {detail.productUpgradeCouponCode ?? <Minus className="size-4 text-zinc-300" />}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead
                 className="font-normal text-zinc-700 dark:text-zinc-300"
               >
-                Coupon Discount
+                Upgrade Coupon Discount
               </TableHead>
               <TableCell>
-                {detail.productCouponDiscount
-                  ? `${detail.productCouponDiscount}%`
+                {detail.productUpgradeCouponDiscount
+                  ? `${detail.productUpgradeCouponDiscount}%`
                   : <Minus className="size-4 text-zinc-300" />}
               </TableCell>
             </TableRow>

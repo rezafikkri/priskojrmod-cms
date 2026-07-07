@@ -6,7 +6,7 @@ import {
   updateProductPinned,
   deleteProduct,
   deleteProductDiscount,
-  deleteProductCoupon,
+  deleteProductUpgradeCoupon,
   deleteProductVariant,
   deleteProductImage,
   updateProduct,
@@ -58,9 +58,9 @@ export async function removeProductDiscount(id, productId) {
   }
 }
 
-export async function removeProductCoupon(id, productId) {
+export async function removeProductUpgradeCoupon(id, productId) {
   try {
-    await deleteProductCoupon(id, productId);
+    await deleteProductUpgradeCoupon(id, productId);
     return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };

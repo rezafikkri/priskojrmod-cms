@@ -14,7 +14,7 @@ import {
   deleteProductVariant,
   deleteProductImage,
   deleteProductDiscount,
-  deleteProductCoupon,
+  deleteProductUpgradeCoupon,
   updateProduct,
 } from '@/lib/services/product-service';
 import { Language, PriceType } from '@/constants/enums';
@@ -45,7 +45,7 @@ beforeAll(() => {
         delete: vi.fn(),
         update: vi.fn(),
       },
-      productCoupon: {
+      productUpgradeCoupon: {
         delete: vi.fn(),
         update: vi.fn(),
       },
@@ -427,14 +427,14 @@ describe('deleteProductDiscount function', () => {
   });
 });
 
-describe('deleteProductCoupon function', () => {
-  it('Should call verifySession function, not call prisma.$transaction, prisma.productCoupon.delete and prisma.product.update function and throw Error with "Unauthenticated" message', async () => {
+describe('deleteProductUpgradeCoupon function', () => {
+  it('Should call verifySession function, not call prisma.$transaction, prisma.productUpgradeCoupon.delete and prisma.product.update function and throw Error with "Unauthenticated" message', async () => {
     const verifySession = (await import('@/lib/verifySession')).default;
     const prisma = (await import('@/lib/prisma')).default;
 
     verifySession.mockResolvedValue(false);
 
-    await expect(deleteProductCoupon(
+    await expect(deleteProductUpgradeCoupon(
       '2e497c7c-3aa2-450a-ac53-e129f5c3cc99',
       '2e497c7c-3aa2-450a-ac53-e129f5c3cc94',
     ))
@@ -442,11 +442,11 @@ describe('deleteProductCoupon function', () => {
 
     expect(verifySession).toHaveBeenCalled();
     expect(prisma.$transaction).not.toHaveBeenCalled();
-    expect(prisma.productCoupon.delete).not.toHaveBeenCalled();
+    expect(prisma.productUpgradeCoupon.delete).not.toHaveBeenCalled();
     expect(prisma.product.update).not.toHaveBeenCalled();
   });
 
-  it('Should call prisma.$transaction function and call prisma.productCoupon.delete and prisma.product.update function correctly', async () => {
+  it('Should call prisma.$transaction function and call prisma.productUpgradeCoupon.delete and prisma.product.update function correctly', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(1744853603149);
     const currentTime = Math.floor(new Date().getTime() / 1000);
@@ -456,12 +456,12 @@ describe('deleteProductCoupon function', () => {
 
     verifySession.mockResolvedValue({ userId: 1 });
 
-    await deleteProductCoupon('2e497c7c-3aa2-450a-ac53-e129f5c3cc99', '2e497c7c-3aa2-450a-ac53-e129f5c3cc94');
+    await deleteProductUpgradeCoupon('2e497c7c-3aa2-450a-ac53-e129f5c3cc99', '2e497c7c-3aa2-450a-ac53-e129f5c3cc94');
 
     expect(prisma.$transaction).toHaveBeenCalled();
     expect(prisma.$transaction.mock.calls[0][0]).toHaveLength(2);
 
-    expect(prisma.productCoupon.delete).toHaveBeenCalledWith({
+    expect(prisma.productUpgradeCoupon.delete).toHaveBeenCalledWith({
       where: {
         id: '2e497c7c-3aa2-450a-ac53-e129f5c3cc99',
         product: {
