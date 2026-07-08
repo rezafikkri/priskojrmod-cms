@@ -105,11 +105,11 @@ function getSubtotal({ qty, price, currencyCode, discount, upgradeCouponDiscount
   let subtotal = price * qty;
 
   if (discount) {
-    let discountPrice = subtotal * (discount / 100);
-    if (currencyCode === 'IDR') discountPrice = Math.round(discountPrice);
-    if (currencyCode === 'USD') discountPrice = roundToTwoDecimals(discountPrice);
+    let discountAmount = subtotal * (discount / 100);
+    if (currencyCode === 'IDR') discountAmount = Math.round(discountAmount);
+    if (currencyCode === 'USD') discountAmount = roundToTwoDecimals(discountAmount);
 
-    subtotal -= discountPrice;
+    subtotal -= discountAmount;
   }
 
   if (upgradeCouponDiscount) {
@@ -215,7 +215,7 @@ export async function seedTransactions(prisma, count) {
   const transactions = [];
   for (let i = 0; i < count; i++) {
     // you can set max to specify how maximal product in one transaction
-    const transactionDetails = getTransactionDetails({ max: 4, products });
+    const transactionDetails = getTransactionDetails({ max: 3, products });
 
     const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];
     const selectedAdmin = admins[generateRandomInt(0, admins.length - 1)];

@@ -75,9 +75,9 @@ export default function DetailsSection({ details }) {
                 Discount Amount
               </TableHead>
               <TableCell className="tabular-nums">
-                {detail.discountPrice
+                {detail.discountAmount
                   ? `-${formatCurrency({
-                    value: detail.discountPrice,
+                    value: detail.discountAmount,
                     currencyCode: detail.productCurrencyCode,
                   })}`
                   : <Minus className="size-4 text-zinc-300" />}
@@ -110,9 +110,9 @@ export default function DetailsSection({ details }) {
                 Upgrade Coupon Amount
               </TableHead>
               <TableCell className="tabular-nums">
-                {detail.couponPrice
+                {detail.upgradeCouponAmount
                   ? `-${formatCurrency({
-                    value: detail.couponPrice,
+                    value: detail.upgradeCouponAmount,
                     currencyCode: detail.productCurrencyCode,
                   })}`
                   : <Minus className="size-4 text-zinc-300" />}
