@@ -4,11 +4,11 @@ import { Button } from './button';
 /*
  * This is for check in other section has error or not
  */
-function hasOtherSectionError(
+function hasOtherSectionError({
   errors,
   activeLang,
   fieldNames = ['title', 'content'],
-) {
+}) {
   let isCurrentSectionError = false;
   let isOtherSectionError = false;
   for (const fn of fieldNames) {
@@ -50,7 +50,7 @@ export default function FormLanguageToggle({
         </Button>
       </div>
       <p className="text-sm text-muted-foreground">Select a language to enter content.</p>
-      {hasOtherSectionError(errors, activeLang, fieldNames) && (
+      {hasOtherSectionError({ errors, activeLang, fieldNames }) && (
         <p className="text-destructive text-sm">
           There are errors in the {activeLang === Language.ID ? 'English' : 'Indonesian'} section.
         </p>

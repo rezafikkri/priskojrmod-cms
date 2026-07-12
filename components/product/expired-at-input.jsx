@@ -105,6 +105,7 @@ export default function ExpiredAtInput({
           <PopoverTrigger asChild className="shadow-none text-base h-auto! px-3 py-1.5 flex-1">
             <FormControl>
               <Button
+                ref={field.ref}
                 disabled={disabled}
                 variant="outline"
                 className={cn(

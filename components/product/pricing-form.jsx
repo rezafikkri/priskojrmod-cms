@@ -21,13 +21,12 @@ import { useProductFormStore } from '@/lib/providers/product-form-store-provider
 import { Fragment, useMemo } from 'react';
 import { addProduct, editProduct } from '@/actions/product-actions';
 import PriceFields from './price-fields';
-import DiscountFields from './discount-fields';
-import UpgradeCouponFields from './upgrade-coupon-fields';
 import useEditPendingTracker from '@/hooks/use-edit-pending-tracker';
 import { Separator } from '../ui/separator';
 import { useQueryClient } from '@tanstack/react-query';
 import { cmsConfig } from '@/config/cms';
-import { Alert, AlertTitle } from '../ui/alert';
+import UpgradeCouponFormSection from './upgrade-coupon-form-section';
+import DiscountFormSection from './discount-form-section';
 
 export default function PricingForm({
   onPrevStep,
@@ -144,16 +143,6 @@ export default function PricingForm({
       });
     });
 
-    if (isError) {
-      // Use requestAnimationFrame to ensure focus happens 
-      // right after the DOM update but before the next paint.
-      // This avoids timing issues where the input ref is not yet ready.
-      requestAnimationFrame(() => {
-        form.setFocus(fieldNameToFocus);
-      });
-      return;
-    }
-
     let product = {
       ...basic,
       ...content,
@@ -244,10 +233,6 @@ export default function PricingForm({
             id: saveRes.data.pricing.discount.id,
             ...data.discount,
           };
-
-        } else if (data.discount.id && !data.discount.value) {
-          // reset discount
-          newPricing.discount = { value: '', expiredAt: '' };
         }
 
         let successMessage = 'Product updated successfully.';
@@ -256,9 +241,9 @@ export default function PricingForm({
             id: saveRes.data.pricing.upgradeCoupon.id,
             ...data.upgradeCoupon,
           };
-        } else if (data.upgradeCoupon.id && (!data.upgradeCoupon.code || dbVersion !== basic.version)) {
+        } else if (data.upgradeCoupon.id && dbVersion !== basic.version) {
           newPricing.upgradeCoupon = { code: '', discount: '', expiredAt: '' };
-          successMessage += ' The old upgrade coupon has been removed because a new version was released.';
+          successMessage += ' The old upgrade coupon has been removed.';
         }
 
         setPricing(newPricing);
@@ -316,41 +301,28 @@ export default function PricingForm({
               ))}
             </section>
             <Separator />
-            <section className="space-y-6 mb-9">
-              <h3 className="text-lg font-bold mb-0">Discount</h3>
-              <h4 className="text-zinc-700 dark:text-zinc-300/80">
-                Optional. The discount percentage to apply to the product price.
-              </h4>
-
-              <DiscountFields
-                form={form}
-                basic={basic}
-                handlers={{
-                  onIncrementPending: incrementPending,
-                  onDecrementPending: decrementPending,
-                }}
-                disabled={isSubmitting}
-              />
-            </section>
+            <DiscountFormSection
+              form={form}
+              productId={basic.id}
+              handlers={{
+                onIncrementPending: incrementPending,
+                onDecrementPending: decrementPending,
+              }}
+              disabled={isSubmitting}
+            />
             {mode === 'edit' && (
               <>
                 <Separator />
-                <section className="space-y-6">
-                  <h3 className="text-lg font-bold mb-0">Upgrade Coupon</h3>
-                  <h4 className="text-zinc-700 dark:text-zinc-300/80">
-                    Optional. Provides a discount for previous buyers when purchasing product upgrades.
-                  </h4>
-
-                  <UpgradeCouponFields
-                    form={form}
-                    basic={basic}
-                    handlers={{
-                      onIncrementPending: incrementPending,
-                      onDecrementPending: decrementPending,
-                    }}
-                    disabled={isSubmitting}
-                  />
-                </section>
+                <UpgradeCouponFormSection
+                  form={form}
+                  dbVersion={dbVersion}
+                  basic={basic}
+                  handlers={{
+                    onIncrementPending: incrementPending,
+                    onDecrementPending: decrementPending,
+                  }}
+                  disabled={isSubmitting}
+                />
               </>
             )}
           </>
