@@ -34,7 +34,7 @@ export default function FormLanguageToggle({
   fieldNames,
 }) {
   return (
-    <div className="space-y-2 mb-6">
+    <div className="mb-6">
       <div className="flex space-x-2 mb-2">
         <Button
           variant="ghost"
@@ -51,7 +51,7 @@ export default function FormLanguageToggle({
           English
         </Button>
       </div>
-      <p className="text-sm text-muted-foreground">Select a language to enter content.</p>
+      <p className="text-sm text-muted-foreground">Select a language to enter content</p>
       {hasOtherSectionError({ errors, activeLang, fieldNames }) && (
         <Alert
           variant="destructive"
