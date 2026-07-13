@@ -29,7 +29,6 @@ import { ChevronsUpDown, Loader2, Check } from 'lucide-react';
 import { useDebounce } from '@/hooks/use-debounce';
 import { safeFetch } from '@/lib/safe-fetch';
 import { useWatch } from 'react-hook-form';
-import { Skeleton } from '../ui/skeleton';
 
 export default function CustomerCombobox({
   form,
@@ -42,17 +41,14 @@ export default function CustomerCombobox({
   // This state for save selected value
   const [selectedLabel, setSelectedLabel] = useState('');
 
-  const customerId = useWatch({
-    control: form.control,
-    name: 'customerId',
-  });
+  const customerId = useWatch({ name: 'customerId' });
   useEffect(() => {
     if (!customerId && selectedLabel) {
       setSelectedLabel('');
     }
   }, [customerId]);
 
-  const { data, isError, error, isFetching, isLoading, status } = useQuery({
+  const { data, isError, error, isFetching, status } = useQuery({
     queryKey: ['customersAutocomplete', debouncedKey],
     queryFn: async ({ signal }) => {
       const results = await safeFetch({
@@ -108,14 +104,6 @@ export default function CustomerCombobox({
                   )}
                 </div>
                 <CommandList className="min-h-10">
-                  {isLoading && (
-                    <div className="py-1 space-y-1.5 px-2">
-                      <Skeleton className="w-3/4 h-[27px]" />
-                      <Skeleton className="w-4/5 h-[27px]" />
-                      <Skeleton className="w-3/4 h-[27px]" />
-                    </div>
-                  )}
-
                   {isError ? (
                     <>
                       <div className="p-1">

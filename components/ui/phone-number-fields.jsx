@@ -85,8 +85,8 @@ export default function PhoneNumberFields({
   const isSubmitting = form.formState.isSubmitting;
   const phoneNumberErrors = form.formState.errors[name];
 
-  const countryIso = useWatch({ control: form.control, name: `${name}.countryIso` });
-  const number = useWatch({ control: form.control, name: `${name}.number` });
+  const countryIso = useWatch({ name: `${name}.countryIso` });
+  const number = useWatch({ name: `${name}.number` });
   const parsedNumber = parsePhoneNumber(
     number,
     countryIso === 'OTHER' ? undefined : countryIso,

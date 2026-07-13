@@ -43,8 +43,8 @@ export default function MainFileFields({ form, applicationCategoryId }) {
     setIsLoading(false);
   }
 
-  const categoryId = useWatch({ control: form.control, name: 'categoryId' });
-  const priceType = useWatch({ control: form.control, name: 'priceType' });
+  const categoryId = useWatch({ name: 'categoryId' });
+  const priceType = useWatch({ name: 'priceType' });
 
   return (
     <>
