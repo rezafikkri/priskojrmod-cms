@@ -1,5 +1,7 @@
 import { Language } from '@/constants/enums';
 import { Button } from './button';
+import { Alert, AlertTitle } from '../ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 /*
  * This is for check in other section has error or not
@@ -51,9 +53,15 @@ export default function FormLanguageToggle({
       </div>
       <p className="text-sm text-muted-foreground">Select a language to enter content.</p>
       {hasOtherSectionError({ errors, activeLang, fieldNames }) && (
-        <p className="text-destructive text-sm">
-          There are errors in the {activeLang === Language.ID ? 'English' : 'Indonesian'} section.
-        </p>
+        <Alert
+          variant="destructive"
+          className="border-destructive/50 text-base items-baseline mt-2.5"
+        >
+          <AlertCircle />
+          <AlertTitle className="line-clamp-0">
+            There are errors in the {activeLang === Language.ID ? 'English' : 'Indonesian'} section
+          </AlertTitle>
+        </Alert>
       )}
     </div>
   );
