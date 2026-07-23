@@ -58,6 +58,7 @@ export default function ExtrasForm({
     setVersionStatus = useProductFormStore(state => state.setVersionStatus);
     setReference = useProductFormStore(state => state.setReference);
   }
+
   const form = useForm({
     resolver: zodResolver(extrasSchema),
     defaultValues: extras,
@@ -144,24 +145,6 @@ export default function ExtrasForm({
   }
 
   async function handleProceed(data) {
-    let isError = false;
-    const variants = data.variants;
-    const variantCount = variants.length;
-
-    // do reverse loop for when error is many, then focus is for first input from top, not last input.
-    for (let i = variantCount; i--; i > 0) {
-      if (variants[i].downloadUrl && !variants[i].fileAccessPassword) {
-        form.setError(
-          `variants.${i}.fileAccessPassword`,
-          { message: 'Can\'t be empty' },
-          { shouldFocus: true },
-        );
-        isError = true;
-      }
-    }
-
-    if (isError) return;
-
     if (mode == 'edit' && basic.priceType === PriceType.FREE) {
       await handleSubmit(data);
     } else {

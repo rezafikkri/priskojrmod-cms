@@ -127,22 +127,6 @@ export default function PricingForm({
   }
 
   async function handleSubmit(data) {
-    // validate prices: if currencyCode = IDR, then only integer, if USD allow decimal
-    let isError = false;
-    let fieldNameToFocus = null;
-
-    data.prices.forEach((price, i) => {
-      price.currencies.forEach((currency, j) => {
-        if (currency.currencyCode === CurrencyCode.IDR && !Number.isInteger(currency.price)) {
-          const fieldName = `prices.${i}.currencies.${j}.price`;
-
-          if (!fieldNameToFocus) fieldNameToFocus = fieldName;
-          form.setError(fieldName, { message: 'Must not contain decimals' }, { shouldFocus: true });
-          isError = true;
-        }
-      });
-    });
-
     let product = {
       ...basic,
       ...content,
@@ -201,7 +185,7 @@ export default function PricingForm({
 
     if (saveRes.status === 'success') {
       if (mode === 'create') {
-        // reset step and form
+        // reset store, step and form
         clearDraft();
         onResetStep();
         toast.success('Product created successfully.');

@@ -22,11 +22,15 @@ import {
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { createProductBasicSchema, editProductBasicSchema } from '@/lib/validators/product-validator';
+import {
+  createProductBasicSchema,
+  editProductBasicSchema,
+  withDownloadUrlRefine,
+  withVersionRefine,
+} from '@/lib/validators/product-validator';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
 import { PriceType } from '@/constants/enums';
 import MainFileFields from './main-file-fields';
-import { isSemverFormat } from '@/lib/utils';
 import { APPLICATION_CATEGORY_SLUG } from '@/constants/categories';
 
 export default function BasicForm({
@@ -40,7 +44,6 @@ export default function BasicForm({
 }) {
   const { adminId, ...basic } = useProductFormStore(state => state.form.basic);
   const setBasic = useProductFormStore(state => state.setBasic);
-  const clearDraft = useProductFormStore(state => state.clearDraft);
   const defaultValues = {
     ...basic,
     categoryId: basic.categoryId.toString(),
@@ -70,42 +73,18 @@ export default function BasicForm({
     dbPriceType = useProductFormStore(state => state.reference.dbPriceType);
   }
 
+  const applicationCategory = categories.find((category) => category.slug === APPLICATION_CATEGORY_SLUG);
+  const applicationCategoryId = applicationCategory?.id ?? null;
+
+  basicSchema = withDownloadUrlRefine({ schema: basicSchema, applicationCategoryId });
+  basicSchema = withVersionRefine({ schema: basicSchema, applicationCategoryId });
+
   const form = useForm({
     resolver: zodResolver(basicSchema),
     defaultValues,
   });
 
-  const applicationCategory = categories.find((category) => category.slug === APPLICATION_CATEGORY_SLUG);
-  const applicationCategoryId = applicationCategory?.id ?? null;
-
   function handleNext(data) {
-    let isError = false;
-
-    if (data.categoryId === applicationCategoryId) {
-      if (!isSemverFormat(data.version)) {
-        form.setError(
-          'version',
-          { message: 'Must follow simplified semantic versioning' },
-          { shouldFocus: true },
-        );
-        isError = true;
-      }
-    }
-
-    // validate driveFileId, downloadUrl, and version
-    if (data.categoryId === applicationCategoryId || data.priceType === PriceType.FREE) {
-      if (data.downloadUrl === '') {
-        form.setError(
-          'downloadUrl',
-          { message: 'Can\'t be empty' },
-          { shouldFocus: true },
-        );
-        isError = true;
-      }
-    }
-
-    if (isError) return;
-
     onPricingStepVisibility(data.priceType);
     setBasic(data);
     onNextStep();
@@ -122,10 +101,6 @@ export default function BasicForm({
     }
 
     form.handleSubmit(handleNext)(e);
-  }
-
-  function clearProductDraft() {
-    clearDraft();
   }
 
   function handleVersionChange(version, fieldOnChange) {
@@ -366,10 +341,7 @@ export default function BasicForm({
         />
 
         <Button asChild variant="outline" className="me-3 mb-0 h-auto inline-block text-base px-3 py-1.5">
-          <Link
-            href="/product"
-            onNavigate={clearProductDraft}
-          >
+          <Link href="/product">
             <ArrowLeft className="icon" /> Back
           </Link>
         </Button>

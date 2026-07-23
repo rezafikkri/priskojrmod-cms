@@ -10,7 +10,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import FormLanguageToggle from '../ui/form-language-toggle';
 import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { createProductContentSchema, editProductContentSchema } from '@/lib/validators/product-validator';
+import {
+  createProductContentSchema,
+  editProductContentSchema,
+  withChangelogSuperRefine,
+} from '@/lib/validators/product-validator';
 import { useProductFormStore } from '@/lib/providers/product-form-store-provider';
 import { contentCustomSchema } from '@/lib/validators/base-validator';
 import { cmsConfig } from '@/config/cms';
@@ -35,10 +39,14 @@ export default function ContentForm({
   if (mode === 'create') {
     contentSchema = createProductContentSchema;
   } else {
-    contentSchema = editProductContentSchema;
+    dbVersion = useProductFormStore(state => state.reference.dbVersion);
+    contentSchema = withChangelogSuperRefine({
+      schema: editProductContentSchema,
+      version: basic.version,
+      dbVersion,
+    });
     setVersionStatus = useProductFormStore(state => state.setVersionStatus);
     versionStatus = useProductFormStore(state => state.meta.versionStatus);
-    dbVersion = useProductFormStore(state => state.reference.dbVersion);
     dbChangelog = useProductFormStore(state => state.reference.dbChangelog);
   }
 
@@ -49,24 +57,6 @@ export default function ContentForm({
   const errors = form.formState.errors;
 
   function handleNext(data) {
-    // validate changelog in edit mode
-    if (mode === 'edit' && basic.version !== dbVersion) {
-      const changelogIdResult = contentCustomSchema.safeParse(data.changelog.id);
-      const changelogEnResult = contentCustomSchema.safeParse(data.changelog.en);
-      let isError = false;
-
-      if (!changelogIdResult.success) {
-        form.setError(`changelog.${Language.ID}`, { message: 'Can\'t be empty' });
-        isError = true;
-      }
-      if (!changelogEnResult.success) {
-        form.setError(`changelog.${Language.EN}`, { message: 'Can\'t be empty' });
-        isError = true;
-      }
-
-      if (isError) return;
-    }
-
     setContent(data);
     onNextStep();
   }
