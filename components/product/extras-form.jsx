@@ -90,6 +90,11 @@ export default function ExtrasForm({
   } = useEditPendingTracker();
 
   function handleNext(data) {
+    data.variants = data.variants.map(variant => ({
+      ...variant,
+      ...(!variant.downloadUrl ? { fileAccessPassword: '' } : {}),
+    }));
+
     setExtras(data);
     onNextStep();
   }
@@ -103,6 +108,9 @@ export default function ExtrasForm({
 
     product.variants = data.variants.map(variant => {
       let newVariant = { ...variant };
+
+      if (!newVariant.downloadUrl) newVariant.fileAccessPassword = '';
+
       delete newVariant.id;
       return newVariant;
     });
@@ -154,6 +162,12 @@ export default function ExtrasForm({
 
   function handlePrev() {
     const data = form.getValues();
+
+    data.variants = data.variants.map(variant => ({
+      ...variant,
+      ...(!variant.downloadUrl ? { fileAccessPassword: '' } : {}),
+    }));
+
     setExtras(data);
     onPrevStep();
   }
