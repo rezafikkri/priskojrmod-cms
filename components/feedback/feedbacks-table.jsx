@@ -103,7 +103,7 @@ export default function FeedbacksTable() {
   const pullFeedbacksToastIdRef = useRef(null);
 
   // add readStatus filters
-  function addParamsToURL(url, { filters }) {
+  function addParamsToUrl(url, { filters }) {
     if (!filters) return url;
 
     let newUrl = url;
@@ -123,7 +123,7 @@ export default function FeedbacksTable() {
     queryKey: ['feedbacks', filters],
     queryFn: async ({ signal }) => {
       const results = await safeFetch({
-        url: addParamsToURL('/api/feedbacks', { filters }),
+        url: addParamsToUrl('/api/feedbacks', { filters }),
         signal,
       });
       return results?.data;

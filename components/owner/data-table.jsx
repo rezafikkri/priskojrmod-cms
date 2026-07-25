@@ -22,7 +22,7 @@ import {
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
-import { extractSMIdentifier, getTableHeaderWidth } from '@/lib/utils';
+import { extractSmIdentifier, getTableHeaderWidth } from '@/lib/utils';
 import { removeOwner } from '@/actions/owner-actions';
 import ProfileBadge from '../ui/profile-badge';
 import { cmsConfig } from '@/config/cms';
@@ -93,7 +93,7 @@ export default function DataTable({ owners: data }) {
           target="_blank"
           className="underline hover:no-underline"
         >
-          {extractSMIdentifier(row.getValue('smProfileUrl'))}
+          {extractSmIdentifier(row.getValue('smProfileUrl'))}
         </a>
       ),
     },

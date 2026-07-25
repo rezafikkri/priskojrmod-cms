@@ -142,7 +142,7 @@ export default function TransactionsTable() {
   const correctingTransactionStatusIdsRef = useRef(correctingTransactionStatusIds);
 
   // add status filters
-  function addParamsToURL(url, { filters, pagination, searchKey }) {
+  function addParamsToUrl(url, { filters, pagination, searchKey }) {
     let newUrl = url + `?pi=${pagination.pageIndex}`;
 
     // add search param to url
@@ -169,7 +169,7 @@ export default function TransactionsTable() {
     queryFn: async ({ signal }) => {
       try {
         const results = await safeFetch({
-          url: addParamsToURL('/api/transactions', { pagination, filters, searchKey }),
+          url: addParamsToUrl('/api/transactions', { pagination, filters, searchKey }),
           signal,
         });
         return results?.data;       

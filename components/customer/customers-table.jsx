@@ -118,7 +118,7 @@ export default function CustomersTable() {
   const updatingBanStatusIdsRef = useRef(updatingBanStatusIds);
 
   // add params to url
-  function addParamsToURL(url, { filters, searchKey, pagination }) {
+  function addParamsToUrl(url, { filters, searchKey, pagination }) {
     let newUrl = `${url}?sb=${filters.showBanned}&pi=${pagination.pageIndex}`;
 
     // add search param to url
@@ -141,7 +141,7 @@ export default function CustomersTable() {
     queryFn: async ({ signal }) => {
       try {
         const results = await safeFetch({
-          url: addParamsToURL('/api/customers', { filters, searchKey, pagination }),
+          url: addParamsToUrl('/api/customers', { filters, searchKey, pagination }),
           signal,
         });
         return results?.data;

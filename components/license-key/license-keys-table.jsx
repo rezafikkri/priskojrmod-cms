@@ -149,7 +149,7 @@ export default function LicenseKeysTable() {
   const grantRegenerateToastIdRef = useRef(null);
 
   // add filters and search params to url
-  function addParamsToURL(url, { filters, searchKey, pagination }) {
+  function addParamsToUrl(url, { filters, searchKey, pagination }) {
     // add filters params to url
     let newUrl = url + `?sr=${filters.showRevoked}&pi=${pagination.pageIndex}`;
 
@@ -177,7 +177,7 @@ export default function LicenseKeysTable() {
     queryFn: async ({ signal }) => {
       try {
         const results = await safeFetch({
-          url: addParamsToURL('/api/license-keys', { filters, searchKey, pagination }),
+          url: addParamsToUrl('/api/license-keys', { filters, searchKey, pagination }),
           signal,
         });
         return results?.data;

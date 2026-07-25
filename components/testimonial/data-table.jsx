@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/format-date';
-import { getTableHeaderWidth, extractSMIdentifier } from '@/lib/utils';
+import { getTableHeaderWidth, extractSmIdentifier } from '@/lib/utils';
 import ProfileBadge from '../ui/profile-badge';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import TableResultCount from '../ui/table-result-count';
@@ -52,7 +52,7 @@ export default function DataTable({ testimonials: data }) {
           target="_blank"
           className="underline hover:no-underline"
         >
-          {extractSMIdentifier(row.getValue('smProfileUrl'))}
+          {extractSmIdentifier(row.getValue('smProfileUrl'))}
         </a>
       ),
     },
