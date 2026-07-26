@@ -122,6 +122,7 @@ export default function DataTable({ owners: data }) {
               <button onClick={() => openDeleteDialog({
                 id: row.original.id,
                 name: row.getValue('name'),
+                smIdentifier: extractSmIdentifier(row.getValue('smProfileUrl')),
               })}>
                 Delete
               </button>
@@ -194,7 +195,7 @@ export default function DataTable({ owners: data }) {
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
         title="Delete Owner"
-        description={`Owner <b>${deleteData?.name}</b> will be permanently deleted.`}
+        description={`Owner <b>${deleteData?.name}</b> (${deleteData?.smIdentifier}) will be permanently deleted.`}
       />
     </>
   );

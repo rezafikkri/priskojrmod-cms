@@ -538,6 +538,7 @@ export default function CustomersTable() {
                     id: row.original.id,
                     isBanned: row.original.isBanned,
                     email: row.getValue('email'),
+                    name: row.getValue('name'),
                   });
                 } else {
                   handleEditBanStatus({
@@ -561,6 +562,7 @@ export default function CustomersTable() {
                 <button onClick={() => openDeleteDialog({
                   id: row.original.id,
                   email: row.getValue('email'),
+                  name: row.getValue('name'),
                   isBanned: row.original.isBanned,
                 })}>
                   Delete

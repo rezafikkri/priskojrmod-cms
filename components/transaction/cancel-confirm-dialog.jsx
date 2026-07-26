@@ -36,8 +36,10 @@ export default function CancelConfirmDialog({
       >
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl">Cancel Transaction</DialogTitle>
-          <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">  
-            Transaction <b>{cancelData?.transactionCode}</b>, owned by customer <b>{cancelData?.email}</b>, will be changed <b>from <span className="capitalize">{TransactionStatus.PENDING}</span> to <span className="capitalize">{TransactionStatus.CANCELLED}</span></b>.
+          <DialogDescription
+            className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold"
+          >
+            Transaction <b>{cancelData?.transactionCode}</b>, owned by customer <b>{cancelData?.name}</b> ({cancelData?.email}), will be changed <b>from <span className="capitalize">{TransactionStatus.PENDING}</span> to <span className="capitalize">{TransactionStatus.CANCELLED}</span></b>.
           </DialogDescription>
 
           <div>

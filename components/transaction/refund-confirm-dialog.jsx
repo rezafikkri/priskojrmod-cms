@@ -18,7 +18,7 @@ export default function RefundConfirmDialog({
   onRefundDataChange,
   refundData,
 }) {
-  let description = `Transaction <b>${refundData?.transactionCode}</b>, owned by customer <b>${refundData?.email}</b>, will have its status changed <b>from <span>${TransactionStatus.PAID}</span> to <span>${TransactionStatus.REFUND}</span></b>. However, the customer account`;
+  let description = `Transaction <b>${refundData?.transactionCode}</b>, owned by customer <b>${refundData?.name}</b> (${refundData?.email}), will have its status changed <b>from <span>${TransactionStatus.PAID}</span> to <span>${TransactionStatus.REFUND}</span></b>. However, the customer account`;
 
   if (!refundData?.customerId) {
     description += ' has been <b>deleted</b>.';

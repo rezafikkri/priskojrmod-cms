@@ -37,7 +37,7 @@ export default function BanDialog({
           <DialogTitle className="text-xl">Ban Customer</DialogTitle>
 
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            Customer <b className="break-all">{banData?.email}</b> will be banned.
+            Customer <b className="break-all">{banData?.name}</b> ({banData?.email}) will be banned.
           </DialogDescription>
 
           <DialogDescription className="text-base my-1.5 text-zinc-700 dark:text-zinc-300">

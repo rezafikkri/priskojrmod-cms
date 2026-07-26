@@ -766,8 +766,8 @@ export default function LicenseKeysTable() {
       enableHiding: false,
       cell: ({ row }) => (
         <TableTwoLineCell
-          primary={`${row.original.customer.firstName} ${row.original.customer.lastName}`}
-          secondary={row.original.customer.email}
+          primary={row.original.customerName}
+          secondary={row.original.customerEmail}
         />
       ),
     },
@@ -839,7 +839,8 @@ export default function LicenseKeysTable() {
             <DropdownMenuItem className="w-full text-base" asChild>
               <button onClick={() => openResetDeviceDialog({
                 id: row.original.id,
-                email: row.getValue('email'),
+                email: row.original.customerEmail,
+                name: row.original.customerName,
                 appName: row.getValue('appName'),
               })}>
                 Reset device
@@ -853,7 +854,8 @@ export default function LicenseKeysTable() {
           >
             <button onClick={() => openEditRevokeStatusDialog({
               id: row.original.id,
-              email: row.getValue('email'),
+              email: row.original.customerEmail,
+              name: row.original.customerName,
               appName: row.getValue('appName'),
               isRevoked: row.original.isRevoked,
             })}>
@@ -864,7 +866,8 @@ export default function LicenseKeysTable() {
           <DropdownMenuItem className="w-full text-base" asChild>
             <button onClick={() => openDeleteDialog({
               id: row.original.id,
-              email: row.getValue('email'),
+              email: row.original.customerEmail,
+              name: row.original.customerName,
               appName: row.getValue('appName'),
             })}>
               Delete

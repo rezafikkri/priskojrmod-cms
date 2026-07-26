@@ -789,6 +789,7 @@ export default function TransactionsTable() {
                           id: row.original.id,
                           transactionCode: row.getValue('code'),
                           email: row.original.customerEmail,
+                          name: row.original.customerName,
                         };
 
                         if (!row.original.customerId || row.original.customer.isBanned) {
@@ -804,6 +805,7 @@ export default function TransactionsTable() {
                           id: row.original.id,
                           transactionCode: row.getValue('code'),
                           email: row.original.customerEmail,
+                          name: row.original.customerName,
                         });
                       } else {
                         handleEditTransactionStatus({ id: row.original.id, status: cs });
@@ -826,6 +828,7 @@ export default function TransactionsTable() {
                   id: row.original.id,
                   transactionCode: row.getValue('code'),
                   email: row.original.customerEmail,
+                  name: row.original.customerName,
                   currentStatus: row.getValue('status'),
                 })}>
                   Correct status
@@ -861,6 +864,7 @@ export default function TransactionsTable() {
                   <button onClick={() => openRefundDeadlineDialog({
                     transactionCode: row.getValue('code'),
                     email: row.original.customerEmail,
+                    name: row.original.customerName,
                     paidAt: row.getValue('paidAt'),
                   })}>
                     Check refund deadline

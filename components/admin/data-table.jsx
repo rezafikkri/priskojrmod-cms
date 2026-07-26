@@ -109,6 +109,7 @@ export default function DataTable({ admins: data }) {
             <button onClick={() => openDeleteDialog({
               id: row.original.id,
               email: row.getValue('email'),
+              name: row.getValue('name'),
             })}>
               Delete
             </button>
@@ -180,7 +181,7 @@ export default function DataTable({ admins: data }) {
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
         title="Delete Admin"
-        description={`Admin <b>${deleteData?.email}</b> (role: Staff) will be permanently deleted.`}
+        description={`Admin <b>${deleteData?.name}</b> (${deleteData?.email}) will be permanently deleted.`}
       />
     </>
   );

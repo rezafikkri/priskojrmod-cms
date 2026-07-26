@@ -39,15 +39,21 @@ export default function RefundDeadlineDialog({
         <DialogHeader className="text-left min-w-0">
           <DialogTitle className="text-xl">Refund Deadline</DialogTitle>
           
-          <Table className="w-full text-base mt-1.5 text-zinc-700 dark:text-zinc-300 -mx-2 [&_b]:font-semibold">
+          <Table
+            className="w-full text-base mt-1.5 text-zinc-700 dark:text-zinc-300 -mx-2 [&_b]:font-semibold"
+          >
             <TableBody>
               <TableRow className="hover:bg-transparent border-0">
                 <TableHead className="font-normal">Transaction Code</TableHead>
                 <TableCell>{refundDeadlineData?.transactionCode}</TableCell>
               </TableRow>
               <TableRow className="hover:bg-transparent border-0">
-                <TableHead className="font-normal">Customer Email</TableHead>
-                <TableCell>{refundDeadlineData?.email}</TableCell>
+                <TableHead className="font-normal">Customer</TableHead>
+                <TableCell
+                  className="whitespace-normal"
+                >
+                  {refundDeadlineData?.name} ({refundDeadlineData?.email})
+                </TableCell>
               </TableRow>
               <TableRow className="hover:bg-transparent border-0">
                 <TableHead className="font-normal">Paid At</TableHead>

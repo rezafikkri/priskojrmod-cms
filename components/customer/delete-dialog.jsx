@@ -51,7 +51,7 @@ export default function DeleteDialog({
         <DialogHeader>
           <DialogTitle className="text-xl">Delete Customer</DialogTitle>
           <DialogDescription className="text-base mt-1.5 text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            Customer <b className="break-all">{targetEmail}</b> will be permanently deleted. 
+            Customer <b className="break-all">{deleteData?.name}</b> ({targetEmail}) will be permanently deleted. 
           </DialogDescription>
 
           {deleteData?.isBanned && (

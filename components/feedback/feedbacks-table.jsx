@@ -645,7 +645,7 @@ export default function FeedbacksTable() {
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
         title="Delete Feedback"
-        description={`Feedback (${Object.keys(rowSelection).length}) will be permanently deleted.`}
+        description={`<b>${Object.keys(rowSelection).length}</b> feedback will be permanently deleted.`}
       />
     </>
   );

@@ -25,10 +25,10 @@ export default function EditRevokeStatusDialog({
   let description;
   if (editRevokeStatusData?.isRevoked) {
     title = 'Unrevoke License Key';
-    description = `License key owned by customer <b>${editRevokeStatusData?.email}</b> for app <b>${editRevokeStatusData?.appName}</b> will be <b>unrevoked</b>. As a result, this license key can be used again to activate and access the application.`;
+    description = `License key owned by customer <b>${editRevokeStatusData?.name}</b> (${editRevokeStatusData?.email}) for app <b>${editRevokeStatusData?.appName}</b> will be <b>unrevoked</b>. As a result, this license key can be used again to activate and access the application.`;
   } else {
     title = 'Revoke License Key';
-    description = `License key owned by customer <b>${editRevokeStatusData?.email}</b> for app <b>${editRevokeStatusData?.appName}</b> will be <b>revoked</b>. As a result, this license key can no longer be used to activate or access the application.`;
+    description = `License key owned by customer <b>${editRevokeStatusData?.name}</b> (${editRevokeStatusData?.email}) for app <b>${editRevokeStatusData?.appName}</b> will be <b>revoked</b>. As a result, this license key can no longer be used to activate or access the application.`;
   }
 
   function handleClickOutside(e) {
