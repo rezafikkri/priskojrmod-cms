@@ -9,11 +9,11 @@ import {
 } from '@/components/ui/sheet';
 import DetailsSection from './details-section';
 import InfoSection from './info-section';
-import InvoicesSection from './invoices-section';
+import InvoiceSection from './invoice-section';
 import { useQuery } from '@tanstack/react-query';
 import InfoSectionSkeleton from './info-section-skeleton';
 import DetailsSectionSkeleton from './details-section-skeleton';
-import InvoicesSectionSkeleton from './invoices-section-skeleton';
+import InvoiceSectionSkeleton from './invoice-section-skeleton';
 import { safeFetch } from '@/lib/safe-fetch';
 import {
   Alert,
@@ -50,10 +50,10 @@ function DetailsContent({ isFetching, data, isError, error }) {
     }
   }
 
-  let details, invoices, info, parties;
+  let details, invoice, info, parties;
 
   if (!isFetching) {
-    ({ details, invoices, parties, ...info } = data);
+    ({ details, invoice, parties, ...info } = data);
   }
 
   return (
@@ -89,12 +89,12 @@ function DetailsContent({ isFetching, data, isError, error }) {
       </section>
 
       <section className="last:mb-7">
-        <h3 className="text-xl font-semibold">Invoices</h3>
+        <h3 className="text-xl font-semibold">Invoice</h3>
 
         {isFetching ? (
-          <InvoicesSectionSkeleton />
+          <InvoiceSectionSkeleton />
         ) : (
-          <InvoicesSection invoices={invoices} />
+          <InvoiceSection invoice={invoice} />
         )}
       </section>
 
@@ -102,7 +102,7 @@ function DetailsContent({ isFetching, data, isError, error }) {
         <section className="mb-7">
           <h3 className="text-xl font-semibold">Refund Note</h3>
 
-          <p className="mt-2 leading-7">{info.refundNote}</p>
+          <p className="mt-2.5 leading-7">{info.refundNote}</p>
         </section>
       )}
     </div>

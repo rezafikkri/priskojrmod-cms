@@ -438,25 +438,26 @@ model Transaction {
 
   customer Customer?           @relation(fields: [customerId], references: [id], onDelete: SetNull)
   details  TransactionDetail[]
-  invoices Invoice[]
+  invoice Invoice?
 
   @@map("transactions")
 }
 
 enum InvoiceStatus {
-  active
-  void
+  unpaid
+  paid
+  cancelled
+  refund
 
   @@map("invoice_status")
 }
 
 model Invoice {
   id            String        @id @default(uuid(7)) @db.Uuid
-  transactionId String        @map("transaction_id") @db.Uuid
+  transactionId String        @unique @map("transaction_id") @db.Uuid
   invoiceNumber String        @unique @map("invoice_number") @db.VarChar(32)
   status        InvoiceStatus
   issuedAt      Int           @map("issued_at")
-  voidedAt      Int?          @map("voided_at")
 
   transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
 

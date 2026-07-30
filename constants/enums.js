@@ -33,8 +33,10 @@ export const ShareMethod = Object.freeze({
 });
 
 export const InvoiceStatus = Object.freeze({
-  ACTIVE: 'active',
-  VOID: 'void',
+  UNPAID: 'unpaid',
+  PAID: 'paid',
+  CANCELLED: 'cancelled',
+  REFUND: 'refund',
 });
 
 export const UserRole = Object.freeze({

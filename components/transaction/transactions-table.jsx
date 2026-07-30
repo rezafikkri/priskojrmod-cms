@@ -294,7 +294,7 @@ export default function TransactionsTable() {
     };
     
     if (status === TransactionStatus.PAID) {
-      result.invoices = editData.invoices;
+      result.invoice = editData.invoice;
 
       if (editData.paidAt) {
         result.paidAt = editData.paidAt;
@@ -315,8 +315,10 @@ export default function TransactionsTable() {
       return newIds;
     });
     const toastId = toast.loading(`Changing status to ${status}...`);
+    let updateData  = { id, status };
+    if (refundNote) updateData.refundNote = refundNote;
 
-    const editRes = await editTransactionStatus({ id, status, refundNote });
+    const editRes = await editTransactionStatus(updateData);
 
     setUpdatingTransactionStatusIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);
@@ -471,7 +473,7 @@ export default function TransactionsTable() {
       updatedAt: editData.updatedAt,
     };
     if (newStatus === TransactionStatus.PAID) {
-      result.invoices = editData.invoices;
+      result.invoice = editData.invoice;
 
       if (editData.paidAt) {
         result.paidAt = editData.paidAt;
@@ -842,11 +844,11 @@ export default function TransactionsTable() {
             >
               <button>See details</button>
             </DropdownMenuItem>
-            {row.original.invoices.length > 0 && (
+            {row.original.invoice && (
               <DropdownMenuItem asChild className="text-base w-full py-2 hover:cursor-pointer">
                 <button
                   onClick={() =>
-                    window.open(`/invoice/${row.original.invoices[0].invoiceNumber}/pdf`, '_blank')
+                    window.open(`/invoice/${row.original.invoice.invoiceNumber}/pdf`, '_blank')
                   }
                 >
                   View invoice

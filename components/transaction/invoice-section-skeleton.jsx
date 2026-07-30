@@ -1,6 +1,6 @@
 import { Skeleton } from '../ui/skeleton';
 
-export default function InvoicesSectionSkeleton() {
+export default function InvoiceSectionSkeleton() {
   return (
     <div className="space-y-3 mt-2.5 mb-4">
       <div className="space-y-2">

@@ -4,6 +4,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { generateDocumentCode } from '../lib/generate-document-code';
 import 'dotenv/config';
 import { CurrencyCode } from '../constants/enums';
+import { getTotalAmount } from '../lib/pricing';
 
 /** @typedef {import('./generated/client').PrismaClient} PrismaClient */
 
@@ -97,36 +98,6 @@ export async function seedLicenseKeys(prisma, customers) {
   console.log(`✅ Seeded ${licenseKeys.length} license keys`);
 }
 
-function roundToTwoDecimals(value) {
-  return Math.round(value * 100) / 100;
-}
-
-function getSubtotal({ qty, price, currencyCode, discount, upgradeCouponDiscount }) {
-  let subtotal = price * qty;
-
-  if (discount) {
-    let discountAmount = subtotal * (discount / 100);
-    if (currencyCode === 'IDR') discountAmount = Math.round(discountAmount);
-    if (currencyCode === 'USD') discountAmount = roundToTwoDecimals(discountAmount);
-
-    subtotal -= discountAmount;
-  }
-
-  if (upgradeCouponDiscount) {
-    let upgradeCouponPrice = subtotal * (upgradeCouponDiscount / 100);
-    if (currencyCode === 'IDR') upgradeCouponPrice = Math.round(upgradeCouponPrice);
-    if (currencyCode === 'USD') upgradeCouponPrice = roundToTwoDecimals(upgradeCouponPrice);
-
-    subtotal -= upgradeCouponPrice;
-  }
-
-  if (currencyCode === 'USD') {
-    subtotal = roundToTwoDecimals(subtotal);
-  }
-
-  return subtotal;
-}
-
 function getTransactionDetails({
   max,
   products,
@@ -155,7 +126,7 @@ function getTransactionDetails({
 
       productVariant: selectedVariant.name,
       productCurrencyCode: selectedPrice.currencyCode,
-      productPrice: selectedPrice.price.toNumber(),
+      productPrice: selectedPrice.price,
     };
 
     if (selectedVariant.downloadUrl) detail.variantDownloadUrl = selectedVariant.downloadUrl;
@@ -230,24 +201,7 @@ export async function seedTransactions(prisma, count) {
       status: 'pending',
       code: generateDocumentCode('TRX'),
       currencyCode: transactionDetails[0].productCurrencyCode,
-      totalAmount: transactionDetails
-        .reduce((total, detail) => {
-          const {
-            qty,
-            productPrice: price,
-            productDiscount: discount = 0,
-            productUpgradeCouponDiscount: upgradeCouponDiscount = 0,
-            productCurrencyCode: currencyCode,
-          } = detail;
-          const subtotal = getSubtotal({
-            qty,
-            price,
-            currencyCode,
-            discount,
-            upgradeCouponDiscount,
-          });
-          return total + subtotal;
-        }, 0),
+      totalAmount: getTotalAmount(transactionDetails),
       customerName: selectedCustomer.firstName + ' ' + selectedCustomer.lastName,
       customerEmail: selectedCustomer.email,
       customerPhoneNumber: selectedCustomer.phoneNumber,
