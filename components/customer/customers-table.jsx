@@ -325,7 +325,7 @@ export default function CustomersTable() {
           queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
         }
       } else {
-        queryClient.invalidateQueries({ queryKey: ['customers'] });
+        queryClient.invalidateQueries({ queryKey: ['customers'], refetchType: 'none' });
       }
 
       queryClient.invalidateQueries({ queryKey: ['customersAutocomplete'] });

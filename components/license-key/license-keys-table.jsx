@@ -594,7 +594,7 @@ export default function LicenseKeysTable() {
           queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });         
         }
       } else {
-        queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+        queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
       }
 
       // if id exist in rowSelection then remove
