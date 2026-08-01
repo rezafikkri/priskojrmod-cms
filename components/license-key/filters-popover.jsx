@@ -95,7 +95,7 @@ export default function FiltersPopover({
         <div className="space-y-2 flex items-start gap-4"> 
           <div className="flex-1"> 
             <Label className="text-base mb-1.5">App name</Label> 
-            <p className="text-muted-foreground text-sm">Filter by secret key app name.</p> 
+            <p className="text-muted-foreground text-sm">Filter by secret key app name</p> 
           </div> 
           <Select
             value={secretKeyId}
@@ -112,10 +112,7 @@ export default function FiltersPopover({
                 </span>
               )}
             </div> 
-            <SelectContent
-              onCloseAutoFocus={(e) => e.preventDefault()}
-              className="max-w-xs"
-            > 
+            <SelectContent className="max-w-xs"> 
               {error && (
                 <>
                   <div className="text-destructive px-2 py-1.5">{error.message}</div>
@@ -134,7 +131,7 @@ export default function FiltersPopover({
         <div className="space-y-2 flex items-start gap-4"> 
           <div className="flex-1"> 
             <Label className="text-base mb-1.5">Revoked</Label> 
-            <p className="text-muted-foreground text-sm">Filter by revoked condition.</p> 
+            <p className="text-muted-foreground text-sm">Filter by revoked condition</p> 
           </div> 
           <Select
             value={showRevoked}

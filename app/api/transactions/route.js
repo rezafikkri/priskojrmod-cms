@@ -6,15 +6,12 @@ export async function GET(req) {
   const pageIndex = parseInt(searchParams.get('pi'));
   const searchKey = searchParams.get('sk');
   const transactionStatus = searchParams.get('ts');
+  const adminId = searchParams.get('ai');
 
   let filters;
-  if (transactionStatus) {
-    filters = { status: transactionStatus }
-  }
-
-  if (searchKey) {
-    filters = { searchKey, ...filters };
-  }
+  if (transactionStatus) filters = { status: transactionStatus };
+  if (adminId) filters = { adminId, ...filters };
+  if (searchKey) filters = { searchKey, ...filters };
 
   try {
     let dataResponse;

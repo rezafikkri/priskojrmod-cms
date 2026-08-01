@@ -149,9 +149,11 @@ export default function TransactionsTable() {
     if (searchKey) {
       newUrl += `&sk=${searchKey}`;
     }
-    
     if (filters?.status && filters.status !== 'all') {
       newUrl += `&ts=${filters.status}`;
+    }
+    if (filters?.adminId && filters.adminId !== 'all') {
+      newUrl += `&ai=${filters.adminId}`;
     }
 
     return newUrl;
@@ -701,6 +703,7 @@ export default function TransactionsTable() {
           </TooltipWrapper>
         </>
       ),
+      // Not replaced with "Myself": this is a historical snapshot, not live admin data.
       cell: ({ row }) => (
         <TableTwoLineCell
           primary={row.original.adminName}

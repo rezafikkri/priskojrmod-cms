@@ -9,8 +9,10 @@ import FormFields from './form-fields';
 import { editAdmin, removeDonationLink } from '@/actions/admin-actions';
 import { generateDonationLinkValues } from '@/lib/utils';
 import { cmsConfig } from '@/config/cms';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function EditForm({ admin }) {
+  const queryClient = useQueryClient();
   const form = useForm({
     resolver: zodResolver(editAdminSchema),
     defaultValues: {
@@ -63,6 +65,9 @@ export default function EditForm({ admin }) {
       ) {
         form.setValue('donationLinks', generateDonationLinkValues(editRes.data.donationLinks ?? []));
       }
+
+      queryClient.invalidateQueries({ queryKey: ['adminOptions'] });
+
       toast.success('Admin updated successfully.');
     } else {
       toast.error(res.message, { duration: cmsConfig.toast.duration.error });

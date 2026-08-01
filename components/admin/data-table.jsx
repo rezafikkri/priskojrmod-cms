@@ -30,10 +30,12 @@ import { cmsConfig } from '@/config/cms';
 import { useDialog } from '@/hooks/use-dialog';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import TableResultCount from '../ui/table-result-count';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function DataTable({ admins: data }) {
   const [admins, setAdmins] = useState(data);
   const [deletingIds, setDeletingIds] = useState([]);
+  const queryClient = useQueryClient();
 
   // dialog state
   const {
@@ -56,6 +58,9 @@ export default function DataTable({ admins: data }) {
 
     if (removeRes.status === 'success') {
       setAdmins((prevAdmins) => prevAdmins.filter(admin => admin.id !== id));
+
+      queryClient.invalidateQueries({ queryKey: ['adminOptions'] });
+
       toast.success('Admin deleted successfully.', {
         id: toastId,
       });

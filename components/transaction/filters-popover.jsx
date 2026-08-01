@@ -7,6 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectSeparator,
 } from '../ui/select';
 import {
   Popover,
@@ -16,21 +17,56 @@ import {
 import { Label } from '../ui/label';
 import { Filter } from 'lucide-react';
 import { Button } from '../ui/button';
-import { X } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { PopoverClose } from '@radix-ui/react-popover';
+import { useQueryClient } from '@tanstack/react-query';
+import { safeFetch } from '@/lib/safe-fetch';
 
 export default function FiltersPopover({
   onFilter,
   filters,
   disabled,
 }) {
+  const queryClient = useQueryClient();
   const [status, setStatus] = useState('all');
+
+  // admin id state
+  const [isLoading, setIsLoading] = useState(false);
+  const [adminId, setAdminId] = useState('all');
+  const [error, setError] = useState(null);
+  const [admins, setAdmins] = useState([]);
 
   function handleClear() {
     setStatus('all');
     onFilter(null);
   }
+
+  // handler for select admin onOpenChange event
+  async function handleOpenChange(open) {
+    if (open) {
+      setIsLoading(true);
+      try {
+        const result = await queryClient.fetchQuery({
+          queryKey: ['adminOptions'],
+          queryFn: async () => {
+            const results = await safeFetch({
+              url: '/api/admins/options',
+            });
+            return results.data;
+          },
+          staleTime: 1000 * 60 * 60,
+        }); 
+
+        setError(null);
+        setAdmins(result);
+      } catch (err) {
+        setError(err);
+      }
+      setIsLoading(false);
+    }
+  }
+
 
   return (
     <Popover>
@@ -75,6 +111,44 @@ export default function FiltersPopover({
             </SelectContent> 
           </Select> 
         </div> 
+
+        <div className="space-y-2 flex items-start gap-4">
+          <div className="flex-1">
+            <Label className="text-base mb-1.5">Admin</Label>
+            <p className="text-muted-foreground text-sm">Filter by admin</p>
+          </div>
+          <Select
+            value={adminId}
+            onOpenChange={handleOpenChange}
+            onValueChange={(value) => setAdminId(value)}
+          >
+            <div className="relative">
+              <SelectTrigger className="shadow-none text-base h-auto! px-3 py-1.5 w-30 min-h-9.5">
+                <SelectValue />
+              </SelectTrigger>
+              {isLoading && (
+                <span className="absolute right-1.5 bg-popover top-1 bottom-1 flex items-center px-1.5">
+                  <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                </span>
+              )}
+            </div>
+            <SelectContent className="max-w-xs md:max-w-md">
+              {error && (
+                <>
+                  <div className="text-destructive px-2 py-1.5">{error.message}</div>
+                  <SelectSeparator />
+                </>
+              )}
+              <SelectItem className="text-base" value="all">All</SelectItem>
+              {admins.map(admin => (
+                <SelectItem className="text-base" value={admin.id} key={admin.id}>
+                  {admin.displayLabel}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         <div className="space-x-3 mt-6 flex"> 
           {filters && ( 
             <PopoverClose asChild>
@@ -90,8 +164,8 @@ export default function FiltersPopover({
           <PopoverClose asChild>
             <Button 
               className="text-base px-3 py-1.5 h-auto border border-primary" 
-              onClick={() => onFilter({ status })} 
-              disabled={status === 'all'}
+              onClick={() => onFilter({ status, adminId })} 
+              disabled={status === 'all' && adminId === 'all'}
             > 
               Apply 
             </Button>
