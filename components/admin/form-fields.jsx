@@ -49,7 +49,7 @@ export default function FormFields({
         ) : (
           <FormItem>
             <FormLabel className="text-base">Email</FormLabel>
-            <p>{form.getValues('email')}</p>
+            <p className="break-all">{form.getValues('email')}</p>
           </FormItem>
         )}
 

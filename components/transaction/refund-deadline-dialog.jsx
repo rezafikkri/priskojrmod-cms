@@ -52,7 +52,7 @@ export default function RefundDeadlineDialog({
                 <TableCell
                   className="whitespace-normal"
                 >
-                  {refundDeadlineData?.name} ({refundDeadlineData?.email})
+                  {refundDeadlineData?.name} <span className="break-all">({refundDeadlineData?.email})</span>
                 </TableCell>
               </TableRow>
               <TableRow className="hover:bg-transparent border-0">
@@ -62,7 +62,9 @@ export default function RefundDeadlineDialog({
                 </TableCell>
               </TableRow>
               <TableRow className="hover:bg-transparent border-0">
-                <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">Refund Deadline</TableHead>
+                <TableHead className="font-normal text-zinc-700 dark:text-zinc-300">
+                  Refund Deadline
+                </TableHead>
                 <TableCell>
                   <b>{formatDateTime(refundDeadline)}</b>
                 </TableCell>

@@ -186,7 +186,7 @@ export default function DataTable({ admins: data }) {
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
         title="Delete Admin"
-        description={`Admin <b>${deleteData?.name}</b> (${deleteData?.email}) will be permanently deleted.`}
+        description={`Admin <b>${deleteData?.name}</b> <span class="break-all">(${deleteData?.email})</span> will be permanently deleted.`}
       />
     </>
   );

@@ -32,12 +32,14 @@ export default function DetailDialog({
               <DialogTitle className="font-semibold text-zinc-800 dark:text-zinc-200 text-lg leading-3">
                 {detailData.name}
               </DialogTitle>
-              <div className="text-sm text-zinc-700 dark:text-zinc-300/90">
+              <div className="text-sm text-zinc-700 dark:text-zinc-300/90 break-all">
                 {detailData.email}
               </div>
             </>
           ) : detailData?.name || detailData?.email ? (
-            <DialogTitle className="font-semibold text-zinc-800 dark:text-zinc-200 text-lg leading-3">
+            <DialogTitle
+              className="font-semibold text-zinc-800 dark:text-zinc-200 text-lg leading-4 break-all pe-2"
+            >
               {detailData.name ?? detailData.email}
             </DialogTitle>
           ) : (

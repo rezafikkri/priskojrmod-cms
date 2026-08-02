@@ -53,13 +53,15 @@ export function NavUser() {
                 />
                 <div className="min-w-0 flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold block">{name}</span>
-                  <span className="truncate text-xs block text-zinc-600 dark:text-zinc-400">{email}</span>
+                  <span
+                    className="truncate text-xs block text-zinc-600 dark:text-zinc-400"
+                  >{email}</span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+              className="w-[--radix-dropdown-menu-trigger-width] min-w-56 max-w-xs md:max-w-md rounded-lg"
               side={isMobile ? "bottom" : "right"}
               align="end"
               sideOffset={4}
@@ -75,7 +77,9 @@ export function NavUser() {
                   />
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{name}</span>
-                    <span className="truncate text-xs text-zinc-600 dark:text-zinc-400">{email}</span>
+                    <span
+                      className="truncate text-xs text-zinc-600 dark:text-zinc-400"
+                    >{email}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>

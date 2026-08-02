@@ -80,7 +80,7 @@ export default function CorrectStatusDialog({
         <DialogHeader>
           <DialogTitle className="text-xl">Correct Transaction Status</DialogTitle>
           <DialogDescription className="mt-1.5 text-base text-zinc-700 dark:text-zinc-300 [&_b]:font-semibold">
-            Transaction <b>{targetTransactionCode}</b>, owned by customer <b>{correctData?.name}</b> ({targetEmail}), will be corrected <b>from <span className="capitalize">{currentStatus}</span> to <span className="capitalize">{newStatus}</span></b>.
+            Transaction <b>{targetTransactionCode}</b>, owned by customer <b>{correctData?.name}</b> <span className="break-all">({targetEmail})</span>, will be corrected <b>from <span className="capitalize">{currentStatus}</span> to <span className="capitalize">{newStatus}</span></b>.
           </DialogDescription>
 
           <DialogDescription
