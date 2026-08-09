@@ -8,6 +8,7 @@ import FormFields from './form-fields';
 import { createLicenseSchema } from '@/lib/validators/license-validator';
 import { addLicense } from '@/actions/license-actions';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function CreateForm() {
   const form = useForm({
@@ -27,7 +28,7 @@ export default function CreateForm() {
   const isResetEditor = useRef(false);
 
   async function handleSubmit(data) {
-    const addRes = await addLicense(data);
+    const addRes = await callAction(() => addLicense(data));
     if (addRes.status === 'success') {
       isResetEditor.current = true;
       form.reset();

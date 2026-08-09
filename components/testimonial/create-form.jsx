@@ -8,6 +8,7 @@ import { useRef } from 'react';
 import { addTestimonial } from '@/actions/testimonial-actions';
 import { toast } from 'sonner';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function CreateForm() {
   const form = useForm({
@@ -26,7 +27,7 @@ export default function CreateForm() {
   const isResetEditor = useRef(false);
 
   async function handleSubmit(data) {
-    const addRes = await addTestimonial(data);
+    const addRes = await callAction(() => addTestimonial(data));
     if (addRes.status === 'success') {
       isResetEditor.current = true;
       form.reset();

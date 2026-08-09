@@ -8,6 +8,7 @@ import { addFaq } from '@/actions/faq-actions';
 import { toast } from 'sonner';
 import FormFields from './form-fields';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function CreateForm() {
   const form = useForm({
@@ -27,7 +28,7 @@ export default function CreateForm() {
   const isResetEditor = useRef(false);
 
   async function handleSubmit(data) {
-    const addRes = await addFaq(data);
+    const addRes = await callAction(() => addFaq(data));
     if (addRes.status === 'success') {
       isResetEditor.current = true;
       form.reset();

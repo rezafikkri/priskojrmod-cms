@@ -31,6 +31,7 @@ import DeleteDialog from '../ui/delete-dialog';
 import { useDialog } from '@/hooks/use-dialog';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import TableResultCount from '../ui/table-result-count';
+import { callAction } from '@/lib/call-action';
 
 export default function DataTable({ licenses: data }) {
   const [licenses, setLicenses] = useState(data);
@@ -50,7 +51,7 @@ export default function DataTable({ licenses: data }) {
     // show loading
     const toastId = toast.loading('Deleting license...');
 
-    const removeRes = await removeLicense(id);
+    const removeRes = await callAction(() => removeLicense(id));
 
     setDeletingIds((prevDeletingIds) =>
       prevDeletingIds.filter((deletingId) => deletingId !== id)

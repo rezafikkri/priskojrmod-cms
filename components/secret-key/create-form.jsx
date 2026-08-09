@@ -32,6 +32,7 @@ import random32Bytes from '@/actions/random-32-bytes-actions';
 import { addSecretKey } from '@/actions/secret-key-actions';
 import { cmsConfig } from '@/config/cms';
 import { useQueryClient } from '@tanstack/react-query';
+import { callAction } from '@/lib/call-action';
 
 export default function CreateForm({ products: data }) {
   const queryClient = useQueryClient();
@@ -47,7 +48,7 @@ export default function CreateForm({ products: data }) {
   const [loadingKey, setLoadingKey] = useState(false);
 
   async function handleSubmit(data) {
-    const addRes = await addSecretKey(data);
+    const addRes = await callAction(() => addSecretKey(data));
     if (addRes.status === 'success') {
       form.reset();
       // filter product when success, cause the app already have secret-key "one-to-one"

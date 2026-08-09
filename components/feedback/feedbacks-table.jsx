@@ -41,6 +41,7 @@ import TableActionDropdown from '../ui/table-action-dropdown';
 import TableSkeleton from '../loadings/table-skeleton';
 import TableResultCount from '../ui/table-result-count';
 import TableTwoLineCell from '../ui/table-two-line-cell';
+import { callAction } from '@/lib/call-action';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -196,7 +197,7 @@ export default function FeedbacksTable() {
     const toastId = toast.loading('Pulling new feedback...');
     setIsPulling(true);
 
-    const loadRes = await loadFeedbacks();
+    const loadRes = await callAction(() => loadFeedbacks());
 
     if (loadRes.status === 'success') {
       if (loadRes.data.count > 0) {
@@ -249,7 +250,7 @@ export default function FeedbacksTable() {
     const toastId = toast.loading('Deleting feedback...');
     setIsDeleting(true);
 
-    const removeRes = await removeFeedbacks(ids);
+    const removeRes = await callAction(() => removeFeedbacks(ids));
 
     if (removeRes.status === 'success') {
       let refreshFailed = false;
@@ -357,7 +358,7 @@ export default function FeedbacksTable() {
       );
     }
 
-    const editRes = await editFeedbackReadStatus(id, true);
+    const editRes = await callAction(() => editFeedbackReadStatus(id, true));
 
     if (editRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['feedbacks'], refetchType: 'none' });
@@ -407,7 +408,7 @@ export default function FeedbacksTable() {
     });
     const toastId = toast.loading('Marking feedback as read...');
 
-    const editRes = await editFeedbackReadStatus(id, true);
+    const editRes = await callAction(() => editFeedbackReadStatus(id, true));
 
     setMarkingAsReadIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);

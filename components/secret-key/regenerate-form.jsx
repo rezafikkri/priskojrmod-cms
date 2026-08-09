@@ -21,6 +21,7 @@ import { regenerateSecretKeySchema } from '@/lib/validators/secret-key-validator
 import { toast } from 'sonner';
 import { applyRegeneratedSecretKey } from '@/actions/secret-key-actions';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function RegenerateForm({ secretKey }) {
   const [oldKey, setOldKey] = useState(secretKey.key);
@@ -35,7 +36,7 @@ export default function RegenerateForm({ secretKey }) {
   const [loadingKey, setLoadingKey] = useState(false);
 
   async function handleSubmit(data) {
-    const applyRes = await applyRegeneratedSecretKey(data);
+    const applyRes = await callAction(() => applyRegeneratedSecretKey(data));
     form.reset();
     if (applyRes.status === 'success') {
       setOldKey(applyRes.data.key);

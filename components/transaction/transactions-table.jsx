@@ -51,6 +51,7 @@ import TableActionDropdown from '../ui/table-action-dropdown';
 import { changeToLastValidPage } from '@/lib/data-table';
 import TableTwoLineCell from '../ui/table-two-line-cell';
 import HelpIcon from '../icon/help-icon';
+import { callAction } from '@/lib/call-action';
 
 const defaultColumnVisibility = {
   admin: true,
@@ -320,7 +321,7 @@ export default function TransactionsTable() {
     let updateData  = { id, status };
     if (refundNote) updateData.refundNote = refundNote;
 
-    const editRes = await editTransactionStatus(updateData);
+    const editRes = await callAction(() => editTransactionStatus(updateData));
 
     setUpdatingTransactionStatusIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);
@@ -462,7 +463,7 @@ export default function TransactionsTable() {
   const handleCopyableMessage = useCallback(async (id) => {
     const toastId = toast.loading('Preparing the message...');
 
-    const prepareRes = await prepareConfirmationMessage(id);
+    const prepareRes = await callAction(() => prepareConfirmationMessage(id));
     navigator.clipboard.writeText(prepareRes.data.message);
 
     toast.success('Message copied to clipboard.', { id: toastId });
@@ -503,7 +504,7 @@ export default function TransactionsTable() {
       return newIds;
     });
 
-    const fixRes = await fixTransactionStatus({ id, status: newStatus });
+    const fixRes = await callAction(() => fixTransactionStatus({ id, status: newStatus }));
 
     setCorrectingTransactionStatusIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);

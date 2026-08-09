@@ -9,6 +9,7 @@ import { addOwner } from '@/actions/owner-actions';
 import { Button } from '../ui/button';
 import { useSession } from 'next-auth/react';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function CreateForm() { 
   const { data: session } = useSession();
@@ -24,7 +25,7 @@ export default function CreateForm() {
   const isSubmitting = form.formState.isSubmitting;
 
   async function handleSubmit(data) {
-    const addRes = await addOwner(data);
+    const addRes = await callAction(() => addOwner(data));
     if (addRes.status === 'success') {
       form.reset();
       toast.success('Owner created successfully.');

@@ -8,6 +8,7 @@ import { createCustomerSchema } from '@/lib/validators/customer-validator';
 import { addCustomer } from '@/actions/customer-actions';
 import { useQueryClient } from '@tanstack/react-query';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function CreateForm() {
   const queryClient = useQueryClient();
@@ -22,7 +23,7 @@ export default function CreateForm() {
   });
 
   async function handleSubmit(data) {
-    const addRes = await addCustomer(data);
+    const addRes = await callAction(() => addCustomer(data));
     if (addRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['customers'] });
       queryClient.invalidateQueries({ queryKey: ['customersAutocomplete'] });

@@ -27,6 +27,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { cmsConfig } from '@/config/cms';
 import UpgradeCouponFormSection from './upgrade-coupon-form-section';
 import DiscountFormSection from './discount-form-section';
+import { callAction } from '@/lib/call-action';
 
 export default function PricingForm({
   onPrevStep,
@@ -178,9 +179,9 @@ export default function PricingForm({
 
     let saveRes;
     if (mode === 'create') {
-      saveRes = await addProduct(product);
+      saveRes = await callAction(() => addProduct(product));
     } else {
-      saveRes = await editProduct(product);
+      saveRes = await callAction(() => editProduct(product));
     }
 
     if (saveRes.status === 'success') {

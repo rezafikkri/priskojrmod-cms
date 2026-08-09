@@ -27,6 +27,7 @@ import { addLicenseKey } from '@/actions/license-key-actions';
 import { useQueryClient } from '@tanstack/react-query';
 import CustomerCombobox from './customer-combobox';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function CreateForm({ secretKeys }) {
   // Get QueryClient from the context
@@ -43,7 +44,7 @@ export default function CreateForm({ secretKeys }) {
   const isSubmitting = form.formState.isSubmitting;
 
   async function handleSubmit(data) {
-    const addRes = await addLicenseKey(data);
+    const addRes = await callAction(() => addLicenseKey(data));
     if (addRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
       form.reset();

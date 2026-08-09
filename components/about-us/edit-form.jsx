@@ -24,6 +24,7 @@ import { Language } from '@/constants/enums';
 import { cmsConfig } from '@/config/cms';
 import PhoneNumberFields from '../ui/phone-number-fields';
 import { Badge } from '@/components/ui/badge';
+import { callAction } from '@/lib/call-action';
 
 function OfficeHoursInput({ activeLang, field, isSubmitting }) {
   return (
@@ -89,8 +90,8 @@ export default function EditForm({ aboutUs }) {
 
   async function handleSubmit(data) {
     const saveRes = hasAboutUs
-      ? await editAboutUs(data)
-      : await addAboutUs(data);
+      ? await callAction(() => editAboutUs(data))
+      : await callAction(() => addAboutUs(data));
 
     if (saveRes.status === 'success') {
       let successMessage;

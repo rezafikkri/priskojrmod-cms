@@ -7,6 +7,7 @@ import FormFields from './form-fields';
 import { editLicenseSchema } from '@/lib/validators/license-validator';
 import { editLicense } from '@/actions/license-actions';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ license }) {
   const form = useForm({
@@ -29,7 +30,7 @@ export default function EditForm({ license }) {
   });
 
   async function handleSubmit(data) {
-    const editRes = await editLicense(data);
+    const editRes = await callAction(() => editLicense(data));
     if (editRes.status === 'success') {
       toast.success('License updated successfully.');
     } else {

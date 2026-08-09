@@ -10,6 +10,7 @@ import { editAdmin, removeDonationLink } from '@/actions/admin-actions';
 import { generateDonationLinkValues } from '@/lib/utils';
 import { cmsConfig } from '@/config/cms';
 import { useQueryClient } from '@tanstack/react-query';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ admin }) {
   const queryClient = useQueryClient();
@@ -37,7 +38,7 @@ export default function EditForm({ admin }) {
   async function handleDeleteDonationLink(id) {
     setDeletingDonationLinkIds(prevIds => [...prevIds, id]);
 
-    const removeRes = await removeDonationLink(id, admin.id);
+    const removeRes = await callAction(() => removeDonationLink(id, admin.id));
 
     setDeletingDonationLinkIds(prevIds => prevIds.filter(prevId => prevId !== id));
 
@@ -57,7 +58,7 @@ export default function EditForm({ admin }) {
   }
 
   async function handleSubmit(data) {
-    const editRes = await editAdmin(data);
+    const editRes = await callAction(() => editAdmin(data));
     if (editRes.status === 'success') {
       if (
         editRes.data.donationLinks ||

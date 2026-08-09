@@ -30,6 +30,7 @@ import DeleteDialog from '../ui/delete-dialog';
 import { useDialog } from '@/hooks/use-dialog';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import TableResultCount from '../ui/table-result-count';
+import { callAction } from '@/lib/call-action';
 
 export default function DataTable({ categories: data }) {
   const [categories, setCategories] = useState(data);
@@ -48,7 +49,7 @@ export default function DataTable({ categories: data }) {
     // show loading
     const toastId = toast.loading('Deleting category...');
     
-    const removeRes = await removeCategory(id);
+    const removeRes = await callAction(() => removeCategory(id));
 
     setDeletingIds((prevIds) =>
       prevIds.filter((prevId) => prevId !== id)

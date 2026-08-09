@@ -53,6 +53,7 @@ import { useFetchAction } from '@/hooks/use-fetch-action';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import { changeToLastValidPage } from '@/lib/data-table';
 import TableTwoLineCell from '../ui/table-two-line-cell';
+import { callAction } from '@/lib/call-action';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -348,7 +349,7 @@ export default function LicenseKeysTable() {
       return newIds;
     });
 
-    const removeRes = await removeLicenseKey(id);
+    const removeRes = await callAction(() => removeLicenseKey(id));
 
     setDeletingIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);
@@ -451,7 +452,7 @@ export default function LicenseKeysTable() {
     // show loading
     const toastId = toast.loading('Enabling regeneration...');
 
-    const setCanRegenerateRes = await setCanRegenerateKeys(rowSelections);
+    const setCanRegenerateRes = await callAction(() => setCanRegenerateKeys(rowSelections));
 
     if (setCanRegenerateRes.status === 'success') {
       // get lastPageIndex before refreshing
@@ -537,7 +538,7 @@ export default function LicenseKeysTable() {
       return newIds;
     });
 
-    const editRes = await editLicenseKeyRevokeStatus(id, !isRevoked);
+    const editRes = await callAction(() => editLicenseKeyRevokeStatus(id, !isRevoked));
 
     setUpdatingRevokeStatusIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);
@@ -647,7 +648,7 @@ export default function LicenseKeysTable() {
       return newIds;
     });
 
-    const releaseRes = await releaseDevice(id);
+    const releaseRes = await callAction(() => releaseDevice(id));
 
     setResetDeviceIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);

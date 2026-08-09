@@ -24,6 +24,7 @@ import { removeProductDiscount } from '@/actions/product-actions';
 import { cmsConfig } from '@/config/cms';
 import { Alert, AlertTitle } from '../ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { callAction } from '@/lib/call-action';
 
 export default function DiscountFormSection({
   form,
@@ -47,7 +48,7 @@ export default function DiscountFormSection({
       // set pending state for disabled prev next button and show loading
       onIncrementPending();
       setIsDeleting(true);
-      const removeRes = await removeProductDiscount(discount.id, productId);
+      const removeRes = await callAction(() => removeProductDiscount(discount.id, productId));
 
       if (removeRes.status === 'success') {
         form.clearErrors('discount');

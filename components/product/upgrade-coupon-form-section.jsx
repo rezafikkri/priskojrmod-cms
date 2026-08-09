@@ -28,6 +28,7 @@ import {
   Alert,
   AlertTitle,
 } from '../ui/alert';
+import { callAction } from '@/lib/call-action';
 
 export default function UpgradeCouponFormSection({
   form,
@@ -52,7 +53,7 @@ export default function UpgradeCouponFormSection({
       // set pending state for disabled prev next button and show loading
       onIncrementPending();
       setIsDeleting(true);
-      const removeRes = await removeProductUpgradeCoupon(upgradeCoupon.id, basic.id);
+      const removeRes = await callAction(() => removeProductUpgradeCoupon(upgradeCoupon.id, basic.id));
 
       if (removeRes.status === 'success') {
         form.clearErrors('upgradeCoupon');

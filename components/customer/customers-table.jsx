@@ -41,6 +41,7 @@ import { useStableTopLoader } from '@/hooks/use-stable-top-loader';
 import { useFetchAction } from '@/hooks/use-fetch-action';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import { changeToLastValidPage } from '@/lib/data-table';
+import { callAction } from '@/lib/call-action';
 
 const defaultColumnVisibility = {
   phoneNumber: false,
@@ -269,7 +270,7 @@ export default function CustomersTable() {
       return newIds;
     });
 
-    const editRes = await editCustomerBanStatus(id, nextIsBanned);
+    const editRes = await callAction(() => editCustomerBanStatus(id, nextIsBanned));
 
     setUpdatingBanStatusIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);
@@ -368,7 +369,7 @@ export default function CustomersTable() {
       return newIds;
     });
 
-    const removeRes = await removeCustomer(id);
+    const removeRes = await callAction(() => removeCustomer(id));
 
     setDeletingIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);

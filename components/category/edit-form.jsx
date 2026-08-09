@@ -7,6 +7,7 @@ import { categorySchema } from '@/lib/validators/category-validator';
 import { editCategory } from '@/actions/category-actions';
 import FormFields from './form-fields';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ category }) {
   const form = useForm({
@@ -18,7 +19,7 @@ export default function EditForm({ category }) {
   });
 
   async function handleSubmit(data) {
-    const addRes = await editCategory(data);
+    const addRes = await callAction(() => editCategory(data));
     if (addRes.status === 'success') {
       toast.success('Category updated successfully.');
     } else {

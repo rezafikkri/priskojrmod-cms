@@ -26,6 +26,7 @@ import { cmsConfig } from '@/config/cms';
 import { generatePassword } from '@/lib/utils';
 import { useDialog } from '@/hooks/use-dialog';
 import DeleteDialog from '../ui/delete-dialog';
+import { callAction } from '@/lib/call-action';
 
 export default function VariantFields({
   form,
@@ -65,7 +66,7 @@ export default function VariantFields({
     // set pending state for disabled prev next button and show loading
     onIncrementPending();
     setDeletingIds([...deletingIds, dbId]);
-    const removeRes = await removeProductVariant(dbId, productId);
+    const removeRes = await callAction(() => removeProductVariant(dbId, productId));
 
     if (removeRes.status === 'success') {
       const currentVariants = form.getValues('variants');

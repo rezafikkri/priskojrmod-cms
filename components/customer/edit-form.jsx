@@ -8,6 +8,7 @@ import { editCustomerSchema } from '@/lib/validators/customer-validator';
 import { editCustomer } from '@/actions/customer-actions';
 import { useQueryClient } from '@tanstack/react-query';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ customer }) {
   const queryClient = useQueryClient();
@@ -35,7 +36,7 @@ export default function EditForm({ customer }) {
       newCustomer.email = data.email;
     }
 
-    const editRes = await editCustomer(newCustomer);
+    const editRes = await callAction(() => editCustomer(newCustomer));
     if (editRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['customers'] });
       queryClient.invalidateQueries({ queryKey: ['customersAutocomplete'] });

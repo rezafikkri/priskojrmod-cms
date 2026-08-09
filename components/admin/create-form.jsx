@@ -9,6 +9,7 @@ import FormFields from './form-fields';
 import { addAdmin } from '@/actions/admin-actions';
 import { cmsConfig } from '@/config/cms';
 import { useQueryClient } from '@tanstack/react-query';
+import { callAction } from '@/lib/call-action';
 
 export default function CreateForm() {
   const queryClient = useQueryClient();
@@ -36,11 +37,12 @@ export default function CreateForm() {
   });
 
   async function handleSubmit(data) {
-    const addRes = await addAdmin(data);
+    const addRes = await callAction(() => addAdmin(data));
+
     if (addRes.status === 'success') {
       form.reset();
       queryClient.invalidateQueries({ queryKey: ['adminOptions'] });
-      
+
       toast.success('Admin created successfully.');
     } else {
       toast.error(addRes.message, { duration: cmsConfig.toast.duration.error });

@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import TooltipWrapper from '../ui/tooltip-wrapper';
 import FormImagePreview from '../ui/form-image-preview';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function ImageGrid({
   form,
@@ -46,7 +47,7 @@ export default function ImageGrid({
       // set pending state for disabled prev next button and show loading
       onIncrementPending();
       setDeletingIds([...deletingIds, dbId]);
-      const removeRes = await removeProductImage(dbId, productId);
+      const removeRes = await callAction(() => removeProductImage(dbId, productId));
 
       if (removeRes.status === 'success') {
         const currentImages = form.getValues('images');

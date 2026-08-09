@@ -7,6 +7,7 @@ import FormFields from './form-fields';
 import { editTestimonial } from '@/actions/testimonial-actions';
 import { toast } from 'sonner';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ testimonial }) {
   const form = useForm({
@@ -28,7 +29,7 @@ export default function EditForm({ testimonial }) {
   });
 
   async function handleSubmit(data) {
-    const editRes = await editTestimonial(data);
+    const editRes = await callAction(() => editTestimonial(data));
     if (editRes.status === 'success') {
       toast.success('Testimonial updated successfully.');
     } else {

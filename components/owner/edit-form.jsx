@@ -7,6 +7,7 @@ import FormFields from './form-fields';
 import { editOwnerSchema } from '@/lib/validators/owner-validator';
 import { editOwner } from '@/actions/owner-actions';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ owner }) {
   const form = useForm({
@@ -21,7 +22,7 @@ export default function EditForm({ owner }) {
   });
 
   async function handleSubmit(data) {
-    const editRes = await editOwner(data);
+    const editRes = await callAction(() => editOwner(data));
     if (editRes.status === 'success') {
       toast.success('Owner updated successfully.');
     } else {

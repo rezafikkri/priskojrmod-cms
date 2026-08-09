@@ -17,6 +17,7 @@ import { privacyPolicySchema } from '@/lib/validators/privacy-policy-validator';
 import { addPrivacyPolicy, editPrivacyPolicy } from '@/actions/privacy-policy-actions';
 import { formatDateTime } from '@/lib/format-date';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ privacyPolicy }) {
   const [createdAt, setCreatedAt] = useState(privacyPolicy?.createdAt);
@@ -53,8 +54,8 @@ export default function EditForm({ privacyPolicy }) {
 
   async function handleSubmit(data) {
     const saveRes = hasPrivacyPolicy
-      ? await editPrivacyPolicy(data)
-      : await addPrivacyPolicy(data);
+      ? await callAction(() => editPrivacyPolicy(data))
+      : await callAction(() => addPrivacyPolicy(data));
 
     if (saveRes.status === 'success') {
       let successMessage;

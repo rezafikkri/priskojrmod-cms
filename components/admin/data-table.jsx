@@ -31,6 +31,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import TableResultCount from '../ui/table-result-count';
 import { useQueryClient } from '@tanstack/react-query';
+import { callAction } from '@/lib/call-action';
 
 export default function DataTable({ admins: data }) {
   const [admins, setAdmins] = useState(data);
@@ -50,7 +51,7 @@ export default function DataTable({ admins: data }) {
     // show loading
     const toastId = toast.loading('Deleting admin...');
     
-    const removeRes = await removeAdmin(id);
+    const removeRes = await callAction(() => removeAdmin(id));
 
     setDeletingIds((prevIds) =>
       prevIds.filter((prevId) => prevId !== id)

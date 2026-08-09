@@ -30,6 +30,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import DeleteDialog from '../ui/delete-dialog';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import TableResultCount from '../ui/table-result-count';
+import { callAction } from '@/lib/call-action';
 
 export default function DataTable({ owners: data }) {
   const [owners, setOwners] = useState(data)
@@ -48,7 +49,7 @@ export default function DataTable({ owners: data }) {
     // show loading
     const toastId = toast.loading('Deleting owner...');
 
-    const removeRes = await removeOwner(id);
+    const removeRes = await callAction(() => removeOwner(id));
 
     setDeletingIds((prevIds) =>
       prevIds.filter((prevId) => prevId !== id)

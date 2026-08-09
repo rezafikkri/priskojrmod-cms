@@ -31,6 +31,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useQueryClient } from '@tanstack/react-query';
 import TableActionDropdown from '../ui/table-action-dropdown';
 import TableResultCount from '../ui/table-result-count';
+import { callAction } from '@/lib/call-action';
 
 export default function DataTable({ secretKeys: data }) {
   const [secretKeys, setSecretKeys] = useState(data);
@@ -50,7 +51,7 @@ export default function DataTable({ secretKeys: data }) {
     // show loading
     const toastId = toast.loading('Deleting secret key...');
 
-    const removeRes = await removeSecretKey(id);
+    const removeRes = await callAction(() => removeSecretKey(id));
 
     setDeletingIds((prevIds) =>
       prevIds.filter((prevId) => prevId !== id)

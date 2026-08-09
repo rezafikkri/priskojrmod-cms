@@ -23,6 +23,7 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function ExtrasForm({
   onNextStep,
@@ -115,7 +116,7 @@ export default function ExtrasForm({
       return newVariant;
     });
 
-    const saveRes = await editProduct(product);
+    const saveRes = await callAction(() => editProduct(product));
 
     if (saveRes.status === 'success') {
       // reset versionStatus state and update reference (dbVersion, dsb)

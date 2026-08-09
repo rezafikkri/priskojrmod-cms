@@ -7,6 +7,7 @@ import { categorySchema } from '@/lib/validators/category-validator';
 import { addCategory } from '@/actions/category-actions';
 import FormFields from './form-fields';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function CreateForm() {
   const form = useForm({
@@ -17,7 +18,7 @@ export default function CreateForm() {
   });
 
   async function handleSubmit(data) {
-    const addRes = await addCategory(data);
+    const addRes = await callAction(() => addCategory(data));
     if (addRes.status === 'success') {
       form.reset();
       toast.success('Category created successfully.');

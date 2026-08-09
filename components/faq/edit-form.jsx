@@ -7,6 +7,7 @@ import FormFields from './form-fields';
 import { editFaq } from '@/actions/faq-actions';
 import { toast } from 'sonner';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ faq }) {
   const form = useForm({
@@ -29,7 +30,7 @@ export default function EditForm({ faq }) {
   });
 
   async function handleSubmit(data) {
-    const editRes = await editFaq(data);
+    const editRes = await callAction(() => editFaq(data));
     if (editRes.status === 'success') {
       toast.success('FAQ updated successfully.');
     } else {

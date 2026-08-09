@@ -21,6 +21,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 import { formatDateTime } from '@/lib/format-date';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ licenseKey }) {
   // Get QueryClient from the context
@@ -40,7 +41,7 @@ export default function EditForm({ licenseKey }) {
   const isSubmitting = form.formState.isSubmitting;
 
   async function handleSubmit(data) {
-    const editRes = await editLicenseKey(data);
+    const editRes = await callAction(() => editLicenseKey(data));
 
     if (editRes.status === 'success') {
       queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });

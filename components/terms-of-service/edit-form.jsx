@@ -17,6 +17,7 @@ import { formatDateTime } from '@/lib/format-date';
 import { addTermsOfService, editTermsOfService } from '@/actions/terms-of-service-actions';
 import { termsOfServiceSchema } from '@/lib/validators/terms-of-service-validator';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export default function EditForm({ termsOfService }) {
   const [createdAt, setCreatedAt] = useState(termsOfService?.createdAt);
@@ -53,8 +54,8 @@ export default function EditForm({ termsOfService }) {
 
   async function handleSubmit(data) {
     const saveRes = hasTermsOfService
-      ? await editTermsOfService(data)
-      : await addTermsOfService(data);
+      ? await callAction(() => editTermsOfService(data))
+      : await callAction(() => addTermsOfService(data));
 
     if (saveRes.status === 'success') {
       let successMessage;

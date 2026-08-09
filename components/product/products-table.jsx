@@ -46,6 +46,7 @@ import TableActionDropdown from '../ui/table-action-dropdown';
 import TableSkeleton from '../loadings/table-skeleton';
 import TableResultCount from '../ui/table-result-count';
 import TableTwoLineCell from '../ui/table-two-line-cell';
+import { callAction } from '@/lib/call-action';
 
 const defaultColumnVisibility = {
   category: false,
@@ -180,7 +181,7 @@ export default function ProductsTable({ isOwner }) {
     // show loading
     const toastId = toast.loading(!isPinned ? 'Pinning product...' : 'Unpinning product...');
 
-    const editRes = await editProductPinned(id, !isPinned);
+    const editRes = await callAction(() => editProductPinned(id, !isPinned));
 
     setUpdatingPinnedIds((prevIds) =>
       prevIds.filter((prevId) => prevId !== id)
@@ -242,7 +243,7 @@ export default function ProductsTable({ isOwner }) {
     // show loading
     const toastId = toast.loading(toastText[newStatus].loading);
 
-    const editRes = await editProductStatus(id, newStatus);
+    const editRes = await callAction(() => editProductStatus(id, newStatus));
 
     setUpdatingStatusIds((prevIds) => prevIds.filter((prevId) => prevId !== id));
 
@@ -290,7 +291,7 @@ export default function ProductsTable({ isOwner }) {
     // show loading
     const toastId = toast.loading('Deleting product...');
 
-    const removeRes = await removeProduct(id);
+    const removeRes = await callAction(() => removeProduct(id));
 
     setDeletingIds((prevIds) =>
       prevIds.filter((prevId) => prevId !== id)

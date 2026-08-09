@@ -10,6 +10,7 @@ import { generateDonationLinkValues } from '@/lib/utils';
 import FormFields from '../admin/form-fields';
 import { accountSettingsSchema } from '@/lib/validators/account-settings-validator';
 import { cmsConfig } from '@/config/cms';
+import { callAction } from '@/lib/call-action';
 
 export function EditForm({
   account,
@@ -37,7 +38,7 @@ export function EditForm({
   async function handleDeleteDonationLink(id) {
     setDeletingDonationLinkIds(prevIds => [...prevIds, id]);
 
-    const removeRes = await removeDonationLink(id);
+    const removeRes = await callAction(() => removeDonationLink(id));
 
     setDeletingDonationLinkIds(prevIds => prevIds.filter(prevId => prevId !== id));
 
@@ -57,7 +58,7 @@ export function EditForm({
   }
 
   async function handleSubmit(data) {
-    const editRes = await editAccount(data);
+    const editRes = await callAction(() => editAccount(data));
     if (editRes.status === 'success') {
       // update several session data
       if (
