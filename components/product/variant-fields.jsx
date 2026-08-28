@@ -27,11 +27,14 @@ import { generatePassword } from '@/lib/utils';
 import { useDialog } from '@/hooks/use-dialog';
 import DeleteDialog from '../ui/delete-dialog';
 import { callAction } from '@/lib/call-action';
+import { Language } from '@/constants/enums';
+import ContentInput from '../ui/content-input';
 
 export default function VariantFields({
   form,
   variants,
   productId,
+  activeLang,
   handlers,
 }) {
   const {
@@ -39,6 +42,7 @@ export default function VariantFields({
     onAppend,
     onIncrementPending,
     onDecrementPending,
+    onActivelangChange,
   } = handlers;
   const [deletingIds, setDeletingIds] = useState([]);
   const queryClient = useQueryClient();
@@ -55,12 +59,17 @@ export default function VariantFields({
     onAppend({
       id: v4(),
       name: '',
+      description: {
+        id: '',
+        en: '',
+      },
       downloadUrl: '',
       fileAccessPassword: '',
     });
   }
 
   const isDeleting = (id) => deletingIds.includes(id);
+  const isSubmitting = form.formState.isSubmitting;
 
   async function handleDelete({ dbId, index }) {
     // set pending state for disabled prev next button and show loading
@@ -104,7 +113,7 @@ export default function VariantFields({
                     <FormControl>
                       <Input
                         {...field}
-                        disabled={isDeleting(variant.dbId)}
+                        disabled={isSubmitting || isDeleting(variant.dbId)}
                         className="shadow-none md:text-base h-auto px-3 py-1.5"
                       />
                     </FormControl>
@@ -113,6 +122,42 @@ export default function VariantFields({
                   </FormItem>
                 )}
               />
+
+              {/* ContentInput's disabled doesn't combine isSubmitting — already handled internally. */}
+              {activeLang === Language.ID && (
+                <FormField
+                  control={form.control}
+                  name={`variants.${index}.description.${Language.ID}`}
+                  render={({ field }) => (
+                    <ContentInput
+                      disabled={isDeleting(variant.dbId)}
+                      field={field}
+                      activeLang={Language.ID}
+                      onActivelangChange={onActivelangChange}
+                      label="Description"
+                      description="Enter a clear and concise description of the variant."
+                    />
+                  )}
+                />
+              )}
+
+              {activeLang === Language.EN && (
+                <FormField
+                  control={form.control}
+                  name={`variants.${index}.description.${Language.EN}`}
+                  render={({ field }) => (
+                    <ContentInput
+                      disabled={isDeleting(variant.dbId)}
+                      field={field}
+                      activeLang={Language.EN}
+                      onActivelangChange={onActivelangChange}
+                      label="Description"
+                      description="Enter a clear and concise description of the variant."
+                    />
+                  )}
+                />
+              )}
+
               <FormField
                 control={form.control}
                 name={`variants.${index}.downloadUrl`}
@@ -122,7 +167,7 @@ export default function VariantFields({
                     <FormControl>
                       <Input
                         {...field}
-                        disabled={isDeleting(variant.dbId)}
+                        disabled={isSubmitting || isDeleting(variant.dbId)}
                         className="shadow-none md:text-base h-auto px-3 py-1.5"
                       />
                     </FormControl>
@@ -140,7 +185,7 @@ export default function VariantFields({
                     <div className="flex w-full items-center">
                       <FormControl>
                         <Input
-                          disabled={isDeleting(variant.dbId)}
+                          disabled={isSubmitting || isDeleting(variant.dbId)}
                           className="md:text-base h-auto px-3 py-1.5 -me-[1px] shadow-none rounded-e-none z-3 relativ"
                           {...field}
                         />
@@ -150,7 +195,7 @@ export default function VariantFields({
                         type="button"
                         onClick={() => field.onChange(generatePassword())}
                         className={'h-auto text-base px-3 py-1.5 border rounded-s-none'}
-                        disabled={isDeleting(variant.dbId)}
+                        disabled={isSubmitting || isDeleting(variant.dbId)}
                       >
                         Generate
                       </Button>
@@ -162,7 +207,7 @@ export default function VariantFields({
               />
             </div>
 
-            <Separator orientation="vertical" className="h-40!" />
+            <Separator orientation="vertical" className="h-90!" />
 
             <div className="flex flex-col gap-3">
               {(variants.length > 1 || variant.dbId) && (
@@ -183,7 +228,7 @@ export default function VariantFields({
                           onRemove(index);
                         }
                       }}
-                      disabled={isDeleting(variant.dbId)}
+                      disabled={isSubmitting || isDeleting(variant.dbId)}
                     >
                       <Trash className={`icon ${isDeleting(variant.dbId) ? 'opacity-0' : ''}`} />
                     </Button>

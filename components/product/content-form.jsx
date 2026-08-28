@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { Language } from '@/constants/enums';
 import { zodResolver } from '@hookform/resolvers/zod';
-import FormLanguageToggle from '../ui/form-language-toggle';
 import { Button } from '../ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import {
@@ -53,7 +52,6 @@ export default function ContentForm({
     resolver: zodResolver(contentSchema),
     defaultValues,
   });
-  const errors = form.formState.errors;
 
   function handleNext(data) {
     setContent(data);
@@ -89,13 +87,6 @@ export default function ContentForm({
 
   return (
     <>
-      <FormLanguageToggle
-        activeLang={activeLang}
-        onToggle={setActiveLang}
-        errors={errors}
-        fieldNames={['description','changelog']}
-      />
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleNext)} className="space-y-6 mb-10">
           {activeLang === Language.ID && (
@@ -103,11 +94,11 @@ export default function ContentForm({
               <FormField
                 control={form.control}
                 name={`description.${Language.ID}`}
-                render={({ field, formState }) => (
+                render={({ field }) => (
                   <ContentInput
                     field={field}
-                    formState={formState}
                     activeLang={Language.ID}
+                    onActivelangChange={setActiveLang}
                     label="Description"
                     description="Enter a clear and concise description of the product."
                   />
@@ -117,11 +108,11 @@ export default function ContentForm({
                 <FormField
                   control={form.control}
                   name={`changelog.${Language.ID}`}
-                  render={({ field, formState }) => (
+                  render={({ field }) => (
                     <ContentInput
                       field={field}
-                      formState={formState}
                       activeLang={Language.ID}
+                      onActivelangChange={setActiveLang}
                       label="Changelog"
                       description="Enter the changes or updates included in this release."
                     />
@@ -135,11 +126,11 @@ export default function ContentForm({
               <FormField
                 control={form.control}
                 name={`description.${Language.EN}`}
-                render={({ field, formState }) => (
+                render={({ field }) => (
                   <ContentInput
                     field={field}
-                    formState={formState}
                     activeLang={Language.EN}
+                    onActivelangChange={setActiveLang}
                     label="Description"
                     description="Enter a clear and concise description of the product."
                   />
@@ -149,11 +140,11 @@ export default function ContentForm({
                 <FormField
                   control={form.control}
                   name={`changelog.${Language.EN}`}
-                  render={({ field, formState }) => (
+                  render={({ field }) => (
                     <ContentInput
                       field={field}
-                      formState={formState}
                       activeLang={Language.EN}
+                      onActivelangChange={setActiveLang}
                       label="Changelog"
                       description="Enter the changes or updates included in this release."
                     />

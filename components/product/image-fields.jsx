@@ -11,11 +11,13 @@ import { createProductImageSchema } from '@/lib/validators/product-validator';
 export default function ImageFields({
   onAppend,
   images,
+  formState,
 }) {
   function computeHasThumbnail() {
     return images.some(image => image.isThumbnail);
   }
 
+  const { isSubmitting } = formState;
   const [hasThumbnail, setHasThumbnail] = useState(computeHasThumbnail);
   const [hasAttemptedAdd, setHasAttemptedAdd] = useState(false);
   const [url, setUrl] = useState('');
@@ -111,6 +113,7 @@ export default function ImageFields({
           onChange={handleUrlChange}
           className="shadow-none md:text-base h-auto px-3 py-1.5"
           aria-invalid={!!errors?.url}
+          disabled={isSubmitting}
         />
         <p className="text-muted-foreground text-sm">Enter the image URL.</p>
         {errors?.url && (
@@ -136,8 +139,13 @@ export default function ImageFields({
               onChange={handleWidthChange}
               className="shadow-none md:text-base h-auto px-3 py-1.5 rounded-e-none z-1"
               aria-invalid={!!errors?.width}
+              disabled={isSubmitting}
             />
-            <span className="inline-block md:text-base h-auto px-3 py-1.5 border border-s-0 rounded-e-md bg-zinc-50 dark:bg-zinc-900/50">px</span>
+            <span
+              className={`inline-block md:text-base h-auto px-3 py-1.5 border border-s-0 rounded-e-md bg-zinc-50 dark:bg-zinc-900/50 ${isSubmitting ? 'opacity-50' : ''}`}
+            >
+              px
+            </span>
           </div>
           <p className="text-muted-foreground text-sm">Enter the image width.</p>
           {errors?.width && (
@@ -162,8 +170,13 @@ export default function ImageFields({
               onChange={handleHeightChange}
               className="shadow-none md:text-base h-auto px-3 py-1.5 rounded-e-none z-1"
               aria-invalid={!!errors?.height}
+              disabled={isSubmitting}
             />
-            <span className="inline-block md:text-base h-auto px-3 py-1.5 border border-s-0 rounded-e-md bg-zinc-50 dark:bg-zinc-900/50">px</span>
+            <span
+              className={`inline-block md:text-base h-auto px-3 py-1.5 border border-s-0 rounded-e-md bg-zinc-50 dark:bg-zinc-900/50 ${isSubmitting ? 'opacity-50' : ''}`}
+            >
+              px
+            </span>
           </div>
           <p className="text-muted-foreground text-sm">Enter the image height.</p>
           {errors?.height && (
@@ -178,7 +191,7 @@ export default function ImageFields({
           id="isThumbnail"
           checked={isThumbnail}
           onCheckedChange={() => setIsThumbnail(prev => !prev)}
-          disabled={hasThumbnail}
+          disabled={hasThumbnail || isSubmitting}
         />
         <div className="space-y-2">
           <Label htmlFor="isThumbnail" className="text-base leading-none">Use as thumbnail</Label>
@@ -193,6 +206,7 @@ export default function ImageFields({
         variant="secondary"
         className="text-base px-3 py-1.5 h-auto! inline-block"
         onClick={handleAdd}
+        disabled={isSubmitting}
       >
         <Plus className="icon" /> Add image
       </Button>

@@ -212,7 +212,7 @@ export default function PricingForm({
           upgradeCoupon: data.upgradeCoupon,
         };
 
-        if (!data.discount.id && data.discount.value) {
+        if (!data.discount.id && saveRes.data.pricing.discount?.id) {
           // add id from db to store
           newPricing.discount = {
             id: saveRes.data.pricing.discount.id,
@@ -221,7 +221,7 @@ export default function PricingForm({
         }
 
         let successMessage = 'Product updated successfully.';
-        if (!data.upgradeCoupon.id && data.upgradeCoupon.code) {
+        if (!data.upgradeCoupon.id && saveRes.data.pricing.upgradeCoupon?.id) {
           newPricing.upgradeCoupon = {
             id: saveRes.data.pricing.upgradeCoupon.id,
             ...data.upgradeCoupon,

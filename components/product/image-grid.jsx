@@ -23,6 +23,7 @@ export default function ImageGrid({
     onDecrementPending,
   } = handlers;
   const [deletingIds, setDeletingIds] = useState([]);
+  const { isSubmitting } = form.formState;
 
   const isDeleting = (id) => deletingIds.includes(id);
 
@@ -87,6 +88,7 @@ export default function ImageGrid({
                     type="button"
                     className="p-1! h-auto border-0 rounded-full dark:hover:bg-input"
                     onClick={() => handleSetAsThumbnail({ index, image })}
+                    disabled={isSubmitting}
                   >
                     <Image className="icon size-4" />
                   </Button>
@@ -98,6 +100,7 @@ export default function ImageGrid({
                   variant="outline"
                   type="button"
                   className="p-1! h-auto border-0 rounded-full hover:text-destructive dark:hover:text-red-500/90 dark:hover:bg-zinc-800/95"
+                  disabled={isSubmitting}
                 >
                   <Trash className="icon size-4" />
                 </Button>

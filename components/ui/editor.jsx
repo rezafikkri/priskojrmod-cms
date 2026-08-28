@@ -37,8 +37,8 @@ export default function Editor({
   onBlur,
   value,
   isError,
-  isSubmitting,
   isResetEditor,
+  disabled = false,
 }) {
   const editor = useEditor({
     immediatelyRender: false,
@@ -116,11 +116,11 @@ export default function Editor({
         },
       });
     }
-  }, [isError]);
+  }, [isError, editor]);
 
   // when isSubmitting disable form and when success clear content
   useEffect(() => {
-    if (editor && isSubmitting) {
+    if (editor && disabled) {
       editor.setEditable(false, false);
     } else if (editor) {
       editor.setEditable(true, false);
@@ -130,7 +130,7 @@ export default function Editor({
         editor.commands.clearContent();
       }
     }
-  }, [isSubmitting]);
+  }, [disabled, editor]);
 
   if (!editor) return <Skeleton className="w-full h-30 rounded-md" />;
 

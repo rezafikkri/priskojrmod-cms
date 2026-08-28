@@ -36,6 +36,10 @@ export const defaultFormStoreInitState = {
         {
           id: v4(),
           name: '',
+          description: {
+            id: '',
+            en: '',
+          },
           downloadUrl: '',
           fileAccessPassword: '',
         },

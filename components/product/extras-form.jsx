@@ -7,6 +7,7 @@ import {
 } from '../ui/form';
 import { Button } from '../ui/button';
 import {
+  Loader2,
   ArrowLeft,
   ArrowRight,
 } from 'lucide-react';
@@ -19,11 +20,11 @@ import ImageGrid from './image-grid';
 import useEditPendingTracker from '@/hooks/use-edit-pending-tracker';
 import { PriceType } from '@/constants/enums';
 import { editProduct } from '@/actions/product-actions';
-import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { cmsConfig } from '@/config/cms';
 import { callAction } from '@/lib/call-action';
+import { useState } from 'react';
 
 export default function ExtrasForm({
   onNextStep,
@@ -32,6 +33,7 @@ export default function ExtrasForm({
 }) {
   const queryClient = useQueryClient();
 
+  const [activeLang, setActiveLang] = useState(cmsConfig.defaults.language);
   const extras = useProductFormStore(state => state.form.extras);
   const setExtras = useProductFormStore(state => state.setExtras);
   let extrasSchema;
@@ -174,90 +176,98 @@ export default function ExtrasForm({
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleProceed)} className="space-y-6 mb-10">
-        <section className="space-y-6 mb-9">
-          <h3 className="text-lg font-bold mb-0">Variants</h3>
-          <h4 className="text-zinc-700 dark:text-zinc-300/80">List available variants that represent different options for this product.</h4>
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleProceed)} className="space-y-6 mb-10">
+          <section className="space-y-6 mb-9">
+            <h3 className="text-lg font-bold mb-0">Variants</h3>
+            <h4 className="text-zinc-700 dark:text-zinc-300/80">List available variants that represent different options for this product.</h4>
 
-          <VariantFields
-            form={form}
-            variants={variants}
-            productId={productId ?? basic?.id}
-            handlers={{
-              onAppend: appendVariant,
-              onRemove: removeVariant,
-              onIncrementPending: incrementPending,
-              onDecrementPending: decrementPending,
-            }}
-          />
-        </section>
-        <Separator />
-        <section className="space-y-6 mb-9">
-          <h3 className="text-lg font-bold mb-0">Images</h3>
-          <h4 className="text-zinc-700 dark:text-zinc-300/80 mb-0">
-            A collection of image URLs that illustrate different aspects of the product.
-          </h4>
-          <p className="text-sm text-gray-500 dark:text-zinc-400 mt-0.5">
-            Make sure all product images have the same dimensions (width and height).
-          </p>
-          
-          <ImageGrid
-            form={form}
-            images={images}
-            productId={productId ?? basic?.id}
-            handlers={{
-              onRemove: removeImage,
-              onUpdate: updateImage,
-              onIncrementPending: incrementPending,
-              onDecrementPending: decrementPending,
-            }}
-          />
-          <ImageFields images={images} onAppend={appendImage} />
-
-          {errors?.images && (
-            <p className="dark:text-red-500/85 text-destructive text-sm">
-              {errors.images.message}
+            <VariantFields
+              form={form}
+              variants={variants}
+              productId={productId ?? basic?.id}
+              activeLang={activeLang}
+              handlers={{
+                onAppend: appendVariant,
+                onRemove: removeVariant,
+                onIncrementPending: incrementPending,
+                onDecrementPending: decrementPending,
+                onActivelangChange: setActiveLang,
+              }}
+            />
+          </section>
+          <Separator />
+          <section className="space-y-6 mb-9">
+            <h3 className="text-lg font-bold mb-0">Images</h3>
+            <h4 className="text-zinc-700 dark:text-zinc-300/80 mb-0">
+              A collection of image URLs that illustrate different aspects of the product.
+            </h4>
+            <p className="text-sm text-gray-500 dark:text-zinc-400 mt-0.5">
+              Make sure all product images have the same dimensions (width and height).
             </p>
-          )}
-        </section>
 
-        <Button
-          variant="outline"
-          className="me-3 mb-0 h-auto inline-block text-base px-3 py-1.5"
-          onClick={handlePrev}
-          disabled={isBlocking}
-        >
-          <ArrowLeft className="icon" /> Previous
-        </Button>
+            <ImageGrid
+              form={form}
+              images={images}
+              productId={productId ?? basic?.id}
+              handlers={{
+                onRemove: removeImage,
+                onUpdate: updateImage,
+                onIncrementPending: incrementPending,
+                onDecrementPending: decrementPending,
+              }}
+            />
+            <ImageFields
+              formState={form.formState}
+              images={images}
+              onAppend={appendImage}
+            />
 
-        {(mode === 'edit' && basic.priceType === PriceType.FREE) ? (
-          <div className="relative inline-block">
-            <Button
-              type="submit"
-              className={`h-auto text-base px-3 py-1.5 ${isSubmitting ? 'transition-none disabled:opacity-100' : ''} border border-primary inline-block`}
-              disabled={isSubmitting || isBlocking}
-            >
-              <span className={isSubmitting ? 'opacity-0' : ''}>
-                {mode === 'create' ? 'Create' : 'Update'}
-              </span>
-            </Button>
-            {isSubmitting && (
-              <div className="absolute h-full top-0 left-0 right-0 flex justify-center items-center">
-                <Loader2 className="animate-spin text-primary-foreground" size={16} />
-              </div>
+            {errors?.images && (
+              <p className="dark:text-red-500/85 text-destructive text-sm">
+                {errors.images.message}
+              </p>
             )}
-          </div>
-        ) : (
+          </section>
+
           <Button
-            type="submit"
-            className={`h-auto text-base px-3 py-1.5 border border-primary inline-block`}
+            variant="outline"
+            className="me-3 mb-0 h-auto inline-block text-base px-3 py-1.5"
+            onClick={handlePrev}
             disabled={isBlocking}
           >
-            Next <ArrowRight className="icon" />
+            <ArrowLeft className="icon" /> Previous
           </Button>
-        )}
-      </form>
-    </Form>
+
+          {(mode === 'edit' && basic.priceType === PriceType.FREE) ? (
+            <div className="relative inline-block">
+              <Button
+                type="submit"
+                className={`h-auto text-base px-3 py-1.5 ${isSubmitting ? 'transition-none disabled:opacity-100' : ''} border border-primary inline-block`}
+                disabled={isSubmitting || isBlocking}
+              >
+                <span className={isSubmitting ? 'opacity-0' : ''}>
+                  {mode === 'create' ? 'Create' : 'Update'}
+                </span>
+              </Button>
+              {isSubmitting && (
+                <div className="absolute h-full top-0 left-0 right-0 flex justify-center items-center">
+                  <Loader2 className="animate-spin text-primary-foreground" size={16} />
+                </div>
+              )}
+            </div>
+          ) : (
+              <Button
+                type="submit"
+                className={`h-auto text-base px-3 py-1.5 border border-primary inline-block`}
+                disabled={isBlocking}
+              >
+                Next <ArrowRight className="icon" />
+              </Button>
+            )}
+        </form>
+      </Form>
+    </>
   );
 }

@@ -83,7 +83,8 @@ export default function CreateForm({ products: data }) {
                 <FormLabel className="text-base">Application</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value} disabled={isSubmitting}
+                  value={field.value}
+                  disabled={isSubmitting}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full shadow-none text-base h-auto! px-3 py-1.5">
