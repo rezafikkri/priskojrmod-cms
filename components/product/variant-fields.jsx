@@ -221,7 +221,7 @@ export default function VariantFields({
                         if (variant.dbId) {
                           openDeleteDialog({
                             dbId: variant.dbId,
-                            index: index,
+                            index,
                             name: variant.name,
                           });
                         } else {
@@ -248,6 +248,7 @@ export default function VariantFields({
                     type="button"
                     variant="secondary"
                     onClick={handleAdd}
+                    disabled={isSubmitting}
                   >
                     <Plus />
                   </Button>
@@ -269,7 +270,7 @@ export default function VariantFields({
         isOpen={isOpenDeleteDialog}
         onClose={closeDeleteDialog}
         title="Delete Variant"
-        description={`Variant <b>${deleteData?.name}</b> will be permanently deleted along with its prices.`}
+        description={`Variant <b>${deleteData?.name}</b> will be permanently deleted. If this is a paid product, its price will be deleted as well.`}
       />
     </>
   );
