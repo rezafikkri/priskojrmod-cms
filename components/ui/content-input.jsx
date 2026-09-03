@@ -8,6 +8,7 @@ import Editor from '../ui/editor';
 import { getLangErrorInfo } from '@/lib/utils';
 import FormLanguageSelect from './form-language-select';
 import { useFormState } from 'react-hook-form';
+import { FormErrorMessage } from './form-error-message';
 
 export default function ContentInput({
   field,
@@ -46,11 +47,11 @@ export default function ContentInput({
       </FormControl>
       <FormDescription>{description}</FormDescription>
       {error && (
-        <p className="text-destructive dark:text-red-500/85 text-sm">
+        <FormErrorMessage>
           {isInactiveLangError
             ? inactiveLangErrorMessage
             : error[activeLang].message}
-        </p>
+        </FormErrorMessage>
       )}
     </FormItem>
   );

@@ -18,6 +18,7 @@ import { cmsConfig } from '@/config/cms';
 import { Input } from '../ui/input';
 import { getLangErrorInfo } from '@/lib/utils';
 import FormLanguageSelect from '../ui/form-language-select';
+import { FormErrorMessage } from '../ui/form-error-message';
 
 function NameInput({
   field,
@@ -50,11 +51,11 @@ function NameInput({
       </FormControl>
       <FormDescription>Enter the license name (e.g., Free License, Personal License, Pro App License)</FormDescription>
       {error && (
-        <p className="text-destructive dark:text-red-500/85 text-sm">
+        <FormErrorMessage>
           {isInactiveLangError
             ? inactiveLangErrorMessage
             : error[activeLang].message}
-        </p>
+        </FormErrorMessage>
       )}
     </FormItem>
   );

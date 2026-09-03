@@ -18,6 +18,7 @@ import { cmsConfig } from '@/config/cms';
 import { Input } from '../ui/input';
 import { getLangErrorInfo } from '@/lib/utils';
 import FormLanguageSelect from '../ui/form-language-select';
+import { FormErrorMessage } from '../ui/form-error-message';
 
 function TitleInput({
   field,
@@ -50,11 +51,11 @@ function TitleInput({
       </FormControl>
       <FormDescription>Enter the title</FormDescription>
       {error && (
-        <p className="text-destructive dark:text-red-500/85 text-sm">
+        <FormErrorMessage>
           {isInactiveLangError
             ? inactiveLangErrorMessage
             : error[activeLang].message}
-        </p>
+        </FormErrorMessage>
       )}
     </FormItem>
   );

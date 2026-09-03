@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import parsePhoneNumber from 'libphonenumber-js';
 import { useEffect } from 'react';
 import { useWatch } from 'react-hook-form';
+import { FormErrorMessage } from './form-error-message';
 
 const countryIsoOptions = [
   // Southeast and South Asia
@@ -187,14 +188,10 @@ export default function PhoneNumberFields({
 
       <FormDescription>{description}</FormDescription>
       {phoneNumberErrors?.countryIso && (
-        <p className="dark:text-red-500/85 text-destructive text-sm">
-          {phoneNumberErrors.countryIso.message}
-        </p>
+        <FormErrorMessage>{phoneNumberErrors.countryIso.message}</FormErrorMessage>
       )}
       {phoneNumberErrors?.number && (
-        <p className="dark:text-red-500/85 text-destructive text-sm">
-          {phoneNumberErrors.number.message}
-        </p>
+        <FormErrorMessage>{phoneNumberErrors.number.message}</FormErrorMessage>
       )}
     </div>
   );

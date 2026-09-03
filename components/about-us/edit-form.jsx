@@ -25,6 +25,7 @@ import PhoneNumberFields from '../ui/phone-number-fields';
 import { callAction } from '@/lib/call-action';
 import FormLanguageSelect from '../ui/form-language-select';
 import { getLangErrorInfo } from '@/lib/utils';
+import { FormErrorMessage } from '../ui/form-error-message';
 
 function OfficeHoursInput({
   field,
@@ -57,11 +58,11 @@ function OfficeHoursInput({
       </FormControl>
       <FormDescription>Enter the operational hours (e.g., Mon-Fri 9:00-17:00)</FormDescription>
       {error && (
-        <p className="text-destructive dark:text-red-500/85 text-sm">
+        <FormErrorMessage>
           {isInactiveLangError
             ? inactiveLangErrorMessage
             : error[activeLang].message}
-        </p>
+        </FormErrorMessage>
       )}
     </FormItem>
   );

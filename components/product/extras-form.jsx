@@ -25,6 +25,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { cmsConfig } from '@/config/cms';
 import { callAction } from '@/lib/call-action';
 import { useState } from 'react';
+import { FormErrorMessage } from '../ui/form-error-message';
 
 export default function ExtrasForm({
   onNextStep,
@@ -225,9 +226,7 @@ export default function ExtrasForm({
             />
 
             {errors?.images && (
-              <p className="dark:text-red-500/85 text-destructive text-sm">
-                {errors.images.message}
-              </p>
+              <FormErrorMessage>{errors.images.message}</FormErrorMessage>
             )}
           </section>
 

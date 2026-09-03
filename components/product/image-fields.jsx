@@ -7,6 +7,7 @@ import { Button } from '../ui/button';
 import { Plus } from 'lucide-react';
 import { Checkbox } from '../ui/checkbox';
 import { createProductImageSchema } from '@/lib/validators/product-validator';
+import { FormErrorMessage } from '../ui/form-error-message';
 
 export default function ImageFields({
   onAppend,
@@ -117,9 +118,7 @@ export default function ImageFields({
         />
         <p className="text-muted-foreground text-sm">Enter the image URL.</p>
         {errors?.url && (
-          <p className="dark:text-red-500/85 text-destructive text-sm">
-            {errors.url}
-          </p>
+          <FormErrorMessage>{errors.url}</FormErrorMessage>
         )}
       </div>
       <div className="flex gap-3">
@@ -149,9 +148,7 @@ export default function ImageFields({
           </div>
           <p className="text-muted-foreground text-sm">Enter the image width.</p>
           {errors?.width && (
-            <p className="dark:text-red-500/85 text-destructive text-sm">
-              {errors.width}
-            </p>
+            <FormErrorMessage>{errors.width}</FormErrorMessage>
           )}
         </div>
         <div className="flex-1 space-y-2">
@@ -180,9 +177,7 @@ export default function ImageFields({
           </div>
           <p className="text-muted-foreground text-sm">Enter the image height.</p>
           {errors?.height && (
-            <p className="dark:text-red-500/85 text-destructive text-sm">
-              {errors.height}
-            </p>
+            <FormErrorMessage>{errors.height}</FormErrorMessage>
           )}
         </div>
       </div>
