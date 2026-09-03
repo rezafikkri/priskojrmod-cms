@@ -3,6 +3,7 @@ import '../globals.css';
 import SessionProvider from '@/components/session-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
+import { CircleCheck, CircleAlert } from 'lucide-react';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -33,6 +34,10 @@ export default function RootLayout({ children }) {
             {children}
 
             <Toaster
+              icons={{
+                success: <CircleCheck size={16} />,
+                error: <CircleAlert size={16} />,
+              }}
               richColors
               position="top-right"
               toastOptions={{

@@ -12,37 +12,48 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
-import FormLanguageToggle from '../ui/form-language-toggle';
 import ContentInput from '../ui/content-input';
 import { Language } from '@/constants/enums';
 import { cmsConfig } from '@/config/cms';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '../ui/input';
+import { getLangErrorInfo } from '@/lib/utils';
+import FormLanguageSelect from '../ui/form-language-select';
 
 function TitleInput({
   field,
-  formState,
   activeLang,
+  onActivelangChange,
+  errors,
+  disabled = false,
 }) {
-  const { errors, isSubmitting } = formState;
+  const {
+    error,
+    isInactiveLangError,
+    inactiveLangErrorMessage,
+  } = getLangErrorInfo({ activeLang, fieldName: field.name, errors });
 
   return (
     <FormItem>
-      <FormLabel className="text-base">
+      <FormLabel className="text-base justify-between">
         Title
-        <Badge variant="secondary">{activeLang.toUpperCase()}</Badge>
+        <FormLanguageSelect
+          activeLang={activeLang}
+          onSelect={onActivelangChange}
+        />
       </FormLabel> 
       <FormControl>
         <Input
-          disabled={isSubmitting}
+          disabled={disabled}
           className="shadow-none md:text-base h-auto px-3 py-1.5 dark:bg-transparent"
           {...field}
         />
       </FormControl>
       <FormDescription>Enter the title</FormDescription>
-      {(errors.title && errors.title[activeLang]) && (
-        <p className="text-destructive text-sm">
-          {errors.title[activeLang].message}
+      {error && (
+        <p className="text-destructive dark:text-red-500/85 text-sm">
+          {isInactiveLangError
+            ? inactiveLangErrorMessage
+            : error[activeLang].message}
         </p>
       )}
     </FormItem>
@@ -59,81 +70,91 @@ export default function FormFields({
   const { isSubmitting, errors } = form.formState;
   
   return (
-    <>
-      <FormLanguageToggle activeLang={activeLang} onToggle={setActiveLang} errors={errors} />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-10">
+        {activeLang === Language.ID && (
+          <>
+            <FormField
+              control={form.control}
+              name={`title.${Language.ID}`}
+              render={({ field }) => (
+                <TitleInput
+                  field={field}
+                  activeLang={activeLang}
+                  onActivelangChange={setActiveLang}
+                  disabled={isSubmitting}
+                  errors={errors}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`content.${Language.ID}`}
+              render={({ field }) => (
+                <ContentInput
+                  field={field}
+                  activeLang={activeLang}
+                  onActivelangChange={setActiveLang}
+                  {...(isResetEditor && { isResetEditor })}
+                  description="Enter faq content"
+                  disabled={isSubmitting}
+                />
+              )}
+            />
+          </>
+        )}
+        {activeLang === Language.EN && (
+          <>
+            <FormField
+              control={form.control}
+              name={`title.${Language.EN}`}
+              render={({ field }) => (
+                <TitleInput
+                  field={field}
+                  activeLang={activeLang}
+                  onActivelangChange={setActiveLang}
+                  disabled={isSubmitting}
+                  errors={errors}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`content.${Language.EN}`}
+              render={({ field }) => (
+                <ContentInput
+                  field={field}
+                  activeLang={activeLang}
+                  onActivelangChange={setActiveLang}
+                  {...(isResetEditor && { isResetEditor })}
+                  description="Enter faq content"
+                  disabled={isSubmitting}
+                />
+              )}
+            />
+          </>
+        )}
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mb-10">
-          {activeLang === Language.ID && (
-            <>
-              <FormField
-                control={form.control}
-                name={`title.${Language.ID}`}
-                render={({ field, formState }) => (
-                  <TitleInput field={field} formState={formState} activeLang={Language.ID} />
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`content.${Language.ID}`}
-                render={({ field, formState }) => (
-                  <ContentInput
-                    field={field}
-                    formState={formState}
-                    activeLang={Language.ID}
-                    {...(isResetEditor && { isResetEditor })}
-                    description="Enter faq content"
-                  />
-                )}
-              />
-            </>
-          )}
-          {activeLang === Language.EN && (
-            <>
-              <FormField
-                control={form.control}
-                name={`title.${Language.EN}`}
-                render={({ field, formState }) => (
-                  <TitleInput field={field} formState={formState} activeLang={Language.EN} />
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`content.${Language.EN}`}
-                render={({ field, formState }) => (
-                  <ContentInput
-                    field={field}
-                    formState={formState}
-                    activeLang={Language.EN}
-                    {...(isResetEditor && { isResetEditor })}
-                    description="Enter faq content"
-                  />
-                )}
-              />
-            </>
-          )}
-
-          <Button asChild variant="outline" className="me-3 mb-0 h-auto inline-block text-base px-3 py-1.5">
-            <Link href="/faq"><ArrowLeft className="icon" /> Back</Link>
+        <Button asChild variant="outline" className="me-3 mb-0 h-auto inline-block text-base px-3 py-1.5">
+          <Link href="/faq"><ArrowLeft className="icon" /> Back</Link>
+        </Button>
+        <div className="relative inline-flex">
+          <Button
+            type="submit"
+            className={`disabled:opacity-100 ${isSubmitting ? 'transition-none' : ''} h-auto text-base px-3 py-1.5 border border-primary`}
+            disabled={isSubmitting}
+          >
+            <span className={isSubmitting ? 'opacity-0' : ''}>
+              {mode === 'edit' ? 'Update' : 'Create'}
+            </span>
           </Button>
-          <div className="relative inline-flex">
-            <Button
-              type="submit"
-              className={`disabled:opacity-100 ${isSubmitting ? 'transition-none' : ''} h-auto text-base px-3 py-1.5 border border-primary`}
-              disabled={isSubmitting}
-            >
-              <span className={isSubmitting ? 'opacity-0' : ''}>
-                {mode === 'edit' ? 'Update' : 'Create'}
-              </span>
-            </Button>
-            {isSubmitting && 
-              <div className="absolute h-full top-0 left-0 right-0 flex justify-center items-center">
-                <Loader2 className="animate-spin text-primary-foreground" size={16} />
-              </div>
-            }
-          </div>
-        </form>
-      </Form>
-    </>
+          {isSubmitting && 
+            <div className="absolute h-full top-0 left-0 right-0 flex justify-center items-center">
+              <Loader2 className="animate-spin text-primary-foreground" size={16} />
+            </div>
+          }
+        </div>
+      </form>
+    </Form>
   );
 }

@@ -9,6 +9,7 @@ import ReactQueryProvider from '@/components/react-query-provider';
 import { Toaster } from '@/components/ui/sonner';
 import SessionProviderWrapper from '@/components/session-provider';
 import NextTopLoader from 'nextjs-toploader';
+import { CircleCheck, CircleAlert } from 'lucide-react';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -55,6 +56,10 @@ export default function RootLayout({ children }) {
                 <Footer />
               </SidebarInset>
               <Toaster
+                icons={{
+                  success: <CircleCheck size={16} />,
+                  error: <CircleAlert size={16} />,
+                }}
                 richColors
                 position="top-right"
                 toastOptions={{

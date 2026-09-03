@@ -130,12 +130,12 @@ export default function VariantFields({
                   name={`variants.${index}.description.${Language.ID}`}
                   render={({ field }) => (
                     <ContentInput
-                      disabled={isDeleting(variant.dbId)}
                       field={field}
-                      activeLang={Language.ID}
+                      activeLang={activeLang}
                       onActivelangChange={onActivelangChange}
                       label="Description"
                       description="Enter a clear and concise description of the variant."
+                      disabled={isDeleting(variant.dbId)}
                     />
                   )}
                 />
@@ -147,12 +147,12 @@ export default function VariantFields({
                   name={`variants.${index}.description.${Language.EN}`}
                   render={({ field }) => (
                     <ContentInput
-                      disabled={isDeleting(variant.dbId)}
                       field={field}
-                      activeLang={Language.EN}
+                      activeLang={activeLang}
                       onActivelangChange={onActivelangChange}
                       label="Description"
                       description="Enter a clear and concise description of the variant."
+                      disabled={isDeleting(variant.dbId)}
                     />
                   )}
                 />

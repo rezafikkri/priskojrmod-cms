@@ -33,8 +33,6 @@ import { useEffect } from 'react';
 
 export default function Editor({
   onChange,
-  ref,
-  onBlur,
   value,
   isError,
   isResetEditor,
@@ -91,8 +89,9 @@ export default function Editor({
     injectCSS: false,
     editorProps: {
       attributes: {
-        class: 'max-w-full transition-[color,box-shadow] border border-input px-3 py-1.5 rounded-md selection:bg-primary selection:text-primary-foreground focus-visible:border-ring ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] outline-none min-h-30 prose prose-zinc dark:prose-invert prose-p:text-zinc-800 dark:prose-p:text-zinc-200 dark:prose-a:text-green-600 prose-a:text-green-700 prose-li:[&_p:first-child]:m-0 prose-li:first:mt-0 prose-li:last:mb-0 data-[error=true]:border-destructive focus-visible:data-[error=true]:border-destructive data-[error=true]:ring-destructive/20 dark:data-[error=true]:ring-destructive/40 [&[contenteditable=false]]:pointer-events-none [&[contenteditable=false]]:opacity-50',
-        'data-error': isError,
+        role: 'textbox',
+        class: 'max-w-full transition-[color,box-shadow] border border-input px-3 py-1.5 rounded-md selection:bg-primary selection:text-primary-foreground focus-visible:border-ring ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] outline-none min-h-30 prose prose-zinc dark:prose-invert prose-p:text-zinc-800 dark:prose-p:text-zinc-200 dark:prose-a:text-green-600 prose-a:text-green-700 prose-li:[&_p:first-child]:m-0 prose-li:first:mt-0 prose-li:last:mb-0 aria-invalid:border-destructive focus-visible:aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&[contenteditable=false]]:pointer-events-none [&[contenteditable=false]]:opacity-50',
+        'aria-invalid': isError,
       },
     },
   });
@@ -110,8 +109,8 @@ export default function Editor({
       editor.setOptions({
         editorProps: {
           attributes: {
-            class: editor.options.editorProps.attributes.class,
-            'data-error': isError,
+            ...editor.options.editorProps.attributes,
+            'aria-invalid': isError,
           },
         },
       });
@@ -247,7 +246,7 @@ export default function Editor({
           </TooltipWrapper>
         </ToggleGroup>
       </FloatingMenu>
-      <EditorContent editor={editor} ref={ref} onBlur={onBlur} data-error={true} />
+      <EditorContent editor={editor} />
     </>
   );
 }

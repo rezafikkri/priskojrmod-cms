@@ -5,9 +5,8 @@ import {
   FormLabel,
 } from '../ui/form';
 import Editor from '../ui/editor';
-import { getNestedValue } from '@/lib/utils';
+import { getLangErrorInfo } from '@/lib/utils';
 import FormLanguageSelect from './form-language-select';
-import { Language } from '@/constants/enums';
 import { useFormState } from 'react-hook-form';
 
 export default function ContentInput({
@@ -21,21 +20,12 @@ export default function ContentInput({
 }) {
   const { errors, isSubmitting } = useFormState();
 
-  const parentFieldName = field.name.slice(0, field.name.lastIndexOf('.'));
-  let isOtherSectionError = false;
-  let isContentError = false;
-  let error;
-  if (errors && Object.keys(errors).length) {
-    error = getNestedValue(errors, parentFieldName);
-
-    // This logic is highly dependent on the format of
-    // the translations object in mapTranslationsToObject
-    if (error && !error[activeLang]) {
-      isOtherSectionError = true;
-    } else if (error) {
-      isContentError = true;
-    }
-  }
+  const {
+    error,
+    isInactiveLangError,
+    isActiveLangError,
+    inactiveLangErrorMessage,
+  } = getLangErrorInfo({ activeLang, fieldName: field.name, errors });
 
   return (
     <FormItem>
@@ -44,13 +34,12 @@ export default function ContentInput({
         <FormLanguageSelect
           activeLang={activeLang}
           onSelect={onActivelangChange}
-          isOtherSectionError={isOtherSectionError}
         />
       </FormLabel>
       <FormControl>
         <Editor
           {...field}
-          isError={isContentError}
+          isError={isActiveLangError}
           disabled={disabled || isSubmitting}
           isResetEditor={isResetEditor}
         />
@@ -58,8 +47,8 @@ export default function ContentInput({
       <FormDescription>{description}</FormDescription>
       {error && (
         <p className="text-destructive dark:text-red-500/85 text-sm">
-          {isOtherSectionError
-            ? `There are errors in the ${activeLang === Language.ID ? 'English' : 'Indonesian'} section`
+          {isInactiveLangError
+            ? inactiveLangErrorMessage
             : error[activeLang].message}
         </p>
       )}
