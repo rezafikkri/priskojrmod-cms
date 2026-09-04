@@ -30,7 +30,7 @@ import { FormErrorMessage } from '../ui/form-error-message';
 function OfficeHoursInput({
   field,
   activeLang,
-  onActivelangChange,
+  onActiveLangChange,
   errors,
   disabled = false,
 }) {
@@ -46,7 +46,7 @@ function OfficeHoursInput({
         Office hours
         <FormLanguageSelect
           activeLang={activeLang}
-          onSelect={onActivelangChange}
+          onSelect={onActiveLangChange}
         />
       </FormLabel>
       <FormControl>
@@ -179,7 +179,7 @@ export default function EditForm({ aboutUs }) {
                 <OfficeHoursInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   disabled={isSubmitting}
                   errors={errors}
                 />
@@ -192,7 +192,7 @@ export default function EditForm({ aboutUs }) {
                 <ContentInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   description="Enter detailed information about the business"
                   disabled={isSubmitting}
                 />
@@ -209,7 +209,7 @@ export default function EditForm({ aboutUs }) {
                 <OfficeHoursInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   disabled={isSubmitting}
                   errors={errors}
                 />
@@ -222,7 +222,7 @@ export default function EditForm({ aboutUs }) {
                 <ContentInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   description="Enter detailed information about the business"
                   disabled={isSubmitting}
                 />

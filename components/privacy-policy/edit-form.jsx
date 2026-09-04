@@ -94,7 +94,7 @@ export default function EditForm({ privacyPolicy }) {
               <ContentInput
                 field={field}
                 activeLang={activeLang}
-                onActivelangChange={setActiveLang}
+                onActiveLangChange={setActiveLang}
                 description="Enter privacy policy content"
                 disabled={isSubmitting}
               />
@@ -109,7 +109,7 @@ export default function EditForm({ privacyPolicy }) {
               <ContentInput
                 field={field}
                 activeLang={activeLang}
-                onActivelangChange={setActiveLang}
+                onActiveLangChange={setActiveLang}
                 description="Enter privacy policy content"
                 disabled={isSubmitting}
               />

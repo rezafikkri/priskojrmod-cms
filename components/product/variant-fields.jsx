@@ -42,7 +42,7 @@ export default function VariantFields({
     onAppend,
     onIncrementPending,
     onDecrementPending,
-    onActivelangChange,
+    onActiveLangChange,
   } = handlers;
   const [deletingIds, setDeletingIds] = useState([]);
   const queryClient = useQueryClient();
@@ -132,7 +132,7 @@ export default function VariantFields({
                     <ContentInput
                       field={field}
                       activeLang={activeLang}
-                      onActivelangChange={onActivelangChange}
+                      onActiveLangChange={onActiveLangChange}
                       label="Description"
                       description="Enter a clear and concise description of the variant."
                       disabled={isDeleting(variant.dbId)}
@@ -149,7 +149,7 @@ export default function VariantFields({
                     <ContentInput
                       field={field}
                       activeLang={activeLang}
-                      onActivelangChange={onActivelangChange}
+                      onActiveLangChange={onActiveLangChange}
                       label="Description"
                       description="Enter a clear and concise description of the variant."
                       disabled={isDeleting(variant.dbId)}

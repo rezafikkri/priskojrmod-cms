@@ -23,7 +23,7 @@ import { FormErrorMessage } from '../ui/form-error-message';
 function NameInput({
   field,
   activeLang,
-  onActivelangChange,
+  onActiveLangChange,
   errors,
   disabled = false,
 }) {
@@ -39,7 +39,7 @@ function NameInput({
         Name
         <FormLanguageSelect
           activeLang={activeLang}
-          onSelect={onActivelangChange}
+          onSelect={onActiveLangChange}
         />
       </FormLabel> 
       <FormControl>
@@ -82,7 +82,7 @@ export default function FormFields({
                 <NameInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   errors={errors}
                   disabled={isSubmitting}
                 />
@@ -95,7 +95,7 @@ export default function FormFields({
                 <ContentInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   {...(isResetEditor && { isResetEditor })}
                   description="Enter license content"
                   disabled={isSubmitting}
@@ -113,7 +113,7 @@ export default function FormFields({
                 <NameInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   errors={errors}
                   disabled={isSubmitting}
                 />
@@ -126,7 +126,7 @@ export default function FormFields({
                 <ContentInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   {...(isResetEditor && { isResetEditor })}
                   description="Enter license content"
                   disabled={isSubmitting}

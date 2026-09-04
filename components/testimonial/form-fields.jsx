@@ -85,7 +85,7 @@ export default function FormFields({
               <ContentInput
                 field={field}
                 activeLang={activeLang}
-                onActivelangChange={setActiveLang}
+                onActiveLangChange={setActiveLang}
                 {...(isResetEditor && { isResetEditor })}
                 description="Enter the original message provided by the customer without modification. Translate it into the other language without altering its meaning."
                 label='Message'
@@ -102,7 +102,7 @@ export default function FormFields({
               <ContentInput
                 field={field}
                 activeLang={activeLang}
-                onActivelangChange={setActiveLang}
+                onActiveLangChange={setActiveLang}
                 {...(isResetEditor && { isResetEditor })}
                 description="Enter the original message provided by the customer without modification. Translate it into the other language without altering its meaning."
                 label='Message'

@@ -94,7 +94,7 @@ export default function EditForm({ termsOfService }) {
               <ContentInput
                 field={field}
                 activeLang={activeLang}
-                onActivelangChange={setActiveLang}
+                onActiveLangChange={setActiveLang}
                 description="Enter term of service content"
                 disabled={isSubmitting}
               />
@@ -109,7 +109,7 @@ export default function EditForm({ termsOfService }) {
               <ContentInput
                 field={field}
                 activeLang={activeLang}
-                onActivelangChange={setActiveLang}
+                onActiveLangChange={setActiveLang}
                 description="Enter term of service content"
                 disabled={isSubmitting}
               />

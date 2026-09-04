@@ -23,7 +23,7 @@ import { FormErrorMessage } from '../ui/form-error-message';
 function TitleInput({
   field,
   activeLang,
-  onActivelangChange,
+  onActiveLangChange,
   errors,
   disabled = false,
 }) {
@@ -39,7 +39,7 @@ function TitleInput({
         Title
         <FormLanguageSelect
           activeLang={activeLang}
-          onSelect={onActivelangChange}
+          onSelect={onActiveLangChange}
         />
       </FormLabel> 
       <FormControl>
@@ -82,7 +82,7 @@ export default function FormFields({
                 <TitleInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   disabled={isSubmitting}
                   errors={errors}
                 />
@@ -95,7 +95,7 @@ export default function FormFields({
                 <ContentInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   {...(isResetEditor && { isResetEditor })}
                   description="Enter faq content"
                   disabled={isSubmitting}
@@ -113,7 +113,7 @@ export default function FormFields({
                 <TitleInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   disabled={isSubmitting}
                   errors={errors}
                 />
@@ -126,7 +126,7 @@ export default function FormFields({
                 <ContentInput
                   field={field}
                   activeLang={activeLang}
-                  onActivelangChange={setActiveLang}
+                  onActiveLangChange={setActiveLang}
                   {...(isResetEditor && { isResetEditor })}
                   description="Enter faq content"
                   disabled={isSubmitting}

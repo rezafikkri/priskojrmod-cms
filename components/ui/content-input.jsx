@@ -13,7 +13,7 @@ import { FormErrorMessage } from './form-error-message';
 export default function ContentInput({
   field,
   activeLang,
-  onActivelangChange,
+  onActiveLangChange,
   isResetEditor,
   description,
   disabled = false,
@@ -34,7 +34,7 @@ export default function ContentInput({
         <span>{label}</span>
         <FormLanguageSelect
           activeLang={activeLang}
-          onSelect={onActivelangChange}
+          onSelect={onActiveLangChange}
         />
       </FormLabel>
       <FormControl>

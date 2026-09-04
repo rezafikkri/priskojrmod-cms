@@ -98,7 +98,7 @@ export default function ContentForm({
                   <ContentInput
                     field={field}
                     activeLang={activeLang}
-                    onActivelangChange={setActiveLang}
+                    onActiveLangChange={setActiveLang}
                     label="Description"
                     description="Enter a clear and concise description of the product."
                   />
@@ -112,7 +112,7 @@ export default function ContentForm({
                     <ContentInput
                       field={field}
                       activeLang={activeLang}
-                      onActivelangChange={setActiveLang}
+                      onActiveLangChange={setActiveLang}
                       label="Changelog"
                       description="Enter the changes or updates included in this release."
                     />
@@ -130,7 +130,7 @@ export default function ContentForm({
                   <ContentInput
                     field={field}
                     activeLang={activeLang}
-                    onActivelangChange={setActiveLang}
+                    onActiveLangChange={setActiveLang}
                     label="Description"
                     description="Enter a clear and concise description of the product."
                   />
@@ -144,7 +144,7 @@ export default function ContentForm({
                     <ContentInput
                       field={field}
                       activeLang={activeLang}
-                      onActivelangChange={setActiveLang}
+                      onActiveLangChange={setActiveLang}
                       label="Changelog"
                       description="Enter the changes or updates included in this release."
                     />

@@ -194,7 +194,7 @@ export default function ExtrasForm({
                 onRemove: removeVariant,
                 onIncrementPending: incrementPending,
                 onDecrementPending: decrementPending,
-                onActivelangChange: setActiveLang,
+                onActiveLangChange: setActiveLang,
               }}
             />
           </section>
