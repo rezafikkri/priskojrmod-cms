@@ -164,6 +164,7 @@ export default function TransactionsTable() {
     data: dataT,
     isPending: isPendingT,
     isRefetching: isRefetchingT,
+    isFetching: isFetchingT,
     isError: isErrorT,
     error: errorT,
     isPlaceholderData: isPlaceholderDataT,
@@ -193,11 +194,15 @@ export default function TransactionsTable() {
       startProgress();
     } else if (!isRefetchingT) {
       doneProgress();
-
-      // reset fetchAction
-      updateFetchAction(null);
     }
   }, [isRefetchingT, fetchAction, startProgress, doneProgress]);
+
+  // reset fetchAction
+  useEffect(() => {
+    if (!isFetchingT) {
+      updateFetchAction(null);
+    }
+  }, [isFetchingT]);
 
   async function handleSearch(key) {
     const keyResult = searchKeySchema.safeParse(key);

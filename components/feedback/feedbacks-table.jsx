@@ -118,6 +118,7 @@ export default function FeedbacksTable() {
     data: dataF,
     isPending: isPendingF,
     isRefetching: isRefetchingF,
+    isFetching: isFetchingF,
     isError: isErrorF,
     error: errorF,
   } = useQuery({
@@ -147,11 +148,15 @@ export default function FeedbacksTable() {
       }
     } else if (!isRefetchingF) {
       doneProgress();
-
-      // reset fetchAction
-      setFetchAction(null);
     }
   }, [isRefetchingF, fetchAction, startProgress, doneProgress]);
+
+  // reset fetchAction
+  useEffect(() => {
+    if (!isFetchingF) {
+      setFetchAction(null);
+    }
+  }, [isFetchingF]);
 
   function handleRefresh() {
     setFetchAction('refresh');

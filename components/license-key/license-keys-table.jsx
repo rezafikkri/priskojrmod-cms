@@ -170,6 +170,7 @@ export default function LicenseKeysTable() {
     data: dataLK,
     isPending: isPendingLK,
     isRefetching: isRefetchingLK,
+    isFetching: isFetchingLK,
     isError: isErrorLK,
     error: errorLK,
     isPlaceholderData: isPlaceholderDataLK,
@@ -207,11 +208,15 @@ export default function LicenseKeysTable() {
       }
     } else if (!isRefetchingLK) {
       doneProgress();
-
-      // reset fetchAction
-      updateFetchAction(null);
     }
   }, [isRefetchingLK, fetchAction, startProgress, doneProgress]);
+
+  // reset fetchAction
+  useEffect(() => {
+    if (!isFetchingLK) {
+      updateFetchAction(null);
+    }
+  }, [isFetchingLK]);
 
   function handleSearch(key) {
     const keyResult = searchKeySchema.safeParse(key);

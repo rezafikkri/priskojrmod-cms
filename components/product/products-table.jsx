@@ -102,6 +102,7 @@ export default function ProductsTable({ isOwner }) {
     data: dataP,
     isPending: isPendingP,
     isRefetching: isRefetchingP,
+    isFetching: isFetchingP,
     isError: isErrorP,
     error: errorP,
   } = useQuery({
@@ -149,11 +150,15 @@ export default function ProductsTable({ isOwner }) {
       startProgress();
     } else if (!isRefetchingP) {
       doneProgress();
-
-      // reset fetchAction
-      setFetchAction(null);
     }
   }, [isRefetchingP]);
+
+  // reset fetchAction
+  useEffect(() => {
+    if (!isFetchingP) {
+      setFetchAction(null);
+    }
+  }, [isFetchingP]);
 
   function handleRefresh() {
     setFetchAction('refresh');

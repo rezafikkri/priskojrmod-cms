@@ -134,6 +134,7 @@ export default function CustomersTable() {
     data: dataC,
     isPending: isPendingC,
     isRefetching: isRefetchingC,
+    isFetching: isFetchingC,
     isError: isErrorC,
     error: errorC,
     isPlaceholderData: isPlaceholderDataC,
@@ -163,11 +164,15 @@ export default function CustomersTable() {
       startProgress();
     } else if (!isRefetchingC) {
       doneProgress();
-
-      // reset fetchAction
-      updateFetchAction(null);
     }
   }, [isRefetchingC, startProgress, doneProgress, fetchAction]);
+
+  // reset fetchAction
+  useEffect(() => {
+    if (!isFetchingC) {
+      updateFetchAction(null);
+    }
+  }, [isFetchingC]);
 
   async function handleSearch(key) {
     const keyResult = searchKeySchema.safeParse(key);
