@@ -114,32 +114,6 @@ export default function ProductsTable({ isOwner }) {
       });
       return results?.data;
     },
-    select: (product) => ({
-      items: product.items.map(product => {
-        let newProduct = { ...product };
-
-        // mapping prices
-        if (newProduct.priceType === PriceType.PAID) {
-          const prices = newProduct.variants.flatMap(variant => variant.prices);
-          newProduct.prices = prices.reduce((acc, { currencyCode, price }) => {
-            if (!acc[currencyCode]) {
-              acc[currencyCode] = { min: price, max: price };
-            } else {
-              if (acc[currencyCode].min > price) acc[currencyCode].min = price;
-              if (acc[currencyCode].max < price) acc[currencyCode].max = price;
-            }
-            return acc;
-          }, {});
-        }
-        delete newProduct.variants;
-
-        // mapping releasedAt
-        newProduct.releasedAt = newProduct.versions[0].releasedAt;
-        delete newProduct.versions;
-
-        return newProduct;
-      }),
-    }),
     placeholderData: keepPreviousData,
     staleTime: STALE_TIME,
   });
