@@ -10,6 +10,34 @@ import FormImagePreview from '../ui/form-image-preview';
 import { cmsConfig } from '@/config/cms';
 import { callAction } from '@/lib/call-action';
 
+function DeleteButton({
+  imagesCount,
+  imagesWithDbIdCount,
+  image,
+  index,
+  onDelete,
+  disabled = false,
+}) {
+  const canDelete = imagesCount > 1 && (imagesWithDbIdCount > 1 || !image.dbId);
+  const tooltipText = canDelete
+    ? 'Delete image'
+    : 'Image cannot be deleted because it\'s the last existing one.';
+
+  return (
+    <TooltipWrapper text={tooltipText}>
+      <Button
+        onClick={() => onDelete(image.dbId, index)}
+        variant="outline"
+        type="button"
+        className="p-1! h-auto border-0 rounded-full hover:text-destructive dark:hover:text-red-500/90 dark:hover:bg-zinc-800/95 disabled:pointer-events-auto disabled:hover:text-foreground"
+        disabled={!canDelete || disabled}
+      >
+        <Trash className="icon size-4" />
+      </Button>
+    </TooltipWrapper>
+  );
+}
+
 export default function ImageGrid({
   form,
   images,
@@ -26,6 +54,7 @@ export default function ImageGrid({
   const { isSubmitting } = form.formState;
 
   const isDeleting = (id) => deletingIds.includes(id);
+  const imagesWithDbIdCount = images.reduce((acc, { dbId }) => dbId ? acc + 1 : acc, 0);
 
   function handleSetAsThumbnail({ index, image }) {
     for (const [currentIndex, image] of images.entries()) {
@@ -94,17 +123,15 @@ export default function ImageGrid({
                   </Button>
                 </TooltipWrapper>
               )}
-              <TooltipWrapper text="Delete" background="bg-destructive">
-                <Button
-                  onClick={() => handleDelete(image.dbId, index)}
-                  variant="outline"
-                  type="button"
-                  className="p-1! h-auto border-0 rounded-full hover:text-destructive dark:hover:text-red-500/90 dark:hover:bg-zinc-800/95"
-                  disabled={isSubmitting}
-                >
-                  <Trash className="icon size-4" />
-                </Button>
-              </TooltipWrapper>
+
+              <DeleteButton
+                imagesCount={images.length}
+                imagesWithDbIdCount={imagesWithDbIdCount}
+                image={image}
+                index={index}
+                onDelete={handleDelete}
+                disabled={isSubmitting}
+              />
             </div>
             <img
               src={image.url}

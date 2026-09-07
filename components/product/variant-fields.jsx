@@ -30,6 +30,55 @@ import { callAction } from '@/lib/call-action';
 import { Language } from '@/constants/enums';
 import ContentInput from '../ui/content-input';
 
+function DeleteButton({
+  variantsCount,
+  variantsWithDbIdCount,
+  variant,
+  isDeleting,
+  openDeleteDialog,
+  onRemove,
+  index,
+  disabled = false,
+}) {
+  const canDelete = variantsCount > 1 && (variantsWithDbIdCount > 1 || !variant.dbId);
+  const tooltipText = canDelete
+    ? 'Delete variant'
+    : 'Variant cannot be deleted because it\'s the last existing one.';
+
+  return (
+    <div className="relative inline-block">
+      <TooltipWrapper text={tooltipText}>
+        <Button
+          type="button"
+          variant="secondary"
+          className={`disabled:pointer-events-auto disabled:hover:text-secondary-foreground hover:text-destructive dark:hover:text-red-500/90 ${isDeleting(variant.dbId) ? 'disabled:opacity-100' : ''}`}
+          onClick={() => {
+            if (variant.dbId) {
+              openDeleteDialog({
+                dbId: variant.dbId,
+                index,
+                name: variant.name,
+              });
+            } else {
+              onRemove(index);
+            }
+          }}
+          disabled={!canDelete || disabled}
+        >
+          <Trash className={`icon ${isDeleting(variant.dbId) ? 'opacity-0' : ''}`} />
+        </Button>
+      </TooltipWrapper>               
+      {isDeleting(variant.dbId) &&
+        <div
+          className="absolute h-full top-0 left-0 right-0 flex justify-center items-center"
+        >
+          <Loader2 className="animate-spin" size={16} />
+        </div>
+      }
+    </div>
+  );
+}
+
 export default function VariantFields({
   form,
   variants,
@@ -68,6 +117,7 @@ export default function VariantFields({
     });
   }
 
+  const variantsWithDbIdCount = variants.reduce((acc, { dbId }) => dbId ? acc + 1 : acc, 0);
   const isDeleting = (id) => deletingIds.includes(id);
   const isSubmitting = form.formState.isSubmitting;
 
@@ -90,7 +140,6 @@ export default function VariantFields({
       toast.error(removeRes.message, {
         duration: cmsConfig.toast.duration.error
       });
-      return;
     }
 
     // set pending state for enabled prev next button and hide loading
@@ -100,170 +149,151 @@ export default function VariantFields({
 
   return (
     <>
-      {variants.map((variant, index) => (
-        <Fragment key={variant.id}>
-          <div className="flex gap-5 items-center">
-            <div className="flex-1 space-y-6">
-              <FormField
-                control={form.control}
-                name={`variants.${index}.name`}
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel className="text-base">Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isSubmitting || isDeleting(variant.dbId)}
-                        className="shadow-none md:text-base h-auto px-3 py-1.5"
-                      />
-                    </FormControl>
-                    <FormDescription>Enter the variant name</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* ContentInput's disabled doesn't combine isSubmitting — already handled internally. */}
-              {activeLang === Language.ID && (
+      {variants.map((variant, index) => {
+        return (
+          <Fragment key={variant.id}>
+            <div className="flex gap-5 items-center">
+              <div className="flex-1 space-y-6">
                 <FormField
                   control={form.control}
-                  name={`variants.${index}.description.${Language.ID}`}
+                  name={`variants.${index}.name`}
                   render={({ field }) => (
-                    <ContentInput
-                      field={field}
-                      activeLang={activeLang}
-                      onActiveLangChange={onActiveLangChange}
-                      label="Description"
-                      description="Enter a clear and concise description of the variant."
-                      disabled={isDeleting(variant.dbId)}
-                    />
-                  )}
-                />
-              )}
-
-              {activeLang === Language.EN && (
-                <FormField
-                  control={form.control}
-                  name={`variants.${index}.description.${Language.EN}`}
-                  render={({ field }) => (
-                    <ContentInput
-                      field={field}
-                      activeLang={activeLang}
-                      onActiveLangChange={onActiveLangChange}
-                      label="Description"
-                      description="Enter a clear and concise description of the variant."
-                      disabled={isDeleting(variant.dbId)}
-                    />
-                  )}
-                />
-              )}
-
-              <FormField
-                control={form.control}
-                name={`variants.${index}.downloadUrl`}
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel className="text-base">Download link</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isSubmitting || isDeleting(variant.dbId)}
-                        className="shadow-none md:text-base h-auto px-3 py-1.5"
-                      />
-                    </FormControl>
-                    <FormDescription>Optional. Add a download URL if this variant includes an extra file.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`variants.${index}.fileAccessPassword`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base">File access password</FormLabel>
-                    <div className="flex w-full items-center">
+                    <FormItem className="flex-1">
+                      <FormLabel className="text-base">Name</FormLabel>
                       <FormControl>
                         <Input
-                          disabled={isSubmitting || isDeleting(variant.dbId)}
-                          className="md:text-base h-auto px-3 py-1.5 -me-[1px] shadow-none rounded-e-none z-3 relativ"
                           {...field}
+                          disabled={isSubmitting || isDeleting(variant.dbId)}
+                          className="shadow-none md:text-base h-auto px-3 py-1.5"
                         />
                       </FormControl>
-                      <Button
-                        variant="secondary"
-                        type="button"
-                        onClick={() => field.onChange(generatePassword())}
-                        className={'h-auto text-base px-3 py-1.5 border rounded-s-none'}
-                        disabled={isSubmitting || isDeleting(variant.dbId)}
-                      >
-                        Generate
-                      </Button>
-                    </div>
-                    <FormDescription>Enter a strong password for the extra file in the download link. Click Generate to create one automatically or use an online password generator.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                      <FormDescription>Enter the variant name</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* ContentInput's disabled doesn't combine
+                  isSubmitting — already handled internally. */}
+                {activeLang === Language.ID && (
+                  <FormField
+                    control={form.control}
+                    name={`variants.${index}.description.${Language.ID}`}
+                    render={({ field }) => (
+                      <ContentInput
+                        field={field}
+                        activeLang={activeLang}
+                        onActiveLangChange={onActiveLangChange}
+                        label="Description"
+                        description="Enter a clear and concise description of the variant."
+                        disabled={isDeleting(variant.dbId)}
+                      />
+                    )}
+                  />
                 )}
-              />
-            </div>
 
-            <Separator orientation="vertical" className="h-90!" />
+                {activeLang === Language.EN && (
+                  <FormField
+                    control={form.control}
+                    name={`variants.${index}.description.${Language.EN}`}
+                    render={({ field }) => (
+                      <ContentInput
+                        field={field}
+                        activeLang={activeLang}
+                        onActiveLangChange={onActiveLangChange}
+                        label="Description"
+                        description="Enter a clear and concise description of the variant."
+                        disabled={isDeleting(variant.dbId)}
+                      />
+                    )}
+                  />
+                )}
 
-            <div className="flex flex-col gap-3">
-              {(variants.length > 1 || variant.dbId) && (
-                <div className="relative inline-block">
-                  <TooltipWrapper text="Delete variant" background="bg-destructive">
+                <FormField
+                  control={form.control}
+                  name={`variants.${index}.downloadUrl`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel className="text-base">Download link</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          disabled={isSubmitting || isDeleting(variant.dbId)}
+                          className="shadow-none md:text-base h-auto px-3 py-1.5"
+                        />
+                      </FormControl>
+                      <FormDescription>Optional. Add a download URL if this variant includes an extra file.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`variants.${index}.fileAccessPassword`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-base">File access password</FormLabel>
+                      <div className="flex w-full items-center">
+                        <FormControl>
+                          <Input
+                            disabled={isSubmitting || isDeleting(variant.dbId)}
+                            className="md:text-base h-auto px-3 py-1.5 -me-[1px] shadow-none rounded-e-none z-3 relativ"
+                            {...field}
+                          />
+                        </FormControl>
+                        <Button
+                          variant="secondary"
+                          type="button"
+                          onClick={() => field.onChange(generatePassword())}
+                          className={'h-auto text-base px-3 py-1.5 border rounded-s-none'}
+                          disabled={isSubmitting || isDeleting(variant.dbId)}
+                        >
+                          Generate
+                        </Button>
+                      </div>
+                      <FormDescription>Enter a strong password for the extra file in the download link. Click Generate to create one automatically or use an online password generator.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <Separator orientation="vertical" className="h-90!" />
+
+              <div className="flex flex-col gap-3">
+                <DeleteButton
+                  variantsCount={variants.length}
+                  variantsWithDbIdCount={variantsWithDbIdCount}
+                  variant={variant}
+                  isDeleting={isDeleting}
+                  openDeleteDialog={openDeleteDialog}
+                  onRemove={onRemove}
+                  index={index}
+                  disabled={isSubmitting || isDeleting(variant.dbId)}
+                />
+                {index === variants.length - 1 && (
+                  <TooltipWrapper text="Add variant">
                     <Button
                       type="button"
                       variant="secondary"
-                      className={`hover:text-destructive dark:hover:text-red-500/90 ${isDeleting(variant.dbId) ? 'disabled:opacity-100' : ''}`}
-                      onClick={() => {
-                        if (variant.dbId) {
-                          openDeleteDialog({
-                            dbId: variant.dbId,
-                            index,
-                            name: variant.name,
-                          });
-                        } else {
-                          onRemove(index);
-                        }
-                      }}
-                      disabled={isSubmitting || isDeleting(variant.dbId)}
+                      onClick={handleAdd}
+                      disabled={isSubmitting}
                     >
-                      <Trash className={`icon ${isDeleting(variant.dbId) ? 'opacity-0' : ''}`} />
+                      <Plus />
                     </Button>
-                  </TooltipWrapper>               
-                  {isDeleting(variant.dbId) &&
-                    <div
-                      className="absolute h-full top-0 left-0 right-0 flex justify-center items-center"
-                    >
-                      <Loader2 className="animate-spin" size={16} />
-                    </div>
-                  }
-                </div>
-              )}
-              {index === variants.length - 1 && (
-                <TooltipWrapper text="Add variant">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={handleAdd}
-                    disabled={isSubmitting}
-                  >
-                    <Plus />
-                  </Button>
-                </TooltipWrapper>
-              )}
+                  </TooltipWrapper>
+                )}
+              </div>
             </div>
-          </div>
 
-          {index !== variants.length - 1 && (
-            <div className="pe-15">
-              <Separator />
-            </div>
-          )}
-        </Fragment>
-      ))}
+            {index !== variants.length - 1 && (
+              <div className="pe-15">
+                <Separator />
+              </div>
+            )}
+          </Fragment>
+        );
+      })}
 
       <DeleteDialog
         onDelete={() => handleDelete(deleteData)}
