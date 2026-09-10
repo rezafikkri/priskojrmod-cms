@@ -14,8 +14,9 @@ import { Input } from '../ui/input';
 
 export default function EditRevokeStatusDialog({
   onEditRevokeStatus,
+  onContinue,
   isOpen,
-  onClose,
+  onIsOpenChange,
   editRevokeStatusData,
 }) {
   const [email, setEmail] = useState('');
@@ -26,18 +27,31 @@ export default function EditRevokeStatusDialog({
   const targetAppName = editRevokeStatusData?.appName;
   const isEditRevokeStatusConfirmed = isRevoked || (email === targetEmail && appName === targetAppName);
 
-  function handleEditRevokeStatus() {
+  // editRevokeStatusData is not reset to null on close, mainly because resetting it
+  // alongside setIsOpen(false) gets batched into the same rerender, and the dialog's
+  // exit animation keeps it mounted with that null data for a moment, causing a
+  // visible layout flash.
+
+  function handleContinue() {
     if (!isRevoked && (email !== targetEmail || appName !== targetAppName)) return false;
 
-    onClose();
+    onIsOpenChange(false);
     setEmail('');
     setAppName('');
 
-    onEditRevokeStatus(editRevokeStatusData);
+    if (isRevoked) {
+      onEditRevokeStatus({
+        id: editRevokeStatusData.id,
+        isRevoked,
+      });
+    } else {
+      onContinue(); // open revoke form dialog
+    }
   }
 
   function handleOpenChange() {
-    onClose();
+    onIsOpenChange(false);
+
     setEmail('');
     setAppName('');
   }
@@ -105,10 +119,10 @@ export default function EditRevokeStatusDialog({
         <DialogFooter className="relative">
           <Button
             className="h-auto text-base w-full px-3 py-1.5 bg-amber-530 hover:bg-amber-530/90 focus-visible:ring-amber-530/50"
-            onClick={handleEditRevokeStatus}
+            onClick={handleContinue}
             disabled={!isEditRevokeStatusConfirmed}
           > 
-            Yes, {editRevokeStatusData?.isRevoked ? 'unrevoke' : 'revoke'}
+            {isRevoked ? 'Yes, unrevoke' : 'Continue'}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -45,9 +45,9 @@ export async function setCanRegenerateKeys(ids) {
   }
 }
 
-export async function editLicenseKeyRevokeStatus(id, isRevoked) {
+export async function editLicenseKeyRevokeStatus(data) {
   try {
-    await updateLicenseKeyRevokeStatus(id, isRevoked);
+    await updateLicenseKeyRevokeStatus(data);
     return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };

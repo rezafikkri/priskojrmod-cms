@@ -54,6 +54,7 @@ import TableActionDropdown from '../ui/table-action-dropdown';
 import { changeToLastValidPage } from '@/lib/data-table';
 import TableTwoLineCell from '../ui/table-two-line-cell';
 import { callAction } from '@/lib/call-action';
+import RevokeFormDialog from './revoke-form-dialog';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -112,12 +113,9 @@ export default function LicenseKeysTable() {
     close: closeDeleteDialog,
   } = useDialog();
 
-  const {
-    data: editRevokeStatusData,
-    isOpen: isOpenEditRevokeStatusDialog,
-    open: openEditRevokeStatusDialog,
-    close: closeEditRevokeStatusDialog,
-  } = useDialog();
+  const [editRevokeStatusData, setEditRevokeStatusData] = useState(null);
+  const [isOpenEditRevokeStatusDialog, setIsOpenEditRevokeStatusDialog] = useState(false);
+  const [isOpenRevokeFormDialog, setIsOpenRevokeFormDialog] = useState(false);
 
   const {
     data: resetDeviceData,
@@ -532,7 +530,7 @@ export default function LicenseKeysTable() {
     setIsRegenerating(false);
   }
 
-  async function handleEditRevokeStatus({ id, isRevoked }) {
+  async function handleEditRevokeStatus({ id, isRevoked, revokeNote }) {
     const toastId = toast.loading(
       `${isRevoked ? 'Unrevoking' : 'Revoking'} license key...`,
     );
@@ -543,7 +541,11 @@ export default function LicenseKeysTable() {
       return newIds;
     });
 
-    const editRes = await callAction(() => editLicenseKeyRevokeStatus(id, !isRevoked));
+    const editRes = await callAction(() => editLicenseKeyRevokeStatus({
+      id,
+      isRevoked: !isRevoked,
+      revokeNote,
+    }));
 
     setUpdatingRevokeStatusIds((prev) => {
       const newIds = prev.filter(prevId => prevId !== id);
@@ -790,7 +792,6 @@ export default function LicenseKeysTable() {
     },
     {
       accessorKey: 'lastUsedAt',
-      header: () => 'Last Used At',
       cell: ({ row }) =>
         row.getValue('lastUsedAt')
           ? formatDateTime(row.getValue('lastUsedAt'))
@@ -858,13 +859,16 @@ export default function LicenseKeysTable() {
             className="w-full text-base"
             asChild
           >
-            <button onClick={() => openEditRevokeStatusDialog({
-              id: row.original.id,
-              email: row.original.customerEmail,
-              name: row.original.customerName,
-              appName: row.getValue('appName'),
-              isRevoked: row.original.isRevoked,
-            })}>
+            <button onClick={() => {
+              setEditRevokeStatusData({
+                id: row.original.id,
+                email: row.original.customerEmail,
+                name: row.original.customerName,
+                appName: row.getValue('appName'),
+                isRevoked: row.original.isRevoked,
+              });
+              setIsOpenEditRevokeStatusDialog(true);
+            }}>
               {row.original.isRevoked ? 'Unrevoke' : 'Revoke'}
             </button>
           </DropdownMenuItem>
@@ -887,7 +891,6 @@ export default function LicenseKeysTable() {
     updatingRevokeStatusIds,
     resetDeviceIds,
     openDeleteDialog,
-    openEditRevokeStatusDialog,
     openResetDeviceDialog,
   ]);
 
@@ -1002,12 +1005,22 @@ export default function LicenseKeysTable() {
         onClose={closeDeleteDialog}
         deleteData={deleteData}
       />
+
       <EditRevokeStatusDialog
         onEditRevokeStatus={handleEditRevokeStatus}
+        onContinue={() => setIsOpenRevokeFormDialog(true)}
         isOpen={isOpenEditRevokeStatusDialog}
-        onClose={closeEditRevokeStatusDialog}
+        onIsOpenChange={setIsOpenEditRevokeStatusDialog}
         editRevokeStatusData={editRevokeStatusData}
       />
+
+      <RevokeFormDialog
+        onRevoke={handleEditRevokeStatus}
+        isOpen={isOpenRevokeFormDialog}
+        onIsOpenChange={setIsOpenRevokeFormDialog}
+        revokeData={editRevokeStatusData}
+      />
+
       <ResetDeviceDialog
         onReset={handleResetDevice}
         isOpen={isOpenResetDeviceDialog}
