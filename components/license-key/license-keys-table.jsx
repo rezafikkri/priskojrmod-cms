@@ -55,6 +55,7 @@ import { changeToLastValidPage } from '@/lib/data-table';
 import TableTwoLineCell from '../ui/table-two-line-cell';
 import { callAction } from '@/lib/call-action';
 import RevokeFormDialog from './revoke-form-dialog';
+import RevokeNoteDialog from './revoke-note-dialog';
 
 const defaultColumnVisibility = {
   appName: true,
@@ -122,6 +123,13 @@ export default function LicenseKeysTable() {
     isOpen: isOpenResetDeviceDialog,
     open: openResetDeviceDialog,
     close: closeResetDeviceDialog,
+  } = useDialog();
+
+  const {
+    data: revokeNoteData,
+    isOpen: isOpenRevokeNoteDialog,
+    open: openRevokeNoteDialog,
+    close: closeRevokeNoteDialog,
   } = useDialog();
 
   // deleting ids and revoke/unrevoke state
@@ -274,6 +282,7 @@ export default function LicenseKeysTable() {
     }
 
     await queryClient.invalidateQueries({ queryKey: ['licenseKeys'] });
+    queryClient.invalidateQueries({ queryKey: ['licenseKeyRevokeNote'] });
 
     if (pagination.pageIndex === 0) return;
 
@@ -411,6 +420,8 @@ export default function LicenseKeysTable() {
       } else {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
       }
+
+      queryClient.invalidateQueries({ queryKey: ['licenseKeyRevokeNote'] });
 
       // if id exist in rowSelection then remove
       setRowSelection(prev => {
@@ -605,6 +616,8 @@ export default function LicenseKeysTable() {
         queryClient.invalidateQueries({ queryKey: ['licenseKeys'], refetchType: 'none' });
       }
 
+      queryClient.invalidateQueries({ queryKey: ['licenseKeyRevokeNote'] });
+      
       // if id exist in rowSelection then remove
       setRowSelection(prev => {
         if (!(id in prev)) return prev;
@@ -855,10 +868,7 @@ export default function LicenseKeysTable() {
             </DropdownMenuItem>
           )}
 
-          <DropdownMenuItem
-            className="w-full text-base"
-            asChild
-          >
+          <DropdownMenuItem className="w-full text-base" asChild>
             <button onClick={() => {
               setEditRevokeStatusData({
                 id: row.original.id,
@@ -872,6 +882,22 @@ export default function LicenseKeysTable() {
               {row.original.isRevoked ? 'Unrevoke' : 'Revoke'}
             </button>
           </DropdownMenuItem>
+
+          {row.original.isRevoked && (
+            <DropdownMenuItem className="w-full text-base" asChild>
+              <button onClick={() => {
+                openRevokeNoteDialog({
+                  id: row.original.id,
+                  email: row.original.customerEmail,
+                  name: row.original.customerName,
+                  appName: row.getValue('appName'),
+                });
+              }}>
+                See revoke note
+              </button>
+            </DropdownMenuItem>
+          )}
+
           <DropdownMenuSeparator className="-mx-1.5" />
           <DropdownMenuItem className="w-full text-base" asChild>
             <button onClick={() => openDeleteDialog({
@@ -1019,6 +1045,12 @@ export default function LicenseKeysTable() {
         isOpen={isOpenRevokeFormDialog}
         onIsOpenChange={setIsOpenRevokeFormDialog}
         revokeData={editRevokeStatusData}
+      />
+
+      <RevokeNoteDialog
+        isOpen={isOpenRevokeNoteDialog}
+        onClose={closeRevokeNoteDialog}
+        revokeNoteData={revokeNoteData}
       />
 
       <ResetDeviceDialog

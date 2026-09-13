@@ -44,7 +44,7 @@ function DetailsContent({ isFetching, data, isError, error }) {
     if (data === null) {
       return (
         <div className="px-4">
-          <NotFoundAlert message="Transaction not found" />
+          <NotFoundAlert message="Transaction not found. Please refresh the table." />
         </div>
       );
     }
