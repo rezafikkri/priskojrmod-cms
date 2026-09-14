@@ -7,9 +7,15 @@ export default function InfoSectionSkeleton() {
         <Skeleton className="w-1/4 h-[24px] rounded-sm" />
         <Skeleton className="w-1/2 h-[24px] rounded-sm" />
       </div>
-      <div className="space-y-3">
-        <Skeleton className="w-3/4 h-[36px] rounded-md" />
-        <Skeleton className="w-1/3 h-[36px] rounded-md" />
+      <div className="flex gap-10">
+        <div className="space-y-3 w-1/3">
+          <Skeleton className="w-1/2 h-[36px] rounded-md" />
+          <Skeleton className="w-full h-[36px] rounded-md" />
+        </div>
+        <div className="space-y-3 w-2/3">
+          <Skeleton className="w-1/2 h-[36px] rounded-md" />
+          <Skeleton className="w-1/3 h-[36px] rounded-md" />
+        </div>
       </div>
     </div>
   );

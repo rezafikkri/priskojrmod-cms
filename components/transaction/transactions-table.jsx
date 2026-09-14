@@ -122,8 +122,13 @@ export default function TransactionsTable() {
     close: closeCancelConfirmDialog,
   } = useDialog();
 
-  const [seeDetailsId, setSeeDetailsId] = useState(null);
-  
+  const {
+    data: detailsData,
+    isOpen: isDetailsSheetOpen,
+    open: openDetailsSheet,
+    close: closeDetailsSheet,
+  } = useDialog();
+
   const [refundData, setRefundData] = useState(null);
   const [isOpenRefundFormDialog, setIsOpenRefundFormDialog] = useState(false);
   const [isOpenRefundConfirmDialog, setIsOpenRefundConfirmDialog] = useState(false);
@@ -849,7 +854,7 @@ export default function TransactionsTable() {
             <DropdownMenuItem
               className="w-full text-base"
               asChild
-              onClick={() => setSeeDetailsId(row.original.id)}
+              onClick={() => openDetailsSheet({ id: row.original.id })}
             >
               <button>See details</button>
             </DropdownMenuItem>
@@ -982,7 +987,11 @@ export default function TransactionsTable() {
         correctData={correctData}
       />
 
-      <DetailsSheet detailsId={seeDetailsId} onDetailsIdChange={setSeeDetailsId} />
+      <DetailsSheet
+        isOpen={isDetailsSheetOpen}
+        onClose={closeDetailsSheet}
+        detailsData={detailsData}
+      />
 
       <RefundConfirmDialog
         onContinue={setIsOpenRefundFormDialog}

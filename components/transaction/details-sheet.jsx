@@ -39,9 +39,7 @@ function DetailsContent({ isFetching, data, isError, error }) {
       );
     }
 
-    if (data === undefined) return null;
-
-    if (data === null) {
+    if (!data) {
       return (
         <div className="px-4">
           <NotFoundAlert message="Transaction not found. Please refresh the table." />
@@ -112,30 +110,28 @@ function DetailsContent({ isFetching, data, isError, error }) {
 // In this function "details" word, not refer to the data "details" for details section,
 // but refer to details of transaction,
 // include transaction info itself and also details of it.
-export default function DetailsSheet({ detailsId, onDetailsIdChange }) {
+export default function DetailsSheet({
+  isOpen,
+  onClose,
+  detailsData,
+}) {
   const { data, isError, error, isFetching } = useQuery({
-    queryKey: ['transactionDetails', detailsId],
+    queryKey: ['transactionDetails', detailsData?.id],
     queryFn: async ({ signal }) => {
       const results = await safeFetch({
-        url: `/api/transactions/${detailsId}`,
+        url: `/api/transactions/${detailsData?.id}`,
         signal,
       });
       return results?.data;
     },
     staleTime: 1000 * 30,
-    enabled: !!detailsId,
+    enabled: isOpen,
     refetchOnReconnect: false,
     refetchOnMount: false,
   });
 
-  function handleOpenChange(isOpen) {
-    if (!isOpen) {
-      onDetailsIdChange(null);
-    }
-  }
-
   return (
-    <Sheet open={!!detailsId} onOpenChange={handleOpenChange}>
+    <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="sm:max-w-xl overflow-auto">
         <SheetHeader>
           <SheetTitle className="text-2xl font-bold flex items-center">
