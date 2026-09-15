@@ -41,7 +41,7 @@ export default function DataTable({ admins: data }) {
   // dialog state
   const {
     data: deleteData,
-    isOpen: isOpenDeleteDialog,
+    isOpen: isDeleteDialogOpen,
     open: openDeleteDialog,
     close: closeDeleteDialog,
   } = useDialog();
@@ -184,7 +184,7 @@ export default function DataTable({ admins: data }) {
 
       <DeleteDialog
         onDelete={() => handleDelete(deleteData)}
-        isOpen={isOpenDeleteDialog}
+        isOpen={isDeleteDialogOpen}
         onClose={closeDeleteDialog}
         title="Delete Admin"
         description={`Admin <b>${deleteData?.name}</b> <span class="break-all">(${deleteData?.email})</span> will be permanently deleted.`}

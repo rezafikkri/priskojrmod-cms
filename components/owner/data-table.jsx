@@ -39,7 +39,7 @@ export default function DataTable({ owners: data }) {
   // dialog state
   const {
     data: deleteData,
-    isOpen: isOpenDeleteDialog,
+    isOpen: isDeleteDialogOpen,
     open: openDeleteDialog,
     close: closeDeleteDialog,
   } = useDialog();
@@ -193,7 +193,7 @@ export default function DataTable({ owners: data }) {
 
       <DeleteDialog
         onDelete={() => handleDelete(deleteData)}
-        isOpen={isOpenDeleteDialog}
+        isOpen={isDeleteDialogOpen}
         onClose={closeDeleteDialog}
         title="Delete Owner"
         description={`Owner <b>${deleteData?.name}</b> (${deleteData?.smIdentifier}) will be permanently deleted.`}

@@ -3,6 +3,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -48,9 +49,9 @@ export default function DetailDialog({
             </DialogTitle>
           )}
 
-          <p className="mb-5 mt-3 text-base text-zinc-950 dark:text-foreground leading-7">
+          <DialogDescription className="mb-5 mt-3 text-base text-zinc-700 dark:text-zinc-300">
             {detailData?.message}
-          </p>
+          </DialogDescription>
 
           <time className="text-[13px] text-zinc-500 leading-3">
             Created {formatDateTime(detailData?.createdAt)}

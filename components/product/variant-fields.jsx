@@ -99,7 +99,7 @@ export default function VariantFields({
   // dialog state
   const {
     data: deleteData,
-    isOpen: isOpenDeleteDialog,
+    isOpen: isDeleteDialogOpen,
     open: openDeleteDialog,
     close: closeDeleteDialog,
   } = useDialog();
@@ -297,7 +297,7 @@ export default function VariantFields({
 
       <DeleteDialog
         onDelete={() => handleDelete(deleteData)}
-        isOpen={isOpenDeleteDialog}
+        isOpen={isDeleteDialogOpen}
         onClose={closeDeleteDialog}
         title="Delete Variant"
         description={`Variant <b>${deleteData?.name}</b> will be permanently deleted. If this is a paid product, its price will be deleted as well.`}

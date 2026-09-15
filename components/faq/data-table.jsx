@@ -41,7 +41,7 @@ export default function DataTable({ faqs: data }) {
   // dialog state
   const {
     data: deleteData,
-    isOpen: isOpenDeleteDialog,
+    isOpen: isDeleteDialogOpen,
     open: openDeleteDialog,
     close: closeDeleteDialog,
   } = useDialog();
@@ -189,7 +189,7 @@ export default function DataTable({ faqs: data }) {
 
       <DeleteDialog
         onDelete={() => handleDelete(deleteData)}
-        isOpen={isOpenDeleteDialog}
+        isOpen={isDeleteDialogOpen}
         onClose={closeDeleteDialog}
         title="Delete FAQ"
         description={`FAQ <b>${deleteData?.title}</b> will be permanently deleted.`}

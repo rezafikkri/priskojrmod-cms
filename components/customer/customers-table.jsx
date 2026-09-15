@@ -92,14 +92,14 @@ export default function CustomersTable() {
   // dialog state
   const {
     data: deleteData,
-    isOpen: isOpenDeleteDialog,
+    isOpen: isDeleteDialogOpen,
     open: openDeleteDialog,
     close: closeDeleteDialog,
   } = useDialog();
   
   const {
     data: banData,
-    isOpen: isOpenBanDialog,
+    isOpen: isBanDialogOpen,
     open: openBanDialog,
     close: closeBanDialog,
   } = useDialog();
@@ -682,14 +682,14 @@ export default function CustomersTable() {
 
       <DeleteDialog
         onDelete={handleDelete}
-        isOpen={isOpenDeleteDialog}
+        isOpen={isDeleteDialogOpen}
         onClose={closeDeleteDialog}
         deleteData={deleteData}
       />
 
       <BanDialog
         onBan={handleEditBanStatus}
-        isOpen={isOpenBanDialog}
+        isOpen={isBanDialogOpen}
         onClose={closeBanDialog}
         banData={banData}
       />

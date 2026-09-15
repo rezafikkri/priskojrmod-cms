@@ -109,25 +109,25 @@ export default function LicenseKeysTable() {
   // dialog state
   const {
     data: deleteData,
-    isOpen: isOpenDeleteDialog,
+    isOpen: isDeleteDialogOpen,
     open: openDeleteDialog,
     close: closeDeleteDialog,
   } = useDialog();
 
   const [editRevokeStatusData, setEditRevokeStatusData] = useState(null);
-  const [isOpenEditRevokeStatusDialog, setIsOpenEditRevokeStatusDialog] = useState(false);
-  const [isOpenRevokeFormDialog, setIsOpenRevokeFormDialog] = useState(false);
+  const [isEditRevokeStatusDialogOpen, setIsEditRevokeStatusDialogOpen] = useState(false);
+  const [isRevokeFormDialogOpen, setIsRevokeFormDialogOpen] = useState(false);
 
   const {
     data: resetDeviceData,
-    isOpen: isOpenResetDeviceDialog,
+    isOpen: isResetDeviceDialogOpen,
     open: openResetDeviceDialog,
     close: closeResetDeviceDialog,
   } = useDialog();
 
   const {
     data: revokeNoteData,
-    isOpen: isOpenRevokeNoteDialog,
+    isOpen: isRevokeNoteDialogOpen,
     open: openRevokeNoteDialog,
     close: closeRevokeNoteDialog,
   } = useDialog();
@@ -877,7 +877,7 @@ export default function LicenseKeysTable() {
                 appName: row.getValue('appName'),
                 isRevoked: row.original.isRevoked,
               });
-              setIsOpenEditRevokeStatusDialog(true);
+              setIsEditRevokeStatusDialogOpen(true);
             }}>
               {row.original.isRevoked ? 'Unrevoke' : 'Revoke'}
             </button>
@@ -1027,35 +1027,35 @@ export default function LicenseKeysTable() {
 
       <DeleteDialog
         onDelete={handleDelete}
-        isOpen={isOpenDeleteDialog}
+        isOpen={isDeleteDialogOpen}
         onClose={closeDeleteDialog}
         deleteData={deleteData}
       />
 
       <EditRevokeStatusDialog
         onEditRevokeStatus={handleEditRevokeStatus}
-        onContinue={() => setIsOpenRevokeFormDialog(true)}
-        isOpen={isOpenEditRevokeStatusDialog}
-        onIsOpenChange={setIsOpenEditRevokeStatusDialog}
+        onContinue={() => setIsRevokeFormDialogOpen(true)}
+        isOpen={isEditRevokeStatusDialogOpen}
+        onIsOpenChange={setIsEditRevokeStatusDialogOpen}
         editRevokeStatusData={editRevokeStatusData}
       />
 
       <RevokeFormDialog
         onRevoke={handleEditRevokeStatus}
-        isOpen={isOpenRevokeFormDialog}
-        onIsOpenChange={setIsOpenRevokeFormDialog}
+        isOpen={isRevokeFormDialogOpen}
+        onIsOpenChange={setIsRevokeFormDialogOpen}
         revokeData={editRevokeStatusData}
       />
 
       <RevokeNoteDialog
-        isOpen={isOpenRevokeNoteDialog}
+        isOpen={isRevokeNoteDialogOpen}
         onClose={closeRevokeNoteDialog}
         revokeNoteData={revokeNoteData}
       />
 
       <ResetDeviceDialog
         onReset={handleResetDevice}
-        isOpen={isOpenResetDeviceDialog}
+        isOpen={isResetDeviceDialogOpen}
         onClose={closeResetDeviceDialog}
         resetData={resetDeviceData}
       />

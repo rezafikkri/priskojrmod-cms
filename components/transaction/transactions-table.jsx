@@ -103,21 +103,21 @@ export default function TransactionsTable() {
   // dialog state
   const {
     data: correctData,
-    isOpen: isOpenCorrectStatusDialog,
+    isOpen: isCorrectStatusDialogOpen,
     open: openCorrectStatusDialog,
     close: closeCorrectStatusDialog,
   } = useDialog();    
   
   const {
     data: refundDeadlineData,
-    isOpen: isOpenRefundDeadlineDialog,
+    isOpen: isRefundDeadlineDialogOpen,
     open: openRefundDeadlineDialog,
     close: closeRefundDeadlineDialog,
   } = useDialog();
 
   const {
     data: cancelData,
-    isOpen: isOpenCancelConfirmDialog,
+    isOpen: isCancelConfirmDialogOpen,
     open: openCancelConfirmDialog,
     close: closeCancelConfirmDialog,
   } = useDialog();
@@ -130,8 +130,8 @@ export default function TransactionsTable() {
   } = useDialog();
 
   const [refundData, setRefundData] = useState(null);
-  const [isOpenRefundFormDialog, setIsOpenRefundFormDialog] = useState(false);
-  const [isOpenRefundConfirmDialog, setIsOpenRefundConfirmDialog] = useState(false);
+  const [isRefundFormDialogOpen, setIsRefundFormDialogOpen] = useState(false);
+  const [isRefundConfirmDialogOpen, setIsRefundConfirmDialogOpen] = useState(false);
 
   // updating ids state
   const [updatingTransactionStatusIds, setUpdatingTransactionStatusIds] = useState([]);
@@ -809,10 +809,10 @@ export default function TransactionsTable() {
                         };
 
                         if (!row.original.customerId || row.original.customer.isBanned) {
-                          setIsOpenRefundConfirmDialog(true);
+                          setIsRefundConfirmDialogOpen(true);
                           newRefundData.customerId = row.original.customerId;
                         } else {
-                          setIsOpenRefundFormDialog(true);
+                          setIsRefundFormDialogOpen(true);
                         }
 
                         setRefundData(newRefundData);
@@ -982,7 +982,7 @@ export default function TransactionsTable() {
 
       <CorrectStatusDialog
         onCorrect={handleFixTransactionStatus}
-        isOpen={isOpenCorrectStatusDialog}
+        isOpen={isCorrectStatusDialogOpen}
         onClose={closeCorrectStatusDialog}
         correctData={correctData}
       />
@@ -994,30 +994,30 @@ export default function TransactionsTable() {
       />
 
       <RefundConfirmDialog
-        onContinue={setIsOpenRefundFormDialog}
-        isOpen={isOpenRefundConfirmDialog}
-        onIsOpenChange={setIsOpenRefundConfirmDialog}
+        onContinue={setIsRefundFormDialogOpen}
+        isOpen={isRefundConfirmDialogOpen}
+        onIsOpenChange={setIsRefundConfirmDialogOpen}
         onRefundDataChange={setRefundData}
         refundData={refundData}
       />
 
       <RefundFormDialog
         onRefund={handleEditTransactionStatus}
-        isOpen={isOpenRefundFormDialog}
-        onIsOpenChange={setIsOpenRefundFormDialog}
+        isOpen={isRefundFormDialogOpen}
+        onIsOpenChange={setIsRefundFormDialogOpen}
         onRefundDataChange={setRefundData}
         refundData={refundData}
       />
 
       <RefundDeadlineDialog
-        isOpen={isOpenRefundDeadlineDialog}
+        isOpen={isRefundDeadlineDialogOpen}
         onClose={closeRefundDeadlineDialog}
         refundDeadlineData={refundDeadlineData}
       />
 
       <CancelConfirmDialog
         onCancel={handleEditTransactionStatus}
-        isOpen={isOpenCancelConfirmDialog}
+        isOpen={isCancelConfirmDialogOpen}
         onClose={closeCancelConfirmDialog}
         cancelData={cancelData}
       />

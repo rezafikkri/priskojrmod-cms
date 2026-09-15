@@ -69,14 +69,14 @@ export default function FeedbacksTable() {
   // dialog state
   const {
     data: detailData,
-    isOpen: isOpenDetailDialog,
+    isOpen: isDetailDialogOpen,
     open: openDetailDialog,
     close: closeDetailDialog,
   } = useDialog();
 
   const {
     data: deleteData,
-    isOpen: isOpenDeleteDialog,
+    isOpen: isDeleteDialogOpen,
     open: openDeleteDialog,
     close: closeDeleteDialog,
   } = useDialog();
@@ -641,14 +641,14 @@ export default function FeedbacksTable() {
         )}
 
       <DetailDialog
-        isOpen={isOpenDetailDialog}
+        isOpen={isDetailDialogOpen}
         detailData={detailData}
         onClose={closeDetailDialog}
       />
 
       <DeleteDialog
         onDelete={() => handleDelete(deleteData)}
-        isOpen={isOpenDeleteDialog}
+        isOpen={isDeleteDialogOpen}
         onClose={closeDeleteDialog}
         title="Delete Feedback"
         description={`<b>${Object.keys(rowSelection).length}</b> feedback will be permanently deleted.`}

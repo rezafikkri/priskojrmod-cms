@@ -89,7 +89,7 @@ export default function ProductsTable({ isOwner }) {
   // dialog state
   const {
     data: deleteData,
-    isOpen: isOpenDeleteDialog,
+    isOpen: isDeleteDialogOpen,
     open: openDeleteDialog,
     close: closeDeleteDialog,
   } = useDialog();
@@ -581,7 +581,7 @@ export default function ProductsTable({ isOwner }) {
 
       <DeleteDialog
         onDelete={handleDelete}
-        isOpen={isOpenDeleteDialog}
+        isOpen={isDeleteDialogOpen}
         onClose={closeDeleteDialog}
         deleteData={deleteData}
       />
