@@ -37,9 +37,7 @@ import { formatCurrency } from '@/lib/format-currency';
 import { formatDateTime } from '@/lib/format-date';
 import { cmsConfig } from '@/config/cms';
 import SearchInput from '../ui/search-input';
-import RefundConfirmDialog from './refund-confirm-dialog';
 import RefundDeadlineDialog from './refund-deadline-dialog';
-import CancelConfirmDialog from './cancel-confirm-dialog';
 import RefundFormDialog from './refund-form-dialog';
 import { useDialog } from '@/hooks/use-dialog';
 import { useCheckQueryStale } from '@/hooks/use-check-query-stale';
@@ -52,6 +50,8 @@ import { changeToLastValidPage } from '@/lib/data-table';
 import TableTwoLineCell from '../ui/table-two-line-cell';
 import HelpIcon from '../icon/help-icon';
 import { callAction } from '@/lib/call-action';
+import CancelDialog from './cancel-dialog';
+import RefundDialog from './refund-dialog';
 
 const defaultColumnVisibility = {
   admin: true,
@@ -993,8 +993,8 @@ export default function TransactionsTable() {
         detailsData={detailsData}
       />
 
-      <RefundConfirmDialog
-        onContinue={setIsRefundFormDialogOpen}
+      <RefundDialog
+        onContinue={() => setIsRefundFormDialogOpen(true)}
         isOpen={isRefundConfirmDialogOpen}
         onIsOpenChange={setIsRefundConfirmDialogOpen}
         refundData={refundData}
@@ -1013,7 +1013,7 @@ export default function TransactionsTable() {
         refundDeadlineData={refundDeadlineData}
       />
 
-      <CancelConfirmDialog
+      <CancelDialog
         onCancel={handleEditTransactionStatus}
         isOpen={isCancelConfirmDialogOpen}
         onClose={closeCancelConfirmDialog}

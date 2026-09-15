@@ -100,7 +100,7 @@ function DetailsContent({ isFetching, data, isError, error }) {
         <section className="mb-7">
           <h3 className="text-xl font-semibold">Refund Note</h3>
 
-          <p className="mt-2.5 leading-7">{info.refundNote}</p>
+          <p className="mt-2.5">{info.refundNote}</p>
         </section>
       )}
     </div>

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { TransactionStatus } from '@/constants/enums';
 
-export default function RefundConfirmDialog({
+export default function RefundDialog({
   onContinue,
   isOpen,
   onIsOpenChange,
@@ -27,7 +27,7 @@ export default function RefundConfirmDialog({
 
   function handleContinue() {
     onIsOpenChange(false);
-    onContinue(true); // open refund form dialog
+    onContinue(); // open refund form dialog
   }
 
   function handleOpenChange() {

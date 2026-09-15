@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { TransactionStatus } from '@/constants/enums';
 
-export default function CancelConfirmDialog({
+export default function CancelDialog({
   onCancel,
   isOpen,
   onClose,
