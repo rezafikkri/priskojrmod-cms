@@ -43,7 +43,7 @@ function RevokeNoteContent({
 
   return (
     <>
-      <div className="mt-1.5 mb-1 text-sm space-y-1">
+      <div className="mt-1.5 mb-1 text-sm space-y-1 text-zinc-600 dark:text-zinc-400">
         <div className="space-x-1">
           <span>{note.customerName}</span>
           <span className="break-all">
@@ -52,10 +52,15 @@ function RevokeNoteContent({
         </div>
 
         <span className="me-1">{note.secretKey.product.name}</span>
-        <Badge variant="secondary" className="p-0 px-1 rounded-sm">app name</Badge>
+        <Badge
+          variant="secondary"
+          className="p-0 px-1 rounded-sm text-zinc-600 dark:text-zinc-400"
+        >
+          app name
+        </Badge>
       </div>
 
-      <DialogDescription className="text-base text-zinc-700 dark:text-zinc-300">
+      <DialogDescription className="text-base text-zinc-800 dark:text-zinc-300">
         {note.revokeNote}
       </DialogDescription>
     </>
@@ -96,7 +101,7 @@ export default function RevokeNoteDialog({
         onInteractOutside={handleClickOutside}
       >
         <DialogHeader>
-          <DialogTitle className="text-xl">Revoke Note</DialogTitle>
+          <DialogTitle className="text-xl">License Key Revoke Note</DialogTitle>
           
           {isFetching ? (
             <>

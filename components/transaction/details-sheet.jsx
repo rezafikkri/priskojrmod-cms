@@ -134,14 +134,16 @@ export default function DetailsSheet({
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="sm:max-w-xl overflow-auto">
         <SheetHeader>
-          <SheetTitle className="text-2xl font-bold flex items-center">
-            Transaction
-            {isFetching ? (
-              <Skeleton className="h-5.5 w-50 ms-2 rounded-sm" />
-            ) : !isError ? (
-              <Badge variant="secondary" className="ms-2">{data?.code}</Badge>
-            ) : null}
+          <SheetTitle className="text-2xl font-bold items-center">
+            Transaction Details
           </SheetTitle>
+
+          {isFetching ? (
+            <Skeleton className="h-5.5 w-50 rounded-sm mb-1.5" />
+          ) : !isError ? (
+            <Badge variant="secondary" className="mb-1.5">{data?.code}</Badge>
+          ) : null}
+
           <SheetDescription className="text-base">
             Detailed information and history of the transaction. Tax is not calculated or included in these figures.
           </SheetDescription>

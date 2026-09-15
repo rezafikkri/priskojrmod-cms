@@ -28,7 +28,6 @@ import {
 } from '@tanstack/react-table';
 import TableColumnVisibility from '../ui/table-column-visibility';
 import TableSelectionAlert from '../ui/table-selection-alert';
-import DetailDialog from './detail-dialog';
 import { cmsConfig } from '@/config/cms';
 import DeleteDialog from '../ui/delete-dialog';
 import { useDialog } from '@/hooks/use-dialog';
@@ -42,6 +41,7 @@ import TableSkeleton from '../loadings/table-skeleton';
 import TableResultCount from '../ui/table-result-count';
 import TableTwoLineCell from '../ui/table-two-line-cell';
 import { callAction } from '@/lib/call-action';
+import MessageDialog from './message-dialog';
 
 const defaultColumnVisibility = {
   createdAt: true,
@@ -640,7 +640,7 @@ export default function FeedbacksTable() {
           </>
         )}
 
-      <DetailDialog
+      <MessageDialog
         isOpen={isDetailDialogOpen}
         detailData={detailData}
         onClose={closeDetailDialog}
