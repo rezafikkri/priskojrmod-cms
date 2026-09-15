@@ -16,21 +16,18 @@ export default function RefundFormDialog({
   onRefund,
   isOpen,
   onIsOpenChange,
-  onRefundDataChange,
   refundData,
 }) {
   const [note, setNote] = useState('');
 
   function handleRefund() {
     onIsOpenChange(false);
-    onRefundDataChange(null);
     setNote('');
     onRefund({ id: refundData.id, status: TransactionStatus.REFUND, refundNote: note });
   }
 
   function handleOpenChange() {
     onIsOpenChange(false);
-    onRefundDataChange(null);
     setNote('');
   }
 

@@ -997,7 +997,6 @@ export default function TransactionsTable() {
         onContinue={setIsRefundFormDialogOpen}
         isOpen={isRefundConfirmDialogOpen}
         onIsOpenChange={setIsRefundConfirmDialogOpen}
-        onRefundDataChange={setRefundData}
         refundData={refundData}
       />
 
@@ -1005,7 +1004,6 @@ export default function TransactionsTable() {
         onRefund={handleEditTransactionStatus}
         isOpen={isRefundFormDialogOpen}
         onIsOpenChange={setIsRefundFormDialogOpen}
-        onRefundDataChange={setRefundData}
         refundData={refundData}
       />
 

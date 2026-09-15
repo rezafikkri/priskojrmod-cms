@@ -15,7 +15,6 @@ export default function RefundConfirmDialog({
   onContinue,
   isOpen,
   onIsOpenChange,
-  onRefundDataChange,
   refundData,
 }) {
   let description = `Transaction <b>${refundData?.transactionCode}</b>, owned by customer <b>${refundData?.name}</b> <span class="break-all">(${refundData?.email})</span>, will have its status changed <b>from <span>${TransactionStatus.PAID}</span> to <span>${TransactionStatus.REFUND}</span></b>. However, the customer account`;
@@ -33,7 +32,6 @@ export default function RefundConfirmDialog({
 
   function handleOpenChange() {
     onIsOpenChange(false);
-    onRefundDataChange(null);
   }
 
   function handleClickOutside(e) {
