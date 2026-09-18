@@ -186,7 +186,7 @@ export async function seedTransactions(prisma, count) {
   const transactions = [];
   for (let i = 0; i < count; i++) {
     // you can set max to specify how maximal product in one transaction
-    const transactionDetails = getTransactionDetails({ max: 3, products });
+    const transactionDetails = getTransactionDetails({ max: 1, products });
 
     const selectedCustomer = customers[generateRandomInt(0, customers.length - 1)];
     const selectedAdmin = admins[generateRandomInt(0, admins.length - 1)];
