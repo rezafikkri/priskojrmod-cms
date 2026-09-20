@@ -594,7 +594,7 @@ export default function FeedbacksTable() {
               disabled={isPendingF || fetchAction === 'filter'}
             />
 
-            <TooltipWrapper text="Delete feedback" background="bg-destructive">
+            <TooltipWrapper text="Delete feedback">
               <Button
                 variant="outline"
                 className="h-auto text-base px-3 py-1.5 inline-block hover:text-destructive dark:hover:text-red-500/90"

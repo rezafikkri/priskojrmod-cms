@@ -145,7 +145,7 @@ export default function DiscountFormSection({
             <Separator orientation="vertical" className="h-30!" />
 
             <div className="relative inline-block">
-              <TooltipWrapper text="Delete discount" background="bg-destructive">
+              <TooltipWrapper text="Delete discount">
                 <Button
                   type="button"
                   variant="secondary"

@@ -189,7 +189,7 @@ export default function UpgradeCouponFormSection({
               <Separator orientation="vertical" className="h-30!" />
 
               <div className="relative inline-block">
-                <TooltipWrapper text="Delete upgrade coupon" background="bg-destructive">
+                <TooltipWrapper text="Delete upgrade coupon">
                   <Button
                     type="button"
                     variant="secondary"

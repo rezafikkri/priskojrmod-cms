@@ -53,7 +53,7 @@ export function CardTotal({
             {tooltip && (
               <>
                 {' '}
-                <TooltipWrapper text={tooltip} {...(title === 'Unpaid' && { background: 'bg-gray-600' })}>
+                <TooltipWrapper text={tooltip}>
                   <HelpIcon />
                 </TooltipWrapper>
               </>
@@ -78,7 +78,7 @@ export function CardTotal({
           )}
 
           {quickLink && (
-            <TooltipWrapper text={tooltipLink} {...(title === 'Unpaid' && { background: 'bg-gray-600' })}>
+            <TooltipWrapper text={tooltipLink}>
               <Link
                 href={href}
                 className="text-zinc-500 rounded-md hover:bg-zinc-100/90 hover:dark:bg-zinc-800/70 p-1.5 inline-block"
