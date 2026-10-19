@@ -18,6 +18,7 @@ export default function ContentInput({
   description,
   disabled = false,
   label = 'Content',
+  height = 250,
 }) {
   const { errors, isSubmitting } = useFormState();
 
@@ -43,6 +44,7 @@ export default function ContentInput({
           isError={isActiveLangError}
           disabled={disabled || isSubmitting}
           isResetEditor={isResetEditor}
+          height={height}
         />
       </FormControl>
       <FormDescription>{description}</FormDescription>

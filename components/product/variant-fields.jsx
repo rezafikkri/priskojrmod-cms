@@ -187,6 +187,7 @@ export default function VariantFields({
                         label="Description"
                         description="Enter a clear and concise description of the variant."
                         disabled={isDeleting(variant.dbId)}
+                        height={200}
                       />
                     )}
                   />
@@ -204,6 +205,7 @@ export default function VariantFields({
                         label="Description"
                         description="Enter a clear and concise description of the variant."
                         disabled={isDeleting(variant.dbId)}
+                        height={200}
                       />
                     )}
                   />
