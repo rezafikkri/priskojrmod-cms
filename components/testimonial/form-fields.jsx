@@ -89,7 +89,6 @@ export default function FormFields({
                 {...(isResetEditor && { isResetEditor })}
                 description="Enter the original message provided by the customer without modification. Translate it into the other language without altering its meaning."
                 label='Message'
-                disabled={isSubmitting}
               />
             )}
           />
@@ -106,7 +105,6 @@ export default function FormFields({
                 {...(isResetEditor && { isResetEditor })}
                 description="Enter the original message provided by the customer without modification. Translate it into the other language without altering its meaning."
                 label='Message'
-                disabled={isSubmitting}
               />
             )}
           />

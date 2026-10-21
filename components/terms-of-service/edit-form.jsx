@@ -96,7 +96,6 @@ export default function EditForm({ termsOfService }) {
                 activeLang={activeLang}
                 onActiveLangChange={setActiveLang}
                 description="Enter term of service content"
-                disabled={isSubmitting}
               />
             )}
           />
@@ -111,7 +110,6 @@ export default function EditForm({ termsOfService }) {
                 activeLang={activeLang}
                 onActiveLangChange={setActiveLang}
                 description="Enter term of service content"
-                disabled={isSubmitting}
               />
             )}
           />

@@ -194,7 +194,6 @@ export default function EditForm({ aboutUs }) {
                   activeLang={activeLang}
                   onActiveLangChange={setActiveLang}
                   description="Enter detailed information about the business"
-                  disabled={isSubmitting}
                 />
               )}
             />
@@ -224,7 +223,6 @@ export default function EditForm({ aboutUs }) {
                   activeLang={activeLang}
                   onActiveLangChange={setActiveLang}
                   description="Enter detailed information about the business"
-                  disabled={isSubmitting}
                 />
               )}
             />

@@ -98,7 +98,6 @@ export default function FormFields({
                   onActiveLangChange={setActiveLang}
                   {...(isResetEditor && { isResetEditor })}
                   description="Enter license content"
-                  disabled={isSubmitting}
                 />
               )}
             />
@@ -129,7 +128,6 @@ export default function FormFields({
                   onActiveLangChange={setActiveLang}
                   {...(isResetEditor && { isResetEditor })}
                   description="Enter license content"
-                  disabled={isSubmitting}
                 />
               )}
             />
