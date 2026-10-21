@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function AboutUsPage() {
   return (
-    <section className="lg:max-w-2/3">
+    <section>
       <h1 className="text-2xl mb-7 font-bold">About Us</h1>
 
       <Suspense fallback={<FormSkeleton />}>

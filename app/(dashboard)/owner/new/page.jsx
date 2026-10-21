@@ -6,7 +6,7 @@ export const metadata = {
 
 export default function OwnerCreatePage() {
   return (
-    <section className="lg:max-w-2/3">
+    <section>
       <h1 className="text-2xl mb-7 font-bold">Create Owner</h1>
       <CreateForm />
     </section>
