@@ -35,7 +35,7 @@ export default function Editor({
   onChange,
   value,
   isError,
-  isResetEditor,
+  isResetEditorRef,
   height,
   disabled = false,
 }) {
@@ -126,8 +126,8 @@ export default function Editor({
     } else if (editor) {
       editor.setEditable(true, false);
 
-      if (isResetEditor?.current) {
-        isResetEditor.current = false;
+      if (isResetEditorRef?.current) {
+        isResetEditorRef.current = false;
         editor.commands.clearContent();
       }
     }

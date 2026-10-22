@@ -14,7 +14,7 @@ export default function ContentInput({
   field,
   activeLang,
   onActiveLangChange,
-  isResetEditor,
+  isResetEditorRef,
   description,
   disabled = false,
   label = 'Content',
@@ -43,7 +43,7 @@ export default function ContentInput({
           {...field}
           isError={isActiveLangError}
           disabled={disabled || isSubmitting}
-          isResetEditor={isResetEditor}
+          isResetEditorRef={isResetEditorRef}
           height={height}
         />
       </FormControl>

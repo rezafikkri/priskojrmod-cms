@@ -65,7 +65,7 @@ export default function FormFields({
   mode,
   form,
   onSubmit,
-  isResetEditor,
+  isResetEditorRef,
 }) {
   const [activeLang, setActiveLang] = useState(cmsConfig.defaults.language);
   const { isSubmitting, errors } = form.formState;
@@ -96,7 +96,7 @@ export default function FormFields({
                   field={field}
                   activeLang={activeLang}
                   onActiveLangChange={setActiveLang}
-                  {...(isResetEditor && { isResetEditor })}
+                  {...(isResetEditorRef && { isResetEditorRef })}
                   description="Enter faq content"
                 />
               )}
@@ -126,7 +126,7 @@ export default function FormFields({
                   field={field}
                   activeLang={activeLang}
                   onActiveLangChange={setActiveLang}
-                  {...(isResetEditor && { isResetEditor })}
+                  {...(isResetEditorRef && { isResetEditorRef })}
                   description="Enter faq content"
                 />
               )}

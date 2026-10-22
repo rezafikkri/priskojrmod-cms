@@ -25,12 +25,12 @@ export default function CreateForm() {
     },
   });
 
-  const isResetEditor = useRef(false);
+  const isResetEditorRef = useRef(false);
 
   async function handleSubmit(data) {
     const addRes = await callAction(() => addLicense(data));
     if (addRes.status === 'success') {
-      isResetEditor.current = true;
+      isResetEditorRef.current = true;
       form.reset();
       toast.success('License created successfully.');
     } else {
@@ -40,5 +40,5 @@ export default function CreateForm() {
     }
   }
 
-  return <FormFields mode="create" form={form} onSubmit={handleSubmit} isResetEditor={isResetEditor} />;
+  return <FormFields mode="create" form={form} onSubmit={handleSubmit} isResetEditorRef={isResetEditorRef} />;
 }
