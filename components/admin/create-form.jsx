@@ -1,9 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { UserRole, CurrencyCode } from '@/constants/enums';
+import { UserRole } from '@/constants/enums';
 import { createAdminSchema } from '@/lib/validators/admin-validator';
 import FormFields from './form-fields';
 import { addAdmin } from '@/actions/admin-actions';
@@ -25,15 +25,7 @@ export default function CreateForm() {
         number: '',
       },
       picture: '',
-      donationLinks: [
-        { url: '', currencyCode: CurrencyCode.IDR },
-        { url: '', currencyCode: CurrencyCode.USD },
-      ],
     },
-  });
-  const { fields: donationLinks } = useFieldArray({
-    control: form.control,
-    name: 'donationLinks',
   });
 
   async function handleSubmit(data) {
@@ -54,9 +46,6 @@ export default function CreateForm() {
       mode="create"
       form={form}
       onSubmit={handleSubmit}
-      donations={{
-        donationLinks,
-      }}
     />
   );
 }

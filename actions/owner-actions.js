@@ -1,6 +1,11 @@
 'use server';
 
-import { createOwner, deleteOwner, updateOwner } from '@/lib/services/owner-service';
+import {
+  deleteDonationLink,
+  createOwner,
+  deleteOwner,
+  updateOwner,
+} from '@/lib/services/owner-service';
 
 export async function addOwner(data) {
   try {
@@ -22,7 +27,16 @@ export async function removeOwner(id) {
 
 export async function editOwner(data) {
   try {
-    await updateOwner(data);
+    const updatedData = await updateOwner(data);
+    return { status: 'success', data: updatedData };
+  } catch (err) {
+    return { status: 'error', message: err.message };
+  }
+}
+
+export async function removeDonationLink(id, adminId) {
+  try {
+    await deleteDonationLink(id, adminId);
     return { status: 'success' };
   } catch (err) {
     return { status: 'error', message: err.message };

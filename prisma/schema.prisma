@@ -28,8 +28,7 @@ model Admin {
   createdAt           Int    @map("created_at")
   updatedAt           Int    @map("updated_at")
 
-  donationLinks DonationLink[]
-  products      Product[]
+  products Product[]
 
   @@map("admins")
 }
@@ -39,17 +38,6 @@ enum CurrencyCode {
   USD
 
   @@map("currency_code")
-}
-
-model DonationLink {
-  id           Int          @id @default(autoincrement())
-  adminId      Int          @map("admin_id") @db.SmallInt
-  currencyCode CurrencyCode @map("currency_code")
-  url          String       @db.VarChar(100)
-
-  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
-
-  @@map("donation_links")
 }
 
 model Owner {
@@ -62,9 +50,21 @@ model Owner {
   createdAt    Int    @map("created_at")
   updatedAt    Int    @map("updated_at")
 
-  products Product[]
+  donationLinks DonationLink[]
+  products      Product[]
 
   @@map("owners")
+}
+
+model DonationLink {
+  id           Int          @id @default(autoincrement())
+  ownerId      Int          @map("owner_id")
+  currencyCode CurrencyCode @map("currency_code")
+  url          String       @db.VarChar(100)
+
+  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@map("donation_links")
 }
 
 model License {
@@ -230,21 +230,21 @@ model ProductVariant {
   downloadUrl        String? @map("download_url")
   fileAccessPassword String? @map("file_access_password") @db.VarChar(100)
 
-  product Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
-  prices  ProductPrice[]
+  product      Product                     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  prices       ProductPrice[]
   translations ProductVariantTranslation[]
 
   @@map("product_variants")
 }
 
 model ProductVariantTranslation {
-  id          String   @id @default(uuid(7)) @db.Uuid
+  id String @id @default(uuid(7)) @db.Uuid
 
   variantId   String   @map("variant_id") @db.Uuid
   language    Language
   description String   @db.Text
 
-  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@map("product_variant_translations")
 }
@@ -451,7 +451,7 @@ model Transaction {
 
   customer Customer?           @relation(fields: [customerId], references: [id], onDelete: SetNull)
   details  TransactionDetail[]
-  invoice Invoice?
+  invoice  Invoice?
 
   @@map("transactions")
 }
@@ -533,7 +533,7 @@ model LicenseKey {
   code          String
   canRegenerate Boolean @default(false) @map("can_regenerate")
   isRevoked     Boolean @default(false) @map("is_revoked")
-  revokeNote    String? @db.Text @map("revoke_note")
+  revokeNote    String? @map("revoke_note") @db.Text
   createdAt     Int     @map("created_at")
   updatedAt     Int     @map("updated_at")
   lastUsedAt    Int?    @map("last_used_at")
