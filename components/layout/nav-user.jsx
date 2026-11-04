@@ -47,7 +47,6 @@ export function NavUser() {
                 <img
                   src={image}
                   alt={name}
-                  loading="lazy"
                   decoding="async"
                   className="size-8 rounded-full"
                 />
@@ -71,7 +70,6 @@ export function NavUser() {
                   <img
                     src={image}
                     alt={name}
-                    loading="lazy"
                     decoding="async"
                     className="size-8 rounded-full object-cover"
                   />
