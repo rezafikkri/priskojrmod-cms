@@ -11,14 +11,14 @@ import { getTotalAmount } from '../lib/pricing';
 export const generateRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 function generateLicenseKeyPayload(email, licenseKeyId) {
-  const expiresAt = new Date();
-  expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+  const expiredAt = new Date();
+  expiredAt.setFullYear(expiredAt.getFullYear() + 1);
 
   return {
     licenseKeyId,
     name: faker.person.fullName(),
     email,
-    exp: Math.floor(expiresAt.getTime() / 1000),
+    exp: Math.floor(expiredAt.getTime() / 1000),
   };
 }
 

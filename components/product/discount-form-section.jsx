@@ -22,8 +22,6 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { removeProductDiscount } from '@/actions/product-actions';
 import { cmsConfig } from '@/config/cms';
-import { Alert, AlertTitle } from '../ui/alert';
-import { AlertCircle } from 'lucide-react';
 import { callAction } from '@/lib/call-action';
 
 export default function DiscountFormSection({
@@ -65,8 +63,9 @@ export default function DiscountFormSection({
   }
 
   function clearErrorsIfAllEmpty() {
-    const { value, expiredAt } = form.getValues('discount');
-    if (!value && !expiredAt && (discountErrors?.value || discountErrors?.expiredAt)) {
+    const { id, value, expiredAt } = form.getValues('discount');
+    if (!id && !value && !expiredAt && (discountErrors?.value || discountErrors?.expiredAt)) {
+      console.dir('clear error');
       form.clearErrors(['discount.value', 'discount.expiredAt']);
     }
   }
@@ -77,16 +76,6 @@ export default function DiscountFormSection({
       <h4 className="text-zinc-700 dark:text-zinc-300/80">
         Optional. The discount percentage to apply to the product price.
       </h4>
-
-      {discountErrors?.root && (
-        <Alert
-          variant="destructive"
-          className="border-destructive/50 text-base items-baseline"
-        >
-          <AlertCircle />
-          <AlertTitle className="line-clamp-0">{discountErrors.root.message}</AlertTitle>
-        </Alert>
-      )}
 
       <div className="flex items-center gap-5">
         <div className="flex-1 space-y-6">

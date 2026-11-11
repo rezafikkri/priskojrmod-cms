@@ -6,7 +6,6 @@ import {
   Trash,
   Loader2,
   Percent,
-  AlertCircle,
 } from 'lucide-react';
 import {
   FormControl,
@@ -71,8 +70,8 @@ export default function UpgradeCouponFormSection({
   }
 
   function clearErrorsIfAllEmpty() {
-    const { code, discount, expiredAt } = form.getValues('upgradeCoupon');
-    const isAllEmpty = !code && !discount && !expiredAt;
+    const { id, code, discount, expiredAt } = form.getValues('upgradeCoupon');
+    const isAllEmpty = !id && !code && !discount && !expiredAt;
     const hasErrors = upgradeCouponErrors?.code
       || upgradeCouponErrors?.discount
       || upgradeCouponErrors?.expiredAt;
@@ -89,13 +88,6 @@ export default function UpgradeCouponFormSection({
         <h4 className="text-zinc-700 dark:text-zinc-300/80">
           Optional. Provides a discount for previous buyers when purchasing product upgrades.
         </h4>
-
-        {upgradeCouponErrors?.root && (
-          <Alert variant="destructive" className="border-destructive/50 text-base items-baseline">
-            <AlertCircle />
-            <AlertTitle className="line-clamp-0">{upgradeCouponErrors.root.message}</AlertTitle>
-          </Alert>
-        )}
 
         {upgradeCoupon.id && basic.version !== dbVersion && (
           <Alert className="text-base items-baseline">
